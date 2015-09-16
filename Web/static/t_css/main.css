@@ -1,0 +1,40 @@
+@charset "utf-8";
+/* CSS Document */
+body{font-family:"Microsoft Yahei","微软雅黑","宋体",Arial, Helvetica, sans-serif;}
+ul,ol{list-style: none;margin: 0;padding: 0;}
+.clear{clear:both;}
+.loginMode,.infoShow{margin-top: 100px;}
+.step a,.market a{display: block;}
+
+.newBtn{display: block;height:54px;padding-bottom: 20px;}
+.infoShow{width: 570px;margin: 100px auto 0;}
+/*登陆页 start*/
+.form-signin {
+    margin: 0 auto;
+    max-width: 330px;
+    padding: 15px;
+}
+.form-signin .form-signin-heading, .form-signin .checkbox {margin-bottom: 10px;}
+.form-signin .checkbox {font-weight: normal;}
+.form-signin .form-control {
+    box-sizing: border-box;
+    font-size: 16px;
+    height: auto;
+    padding: 10px;
+    position: relative;
+    margin:15px 0;
+}
+.form-signin .form-control:focus {z-index: 2;}
+/*登陆页 end*/
+
+/*填写信息模块 start*/
+.step{min-width: 470px;padding-left: 100px;padding-bottom:20px;}
+.step p{width: 154px;text-align: center;}
+
+.list-body {padding: 15px 50px;}
+.list-body ul li{clear: both;padding:8px 0;}
+.list-body ul li label{width: 150px;text-align: right;line-height: 34px;margin: 0;font-weight: normal;}
+.list-body ul li input{width:68%;}
+/*编号start*/
+.number{width: 100px;background: #eae8e6;border-top: 5px solid #ff991d;text-align:center;}
+/*填写信息模块 end*/
