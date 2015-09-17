@@ -3,8 +3,10 @@
 __author__ = 'ZhouHeng'
 
 from Class.User import UserManager
+from Tools.MyEmail import MyEmailManager
 
 user_m = UserManager()
+my_email = MyEmailManager()
 
 user_info = []
 user_info.append({"user_name": "wangfei", "password": "wangfei@gene.ac", "role": "market"})
@@ -14,7 +16,9 @@ user_info.append({"user_name": "zhaolianhe", "password": "zhaolianhe@gene.ac", "
 
 user_info.append({"user_name": "yangrui", "password": "yangrui@gene.ac", "role": "calc"})
 
-for user in user_info:
-    result, message = user_m.new(user["user_name"], user["password"], user["role"])
-    if result is False:
-        print(message)
+# for user in user_info:
+#     result, message = user_m.new(user["user_name"], user["password"], user["role"])
+#     if result is False:
+#         print(message)\
+
+my_email.send_mail("zhou5315938@163.com", "test", "test")

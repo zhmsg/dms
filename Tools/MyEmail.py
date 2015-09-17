@@ -13,11 +13,11 @@ from My_PC import pc_info
 
 class MyEmailManager:
     def __init__(self):
-        self.m_user = "zhouheng615"
-        self.m_password = "msg245"
-        self.email_server = "163.com"
+        self.m_user = "admin"
+        self.m_password = "Bdcbdc123456"
+        self.email_server = "ym.163.com"
         self.sender = "晶云平台"
-        self.developer_emails = ["zhou5315938@163.com", "15136519943@163.com"]
+        self.developer_emails = ["zhou5315938@163.com"]
 
     def encoded(self, s, encoding):
         return s.encode(encoding) if isinstance(s, unicode) else s
@@ -27,8 +27,8 @@ class MyEmailManager:
             encoding = 'utf-8'
             SMTP = smtplib.SMTP
             smtp = SMTP("smtp.%s" % self.email_server, 25)
-            # smtp.set_debuglevel(True)
-            user = "%s@%s" % (self.m_user, self.email_server)
+            smtp.set_debuglevel(True)
+            user = "%s@%s" % (self.m_user, "gene.ac")
             smtp.starttls()
             smtp.login(user, self.m_password)
             user = self.encoded(user, encoding)
