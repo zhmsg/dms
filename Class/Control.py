@@ -41,9 +41,9 @@ class ControlManager:
         if role != self.user.role_str[0]:
             return False, u"您的权限不足"
         result, message = self.data.new(inputuser)
-        if result is True:
-            if inputuser != "market":
-                self.send_email(u"%s新建了一条数据记录" % inputuser, message, {}, [], [])
+        # if result is True:
+        #     if inputuser != "market":
+        #         self.send_email(u"%s新建了一条数据记录" % inputuser, message, {}, [], [])
         return result, message
 
     def new_market(self, data_no, market_info, inputuser, role):
