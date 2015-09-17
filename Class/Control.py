@@ -32,7 +32,7 @@ class ControlManager:
         self.calc_attribute = self.calc.attribute
         self.calc_attribute_ch = self.calc.attribute_ch
         self.user = UserManager()
-        self.manger_email = "budechao@ict.ac.cn"
+        self.manger_email = ["budechao@ict.ac.cn"]
 
     def get_data(self):
         return self.data.get()
@@ -103,4 +103,5 @@ class ControlManager:
         att_len = len(attribute)
         for index in range(att_len):
             content += "%s : %s<br>" % (attribute_ch[index], info[attribute[index]])
-        my_email.send_mail_thread(self.manger_email, sub, content)
+        for email in self.manger_email:
+            my_email.send_mail_thread(email, sub, content)
