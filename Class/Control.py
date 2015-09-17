@@ -32,7 +32,7 @@ class ControlManager:
         self.calc_attribute = self.calc.attribute
         self.calc_attribute_ch = self.calc.attribute_ch
         self.user = UserManager()
-        self.manger_email = ["budechao@ict.ac.cn"]
+        self.manger_email = ["budechao@ict.ac.cn", "biozy@ict.ac.cn"]
 
     def get_data(self):
         return self.data.get()
