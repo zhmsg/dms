@@ -6,6 +6,7 @@ sys.path.append("..")
 from datetime import datetime
 from Tools.Mysql_db import DB
 from Check import check_chinese
+from Class import TIME_FORMAT, DATE_FORMAT
 
 __author__ = 'ZhouHeng'
 
@@ -47,3 +48,16 @@ class UploadManager:
         insert_sql += "inputtime,inputuser)%s" % values_sql
         self.db.execute(insert_sql)
         return True, ""
+
+    def select(self, data_no):
+        select_sql = "SELECT %s FROM %s WHERE data_no=%s;" % (",".join(self.attribute), self.upload, data_no)
+        result = self.db.execute(select_sql)
+        if result == 0:
+            return False, u"数据编号不存在或没有相应记录"
+        db_r = self.db.fetchone()
+        upload_info = {}
+        len_att = len(self.attribute)
+        for index in range(len_att):
+            upload_info[self.attribute[index]] = db_r[index]
+        upload_info["completed"] = upload_info["completed"].strftime(DATE_FORMAT)
+        return True, upload_info

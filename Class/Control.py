@@ -96,6 +96,22 @@ class ControlManager:
                 self.send_email(u"%s添加了计算记录" % inputuser, data_no, calc_info, self.calc_attribute, self.calc_attribute_ch)
         return True, ""
 
+    def get_market(self, data_no, role):
+        if role != self.user.role_str[0] and role != self.user.role_str[5]:
+            return False, u"您的权限不足"
+        print("ddd")
+        return self.market.select(data_no)
+
+    def get_upload(self, data_no, role):
+        if role != self.user.role_str[1] and role != self.user.role_str[5]:
+            return False, u"您的权限不足"
+        return self.upload.select(data_no)
+
+    def get_calc(self, data_no, role):
+        if role != self.user.role_str[2] and role != self.user.role_str[5]:
+            return False, u"您的权限不足"
+        return self.calc.select(data_no)
+
     def send_email(self, sub, data_no, info, attribute, attribute_ch):
         print("strart send email to %s" % self.manger_email)
         content = sub + "<br>"

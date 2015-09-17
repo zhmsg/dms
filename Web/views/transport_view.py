@@ -96,6 +96,20 @@ def new_market():
         return error_message
 
 
+@transport_view.route("/market/", methods=["GET"])
+@login_required
+def get_market():
+    try:
+        data_no = int(request.args["data_no"])
+        result, message = control.get_market(data_no, session["role"])
+        if result is True:
+            return json.dumps({"status": result, "value": message, "att": control.market_attribute, "ch": control.market_attribute_ch})
+        return json.dumps({"status": False, "data": message})
+    except Exception as e:
+        error_message = u"获得记录失败：%s" % str(e.args)
+        return json.dumps({"status": False, "data": error_message})
+
+
 @transport_view.route("/upload/", methods=["POST"])
 @login_required
 def new_upload():
@@ -114,6 +128,21 @@ def new_upload():
         return error_message
 
 
+@transport_view.route("/upload/", methods=["GET"])
+@login_required
+def get_upload():
+    try:
+        data_no = int(request.args["data_no"])
+        result, message = control.get_upload(data_no, session["role"])
+        if result is True:
+            return json.dumps({"status": result, "value": message, "att": control.upload_attribute, "ch": control.upload_attribute_ch})
+        return json.dumps({"status": False, "data": message})
+
+    except Exception as e:
+        error_message = u"获得记录失败：%s" % str(e.args)
+        return json.dumps({"status": False, "data": error_message})
+
+
 @transport_view.route("/calc/", methods=["POST"])
 @login_required
 def new_calc():
@@ -130,3 +159,17 @@ def new_calc():
     except Exception as e:
         error_message = u"新建记录失败：%s" % str(e.args)
         return error_message
+
+
+@transport_view.route("/calc/", methods=["GET"])
+@login_required
+def get_calc():
+    try:
+        data_no = int(request.args["data_no"])
+        result, message = control.get_calc(data_no, session["role"])
+        if result is True:
+            return json.dumps({"status": result, "value": message, "att": control.calc_attribute, "ch": control.calc_attribute_ch})
+        return json.dumps({"status": False, "data": message})
+    except Exception as e:
+        error_message = u"获得记录失败：%s" % str(e.args)
+        return json.dumps({"status": False, "data": error_message})

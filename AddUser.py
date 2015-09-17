@@ -16,9 +16,9 @@ user_info.append({"user_name": "zhaolianhe", "password": "zhaolianhe@gene.ac", "
 
 user_info.append({"user_name": "yangrui", "password": "yangrui@gene.ac", "role": "calc"})
 
-# for user in user_info:
-#     result, message = user_m.new(user["user_name"], user["password"], user["role"])
-#     if result is False:
-#         print(message)\
+user_info.append({"user_name": "budechao", "password": "budechao@gene.ac", "role": "sys"})
 
-my_email.send_mail("zhou5315938@163.com", "test", "test")
+for user in user_info:
+    result, message = user_m.new(user["user_name"], user["password"], user["role"])
+    if result is False:
+        print(message)

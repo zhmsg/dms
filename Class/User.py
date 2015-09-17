@@ -20,7 +20,7 @@ class UserManager:
             ["password", "char(66)", "NO", "", None, ""],
             ["role", "tinyint(4)", "NO", "", None, ""]
         ]
-        self.role_str = ("market", "upload", "calc")
+        self.role_str = ("market", "upload", "calc", "", "", "sys")
 
     def create_user(self, force=False):
         return self.db.create_table(self.user, self.user_desc, force)
