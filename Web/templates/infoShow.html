@@ -30,6 +30,9 @@
       </div>
       <form action="/dms/market/", method="post">
         <div class="modal-body list-body">
+          <!-- 模态框内的提示语 start -->
+          <div class="toolTip redColor">温馨提醒：在此填写的内容一律不可修改，请谨慎操作每一步。</div>
+          <!-- 模态框内的提示语 end -->
           <ul>
             <li>
               <label>数据编号</label>
@@ -41,7 +44,7 @@
               {% if info == "person" %}
               <input name="{{ info }}" type="text" class="form-control pull-right" value="{{ user_name }}" readonly>
               {% elif info == "panel" %}
-              <select name="{{ info }}" class="form-control pull-right">
+              <select name="{{ info }}" class="form-control pull-right panelInput">
                 {% for item in market_target %}
                 <option value="{{ item }}">{{ item }}</option>
                 {% endfor %}
@@ -75,6 +78,9 @@
       </div>
       <form action="/dms/upload/" method="post">
         <div class="modal-body list-body">
+          <!-- 模态框内的提示语 start -->
+          <div class="toolTip redColor">温馨提醒：在此填写的内容一律不可修改，请谨慎操作每一步。</div>
+          <!-- 模态框内的提示语 end -->
           <ul>
             <li>
               <label>数据编号</label>
@@ -108,6 +114,9 @@
       </div>
       <form action="/dms/calc/" method="post">
         <div class="modal-body list-body">
+          <!-- 模态框内的提示语 start -->
+          <div class="toolTip redColor">温馨提醒：在此填写的内容一律不可修改，请谨慎操作每一步。</div>
+          <!-- 模态框内的提示语 end -->
           <ul>
             <li>
               <label>数据编号</label>
@@ -133,6 +142,20 @@
 <!-- 模态框 end-->
 
 <div class="container">
+  <!--系统备注及说明模块 start-->
+  <div class="declare">
+      <p class="redColor"> 进入系统需知：</p>
+      <p>【1】每次进行添加数据时，编号是系统自动生成的。</p>
+      <p>【2】所有登陆系统进行相关操作的人员，所操作的内容一律不可修改，请慎重操作每一步。</p>
+      <p>【3】各部门只允许查看本部门所录入的数据，无权查看其它部门的数据（例如：市场部人员只有查看市场部数据的权限）。</p>
+      <p>【4】所有的操作流程都需要安装步骤123依次进行。即市场部数据完成之后，上传和计算才能依次进行，本系统不提供跳步骤操作的功能。</p>
+      <p>【5】当每个部门完成一个步骤之后，相应的步骤图标也会由灰色变为蓝色，但若操作失败，则没有相关提示信息出现。</p>
+      <p>【6】如果需要查看已经上传完成的数据，可点击蓝色的图标，则页面底部会出现所需查看的相关数据信息。</p>
+      <p>【7】请认真的阅读本系统的使用说明书，谨慎操作每一步。</p>
+      <p>【8】如果操作完成，请关闭浏览器即可。</p>
+  </div>
+  <!--系统备注及说明模块 end-->
+
   <!-- 填写信息模块 start -->
   <div class="infoShow">
     <!-- 新建start -->
@@ -191,8 +214,11 @@
 
   </div>
   <!-- 填写信息模块 end -->
-</div>
-<div id="info">
+
+  <!--信息展示模块 start-->
+  <table class="table table-bordered table-hover infoShowMode" id="info"></table>
+  <!--信息展示模块 end-->
+
 </div>
 </body>
 </html>

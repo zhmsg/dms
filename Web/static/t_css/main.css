@@ -3,11 +3,11 @@
 body{font-family:"Microsoft Yahei","微软雅黑","宋体",Arial, Helvetica, sans-serif;}
 ul,ol{list-style: none;margin: 0;padding: 0;}
 .clear{clear:both;}
-.loginMode,.infoShow{margin-top: 100px;}
+.loginMode{margin-top: 100px;}
 .step a,.market a{display: block;}
 
 .newBtn{display: block;height:54px;padding-bottom: 20px;}
-.infoShow{width: 570px;margin: 100px auto 0;}
+.infoShow{width: 570px;margin:50px auto 0;}
 /*登陆页 start*/
 .form-signin {
     margin: 0 auto;
@@ -34,7 +34,17 @@ ul,ol{list-style: none;margin: 0;padding: 0;}
 .list-body {padding: 15px 50px;}
 .list-body ul li{clear: both;padding:8px 0;}
 .list-body ul li label{width: 150px;text-align: right;line-height: 34px;margin: 0;font-weight: normal;}
-.list-body ul li input{width:68%;}
+.list-body ul li input,.panelInput{width:68%;}
 /*编号start*/
 .number{width: 100px;background: #eae8e6;border-top: 5px solid #ff991d;text-align:center;}
 /*填写信息模块 end*/
+
+/*信息展示模块 start*/
+.infoShowMode{margin-top: 20px;margin-bottom: 50px;}
+/*信息展示模块 end*/
+
+/*系统备注及说明模块 start*/
+.declare{padding-top: 20px;padding-bottom:10px;border-bottom: 2px dotted #999;}
+.redColor{color: #f23156;font-size: 16px;}
+/*系统备注及说明模块 end*/
+.toolTip{line-height: 30px;padding-bottom: 5px;}
