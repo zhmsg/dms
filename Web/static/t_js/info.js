@@ -17,9 +17,9 @@ function get_info(type,data_no){
                 var value = data_object.value;
                 var ch = data_object.ch;
                 var att = data_object.att;
-                var info_str = "数据编号:" + data_no + "<br>";
+                var info_str = "<tr>" + "<td class='text-right'>"+"数据编号:"+"</td>" + "<td>" + data_no + "</td>"+ "</tr>";
                 for(var i=0;i<att.length;i++){
-                    info_str += ch[i] + ":" + value[att[i]] + "<br>"
+                    info_str += "<tr>" + "<td class='text-right'>"+ ch[i] + ":" +"</td>" + "<td>"+ value[att[i]] + "</td>" + "</tr>"
                 }
                 $("#info").html(info_str)
             }
