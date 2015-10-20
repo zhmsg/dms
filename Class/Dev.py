@@ -46,7 +46,6 @@ class DevManager:
             titles = [u"模块", u"操作", u"拥有操作权限的角色"]
             file = "operate_auth_%s.xls" % datetime.now().strftime(TIME_FORMAT_STR)
             save_path = "%s/%s" % (temp_dir, file)
-            print(save_path)
             write_result, message = write_excel(save_path, operate_auth_array, titles)
             if write_result is False:
                 return write_result, message
