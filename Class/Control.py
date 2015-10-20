@@ -10,6 +10,7 @@ from Market import MarketManager
 from Upload import UploadManager
 from Calc import CalcManager
 from User import UserManager
+from Dev import DevManager
 
 __author__ = 'ZhouHeng'
 
@@ -32,6 +33,7 @@ class ControlManager:
         self.calc_attribute = self.calc.attribute
         self.calc_attribute_ch = self.calc.attribute_ch
         self.user = UserManager()
+        self.dev = DevManager()
         self.manger_email = ["budechao@ict.ac.cn", "biozy@ict.ac.cn"]
 
     def get_data(self):
@@ -111,6 +113,9 @@ class ControlManager:
         if role != self.user.role_str[2] and role != self.user.role_str[5]:
             return False, u"您的权限不足"
         return self.calc.select(data_no)
+
+    def download_operate_auth(self):
+        return self.dev.get_operate_auth_file()
 
     def send_email(self, sub, data_no, info, attribute, attribute_ch):
         print("strart send email to %s" % self.manger_email)
