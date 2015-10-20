@@ -30,6 +30,14 @@ def ping():
     return "true"
 
 
+@develop_view.route("/operate/auth/", methods=["GET"])
+def operate_auth_show():
+    result, data = control.show_operate_auth()
+    if result is False:
+        return data
+    return render_template("/Dev/operate_auth.html", operate_auth=data)
+
+
 @develop_view.route("/operate/auth/download/", methods=["GET"])
 def download_operate_auth():
     result, data = control.download_operate_auth()

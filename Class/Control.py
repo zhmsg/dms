@@ -117,6 +117,9 @@ class ControlManager:
     def download_operate_auth(self):
         return self.dev.get_operate_auth_file()
 
+    def show_operate_auth(self):
+        return self.dev.get_operate_auth()
+
     def send_email(self, sub, data_no, info, attribute, attribute_ch):
         print("strart send email to %s" % self.manger_email)
         content = sub + "<br>"

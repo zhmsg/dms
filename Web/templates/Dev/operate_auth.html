@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>晶云平台遗传频道权限描述</title>
+</head>
+<body>
+<table border="1">
+    <tr>
+        <th scope="col">模块</th>
+        <th scope="col">操作</th>
+        <th scope="col">拥有操作权限的角色</th>
+    </tr>
+    {% for item in operate_auth %}
+    <tr>
+        <td>{{ item["module"] }}</td>
+        <td>{{ item["operate"] }}</td>
+        <td>{{ item["role"] }} {{ item["description"] }}</td>
+    </tr>
+    {% endfor %}
+</table>
+</body>
+</html>
