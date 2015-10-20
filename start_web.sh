@@ -1,2 +1,2 @@
 cd Web
-nohup python Webstart.py 1>> web.log 2>>web.log &
+nohup python msg_web.py 1>> msg_web.log 2>>msg_web.log &
