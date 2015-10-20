@@ -41,7 +41,6 @@ def operate_auth_show():
 @develop_view.route("/operate/auth/download/", methods=["GET"])
 def download_operate_auth():
     result, data = control.download_operate_auth()
-    print(data)
     if result is True:
         return send_from_directory(data["DIR"], data["FILE"], as_attachment=True)
     return data
