@@ -25,6 +25,7 @@ logging.basicConfig(filename=current_filename + '_DB.log', filemode='w')
 
 remote_host = "gene.ac"
 local_host = "127.0.0.1"
+service_mysql = "192.168.120.2"
 
 
 class DB(object):
@@ -32,12 +33,17 @@ class DB(object):
     cursor = None
     _sock_file = ''
 
-    def __init__(self, local=False):
+    def __init__(self, local=False, host="", mysql_user="jingyun", mysql_password="gene.ac898", mysql_db="transport"):
         try:
             if local is True:
                 self.host = local_host
             else:
                 self.host = remote_host
+            if host != "":
+                self.host = host
+            self.mysql_user = mysql_user
+            self.mysql_password = mysql_password
+            self.db = mysql_db
             config = ConfigParser.ConfigParser()
             config.read('/etc/my.cnf')
             self._sock_file = ""  # config.get('mysqld', 'socket')
@@ -47,13 +53,13 @@ class DB(object):
     def connect(self):
         logging.info(time.ctime() + " : connect to mysql server..")
         if self._sock_file != '':
-            self.conn = MySQLdb.connect(host=self.host, port=3306, user='jingyun',
-                                        passwd='gene.ac898', db='transport', charset='utf8',
+            self.conn = MySQLdb.connect(host=self.host, port=3306, user=self.mysql_user,
+                                        passwd=self.mysql_password, db=self.db, charset='utf8',
                                         unix_socket=self._sock_file)
             self.cursor = self.conn.cursor()
         else:
-            self.conn = MySQLdb.connect(host=self.host, port=3306, user='jingyun',
-                                        passwd='gene.ac898', db='transport', charset='utf8')
+            self.conn = MySQLdb.connect(host=self.host, port=3306, user=self.mysql_user,
+                                        passwd=self.mysql_password, db=self.db, charset='utf8')
             self.cursor = self.conn.cursor()
 
         self.conn.autocommit(True)

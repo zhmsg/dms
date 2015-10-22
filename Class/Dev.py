@@ -18,6 +18,7 @@ class DevManager:
 
     def __init__(self):
         self.db = DB()
+        self.service_db = DB(host="192.168.120.2", mysql_user="gener", mysql_password="gene_ac252", mysql_db="information_schema")
         self.auth_role = "auth_role"
         self.operate_role = "operate_role"
 
@@ -54,3 +55,19 @@ class DevManager:
             error_message = str(e.args)
             print(error_message)
             return False, error_message
+
+    def list_table(self):
+        sql = "SELECT TABLE_NAME, CREATE_TIME,TABLE_COMMENT FROM TABLES WHERE TABLE_SCHEMA='clinic' AND TABLE_TYPE='BASE TABLE';"
+        self.service_db.execute(sql)
+        table_list = []
+        for item in self.service_db.fetchall():
+            table_list.append({"table_name": item[0], "create_time": item[1], "table_comment": item[2]})
+        return table_list
+
+    def get_table_info(self, table_name):
+        sql = "SELECT COLUMN_NAME, COLUMN_TYPE,COLUMN_KEY,COLUMN_DEFAULT,EXTRA,COLUMN_COMMENT FROM columns WHERE TABLE_NAME='%s';" % table_name
+        self.service_db.execute(sql)
+        column_info = []
+        for item in self.service_db.fetchall():
+            column_info.append({"column_name": item[0], "column_type": item[1], "column_key": item[2], "column_default": item[3], "extra": item[4], "column_comment": item[5]})
+        return column_info

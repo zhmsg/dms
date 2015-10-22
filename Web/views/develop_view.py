@@ -1,16 +1,12 @@
 #!/user/bin/env python
 # -*- coding: utf-8 -*-
 
-import requests
-import json
+
 import sys
-from flask import Blueprint, request, render_template, redirect, session, url_for, send_from_directory
-from flask_login import login_user, current_user
+from flask import Blueprint, render_template, send_from_directory, request
 from Tools.MyEmail import MyEmailManager
-from flask_login import login_required
 from Class.User import UserManager
 from Class.Control import ControlManager
-from Web import User
 
 sys.path.append('..')
 
@@ -44,3 +40,12 @@ def download_operate_auth():
     if result is True:
         return send_from_directory(data["DIR"], data["FILE"], as_attachment=True)
     return data
+
+
+@develop_view.route("/data/table/", methods=["GET"])
+def show_data_table():
+    table_list = control.list_data_table()
+    column_info = []
+    if "table" in request.args:
+        column_info = control.get_table_info(request.args["table"])
+    return render_template("/Dev/data_table.html", table_list=table_list, column_info=column_info)
