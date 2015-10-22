@@ -20,6 +20,9 @@ my_email = MyEmailManager()
 user_m = UserManager()
 control = ControlManager()
 
+@develop_view.errorhandler(500)
+def handle_500(e):
+    return str(e.args)
 
 @develop_view.route("/ping/", methods=["GET"])
 def ping():
