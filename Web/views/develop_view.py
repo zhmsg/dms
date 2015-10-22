@@ -53,4 +53,9 @@ def show_data_table():
     column_info = []
     if "table" in request.args:
         column_info = control.get_table_info(request.args["table"])
-    return render_template("/Dev/data_table.html", table_list=table_list, column_info=column_info)
+        select_table = {}
+        for table in table_list:
+            if table["table_name"] == request.args["table"]:
+                select_table = table
+                break
+    return render_template("/Dev/data_table.html", table_list=table_list, column_info=column_info, select_table=select_table)

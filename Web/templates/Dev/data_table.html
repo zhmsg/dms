@@ -8,6 +8,11 @@
 {% for table in table_list %}
     <a href="/dev/data/table/?table={{ table["table_name"] }}">{{ table["table_name"] }}</a>
 {% endfor %}
+{% if select_table != {} %}
+    表名：{{ select_table["table_name"] }}
+    创建时间： {{ select_table["create_time"] }}
+    注释：{{ select_table["table_comment"] }}
+{% endif %}
 {% if column_info != [] %}
     <table border="1">
     <tr>
