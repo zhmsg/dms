@@ -1,20 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <title>晶云平台数据表</title>#}
+{#</head>#}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title>晶云平台数据表</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>晶云平台数据表</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='t_css/main.css') }}"><!--自定义的页面样式 -->
 </head>
+
 <body>
+<div class="data">
 {% for table in table_list %}
-    <a href="/dev/data/table/?table={{ table["table_name"] }}">{{ table["table_name"] }}</a>
+    <a class="data_title" href="/dev/data/table/?table={{ table["table_name"] }}">{{ table["table_name"] }}</a>
 {% endfor %}
 {% if select_table != {} %}
-    表名：{{ select_table["table_name"] }}
-    创建时间： {{ select_table["create_time"] }}
-    注释：{{ select_table["table_comment"] }}
+    <div class="clear data_table_title">
+        <p>表名：{{ select_table["table_name"] }}</p>
+        <p>创建时间： {{ select_table["create_time"] }}</p>
+        <p>注释：{{ select_table["table_comment"] }}</p>
+    </div>
 {% endif %}
+
 {% if column_info != [] %}
-    <table border="1">
+    <table class="clear data_table" cellpadding="0" cellspacing="0">
     <tr>
         <th scope="col">列名</th>
         <th scope="col">类型</th>
@@ -34,7 +46,8 @@
     </tr>
     {% endfor %}
 </table>
-
 {% endif %}
+
+</div>
 </body>
 </html>
