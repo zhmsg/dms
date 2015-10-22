@@ -30,7 +30,6 @@ ul,ol{list-style: none;margin: 0;padding: 0;}
 /*填写信息模块 start*/
 .step{min-width: 470px;padding-left: 100px;padding-bottom:20px;}
 .step p{width: 154px;text-align: center;}
-
 .list-body {padding: 15px 50px;}
 .list-body ul li{clear: both;padding:8px 0;}
 .list-body ul li label{width: 150px;text-align: right;line-height: 34px;margin: 0;font-weight: normal;}
@@ -48,7 +47,6 @@ ul,ol{list-style: none;margin: 0;padding: 0;}
 .redColor{color: #f23156;font-size: 16px;}
 /*系统备注及说明模块 end*/
 .toolTip{line-height: 30px;padding-bottom: 5px;}
-
 /*data table页面的样式美化*/
 .data{padding:10px 30px;}
 .data_title{padding-right: 30px;color: #333;text-decoration: none;line-height: 40px;}
