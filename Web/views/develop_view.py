@@ -51,9 +51,9 @@ def download_operate_auth():
 def show_data_table():
     table_list = control.list_data_table()
     column_info = []
+    select_table = {}
     if "table" in request.args:
         column_info = control.get_table_info(request.args["table"])
-        select_table = {}
         for table in table_list:
             if table["table_name"] == request.args["table"]:
                 select_table = table
