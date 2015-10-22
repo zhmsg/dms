@@ -25,7 +25,6 @@ logging.basicConfig(filename=current_filename + '_DB.log', filemode='w')
 
 remote_host = "gene.ac"
 local_host = "127.0.0.1"
-service_mysql = "rdsikqm8sr3rugdu1muh3.mysql.rds.aliyuncs.com"
 
 
 class DB(object):
