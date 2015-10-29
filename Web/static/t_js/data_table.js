@@ -3,6 +3,27 @@
  */
 // $('#search_table').bind('input propertychange', function() {alert("success")});
 
+function msg_include(str, include_str){
+    var len_include = include_str.length;
+    var len_str = str.length;
+    var i= 0, j=0;
+    while(true){
+        if(i >= len_include){
+            return true;
+        }
+        if(j >= len_str){
+            return false;
+        }
+        if(str[j] == include_str[i]){
+            i++;
+            j++;
+        }
+        else{
+            j++;
+        }
+    }
+}
+
 function search_table(){
     var v = $("#search_table").val();
     var a_el = $("a");
@@ -12,7 +33,7 @@ function search_table(){
         if(v.length == 0){
             a_el[i].hidden = false;
         }
-        else if(a_el[i].text.indexOf(v) >= 0){
+        else if(msg_include(a_el[i].text, v)){
             a_el[i].hidden = false;
         }
         else{
