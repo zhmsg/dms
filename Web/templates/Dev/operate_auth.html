@@ -1,15 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title>晶云平台遗传频道权限描述</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>晶云平台遗传频道权限描述</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='t_css/main.css') }}"><!--自定义的页面样式 -->
 </head>
+
 <body>
-<table border="1">
+<table class="privilegeTable" cellspacing="0" cellpadding="0">
     <tr>
-        <th scope="col">模块</th>
-        <th scope="col">操作</th>
-        <th scope="col">拥有操作权限的角色</th>
+        <th scope="col" width="4%">模块</th>
+        <th scope="col" width="48%">操作</th>
+        <th scope="col" width="48%">拥有操作权限的角色</th>
     </tr>
     {% for item in operate_auth %}
     <tr>
@@ -20,7 +22,7 @@
     {% endfor %}
 </table>
 <form method="get" action="/dev/operate/auth/download">
-    <button type="submit">下载</button>
+    <button class="btn-down" type="submit">下载</button>
 </form>
 </body>
 </html>
