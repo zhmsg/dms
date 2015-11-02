@@ -11,6 +11,8 @@ from Upload import UploadManager
 from Calc import CalcManager
 from User import UserManager
 from Dev import DevManager
+from TableDesc import TableManager
+from Class import table_manager
 
 __author__ = 'ZhouHeng'
 
@@ -34,6 +36,7 @@ class ControlManager:
         self.calc_attribute_ch = self.calc.attribute_ch
         self.user = UserManager()
         self.dev = DevManager()
+        table_manager.create_not_exist_table()
         self.manger_email = ["budechao@ict.ac.cn", "biozy@ict.ac.cn"]
 
     def get_data(self):
@@ -114,6 +117,7 @@ class ControlManager:
             return False, u"您的权限不足"
         return self.calc.select(data_no)
 
+    # 针对开发者的应用
     def download_operate_auth(self):
         return self.dev.get_operate_auth_file()
 

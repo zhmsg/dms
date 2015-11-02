@@ -150,6 +150,7 @@ class DB(object):
                     create_table_sql += " default %s" % value[4]
                 if value[5] != "":
                     create_table_sql += " %s" % value[5]
+
                 if len(value) >= 7:
                     create_table_sql += " COMMENT '%s'" % value[6]
                 create_table_sql += ","
@@ -164,6 +165,7 @@ class DB(object):
             return True, execute_message
         except Exception, e:
             error_message = str(e.args)
+            print(create_table_sql)
             return False, "fail:%s." % error_message
 
     def check_table(self, table_name, table_desc):
