@@ -125,7 +125,7 @@ class DB(object):
     def format_string(self, str):
         return MySQLdb.escape_string(str)
 
-    def create_table(self, table_name, table_desc, force=False):
+    def create_table(self, table_name, table_desc, force=False, table_comment=""):
         try:
             show_sql = "SHOW TABLES LIKE '%s';" % table_name
             result = self.execute(show_sql)
@@ -136,27 +136,35 @@ class DB(object):
                     self.execute(del_sql)
                     execute_message += "Delete The Original Table %s \n" % table_name
                 else:
-                    return "%s Table Already Exists" % table_name
+                    return False, "%s Table Already Exists" % table_name
             create_table_sql = "CREATE TABLE %s (" % table_name
+            primary_key = []
             for value in table_desc:
                 create_table_sql += "%s %s" % (value[0], value[1])
                 if value[2] == "NO":
                     create_table_sql += " NOT NULL"
                 if value[3] == "PRI":
-                    create_table_sql += " PRIMARY KEY"
-                if value[4] is not None:
+                    primary_key.append(value[0])
+                    # create_table_sql += " PRIMARY KEY"
+                if value[4] is not None and value[4] != "None":
                     create_table_sql += " default %s" % value[4]
                 if value[5] != "":
                     create_table_sql += " %s" % value[5]
+                if len(value) >= 7:
+                    create_table_sql += " COMMENT '%s'" % value[6]
                 create_table_sql += ","
-            create_table_sql = create_table_sql[:-1] + ") DEFAULT CHARSET=utf8;"
+            if primary_key != []:
+                create_table_sql += " PRIMARY KEY (%s)," % ",".join(primary_key)
+            if table_comment != "":
+                create_table_sql = create_table_sql[:-1] + ") COMMENT '%s'  DEFAULT CHARSET=utf8;" % table_comment
+            else:
+                create_table_sql = create_table_sql[:-1] + ") DEFAULT CHARSET=utf8;"
             self.execute(create_table_sql)
-            execute_message += "Create Table %s Success \n" % table_name
-            return execute_message
+            execute_message += "CREATE TABLE %s Success \n" % table_name
+            return True, execute_message
         except Exception, e:
             error_message = str(e.args)
-            print(error_message)
-            return "fail:%s." % error_message
+            return False, "fail:%s." % error_message
 
     def check_table(self, table_name, table_desc):
         try:
