@@ -25,4 +25,5 @@ class HelpManager:
 
     def new_api(self, module_no, api_title, api_path, api_method, api_desc):
         # 新建 api_info
-        insert_sql = "INSERT INTO %s"
+        insert_sql = "INSERT INTO %s (module_no,api_title,api_path,api_method,api_desc) VALUES(%s,'%s','%s','%s','%s')" \
+                     % (self.api_info, module_no, api_title, api_path, api_method, api_desc)

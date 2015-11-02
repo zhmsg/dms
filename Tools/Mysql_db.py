@@ -133,6 +133,7 @@ class DB(object):
             if result == 1:
                 if force:
                     del_sql = "DROP TABLE  %s;" % table_name
+                    print(del_sql)
                     self.execute(del_sql)
                     execute_message += "Delete The Original Table %s \n" % table_name
                 else:
