@@ -24,6 +24,11 @@ def check_char_num_underline(s, min_len=1, max_len=-1):
     return check(regex, s, min_len, max_len)
 
 
+def check_char(s, min_len=1, max_len=-1):
+    regex = '[^a-zA-Z]'
+    return check(regex, s, min_len, max_len)
+
+
 def check_chinese(s, min_len=1, max_len=-1):
     regex = u'[^\u4e00-\u9fa5]'
     return check(regex, s, min_len, max_len)

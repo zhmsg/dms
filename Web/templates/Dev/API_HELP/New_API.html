@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加API</title>
+    <script type="text/javascript" src="{{ url_for('static', filename='t_js/jquery.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='t_js/API_HELP/new_api.js') }}"></script>
+</head>
+<body>
+API所属模块
+<select id="api_module" onchange="select_change()">
+    {% for module in module_list %}
+    <option about="{{ module["module_desc"] }}" value="{{ module["module_no"] }}" title="{{ module["module_prefix"] }}">{{ module["module_name"] }}</option>
+    {% endfor %}
+</select><br/>
+<form>
+选择的模块是 模块编号：<p id="selected_no"></p>模块名称：<p id="selected_name"></p>模块URL前缀 <p id="selected_prefix"></p>模块描述<p id="selected_desc"></p>
+<br/>
+API标题<input /><br/>
+API访问路径<input /><br/>
+API请求方式<select>
+    <option>GET</option>
+    <option>POST</option>
+    <option>PUT</option>
+    <option>DELETE</option>
+</select>
+<br/>
+API描述<input multiple/>
+<br/>
+    <button type="submit">新建</button>
+</form>
+</body>
+</html>

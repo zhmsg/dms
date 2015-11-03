@@ -11,7 +11,7 @@ from Upload import UploadManager
 from Calc import CalcManager
 from User import UserManager
 from Dev import DevManager
-from TableDesc import TableManager
+from APIHelp import HelpManager
 from Class import table_manager
 
 __author__ = 'ZhouHeng'
@@ -36,7 +36,8 @@ class ControlManager:
         self.calc_attribute_ch = self.calc.attribute_ch
         self.user = UserManager()
         self.dev = DevManager()
-        table_manager.create_not_exist_table()
+        # table_manager.create_not_exist_table()
+        self.api_help = HelpManager()
         self.manger_email = ["budechao@ict.ac.cn", "biozy@ict.ac.cn"]
 
     def get_data(self):
@@ -139,3 +140,7 @@ class ControlManager:
             content += "%s : %s<br>" % (attribute_ch[index], info[attribute[index]])
         for email in self.manger_email:
             my_email.send_mail_thread(email, sub, content)
+
+    # 针对API HEL片的应用
+    def get_module_list(self):
+        return self.api_help.get_module_list()

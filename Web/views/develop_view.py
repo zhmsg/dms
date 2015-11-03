@@ -12,12 +12,9 @@ sys.path.append('..')
 
 __author__ = 'Zhouheng'
 
-my_email = MyEmailManager()
 
 develop_view = Blueprint('develop_view', __name__)
 
-my_email = MyEmailManager()
-user_m = UserManager()
 control = ControlManager()
 
 
