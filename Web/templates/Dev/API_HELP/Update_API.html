@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>更新API解释</title>
@@ -70,12 +70,15 @@ API 请求方式 {{ api_info["basic_info"]["api_method"] }}
         <td><button onclick="new_body_param();">新建</button></td>
 </table>
 请求示例
+<br>
 {% for item in api_info["input_info"] %}
     {{ item["input_desc"] }}
-    <input value="{{ item["input_desc"] }}" readonly/>
+    <input value="{{ item["input_example"] }}" readonly/><br>
 {% endfor %}
 <input id="input_desc" />
-<area id="input_example" />
+<textarea id="input_example" /></textarea>
+<br>
+<button onclick="new_input_example()">新建</button>
 返回示例
 </body>
 </html>

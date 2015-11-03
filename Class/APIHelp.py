@@ -111,7 +111,7 @@ class HelpManager:
             return False, "sql execute result is %s " % result
         return True, {"api_no", api_no}
 
-    def new_api_input(self, api_no, output_examples):
+    def new_api_output(self, api_no, output_examples):
         if len(api_no) != 32:
             return False, "Bad api_no"
         value_sql = "VALUES "

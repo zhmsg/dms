@@ -156,3 +156,9 @@ class ControlManager:
 
     def add_body_param(self, api_no, param, necessary, type, desc):
         return self.api_help.new_api_body(api_no, {param :{"necessary": necessary, "type": type, "desc": desc}})
+
+    def add_input_example(self, api_no, example, desc):
+        return self.api_help.new_api_input(api_no, [{"desc": desc, "example": example}])
+
+    def add_output_example(self, api_no, example, desc):
+        return self.api_help.new_api_output(api_no, [{"desc": desc, "example": example}])

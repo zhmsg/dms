@@ -38,3 +38,20 @@ function new_body_param(){
         }
     });
 }
+
+function new_input_example(){
+    var api_no = $("#api_no").val();
+    var desc = $("#input_desc").val();
+    var example = $("#input_example").val();
+    $.ajax({
+        url: "/dev/api/add/input/",
+        method: "POST",
+        data:{desc:desc,api_no:api_no,example:example},
+        success:function(data){
+            alert(data);
+        },
+        error:function(xhr){
+            alert(xhr.statusText);
+        }
+    });
+}
