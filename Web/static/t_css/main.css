@@ -3,6 +3,7 @@
 body{font-family:"Microsoft Yahei","微软雅黑","宋体",Arial, Helvetica, sans-serif;}
 ul,ol{list-style: none;margin: 0;padding: 0;}
 .clear{clear:both;}
+.left{float: left;}
 .loginMode{margin-top: 100px;}
 .step a,.market a{display: block;}
 
@@ -60,3 +61,15 @@ ul,ol{list-style: none;margin: 0;padding: 0;}
 .privilegeTable th,.privilegeTable td{padding: 0 8px 0 !important;line-height:44px !important;}
 .privilegeTable td{color: #080808;}
 .btn-down{margin-left: 20px;margin-bottom: 20px;padding:8px 40px;}
+/*添加API页面*/
+.apiMode{padding: 30px 0;}
+.apiMode label{width:200px;text-align: right;font-weight: normal;}
+.box-side{border: 1px solid #ccc;border-radius: 4px;box-shadow: 5px;padding: 5px 0;}
+.apiContentLine p{margin-bottom: 0;}
+.apiContentLine ul li{line-height:30px;padding: 5px 0;}
+.apiContentLine input{padding: 0;}
+.apiContentLine textarea{resize:none;width: 500px;height: 200px;}
+.select-mode{padding-left:200px;}
+.select-mode label{width:auto;text-align: left;}
+.api-describe{vertical-align: top;}
+.api-newBtn{margin-left: 202px;}
