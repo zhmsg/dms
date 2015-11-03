@@ -1,33 +1,69 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title>添加API</title>
-    <script type="text/javascript" src="{{ url_for('static', filename='t_js/jquery.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='t_js/API_HELP/new_api.js') }}"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>添加API</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='t_css/bootstrap.min.css') }}"><!-- 新 Bootstrap 核心 CSS 文件 -->
+<link rel="stylesheet" href="{{ url_for('static', filename='t_css/main.css') }}"><!--自定义的页面样式 -->
+<script type="text/javascript" src="{{ url_for('static', filename='t_js/jquery.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='t_js/API_HELP/new_api.js') }}"></script>
 </head>
+
 <body>
-API所属模块
-<select id="api_module" onchange="select_change()">
-    {% for module in module_list %}
-    <option about="{{ module["module_desc"] }}" value="{{ module["module_no"] }}" title="{{ module["module_prefix"] }}">{{ module["module_name"] }}</option>
-    {% endfor %}
-</select><br/>
-<form>
-选择的模块是 模块编号：<p id="selected_no"></p>模块名称：<p id="selected_name"></p>模块URL前缀 <p id="selected_prefix"></p>模块描述<p id="selected_desc"></p>
-<br/>
-API标题<input /><br/>
-API访问路径<input /><br/>
-API请求方式<select>
-    <option>GET</option>
-    <option>POST</option>
-    <option>PUT</option>
-    <option>DELETE</option>
-</select>
-<br/>
-API描述<input multiple/>
-<br/>
-    <button type="submit">新建</button>
-</form>
+<div class="container apiMode">
+  <div class="form-group">
+     <label for="">API所属模块：</label>
+     <select class="box-side" id="api_module" onchange="select_change()">
+        {% for module in module_list %}
+            <option about="{{ module["module_desc"] }}" value="{{ module["module_no"] }}" title="{{ module["module_prefix"] }}">{{ module["module_name"] }}</option>
+        {% endfor %}
+     </select>
+  </div>
+  <form role="form">
+     <div class="form-group apiContentLine">
+      <label for="">选择的模块是：</label>
+      <ul class="select-mode">
+        <li>
+          <label for="">模块编号：</label>
+          <span id="selected_no"></span> </li>
+        <li>
+          <label for="">模块名称：</label>
+          <span id="selected_name"></span></li>
+        <li>
+          <label for="">模块URL前缀：</label>
+          <span id="selected_prefix"></span></li>
+        <li>
+          <label for="">模块描述：</label>
+          <span id="selected_desc"></span></li>
+      </ul>
+    </div>
+    <div class="form-group apiContentLine">
+      <ul>
+        <li>
+          <label for="">API标题：</label>
+          <input class="box-side width300" name="" type="text" />
+        </li>
+        <li>
+          <label for="">API访问路径：</label>
+          <input class="box-side width300" name="" type="text" />
+        </li>
+        <li>
+          <label for="">API请求方式：</label>
+          <select class="box-side width300">
+            <option>GET</option>
+            <option>POST</option>
+            <option>PUT</option>
+            <option>DELETE</option>
+          </select>
+        </li>
+        <li>
+          <label class="api-describe" for="">API描述：</label>
+          <textarea class="box-side" rows="3"></textarea>
+        </li>
+      </ul>
+    </div>
+    <button type="submit" class="btn btn-success btn-down api-newBtn">新建</button>
+  </form>
+</div>
 </body>
 </html>
