@@ -29,12 +29,29 @@ def check_chinese(s, min_len=1, max_len=-1):
     return check(regex, s, min_len, max_len)
 
 
+def check_chinese_en(s, min_len=1, max_len=-1):
+    regex = u'[^\u4e00-\u9fa5a-zA-Z]'
+    return check(regex, s, min_len, max_len)
+
+
 def check_password(s, min_len=1, max_len=-1):
-    regex = 'a-zA-Z0-9.@_'
+    regex = '[^a-zA-Z0-9.@_]'
     return check(regex, s, min_len, max_len)
 
 
 def check_path(s, min_len=1, max_len=-1):
-    regex = '[/a-z_]'
+    regex = '[^/a-z_]'
     return check(regex, s, min_len, max_len)
+
+
+def check_http_method(m):
+    if m not in ("POST", "GET", "PUT", "DELETE"):
+        return False
+    return True
+
+
+def check_sql_character(s):
+    if type(s) != unicode and type(s) != str:
+        s = str(s)
+    return s.replace("\\", "\\\\").replace("'", "\\'")
 
