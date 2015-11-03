@@ -26,22 +26,28 @@ class HelpManager:
         self.api_body = table_manager.api_body
 
     def new_api_info(self, module_no, api_title, api_path, api_method, api_desc):
+        if type(module_no) != int:
+            return False , "Bad module_no"
         if check_chinese_en(api_title) is False:
             return False, "Bad api_title"
         if check_path(api_path) is False:
             return False, "Bad api_path"
         if check_http_method(api_method) is False:
             return False, "Bad api_method"
+
         api_desc = check_sql_character(api_desc)
+        if len(api_desc) < 1:
+            return False, "Bad api_desc"
         api_no = uuid.uuid1().hex
         # 新建 api_info
         insert_sql = "INSERT INTO %s (api_no,module_no,api_title,api_path,api_method,api_desc) " \
                      "VALUES('%s',%s,'%s','%s','%s','%s')" \
                      % (self.api_info, api_no, module_no, api_title, api_path, api_method, api_desc)
+        print(insert_sql)
         result = self.db.execute(insert_sql)
         if result != 1:
             return False, "sql execute result is %s " % result
-        return True, {"api_no", api_no}
+        return True, {"api_no": api_no}
 
     def new_api_header(self, api_no, header_params):
         if len(api_no) != 32:
@@ -130,3 +136,54 @@ class HelpManager:
         for item in self.db.fetchall():
             module_info.append({"module_no": item[0], "module_name": item[1], "module_prefix": item[2], "module_desc": item[3]})
         return True, module_info
+
+    def get_api_info(self, api_no):
+        if len(api_no) != 32:
+            return False, "Bad api_no"
+        # get basic info
+        basic_info_col = ("module_no", "api_no", "api_title", "api_path", "api_method", "api_desc", "module_name",
+                          "module_prefix", "module_desc")
+        select_sql = "SELECT m.%s FROM %s AS i, api_module AS m WHERE i.module_no=m.module_no AND api_no='%s';" \
+                     % (",".join(basic_info_col), self.api_info, api_no)
+        result = self.db.execute(select_sql)
+        if result <= 0:
+            return False, "Not Exist api_no"
+        db_info = self.db.fetchone()
+        basic_info = {}
+        for i in range(len(db_info)):
+            basic_info[basic_info_col[i]] = db_info[i]
+        basic_info["api_url"] = basic_info["module_prefix"].rstrip("/") + "/" + basic_info["api_path"].lstrip("/")
+        # 获得请求头部参数列表
+        select_sql = "SELECT header_no,api_no,param,necessary,param_desc FROM %s WHERE api_no='%s';" \
+                     % (self.api_header, api_no)
+        self.db.execute(select_sql)
+        header_info = []
+        for item in self.db.fetchall():
+            necessary = True if item[3] == "" else False
+            header_info.append({"header_no": item[0], "api_no": item[1], "param": item[2], "necessary": necessary,
+                                "param_desc": item[4]})
+        # 获得请求主体参数列表
+        select_sql = "SELECT body_no,api_no,param,necessary,type,param_desc FROM %s WHERE api_no='%s';" \
+                     % (self.api_body, api_no)
+        self.db.execute(select_sql)
+        body_info = []
+        for item in self.db.fetchall():
+            necessary = True if item[3] == "" else False
+            body_info.append({"body_no": item[0], "api_no": item[1], "param": item[2], "necessary": necessary,
+                              "type": item[4], "param_desc": item[5]})
+        # 获得请求示例
+        select_sql = "SELECT input_no,api_no,input_desc,input_example FROM %s WHERE api_no='%s';" \
+                     % (self.api_input, api_no)
+        self.db.execute(select_sql)
+        input_info = []
+        for item in self.db.fetchall():
+            input_info.append({"input_no": item[0], "api_no": item[1], "input_desc": item[2], "input_example": item[3]})
+        # 获得返回示例
+        select_sql = "SELECT output_no,api_no,output_desc,output_example FROM %s WHERE api_no='%s';" \
+                     % (self.api_output, api_no)
+        self.db.execute(select_sql)
+        output_info = []
+        for item in self.db.fetchall():
+            output_info.append({"input_no": item[0], "api_no": item[1], "input_desc": item[2], "input_example": item[3]})
+        return True, {"basic_info": basic_info, "header_info": header_info, "body_info": body_info,
+                      "input_info": input_info, "output_info": output_info}

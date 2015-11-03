@@ -7,5 +7,6 @@ function select_change(){
     $("#selected_name").text(selected_module.text());
     $("#selected_prefix").text(selected_module.attr("title"));
     $("#selected_desc").text(selected_module.attr("about"));
+    $("#module_no").val(selected_module.val());
 }
 select_change();

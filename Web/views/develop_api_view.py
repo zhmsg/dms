@@ -3,7 +3,7 @@
 
 
 import sys
-from flask import Blueprint, render_template, send_from_directory, request
+from flask import Blueprint, render_template, request, redirect
 from Class.Control import ControlManager
 
 sys.path.append('..')
@@ -11,13 +11,16 @@ sys.path.append('..')
 __author__ = 'Zhouheng'
 
 
-develop_api_view = Blueprint('develop_api_view', __name__)
+develop_api_view = Blueprint('develop_api_view', __name__, url_prefix="/dev/api")
 
 control = ControlManager()
+
+print("start success")
 
 
 @develop_api_view.app_errorhandler(500)
 def handle_500(e):
+    print(e.args)
     return str(e.args)
 
 
@@ -33,3 +36,57 @@ def new_api_page():
         return module_list
     return render_template("/Dev/API_HELP/New_API.html", module_list=module_list)
 
+
+@develop_api_view.route("/new/", methods=["POST"])
+def new_api_info():
+    request_form = request.form
+    desc = request_form["api_desc"]
+    url = request_form["api_url"]
+    title = request_form["api_title"]
+    method = request_form["api_method"]
+    module_no = int(request_form["api_module"])
+    result, api_info = control.new_api_info(module_no, title, url, method, desc)
+    if result is False:
+        return api_info
+    return redirect(develop_api_view.url_prefix + "/update/info/?api_no=%s" % api_info["api_no"])
+
+
+@develop_api_view.route("/update/info/", methods=["GET"])
+def update_api_other_info():
+    if "api_no" not in request.args:
+        return "Need api_no"
+    api_no = request.args["api_no"]
+    if len(api_no) != 32:
+        return "Bad api_no"
+    result, api_info = control.get_api_info(api_no)
+    if result is False:
+        return api_info
+    return render_template("/Dev/API_HELP/Update_API.html", api_info=api_info, api_no=api_no)
+
+
+@develop_api_view.route("/add/header/", methods=["POST"])
+def add_header_param():
+    request_form = request.form
+    param = request_form["param"]
+    api_no = request_form["api_no"]
+    desc = request_form["desc"]
+    necessary = int(request_form["necessary"])
+    result, param_info = control.add_header_param(api_no, param, necessary, desc)
+    if result is False:
+        return param_info
+    return "true"
+
+
+@develop_api_view.route("/add/body/", methods=["POST"])
+def add_body_param():
+    request_form = request.form
+    param = request_form["param"]
+    api_no = request_form["api_no"]
+    desc = request_form["desc"]
+    necessary = int(request_form["necessary"])
+    type = request_form["type"]
+    print(request_form)
+    result, param_info = control.add_body_param(api_no, param, necessary, type, desc)
+    if result is False:
+        return param_info
+    return "true"

@@ -19,13 +19,15 @@
         {% endfor %}
      </select>
   </div>
-  <form role="form">
+  <form role="form" action="/dev/api/new/" method="post">
      <div class="form-group apiContentLine">
       <label for="">选择的模块是：</label>
       <ul class="select-mode">
         <li>
           <label for="">模块编号：</label>
-          <span id="selected_no"></span> </li>
+          <span id="selected_no"></span>
+          <input id="module_no" name="api_module" style="display:none;"/>
+        </li>
         <li>
           <label for="">模块名称：</label>
           <span id="selected_name"></span></li>
@@ -41,15 +43,15 @@
       <ul>
         <li>
           <label for="">API标题：</label>
-          <input class="box-side width300" name="" type="text" />
+          <input class="box-side width300" name="api_title" type="text" />
         </li>
         <li>
           <label for="">API访问路径：</label>
-          <input class="box-side width300" name="" type="text" />
+          <input class="box-side width300" name="api_url" type="text" />
         </li>
         <li>
           <label for="">API请求方式：</label>
-          <select class="box-side width300">
+          <select class="box-side width300" name="api_method">
             <option>GET</option>
             <option>POST</option>
             <option>PUT</option>
@@ -58,7 +60,7 @@
         </li>
         <li>
           <label class="api-describe" for="">API描述：</label>
-          <textarea class="box-side" rows="3"></textarea>
+          <textarea class="box-side" rows="3" name="api_desc"></textarea>
         </li>
       </ul>
     </div>

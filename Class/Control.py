@@ -144,3 +144,15 @@ class ControlManager:
     # 针对API HEL片的应用
     def get_module_list(self):
         return self.api_help.get_module_list()
+
+    def new_api_info(self, module_no, title, path, method, desc):
+        return self.api_help.new_api_info(module_no, title, path, method, desc)
+
+    def get_api_info(self, api_no):
+        return self.api_help.get_api_info(api_no)
+
+    def add_header_param(self, api_no, param, necessary, desc):
+        return self.api_help.new_api_header(api_no, {param :{"necessary": necessary, "desc": desc}})
+
+    def add_body_param(self, api_no, param, necessary, type, desc):
+        return self.api_help.new_api_body(api_no, {param :{"necessary": necessary, "type": type, "desc": desc}})

@@ -7,7 +7,7 @@ __author__ = 'ZhouHeng'
 
 
 def check(regex, s, min_len=1, max_len=-1):
-    if type(s) != unicode or type(s) !=  str:
+    if type(s) != unicode and type(s) !=  str:
         return False
     if min_len > 0 and len(s) < min_len:
         return False
@@ -45,7 +45,7 @@ def check_password(s, min_len=1, max_len=-1):
 
 
 def check_path(s, min_len=1, max_len=-1):
-    regex = '[^/a-z_]'
+    regex = '[^/a-z_<>]'
     return check(regex, s, min_len, max_len)
 
 
