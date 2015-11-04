@@ -6,6 +6,9 @@ ul,ol{list-style: none;margin: 0;padding: 0;}
 .left{float: left;}
 .loginMode{margin-top: 100px;}
 .step a,.market a{display: block;}
+.font16{font-size: 16px;}
+.bottom10{margin-bottom: 10px;}
+.bottom20{margin-bottom: 20px;}
 
 .newBtn{display: block;height:54px;padding-bottom: 20px;}
 .infoShow{width: 570px;margin:50px auto 0;}
@@ -74,3 +77,8 @@ ul,ol{list-style: none;margin: 0;padding: 0;}
 .api-describe{vertical-align: top;}
 .api-newBtn{margin-left: 202px;}
 .width300{width: 300px;}
+/*API帮助文档*/
+.api-help-mode a{padding-right:20px;color: #000;}
+.api-list-table caption{color: #000;font-weight: bold;}
+.api-list-table th, .api-list-table td{word-break:break-all;word-wrap:break-word;}
+.api-example textarea{resize:none;width:100%;height:300px !important;background: none !important;}

@@ -1,37 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title>API帮助文档</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>API帮助文档</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='t_css/bootstrap.min.css') }}"><!-- 新 Bootstrap 核心 CSS 文件 -->
+<link rel="stylesheet" href="{{ url_for('static', filename='t_css/main.css') }}"><!--自定义的页面样式 -->
 </head>
+
 <body>
-{% for module_info in module_list %}
-<a href="/dev/api/?module_no={{ module_info["module_no"] }}">{{ module_info["module_name"] }}</a>
-{% endfor %}
-{% if current_module %}
-    当前模块
-    模块编号：{{ current_module["module_no"] }}
-    模块名称：{{ current_module["module_name"] }}
-    模块URL前缀：{{ current_module["module_prefix"] }}
-    模块描述：{{ current_module["module_desc"] }}
-{% endif %}
-<br>
-{% if api_list and current_module%}
-    API列表
-    <table>
-    <tr>
-        <th scope="col">API标题</th>
-        <th scope="col">访问URL</th>
-        <th scope="col">操作</th>
-    </tr>
-    {% for item in api_list %}
-    <tr>
-        <td>{{ item["api_title"] }}</td>
-        <td>{{ current_module["module_prefix"].rstrip("/") }}/{{ item["api_path"].lstrip("/") }}</td>
-        <td><a href="/dev/api/update/info/?api_no={{ item["api_no"] }}">查看</a></td>
-    </tr>
+<div class="container font16">
+<div class="apiMode api-help-mode">
+    {% for module_info in module_list %}
+        <a href="/dev/api/?module_no={{ module_info["module_no"] }}">{{ module_info["module_name"] }}</a>
     {% endfor %}
-</table>
+</div>
+{% if current_module %}
+    <p>当前模块</p>
+    <p>模块编号：{{ current_module["module_no"] }}</p>
+    <p>模块名称：{{ current_module["module_name"] }}</p>
+    <p>模块URL前缀：{{ current_module["module_prefix"] }}</p>
+    <p>模块描述：{{ current_module["module_desc"] }}</p>
 {% endif %}
+{% if api_list and current_module%}
+    <table class="table table-bordered table-hover api-list-table">
+        <caption>API列表</caption>
+        <tr>
+            <th scope="col" width="25%">API标题</th>
+            <th scope="col" width="70%">访问URL</th>
+            <th scope="col" width="5%">操作</th>
+        </tr>
+        {% for item in api_list %}
+        <tr>
+            <td>{{ item["api_title"] }}</td>
+            <td>{{ current_module["module_prefix"].rstrip("/") }}/{{ item["api_path"].lstrip("/") }}</td>
+            <td><a href="/dev/api/update/info/?api_no={{ item["api_no"] }}">查看</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endif %}
+</div>
 </body>
 </html>
