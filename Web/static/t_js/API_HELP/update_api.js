@@ -29,6 +29,8 @@ function new_header_param(){
                     var tr=$("#api_header_param tr").eq(-2);
                     tr.after(trHTML);
                 }
+                $("#header_param_name").val("");
+                $("#header_param_desc").val("");
             }
             else{
                 alert(data)
@@ -67,6 +69,9 @@ function new_body_param(){
                     var tr=$("#api_body_param tr").eq(-2);
                     tr.after(trHTML);
                 }
+                $("#body_param_name").val("");
+                $("#body_param_desc").val("");
+                $("#body_param_type").val("");
             }
         },
         error:function(xhr){
@@ -90,6 +95,8 @@ function new_input_example(){
                 for(var i=0;i<new_data.length;i++) {
                     $("#api_input_exist").append('<div><p>' + new_data[i].desc +'</p><p><textarea class="form-control" readonly>' + new_data[i].example + '</textarea></p></div>');
                 }
+                $("#input_desc").val("");
+                $("#input_example").val("");
             }
             else{
                 alert(data);
@@ -116,6 +123,8 @@ function new_output_example(){
                 for(var i=0;i<new_data.length;i++) {
                     $("#api_output_exist").append('<div><p>' + new_data[i].desc +'</p><p><textarea class="form-control" readonly>' + new_data[i].example + '</textarea></p></div>');
                 }
+                $("#output_desc").val("");
+                $("#output_example").val("");
             }
             else{
                 alert(data);
