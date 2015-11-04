@@ -29,6 +29,27 @@ def ping():
     return "true"
 
 
+@develop_api_view.route("/")
+def list_api():
+    result, module_list = control.get_module_list()
+    if result is False:
+        return module_list
+    if "module_no" in request.args:
+        module_no = int(request.args["module_no"])
+        result, api_list = control.get_api_list(module_no)
+        if result is False:
+            return api_list
+        for module_info in module_list:
+            if module_info["module_no"] == module_no:
+                current_module = module_info
+                break
+        if current_module is None:
+            return "Error"
+        return render_template("/Dev/API_HELP/List_API.html",
+                               module_list=module_list, api_list=api_list, current_module=current_module)
+    return render_template("/Dev/API_HELP/List_API.html", module_list=module_list)
+
+
 @develop_api_view.route("/new/", methods=["GET"])
 def new_api_page():
     result, module_list = control.get_module_list()

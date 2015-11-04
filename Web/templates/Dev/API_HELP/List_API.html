@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>API帮助文档</title>
+</head>
+<body>
+{% for module_info in module_list %}
+<a href="/dev/api/?module_no={{ module_info["module_no"] }}">{{ module_info["module_name"] }}</a>
+{% endfor %}
+{% if current_module %}
+    当前模块
+    模块编号：{{ current_module["module_no"] }}
+    模块名称：{{ current_module["module_name"] }}
+    模块URL前缀：{{ current_module["module_prefix"] }}
+    模块描述：{{ current_module["module_desc"] }}
+{% endif %}
+<br>
+{% if api_list and current_module%}
+    API列表
+    <table>
+    <tr>
+        <th scope="col">API标题</th>
+        <th scope="col">访问URL</th>
+        <th scope="col">操作</th>
+    </tr>
+    {% for item in api_list %}
+    <tr>
+        <td>{{ item["api_title"] }}</td>
+        <td>{{ current_module["module_prefix"].rstrip("/") }}/{{ item["api_path"].lstrip("/") }}</td>
+        <td><a href="/dev/api/update/info/?api_no={{ item["api_no"] }}">查看</a></td>
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+</body>
+</html>

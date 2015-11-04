@@ -162,3 +162,6 @@ class ControlManager:
 
     def add_output_example(self, api_no, example, desc):
         return self.api_help.new_api_output(api_no, [{"desc": desc, "example": example}])
+
+    def get_api_list(self, module_no):
+        return self.api_help.get_api_list(module_no)

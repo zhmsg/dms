@@ -102,6 +102,10 @@ class HelpManager:
                 return False, "input example need desc and example"
             input_desc = check_sql_character(item["desc"])[:150]
             input_example = check_sql_character(item["example"])
+            if len(input_desc) < 1:
+                return False, "Bad input_desc"
+            if len(input_example) < 1:
+                return False, "Bad input_example"
             value_sql += "('%s','%s','%s')" % (api_no, input_desc, input_example)
         if len(value_sql) < 8:
             return True
@@ -120,6 +124,10 @@ class HelpManager:
                 return False, "output example need desc and example"
             output_desc = check_sql_character(item["desc"])[:150]
             output_example = check_sql_character(item["example"])
+            if len(output_desc) < 1:
+                return False, "Bad output_desc"
+            if len(output_example) < 1:
+                return False, "Bad output_example"
             value_sql += "('%s','%s','%s')" % (api_no, output_desc, output_example)
         if len(value_sql) < 8:
             return True
@@ -129,8 +137,11 @@ class HelpManager:
             return False, "sql execute result is %s " % result
         return True, {"api_no", api_no}
 
-    def get_module_list(self):
-        select_sql = "SELECT module_no,module_name,module_prefix,module_desc FROM %s;" % self.api_module
+    def get_module_list(self, module_no=None):
+        select_sql = "SELECT module_no,module_name,module_prefix,module_desc FROM %s" % self.api_module
+        if module_no is not None and type(module_no) == int:
+            select_sql += " WHERE module_no=%s" % module_no
+        select_sql += ";"
         self.db.execute(select_sql)
         module_info = []
         for item in self.db.fetchall():
@@ -187,3 +198,15 @@ class HelpManager:
             output_info.append({"input_no": item[0], "api_no": item[1], "input_desc": item[2], "input_example": item[3]})
         return True, {"basic_info": basic_info, "header_info": header_info, "body_info": body_info,
                       "input_info": input_info, "output_info": output_info}
+
+    def get_api_list(self, module_no):
+        if type(module_no) != int:
+            return False, "Bad module_no"
+        select_sql = "SELECT api_no,module_no,api_title,api_path,api_method,api_desc FROM %s WHERE module_no=%s;" \
+                     % (self.api_info, module_no)
+        self.db.execute(select_sql)
+        api_list = []
+        for item in self.db.fetchall():
+            api_list.append({"api_no": item[0], "module_no": item[1], "api_title": item[2], "api_path": item[3],
+                             "api_method": item[4], "api_desc": item[5]})
+        return True, api_list
