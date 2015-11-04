@@ -27,21 +27,24 @@ class TableManager:
             ["api_title", "varchar(150)", "NO", "", None, "", "API的标题即主要功能概述"],
             ["api_path", "varchar(150)", "NO", "", None, "", "API的URL"],
             ["api_method", "varchar(6)", "NO", "", None, "", "API的请求方法"],
-            ["api_desc", "varchar(300)", "NO", "", None, "", "关于API的详细描述"]
+            ["api_desc", "varchar(300)", "NO", "", None, "", "关于API的详细描述"],
+            ["add_time", "datetime", "NO", "", None, "", "添加的时间"]
         ]
         self.api_input = "api_input"
         self.api_input_desc = [
             ["input_no", "char(32)", "NO", "PRI", None, "", "主键 输入系统编号"],
             ["api_no", "char(32)", "NO", "", None, "", "API系統编号 參看%s api_no" % self.api_info],
             ["input_desc", "varchar(150)", "NO", "", None, "", "API输入描述"],
-            ["input_example", "text", "NO", "", None, "", "API调用输入示例"]
+            ["input_example", "text", "NO", "", None, "", "API调用输入示例"],
+            ["add_time", "datetime", "NO", "", None, "", "添加的时间"]
         ]
         self.api_output = "api_output"
         self.api_output_desc = [
             ["output_no", "char(32)", "NO", "PRI", None, "", "主键 输出系统编号"],
             ["api_no", "char(32)", "NO", "", None, "", "API系統编号 參看%s api_no" % self.api_info],
             ["output_desc", "varchar(150)", "NO", "", None, "", "API输出描述"],
-            ["output_example", "text", "NO", "", None, "", "API调用输出示例"]
+            ["output_example", "text", "NO", "", None, "", "API调用输出示例"],
+            ["add_time", "datetime", "NO", "", None, "", "添加的时间"]
         ]
         self.api_body = "api_body"
         self.api_body_desc = [
@@ -50,7 +53,8 @@ class TableManager:
             ["param", "varchar(30)", "NO", "", None, "", "请求参数"],
             ["necessary", "bit(1)", "NO", "", None, "", "请求参数是否必需0非必需1必需"],
             ["type", "varchar(20)", "NO", "", None, "", "请求参数类型"],
-            ["param_desc", "varchar(1000)", "NO", "", None, "", "请求参数描述"]
+            ["param_desc", "varchar(1000)", "NO", "", None, "", "请求参数描述"],
+            ["add_time", "datetime", "NO", "", None, "", "添加的时间"]
         ]
         self.api_header = "api_header"
         self.api_header_desc = [
@@ -58,7 +62,8 @@ class TableManager:
             ["api_no", "char(32)", "NO", "", None, "", "API系統编号 參看%s api_no" % self.api_info],
             ["param", "varchar(30)", "NO", "", None, "", "请求参数"],
             ["necessary", "bit(1)", "NO", "", None, "", "请求参数是否必需0非必需1必需"],
-            ["param_desc", "varchar(1000)", "NO", "", None, "", "请求参数描述"]
+            ["param_desc", "varchar(1000)", "NO", "", None, "", "请求参数描述"],
+            ["add_time", "datetime", "NO", "", None, "", "添加的时间"]
         ]
 
     def create_not_exist_table(self):

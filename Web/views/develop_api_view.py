@@ -97,7 +97,7 @@ def add_header_param():
     result, param_info = control.add_header_param(api_no, param, necessary, desc)
     if result is False:
         return param_info
-    return "true"
+    return json.dumps({"status": True, "data": param_info})
 
 
 @develop_api_view.route("/add/body/", methods=["POST"])

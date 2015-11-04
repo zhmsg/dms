@@ -14,7 +14,21 @@ function new_header_param(){
         success:function(data){
             var json_obj = JSON.parse(data);
             if (json_obj.status == true){
-                alert(json_obj.data);
+                var new_data = json_obj.data;
+                for(var i=0;i<new_data.length;i++){
+                    var t_len = $("#api_header_param").length;
+                    var trHTML = "<tr><td>" + new_data[i].param;
+                    trHTML += '</td><td><select class="form-control" disabled>'
+                    if (new_data[i].necessary == true) {
+                        trHTML += '<option value="1" selected="selected">是</option><option value="0">否</option></select></td>';
+                    }
+                    else{
+                        trHTML += '<option value="1">是</option><option value="0" selected="selected">否</option></select></td>';
+                    }
+                    trHTML += '<td>' + new_data[i].desc + '</td><td><button class="btn btn-success">更新</button><button class="btn btn-danger">删除</button></td></tr>"';
+                    var tr=$("#api_header_param tr").eq(-2);
+                    tr.after(trHTML);
+                }
             }
             else{
                 alert(data)
