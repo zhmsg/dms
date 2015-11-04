@@ -52,6 +52,19 @@ def list_api():
     return render_template("/Dev/API_HELP/List_API.html", module_list=module_list)
 
 
+@develop_api_view.route("/info/", methods=["GET"])
+def update_api_other_info():
+    if "api_no" not in request.args:
+        return "Need api_no"
+    api_no = request.args["api_no"]
+    if len(api_no) != 32:
+        return "Bad api_no"
+    result, api_info = control.get_api_info(api_no)
+    if result is False:
+        return api_info
+    return render_template("/Dev/API_HELP/Show_API.html", api_info=api_info, api_no=api_no)
+
+
 @develop_api_view.route("/new/", methods=["GET"])
 def new_api_page():
     result, module_list = control.get_module_list()
