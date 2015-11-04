@@ -12,7 +12,13 @@ function new_header_param(){
         method: "POST",
         data:{param:param,necessary:necessary,desc:desc,api_no:api_no},
         success:function(data){
-            alert(data);
+            var json_obj = JSON.parse(data);
+            if (json_obj.status == true){
+                alert(json_obj.data);
+            }
+            else{
+                alert(data)
+            }
         },
         error:function(xhr){
             alert(xhr.statusText);

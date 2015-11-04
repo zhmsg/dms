@@ -3,6 +3,7 @@
 
 
 import sys
+import json
 from flask import Blueprint, render_template, request, redirect
 from Class.Control import ControlManager
 
@@ -110,7 +111,7 @@ def add_body_param():
     result, param_info = control.add_body_param(api_no, param, necessary, type, desc)
     if result is False:
         return param_info
-    return "true"
+    return json.dumps({"status": True, "data": param_info})
 
 
 @develop_api_view.route("/add/input/", methods=["POST"])
