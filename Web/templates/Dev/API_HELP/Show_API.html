@@ -25,10 +25,11 @@
     <tr>
         <td>{{ item["param"] }}</td>
         <td>
-            <select class="form-control" disabled>
-                <option value="1" {% if item["necessary"] %}selected="selected"{% endif %}>是</option>
-                <option value="0" {% if not item["necessary"] %}selected="selected"{% endif %}>否</option>
-            </select>
+            {% if item["necessary"] %}
+                是
+            {% else %}
+                否
+            {% endif %}
         </td>
         <td>{{ item["param_desc"] }}</td>
     </tr>
@@ -48,10 +49,11 @@
     <tr>
         <td>{{ item["param"] }}</td>
         <td>
-            <select class="form-control" disabled>
-                <option value="1" {% if item["necessary"] %}selected="selected"{% endif %}>是</option>
-                <option value="0" {% if not item["necessary"] %}selected="selected"{% endif %}>否</option>
-            </select>
+            {% if item["necessary"] %}
+                是
+            {% else %}
+                否
+            {% endif %}
         </td>
         <td>{{ item["type"] }}</td>
         <td>{{ item["param_desc"] }}</td>
