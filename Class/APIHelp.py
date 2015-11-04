@@ -105,10 +105,10 @@ class HelpManager:
                          % (body_no, api_no, key, value["necessary"], value["type"], param_desc)
             necessary = True if value["necessary"] == 1 else False
             new_result.append({"api_no": api_no, "body_no": body_no, "necessary": necessary, "param": key,
-                               "desc": param_desc})
+                               "desc": param_desc, "type": value["type"]})
         if len(value_sql) < 8:
             return True
-        insert_sql = "INSERT INTO %s (api_no,param,necessary,type,param_desc) %s" % (self.api_body, value_sql)
+        insert_sql = "INSERT INTO %s (body_no,api_no,param,necessary,type,param_desc) %s" % (self.api_body, value_sql)
         result = self.db.execute(insert_sql)
         if result != 1:
             return False, "sql execute result is %s " % result
