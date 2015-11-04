@@ -55,3 +55,20 @@ function new_input_example(){
         }
     });
 }
+
+function new_output_example(){
+    var api_no = $("#api_no").val();
+    var desc = $("#output_desc").val();
+    var example = $("#output_example").val();
+    $.ajax({
+        url: "/dev/api/add/output/",
+        method: "POST",
+        data:{desc:desc,api_no:api_no,example:example},
+        success:function(data){
+            alert(data);
+        },
+        error:function(xhr){
+            alert(xhr.statusText);
+        }
+    });
+}

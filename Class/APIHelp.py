@@ -50,29 +50,45 @@ class HelpManager:
         return True, {"api_no": api_no}
 
     def new_api_header(self, api_no, header_params):
-        if len(api_no) != 32:
-            return False, "Bad api_no"
-        value_sql = "VALUES "
-        for key, value in header_params.items():
-            if check_char_num_underline(key) is False:
-                return False, "Bad header param %s" % key
-            if "necessary" not in value or "desc" not in value:
-                return False, "Bad header param %s, need necessary and desc" % key
-            if value["necessary"] != 0 and value["necessary"] != 1:
-                return False, "Bad header param %s, necessary must be 0 or 1" % key
-            param_desc = check_sql_character(value["desc"])[:1000]
-            value_sql += "('%s','%s',%s,'%s')" % (api_no, key, value["necessary"], param_desc)
-        if len(value_sql) < 8:
-            return True
-        insert_sql = "INSERT INTO %s (api_no,param,necessary,param_desc) %s" % (self.api_header, value_sql)
-        result = self.db.execute(insert_sql)
-        if result != 1:
-            return False, "sql execute result is %s " % result
-        return True, {"api_no", api_no}
+        try:
+            if len(api_no) != 32:
+                return False, "Bad api_no"
+            value_sql = "VALUES "
+            new_result = []
+            for key, value in header_params.items():
+                if check_char_num_underline(key) is False:
+                    return False, "Bad header param %s" % key
+                if "necessary" not in value or "desc" not in value:
+                    return False, "Bad header param %s, need necessary and desc" % key
+                if value["necessary"] != 0 and value["necessary"] != 1:
+                    return False, "Bad header param %s, necessary must be 0 or 1" % key
+                param_desc = check_sql_character(value["desc"])[:1000]
+                header_no = uuid.uuid1().hex
+                value_sql += "('%s','%s','%s',%s,'%s')" % (header_no, api_no, key, value["necessary"], param_desc)
+                necessary = True if value["necessary"] == 1 else False
+                new_result.append({"api_no": api_no, "header_no": header_no, "necessary": necessary, "param": key,
+                                   "desc": param_desc})
+            if len(value_sql) < 8:
+                return True
+            insert_sql = "INSERT INTO %s (header_no,api_no,param,necessary,param_desc) %s" % (self.api_header, value_sql)
+            self.db.execute("LOCK TABLES %s WRITE;" % self.api_header)
+            result = self.db.execute(insert_sql)
+            if result != 1:
+                self.db.execute("UNLOCK TABLES;")
+                return False, "sql execute result is %s " % result
+            self.db.execute("select max(header_no) from %s;" % self.api_header)
+            header_no = self.db.fetchone()[0]
+            self.db.execute("UNLOCK TABLES;")
+            return True, new_result
+        except Exception as e:
+            self.db.execute("UNLOCK TABLES;")
+            print(e.args)
+            return False, str(e.args)
 
     def new_api_body(self, api_no, body_params):
         if len(api_no) != 32:
             return False, "Bad api_no"
+        new_result = []
         value_sql = "VALUES "
         for key, value in body_params.items():
             if check_char_num_underline(key) is False:
@@ -84,14 +100,19 @@ class HelpManager:
             if check_char(value["type"], 1, 20) is False:
                 return False, "Bad body param %s, type must a-z" % key
             param_desc = check_sql_character(value["desc"])[:1000]
-            value_sql += "('%s','%s',%s,'%s','%s')" % (api_no, key, value["necessary"], value["type"], param_desc)
+            body_no = uuid.uuid1().hex
+            value_sql += "('%s', '%s','%s',%s,'%s','%s')" \
+                         % (body_no, api_no, key, value["necessary"], value["type"], param_desc)
+            necessary = True if value["necessary"] == 1 else False
+            new_result.append({"api_no": api_no, "body_no": body_no, "necessary": necessary, "param": key,
+                               "desc": param_desc})
         if len(value_sql) < 8:
             return True
         insert_sql = "INSERT INTO %s (api_no,param,necessary,type,param_desc) %s" % (self.api_body, value_sql)
         result = self.db.execute(insert_sql)
         if result != 1:
             return False, "sql execute result is %s " % result
-        return True, {"api_no", api_no}
+        return True, new_result
 
     def new_api_input(self, api_no, input_examples):
         if len(api_no) != 32:

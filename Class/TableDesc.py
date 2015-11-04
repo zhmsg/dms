@@ -31,21 +31,21 @@ class TableManager:
         ]
         self.api_input = "api_input"
         self.api_input_desc = [
-            ["input_no", "int(11)", "NO", "PRI", None, "auto_increment", "主键 自增 输入系统编号"],
+            ["input_no", "char(32)", "NO", "PRI", None, "", "主键 输入系统编号"],
             ["api_no", "char(32)", "NO", "", None, "", "API系統编号 參看%s api_no" % self.api_info],
             ["input_desc", "varchar(150)", "NO", "", None, "", "API输入描述"],
             ["input_example", "text", "NO", "", None, "", "API调用输入示例"]
         ]
         self.api_output = "api_output"
         self.api_output_desc = [
-            ["output_no", "int(11)", "NO", "PRI", None, "auto_increment", "主键 自增 输出系统编号"],
+            ["output_no", "char(32)", "NO", "PRI", None, "", "主键 输出系统编号"],
             ["api_no", "char(32)", "NO", "", None, "", "API系統编号 參看%s api_no" % self.api_info],
             ["output_desc", "varchar(150)", "NO", "", None, "", "API输出描述"],
             ["output_example", "text", "NO", "", None, "", "API调用输出示例"]
         ]
         self.api_body = "api_body"
         self.api_body_desc = [
-            ["body_no", "int(11)", "NO", "PRI", None, "auto_increment", "主键 自增 请求主体参数系统编号"],
+            ["body_no", "char(32)", "NO", "PRI", None, "", "主键 请求主体参数系统编号"],
             ["api_no", "char(32)", "NO", "", None, "", "API系統编号 參看%s api_no" % self.api_info],
             ["param", "varchar(30)", "NO", "", None, "", "请求参数"],
             ["necessary", "bit(1)", "NO", "", None, "", "请求参数是否必需0非必需1必需"],
@@ -54,7 +54,7 @@ class TableManager:
         ]
         self.api_header = "api_header"
         self.api_header_desc = [
-            ["header_no", "int(11)", "NO", "PRI", None, "auto_increment", "主键 自增 请求头部参数系统编号"],
+            ["header_no", "char(32)", "NO", "PRI", None, "", "主键 请求头部参数系统编号"],
             ["api_no", "char(32)", "NO", "", None, "", "API系統编号 參看%s api_no" % self.api_info],
             ["param", "varchar(30)", "NO", "", None, "", "请求参数"],
             ["necessary", "bit(1)", "NO", "", None, "", "请求参数是否必需0非必需1必需"],

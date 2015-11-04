@@ -39,6 +39,7 @@ def list_api():
         result, api_list = control.get_api_list(module_no)
         if result is False:
             return api_list
+        current_module = None
         for module_info in module_list:
             if module_info["module_no"] == module_no:
                 current_module = module_info
@@ -120,6 +121,18 @@ def add_input_example():
     example = request_form["example"]
     print(request_form)
     result, input_info = control.add_input_example(api_no, example, desc)
+    if result is False:
+        return input_info
+    return "true"
+
+
+@develop_api_view.route("/add/output/", methods=["POST"])
+def add_output_example():
+    request_form = request.form
+    api_no = request_form["api_no"]
+    desc = request_form["desc"]
+    example = request_form["example"]
+    result, input_info = control.add_output_example(api_no, example, desc)
     if result is False:
         return input_info
     return "true"

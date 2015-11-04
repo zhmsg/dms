@@ -27,9 +27,9 @@
     <tr>
         <td>{{ item["param"] }}</td>
         <td>
-            <select class="form-control">
-                <option value="1">是</option>
-                <option value="0">否</option>
+            <select class="form-control" disabled>
+                <option value="1" {% if item["necessary"] %}selected="selected"{% endif %}>是</option>
+                <option value="0" {% if not item["necessary"] %}selected="selected"{% endif %}>否</option>
             </select>
         </td>
         <td>{{ item["param_desc"] }}</td>
@@ -62,9 +62,9 @@
     <tr>
         <td>{{ item["param"] }}</td>
         <td>
-            <select class="form-control">
-                <option value="1">是</option>
-                <option value="0">否</option>
+            <select class="form-control" disabled>
+                <option value="1" {% if item["necessary"] %}selected="selected"{% endif %}>是</option>
+                <option value="0" {% if not item["necessary"] %}selected="selected"{% endif %}>否</option>
             </select>
         </td>
         <td>{{ item["type"] }}</td>
@@ -87,7 +87,7 @@
         <td><button class="btn btn-info" onclick="new_body_param();">新建</button></td>
 </table>
 <div class="bottom20 api-example">
-    <p>请求示例：</p>
+    <caption>请求示例</caption>
     {% for item in api_info["input_info"] %}
        <p>{{ item["input_desc"] }}</p>
        <p><textarea class="form-control" readonly>{{ item["input_example"] }}</textarea></p>
@@ -96,7 +96,16 @@
     <p><textarea class="form-control input_example" id="input_example"></textarea></p>
     <button class="btn btn-info" onclick="new_input_example()">新建</button>
 </div>
-返回示例
+<div class="bottom20 api-example">
+    <caption>返回示例</caption>
+    {% for item in api_info["output_info"] %}
+       <p>{{ item["output_desc"] }}</p>
+       <p><textarea class="form-control" readonly>{{ item["output_example"] }}</textarea></p>
+    {% endfor %}
+    <p><input class="form-control" id="output_desc" /></p>
+    <p><textarea class="form-control input_example" id="output_example"></textarea></p>
+    <button class="btn btn-info" onclick="new_output_example()">新建</button>
+</div>
 </div>
 </body>
 </html>
