@@ -53,7 +53,7 @@ def list_api():
 
 
 @develop_api_view.route("/info/", methods=["GET"])
-def update_api_other_info():
+def show_api():
     if "api_no" not in request.args:
         return "Need api_no"
     api_no = request.args["api_no"]
