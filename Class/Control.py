@@ -36,7 +36,7 @@ class ControlManager:
         self.calc_attribute_ch = self.calc.attribute_ch
         self.user = UserManager()
         self.dev = DevManager()
-        # table_manager.create_not_exist_table()
+        table_manager.create_not_exist_table()
         self.api_help = HelpManager()
         self.manger_email = ["budechao@ict.ac.cn", "biozy@ict.ac.cn"]
 

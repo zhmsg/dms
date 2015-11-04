@@ -25,7 +25,7 @@ function new_header_param(){
                     else{
                         trHTML += '<option value="1">是</option><option value="0" selected="selected">否</option></select></td>';
                     }
-                    trHTML += '<td>' + new_data[i].desc + '</td><td><button class="btn btn-success">更新</button><button class="btn btn-danger">删除</button></td></tr>"';
+                    trHTML += '<td>' + new_data[i].desc + '</td><td><button class="btn btn-success">更新</button> <button class="btn btn-danger">删除</button></td></tr>"';
                     var tr=$("#api_header_param tr").eq(-2);
                     tr.after(trHTML);
                 }
@@ -51,7 +51,23 @@ function new_body_param(){
         method: "POST",
         data:{param:param,necessary:necessary,desc:desc,api_no:api_no, type:type},
         success:function(data){
-            alert(data);
+            var json_obj = JSON.parse(data);
+            if (json_obj.status == true){
+                var new_data = json_obj.data;
+                for(var i=0;i<new_data.length;i++){
+                    var trHTML = "<tr><td>" + new_data[i].param;
+                    trHTML += '</td><td><select class="form-control" disabled>'
+                    if (new_data[i].necessary == true) {
+                        trHTML += '<option value="1" selected="selected">是</option><option value="0">否</option></select></td>';
+                    }
+                    else{
+                        trHTML += '<option value="1">是</option><option value="0" selected="selected">否</option></select></td>';
+                    }
+                    trHTML += '<td>' + new_data[i].type + '</td><td>' + new_data[i].desc + '</td><td><button class="btn btn-success">更新</button> <button class="btn btn-danger">删除</button></td></tr>"';
+                    var tr=$("#api_body_param tr").eq(-2);
+                    tr.after(trHTML);
+                }
+            }
         },
         error:function(xhr){
             alert(xhr.statusText);
@@ -68,7 +84,16 @@ function new_input_example(){
         method: "POST",
         data:{desc:desc,api_no:api_no,example:example},
         success:function(data){
-            alert(data);
+            var json_obj = JSON.parse(data);
+            if (json_obj.status == true) {
+                var new_data = json_obj.data;
+                for(var i=0;i<new_data.length;i++) {
+                    $("#api_input_exist").append('<div><p>' + new_data[i].desc +'</p><p><textarea class="form-control" readonly>' + new_data[i].example + '</textarea></p></div>');
+                }
+            }
+            else{
+                alert(data);
+            }
         },
         error:function(xhr){
             alert(xhr.statusText);
@@ -85,7 +110,16 @@ function new_output_example(){
         method: "POST",
         data:{desc:desc,api_no:api_no,example:example},
         success:function(data){
-            alert(data);
+            var json_obj = JSON.parse(data);
+            if (json_obj.status == true) {
+                var new_data = json_obj.data;
+                for(var i=0;i<new_data.length;i++) {
+                    $("#api_output_exist").append('<div><p>' + new_data[i].desc +'</p><p><textarea class="form-control" readonly>' + new_data[i].example + '</textarea></p></div>');
+                }
+            }
+            else{
+                alert(data);
+            }
         },
         error:function(xhr){
             alert(xhr.statusText);

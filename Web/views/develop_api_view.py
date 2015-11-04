@@ -120,11 +120,10 @@ def add_input_example():
     api_no = request_form["api_no"]
     desc = request_form["desc"]
     example = request_form["example"]
-    print(request_form)
     result, input_info = control.add_input_example(api_no, example, desc)
     if result is False:
         return input_info
-    return "true"
+    return json.dumps({"status": True, "data": input_info})
 
 
 @develop_api_view.route("/add/output/", methods=["POST"])
@@ -133,7 +132,7 @@ def add_output_example():
     api_no = request_form["api_no"]
     desc = request_form["desc"]
     example = request_form["example"]
-    result, input_info = control.add_output_example(api_no, example, desc)
+    result, output_info = control.add_output_example(api_no, example, desc)
     if result is False:
-        return input_info
-    return "true"
+        return output_info
+    return json.dumps({"status": True, "data": output_info})

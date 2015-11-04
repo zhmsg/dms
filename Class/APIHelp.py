@@ -113,6 +113,7 @@ class HelpManager:
     def new_api_input(self, api_no, input_examples):
         if len(api_no) != 32:
             return False, "Bad api_no"
+        new_result = []
         value_sql = "VALUES "
         for item in input_examples:
             if "desc" not in item or "example" not in item:
@@ -123,18 +124,23 @@ class HelpManager:
                 return False, "Bad input_desc"
             if len(input_example) < 1:
                 return False, "Bad input_example"
-            value_sql += "('%s','%s','%s')" % (api_no, input_desc, input_example)
+            input_no = uuid.uuid1().hex
+            add_time = datetime.now().strftime(TIME_FORMAT)
+            value_sql += "('%s','%s','%s','%s','%s')" % (input_no,api_no, input_desc, input_example, add_time)
+            new_result.append({"api_no": api_no, "input_no": input_no, "desc": input_desc,
+                               "example": input_example, "add_time": add_time})
         if len(value_sql) < 8:
             return True
-        insert_sql = "INSERT INTO %s (api_no,input_desc,input_example) %s" % (self.api_input, value_sql)
+        insert_sql = "INSERT INTO %s (input_no,api_no,input_desc,input_example,add_time) %s" % (self.api_input, value_sql)
         result = self.db.execute(insert_sql)
         if result != 1:
             return False, "sql execute result is %s " % result
-        return True, {"api_no", api_no}
+        return True, new_result
 
     def new_api_output(self, api_no, output_examples):
         if len(api_no) != 32:
             return False, "Bad api_no"
+        new_result = []
         value_sql = "VALUES "
         for item in output_examples:
             if "desc" not in item or "example" not in item:
@@ -145,14 +151,19 @@ class HelpManager:
                 return False, "Bad output_desc"
             if len(output_example) < 1:
                 return False, "Bad output_example"
-            value_sql += "('%s','%s','%s')" % (api_no, output_desc, output_example)
+            output_no = uuid.uuid1().hex
+            add_time = datetime.now().strftime(TIME_FORMAT)
+            value_sql += "('%s','%s','%s','%s','%s')" % (output_no,api_no, output_desc, output_example, add_time)
+            new_result.append({"api_no": api_no, "input_no": output_no, "desc": output_desc,
+                               "example": output_example, "add_time": add_time})
         if len(value_sql) < 8:
             return True
-        insert_sql = "INSERT INTO %s (api_no,input_desc,input_example) %s" % (self.api_output, value_sql)
+        insert_sql = "INSERT INTO %s (output_no,api_no,output_desc,output_example,add_time) %s" \
+                     % (self.api_output, value_sql)
         result = self.db.execute(insert_sql)
         if result != 1:
             return False, "sql execute result is %s " % result
-        return True, {"api_no", api_no}
+        return True, new_result
 
     def get_module_list(self, module_no=None):
         select_sql = "SELECT module_no,module_name,module_prefix,module_desc FROM %s" % self.api_module
@@ -182,7 +193,7 @@ class HelpManager:
             basic_info[basic_info_col[i]] = db_info[i]
         basic_info["api_url"] = basic_info["module_prefix"].rstrip("/") + "/" + basic_info["api_path"].lstrip("/")
         # 获得请求头部参数列表
-        select_sql = "SELECT header_no,api_no,param,necessary,param_desc FROM %s WHERE api_no='%s';" \
+        select_sql = "SELECT header_no,api_no,param,necessary,param_desc FROM %s WHERE api_no='%s' ORDER BY add_time;" \
                      % (self.api_header, api_no)
         self.db.execute(select_sql)
         header_info = []
@@ -191,7 +202,7 @@ class HelpManager:
             header_info.append({"header_no": item[0], "api_no": item[1], "param": item[2], "necessary": necessary,
                                 "param_desc": item[4]})
         # 获得请求主体参数列表
-        select_sql = "SELECT body_no,api_no,param,necessary,type,param_desc FROM %s WHERE api_no='%s';" \
+        select_sql = "SELECT body_no,api_no,param,necessary,type,param_desc FROM %s WHERE api_no='%s' ORDER BY add_time;" \
                      % (self.api_body, api_no)
         self.db.execute(select_sql)
         body_info = []
@@ -200,19 +211,19 @@ class HelpManager:
             body_info.append({"body_no": item[0], "api_no": item[1], "param": item[2], "necessary": necessary,
                               "type": item[4], "param_desc": item[5]})
         # 获得请求示例
-        select_sql = "SELECT input_no,api_no,input_desc,input_example FROM %s WHERE api_no='%s';" \
+        select_sql = "SELECT input_no,api_no,input_desc,input_example FROM %s WHERE api_no='%s' ORDER BY add_time;" \
                      % (self.api_input, api_no)
         self.db.execute(select_sql)
         input_info = []
         for item in self.db.fetchall():
             input_info.append({"input_no": item[0], "api_no": item[1], "input_desc": item[2], "input_example": item[3]})
         # 获得返回示例
-        select_sql = "SELECT output_no,api_no,output_desc,output_example FROM %s WHERE api_no='%s';" \
+        select_sql = "SELECT output_no,api_no,output_desc,output_example FROM %s WHERE api_no='%s' ORDER BY add_time;" \
                      % (self.api_output, api_no)
         self.db.execute(select_sql)
         output_info = []
         for item in self.db.fetchall():
-            output_info.append({"input_no": item[0], "api_no": item[1], "input_desc": item[2], "input_example": item[3]})
+            output_info.append({"output_no": item[0], "api_no": item[1], "output_desc": item[2], "output_example": item[3]})
         return True, {"basic_info": basic_info, "header_info": header_info, "body_info": body_info,
                       "input_info": input_info, "output_info": output_info}
 

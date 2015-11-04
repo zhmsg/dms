@@ -88,20 +88,26 @@
 </table>
 <div class="bottom20 api-example">
     <caption>请求示例</caption>
-    {% for item in api_info["input_info"] %}
-       <p>{{ item["input_desc"] }}</p>
-       <p><textarea class="form-control" readonly>{{ item["input_example"] }}</textarea></p>
-    {% endfor %}
+    <div id="api_input_exist">
+        {% for item in api_info["input_info"] %}
+        <div>
+           <p>{{ item["input_desc"] }}</p>
+           <p><textarea class="form-control" readonly>{{ item["input_example"] }}</textarea></p>
+        </div>
+        {% endfor %}
+    </div>
     <p><input class="form-control" id="input_desc" /></p>
     <p><textarea class="form-control input_example" id="input_example"></textarea></p>
     <button class="btn btn-info" onclick="new_input_example()">新建</button>
 </div>
 <div class="bottom20 api-example">
     <caption>返回示例</caption>
-    {% for item in api_info["output_info"] %}
-       <p>{{ item["output_desc"] }}</p>
-       <p><textarea class="form-control" readonly>{{ item["output_example"] }}</textarea></p>
-    {% endfor %}
+    <div id="api_output_exist">
+        {% for item in api_info["output_info"] %}
+           <p>{{ item["output_desc"] }}</p>
+           <p><textarea class="form-control" readonly>{{ item["output_example"] }}</textarea></p>
+        {% endfor %}
+    </div>
     <p><input class="form-control" id="output_desc" /></p>
     <p><textarea class="form-control input_example" id="output_example"></textarea></p>
     <button class="btn btn-info" onclick="new_output_example()">新建</button>
