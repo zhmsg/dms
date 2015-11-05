@@ -34,7 +34,14 @@ def ping():
 def index():
     next_url = ""
     if current_user.is_authenticated():
-        print(current_user.role)
+        if current_user.role < 8:
+            return redirect(url_for("transport_view.show"))
+        elif current_user.role < 32:
+            return redirect(url_for("develop_api_view.list_api"))
+        elif current_user.role < 64:
+            return redirect(url_for("develop_view.show_data_table"))
+        else:
+            return redirect(url_for("develop_view.operate_auth_show"))
     if "next" in request.args:
         next_url = request.args["next"]
     return render_template("login.html", next_url=next_url)
