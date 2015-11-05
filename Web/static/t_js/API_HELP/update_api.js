@@ -93,7 +93,9 @@ function new_input_example(){
             if (json_obj.status == true) {
                 var new_data = json_obj.data;
                 for(var i=0;i<new_data.length;i++) {
-                    $("#api_input_exist").append('<div><p>' + new_data[i].desc +'</p><p><textarea class="form-control" readonly>' + new_data[i].example + '</textarea></p></div>');
+                    var div_html = '<div id="div_' + new_data[i].input_no + '"><p>' + new_data[i].desc +'</p><p><textarea class="form-control" readonly>' + new_data[i].example + '</textarea></p>'
+                    div_html += '<button class="btn btn-success">更新</button> <button class="btn btn-danger" onclick="delete_input_param(' + "'" + new_data[i].input_no + "'" + ')">删除</button></div>';
+                    $("#api_input_exist").append(div_html);
                 }
                 $("#input_desc").val("");
                 $("#input_example").val("");
@@ -121,7 +123,9 @@ function new_output_example(){
             if (json_obj.status == true) {
                 var new_data = json_obj.data;
                 for(var i=0;i<new_data.length;i++) {
-                    $("#api_output_exist").append('<div><p>' + new_data[i].desc +'</p><p><textarea class="form-control" readonly>' + new_data[i].example + '</textarea></p></div>');
+                    var div_html = '<div id="div_' + new_data[i].output_no + '"><p>' + new_data[i].desc +'</p><p><textarea class="form-control" readonly>' + new_data[i].example + '</textarea></p>'
+                    div_html += '<button class="btn btn-success">更新</button> <button class="btn btn-danger" onclick="delete_output_param(' + "'" + new_data[i].output_no + "'" + ')">删除</button></div>';
+                    $("#api_output_exist").append(div_html);
                 }
                 $("#output_desc").val("");
                 $("#output_example").val("");
@@ -163,6 +167,44 @@ function delete_body_param(body_no){
             var json_obj = JSON.parse(data);
             if (json_obj.status == true){
                 $("#tr_"+body_no).remove();
+            }
+            else{
+                alert(data)
+            }
+        },
+        error:function(xhr){
+            alert(xhr.statusText);
+        }
+    });
+}
+
+function delete_input_param(input_no){
+    $.ajax({
+        url: "/dev/api/delete/input/" + input_no + "/",
+        method: "DELETE",
+        success:function(data){
+            var json_obj = JSON.parse(data);
+            if (json_obj.status == true){
+                $("#div_"+input_no).remove();
+            }
+            else{
+                alert(data)
+            }
+        },
+        error:function(xhr){
+            alert(xhr.statusText);
+        }
+    });
+}
+
+function delete_output_param(output_no){
+    $.ajax({
+        url: "/dev/api/delete/output/" + output_no + "/",
+        method: "DELETE",
+        success:function(data){
+            var json_obj = JSON.parse(data);
+            if (json_obj.status == true){
+                $("#div_"+output_no).remove();
             }
             else{
                 alert(data)

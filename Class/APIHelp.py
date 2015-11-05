@@ -154,7 +154,7 @@ class HelpManager:
             output_no = uuid.uuid1().hex
             add_time = datetime.now().strftime(TIME_FORMAT)
             value_sql += "('%s','%s','%s','%s','%s')" % (output_no,api_no, output_desc, output_example, add_time)
-            new_result.append({"api_no": api_no, "input_no": output_no, "desc": output_desc,
+            new_result.append({"api_no": api_no, "output_no": output_no, "desc": output_desc,
                                "example": output_example, "add_time": add_time})
         if len(value_sql) < 8:
             return True
