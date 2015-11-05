@@ -62,7 +62,8 @@ def show_api():
     result, api_info = control.get_api_info(api_no)
     if result is False:
         return api_info
-    return render_template("/Dev/API_HELP/Show_API.html", api_info=api_info, api_no=api_no)
+    return_url = develop_api_view.url_prefix + "/?module_no=%s" % api_info["basic_info"]["module_no"]
+    return render_template("/Dev/API_HELP/Show_API.html", api_info=api_info, api_no=api_no,return_url=return_url)
 
 
 @develop_api_view.route("/new/", methods=["GET"])
