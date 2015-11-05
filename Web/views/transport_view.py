@@ -32,7 +32,12 @@ def ping():
 
 @transport_view.route("/", methods=["GET"])
 def index():
-    return render_template("login.html")
+    next_url = ""
+    if current_user.is_authenticated():
+        print(current_user.role)
+    if "next" in request.args:
+        next_url = request.args["next"]
+    return render_template("login.html", next_url=next_url)
 
 
 @transport_view.route("/login/", methods=["POST"])
@@ -43,10 +48,16 @@ def login():
     result, message = user_m.check(user_name, password)
     if result is False:
         return message
+    if "remember" in request_data and request_data["remember"] == "on":
+        remember = True
+    else:
+        remember = False
     user = User()
     user.account = user_name
-    login_user(user)
+    login_user(user, remember=remember)
     session["role"] = message
+    if "next" in request_data and request_data["next"] != "":
+        return redirect(request_data["next"])
     if session["role"] < 8:
         return redirect(url_for("transport_view.show"))
     elif session["role"] < 32:
@@ -62,7 +73,7 @@ def login():
 def show():
     try:
         data_info = control.get_data()
-        role = session["role"]
+        role = current_user.role
         market_role = upload_role = calc_role = False
         if role & 1 > 0:
             market_role = True
@@ -87,7 +98,7 @@ def show():
 @login_required
 def new_data():
     try:
-        result, message = control.new_data(session["role"], current_user.account)
+        result, message = control.new_data(current_user.role, current_user.account)
         if result is False:
             return message
         return redirect(url_for("transport_view.show"))
@@ -105,7 +116,7 @@ def new_market():
         market_info = {}
         for att in control.market_attribute:
             market_info[att] = request_data[att]
-        result, message = control.new_market(data_no, market_info, current_user.account, session["role"])
+        result, message = control.new_market(data_no, market_info, current_user.account, current_user.role)
         if result is False:
             return message
         return redirect(url_for("transport_view.show"))
@@ -119,7 +130,7 @@ def new_market():
 def get_market():
     try:
         data_no = int(request.args["data_no"])
-        result, message = control.get_market(data_no, session["role"])
+        result, message = control.get_market(data_no, current_user.role)
         if result is True:
             return json.dumps({"status": result, "value": message, "att": control.market_attribute, "ch": control.market_attribute_ch})
         return json.dumps({"status": False, "data": message})
@@ -137,7 +148,7 @@ def new_upload():
         upload_info = {}
         for att in control.upload_attribute:
             upload_info[att] = request_data[att]
-        result, message = control.new_upload(data_no, upload_info, current_user.account, session["role"])
+        result, message = control.new_upload(data_no, upload_info, current_user.account, current_user.role)
         if result is False:
             return message
         return redirect(url_for("transport_view.show"))
@@ -151,7 +162,7 @@ def new_upload():
 def get_upload():
     try:
         data_no = int(request.args["data_no"])
-        result, message = control.get_upload(data_no, session["role"])
+        result, message = control.get_upload(data_no, current_user.role)
         if result is True:
             return json.dumps({"status": result, "value": message, "att": control.upload_attribute, "ch": control.upload_attribute_ch})
         return json.dumps({"status": False, "data": message})
@@ -170,7 +181,7 @@ def new_calc():
         calc_info = {}
         for att in control.calc_attribute:
             calc_info[att] = request_data[att]
-        result, message = control.new_calc(data_no, calc_info, current_user.account, session["role"])
+        result, message = control.new_calc(data_no, calc_info, current_user.account, current_user.role)
         if result is False:
             return message
         return redirect(url_for("transport_view.show"))
@@ -184,7 +195,7 @@ def new_calc():
 def get_calc():
     try:
         data_no = int(request.args["data_no"])
-        result, message = control.get_calc(data_no, session["role"])
+        result, message = control.get_calc(data_no, current_user.role)
         if result is True:
             return json.dumps({"status": result, "value": message, "att": control.calc_attribute, "ch": control.calc_attribute_ch})
         return json.dumps({"status": False, "data": message})

@@ -5,6 +5,7 @@
 import sys
 import json
 from flask import Blueprint, render_template, request, redirect
+from flask_login import login_required
 from Class.Control import ControlManager
 
 sys.path.append('..')
@@ -31,6 +32,7 @@ def ping():
 
 
 @develop_api_view.route("/")
+@login_required
 def list_api():
     result, module_list = control.get_module_list()
     if result is False:
@@ -67,6 +69,7 @@ def show_api():
 
 
 @develop_api_view.route("/new/", methods=["GET"])
+@login_required
 def new_api_page():
     result, module_list = control.get_module_list()
     if result is False:
