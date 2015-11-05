@@ -159,7 +159,7 @@
   <!-- 填写信息模块 start -->
   <div class="infoShow">
     <!-- 新建start -->
-    {% if role == "market" %}
+    {% if market_role %}
     <form class="newBtn" action="/dms/data/" method="post">
       <button type="submit" class="btn btn-primary pull-right">添加数据</button>
     </form>
@@ -179,7 +179,7 @@
     <div class="step">
 
       <!-- 市场 start -->
-      <div class="pull-left market"> <a onclick={% if data['status'] >0  and role == "market" or role == "sys" %}"get_info('market',{{ data["data_no"] }});"{% else %}"$('#market_data_no').val({{data["data_no"]}});"{% endif %} title="市场" data-toggle="modal" {% if role == "market" and data["status"] == 0 %}data-target="#marketModal"{% endif %}> <img src="/static/t_images/one_{% if data['status'] >0 %}success{% else %}gray{% endif %}.png" alt="" border="0" usemap="#Map{{ data["data_no"] }}1">
+      <div class="pull-left market"> <a onclick={% if data['status'] >0  and market_role  %}"get_info('market',{{ data["data_no"] }});"{% else %}"$('#market_data_no').val({{data["data_no"]}});"{% endif %} title="市场" data-toggle="modal" {% if market_role and data["status"] == 0 %}data-target="#marketModal"{% endif %}> <img src="/static/t_images/one_{% if data['status'] >0 %}success{% else %}gray{% endif %}.png" alt="" border="0" usemap="#Map{{ data["data_no"] }}1">
         <map name="Map1" id="Map{{ data["data_no"] }}1">
           <area shape="circle" coords="78,24,21" href="javascript:void(0);" />
         </map>
@@ -189,7 +189,7 @@
       <!-- 市场 end -->
 
       <!-- 上传 start -->
-      <div class="pull-left upload"> <a onclick={% if data['status'] >1  and role == "upload"  or role == "sys" %}"get_info('upload',{{ data["data_no"] }});"{% else %}"$('#upload_data_no').val({{data["data_no"]}});"{% endif %} title="上传" data-toggle="modal" {% if data['status'] == 1 and role == "upload" %}data-target="#uploadModal"{% endif %}> <img src="/static/t_images/two_{% if data['status'] >1 %}success{% else %}gray{% endif %}.png" alt="" border="0" usemap="#Map{{ data["data_no"] }}2" >
+      <div class="pull-left upload"> <a onclick={% if data['status'] >1  and upload_role %}"get_info('upload',{{ data["data_no"] }});"{% else %}"$('#upload_data_no').val({{data["data_no"]}});"{% endif %} title="上传" data-toggle="modal" {% if data['status'] == 1 and upload_role %}data-target="#uploadModal"{% endif %}> <img src="/static/t_images/two_{% if data['status'] >1 %}success{% else %}gray{% endif %}.png" alt="" border="0" usemap="#Map{{ data["data_no"] }}2" >
         <map name="Map2" id="Map{{ data["data_no"] }}2">
           <area shape="circle" coords="78,24,21" href="javascript:void(0);" />
         </map>
@@ -199,7 +199,7 @@
       <!-- 上传 end -->
 
       <!-- 计算 start -->
-      <div class="pull-left count"> <a onclick={% if data['status'] >2  and role == "calc"  or role == "sys" %}"get_info('calc',{{ data["data_no"] }});"{% else %}"$('#calc_data_no').val({{data["data_no"]}});"{% endif %} title="计算" data-toggle="modal" {% if data['status'] ==2  and role == "calc" %}data-target="#countModal"{% endif %}> <img src="/static/t_images/end_{% if data['status'] >2 %}success{% else %}gray{% endif %}.png" alt="" border="0" usemap="#Map{{ data["data_no"] }}3" >
+      <div class="pull-left count"> <a onclick={% if data['status'] >2  and calc_role %}"get_info('calc',{{ data["data_no"] }});"{% else %}"$('#calc_data_no').val({{data["data_no"]}});"{% endif %} title="计算" data-toggle="modal" {% if data['status'] ==2  and calc_role%}data-target="#countModal"{% endif %}> <img src="/static/t_images/end_{% if data['status'] >2 %}success{% else %}gray{% endif %}.png" alt="" border="0" usemap="#Map{{ data["data_no"] }}3" >
         <map name="Map3" id="Map{{ data["data_no"] }}3">
           <area shape="circle" coords="78,24,21" href="javascript:void(0);" />
         </map>

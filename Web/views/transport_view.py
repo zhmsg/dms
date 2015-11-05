@@ -55,7 +55,17 @@ def login():
 def show():
     try:
         data_info = control.get_data()
-        return render_template("infoShow.html", data_info=data_info, user_name=current_user.account, role=session["role"],
+        role = session["role"]
+        market_role = upload_role = calc_role = False
+        if role & 1 > 0:
+            market_role = True
+        if role & 2 > 0:
+            upload_role = True
+        if role & 4 > 0:
+            calc_role = True
+        print(role)
+        return render_template("infoShow.html", data_info=data_info, user_name=current_user.account,
+                               market_role=market_role, upload_role=upload_role, calc_role=calc_role,
                                market_target=control.market_target, market_attribute=control.market_attribute,
                                market_attribute_ch=control.market_attribute_ch, upload_attribute=control.upload_attribute,
                                upload_attribute_ch=control.upload_attribute_ch, calc_attribute=control.calc_attribute,

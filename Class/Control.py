@@ -44,16 +44,13 @@ class ControlManager:
         return self.data.get()
 
     def new_data(self, role, inputuser):
-        if role != self.user.role_str[0]:
+        if (role & 1) <= 0:
             return False, u"您的权限不足"
         result, message = self.data.new(inputuser)
-        # if result is True:
-        #     if inputuser != "market":
-        #         self.send_email(u"%s新建了一条数据记录" % inputuser, message, {}, [], [])
         return result, message
 
     def new_market(self, data_no, market_info, inputuser, role):
-        if role != self.user.role_str[0]:
+        if (role & 1) <= 0:
             return False, u"您的权限不足"
         data_info = self.data.get(data_no)
         if len(data_info) <= 0:
@@ -70,7 +67,7 @@ class ControlManager:
         return True, data_no
 
     def new_upload(self, data_no, upload_info, inputuser, role):
-        if role != self.user.role_str[1]:
+        if (role & 2) <= 0:
             return False, u"您的权限不足"
         data_info = self.data.get(data_no)
         if len(data_info) <= 0:
@@ -86,7 +83,7 @@ class ControlManager:
         return True, ""
 
     def new_calc(self, data_no, calc_info, inputuser, role):
-        if role != self.user.role_str[2]:
+        if (role & 4) <= 0:
             return False, u"您的权限不足"
         data_info = self.data.get(data_no)
         if len(data_info) <= 0:
@@ -103,18 +100,18 @@ class ControlManager:
         return True, ""
 
     def get_market(self, data_no, role):
-        if role != self.user.role_str[0] and role != self.user.role_str[5]:
+        print(role)
+        if (role & 1) <= 0:
             return False, u"您的权限不足"
-        print("ddd")
         return self.market.select(data_no)
 
     def get_upload(self, data_no, role):
-        if role != self.user.role_str[1] and role != self.user.role_str[5]:
+        if (role & 2) <= 0:
             return False, u"您的权限不足"
         return self.upload.select(data_no)
 
     def get_calc(self, data_no, role):
-        if role != self.user.role_str[2] and role != self.user.role_str[5]:
+        if (role & 4) <= 0:
             return False, u"您的权限不足"
         return self.calc.select(data_no)
 
