@@ -9,4 +9,4 @@ function select_change(){
     $("#selected_desc").text(selected_module.attr("about"));
     $("#module_no").val(selected_module.val());
 }
-select_change();
+$("#api_module").options[0].selected = true;

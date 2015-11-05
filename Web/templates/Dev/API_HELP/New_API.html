@@ -25,18 +25,18 @@
       <ul class="select-mode">
         <li>
           <label for="">模块编号：</label>
-          <span id="selected_no"></span>
+          <span id="selected_no">{{ module_list[0]["module_no"] }}</span>
           <input id="module_no" name="api_module" style="display:none;"/>
         </li>
         <li>
           <label for="">模块名称：</label>
-          <span id="selected_name"></span></li>
+          <span id="selected_name">{{ module_list[0]["module_name"] }}</span></li>
         <li>
           <label for="">模块URL前缀：</label>
-          <span id="selected_prefix"></span></li>
+          <span id="selected_prefix">{{ module_list[0]["module_prefix"] }}</span></li>
         <li>
           <label for="">模块描述：</label>
-          <span id="selected_desc"></span></li>
+          <span id="selected_desc">{{ module_list[0]["module_desc"] }}</span></li>
       </ul>
     </div>
     <div class="form-group apiContentLine">
