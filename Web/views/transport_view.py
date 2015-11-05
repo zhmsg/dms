@@ -47,7 +47,14 @@ def login():
     user.account = user_name
     login_user(user)
     session["role"] = message
-    return redirect(url_for("transport_view.show"))
+    if session["role"] < 8:
+        return redirect(url_for("transport_view.show"))
+    elif session["role"] < 32:
+        return redirect(url_for("develop_api_view.list_api"))
+    elif session["role"] < 64:
+        return redirect(url_for("develop_view.show_data_table"))
+    else:
+        return redirect(url_for("develop_view.operate_auth_show"))
 
 
 @transport_view.route("/records/", methods=["GET"])

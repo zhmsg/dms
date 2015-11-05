@@ -238,3 +238,6 @@ class HelpManager:
             api_list.append({"api_no": item[0], "module_no": item[1], "api_title": item[2], "api_path": item[3],
                              "api_method": item[4], "api_desc": item[5]})
         return True, api_list
+
+    def del_api_header(self, header_no):
+        delete_sql = "DELETE FROM %s WHERE " % self.api_header
