@@ -21,7 +21,7 @@ class UserManager:
             ["role", "tinyint(4)", "NO", "", None, ""],  # 1代表可以市场部权限 2代表具有上传者权限 4代表具有计算者权限
                                                         # 8代表可以查看API帮助文档 16代表可以添加API帮助文档
                                                         # 32代表可以查看数据库表设计 64代表可以查看权限设计
-            ["nick_name", "varchar(20)", "YES", "", None, ""]
+            ["nick_name", "varchar(20)", "NO", "", None, ""]
         ]
 
     def create_user(self, force=False):

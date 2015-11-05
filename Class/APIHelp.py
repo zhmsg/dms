@@ -25,6 +25,7 @@ class HelpManager:
         self.api_output = table_manager.api_output
         self.api_header = table_manager.api_header
         self.api_body = table_manager.api_body
+        self.api_care = table_manager.api_care
 
     def new_api_info(self, module_no, api_title, api_path, api_method, api_desc):
         if type(module_no) != int:
@@ -165,6 +166,18 @@ class HelpManager:
             return False, "sql execute result is %s " % result
         return True, new_result
 
+    def new_api_care(self, api_no, user_name):
+        if len(api_no) != 32:
+            return False, "Bad api_no"
+        care_time = datetime.now().strftime(TIME_FORMAT)
+        insert_sql = "INSERT INTO %s (api_no,user_name,care_time) VALUES('%s','%s','%s')" \
+                     " ON DUPLICATE KEY UPDATE care_time=VALUES(care_time);" \
+                     % (self.api_care, api_no, user_name, care_time)
+        result = self.db.execute(insert_sql)
+        if result < 1:
+            return False, "sql execute result is %s " % result
+        return True, {"user_name": user_name, "api_no": api_no, "care_time": care_time}
+
     def get_module_list(self, module_no=None):
         select_sql = "SELECT module_no,module_name,module_prefix,module_desc FROM %s" % self.api_module
         if module_no is not None and type(module_no) == int:
@@ -224,8 +237,15 @@ class HelpManager:
         output_info = []
         for item in self.db.fetchall():
             output_info.append({"output_no": item[0], "api_no": item[1], "output_desc": item[2], "output_example": item[3]})
+        # 获得关注列表
+        select_sql = "SELECT api_no,c.user_name,care_time,nick_name FROM sys_user as su,%s as c " \
+                     "WHERE su.user_name=c.user_name AND api_no='%s';" % (self.api_care, api_no)
+        self.db.execute(select_sql)
+        care_info = []
+        for item in self.db.fetchall():
+            care_info.append({"api_no": item[0], "user_name": item[1], "care_time": item[2].strftime(TIME_FORMAT), "nick_name": item[3]})
         return True, {"basic_info": basic_info, "header_info": header_info, "body_info": body_info,
-                      "input_info": input_info, "output_info": output_info}
+                      "input_info": input_info, "output_info": output_info, "care_info": care_info}
 
     def get_api_list(self, module_no):
         if type(module_no) != int:
@@ -264,5 +284,12 @@ class HelpManager:
         if len(output_no) != 32:
             return False, "Bad output_no"
         delete_sql = "DELETE FROM %s WHERE output_no='%s';" % (self.api_output, output_no)
+        result = self.db.execute(delete_sql)
+        return True, result
+
+    def del_api_care(self, api_no, user_name):
+        if len(api_no) != 32:
+            return False, "Bad api_no"
+        delete_sql = "DELETE FROM %s WHERE api_no='%s' AND user_name='%s';" % (self.api_care, api_no, user_name)
         result = self.db.execute(delete_sql)
         return True, result

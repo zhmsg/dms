@@ -2,9 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>更新API解释</title>
+<title>查看API解释</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='t_css/bootstrap.min.css') }}"><!-- 新 Bootstrap 核心 CSS 文件 -->
 <link rel="stylesheet" href="{{ url_for('static', filename='t_css/main.css') }}"><!--自定义的页面样式 -->
+<script type="text/javascript" src="{{ url_for('static', filename='t_js/jquery.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='t_js/API_HELP/show_api.js') }}"></script>
 </head>
 
 <body>
@@ -93,10 +95,20 @@
 {% endif %}
 
 <div class="care">
-<button class="btn btn-primary pull-right" href="{{ return_url }}" title="">关注</button>
-<p>已关注的人</p>
-    <span>11</span><span>222</span><span>333</span>
-    <span>11</span><span>222</span><span>333</span>
+    {% if my_care %}
+       <button class="btn btn-primary pull-right" onclick="change_care();" id="make_care">取消关注</button>
+    {% else %}
+        <button class="btn btn-primary pull-right" onclick="change_care();" id="make_care">关注</button>
+    {% endif %}
+    <p>已关注的人</p>
+    <div id="api_care_user">
+        {% if my_care %}
+            <span id="mine_care">我</span>
+        {% endif %}
+        {% for item in api_info["care_info"] %}
+        <span>{{ item["nick_name"] }}</span>
+        {% endfor %}
+    </div>
 </div>
 </div>
 

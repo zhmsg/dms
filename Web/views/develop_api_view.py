@@ -69,8 +69,14 @@ def show_api():
     update_url = None
     if current_user.role & 16 > 0:
         update_url = develop_api_view.url_prefix + "/update/info/?api_no=%s" % api_no
+    my_care = None
+    for item in api_info["care_info"]:
+        if item["user_name"] == current_user.account:
+            my_care = item
+            api_info["care_info"].remove(item)
+            break
     return render_template("/Dev/API_HELP/Show_API.html", api_info=api_info, api_no=api_no, return_url=return_url,
-                           update_url=update_url)
+                           update_url=update_url, my_care=my_care)
 
 
 @develop_api_view.route("/new/", methods=["GET"])
@@ -166,6 +172,15 @@ def add_output_example():
     return json.dumps({"status": True, "data": output_info})
 
 
+@develop_api_view.route("/add/care/", methods=["POST"])
+@login_required
+def add_care():
+    request_form = request.form
+    api_no = request_form["api_no"]
+    result, care_info = control.add_care(api_no, current_user.account, current_user.role)
+    return json.dumps({"status": result, "data": care_info})
+
+
 @develop_api_view.route("/delete/header/<header_no>/", methods=["DELETE"])
 @login_required
 def delete_header(header_no):
@@ -191,4 +206,11 @@ def delete_input(input_no):
 @login_required
 def delete_output(output_no):
     result, data = control.delete_ouput(output_no, current_user.role)
+    return json.dumps({"status": result, "data": data})
+
+
+@develop_api_view.route("/delete/care/<api_no>/", methods=["DELETE"])
+@login_required
+def delete_care(api_no):
+    result, data = control.delete_care(api_no, current_user.account)
     return json.dumps({"status": result, "data": data})

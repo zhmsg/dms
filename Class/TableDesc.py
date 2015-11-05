@@ -65,6 +65,12 @@ class TableManager:
             ["param_desc", "varchar(1000)", "NO", "", None, "", "请求参数描述"],
             ["add_time", "datetime", "NO", "", None, "", "添加的时间"]
         ]
+        self.api_care = "api_care"
+        self.api_care_desc = [
+            ["api_no", "char(32)", "NO", "PRI", None, "", "API系统编号"],
+            ["user_name", "varchar(15)", "NO", "PRI", None, "", "用户账户名"],
+            ["care_time", "datetime", "NO", "", None, "", "关注的时间"]
+        ]
 
     def create_not_exist_table(self):
         keys = vars(self).keys()

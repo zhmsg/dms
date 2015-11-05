@@ -18,5 +18,5 @@ msg_web.register_blueprint(develop_view_blueprint, url_prefix="/dev")
 msg_web.register_blueprint(develop_api_view_blueprint)
 
 
-if __name__ == '__main__':
-    msg_web.run(host="0.0.0.0", port=2100)
+# if __name__ == '__main__':
+#     msg_web.run(host="0.0.0.0", port=2100)
