@@ -63,7 +63,8 @@ def show():
             upload_role = True
         if role & 4 > 0:
             calc_role = True
-        print(role)
+        if market_role is False and upload_role is False and calc_role is False:
+            return u"您没有权限查看"
         return render_template("infoShow.html", data_info=data_info, user_name=current_user.account,
                                market_role=market_role, upload_role=upload_role, calc_role=calc_role,
                                market_target=control.market_target, market_attribute=control.market_attribute,
