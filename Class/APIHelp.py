@@ -240,4 +240,29 @@ class HelpManager:
         return True, api_list
 
     def del_api_header(self, header_no):
-        delete_sql = "DELETE FROM %s WHERE " % self.api_header
+        if len(header_no) != 32:
+            return False, "Bad header_no"
+        delete_sql = "DELETE FROM %s WHERE header_no='%s';" % (self.api_header, header_no)
+        result = self.db.execute(delete_sql)
+        return True, result
+
+    def del_api_body(self, body_no):
+        if len(body_no) != 32:
+            return False, "Bad body_no"
+        delete_sql = "DELETE FROM %s WHERE body_no='%s';" % (self.api_body, body_no)
+        result = self.db.execute(delete_sql)
+        return True, result
+
+    def del_api_input(self, input_no):
+        if len(input_no) != 32:
+            return False, "Bad input_no"
+        delete_sql = "DELETE FROM %s WHERE input_no='%s';" % (self.api_input, input_no)
+        result = self.db.execute(delete_sql)
+        return True, result
+
+    def del_api_output(self, output_no):
+        if len(output_no) != 32:
+            return False, "Bad output_no"
+        delete_sql = "DELETE FROM %s WHERE output_no='%s';" % (self.api_output, output_no)
+        result = self.db.execute(delete_sql)
+        return True, result

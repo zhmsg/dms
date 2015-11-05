@@ -162,3 +162,15 @@ class ControlManager:
 
     def get_api_list(self, module_no):
         return self.api_help.get_api_list(module_no)
+
+    def delete_header(self, header_no):
+        return self.api_help.del_api_header(header_no)
+
+    def delete_body(self, body_no):
+        return self.api_help.del_api_body(body_no)
+
+    def delete_input(self, input_no):
+        return self.api_help.del_api_input(input_no)
+
+    def delete_ouput(self, output_no):
+        return self.api_help.del_api_output(output_no)

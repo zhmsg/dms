@@ -24,7 +24,7 @@
         <th scope="col" width="11%">操作</th>
     </tr>
     {% for item in api_info["header_info"] %}
-    <tr>
+    <tr id="tr_{{ item["header_no"] }}">
         <td>{{ item["param"] }}</td>
         <td>
             <select class="form-control" disabled>
@@ -35,7 +35,7 @@
         <td>{{ item["param_desc"] }}</td>
         <td>
             <button class="btn btn-success">更新</button>
-            <button class="btn btn-danger">删除</button>
+            <button class="btn btn-danger" onclick="delete_header_param('{{ item["header_no"] }}')">删除</button>
         </td>
     </tr>
     {% endfor %}
@@ -59,7 +59,7 @@
         <th scope="col" width="11%">操作</th>
     </tr>
     {% for item in api_info["body_info"] %}
-    <tr>
+    <tr id="tr_{{ item["body_no"] }}">
         <td>{{ item["param"] }}</td>
         <td>
             <select class="form-control" disabled>
@@ -71,7 +71,7 @@
         <td>{{ item["param_desc"] }}</td>
         <td>
            <button class="btn btn-success">更新</button>
-           <button class="btn btn-danger">删除</button>
+           <button class="btn btn-danger" onclick="delete_body_param('{{ item["body_no"] }}')">删除</button>
         </td>
     </tr>
     {% endfor %}

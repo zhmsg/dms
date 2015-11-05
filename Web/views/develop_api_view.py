@@ -32,7 +32,6 @@ def ping():
 
 
 @develop_api_view.route("/")
-@login_required
 def list_api():
     result, module_list = control.get_module_list()
     if result is False:
@@ -69,7 +68,6 @@ def show_api():
 
 
 @develop_api_view.route("/new/", methods=["GET"])
-@login_required
 def new_api_page():
     result, module_list = control.get_module_list()
     if result is False:
@@ -153,3 +151,27 @@ def add_output_example():
     if result is False:
         return output_info
     return json.dumps({"status": True, "data": output_info})
+
+
+@develop_api_view.route("/delete/header/<header_no>/", methods=["DELETE"])
+def delete_header(header_no):
+    result, data = control.delete_header(header_no)
+    return json.dumps({"status": result, "data": data})
+
+
+@develop_api_view.route("/delete/body/<body_no>/", methods=["DELETE"])
+def delete_body(body_no):
+    result, data = control.delete_body(body_no)
+    return json.dumps({"status": result, "data": data})
+
+
+@develop_api_view.route("/delete/input/<input_no>/", methods=["DELETE"])
+def delete_input(input_no):
+    result, data = control.delete_input(input_no)
+    return json.dumps({"status": result, "data": data})
+
+
+@develop_api_view.route("/delete/output/<output_no>/", methods=["DELETE"])
+def delete_output(output_no):
+    result, data = control.delete_ouput(output_no)
+    return json.dumps({"status": result, "data": data})

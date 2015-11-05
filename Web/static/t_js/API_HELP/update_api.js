@@ -17,7 +17,7 @@ function new_header_param(){
                 var new_data = json_obj.data;
                 for(var i=0;i<new_data.length;i++){
                     var t_len = $("#api_header_param").length;
-                    var trHTML = "<tr><td>" + new_data[i].param;
+                    var trHTML = "<tr id='tr_" + new_data[i].header_no + "'><td>" + new_data[i].param;
                     trHTML += '</td><td><select class="form-control" disabled>'
                     if (new_data[i].necessary == true) {
                         trHTML += '<option value="1" selected="selected">是</option><option value="0">否</option></select></td>';
@@ -25,7 +25,7 @@ function new_header_param(){
                     else{
                         trHTML += '<option value="1">是</option><option value="0" selected="selected">否</option></select></td>';
                     }
-                    trHTML += '<td>' + new_data[i].desc + '</td><td><button class="btn btn-success">更新</button> <button class="btn btn-danger">删除</button></td></tr>"';
+                    trHTML += '<td>' + new_data[i].desc + '</td><td><button class="btn btn-success">更新</button> <button class="btn btn-danger"  onclick="delete_header_param('+ "'" + new_data[i].header_no + "'" + ')">删除</button></td></tr>"';
                     var tr=$("#api_header_param tr").eq(-2);
                     tr.after(trHTML);
                 }
@@ -57,7 +57,7 @@ function new_body_param(){
             if (json_obj.status == true){
                 var new_data = json_obj.data;
                 for(var i=0;i<new_data.length;i++){
-                    var trHTML = "<tr><td>" + new_data[i].param;
+                    var trHTML = "<tr id='tr_" + new_data[i].body_no + "'><td>" + new_data[i].param;
                     trHTML += '</td><td><select class="form-control" disabled>'
                     if (new_data[i].necessary == true) {
                         trHTML += '<option value="1" selected="selected">是</option><option value="0">否</option></select></td>';
@@ -65,7 +65,7 @@ function new_body_param(){
                     else{
                         trHTML += '<option value="1">是</option><option value="0" selected="selected">否</option></select></td>';
                     }
-                    trHTML += '<td>' + new_data[i].type + '</td><td>' + new_data[i].desc + '</td><td><button class="btn btn-success">更新</button> <button class="btn btn-danger">删除</button></td></tr>"';
+                    trHTML += '<td>' + new_data[i].type + '</td><td>' + new_data[i].desc + '</td><td><button class="btn btn-success">更新</button> <button class="btn btn-danger"  onclick="delete_body_param('+ "'" + new_data[i].body_no + "'" + ')">删除</button></td></tr>"';
                     var tr=$("#api_body_param tr").eq(-2);
                     tr.after(trHTML);
                 }
@@ -128,6 +128,44 @@ function new_output_example(){
             }
             else{
                 alert(data);
+            }
+        },
+        error:function(xhr){
+            alert(xhr.statusText);
+        }
+    });
+}
+
+function delete_header_param(header_no){
+    $.ajax({
+        url: "/dev/api/delete/header/" + header_no + "/",
+        method: "DELETE",
+        success:function(data){
+            var json_obj = JSON.parse(data);
+            if (json_obj.status == true){
+                $("#tr_"+header_no).remove();
+            }
+            else{
+                alert(data)
+            }
+        },
+        error:function(xhr){
+            alert(xhr.statusText);
+        }
+    });
+}
+
+function delete_body_param(body_no){
+    $.ajax({
+        url: "/dev/api/delete/body/" + body_no + "/",
+        method: "DELETE",
+        success:function(data){
+            var json_obj = JSON.parse(data);
+            if (json_obj.status == true){
+                $("#tr_"+body_no).remove();
+            }
+            else{
+                alert(data)
             }
         },
         error:function(xhr){
