@@ -66,7 +66,11 @@ def show_api():
     if result is False:
         return api_info
     return_url = develop_api_view.url_prefix + "/?module_no=%s" % api_info["basic_info"]["module_no"]
-    return render_template("/Dev/API_HELP/Show_API.html", api_info=api_info, api_no=api_no,return_url=return_url)
+    update_url = None
+    if current_user.role & 16 > 0:
+        update_url = develop_api_view.url_prefix + "/update/info/?api_no=%s" % api_no
+    return render_template("/Dev/API_HELP/Show_API.html", api_info=api_info, api_no=api_no, return_url=return_url,
+                           update_url=update_url)
 
 
 @develop_api_view.route("/new/", methods=["GET"])

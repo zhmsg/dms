@@ -18,6 +18,10 @@ user_info.append({"user_name": "yangrui", "password": "yangrui@gene.ac", "role":
 
 user_info.append({"user_name": "budechao", "password": "budechao@gene.ac", "role": 7})
 
+user_info = []
+
+user_info.append({"user_name": "wubo", "password": "wb123456", "role": 24})
+
 for user in user_info:
     result, message = user_m.new(user["user_name"], user["password"], user["role"])
     if result is False:
