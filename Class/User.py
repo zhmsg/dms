@@ -18,9 +18,10 @@ class UserManager:
         self.user_desc = [
             ["user_name", "varchar(15)", "NO", "PRI", None, ""],
             ["password", "char(66)", "NO", "", None, ""],
-            ["role", "tinyint(4)", "NO", "", None, ""]  # 1代表可以市场部权限 2代表具有上传者权限 4代表具有计算者权限
+            ["role", "tinyint(4)", "NO", "", None, ""],  # 1代表可以市场部权限 2代表具有上传者权限 4代表具有计算者权限
                                                         # 8代表可以查看API帮助文档 16代表可以添加API帮助文档
                                                         # 32代表可以查看数据库表设计 64代表可以查看权限设计
+            ["nick_name", "varchar(20)", "YES", "", None, ""]
         ]
 
     def create_user(self, force=False):
@@ -29,7 +30,7 @@ class UserManager:
     def check_user(self):
         return self.db.check_table(self.user, self.user_desc)
 
-    def new(self, user_name, password, role):
+    def new(self, user_name, password, role, nick_name):
         if check_user(user_name, 1, 15) is False:
             return False, u"用户名只能由字母数字和下划线组成且长度不大于20"
         select_sql = "SELECT role FROM %s WHERE user_name='%s';" % (self.user, user_name)
@@ -39,7 +40,8 @@ class UserManager:
         if check_password(password, 1, 20) is False:
             return False, u"密码只能由字母数字和下划线组成且长度不大于20"
         en_password = generate_password_hash(password)
-        insert_sql = "INSERT INTO %s (user_name,password,role) VALUES ('%s','%s',%s);" % (self.user, user_name, en_password, role)
+        insert_sql = "INSERT INTO %s (user_name,password,role,nick_name) VALUES ('%s','%s',%s,'%s');" \
+                     % (self.user, user_name, en_password, role, nick_name)
         self.db.execute(insert_sql)
         return True, user_name
 
