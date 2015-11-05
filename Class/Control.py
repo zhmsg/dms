@@ -139,38 +139,62 @@ class ControlManager:
             my_email.send_mail_thread(email, sub, content)
 
     # 针对API HEL片的应用
-    def get_module_list(self):
+    def get_module_list(self, role):
+        if role & 8 <= 0:
+            return False, u"您没有权限"
         return self.api_help.get_module_list()
 
-    def new_api_info(self, module_no, title, path, method, desc):
+    def new_api_info(self, module_no, title, path, method, desc, role):
+        if role & 16 <= 0:
+            return False, u"您没有权限"
         return self.api_help.new_api_info(module_no, title, path, method, desc)
 
-    def get_api_info(self, api_no):
+    def get_api_info(self, api_no, role):
+        if role & 8 <= 0:
+            return False, u"您没有权限"
         return self.api_help.get_api_info(api_no)
 
-    def add_header_param(self, api_no, param, necessary, desc):
+    def add_header_param(self, api_no, param, necessary, desc, role):
+        if role & 16 <= 0:
+            return False, u"您没有权限"
         return self.api_help.new_api_header(api_no, {param :{"necessary": necessary, "desc": desc}})
 
-    def add_body_param(self, api_no, param, necessary, type, desc):
+    def add_body_param(self, api_no, param, necessary, type, desc, role):
+        if role & 16 <= 0:
+            return False, u"您没有权限"
         return self.api_help.new_api_body(api_no, {param :{"necessary": necessary, "type": type, "desc": desc}})
 
-    def add_input_example(self, api_no, example, desc):
+    def add_input_example(self, api_no, example, desc, role):
+        if role & 16 <= 0:
+            return False, u"您没有权限"
         return self.api_help.new_api_input(api_no, [{"desc": desc, "example": example}])
 
-    def add_output_example(self, api_no, example, desc):
+    def add_output_example(self, api_no, example, desc, role):
+        if role & 16 <= 0:
+            return False, u"您没有权限"
         return self.api_help.new_api_output(api_no, [{"desc": desc, "example": example}])
 
-    def get_api_list(self, module_no):
+    def get_api_list(self, module_no, role):
+        if role & 16 <= 0:
+            return False, u"您没有权限"
         return self.api_help.get_api_list(module_no)
 
-    def delete_header(self, header_no):
+    def delete_header(self, header_no, role):
+        if role & 16 <= 0:
+            return False, u"您没有权限"
         return self.api_help.del_api_header(header_no)
 
-    def delete_body(self, body_no):
+    def delete_body(self, body_no, role):
+        if role & 16 <= 0:
+            return False, u"您没有权限"
         return self.api_help.del_api_body(body_no)
 
-    def delete_input(self, input_no):
+    def delete_input(self, input_no, role):
+        if role & 16 <= 0:
+            return False, u"您没有权限"
         return self.api_help.del_api_input(input_no)
 
-    def delete_ouput(self, output_no):
+    def delete_ouput(self, output_no, role):
+        if role & 16 <= 0:
+            return False, u"您没有权限"
         return self.api_help.del_api_output(output_no)

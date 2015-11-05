@@ -5,7 +5,7 @@
 import sys
 import json
 from flask import Blueprint, render_template, request, redirect
-from flask_login import login_required
+from flask_login import login_required, current_user
 from Class.Control import ControlManager
 
 sys.path.append('..')
@@ -32,13 +32,14 @@ def ping():
 
 
 @develop_api_view.route("/")
+@login_required
 def list_api():
-    result, module_list = control.get_module_list()
+    result, module_list = control.get_module_list(current_user.role)
     if result is False:
         return module_list
     if "module_no" in request.args:
         module_no = int(request.args["module_no"])
-        result, api_list = control.get_api_list(module_no)
+        result, api_list = control.get_api_list(module_no, current_user.role)
         if result is False:
             return api_list
         current_module = None
@@ -54,13 +55,14 @@ def list_api():
 
 
 @develop_api_view.route("/info/", methods=["GET"])
+@login_required
 def show_api():
     if "api_no" not in request.args:
         return "Need api_no"
     api_no = request.args["api_no"]
     if len(api_no) != 32:
         return "Bad api_no"
-    result, api_info = control.get_api_info(api_no)
+    result, api_info = control.get_api_info(api_no, current_user.role)
     if result is False:
         return api_info
     return_url = develop_api_view.url_prefix + "/?module_no=%s" % api_info["basic_info"]["module_no"]
@@ -68,14 +70,16 @@ def show_api():
 
 
 @develop_api_view.route("/new/", methods=["GET"])
+@login_required
 def new_api_page():
-    result, module_list = control.get_module_list()
+    result, module_list = control.get_module_list(current_user.role)
     if result is False:
         return module_list
     return render_template("/Dev/API_HELP/New_API.html", module_list=module_list)
 
 
 @develop_api_view.route("/new/", methods=["POST"])
+@login_required
 def new_api_info():
     request_form = request.form
     desc = request_form["api_desc"]
@@ -83,39 +87,42 @@ def new_api_info():
     title = request_form["api_title"]
     method = request_form["api_method"]
     module_no = int(request_form["api_module"])
-    result, api_info = control.new_api_info(module_no, title, url, method, desc)
+    result, api_info = control.new_api_info(module_no, title, url, method, desc, current_user.role)
     if result is False:
         return api_info
     return redirect(develop_api_view.url_prefix + "/update/info/?api_no=%s" % api_info["api_no"])
 
 
 @develop_api_view.route("/update/info/", methods=["GET"])
+@login_required
 def update_api_other_info():
     if "api_no" not in request.args:
         return "Need api_no"
     api_no = request.args["api_no"]
     if len(api_no) != 32:
         return "Bad api_no"
-    result, api_info = control.get_api_info(api_no)
+    result, api_info = control.get_api_info(api_no, current_user.role)
     if result is False:
         return api_info
     return render_template("/Dev/API_HELP/Update_API.html", api_info=api_info, api_no=api_no)
 
 
 @develop_api_view.route("/add/header/", methods=["POST"])
+@login_required
 def add_header_param():
     request_form = request.form
     param = request_form["param"]
     api_no = request_form["api_no"]
     desc = request_form["desc"]
     necessary = int(request_form["necessary"])
-    result, param_info = control.add_header_param(api_no, param, necessary, desc)
+    result, param_info = control.add_header_param(api_no, param, necessary, desc, current_user.role)
     if result is False:
         return param_info
     return json.dumps({"status": True, "data": param_info})
 
 
 @develop_api_view.route("/add/body/", methods=["POST"])
+@login_required
 def add_body_param():
     request_form = request.form
     param = request_form["param"]
@@ -123,55 +130,61 @@ def add_body_param():
     desc = request_form["desc"]
     necessary = int(request_form["necessary"])
     type = request_form["type"]
-    result, param_info = control.add_body_param(api_no, param, necessary, type, desc)
+    result, param_info = control.add_body_param(api_no, param, necessary, type, desc, current_user.role)
     if result is False:
         return param_info
     return json.dumps({"status": True, "data": param_info})
 
 
 @develop_api_view.route("/add/input/", methods=["POST"])
+@login_required
 def add_input_example():
     request_form = request.form
     api_no = request_form["api_no"]
     desc = request_form["desc"]
     example = request_form["example"]
-    result, input_info = control.add_input_example(api_no, example, desc)
+    result, input_info = control.add_input_example(api_no, example, desc, current_user.role)
     if result is False:
         return input_info
     return json.dumps({"status": True, "data": input_info})
 
 
 @develop_api_view.route("/add/output/", methods=["POST"])
+@login_required
 def add_output_example():
     request_form = request.form
     api_no = request_form["api_no"]
     desc = request_form["desc"]
     example = request_form["example"]
-    result, output_info = control.add_output_example(api_no, example, desc)
+    result, output_info = control.add_output_example(api_no, example, desc, current_user.role)
     if result is False:
         return output_info
     return json.dumps({"status": True, "data": output_info})
 
 
 @develop_api_view.route("/delete/header/<header_no>/", methods=["DELETE"])
+@login_required
 def delete_header(header_no):
-    result, data = control.delete_header(header_no)
+    result, data = control.delete_header(header_no, current_user.role)
     return json.dumps({"status": result, "data": data})
 
 
 @develop_api_view.route("/delete/body/<body_no>/", methods=["DELETE"])
+@login_required
 def delete_body(body_no):
-    result, data = control.delete_body(body_no)
+    result, data = control.delete_body(body_no, current_user.role)
     return json.dumps({"status": result, "data": data})
 
 
 @develop_api_view.route("/delete/input/<input_no>/", methods=["DELETE"])
+@login_required
 def delete_input(input_no):
-    result, data = control.delete_input(input_no)
+    result, data = control.delete_input(input_no, current_user.role)
     return json.dumps({"status": result, "data": data})
 
 
 @develop_api_view.route("/delete/output/<output_no>/", methods=["DELETE"])
+@login_required
 def delete_output(output_no):
-    result, data = control.delete_ouput(output_no)
+    result, data = control.delete_ouput(output_no, current_user.role)
     return json.dumps({"status": result, "data": data})
