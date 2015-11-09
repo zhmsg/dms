@@ -9,8 +9,10 @@ from datetime import datetime
 from Tools.Mysql_db import DB
 from Class import table_manager, TIME_FORMAT
 from Check import check_chinese_en, check_http_method, check_path, check_sql_character, check_char_num_underline, check_char
+from Tools.Wx import WxManager
 
 temp_dir = tempfile.gettempdir()
+wx = WxManager()
 
 __author__ = 'ZhouHeng'
 
@@ -26,6 +28,7 @@ class HelpManager:
         self.api_header = table_manager.api_header
         self.api_body = table_manager.api_body
         self.api_care = table_manager.api_care
+        self.user = "sys_user"
 
     def new_api_info(self, module_no, api_title, api_path, api_method, api_desc):
         if type(module_no) != int:
@@ -293,3 +296,30 @@ class HelpManager:
         delete_sql = "DELETE FROM %s WHERE api_no='%s' AND user_name='%s';" % (self.api_care, api_no, user_name)
         result = self.db.execute(delete_sql)
         return True, result
+
+    def notice_change(self, api_no, change_message):
+        # 获得所有关注的人
+        select_sql = "SELECT c.user_name,wx_id,nick_name FROM %s as su,%s as c " \
+                     "WHERE su.user_name=c.user_name AND api_no='%s' AND wx_id is not null;" \
+                     % (self.user, self.api_care, api_no)
+        self.db.execute(select_sql)
+        care_info = []
+        for item in self.db.fetchall():
+            care_info.append({"user_name": item[0], "wx_id": item[1], "nick_name": item[2]})
+        # 获取API基本信息
+        basic_info_col = ("api_no", "api_title", "api_path", "api_method", "api_desc")
+        select_sql = "SELECT m.%s FROM %s AS i, api_module AS m WHERE i.module_no=m.module_no AND api_no='%s';" \
+                     % (",".join(basic_info_col), self.api_info, api_no)
+        result = self.db.execute(select_sql)
+        if result <= 0:
+            return False, "Not Exist api_no"
+        db_info = self.db.fetchone()
+        basic_info = {}
+        for i in range(len(db_info)):
+            basic_info[basic_info_col[i]] = db_info[i]
+        basic_info["api_url"] = basic_info["module_prefix"].rstrip("/") + "/" + basic_info["api_path"].lstrip("/")
+        # 逐个发送微信消息
+        for care_user in care_info:
+            look_url = "www.gene.ac/dev/api/info/?api_no=%s" % api_no
+            wx.send_api_change_template(basic_info["api_url"], basic_info["api_title", look_url, care_user["wx_id"]], change_message)
+        return True, "success"
