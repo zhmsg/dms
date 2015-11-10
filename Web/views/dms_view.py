@@ -79,4 +79,4 @@ def register():
     result, message = control.new_user(user_name, password, user_role, nick_name, current_user.account, current_user.role)
     if result is False:
        return message
-    return redirect(url_for("dms_view.register_page"))
+    return redirect(url_for("dms_view.login_page"))

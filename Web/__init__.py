@@ -40,6 +40,6 @@ def load_user(account):
     return user
 
 
-login_manager.login_view = "transport_view.index"
+login_manager.login_view = "dms_view.index"
 
 
