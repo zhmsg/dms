@@ -25,36 +25,6 @@ user_m = UserManager()
 control = ControlManager()
 
 
-@transport_view.route("/login/", methods=["POST"])
-def login():
-    request_data = request.form
-    user_name = request_data["user_name"]
-    password = request_data["password"]
-    result, message = user_m.check(user_name, password)
-    if result is False:
-        return message
-    if "remember" in request_data and request_data["remember"] == "on":
-        remember = True
-    else:
-        remember = False
-    user = User()
-    user.account = user_name
-    login_user(user, remember=remember)
-    session["role"] = message
-    if "next" in request_data and request_data["next"] != "":
-        return redirect(request_data["next"])
-    if session["role"] == 0:
-            return u"您还没有任何权限，请联系管理员授权"
-    elif session["role"] < 8:
-        return redirect(url_for("transport_view.show"))
-    elif session["role"] < 32:
-        return redirect(url_for("develop_api_view.list_api"))
-    elif session["role"] < 64:
-        return redirect(url_for("develop_view.show_data_table"))
-    else:
-        return redirect(url_for("develop_view.operate_auth_show"))
-
-
 @transport_view.route("/records/", methods=["GET"])
 @login_required
 def show():

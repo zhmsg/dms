@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>API帮助文档</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='t_css/bootstrap.min.css') }}"><!-- 新 Bootstrap 核心 CSS 文件 -->
+<link rel="stylesheet" href="{{ url_for('static', filename='t_css/main.css') }}"><!--自定义的页面样式 -->
+</head>
+
+<body>
+<div class="container font16">
+<div class="apiMode api-help-mode">
+    {% if user_role | bit_and(role_value["market"]) >  0 or user_role | bit_and(role_value["upload"]) >  0 or user_role | bit_and(role_value["calc"]) >  0%}
+        <a href="/dms/records/">查看数据运输</a>
+    {% endif %}
+    {% if user_role | bit_and(role_value["api_look"]) >  0 or user_role | bit_and(role_value["api_new"]) >  0 %}
+        <a href="/dev/api/">查看API文档</a>
+    {% endif %}
+    {% if user_role | bit_and(role_value["table_look"]) >  0 %}
+        <a href="/dev/data/table">查看数据表设计</a>
+    {% endif %}
+    {% if user_role | bit_and(role_value["auth_look"]) >  0 %}
+        <a href="/dev/operate/auth/">查看晶云平台操作权限</a>
+    {% endif %}
+    {% if user_role | bit_and(role_value["user_new"]) >  0 %}
+        <a href="/dms/register/">新建用户</a>
+    {% endif %}
+</div>
+</div>
+</body>
+</html>
