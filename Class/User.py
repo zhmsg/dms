@@ -2,10 +2,12 @@
 # coding: utf-8
 
 import sys
+from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 sys.path.append("..")
 from Tools.Mysql_db import DB
 from Check import check_char_num_underline as check_user, check_password
+from Class import TIME_FORMAT
 
 __author__ = 'ZhouHeng'
 
@@ -43,8 +45,10 @@ class UserManager:
         if check_password(password, 1, 20) is False:
             return False, u"密码只能由字母数字和下划线组成且长度不大于20"
         en_password = generate_password_hash(password)
-        insert_sql = "INSERT INTO %s (user_name,password,role,nick_name,creator) VALUES ('%s','%s',%s,'%s','%s');" \
-                     % (self.user, user_name, en_password, role, nick_name, creator)
+        add_time = datetime.now().strftime(TIME_FORMAT)
+        insert_sql = "INSERT INTO %s (user_name,password,role,nick_name,creator,add_time) " \
+                     "VALUES ('%s','%s',%s,'%s','%s','%s');" \
+                     % (self.user, user_name, en_password, role, nick_name, creator, add_time)
         self.db.execute(insert_sql)
         return True, user_name
 
