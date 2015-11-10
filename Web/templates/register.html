@@ -26,6 +26,25 @@
       <input type="text" id="inputUser" name="user_name" class="form-control" placeholder="User Name" required autofocus>
       <label for="inputPassword" class="sr-only">Password</label>
       <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
+      <input type="text" id="inputName" name="nick_name" class="form-control" placeholder="Real Name" required>
+      <div class="checkbox">数据传输权限&nbsp;&nbsp;&nbsp;
+        <label><input type="checkbox" {% if user_role | bit_and(role_value["market"]) <= 0 %}disabled{% else %}name="market" {% endif %}>市场</label>&nbsp;&nbsp;
+        <label><input type="checkbox" {% if user_role | bit_and(role_value["upload"]) <= 0 %}disabled{% else %}name="upload" {% endif %}>上传</label>&nbsp;&nbsp;
+        <label><input type="checkbox" {% if user_role | bit_and(role_value["calc"]) <= 0 %}disabled{% else %}name="calc" {% endif %}>计算</label>&nbsp;&nbsp;
+      </div>
+      <div class="checkbox">API文档权限&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <label><input type="checkbox" {% if user_role | bit_and(role_value["api_look"]) <= 0 %}disabled{% else %}name="api_look" {% endif %}>查看</label>&nbsp;&nbsp;
+        <label><input type="checkbox" {% if user_role | bit_and(role_value["api_new"]) <= 0 %}disabled{% else %}name="api_new"{% endif %}>新建修改</label>&nbsp;&nbsp;
+      </div>
+      <div class="checkbox">权限列表权限&nbsp;&nbsp;&nbsp;
+        <label><input type="checkbox" {% if user_role | bit_and(role_value["auth_look"]) <= 0 %}disabled{% else %}name="auth_look"{% endif %}>查看</label>&nbsp;&nbsp;
+      </div>
+      <div class="checkbox">数据表描述权限
+        <label><input type="checkbox" {% if user_role | bit_and(role_value["table_look"]) <= 0 %}disabled{% else %}name="table_look"{% endif %}>查看</label>&nbsp;&nbsp;
+      </div>
+      <div class="checkbox">操作用户权限&nbsp;&nbsp;&nbsp;
+        <label><input type="checkbox" {% if user_role | bit_and(role_value["user_new"]) <= 0 %}disabled {% else %}name="user_new"{% endif %}>新建</label>&nbsp;&nbsp;
+      </div>
       <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
     </form>
   </div>

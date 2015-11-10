@@ -58,16 +58,25 @@ def login_page():
 
 
 @dms_view.route("/register/", methods=["GET"])
+@login_required
 def register_page():
-    return render_template("register.html")
+    if current_user.role & control.user_role["user_new"] <= 0:
+        return u"用户无权限操作"
+    return render_template("register.html", user_role=current_user.role, role_value=control.user_role)
 
 
 @dms_view.route("/register/", methods=["POST"])
+@login_required
 def register():
     request_data = request.form
     user_name = request_data["user_name"]
     password = request_data["password"]
-    result, message = user_m.new(user_name, password, 0, "")
+    nick_name = request_data["nick_name"]
+    user_role = 0
+    for key, value in user_m.role_value.items():
+        if key in request_data and request_data[key] == "on":
+            user_role += value
+    result, message = control.new_user(user_name, password, user_role, nick_name, current_user.account, current_user.role)
     if result is False:
-        return message
-    return redirect(url_for("dms_view.login_page"))
+       return message
+    return redirect(url_for("dms_view.register_page"))

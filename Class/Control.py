@@ -35,10 +35,18 @@ class ControlManager:
         self.calc_attribute = self.calc.attribute
         self.calc_attribute_ch = self.calc.attribute_ch
         self.user = UserManager()
+        self.user_role = self.user.role_value
         self.dev = DevManager()
         # table_manager.create_not_exist_table()
         self.api_help = HelpManager()
         self.manger_email = ["budechao@ict.ac.cn", "biozy@ict.ac.cn"]
+
+    def new_user(self, user_name, password, role, nick_name, creator, creator_role):
+        if creator_role & self.user.role_value["user_new"] <= 0:
+            return False, u"用户无权限新建用户"
+        if creator_role | role > creator_role:
+            return False, u"给新建用户赋予权限过高"
+        return self.user.new(user_name, password, role, nick_name, creator)
 
     def get_data(self):
         return self.data.get()

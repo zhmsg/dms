@@ -20,5 +20,12 @@ msg_web.register_blueprint(develop_api_view_blueprint)
 msg_web.register_blueprint(dms_blueprint)
 
 
+@msg_web.template_filter('bit_and')
+def bit_and(num1, num2):
+    return num1 & num2
+
+msg_web.jinja_env.filters['bit_and'] = bit_and
+
+
 if __name__ == '__main__':
     msg_web.run(host="0.0.0.0", port=2100)
