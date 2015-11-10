@@ -24,7 +24,10 @@ class UserManager:
                                                         # 8代表可以查看API帮助文档 16代表可以添加API帮助文档
                                                         # 32代表可以查看数据库表设计 64代表可以查看权限设计
                                                         # 128代表新建用户的权限
-            ["nick_name", "varchar(20)", "NO", "", None, ""]
+            ["nick_name", "varchar(20)", "NO", "", None, ""],
+            ["wx_id", "char(28)", "NO", "", None, ""],
+            ["creator", "varchar(15)", "NO", "", None, ""],
+            ["add_time", "datetime", "NO", "", None, ""]
         ]
         self.role_value = {"market": 1, "upload": 2, "calc": 4, "api_look": 8, "api_new": 16, "table_look": 32,
                            "auth_look": 64, "user_new": 128}
