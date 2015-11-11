@@ -33,13 +33,11 @@ class HelpManager:
     def new_api_info(self, module_no, api_title, api_path, api_method, api_desc):
         if type(module_no) != int:
             return False , "Bad module_no"
-        if check_chinese_en(api_title) is False:
-            return False, "Bad api_title"
         if check_path(api_path) is False:
             return False, "Bad api_path"
         if check_http_method(api_method) is False:
             return False, "Bad api_method"
-
+        api_title = check_sql_character(api_title)
         api_desc = check_sql_character(api_desc)
         if len(api_desc) < 1:
             return False, "Bad api_desc"

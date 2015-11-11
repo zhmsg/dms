@@ -108,7 +108,6 @@ class ControlManager:
         return True, ""
 
     def get_market(self, data_no, role):
-        print(role)
         if (role & 1) <= 0:
             return False, u"您的权限不足"
         return self.market.select(data_no)

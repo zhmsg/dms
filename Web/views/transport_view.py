@@ -16,12 +16,9 @@ sys.path.append('..')
 
 __author__ = 'Zhouheng'
 
-my_email = MyEmailManager()
 
 transport_view = Blueprint('transport_view', __name__)
 
-my_email = MyEmailManager()
-user_m = UserManager()
 control = ControlManager()
 
 
