@@ -34,7 +34,7 @@ class TableManager:
         self.api_input_desc = [
             ["input_no", "char(32)", "NO", "PRI", None, "", "主键 输入系统编号"],
             ["api_no", "char(32)", "NO", "", None, "", "API系統编号 參看%s api_no" % self.api_info],
-            ["input_desc", "varchar(150)", "NO", "", None, "", "API输入描述"],
+            ["input_desc", "varchar(550)", "NO", "", None, "", "API输入描述"],
             ["input_example", "text", "NO", "", None, "", "API调用输入示例"],
             ["add_time", "datetime", "NO", "", None, "", "添加的时间"]
         ]
@@ -42,7 +42,7 @@ class TableManager:
         self.api_output_desc = [
             ["output_no", "char(32)", "NO", "PRI", None, "", "主键 输出系统编号"],
             ["api_no", "char(32)", "NO", "", None, "", "API系統编号 參看%s api_no" % self.api_info],
-            ["output_desc", "varchar(150)", "NO", "", None, "", "API输出描述"],
+            ["output_desc", "varchar(550)", "NO", "", None, "", "API输出描述"],
             ["output_example", "text", "NO", "", None, "", "API调用输出示例"],
             ["add_time", "datetime", "NO", "", None, "", "添加的时间"]
         ]

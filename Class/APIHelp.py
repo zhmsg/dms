@@ -120,7 +120,7 @@ class HelpManager:
         for item in input_examples:
             if "desc" not in item or "example" not in item:
                 return False, "input example need desc and example"
-            input_desc = check_sql_character(item["desc"])[:150]
+            input_desc = check_sql_character(item["desc"])[:550]
             input_example = check_sql_character(item["example"])
             if len(input_desc) < 1:
                 return False, "Bad input_desc"
@@ -147,7 +147,7 @@ class HelpManager:
         for item in output_examples:
             if "desc" not in item or "example" not in item:
                 return False, "output example need desc and example"
-            output_desc = check_sql_character(item["desc"])[:150]
+            output_desc = check_sql_character(item["desc"])[:550]
             output_example = check_sql_character(item["example"])
             if len(output_desc) < 1:
                 return False, "Bad output_desc"
