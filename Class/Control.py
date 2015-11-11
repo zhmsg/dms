@@ -123,16 +123,24 @@ class ControlManager:
         return self.calc.select(data_no)
 
     # 针对开发者的应用
-    def download_operate_auth(self):
+    def download_operate_auth(self, role):
+        if role & self.user_role["auth_look"] <= 0:
+            return False, u"您没有权限"
         return self.dev.get_operate_auth_file()
 
-    def show_operate_auth(self):
+    def show_operate_auth(self, role):
+        if role & self.user_role["auth_look"] <= 0:
+            return False, u"您没有权限"
         return self.dev.get_operate_auth()
 
-    def list_data_table(self):
+    def list_data_table(self, role):
+        if role & self.user_role["table_look"] <= 0:
+            return False, u"您没有权限"
         return self.dev.list_table()
 
-    def get_table_info(self, table_name):
+    def get_table_info(self, table_name, role):
+        if role & self.user_role["table_look"] <= 0:
+            return False, u"您没有权限"
         return self.dev.get_table_info(table_name)
 
     def send_email(self, sub, data_no, info, attribute, attribute_ch):
@@ -145,7 +153,7 @@ class ControlManager:
         for email in self.manger_email:
             my_email.send_mail_thread(email, sub, content)
 
-    # 针对API HEL片的应用
+    # 针对API HELP的应用
     def get_module_list(self, role):
         if role & 8 <= 0:
             return False, u"您没有权限"

@@ -4,8 +4,7 @@
 
 import sys
 from flask import Blueprint, render_template, send_from_directory, request
-from Tools.MyEmail import MyEmailManager
-from Class.User import UserManager
+from flask_login import current_user, login_required
 from Class.Control import ControlManager
 
 sys.path.append('..')
@@ -29,28 +28,31 @@ def ping():
 
 
 @develop_view.route("/operate/auth/", methods=["GET"])
+@login_required
 def operate_auth_show():
-    result, data = control.show_operate_auth()
+    result, data = control.show_operate_auth(current_user.role)
     if result is False:
         return data
     return render_template("/Dev/operate_auth.html", operate_auth=data)
 
 
 @develop_view.route("/operate/auth/download/", methods=["GET"])
+@login_required
 def download_operate_auth():
-    result, data = control.download_operate_auth()
+    result, data = control.download_operate_auth(current_user.role)
     if result is True:
         return send_from_directory(data["DIR"], data["FILE"], as_attachment=True)
     return data
 
 
 @develop_view.route("/data/table/", methods=["GET"])
+@login_required
 def show_data_table():
-    table_list = control.list_data_table()
+    table_list = control.list_data_table(current_user.role)
     column_info = []
     select_table = {}
     if "table" in request.args:
-        column_info = control.get_table_info(request.args["table"])
+        column_info = control.get_table_info(request.args["table"], current_user.role)
         for table in table_list:
             if table["table_name"] == request.args["table"]:
                 select_table = table
