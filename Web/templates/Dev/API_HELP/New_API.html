@@ -13,7 +13,7 @@
 <div class="container apiMode">
   <div class="form-group">
      <label for="">API所属模块：</label>
-     <select class="box-side" id="api_module" onchange="select_change()">
+     <select class="box-side" id="api_module" onchange="select_change()" >
         {% for module in module_list %}
             <option about="{{ module["module_desc"] }}" value="{{ module["module_no"] }}" title="{{ module["module_prefix"] }}">{{ module["module_name"] }}</option>
         {% endfor %}
@@ -26,7 +26,7 @@
         <li>
           <label for="">模块编号：</label>
           <span id="selected_no">{{ module_list[0]["module_no"] }}</span>
-          <input id="module_no" name="api_module" style="display:none;"/>
+          <input id="module_no" name="api_module" style="display:none;" value="{{ module_list[0]["module_no"] }}"/>
         </li>
         <li>
           <label for="">模块名称：</label>
