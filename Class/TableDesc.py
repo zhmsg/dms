@@ -69,7 +69,8 @@ class TableManager:
         self.api_care_desc = [
             ["api_no", "char(32)", "NO", "PRI", None, "", "API系统编号"],
             ["user_name", "varchar(15)", "NO", "PRI", None, "", "用户账户名"],
-            ["care_time", "datetime", "NO", "", None, "", "关注的时间"]
+            ["care_time", "datetime", "NO", "", None, "", "关注的时间"],
+            ["level", "tinyint(4)", "NO", "", None, "", "用户关注级别 0 API的创建者 1 修改过API 2 关心API 3 删除API"]
         ]
 
     def create_not_exist_table(self):

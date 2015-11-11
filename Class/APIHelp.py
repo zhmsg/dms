@@ -167,13 +167,13 @@ class HelpManager:
             return False, "sql execute result is %s " % result
         return True, new_result
 
-    def new_api_care(self, api_no, user_name):
+    def new_api_care(self, api_no, user_name, care_level=2):
         if len(api_no) != 32:
             return False, "Bad api_no"
         care_time = datetime.now().strftime(TIME_FORMAT)
-        insert_sql = "INSERT INTO %s (api_no,user_name,care_time) VALUES('%s','%s','%s')" \
+        insert_sql = "INSERT INTO %s (api_no,user_name,care_time,level) VALUES('%s','%s','%s',%s)" \
                      " ON DUPLICATE KEY UPDATE care_time=VALUES(care_time);" \
-                     % (self.api_care, api_no, user_name, care_time)
+                     % (self.api_care, api_no, user_name, care_time, care_level)
         result = self.db.execute(insert_sql)
         if result < 1:
             return False, "sql execute result is %s " % result

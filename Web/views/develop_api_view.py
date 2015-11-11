@@ -97,7 +97,7 @@ def new_api_info():
     title = request_form["api_title"]
     method = request_form["api_method"]
     module_no = int(request_form["api_module"])
-    result, api_info = control.new_api_info(module_no, title, url, method, desc, current_user.role)
+    result, api_info = control.new_api_info(module_no, title, url, method, desc, current_user.account, current_user.role)
     if result is False:
         return api_info
     return redirect(develop_api_view.url_prefix + "/update/info/?api_no=%s" % api_info["api_no"])
