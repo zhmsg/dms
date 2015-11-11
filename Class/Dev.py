@@ -63,7 +63,7 @@ class DevManager:
         table_list = []
         for item in self.service_db.fetchall():
             table_list.append({"table_name": item[0], "create_time": item[1], "table_comment": item[2]})
-        return table_list
+        return True, table_list
 
     def get_table_info(self, table_name):
         sql = "SELECT COLUMN_NAME, COLUMN_TYPE,COLUMN_KEY,COLUMN_DEFAULT,EXTRA,COLUMN_COMMENT FROM columns WHERE TABLE_NAME='%s';" % table_name
@@ -71,4 +71,4 @@ class DevManager:
         column_info = []
         for item in self.service_db.fetchall():
             column_info.append({"column_name": item[0], "column_type": item[1], "column_key": item[2], "column_default": item[3], "extra": item[4], "column_comment": item[5]})
-        return column_info
+        return True, column_info

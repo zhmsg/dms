@@ -48,11 +48,15 @@ def download_operate_auth():
 @develop_view.route("/data/table/", methods=["GET"])
 @login_required
 def show_data_table():
-    table_list = control.list_data_table(current_user.role)
+    result, table_list = control.list_data_table(current_user.role)
+    if result is False:
+        return table_list
     column_info = []
     select_table = {}
     if "table" in request.args:
-        column_info = control.get_table_info(request.args["table"], current_user.role)
+        result, column_info = control.get_table_info(request.args["table"], current_user.role)
+        if result is False:
+            return column_info
         for table in table_list:
             if table["table_name"] == request.args["table"]:
                 select_table = table
