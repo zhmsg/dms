@@ -198,7 +198,7 @@ class ControlManager:
         return self.api_help.new_api_care(api_no, user_name)
 
     def get_api_list(self, module_no, role):
-        if role & 16 <= 0:
+        if role & 8 <= 0:
             return False, u"您没有权限"
         return self.api_help.get_api_list(module_no)
 
