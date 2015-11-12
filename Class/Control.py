@@ -224,3 +224,6 @@ class ControlManager:
 
     def delete_care(self, api_no, user_name):
         return self.api_help.del_api_care(api_no, user_name)
+
+    def delete_api(self, api_no, user_name):
+        return self.api_help.del_api_info(api_no, user_name)

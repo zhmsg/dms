@@ -110,6 +110,11 @@
         {% endfor %}
     </div>
 </div>
+{% if my_care and my_care["level"] == 0 %}
+<form action="/dev/api/delete/{{ api_no }}/" method="get">
+    <button class="btn btn-primary pull-right" >删除API</button>
+</form>
+{% endif %}
 </div>
 
 </body>

@@ -239,12 +239,13 @@ class HelpManager:
         for item in self.db.fetchall():
             output_info.append({"output_no": item[0], "api_no": item[1], "output_desc": item[2], "output_example": item[3]})
         # 获得关注列表
-        select_sql = "SELECT api_no,c.user_name,care_time,nick_name FROM sys_user as su,%s as c " \
+        select_sql = "SELECT api_no,c.user_name,care_time,nick_name,level FROM sys_user as su,%s as c " \
                      "WHERE su.user_name=c.user_name AND api_no='%s';" % (self.api_care, api_no)
         self.db.execute(select_sql)
         care_info = []
         for item in self.db.fetchall():
-            care_info.append({"api_no": item[0], "user_name": item[1], "care_time": item[2].strftime(TIME_FORMAT), "nick_name": item[3]})
+            care_info.append({"api_no": item[0], "user_name": item[1], "care_time": item[2].strftime(TIME_FORMAT),
+                              "nick_name": item[3], "level": item[4]})
         return True, {"basic_info": basic_info, "header_info": header_info, "body_info": body_info,
                       "input_info": input_info, "output_info": output_info, "care_info": care_info}
 
@@ -294,6 +295,29 @@ class HelpManager:
         delete_sql = "DELETE FROM %s WHERE api_no='%s' AND user_name='%s';" % (self.api_care, api_no, user_name)
         result = self.db.execute(delete_sql)
         return True, result
+
+    def del_api_info(self, api_no, user_name):
+        if len(api_no) != 32:
+            return False, "Bad api_no"
+        select_sql = "SELECT level FROM %s WHERE api_no='%s' AND user_name='%s' AND level=0;" \
+                     % (self.api_care, api_no, user_name)
+        result = self.db.execute(select_sql)
+        if result <= 0:
+            return False, "user can not delete this api"
+        delete_sql = "DELETE FROM %s WHERE api_no='%s';" % (self.api_info, api_no)
+        update_sql = "UPDATE %s SET level=3 WHERE api_no='%s' AND user_name='%s';" \
+                     % (self.api_care, api_no, user_name)
+        result = self.db.execute(delete_sql)
+        self.db.execute(update_sql)
+        self.del_api_other_info(api_no)
+        return True, result
+
+    def del_api_other_info(self, api_no):
+        delete_sql_format = "DELETE FROM %s WHERE api_no='" + api_no + "';"
+        for t in (self.api_header, self.api_input, self.api_body, self.api_output):
+            delete_sql = delete_sql_format % t
+            self.db.execute(delete_sql)
+        return True, "success"
 
     def notice_change(self, api_no, change_message):
         # 获得所有关注的人

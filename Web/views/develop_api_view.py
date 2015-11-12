@@ -4,7 +4,7 @@
 
 import sys
 import json
-from flask import Blueprint, render_template, request, redirect
+from flask import Blueprint, render_template, request, redirect, url_for
 from flask_login import login_required, current_user
 from Class.Control import ControlManager
 
@@ -179,6 +179,15 @@ def add_care():
     api_no = request_form["api_no"]
     result, care_info = control.add_care(api_no, current_user.account, current_user.role)
     return json.dumps({"status": result, "data": care_info})
+
+
+@develop_api_view.route("/delete/<api_no>/", methods=["GET"])
+@login_required
+def delete_api(api_no):
+    result, data = control.delete_api(api_no, current_user.account)
+    if result is False:
+        return data
+    return redirect(url_for("develop_api_view.list_api"))
 
 
 @develop_api_view.route("/delete/header/<header_no>/", methods=["DELETE"])
