@@ -68,6 +68,11 @@ class UserManager:
         db_r = self.db.fetchone()
         en_password = db_r[1]
         role = db_r[2]
+        if en_password is None:
+            if password == self.default_password:
+                return True, -1
+            else:
+                return False, u"密码不正确"
         if check_password_hash(en_password, password) is False:
             return False, u"密码不正确"
         return True, role

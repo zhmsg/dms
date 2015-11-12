@@ -69,9 +69,11 @@ def login():
     request_data = request.form
     user_name = request_data["user_name"]
     password = request_data["password"]
-    result, message = user_m.check(user_name, password)
+    result, role = user_m.check(user_name, password)
     if result is False:
-        return message
+        return role
+    if role == -1:
+        return u"需要更换密码"
     if "remember" in request_data and request_data["remember"] == "on":
         remember = True
     else:
@@ -79,7 +81,7 @@ def login():
     user = User()
     user.account = user_name
     login_user(user, remember=remember)
-    session["role"] = message
+    session["role"] = role
     if "next" in request_data and request_data["next"] != "":
         return redirect(request_data["next"])
     if session["role"] == 0:

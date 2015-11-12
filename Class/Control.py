@@ -160,7 +160,7 @@ class ControlManager:
         return self.api_help.get_module_list()
 
     def new_api_info(self, module_no, title, path, method, desc, user_name, role):
-        if role & 16 <= 0:
+        if role & 8 <= 0:
             return False, u"您没有权限"
         result, data = self.api_help.new_api_info(module_no, title, path, method, desc)
         if result is True:

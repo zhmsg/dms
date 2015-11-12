@@ -11,7 +11,7 @@
 <div class="container font16">
 <div class="apiMode api-help-mode">
     {% if user_role | bit_and(role_value["market"]) >  0 or user_role | bit_and(role_value["upload"]) >  0 or user_role | bit_and(role_value["calc"]) >  0%}
-        <a href="/dms/records/">查看数据运输</a>
+        <a href="/dms/records/">查看数据管理</a>
     {% endif %}
     {% if user_role | bit_and(role_value["api_look"]) >  0 or user_role | bit_and(role_value["api_new"]) >  0 %}
         <a href="/dev/api/">查看API文档</a>
