@@ -29,6 +29,7 @@ class UserManager:
             ["creator", "varchar(15)", "NO", "", None, ""],
             ["add_time", "datetime", "NO", "", None, ""]
         ]
+        self.default_password = "gene.ac"
         self.role_value = {"market": 1, "upload": 2, "calc": 4, "api_look": 8, "api_new": 16, "table_look": 32,
                            "auth_look": 64, "user_new": 128}
 

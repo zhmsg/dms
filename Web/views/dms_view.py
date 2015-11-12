@@ -1,12 +1,9 @@
 #!/user/bin/env python
 # -*- coding: utf-8 -*-
 
-import requests
-import json
 import sys
 from flask import Blueprint, request, render_template, redirect, session, url_for
 from flask_login import login_user, current_user, logout_user
-from Tools.MyEmail import MyEmailManager
 from flask_login import login_required
 from Class.User import UserManager
 from Class.Control import ControlManager
@@ -15,8 +12,6 @@ from Web import User
 sys.path.append('..')
 
 __author__ = 'Zhouheng'
-
-my_email = MyEmailManager()
 
 dms_view = Blueprint('dms_view', __name__, url_prefix="/dms")
 
