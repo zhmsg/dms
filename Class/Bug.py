@@ -34,12 +34,12 @@ class BugManager:
             return False, "sql execute result is %s " % result
         return True, {"bug_no": bug_no, "bug_title": bug_title, "submitter": submitter, "submit_time": submit_time}
 
-    def new_bug_link(self, bug_no, user_name, link_type):
+    def new_bug_link(self, bug_no, user_name, link_type, adder):
         if len(bug_no) != 32:
             return False, "Bad bug_no"
         link_time = datetime.now().strftime(TIME_FORMAT)
-        insert_sql = "INSERT INTO %s (bug_no,user_name,type,link_time) VALUES ('%s','%s','%s','%s');" \
-                     % (self.bug_owner, bug_no, user_name, link_type, link_time)
+        insert_sql = "INSERT INTO %s (bug_no,user_name,type,link_time,adder) VALUES ('%s','%s','%s','%s','%s');" \
+                     % (self.bug_owner, bug_no, user_name, link_type, link_time, adder)
         result = self.db.execute(insert_sql)
         if result != 1:
             return False, "sql execute result is %s " % result
@@ -63,3 +63,37 @@ class BugManager:
         update_sql = "UPDATE %s SET bug_status=%s WHERE bug_no='%s';" % (self.bug_example, status, bug_no)
         result = self.db.execute(update_sql)
         return True, result
+
+    def get_bug_list(self):
+        select_sql = "SELECT bug_no,bug_title,submitter,submit_time FROM %s;" % self.bug
+        self.db.execute(select_sql)
+        bug_list = []
+        for item in self.db.fetchall():
+            bug_list.append({"bug_no": item[0], "bug_title": item[1], "submitter": item[2], "submit_time": item[3]})
+        return True, bug_list
+
+    def get_bug_info(self, bug_no):
+        if len(bug_no) != 32:
+            return False, "Bad bug_no"
+        # 获取基本信息
+        select_sql = "SELECT bug_no,bug_title,submitter,submit_time,bug_status FROM %s WHERE bug_no='%s';" \
+                     % (self.bug, bug_no)
+        result = self.db.execute(select_sql)
+        if result != 1:
+            return False, "Bad bug_no."
+        info = self.db.fetchone()
+        bug_info = {"bug_no": info[0], "bug_title": info[1], "submitter": info[2],
+                    "submit_time": info[3].strftime(TIME_FORMAT), "bug_status": info[4]}
+        # 获取示例信息
+        select_sql = "SELECT type,content,add_time FROM %s WHERE bug_no='%s' ORDER BY add_time;" % (self.bug_example, bug_no)
+        self.db.execute(select_sql)
+        example_info = []
+        for item in self.db.execute(select_sql):
+            example_info.append({"example_type": item[0], "content": item[1], "add_time": item[2].strftime(TIME_FORMAT)})
+        # 获取关联的人
+        select_sql = "SELECT user_name,type,link_time,adder FROM %s WHERE bug_no='%s';" % (self.bug_owner, bug_no)
+        link_user = []
+        for item in self.db.execute(select_sql):
+            link_user.append({"user_name": item[0], "link_type": item[1],
+                              "link_time": item[2].strftime(TIME_FORMAT), "adder": item[3]})
+        return True, {"bug_info": bug_info, "example_info": example_info, "link_user": link_user}

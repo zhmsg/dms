@@ -12,6 +12,7 @@ from Calc import CalcManager
 from User import UserManager
 from Dev import DevManager
 from APIHelp import HelpManager
+from Bug import BugManager
 from Class import table_manager
 
 __author__ = 'ZhouHeng'
@@ -39,6 +40,7 @@ class ControlManager:
         self.dev = DevManager()
         # table_manager.create_not_exist_table()
         self.api_help = HelpManager()
+        self.bug = BugManager()
         self.manger_email = ["budechao@ict.ac.cn", "biozy@ict.ac.cn"]
 
     def new_user(self, user_name, password, role, nick_name, creator, creator_role):
@@ -227,3 +229,34 @@ class ControlManager:
 
     def delete_api(self, api_no, user_name):
         return self.api_help.del_api_info(api_no, user_name)
+
+    # 针对BUG的应用
+    def get_bug_list(self, role):
+        if role & self.user_role["bug_look"] <= 0:
+            return False, u"您没有权限"
+        return self.bug.get_bug_list()
+
+    def get_bug_info(self, role, bug_no):
+        if role & self.user_role["bug_look"] <= 0:
+            return False, u"您没有权限"
+        return self.bug.get_bug_info(bug_no)
+
+    def new_bug(self, user_name, role, bug_title):
+        if role & self.user_role["bug_new"] <= 0:
+            return False, u"您没有权限"
+        return self.bug.new_bug_info(bug_title, user_name)
+
+    def add_bug_str_example(self, user_name, role, bug_no, content):
+        if role & self.user_role["bug_new"] <= 0:
+            return False, u"您没有权限"
+        # 判断该bug是否是user_name提交的
+        select_sql = "SELECT submitter,bug_status FROM %s WHERE bug_no='%s';" % (self.bug.bug, bug_no)
+        result = self.db.execute(select_sql)
+        if result == 0:
+            return False, u"BUG 不存在"
+        submitter, bug_status = self.db.fetchone()
+        if submitter != user_name:
+            return False, u"您不能修改别人的BUG"
+        if bug_status > 2:
+            return False, u"BUG 已不能修改"
+        return self.bug.new_bug_example(bug_no, 1, content)

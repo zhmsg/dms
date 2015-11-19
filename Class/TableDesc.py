@@ -85,7 +85,8 @@ class TableManager:
             ["bug_no", "char(32)", "NO", "PRI", None, "", "BUG系统编号"],
             ["user_name", "varchar(15)", "NO", "PRI", None, "", "用户账户名"],
             ["type", "tinyint(4)", "NO", "PRI", None, "", "1 代表疑似BUG拥有者 2 代表BUG拥有者 3 代表BUG修复者 4 代表BUG取消者 5 代表确认BUG属于设计范围内"],
-            ["link_time", "datetime", "NO", "", None, "", "关联的时间"]
+            ["link_time", "datetime", "NO", "", None, "", "关联的时间"],
+            ["adder", "varchar(15)", "NO", "PRI", None, "", "添加关联者账户名"]
         ]
         self.bug_example = "bug_example"
         self.bug_example_desc = [
