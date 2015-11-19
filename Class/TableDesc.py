@@ -72,6 +72,28 @@ class TableManager:
             ["care_time", "datetime", "NO", "", None, "", "关注的时间"],
             ["level", "tinyint(4)", "NO", "", None, "", "用户关注级别 0 API的创建者 1 修改过API 2 关心API 3 删除API"]
         ]
+        self.bug = "bug_info"
+        self.bug_desc = [
+            ["bug_no", "char(32)", "NO", "PRI", None, "", "BUG系统编号"],
+            ["bug_title", "varchar(50)", "NO", "", None, "", "BUG标题"],
+            ["submitter", "varchar(15)", "NO", "", None, "", "用户账户名"],
+            ["submit_time", "datetime", "NO", "", None, "", "关注的时间"],
+            ["bug_status", "tinyint(4)", "NO", "", 0, "", "bug 当前状态 0 代表不知BUG归属 1 代表BUG存在疑似归属者 2 代表BUG存在归属者 3 代表BUG已修复 4 代表BUG被取消 5 代表BUG属于设计范围内"]
+        ]
+        self.bug_owner = "bug_owner"
+        self.bug_owner_desc = [
+            ["bug_no", "char(32)", "NO", "PRI", None, "", "BUG系统编号"],
+            ["user_name", "varchar(15)", "NO", "PRI", None, "", "用户账户名"],
+            ["type", "tinyint(4)", "NO", "PRI", None, "", "1 代表疑似BUG拥有者 2 代表BUG拥有者 3 代表BUG修复者 4 代表BUG取消者 5 代表确认BUG属于设计范围内"],
+            ["link_time", "datetime", "NO", "", None, "", "关联的时间"]
+        ]
+        self.bug_example = "bug_example"
+        self.bug_example_desc = [
+            ["bug_no", "char(32)", "NO", "", None, "", "BUG系统编号"],
+            ["type", "tinyint(4)", "NO", "", None, "", "1 文字示例 2代表 图片示例"],
+            ["content", "text", "NO", "", None, "", "相应的文字示例或者时图片地址"],
+            ["add_time", "datetime", "NO", "", None, "", "添加的时间"]
+        ]
 
     def create_not_exist_table(self):
         keys = vars(self).keys()

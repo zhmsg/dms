@@ -20,10 +20,12 @@ class UserManager:
         self.user_desc = [
             ["user_name", "varchar(15)", "NO", "PRI", None, ""],
             ["password", "char(66)", "NO", "", None, ""],
-            ["role", "tinyint(4)", "NO", "", None, ""],  # 1代表可以市场部权限 2代表具有上传者权限 4代表具有计算者权限
-                                                        # 8代表可以查看API帮助文档 16代表可以添加API帮助文档
-                                                        # 32代表可以查看数据库表设计 64代表可以查看权限设计
-                                                        # 128代表新建用户的权限
+            ["role", "tinyint(4)", "NO", "", None, ""],  # 1 代表可以市场部权限 2 代表具有上传者权限 4 代表具有计算者权限
+                                                        # 8 代表可以查看API帮助文档 16 代表可以添加API帮助文档
+                                                        # 32 代表可以查看数据库表设计 64 代表可以查看权限设计
+                                                        # 128代表新建和更新用户的权限
+                                                        # 256 代表有查看BUG列表权限 512 代表有新建BUG的权限
+                                                        # 1024 代表被赋予BUG的权限 2048
             ["nick_name", "varchar(20)", "NO", "", None, ""],
             ["wx_id", "char(28)", "NO", "", None, ""],
             ["creator", "varchar(15)", "NO", "", None, ""],
@@ -31,7 +33,7 @@ class UserManager:
         ]
         self.default_password = "gene.ac"
         self.role_value = {"market": 1, "upload": 2, "calc": 4, "api_look": 8, "api_new": 16, "table_look": 32,
-                           "auth_look": 64, "user_new": 128}
+                           "auth_look": 64, "user_new": 128, "bug_look": 256, "bug_new": 512}
 
     def create_user(self, force=False):
         return self.db.create_table(self.user, self.user_desc, force)
