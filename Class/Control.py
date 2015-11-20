@@ -24,6 +24,7 @@ class ControlManager:
 
     def __init__(self):
         self.db = DB()
+        self.sys_user = "sys_user"
         self.data = DataManager()
         self.market = MarketManager()
         self.market_attribute = self.market.attribute
@@ -260,3 +261,76 @@ class ControlManager:
         if bug_status > 2:
             return False, u"BUG 已不能修改"
         return self.bug.new_bug_example(bug_no, 1, content)
+
+    def add_bug_img_example(self, user_name, role, bug_no, path):
+        if role & self.user_role["bug_new"] <= 0:
+            return False, u"您没有权限"
+        # 判断该bug是否是user_name提交的
+        select_sql = "SELECT submitter,bug_status FROM %s WHERE bug_no='%s';" % (self.bug.bug, bug_no)
+        result = self.db.execute(select_sql)
+        if result == 0:
+            return False, u"BUG 不存在"
+        submitter, bug_status = self.db.fetchone()
+        if submitter != user_name:
+            return False, u"您不能修改别人的BUG"
+        if bug_status > 2:
+            return False, u"BUG 已不能修改"
+        return self.bug.new_bug_example(bug_no, 2, path)
+
+    def add_bug_link(self, bug_no, user_name, role, link_user, link_type):
+        if role & self.user_role["bug_new"] <= 0:
+            return False, u"您没有权限"
+        # 判断当前bug是否允许添加关联者
+        select_sql = "SELECT submitter,bug_status FROM %s WHERE bug_no='%s';" % (self.bug.bug, bug_no)
+        result = self.db.execute(select_sql)
+        if result == 0:
+            return False, u"BUG 不存在"
+        submitter, bug_status = self.db.fetchone()
+        if bug_status > 2:
+            return False, u"BUG 已不能修改"
+        # 判断被链接者是否可以被链接
+        select_sql = "SELECT role FROM %s WHERE user_name='%s';" % (self.sys_user, link_user)
+        result = self.db.execute(select_sql)
+        if result == 0:
+            return False, u"添加关联账户不存在"
+        link_role = self.db.fetchone()[0]
+        if link_role & self.user_role["bug_link"] <= 0:
+            return False, u"添加关联账户无效"
+        if link_type == "ys":
+            return self._add_ys_link(bug_no, user_name, link_user)
+        elif link_type == "owner":
+            return self._add_owner_link(bug_no, user_name, link_user, submitter)
+        elif link_type == "fix":
+            return self._add_fix_link(bug_no, user_name, link_user, submitter)
+        elif link_type == "channel":
+            return self._add_channel_link(bug_no, user_name, link_user, submitter)
+        elif link_type == "design":
+            return self._add_design_link(bug_no, user_name, link_user, submitter)
+        else:
+            return False, u"错误的请求"
+
+    def _add_ys_link(self, bug_no, user_name, link_user):
+        return self.bug.new_bug_link(bug_no, link_user, 1, user_name)
+
+    def _add_owner_link(self, bug_no, user_name, link_user, submitter):
+        # 判断操作者是否有权限操作 操作者可以是关联自己 或者 是bug的提交者
+        if user_name != link_user:
+            # 判断提交者是否是bug提交者
+            if submitter != user_name:
+                return False, u"您不能修改别人的BUG"
+        return self.bug.new_bug_link(bug_no, link_user, 2, user_name)
+
+    def _add_fix_link(self, bug_no, user_name, link_user, submitter):
+        if submitter != user_name:
+            return False, u"您不能修改别人的BUG的状态"
+        return self.bug.new_bug_link(bug_no, link_user, 3, user_name)
+
+    def _add_channel_link(self, bug_no, user_name, role, link_user, submitter):
+        if submitter != user_name and role & self.user_role["bug_channel"]:
+            return False, u"您无权限修改该BUG的状态"
+        return self.bug.new_bug_link(bug_no, link_user, 4, user_name)
+
+    def _add_design_link(self, bug_no, user_name, role, link_user, submitter):
+        if submitter != user_name and role & self.user_role["bug_channel"]:
+            return False, u"您无权限修改该BUG的状态"
+        return self.bug.new_bug_link(bug_no, link_user, 5, user_name)

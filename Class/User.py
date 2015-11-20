@@ -25,7 +25,7 @@ class UserManager:
                                                         # 32 代表可以查看数据库表设计 64 代表可以查看权限设计
                                                         # 128代表新建和更新用户的权限
                                                         # 256 代表有查看BUG列表权限 512 代表有新建BUG的权限
-                                                        # 1024 代表被赋予BUG的权限 2048
+                                                        # 1024 代表被关联BUG的权限 2048 代表有取消他人BUG的权限
             ["nick_name", "varchar(20)", "NO", "", None, ""],
             ["wx_id", "char(28)", "NO", "", None, ""],
             ["creator", "varchar(15)", "NO", "", None, ""],
@@ -33,7 +33,8 @@ class UserManager:
         ]
         self.default_password = "gene.ac"
         self.role_value = {"market": 1, "upload": 2, "calc": 4, "api_look": 8, "api_new": 16, "table_look": 32,
-                           "auth_look": 64, "user_new": 128, "bug_look": 256, "bug_new": 512}
+                           "auth_look": 64, "user_new": 128, "bug_look": 256, "bug_new": 512, "bug_link": 1024,
+                           "bug_channel": 2048}
 
     def create_user(self, force=False):
         return self.db.create_table(self.user, self.user_desc, force)
