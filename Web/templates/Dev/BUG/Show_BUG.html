@@ -1,22 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title>晶云平台BUG列表</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='t_css/bootstrap.min.css') }}"><!-- 新 Bootstrap 核心 CSS 文件 -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='t_css/main.css') }}"><!--自定义的页面样式 -->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>晶云平台BUG列表</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='t_css/bootstrap.min.css') }}"><!-- 新 Bootstrap 核心 CSS 文件 -->
+<link rel="stylesheet" href="{{ url_for('static', filename='t_css/main.css') }}"><!--自定义的页面样式 -->
 </head>
+
 <body>
+<div class="container font16">
 {#BUG列表#}
 {% if bug_list %}
     <table  class="table table-bordered table-hover api-list-table">
         <caption>BUG列表</caption>
         <tr>
-            <th scope="col" width="32%">BUG标题</th>
-            <th scope="col" width="15%">BUG状态</th>
+            <th scope="col" width="38%">BUG标题</th>
+            <th scope="col" width="16%">BUG状态</th>
             <th scope="col" width="8%">BUG提交者</th>
-            <th scope="col" width="8%">BUG提交时间</th>
-            <th class="text-center" scope="col" width="5%">操作</th>
+            <th scope="col" width="12%">BUG提交时间</th>
+            <th class="text-center" scope="col" width="4%">操作</th>
         </tr>
         {% for item in bug_list %}
         <tr>
@@ -32,9 +34,10 @@
 {# 新建BUG #}
 {% if user_role | bit_and(role_value["bug_new"]) == role_value["bug_new"]  %}
 <form action="/dev/bug/new/" method="post">
-    <input name="bug_title">
-    <button type="submit">新建BUG</button>
+    <input class="form-control pull-left bug-input" name="bug_title" >
+    <button class="btn btn-primary" type="submit">新建BUG</button>
 </form>
 {% endif %}
+</div>
 </body>
 </html>

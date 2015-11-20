@@ -1,22 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title>BUG信息</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>BUG信息</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='t_css/bootstrap.min.css') }}"><!-- 新 Bootstrap 核心 CSS 文件 -->
+<link rel="stylesheet" href="{{ url_for('static', filename='t_css/main.css') }}"><!--自定义的页面样式 -->
 </head>
+
 <body>
-BUG系统编号：{{ bug_info["basic_info"]["bug_no"] }} <br/>
-BUG标题：{{ bug_info["basic_info"]["bug_title"] }}<br/>
-BUG提交时间：{{ bug_info["basic_info"]["submit_time"] }}<br/>
-BUG提交者：{{ bug_info["basic_info"]["submitter"] }}<br/>
-BUG状态：{{ bug_status_desc[bug_info["basic_info"]["bug_status"]] }}<br/>
-{#如果当前状态为 已有BUG疑似拥有者 显示疑似拥有者#}
-{% if bug_info["basic_info"]["bug_status"] == 1 %}
-    BUG疑似拥有者
-    {% for link_user in bug_info["link_user"] %}
-        {{ link_user["user_name"] }}
-    {% endfor %}
-{% endif %}
+<div class="container font16">
+<div class="bugInfoShow">
+    <p>BUG系统编号：{{ bug_info["basic_info"]["bug_no"] }}</p>
+    <p>BUG标题：{{ bug_info["basic_info"]["bug_title"] }}</p>
+    <p>BUG提交时间：{{ bug_info["basic_info"]["submit_time"] }}</p>
+    <p>BUG提交者：{{ bug_info["basic_info"]["submitter"] }}</p>
+    <p>BUG状态：{{ bug_status_desc[bug_info["basic_info"]["bug_status"]] }}</p>
+    {#如果当前状态为 已有BUG疑似拥有者 显示疑似拥有者#}
+    <p>
+        {% if bug_info["basic_info"]["bug_status"] == 1 %}
+            BUG疑似拥有者：
+            {% for link_user in bug_info["link_user"] %}
+                {{ link_user["user_name"] }}
+            {% endfor %}
+        {% endif %}
+    </p>
+</div>
+<div class="bugInfoDepict">
 {#BUG的描述信息#}
 {% for item in bug_info["example_info"] %}
     {% if item["example_type"] == 1 %}
@@ -25,30 +34,35 @@ BUG状态：{{ bug_status_desc[bug_info["basic_info"]["bug_status"]] }}<br/>
         <img src="/{{ item['content']}}" >
     {% endif %}
 {% endfor %}
-
+</div>
 {# 提交关于BUG的描述 只有BUG提交者才可以提交 并且要在BUG的状态小于3即BUG处于未修复状态下才可以 #}
+<div class="clear bottom20 bugUpload">
 {% if bug_info["basic_info"]["submitter"] == current_user and bug_info["basic_info"]["bug_status"] < 3 %}
-    <form action="/dev/bug/{{ bug_no }}/str/example/", method="post">
-        <input name="bug_str_example"><button type="submit">提交</button>
+    <form class="bugTextMode" action="/dev/bug/{{ bug_no }}/str/example/", method="post">
+        <span class="pull-left">请添加bug的相关文字描述：</span>
+        <textarea class="form-control bottom10" rows="5" name="bug_str_example"></textarea>
+        <button class="btn btn-primary" type="submit">提交</button>
     </form>
     <form action="/dev/bug/{{ bug_no }}/img/example/" method="post" enctype="multipart/form-data">
-        <input type="file" accept="image/jpeg, image/png, image/gif" name="bug_img_example">
-        <button type="submit" value="上传">上传</button>
+        <span class="pull-left">请添加bug的相关图片描述：</span>
+        <input class="btn btn-default pull-left bugUploadBtn" type="button" value="请选择文件" name="file">
+        <input class="pull-left" type="file" accept="image/jpeg, image/png, image/gif" name="bug_img_example">
+        <button class="btn btn-primary" type="submit" value="上传">上传</button>
     </form>
 {% endif %}
-
 {#添加疑似BUG拥有者#}
 {% if bug_info["basic_info"]["bug_status"] < 2 %}
-    添加疑似BUG拥有者
     <form action="/dev/bug/{{ bug_no }}/ys/", method="post">
-        <select name="ys_user">
+        <span class="pull-left">添加疑似BUG拥有者：</span>
+        <select class="form-control pull-left bug-input" name="ys_user">
             {% for user in user_list %}
                 <option value="{{ user["user_name"] }}">{{ user["nick_name"] }}</option>
             {% endfor %}
         </select>
-        <button type="submit">添加</button>
+        <button class="btn btn-primary" type="submit">添加</button>
     </form>
 {% endif %}
-
+</div>
+</div>
 </body>
 </html>
