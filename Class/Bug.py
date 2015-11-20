@@ -26,6 +26,8 @@ class BugManager:
     def new_bug_info(self, bug_title, submitter):
         submit_time = datetime.now().strftime(TIME_FORMAT)
         bug_no = uuid.uuid1().hex
+        if len(bug_title) < 5:
+            return False, "Bad bug_title"
         bug_title = check_sql_character(bug_title)[:50]
         insert_sql = "INSERT INTO %s (bug_no,bug_title,submitter,submit_time) VALUES ('%s','%s','%s','%s');" \
                      % (self.bug, bug_no, bug_title, submitter, submit_time)
@@ -51,6 +53,8 @@ class BugManager:
         if len(bug_no) != 32:
             return False, "Bad bug_no"
         add_time = datetime.now().strftime(TIME_FORMAT)
+        if len(content) < 5:
+            return False, "Bad content"
         content = check_sql_character(content)
         insert_sql = "INSERT INTO %s (bug_no,type,content,add_time) VALUES ('%s','%s','%s','%s');" \
                      % (self.bug_example, bug_no, example_type, content, add_time)
