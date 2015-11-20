@@ -65,11 +65,12 @@ class BugManager:
         return True, result
 
     def get_bug_list(self):
-        select_sql = "SELECT bug_no,bug_title,submitter,submit_time FROM %s;" % self.bug
+        select_sql = "SELECT bug_no,bug_title,submitter,submit_time,bug_status FROM %s;" % self.bug
         self.db.execute(select_sql)
         bug_list = []
         for item in self.db.fetchall():
-            bug_list.append({"bug_no": item[0], "bug_title": item[1], "submitter": item[2], "submit_time": item[3]})
+            bug_list.append({"bug_no": item[0], "bug_title": item[1], "submitter": item[2],
+                             "submit_time": item[3].strftime(TIME_FORMAT), "bug_status": item[4]})
         return True, bug_list
 
     def get_bug_info(self, bug_no):
@@ -82,18 +83,19 @@ class BugManager:
         if result != 1:
             return False, "Bad bug_no."
         info = self.db.fetchone()
-        bug_info = {"bug_no": info[0], "bug_title": info[1], "submitter": info[2],
-                    "submit_time": info[3].strftime(TIME_FORMAT), "bug_status": info[4]}
+        basic_info = {"bug_no": info[0], "bug_title": info[1], "submitter": info[2],
+                      "submit_time": info[3].strftime(TIME_FORMAT), "bug_status": info[4]}
         # 获取示例信息
         select_sql = "SELECT type,content,add_time FROM %s WHERE bug_no='%s' ORDER BY add_time;" % (self.bug_example, bug_no)
         self.db.execute(select_sql)
         example_info = []
-        for item in self.db.execute(select_sql):
+        for item in self.db.fetchall():
             example_info.append({"example_type": item[0], "content": item[1], "add_time": item[2].strftime(TIME_FORMAT)})
         # 获取关联的人
         select_sql = "SELECT user_name,type,link_time,adder FROM %s WHERE bug_no='%s';" % (self.bug_owner, bug_no)
+        self.db.execute(select_sql)
         link_user = []
-        for item in self.db.execute(select_sql):
+        for item in self.db.fetchall():
             link_user.append({"user_name": item[0], "link_type": item[1],
                               "link_time": item[2].strftime(TIME_FORMAT), "adder": item[3]})
-        return True, {"bug_info": bug_info, "example_info": example_info, "link_user": link_user}
+        return True, {"basic_info": basic_info, "example_info": example_info, "link_user": link_user}

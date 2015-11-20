@@ -6,8 +6,9 @@ from flask import Blueprint, request, render_template, redirect, session, url_fo
 from flask_login import login_user, current_user, logout_user
 from flask_login import login_required
 from Class.User import UserManager
-from Class.Control import ControlManager
 from Web import User
+
+from Web.views import control
 
 sys.path.append('..')
 
@@ -17,7 +18,7 @@ dms_view = Blueprint('dms_view', __name__, url_prefix="/dms")
 
 
 user_m = UserManager()
-control = ControlManager()
+
 
 
 @dms_view.route("/ping/", methods=["GET"])

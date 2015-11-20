@@ -5,7 +5,8 @@
 import sys
 from flask import Blueprint, render_template, send_from_directory, request
 from flask_login import current_user, login_required
-from Class.Control import ControlManager
+
+from Web.views import control
 
 sys.path.append('..')
 
@@ -13,8 +14,6 @@ __author__ = 'Zhouheng'
 
 
 develop_view = Blueprint('develop_view', __name__)
-
-control = ControlManager()
 
 
 @develop_view.app_errorhandler(500)

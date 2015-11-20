@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BUG信息</title>
+</head>
+<body>
+BUG系统编号：{{ bug_info["basic_info"]["bug_no"] }} <br/>
+BUG标题：{{ bug_info["basic_info"]["bug_title"] }}<br/>
+BUG提交时间：{{ bug_info["basic_info"]["submit_time"] }}<br/>
+BUG提交者：{{ bug_info["basic_info"]["submitter"] }}<br/>
+BUG状态：{{ bug_status_desc[bug_info["basic_info"]["bug_status"]] }}<br/>
+{% if bug_info["basic_info"]["submitter"] == current_user and bug_info["basic_info"]["bug_status"] < 2 %}
+    <form>
+        <input name="bug_str_example"><button type="submit">提交</button>
+    </form>
+{% endif %}
+</body>
+</html>

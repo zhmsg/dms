@@ -1,16 +1,14 @@
 #!/user/bin/env python
 # -*- coding: utf-8 -*-
 
-import requests
 import json
 import sys
-from flask import Blueprint, request, render_template, redirect, session, url_for
-from flask_login import login_user, current_user
-from Tools.MyEmail import MyEmailManager
+from flask import Blueprint, request, render_template, redirect, url_for
+from flask_login import current_user
+
 from flask_login import login_required
-from Class.User import UserManager
-from Class.Control import ControlManager
-from Web import User
+
+from Web.views import control
 
 sys.path.append('..')
 
@@ -18,8 +16,6 @@ __author__ = 'Zhouheng'
 
 
 transport_view = Blueprint('transport_view', __name__)
-
-control = ControlManager()
 
 
 @transport_view.route("/records/", methods=["GET"])

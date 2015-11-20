@@ -6,7 +6,9 @@ import sys
 import json
 from flask import Blueprint, render_template, request, redirect, url_for
 from flask_login import login_required, current_user
-from Class.Control import ControlManager
+
+from Web.views import control
+
 
 sys.path.append('..')
 
@@ -15,7 +17,6 @@ __author__ = 'Zhouheng'
 
 develop_api_view = Blueprint('develop_api_view', __name__, url_prefix="/dev/api")
 
-control = ControlManager()
 
 print("start success")
 
