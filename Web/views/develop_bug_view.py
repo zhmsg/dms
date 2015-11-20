@@ -3,11 +3,13 @@
 
 
 import sys
-import json
+from datetime import datetime
 from flask import Blueprint, render_template, request, redirect, url_for
 from flask_login import login_required, current_user
+from werkzeug.utils import secure_filename
 
 from Web.views import control
+from Class import TIME_FORMAT_STR
 
 sys.path.append('..')
 
@@ -31,6 +33,7 @@ def ping():
 
 
 @develop_bug_view.route("/", methods=["GET"])
+@login_required
 def show_bug_list():
     result, bug_list = control.get_bug_list(current_user.role)
     if result is False:
@@ -40,6 +43,7 @@ def show_bug_list():
 
 
 @develop_bug_view.route("/info/", methods=["GET"])
+@login_required
 def bug_info():
     if "bug_no" not in request.args:
         return u"请求错误"
@@ -47,16 +51,44 @@ def bug_info():
     result, bug_info = control.get_bug_info(current_user.role, bug_no)
     if result is False:
         return bug_info
-    return render_template("/Dev/BUG/BUG_Info.html", bug_info=bug_info, bug_status_desc=bug_status_desc,
+    return render_template("/Dev/BUG/BUG_Info.html", bug_info=bug_info, bug_status_desc=bug_status_desc,bug_no=bug_no,
                            user_role=current_user.role, current_user=current_user.account, role_value=control.user_role)
 
 
 @develop_bug_view.route("/new/", methods=["POST"])
+@login_required
 def new_bug():
     bug_title = request.form["bug_title"]
     result, bug_info = control.new_bug(current_user.account, current_user.role, bug_title)
     if result is False:
         return bug_info
-
     bug_no = bug_info["bug_no"]
+    return redirect(develop_bug_view.url_prefix + "/info?bug_no=%s" % bug_no)
+
+
+@develop_bug_view.route("/<bug_no>/str/example/", methods=["POST"])
+@login_required
+def add_str_example(bug_no):
+    str_example = request.form["bug_str_example"]
+    result, example_info = control.add_bug_str_example(current_user.account, current_user.role, bug_no, str_example)
+    if result is False:
+        return example_info
+    print(str_example)
+    return redirect(develop_bug_view.url_prefix + "/info?bug_no=%s" % bug_no)
+
+
+bug_img_dir = "static/t_images/BUG_Image/"
+
+
+@develop_bug_view.route("/<bug_no>/img/example/", methods=["POST"])
+@login_required
+def add_img_example(bug_no):
+    img_file = request.files["bug_img_example"]
+    img_filename = secure_filename(img_file.filename)
+    extend = img_filename.split(".")[-1]
+    if extend not in ["png", "jpeg", "jpg", "gif"]:
+        return u"不支持的图片格式"
+    save_path = "%s%s_%s.%s" % (bug_img_dir, bug_no, datetime.now().strftime(TIME_FORMAT_STR), extend)
+    print(save_path)
+    img_file.save(save_path)
     return redirect(develop_bug_view.url_prefix + "/info?bug_no=%s" % bug_no)

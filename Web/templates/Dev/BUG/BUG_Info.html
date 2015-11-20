@@ -10,9 +10,20 @@ BUG标题：{{ bug_info["basic_info"]["bug_title"] }}<br/>
 BUG提交时间：{{ bug_info["basic_info"]["submit_time"] }}<br/>
 BUG提交者：{{ bug_info["basic_info"]["submitter"] }}<br/>
 BUG状态：{{ bug_status_desc[bug_info["basic_info"]["bug_status"]] }}<br/>
+{% for item in bug_info["example_info"] %}
+    {% if item["example_type"] == 1 %}
+        <p>{{ item["content"] }}</p>
+    {% else %}
+        <img src="{{ item['content']}}" >
+    {% endif %}
+{% endfor %}
 {% if bug_info["basic_info"]["submitter"] == current_user and bug_info["basic_info"]["bug_status"] < 2 %}
-    <form>
+    <form action="/dev/bug/{{ bug_no }}/str/example/", method="post">
         <input name="bug_str_example"><button type="submit">提交</button>
+    </form>
+    <form action="/dev/bug/{{ bug_no }}/img/example/" method="post" enctype="multipart/form-data">
+        <input type="file" accept="image/jpeg, image/png, image/gif" name="bug_img_example">
+        <button type="submit" value="上传">上传</button>
     </form>
 {% endif %}
 </body>
