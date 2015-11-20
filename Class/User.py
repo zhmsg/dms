@@ -79,3 +79,13 @@ class UserManager:
         if check_password_hash(en_password, password) is False:
             return False, u"密码不正确"
         return True, role
+
+    def get_role_user(self, role):
+        select_sql = "SELECT user_name,role,nick_name,wx_id,creator,add_time FROM %s WHERE role & %s > 0;" \
+                     % (self.user, role)
+        self.db.execute(select_sql)
+        user_list = []
+        for item in self.db.fetchall():
+            user_list.append({"user_name": item[0], "role": item[1], "nick_name": item[2], "wx_id": item[3],
+                              "creator": item[4], "add_time": item[5].strftime(TIME_FORMAT)})
+        return True, user_list

@@ -38,11 +38,13 @@ class BugManager:
         if len(bug_no) != 32:
             return False, "Bad bug_no"
         link_time = datetime.now().strftime(TIME_FORMAT)
-        insert_sql = "INSERT INTO %s (bug_no,user_name,type,link_time,adder) VALUES ('%s','%s','%s','%s','%s');" \
+        insert_sql = "INSERT INTO %s (bug_no,user_name,type,link_time,adder) VALUES ('%s','%s','%s','%s','%s') " \
+                     "ON DUPLICATE KEY UPDATE adder=adder;" \
                      % (self.bug_owner, bug_no, user_name, link_type, link_time, adder)
         result = self.db.execute(insert_sql)
-        if result != 1:
-            return False, "sql execute result is %s " % result
+        # if result != 1:
+        #     return False, "sql execute result is %s " % result
+        self.update_bug_status(bug_no, link_type)
         return True, {"bug_no": bug_no, "user_name": user_name, "link_type": link_type, "link_time": link_time}
 
     def new_bug_example(self, bug_no, example_type, content):
@@ -60,7 +62,7 @@ class BugManager:
     def update_bug_status(self, bug_no, status):
         if len(bug_no) != 32:
             return False, "Bad bug_no"
-        update_sql = "UPDATE %s SET bug_status=%s WHERE bug_no='%s';" % (self.bug_example, status, bug_no)
+        update_sql = "UPDATE %s SET bug_status=%s WHERE bug_no='%s';" % (self.bug, status, bug_no)
         result = self.db.execute(update_sql)
         return True, result
 

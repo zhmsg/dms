@@ -51,6 +51,9 @@ class ControlManager:
             return False, u"给新建用户赋予权限过高"
         return self.user.new(user_name, password, role, nick_name, creator)
 
+    def get_role_user(self, role):
+        return self.user.get_role_user(role)
+
     def get_data(self):
         return self.data.get()
 

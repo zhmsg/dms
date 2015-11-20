@@ -10,14 +10,24 @@ BUG标题：{{ bug_info["basic_info"]["bug_title"] }}<br/>
 BUG提交时间：{{ bug_info["basic_info"]["submit_time"] }}<br/>
 BUG提交者：{{ bug_info["basic_info"]["submitter"] }}<br/>
 BUG状态：{{ bug_status_desc[bug_info["basic_info"]["bug_status"]] }}<br/>
+{#如果当前状态为 已有BUG疑似拥有者 显示疑似拥有者#}
+{% if bug_info["basic_info"]["bug_status"] == 1 %}
+    BUG疑似拥有者
+    {% for link_user in bug_info["link_user"] %}
+        {{ link_user["user_name"] }}
+    {% endfor %}
+{% endif %}
+{#BUG的描述信息#}
 {% for item in bug_info["example_info"] %}
     {% if item["example_type"] == 1 %}
         <p>{{ item["content"] }}</p>
     {% else %}
-        <img src="{{ item['content']}}" >
+        <img src="/{{ item['content']}}" >
     {% endif %}
 {% endfor %}
-{% if bug_info["basic_info"]["submitter"] == current_user and bug_info["basic_info"]["bug_status"] < 2 %}
+
+{# 提交关于BUG的描述 只有BUG提交者才可以提交 并且要在BUG的状态小于3即BUG处于未修复状态下才可以 #}
+{% if bug_info["basic_info"]["submitter"] == current_user and bug_info["basic_info"]["bug_status"] < 3 %}
     <form action="/dev/bug/{{ bug_no }}/str/example/", method="post">
         <input name="bug_str_example"><button type="submit">提交</button>
     </form>
@@ -26,5 +36,19 @@ BUG状态：{{ bug_status_desc[bug_info["basic_info"]["bug_status"]] }}<br/>
         <button type="submit" value="上传">上传</button>
     </form>
 {% endif %}
+
+{#添加疑似BUG拥有者#}
+{% if bug_info["basic_info"]["bug_status"] < 2 %}
+    添加疑似BUG拥有者
+    <form action="/dev/bug/{{ bug_no }}/ys/", method="post">
+        <select name="ys_user">
+            {% for user in user_list %}
+                <option value="{{ user["user_name"] }}">{{ user["nick_name"] }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">添加</button>
+    </form>
+{% endif %}
+
 </body>
 </html>

@@ -51,8 +51,12 @@ def bug_info():
     result, bug_info = control.get_bug_info(current_user.role, bug_no)
     if result is False:
         return bug_info
+    result, user_list = control.get_role_user(control.user_role["bug_link"])
+    if result is False:
+        return user_list
     return render_template("/Dev/BUG/BUG_Info.html", bug_info=bug_info, bug_status_desc=bug_status_desc,bug_no=bug_no,
-                           user_role=current_user.role, current_user=current_user.account, role_value=control.user_role)
+                           user_role=current_user.role, current_user=current_user.account, role_value=control.user_role,
+                           user_list=user_list)
 
 
 @develop_bug_view.route("/new/", methods=["POST"])
@@ -73,7 +77,6 @@ def add_str_example(bug_no):
     result, example_info = control.add_bug_str_example(current_user.account, current_user.role, bug_no, str_example)
     if result is False:
         return example_info
-    print(str_example)
     return redirect(develop_bug_view.url_prefix + "/info?bug_no=%s" % bug_no)
 
 
@@ -89,6 +92,18 @@ def add_img_example(bug_no):
     if extend not in ["png", "jpeg", "jpg", "gif"]:
         return u"不支持的图片格式"
     save_path = "%s%s_%s.%s" % (bug_img_dir, bug_no, datetime.now().strftime(TIME_FORMAT_STR), extend)
-    print(save_path)
     img_file.save(save_path)
+    result, example_info = control.add_bug_img_example(current_user.account, current_user.role, bug_no, save_path)
+    if result is False:
+        return example_info
+    return redirect(develop_bug_view.url_prefix + "/info?bug_no=%s" % bug_no)
+
+
+@develop_bug_view.route("/<bug_no>/ys/", methods=["POST"])
+@login_required
+def add_ys_user(bug_no):
+    ys_user = request.form["ys_user"]
+    result, link_info = control.add_bug_link(bug_no, current_user.account, current_user.role, ys_user, "ys")
+    if result is False:
+        return link_info
     return redirect(develop_bug_view.url_prefix + "/info?bug_no=%s" % bug_no)
