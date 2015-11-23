@@ -128,10 +128,10 @@ def add_fix_user(bug_no):
     return redirect(develop_bug_view.url_prefix + "/info?bug_no=%s" % bug_no)
 
 
-@develop_bug_view.route("/<bug_no>/channel/", methods=["POST"])
+@develop_bug_view.route("/<bug_no>/cancel/", methods=["POST"])
 @login_required
-def add_channel_user(bug_no):
-    result, link_info = control.add_bug_link(bug_no, current_user.account, current_user.role, current_user.account, "channel")
+def add_cancel_user(bug_no):
+    result, link_info = control.add_bug_link(bug_no, current_user.account, current_user.role, current_user.account, "cancel")
     if result is False:
         return link_info
     return redirect(develop_bug_view.url_prefix + "/info?bug_no=%s" % bug_no)

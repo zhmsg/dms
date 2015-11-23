@@ -34,7 +34,7 @@ class UserManager:
         self.default_password = "gene.ac"
         self.role_value = {"market": 1, "upload": 2, "calc": 4, "api_look": 8, "api_new": 16, "table_look": 32,
                            "auth_look": 64, "user_new": 128, "bug_look": 256, "bug_new": 512, "bug_link": 1024,
-                           "bug_channel": 2048}
+                           "bug_cancel": 2048}
 
     def create_user(self, force=False):
         return self.db.create_table(self.user, self.user_desc, force)
@@ -83,6 +83,16 @@ class UserManager:
     def get_role_user(self, role):
         select_sql = "SELECT user_name,role,nick_name,wx_id,creator,add_time FROM %s WHERE role & %s > 0;" \
                      % (self.user, role)
+        self.db.execute(select_sql)
+        user_list = []
+        for item in self.db.fetchall():
+            user_list.append({"user_name": item[0], "role": item[1], "nick_name": item[2], "wx_id": item[3],
+                              "creator": item[4], "add_time": item[5].strftime(TIME_FORMAT)})
+        return True, user_list
+
+    def my_user(self, user_name):
+        select_sql = "SELECT user_name,role,nick_name,wx_id,creator,add_time FROM %s WHERE creator='%s';" \
+                     % (self.user, user_name)
         self.db.execute(select_sql)
         user_list = []
         for item in self.db.fetchall():

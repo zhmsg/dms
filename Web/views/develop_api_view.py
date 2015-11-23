@@ -93,11 +93,14 @@ def new_api_page():
 @login_required
 def new_api_info():
     request_form = request.form
+    api_module = request_form["api_module"]
+    if api_module == "":
+        return "请选择API所属模块"
     desc = request_form["api_desc"]
     url = request_form["api_url"]
     title = request_form["api_title"]
     method = request_form["api_method"]
-    module_no = int(request_form["api_module"])
+    module_no = int(api_module)
     result, api_info = control.new_api_info(module_no, title, url, method, desc, current_user.account, current_user.role)
     if result is False:
         return api_info

@@ -51,6 +51,11 @@ class ControlManager:
             return False, u"给新建用户赋予权限过高"
         return self.user.new(user_name, password, role, nick_name, creator)
 
+    def get_my_user(self, user_name, role):
+        if role & self.user.role_value["user_new"] <= 0:
+            return False, u"用户无权限新建用户"
+        return self.user.my_user(user_name)
+
     def get_role_user(self, role):
         return self.user.get_role_user(role)
 
@@ -305,7 +310,7 @@ class ControlManager:
             return self._add_owner_link(bug_no, user_name, link_user, submitter)
         elif link_type == "fix":
             return self._add_fix_link(bug_no, user_name, link_user, submitter)
-        elif link_type == "channel":
+        elif link_type == "cancel":
             return self._add_channel_link(bug_no, user_name, role, link_user, submitter)
         elif link_type == "design":
             return self._add_design_link(bug_no, user_name, role, link_user, submitter)

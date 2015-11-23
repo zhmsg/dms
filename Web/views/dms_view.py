@@ -20,7 +20,6 @@ dms_view = Blueprint('dms_view', __name__, url_prefix="/dms")
 user_m = UserManager()
 
 
-
 @dms_view.route("/ping/", methods=["GET"])
 def ping():
     return "true"
@@ -37,8 +36,10 @@ def calc_redirect(role):
         url_for_fun = "develop_view.operate_auth_show"
     elif role == 128:
         url_for_fun = "dms_view.register_page"
+    elif role == 256 or role == 256 + 512:
+        url_for_fun = "develop_bug_view.show_bug_list"
     else:
-        url_for_fun = "dms_view.select_channel"
+        url_for_fun = "dms_view.select_portal"
     return url_for_fun
 
 
@@ -116,7 +117,23 @@ def register():
     return redirect(url_for("dms_view.login_page"))
 
 
-@dms_view.route("/channel/", methods=["GET"])
+@dms_view.route("/authorize/", methods=["GET"])
 @login_required
-def select_channel():
-    return render_template("Select_Channel.html", user_role=current_user.role, role_value=control.user_role)
+def authorize_page():
+    result, my_user = control.get_my_user(current_user.account, current_user.role)
+    if result is False:
+        return my_user
+    return render_template("authorize.html", my_user=my_user, user_role=current_user.role, role_value=control.user_role)
+
+
+@dms_view.route("/authorize/", methods=["POST"])
+@login_required
+def authorize():
+    print(request.form)
+    return redirect(url_for("dms_view.authorize_page"))
+
+
+@dms_view.route("/portal/", methods=["GET"])
+@login_required
+def select_portal():
+    return render_template("portal.html", user_role=current_user.role, role_value=control.user_role)

@@ -5,6 +5,7 @@
 <title>BUG信息</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='t_css/bootstrap.min.css') }}"><!-- 新 Bootstrap 核心 CSS 文件 -->
 <link rel="stylesheet" href="{{ url_for('static', filename='t_css/main.css') }}"><!--自定义的页面样式 -->
+
 </head>
 
 <body>
@@ -110,7 +111,7 @@
 {#取消BUG#}
 {% if bug_info["basic_info"]["bug_status"] < 3 %}
     {% if bug_info["basic_info"]["submitter"] == current_user %}
-    <form action="/dev/bug/{{ bug_no }}/channel/", method="post">
+    <form action="/dev/bug/{{ bug_no }}/cancel/", method="post">
         <button class="btn btn-primary" type="submit">取消BUG</button>
     </form>
     {% endif %}
@@ -118,7 +119,7 @@
 
 {#不过属于BUG 设计如此#}
 {% if bug_info["basic_info"]["bug_status"] < 3 %}
-    {% if user_role | bit_and(role_value["bug_channel"]) == role_value["bug_channel"] %}
+    {% if user_role | bit_and(role_value["bug_cancel"]) == role_value["bug_cancel"] %}
     <form action="/dev/bug/{{ bug_no }}/design/", method="post">
         <button class="btn btn-primary" type="submit">不是BUG，就是这么设计的</button>
     </form>

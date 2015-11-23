@@ -24,6 +24,10 @@
     {% endif %}
     {% if user_role | bit_and(role_value["user_new"]) >  0 %}
         <a href="/dms/register/">新建用户</a>
+        <a href="/dms/authorize/">用户授权</a>
+    {% endif %}
+    {% if user_role | bit_and(role_value["bug_look"]) >  0 %}
+        <a href="/dev/bug/">查看BUG</a>
     {% endif %}
 </div>
 </div>
