@@ -42,20 +42,17 @@ class UserManager:
     def check_user(self):
         return self.db.check_table(self.user, self.user_desc)
 
-    def new(self, user_name, password, role, nick_name, creator):
+    def new(self, user_name, role, nick_name, creator):
         if check_user(user_name, 1, 15) is False:
             return False, u"用户名只能由字母数字和下划线组成且长度不大于20"
         select_sql = "SELECT role FROM %s WHERE user_name='%s';" % (self.user, user_name)
         result = self.db.execute(select_sql)
         if result > 0:
             return False, u"用户名已存在"
-        if check_password(password, 1, 20) is False:
-            return False, u"密码只能由字母数字和下划线@组成且长度不大于20"
-        en_password = generate_password_hash(password)
         add_time = datetime.now().strftime(TIME_FORMAT)
-        insert_sql = "INSERT INTO %s (user_name,password,role,nick_name,creator,add_time) " \
-                     "VALUES ('%s','%s',%s,'%s','%s','%s');" \
-                     % (self.user, user_name, en_password, role, nick_name, creator, add_time)
+        insert_sql = "INSERT INTO %s (user_name,role,nick_name,creator,add_time) " \
+                     "VALUES ('%s',%s,'%s','%s','%s');" \
+                     % (self.user, user_name, role, nick_name, creator, add_time)
         self.db.execute(insert_sql)
         return True, user_name
 

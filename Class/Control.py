@@ -44,12 +44,12 @@ class ControlManager:
         self.bug = BugManager()
         self.manger_email = ["budechao@ict.ac.cn", "biozy@ict.ac.cn"]
 
-    def new_user(self, user_name, password, role, nick_name, creator, creator_role):
+    def new_user(self, user_name, role, nick_name, creator, creator_role):
         if creator_role & self.user.role_value["user_new"] <= 0:
             return False, u"用户无权限新建用户"
         if creator_role | role > creator_role:
             return False, u"给新建用户赋予权限过高"
-        return self.user.new(user_name, password, role, nick_name, creator)
+        return self.user.new(user_name, role, nick_name, creator)
 
     def change_password(self, user_name, old_password, new_password):
         result, role = self.user.check(user_name, old_password)

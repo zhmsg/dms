@@ -158,16 +158,15 @@ def register_page():
 def register():
     request_data = request.form
     user_name = request_data["user_name"]
-    password = request_data["password"]
     nick_name = request_data["nick_name"]
     user_role = 0
     for key, value in control.user_role.items():
         if key in request_data and request_data[key] == "on":
             user_role += value
-    result, message = control.new_user(user_name, password, user_role, nick_name, current_user.account, current_user.role)
+    result, message = control.new_user(user_name, user_role, nick_name, current_user.account, current_user.role)
     if result is False:
        return message
-    return redirect(url_for("dms_view.login_page"))
+    return redirect(url_for("dms_view.select_portal"))
 
 
 @dms_view.route("/authorize/", methods=["GET"])
