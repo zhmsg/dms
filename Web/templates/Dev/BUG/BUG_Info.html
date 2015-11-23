@@ -15,13 +15,23 @@
     <p>BUG提交时间：{{ bug_info["basic_info"]["submit_time"] }}</p>
     <p>BUG提交者：{{ bug_info["basic_info"]["submitter"] }}</p>
     <p>BUG状态：{{ bug_status_desc[bug_info["basic_info"]["bug_status"]] }}</p>
-    {#如果当前状态为 已有BUG疑似拥有者 显示疑似拥有者#}
+
     <p>
+        {#如果当前状态为 已有BUG疑似拥有者 显示疑似拥有者#}
         {% if bug_info["basic_info"]["bug_status"] == 1 %}
             BUG疑似拥有者：
-            {% for link_user in bug_info["link_user"] %}
-                {{ link_user["user_name"] }}
+            {% for user_name in bug_info["link_user"]["ys"].keys() %}
+                {{ user_name }}
             {% endfor %}
+        {#如果当前状态为 已有BUG拥有者 显示拥有者#}
+        {% elif bug_info["basic_info"]["bug_status"] == 2 %}
+            BUG拥有者：
+            {% for user_name in bug_info["link_user"]["owner"].keys() %}
+                {{ user_name }}
+            {% endfor %}
+        {#如果当前状态为 BUG已修复 显示信息#}
+       {% elif bug_info["basic_info"]["bug_status"] == 3 %}
+            BUG已被修复
         {% endif %}
     </p>
 </div>
@@ -31,7 +41,7 @@
     {% if item["example_type"] == 1 %}
         <p>{{ item["content"] }}</p>
     {% else %}
-        <img src="/{{ item['content']}}" >
+        <img src="/{{ item['content']}}" width="100%">
     {% endif %}
 {% endfor %}
 </div>
@@ -56,12 +66,65 @@
         <span class="pull-left">添加疑似BUG拥有者：</span>
         <select class="form-control pull-left bug-input" name="ys_user">
             {% for user in user_list %}
+                {% if not user["user_name"] in bug_info["link_user"]["ys"] %}
                 <option value="{{ user["user_name"] }}">{{ user["nick_name"] }}</option>
+                {% endif %}
             {% endfor %}
         </select>
         <button class="btn btn-primary" type="submit">添加</button>
     </form>
 {% endif %}
+
+{#添加BUG拥有者#}
+{% if bug_info["basic_info"]["bug_status"] < 3 %}
+    {% if bug_info["basic_info"]["submitter"] == current_user %}
+    <form action="/dev/bug/{{ bug_no }}/owner/", method="post">
+        <span class="pull-left">添加BUG拥有者：</span>
+        <select class="form-control pull-left bug-input" name="owner">
+            {% for user in user_list %}
+                {% if not user["user_name"] in bug_info["link_user"]["owner"] %}
+                <option value="{{ user["user_name"] }}">{{ user["nick_name"] }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+        <button class="btn btn-primary" type="submit">添加</button>
+    </form>
+    {% endif %}
+    {% if current_user not in bug_info["link_user"]["owner"] %}
+    <form action="/dev/bug/{{ bug_no }}/owner/", method="post">
+        <input name="owner" value="{{ current_user }}" style="display: none"/>
+        <button class="btn btn-primary" type="submit">标记为我的BUG</button>
+    </form>
+    {% endif %}
+{% endif %}
+
+{#完成BUG#}
+{% if bug_info["basic_info"]["bug_status"] < 3 %}
+    {% if bug_info["basic_info"]["submitter"] == current_user %}
+    <form action="/dev/bug/{{ bug_no }}/fix/", method="post">
+        <button class="btn btn-primary" type="submit">BUG已修复</button>
+    </form>
+    {% endif %}
+{% endif %}
+
+{#取消BUG#}
+{% if bug_info["basic_info"]["bug_status"] < 3 %}
+    {% if bug_info["basic_info"]["submitter"] == current_user %}
+    <form action="/dev/bug/{{ bug_no }}/channel/", method="post">
+        <button class="btn btn-primary" type="submit">取消BUG</button>
+    </form>
+    {% endif %}
+{% endif %}
+
+{#不过属于BUG 设计如此#}
+{% if bug_info["basic_info"]["bug_status"] < 3 %}
+    {% if user_role | bit_and(role_value["bug_channel"]) == role_value["bug_channel"] %}
+    <form action="/dev/bug/{{ bug_no }}/design/", method="post">
+        <button class="btn btn-primary" type="submit">不是BUG，就是这么设计的</button>
+    </form>
+    {% endif %}
+{% endif %}
+
 </div>
 </div>
 </body>

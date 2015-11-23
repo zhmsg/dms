@@ -306,13 +306,14 @@ class ControlManager:
         elif link_type == "fix":
             return self._add_fix_link(bug_no, user_name, link_user, submitter)
         elif link_type == "channel":
-            return self._add_channel_link(bug_no, user_name, link_user, submitter)
+            return self._add_channel_link(bug_no, user_name, role, link_user, submitter)
         elif link_type == "design":
-            return self._add_design_link(bug_no, user_name, link_user, submitter)
+            return self._add_design_link(bug_no, user_name, role, link_user, submitter)
         else:
             return False, u"错误的请求"
 
     def _add_ys_link(self, bug_no, user_name, link_user):
+        # 有new bug的权限均可添加疑似bug拥有者
         return self.bug.new_bug_link(bug_no, link_user, 1, user_name)
 
     def _add_owner_link(self, bug_no, user_name, link_user, submitter):
@@ -324,16 +325,19 @@ class ControlManager:
         return self.bug.new_bug_link(bug_no, link_user, 2, user_name)
 
     def _add_fix_link(self, bug_no, user_name, link_user, submitter):
+        # 只有BUG提交者可以标记为修复
         if submitter != user_name:
             return False, u"您不能修改别人的BUG的状态"
         return self.bug.new_bug_link(bug_no, link_user, 3, user_name)
 
     def _add_channel_link(self, bug_no, user_name, role, link_user, submitter):
+        # 只有bug提交者才 或者拥有bug_channel 权限的人可以操作
         if submitter != user_name and role & self.user_role["bug_channel"]:
             return False, u"您无权限修改该BUG的状态"
         return self.bug.new_bug_link(bug_no, link_user, 4, user_name)
 
     def _add_design_link(self, bug_no, user_name, role, link_user, submitter):
-        if submitter != user_name and role & self.user_role["bug_channel"]:
+        # 拥有bug_channel 权限的人可以操作
+        if role & self.user_role["bug_channel"]:
             return False, u"您无权限修改该BUG的状态"
         return self.bug.new_bug_link(bug_no, link_user, 5, user_name)

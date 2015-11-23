@@ -107,3 +107,40 @@ def add_ys_user(bug_no):
     if result is False:
         return link_info
     return redirect(develop_bug_view.url_prefix + "/info?bug_no=%s" % bug_no)
+
+
+@develop_bug_view.route("/<bug_no>/owner/", methods=["POST"])
+@login_required
+def add_own_user(bug_no):
+    bug_owner = request.form["owner"]
+    result, link_info = control.add_bug_link(bug_no, current_user.account, current_user.role, bug_owner, "owner")
+    if result is False:
+        return link_info
+    return redirect(develop_bug_view.url_prefix + "/info?bug_no=%s" % bug_no)
+
+
+@develop_bug_view.route("/<bug_no>/fix/", methods=["POST"])
+@login_required
+def add_fix_user(bug_no):
+    result, link_info = control.add_bug_link(bug_no, current_user.account, current_user.role, current_user.account, "fix")
+    if result is False:
+        return link_info
+    return redirect(develop_bug_view.url_prefix + "/info?bug_no=%s" % bug_no)
+
+
+@develop_bug_view.route("/<bug_no>/channel/", methods=["POST"])
+@login_required
+def add_channel_user(bug_no):
+    result, link_info = control.add_bug_link(bug_no, current_user.account, current_user.role, current_user.account, "channel")
+    if result is False:
+        return link_info
+    return redirect(develop_bug_view.url_prefix + "/info?bug_no=%s" % bug_no)
+
+
+@develop_bug_view.route("/<bug_no>/design/", methods=["POST"])
+@login_required
+def add_design_user(bug_no):
+    result, link_info = control.add_bug_link(bug_no, current_user.account, current_user.role, current_user.account, "design")
+    if result is False:
+        return link_info
+    return redirect(develop_bug_view.url_prefix + "/info?bug_no=%s" % bug_no)

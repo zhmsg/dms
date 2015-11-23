@@ -100,8 +100,20 @@ class BugManager:
         # 获取关联的人
         select_sql = "SELECT user_name,type,link_time,adder FROM %s WHERE bug_no='%s';" % (self.bug_owner, bug_no)
         self.db.execute(select_sql)
-        link_user = []
+        link_user = {"ys": {}, "owner": {}, "fix": {}, "channel": {}, "design": {}}
         for item in self.db.fetchall():
-            link_user.append({"user_name": item[0], "link_type": item[1],
-                              "link_time": item[2].strftime(TIME_FORMAT), "adder": item[3]})
+            link_info = {"user_name": item[0], "link_type": item[1], "link_time": item[2].strftime(TIME_FORMAT),
+                         "adder": item[3]}
+            if item[1] == 1:
+                link_user["ys"][item[0]] = link_info
+            elif item[1] == 2:
+                link_user["owner"][item[0]] = link_info
+            elif item[1] == 3:
+                link_user["fix"][item[0]] = link_info
+            elif item[1] == 4:
+                link_user["channel"][item[0]] = link_info
+            elif item[1] == 5:
+                link_user["design"][item[0]] = link_info
+            else:
+                pass
         return True, {"basic_info": basic_info, "example_info": example_info, "link_user": link_user}
