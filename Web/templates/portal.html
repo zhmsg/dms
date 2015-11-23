@@ -22,13 +22,14 @@
     {% if user_role | bit_and(role_value["auth_look"]) >  0 %}
         <a href="/dev/operate/auth/">查看晶云平台操作权限</a>
     {% endif %}
+    {% if user_role | bit_and(role_value["bug_look"]) >  0 %}
+        <a href="/dev/bug/">查看BUG</a>
+    {% endif %}
     {% if user_role | bit_and(role_value["user_new"]) >  0 %}
         <a href="/dms/register/">新建用户</a>
         <a href="/dms/authorize/">用户授权</a>
     {% endif %}
-    {% if user_role | bit_and(role_value["bug_look"]) >  0 %}
-        <a href="/dev/bug/">查看BUG</a>
-    {% endif %}
+    <a href="/dms/password">修改密码</a>
 </div>
 </div>
 </body>

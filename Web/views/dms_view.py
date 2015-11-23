@@ -118,6 +118,8 @@ def password():
         return "两次输入密码不一致"
     if current_user.is_authenticated():
         old_password= request.form["old_password"]
+        if old_password == new_password:
+            return u"新密码不能和旧密码一样"
         result, message = control.change_password(user_name, old_password, new_password)
         if result is False:
             return message

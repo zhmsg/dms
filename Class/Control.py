@@ -54,7 +54,7 @@ class ControlManager:
     def change_password(self, user_name, old_password, new_password):
         result, role = self.user.check(user_name, old_password)
         if result is False:
-            return result, role
+            return result, u"验证原和用户名密码时出错：" + role
         return self.user.change_password(user_name, new_password)
 
     def get_my_user(self, user_name, role):
