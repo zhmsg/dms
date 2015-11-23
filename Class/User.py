@@ -99,3 +99,54 @@ class UserManager:
             user_list.append({"user_name": item[0], "role": item[1], "nick_name": item[2], "wx_id": item[3],
                               "creator": item[4], "add_time": item[5].strftime(TIME_FORMAT)})
         return True, user_list
+
+    def update_my_user_role(self, role, user_name, my_name):
+        if type(role) != int:
+            return False, "Bad role"
+        update_sql = "UPDATE %s SET role=%s WHERE user_name='%s' AND creator='%s';" % (self.user, user_name, my_name)
+        self.db.execute(update_sql)
+        return True, "success"
+
+    def _add_role_my_user(self, role, user_name, my_name):
+        if type(role) != int:
+            return False, "Bad role"
+        update_sql = "UPDATE %s SET role=role | %s WHERE user_name='%s' AND creator='%s';" % (self.user, user_name, my_name)
+        self.db.execute(update_sql)
+        return True, "success"
+
+    def add_role_my_users(self, role, user_names, my_name):
+        if type(user_names) != list:
+            return "Bad user_names"
+        if len(user_names) == 0:
+            return True, "no update"
+        if len(user_names) == 1:
+            return self.add_role_my_user(role, user_names, my_name)
+        if type(role) != int:
+            return False, "Bad role"
+        update_sql = "UPDATE %s SET role=role | %s WHERE creator='%s' AND user_name in ('%s');" \
+                     % (self.user, "','".join(user_names), my_name)
+        self.db.execute(update_sql)
+        return True, "success"
+
+    def _remove_role_my_user(self, role, user_name, my_name):
+        if type(role) != int:
+            return False, "Bad role"
+        update_sql = "UPDATE %s SET role=role & ~%s WHERE user_name='%s' AND creator='%s';" \
+                     % (self.user, user_name, my_name)
+        self.db.execute(update_sql)
+        return True, "success"
+
+    def remove_role_my_users(self, role, user_names, my_name):
+        if type(user_names) != list:
+            return "Bad user_names"
+        if len(user_names) == 0:
+            return True, "no update"
+        if len(user_names) == 1:
+            return self.add_role_my_user(role, user_names, my_name)
+        if type(role) != int:
+            return False, "Bad role"
+        update_sql = "UPDATE %s SET role=role & ~%s WHERE creator='%s' AND user_name in ('%s');" \
+                     % (self.user, "','".join(user_names), my_name)
+        self.db.execute(update_sql)
+        return True, "success"
+
