@@ -103,14 +103,16 @@ class UserManager:
     def update_my_user_role(self, role, user_name, my_name):
         if type(role) != int:
             return False, "Bad role"
-        update_sql = "UPDATE %s SET role=%s WHERE user_name='%s' AND creator='%s';" % (self.user, user_name, my_name)
+        update_sql = "UPDATE %s SET role=%s WHERE user_name='%s' AND creator='%s';" \
+                     % (self.user, role, user_name, my_name)
         self.db.execute(update_sql)
         return True, "success"
 
     def _add_role_my_user(self, role, user_name, my_name):
         if type(role) != int:
             return False, "Bad role"
-        update_sql = "UPDATE %s SET role=role | %s WHERE user_name='%s' AND creator='%s';" % (self.user, user_name, my_name)
+        update_sql = "UPDATE %s SET role=role | %s WHERE user_name='%s' AND creator='%s';" \
+                     % (self.user, role, user_name, my_name)
         self.db.execute(update_sql)
         return True, "success"
 
@@ -124,7 +126,7 @@ class UserManager:
         if type(role) != int:
             return False, "Bad role"
         update_sql = "UPDATE %s SET role=role | %s WHERE creator='%s' AND user_name in ('%s');" \
-                     % (self.user, "','".join(user_names), my_name)
+                     % (self.user, role, "','".join(user_names), my_name)
         self.db.execute(update_sql)
         return True, "success"
 
@@ -132,7 +134,7 @@ class UserManager:
         if type(role) != int:
             return False, "Bad role"
         update_sql = "UPDATE %s SET role=role & ~%s WHERE user_name='%s' AND creator='%s';" \
-                     % (self.user, user_name, my_name)
+                     % (self.user, role, user_name, my_name)
         self.db.execute(update_sql)
         return True, "success"
 
@@ -146,7 +148,7 @@ class UserManager:
         if type(role) != int:
             return False, "Bad role"
         update_sql = "UPDATE %s SET role=role & ~%s WHERE creator='%s' AND user_name in ('%s');" \
-                     % (self.user, "','".join(user_names), my_name)
+                     % (self.user, role, "','".join(user_names), my_name)
         self.db.execute(update_sql)
         return True, "success"
 

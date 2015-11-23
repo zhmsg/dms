@@ -136,7 +136,9 @@ def authorize():
     for key, value in control.user_role.items():
         if key in request.form and request.form[key] == "on":
             user_role += value
-    print(user_role)
+    result, message = control.update_my_user_role(current_user.role, current_user.account, perm_user, user_role)
+    if result is False:
+        return message
     return redirect(url_for("dms_view.authorize_page"))
 
 
