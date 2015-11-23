@@ -2,9 +2,11 @@
 # -*- coding: utf-8 -*-
 
 import sys
+from datetime import datetime, timedelta
 from flask import Blueprint, request, render_template, redirect, session, url_for
 from flask_login import login_user, current_user, logout_user
 from flask_login import login_required
+from werkzeug.security import gen_salt
 from Class.User import UserManager
 from Web import User
 
@@ -75,7 +77,11 @@ def login():
     if result is False:
         return role
     if role == -1:
-        return u"需要更换密码"
+        session["user_name"] = user_name
+        session["change_token"] = gen_salt(57)
+        session["expires_in"] = datetime.now() + timedelta(seconds=300)
+        session["password"] = password
+        return redirect(url_for("dms_view.password_page"))
     if "remember" in request_data and request_data["remember"] == "on":
         remember = True
     else:
@@ -90,6 +96,51 @@ def login():
             return u"您还没有任何权限，请联系管理员授权"
     else:
         return redirect(url_for(calc_redirect(session["role"])))
+
+
+@dms_view.route("/password/", methods=["GET"])
+def password_page():
+    if current_user.is_authenticated():
+        return render_template("password.html", user_name=current_user.account)
+    elif "change_token" in session and "expires_in" in session and "user_name" in session:
+        expires_in = session["expires_in"]
+        if expires_in > datetime.now():
+            return render_template("password.html", user_name=session["user_name"], change_token=session["change_token"])
+    return redirect(url_for("dms_view.login_page"))
+
+
+@dms_view.route("/password/", methods=["POST"])
+def password():
+    user_name = request.form["user_name"]
+    new_password= request.form["new_password"]
+    confirm_password = request.form["confirm_password"]
+    if new_password != confirm_password:
+        return "两次输入密码不一致"
+    if current_user.is_authenticated():
+        old_password= request.form["old_password"]
+        result, message = control.change_password(user_name, old_password, new_password)
+        if result is False:
+            return message
+        return redirect(url_for("dms_view.login_page"))
+    elif "change_token" in session and "expires_in" in session and "user_name" in session and "password" in session:
+        expires_in = session["expires_in"]
+        if expires_in > datetime.now():
+            change_token = request.form["change_token"]
+            if change_token != session["change_token"]:
+                return "Bad change_token"
+            if user_name != session["user_name"]:
+                return "Bad user_name"
+            result, message = control.change_password(user_name, session["password"], new_password)
+            if result is False:
+                return message
+            del session["user_name"]
+            del session["change_token"]
+            del session["expires_in"]
+            del session["password"]
+            return redirect(url_for("dms_view.login_page"))
+        else:
+            return "更新密码超时，请重新登录"
+    return "更新失败，请重新登录"
 
 
 @dms_view.route("/register/", methods=["GET"])
@@ -126,7 +177,7 @@ def authorize_page():
     return render_template("authorize.html", my_user=my_user, user_role=current_user.role, role_value=control.user_role)
 
 
-@dms_view.route("/authorize/", methods=["POST"])
+@dms_view.route("/authorize/user/", methods=["POST"])
 @login_required
 def authorize():
     perm_user = request.form["perm_user"]

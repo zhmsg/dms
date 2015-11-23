@@ -51,9 +51,15 @@ class ControlManager:
             return False, u"给新建用户赋予权限过高"
         return self.user.new(user_name, password, role, nick_name, creator)
 
+    def change_password(self, user_name, old_password, new_password):
+        result, role = self.user.check(user_name, old_password)
+        if result is False:
+            return result, role
+        return self.user.change_password(user_name, new_password)
+
     def get_my_user(self, user_name, role):
         if role & self.user.role_value["user_new"] <= 0:
-            return False, u"用户无权限新建用户"
+            return False, u"用户无权限操作用户"
         return self.user.my_user(user_name)
 
     def update_my_user_role(self, role, user_name, my_user, my_user_role):
@@ -335,7 +341,7 @@ class ControlManager:
         elif link_type == "cancel":
             return self._add_channel_link(bug_no, user_name, role, link_user, submitter)
         elif link_type == "design":
-            return self._add_design_link(bug_no, user_name, role, link_user, submitter)
+            return self._add_design_link(bug_no, user_name, role, link_user)
         else:
             return False, u"错误的请求"
 
@@ -363,7 +369,7 @@ class ControlManager:
             return False, u"您无权限修改该BUG的状态"
         return self.bug.new_bug_link(bug_no, link_user, 4, user_name)
 
-    def _add_design_link(self, bug_no, user_name, role, link_user, submitter):
+    def _add_design_link(self, bug_no, user_name, role, link_user):
         # 拥有bug_channel 权限的人可以操作
         if role & self.user_role["bug_channel"]:
             return False, u"您无权限修改该BUG的状态"

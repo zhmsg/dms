@@ -50,7 +50,7 @@ class UserManager:
         if result > 0:
             return False, u"用户名已存在"
         if check_password(password, 1, 20) is False:
-            return False, u"密码只能由字母数字和下划线组成且长度不大于20"
+            return False, u"密码只能由字母数字和下划线@组成且长度不大于20"
         en_password = generate_password_hash(password)
         add_time = datetime.now().strftime(TIME_FORMAT)
         insert_sql = "INSERT INTO %s (user_name,password,role,nick_name,creator,add_time) " \
@@ -63,7 +63,7 @@ class UserManager:
         if check_user(user_name, 1, 15) is False:
             return False, u"用户名只能由字母数字和下划线组成且长度不大于15"
         if check_password(password, 1, 20) is False:
-            return False, u"密码只能由字母数字和下划线组成且长度不大于15"
+            return False, u"密码只能由字母数字和下划线@组成且长度不大于20"
         select_sql = "SELECT user_name,password,role FROM %s WHERE user_name='%s';" % (self.user, user_name)
         result = self.db.execute(select_sql)
         if result <= 0:
@@ -71,7 +71,7 @@ class UserManager:
         db_r = self.db.fetchone()
         en_password = db_r[1]
         role = db_r[2]
-        if en_password is None:
+        if en_password is None or en_password == "":
             if password == self.default_password:
                 return True, -1
             else:
@@ -79,6 +79,14 @@ class UserManager:
         if check_password_hash(en_password, password) is False:
             return False, u"密码不正确"
         return True, role
+
+    def change_password(self, user_name, new_password):
+        if check_password(new_password, 1, 20) is False:
+            return False, u"密码只能由字母数字和下划线@组成且长度不大于20"
+        en_password = generate_password_hash(new_password)
+        update_sql = "UPDATE %s SET password='%s' WHERE user_name='%s';" % (self.user, en_password, user_name)
+        self.db.execute(update_sql)
+        return True, u"更新成功"
 
     def get_role_user(self, role):
         select_sql = "SELECT user_name,role,nick_name,wx_id,creator,add_time FROM %s WHERE role & %s > 0;" \
