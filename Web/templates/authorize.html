@@ -24,10 +24,10 @@
   <div class="loginMode">
     <form class="form-signin" action="/dms/authorize/" method="post">
       <h4 class="form-signin-heading">修改用户权限 按照用户修改</h4>
-      <select class="form-control pull-left bug-input" id="perm_user" onchange="user_select_change();">
-          <option value="0"></option>
+      <select class="form-control pull-left bug-input" id="perm_user" onchange="user_select_change();" name="perm_user">
+          <option role="0" value=""></option>
           {% for user in my_user %}
-              <option value="{{ user["role"] }}">{{ user["user_name"] }}</option>
+              <option role="{{ user["role"] }}" value="{{ user["user_name"] }}">{{ user["nick_name"] }}</option>
           {% endfor %}
       </select>
       {% include "perm_conent.html" %}

@@ -108,7 +108,7 @@ def register():
     password = request_data["password"]
     nick_name = request_data["nick_name"]
     user_role = 0
-    for key, value in user_m.role_value.items():
+    for key, value in control.user_role.items():
         if key in request_data and request_data[key] == "on":
             user_role += value
     result, message = control.new_user(user_name, password, user_role, nick_name, current_user.account, current_user.role)
@@ -129,7 +129,14 @@ def authorize_page():
 @dms_view.route("/authorize/", methods=["POST"])
 @login_required
 def authorize():
-    print(request.form)
+    perm_user = request.form["perm_user"]
+    if perm_user == "":
+        return "请选择一个账户"
+    user_role = 0
+    for key, value in control.user_role.items():
+        if key in request.form and request.form[key] == "on":
+            user_role += value
+    print(user_role)
     return redirect(url_for("dms_view.authorize_page"))
 
 

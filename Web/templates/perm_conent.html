@@ -1,24 +1,24 @@
 <div class="checkbox">数据传输权限&nbsp;&nbsp;&nbsp;
-    <label><input type="checkbox" {% if user_role | bit_and(role_value["market"]) <= 0 %}disabled{% else %}name="market" id="market" {% endif %}>市场</label>&nbsp;&nbsp;
-    <label><input type="checkbox" {% if user_role | bit_and(role_value["upload"]) <= 0 %}disabled{% else %}name="upload" id="upload"{% endif %}>上传</label>&nbsp;&nbsp;
-    <label><input type="checkbox" {% if user_role | bit_and(role_value["calc"]) <= 0 %}disabled{% else %}name="calc" id="calc"{% endif %}>计算</label>&nbsp;&nbsp;
+    <label><input type="checkbox" id="market" {% if user_role | bit_and(role_value["market"]) <= 0 %}disabled{% else %}name="market"  {% endif %}>市场</label>&nbsp;&nbsp;
+    <label><input type="checkbox" id="upload" {% if user_role | bit_and(role_value["upload"]) <= 0 %}disabled{% else %}name="upload" {% endif %}>上传</label>&nbsp;&nbsp;
+    <label><input type="checkbox" id="calc" {% if user_role | bit_and(role_value["calc"]) <= 0 %}disabled{% else %}name="calc" {% endif %}>计算</label>&nbsp;&nbsp;
   </div>
   <div class="checkbox">API文档权限&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <label><input type="checkbox" {% if user_role | bit_and(role_value["api_look"]) <= 0 %}disabled{% else %}name="api_look" id="api_look"{% endif %}>查看</label>&nbsp;&nbsp;
-    <label><input type="checkbox" {% if user_role | bit_and(role_value["api_new"]) <= 0 %}disabled{% else %}name="api_new" id="api_new"{% endif %}>新建修改</label>&nbsp;&nbsp;
+    <label><input type="checkbox" id="api_look" {% if user_role | bit_and(role_value["api_look"]) <= 0 %}disabled{% else %}name="api_look" {% endif %}>查看</label>&nbsp;&nbsp;
+    <label><input type="checkbox" id="api_new" {% if user_role | bit_and(role_value["api_new"]) <= 0 %}disabled{% else %}name="api_new" {% endif %}>新建修改</label>&nbsp;&nbsp;
   </div>
   <div class="checkbox">权限列表权限&nbsp;&nbsp;&nbsp;
-    <label><input type="checkbox" {% if user_role | bit_and(role_value["auth_look"]) <= 0 %}disabled{% else %}name="auth_look" id="auth_look"{% endif %}>查看</label>&nbsp;&nbsp;
+    <label><input type="checkbox" id="auth_look" {% if user_role | bit_and(role_value["auth_look"]) <= 0 %}disabled{% else %}name="auth_look" {% endif %}>查看</label>&nbsp;&nbsp;
   </div>
   <div class="checkbox">数据表描述权限
-    <label><input type="checkbox" {% if user_role | bit_and(role_value["table_look"]) <= 0 %}disabled{% else %}name="table_look" id="table_look"{% endif %}>查看</label>&nbsp;&nbsp;
+    <label><input type="checkbox" id="table_look" {% if user_role | bit_and(role_value["table_look"]) <= 0 %}disabled{% else %}name="table_look" {% endif %}>查看</label>&nbsp;&nbsp;
   </div>
   <div class="checkbox">操作用户权限&nbsp;&nbsp;&nbsp;
-    <label><input type="checkbox" {% if user_role | bit_and(role_value["user_new"]) <= 0 %}disabled {% else %}name="user_new" id="user_new"{% endif %}>新建</label>&nbsp;&nbsp;
+    <label><input type="checkbox" id="user_new" {% if user_role | bit_and(role_value["user_new"]) <= 0 %}disabled {% else %}name="user_new" {% endif %}>新建</label>&nbsp;&nbsp;
   </div>
   <div class="checkbox">BUG操作权限&nbsp;&nbsp;&nbsp;
-    <label><input type="checkbox" {% if user_role | bit_and(role_value["bug_look"]) <= 0 %}disabled {% else %}name="bug_look" id="bug_look" {% endif %}>查看</label>&nbsp;&nbsp;
-    <label><input type="checkbox" {% if user_role | bit_and(role_value["bug_new"]) <= 0 %}disabled {% else %}name="bug_new" id="bug_new" {% endif %}>新建</label>&nbsp;&nbsp;
-    <label><input type="checkbox" {% if user_role | bit_and(role_value["bug_link"]) <= 0 %}disabled {% else %}name="bug_link" id="bug_link"{% endif %}>被关联</label>&nbsp;&nbsp;
-    <label><input type="checkbox" {% if user_role | bit_and(role_value["bug_cancel"]) <= 0 %}disabled {% else %}name="bug_cancel" id="bug_cancel"{% endif %}>取消</label>&nbsp;&nbsp;
+    <label><input type="checkbox" id="bug_look" {% if user_role | bit_and(role_value["bug_look"]) <= 0 %}disabled {% else %}name="bug_look"{% endif %}>查看</label>&nbsp;&nbsp;
+    <label><input type="checkbox" id="bug_new"  {% if user_role | bit_and(role_value["bug_new"]) <= 0 %}disabled {% else %}name="bug_new" {% endif %}>新建</label>&nbsp;&nbsp;
+    <label><input type="checkbox" id="bug_link" {% if user_role | bit_and(role_value["bug_link"]) <= 0 %}disabled {% else %}name="bug_link" {% endif %}>被关联</label>&nbsp;&nbsp;
+    <label><input type="checkbox" id="bug_cancel" {% if user_role | bit_and(role_value["bug_cancel"]) <= 0 %}disabled {% else %}name="bug_cancel" {% endif %}>取消</label>&nbsp;&nbsp;
   </div>
