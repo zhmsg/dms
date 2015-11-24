@@ -72,7 +72,7 @@ class BugManager:
         return True, result
 
     def get_bug_list(self):
-        select_sql = "SELECT bug_no,bug_title,submitter,submit_time,bug_status FROM %s;" % self.bug
+        select_sql = "SELECT bug_no,bug_title,submitter,submit_time,bug_status FROM %s ORDER BY bug_status;" % self.bug
         self.db.execute(select_sql)
         bug_list = []
         for item in self.db.fetchall():
@@ -122,8 +122,9 @@ class BugManager:
     def get_statistic(self):
         # 获得所有的统计信息
         bug_role = 1024
-        select_sql = "SELECT u.user_name,nick_name,count(bug_no) FROM %s as u LEFT JOIN %s as b " \
-                     "on u.user_name=b.user_name AND type=2 WHERE role & %s = %s GROUP BY u.user_name;" \
+        select_sql = "SELECT u.user_name,nick_name,count(bug_no) AS bug_num FROM %s as u LEFT JOIN %s as b " \
+                     "on u.user_name=b.user_name AND type=2 WHERE role & %s = %s " \
+                     "GROUP BY u.user_name ORDER BY bug_num DESC;" \
                      % (self.user, self.bug_owner, bug_role, bug_role)
         self.db.execute(select_sql)
         all_data = []
@@ -131,9 +132,9 @@ class BugManager:
             all_data.append({"user_name": item[0], "nick_name": item[1], "bug_num": item[2]})
         # 获得最近一个月的统计信息
         after_time = (datetime.now() - timedelta(days=30)).strftime(TIME_FORMAT)
-        select_sql = "SELECT u.user_name,nick_name,count(bug_no) FROM %s as u LEFT JOIN %s as b " \
+        select_sql = "SELECT u.user_name,nick_name,count(bug_no) AS bug_num FROM %s as u LEFT JOIN %s as b " \
                      "on u.user_name=b.user_name AND type=2 AND link_time>'%s' " \
-                     "WHERE role & %s = %s GROUP BY u.user_name;" \
+                     "WHERE role & %s = %s GROUP BY u.user_name ORDER BY bug_num DESC;" \
                      % (self.user, self.bug_owner, after_time, bug_role, bug_role)
         self.db.execute(select_sql)
         month_data = []
