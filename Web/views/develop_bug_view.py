@@ -62,7 +62,7 @@ def bug_info():
     result, user_list = control.get_role_user(control.user_role["bug_link"])
     if result is False:
         return user_list
-    return render_template("/Dev/BUG/BUG_Info.html", bug_info=bug_info, bug_status_desc=bug_status_desc,bug_no=bug_no,
+    return render_template("/Dev/BUG/BUG_Info.html", bug_info=bug_info, bug_status_desc=bug_status_desc, bug_no=bug_no,
                            user_role=current_user.role, current_user=current_user.account, role_value=control.user_role,
                            user_list=user_list)
 

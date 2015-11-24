@@ -87,14 +87,15 @@ class BugManager:
         if len(bug_no) != 32:
             return False, "Bad bug_no"
         # 获取基本信息
-        select_sql = "SELECT bug_no,bug_title,submitter,submit_time,bug_status FROM %s WHERE bug_no='%s';" \
-                     % (self.bug, bug_no)
+        select_sql = "SELECT bug_no,bug_title,submitter,submit_time,bug_status,nick_name FROM %s AS i,%s AS u " \
+                     "WHERE bug_no='%s' AND i.submitter=u.user_name;" \
+                     % (self.bug, self.user, bug_no)
         result = self.db.execute(select_sql)
         if result != 1:
             return False, "Bad bug_no."
         info = self.db.fetchone()
         basic_info = {"bug_no": info[0], "bug_title": info[1], "submitter": info[2],
-                      "submit_time": info[3].strftime(TIME_FORMAT), "bug_status": info[4]}
+                      "submit_time": info[3].strftime(TIME_FORMAT), "bug_status": info[4], "submit_name": info[5]}
         # 获取示例信息
         select_sql = "SELECT type,content,add_time FROM %s WHERE bug_no='%s' ORDER BY add_time;" % (self.bug_example, bug_no)
         self.db.execute(select_sql)
@@ -102,12 +103,13 @@ class BugManager:
         for item in self.db.fetchall():
             example_info.append({"example_type": item[0], "content": item[1], "add_time": item[2].strftime(TIME_FORMAT)})
         # 获取关联的人
-        select_sql = "SELECT user_name,type,link_time,adder FROM %s WHERE bug_no='%s';" % (self.bug_owner, bug_no)
+        select_sql = "SELECT o.user_name,type,link_time,adder,nick_name FROM %s AS o, %s AS u " \
+                     "WHERE bug_no='%s' AND o.user_name=u.user_name;" % (self.bug_owner, self.user, bug_no)
         self.db.execute(select_sql)
         link_user = {"ys": {}, "owner": {}, "fix": {}, "channel": {}, "design": {}}
         for item in self.db.fetchall():
             link_info = {"user_name": item[0], "link_type": item[1], "link_time": item[2].strftime(TIME_FORMAT),
-                         "adder": item[3]}
+                         "adder": item[3], "nick_name": item[4]}
             if item[1] == 1:
                 link_user["ys"][item[0]] = link_info
             elif item[1] == 2:

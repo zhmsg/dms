@@ -13,14 +13,14 @@
     <p>BUG系统编号：{{ bug_info["basic_info"]["bug_no"] }}</p>
     <p><span class="font-red">BUG标题：</span>{{ bug_info["basic_info"]["bug_title"] }}</p>
     <p>BUG提交时间：{{ bug_info["basic_info"]["submit_time"] }}</p>
-    <p>BUG提交者：{{ bug_info["basic_info"]["submitter"] }}</p>
+    <p>BUG提交者：{{ bug_info["basic_info"]["submit_name"] }}</p>
     <p><span class="font-red">BUG状态：</span>{{ bug_status_desc[bug_info["basic_info"]["bug_status"]] }}</p>
     <p>
         {#如果当前状态为 已有BUG疑似拥有者 显示疑似拥有者#}
         {% if bug_info["basic_info"]["bug_status"] == 1 %}
             <span class="font-red">BUG疑似拥有者：</span>
             {% for user_name in bug_info["link_user"]["ys"].keys() %}
-                {{ user_name }}
+                {{ bug_info["link_user"]["ys"][user_name]["nick_name"] }}
             {% endfor %}
         {#如果当前状态为 已有BUG拥有者 显示拥有者#}
         {% elif bug_info["basic_info"]["bug_status"] == 2 %}
