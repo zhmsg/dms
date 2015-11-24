@@ -332,7 +332,7 @@ class ControlManager:
             if wx_id is not None:
                 bug_url = "http://gene.ac/dev/bug/info?bug_no=%s" % bug_no
                 title = u"%s, 您被标记为BUG %s" % (nick_name, link_desc)
-                remark = "请查看%s,如果是你的BUG，请尽快修复。" % bug_url
+                remark = u"请查看%s,如果是你的BUG，请尽快修复。" % bug_url
                 self.wx.send_bug_link(bug_title, bug_url, wx_id, title, remark)
 
     def _wx_send_bug_thread(self, bug_no, user_name, type, link_desc):
