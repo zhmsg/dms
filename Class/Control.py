@@ -324,7 +324,7 @@ class ControlManager:
     def _wx_send_bug(self, bug_no, user_name, type, link_desc):
         select_sql = "SELECT nick_name,wx_id,bug_title FROM %s as u,%s as b, %s as o " \
                      "WHERE u.user_name=o.user_name AND o.bug_no=b.bug_no " \
-                     "AND type=%s AND u.user_name='%s' AND bug_no='%s';" \
+                     "AND type=%s AND u.user_name='%s' AND o.bug_no='%s';" \
                      % (self.user.user, self.bug.bug, self.bug.bug_owner, type, user_name, bug_no)
         result= self.db.execute(select_sql)
         if result != 0:
