@@ -2,23 +2,10 @@
 # coding: utf-8
 __author__ = 'ZhouHeng'
 
-import sys
 import datetime
 import requests
 import json
-import string
-import time
-from time import sleep
-import random
-import thread
-import base64
-import socket
-import struct
 import tempfile
-from hashlib import sha1
-from Crypto.Cipher import AES
-import binascii
-from lxml import etree
 from MyEmail import MyEmailManager
 
 my_email = MyEmailManager()
@@ -53,6 +40,32 @@ class WxManager:
             request_data["data"]["first"] = {"value": u"非常辛苦的 %s者 您好！" % group, "color": "#173177"}
             request_data["data"]["keyword1"] = {"value": status, "color": "#173177"}
             request_data["data"]["keyword2"] = {"value": datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), "color": "#000000"}
+            request_data["data"]["remark"] = {"value": remark, "color": "#000000"}
+            res = requests.post(url, data=json.dumps(request_data))
+            if res.status_code == 200:
+                r = json.loads(res.text)
+                if r["errcode"] == 0:
+                    return r["msgid"]
+                else:
+                    print(res.text)
+                    return res.text
+            else:
+                print(res.status_code)
+            return ""
+        except Exception as e:
+            print(e.args)
+            error_message = str(e.args)
+            return error_message
+
+    def send_bug_link(self, bug_title, bug_url, open_id, title, remark):
+        try:
+            url = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=%s" % self.get_access_token()
+            request_data = {"template_id": "AlD8psjAv7E_NjUy86PnqaIgV45iuvt_ZLhxE7YJ-f0", "url": bug_url}
+            request_data["touser"] = open_id
+            request_data["data"] = {}
+            request_data["data"]["first"] = {"value": title, "color": "#173177"}
+            request_data["data"]["performance"] = {"value": bug_title, "color": "#173177"}
+            request_data["data"]["time"] = {"value": datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), "color": "#000000"}
             request_data["data"]["remark"] = {"value": remark, "color": "#000000"}
             res = requests.post(url, data=json.dumps(request_data))
             if res.status_code == 200:

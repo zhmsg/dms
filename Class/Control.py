@@ -2,9 +2,11 @@
 # coding: utf-8
 
 import sys
+from threading import Thread
 sys.path.append("..")
 from Tools.Mysql_db import DB
 from Tools.MyEmail import MyEmailManager
+from Tools.Wx import WxManager
 from Data import DataManager
 from Market import MarketManager
 from Upload import UploadManager
@@ -43,6 +45,7 @@ class ControlManager:
         self.api_help = HelpManager()
         self.bug = BugManager()
         self.manger_email = ["budechao@ict.ac.cn", "biozy@ict.ac.cn"]
+        self.wx = WxManager()
 
     def new_user(self, user_name, role, nick_name, creator, creator_role):
         if creator_role & self.user.role_value["user_new"] <= 0:
@@ -318,6 +321,24 @@ class ControlManager:
             return False, u"BUG 已不能修改"
         return self.bug.new_bug_example(bug_no, 2, path)
 
+    def _wx_send_bug(self, bug_no, user_name, type, link_desc):
+        select_sql = "SELECT nick_name,wx_id,bug_title FROM %s as u,%s as b, %s as o " \
+                     "WHERE u.user_name=o.user_name AND o.bug_no=b.bug_no " \
+                     "AND type=%s AND u.user_name='%s' AND bug_no='%s';" \
+                     % (self.user.user, self.bug.bug, self.bug.bug_owner, type, user_name)
+        result= self.db.execute(select_sql)
+        if result != 0:
+            nick_name, wx_id, bug_title = self.db.fetchone()
+            if wx_id is not None:
+                bug_url = "http://gene.ac/dev/bug/info?bug_no=%s" % bug_no
+                title = u"%s, 您被标记为BUG %s" % (nick_name, link_desc)
+                remark = "请查看%s,如果是你的BUG，请尽快修复。" % bug_url
+                self.wx.send_bug_link(bug_title, bug_url, wx_id, title, remark)
+
+    def _wx_send_bug_thread(self, bug_no, user_name, type, link_desc):
+        t = Thread(target=self._wx_send_bug, args=(bug_no, user_name, type, link_desc))
+        t.start()
+
     def add_bug_link(self, bug_no, user_name, role, link_user, link_type):
         if role & self.user_role["bug_new"] <= 0:
             return False, u"您没有权限"
@@ -352,7 +373,11 @@ class ControlManager:
 
     def _add_ys_link(self, bug_no, user_name, link_user):
         # 有new bug的权限均可添加疑似bug拥有者
-        return self.bug.new_bug_link(bug_no, link_user, 1, user_name)
+        result, info = self.bug.new_bug_link(bug_no, link_user, 1, user_name)
+        if result is True:
+            # 发送微信消息
+            self._wx_send_bug_thread(bug_no, user_name, 1, u"疑似拥有者")
+        return result, info
 
     def _add_owner_link(self, bug_no, user_name, link_user, submitter):
         # 判断操作者是否有权限操作 操作者可以是关联自己 或者 是bug的提交者
@@ -360,7 +385,11 @@ class ControlManager:
             # 判断提交者是否是bug提交者
             if submitter != user_name:
                 return False, u"您不能修改别人的BUG"
-        return self.bug.new_bug_link(bug_no, link_user, 2, user_name)
+        result, info = self.bug.new_bug_link(bug_no, link_user, 2, user_name)
+        if result is True:
+            # 发送微信消息
+            self._wx_send_bug_thread(bug_no, user_name, 1, u"拥有者")
+        return result, info
 
     def _add_fix_link(self, bug_no, user_name, link_user, submitter):
         # 只有BUG提交者可以标记为修复
