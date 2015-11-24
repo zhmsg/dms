@@ -5,22 +5,20 @@
 <title>BUG信息</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='t_css/bootstrap.min.css') }}"><!-- 新 Bootstrap 核心 CSS 文件 -->
 <link rel="stylesheet" href="{{ url_for('static', filename='t_css/main.css') }}"><!--自定义的页面样式 -->
-
 </head>
 
 <body>
 <div class="container font16">
 <div class="bugInfoShow">
     <p>BUG系统编号：{{ bug_info["basic_info"]["bug_no"] }}</p>
-    <p>BUG标题：{{ bug_info["basic_info"]["bug_title"] }}</p>
+    <p><span class="font-red">BUG标题：</span>{{ bug_info["basic_info"]["bug_title"] }}</p>
     <p>BUG提交时间：{{ bug_info["basic_info"]["submit_time"] }}</p>
     <p>BUG提交者：{{ bug_info["basic_info"]["submitter"] }}</p>
-    <p>BUG状态：{{ bug_status_desc[bug_info["basic_info"]["bug_status"]] }}</p>
-
+    <p><span class="font-red">BUG状态：</span>{{ bug_status_desc[bug_info["basic_info"]["bug_status"]] }}</p>
     <p>
         {#如果当前状态为 已有BUG疑似拥有者 显示疑似拥有者#}
         {% if bug_info["basic_info"]["bug_status"] == 1 %}
-            BUG疑似拥有者：
+            <span class="font-red">BUG疑似拥有者：</span>
             {% for user_name in bug_info["link_user"]["ys"].keys() %}
                 {{ user_name }}
             {% endfor %}
