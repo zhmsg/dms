@@ -3,6 +3,7 @@
 
 
 import sys
+import json
 from datetime import datetime
 from flask import Blueprint, render_template, request, redirect, url_for
 from flask_login import login_required, current_user
@@ -40,6 +41,13 @@ def show_bug_list():
         return bug_list
     return render_template("/Dev/BUG/Show_BUG.html", bug_list=bug_list, bug_status_desc=bug_status_desc,
                            user_role=current_user.role, role_value=control.user_role)
+
+
+@develop_bug_view.route("/statistic/", methods=["GET"])
+@login_required
+def get_statistic():
+    result, sta_info = control.get_bug_statistic(current_user.role)
+    return json.dumps({"status": result, "data": sta_info})
 
 
 @develop_bug_view.route("/info/", methods=["GET"])

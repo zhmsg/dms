@@ -5,7 +5,7 @@ import sys
 import tempfile
 import uuid
 sys.path.append("..")
-from datetime import datetime
+from datetime import datetime, timedelta
 from Tools.Mysql_db import DB
 from Class import table_manager, TIME_FORMAT
 from Check import check_sql_character
@@ -22,6 +22,7 @@ class BugManager:
         self.bug = table_manager.bug
         self.bug_owner = table_manager.bug_owner
         self.bug_example = table_manager.bug_example
+        self.user = "sys_user"
 
     def new_bug_info(self, bug_title, submitter):
         submit_time = datetime.now().strftime(TIME_FORMAT)
@@ -117,3 +118,25 @@ class BugManager:
             else:
                 pass
         return True, {"basic_info": basic_info, "example_info": example_info, "link_user": link_user}
+
+    def get_statistic(self):
+        # 获得所有的统计信息
+        bug_role = 1024
+        select_sql = "SELECT u.user_name,nick_name,count(bug_no) FROM %s as u LEFT JOIN %s as b " \
+                     "on u.user_name=b.user_name AND type=2 WHERE role & %s = %s GROUP BY u.user_name;" \
+                     % (self.user, self.bug_owner, bug_role, bug_role)
+        self.db.execute(select_sql)
+        all_data = []
+        for item in self.db.fetchall():
+            all_data.append({"user_name": item[0], "nick_name": item[1], "bug_num": item[2]})
+        # 获得最近一个月的统计信息
+        after_time = (datetime.now() - timedelta(days=30)).strftime(TIME_FORMAT)
+        select_sql = "SELECT u.user_name,nick_name,count(bug_no) FROM %s as u LEFT JOIN %s as b " \
+                     "on u.user_name=b.user_name AND type=2 AND link_time>'%s' " \
+                     "WHERE role & %s = %s GROUP BY u.user_name;" \
+                     % (self.user, self.bug_owner, after_time, bug_role, bug_role)
+        self.db.execute(select_sql)
+        month_data = []
+        for item in self.db.fetchall():
+            month_data.append({"user_name": item[0], "nick_name": item[1], "bug_num": item[2]})
+        return True, {"month": month_data, "all": all_data}

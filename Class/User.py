@@ -85,6 +85,11 @@ class UserManager:
         self.db.execute(update_sql)
         return True, u"更新成功"
 
+    def clear_password(self, user_name, creator):
+        update_sql = "UPDATE %s SET password=null WHERE user_name='%s' AND creator='%s';" % (self.user, user_name, creator)
+        self.db.execute(update_sql)
+        return True, u"重置成功"
+
     def get_role_user(self, role):
         select_sql = "SELECT user_name,role,nick_name,wx_id,creator,add_time FROM %s WHERE role & %s > 0;" \
                      % (self.user, role)

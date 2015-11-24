@@ -273,6 +273,11 @@ class ControlManager:
             return False, u"您没有权限"
         return self.bug.get_bug_list()
 
+    def get_bug_statistic(self, role):
+        if role & self.user_role["bug_look"] <= 0:
+            return False, u"您没有权限"
+        return self.bug.get_statistic()
+
     def get_bug_info(self, role, bug_no):
         if role & self.user_role["bug_look"] <= 0:
             return False, u"您没有权限"
