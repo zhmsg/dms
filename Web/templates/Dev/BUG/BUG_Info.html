@@ -26,7 +26,7 @@
         {% elif bug_info["basic_info"]["bug_status"] == 2 %}
             BUG拥有者：
             {% for user_name in bug_info["link_user"]["owner"].keys() %}
-                {{ user_name }}
+                {{ bug_info["link_user"]["owner"][user_name]["nick_name"] }}
             {% endfor %}
         {#如果当前状态为 BUG已修复 显示信息#}
        {% elif bug_info["basic_info"]["bug_status"] == 3 %}
