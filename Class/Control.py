@@ -359,6 +359,8 @@ class ControlManager:
         if link_role & self.user_role["bug_link"] <= 0:
             return False, u"添加关联账户无效"
         if link_type == "ys":
+            if bug_status > 1:
+                return False, u"BUG 状态已不允许添加疑似拥有者"
             return self._add_ys_link(bug_no, user_name, link_user)
         elif link_type == "owner":
             return self._add_owner_link(bug_no, user_name, link_user, submitter)
@@ -370,6 +372,10 @@ class ControlManager:
             return self._add_design_link(bug_no, user_name, role, link_user)
         else:
             return False, u"错误的请求"
+
+    def delete_bug_link(self, bug_no, user_name, role, link_user, linke_type):
+        if role & self.user_role["bug_new"] <= 0:
+            return False, u"您没有权限"
 
     def _add_ys_link(self, bug_no, user_name, link_user):
         # 有new bug的权限均可添加疑似bug拥有者
