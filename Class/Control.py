@@ -388,7 +388,7 @@ class ControlManager:
         result, info = self.bug.new_bug_link(bug_no, link_user, 2, user_name)
         if result is True:
             # 发送微信消息
-            self._wx_send_bug_thread(bug_no, link_user, 1, u"拥有者")
+            self._wx_send_bug_thread(bug_no, link_user, 2, u"拥有者")
         return result, info
 
     def _add_fix_link(self, bug_no, user_name, link_user, submitter):
