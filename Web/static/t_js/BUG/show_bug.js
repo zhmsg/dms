@@ -20,7 +20,7 @@ $(function(){
 });
 function draw(data){
     drawBar(data.month,"bar_month","月统计图");
-    drawBar(data.all,"bar_all","年统计图");
+    drawBar(data.all,"bar_all","总统计图");
 }
 function drawBar(data,father_id,bar_name){
     var dataX=[];

@@ -50,6 +50,14 @@ class BugManager:
         self.update_bug_status(bug_no, link_type)
         return True, {"bug_no": bug_no, "user_name": user_name, "link_type": link_type, "link_time": link_time}
 
+    def del_bug_link(self, bug_no, user_name, link_type, adder):
+        if len(bug_no) != 32:
+            return False, "Bad bug_no"
+        delete_sql = "DELETE FROM %s WHERE bug_no='%s' AND user_name='%s' AND adder='%s' AND type=%s;" \
+                     % (self.bug_owner, bug_no, user_name, adder, link_type)
+        result = self.db.execute(delete_sql)
+        return True, result
+
     def new_bug_example(self, bug_no, example_type, content):
         if len(bug_no) != 32:
             return False, "Bad bug_no"
