@@ -79,7 +79,6 @@
         <button class="btn btn-primary" type="submit">添加</button>
     </form>
 {% endif %}
-
 {#添加BUG拥有者#}
 {% if bug_info["basic_info"]["bug_status"] < 3 %}
     {% if bug_info["basic_info"]["submitter"] == current_user %}
