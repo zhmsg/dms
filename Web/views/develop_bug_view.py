@@ -4,8 +4,9 @@
 
 import sys
 import json
+import os
 from datetime import datetime
-from flask import Blueprint, render_template, request, redirect,jsonify
+from flask import Blueprint, render_template, request, redirect,jsonify, send_from_directory
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
 
@@ -88,20 +89,25 @@ def add_str_example(bug_no):
     return redirect(develop_bug_view.url_prefix + "/info?bug_no=%s" % bug_no)
 
 
-bug_img_dir = "static/t_images/BUG_Image/"
+# bug_img_dir = "static/t_images/BUG_Image/"
+bug_img_dir = "/data/dms/bug/"
 
 
 @develop_bug_view.route("/<bug_no>/img/example/", methods=["POST"])
 @login_required
 def add_img_example(bug_no):
+    mine_bug_img_dir = bug_img_dir + current_user.account
+    if os.path.exists(mine_bug_img_dir) is False:
+        os.makedirs(mine_bug_img_dir)
     img_file = request.files["bug_img_example"]
     img_filename = secure_filename(img_file.filename)
     extend = img_filename.split(".")[-1]
     if extend not in ["png", "jpeg", "jpg", "gif"]:
         return u"不支持的图片格式"
-    save_path = "%s%s_%s.%s" % (bug_img_dir, bug_no, datetime.now().strftime(TIME_FORMAT_STR), extend)
+    file_name = "%s_%s.%s" % (bug_no, datetime.now().strftime(TIME_FORMAT_STR), extend)
+    save_path = "%s/%s" % (mine_bug_img_dir, file_name)
     img_file.save(save_path)
-    result, example_info = control.add_bug_img_example(current_user.account, current_user.role, bug_no, save_path)
+    result, example_info = control.add_bug_img_example(current_user.account, current_user.role, bug_no, file_name)
     if result is False:
         return example_info
     return redirect(develop_bug_view.url_prefix + "/info?bug_no=%s" % bug_no)
@@ -172,3 +178,10 @@ def del_own_user(bug_no):
     if result is False:
         return link_info
     return redirect(develop_bug_view.url_prefix + "/info?bug_no=%s" % bug_no)
+
+
+@develop_bug_view.route("/<user_name>/<img_path>/", methods=["GET"])
+@login_required
+def get_bug_img(user_name, img_path):
+    dir = "%s%s" % (bug_img_dir, user_name)
+    return send_from_directory(directory=dir, filename=img_path)

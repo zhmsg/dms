@@ -40,7 +40,7 @@
     {% if item["example_type"] == 1 %}
         <p>{{ item["content"] }}</p>
     {% else %}
-        <img src="/{{ item['content']}}" width="100%">
+        <img src="/dev/bug/{{ bug_info["basic_info"]["submitter"] }}/{{ item['content']}}" width="100%">
     {% endif %}
 {% endfor %}
 </div>
