@@ -58,6 +58,10 @@ class BugManager:
         result = self.db.execute(delete_sql)
         return True, result
 
+    def del_bug(self, bug_no):
+        if len(bug_no) != 32:
+            return False, "Bad bug_no"
+
     def new_bug_example(self, bug_no, example_type, content):
         if len(bug_no) != 32:
             return False, "Bad bug_no"

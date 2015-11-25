@@ -34,7 +34,7 @@ class UserManager:
         self.default_password = "gene.ac"
         self.role_value = {"market": 1, "upload": 2, "calc": 4, "api_look": 8, "api_new": 16, "table_look": 32,
                            "auth_look": 64, "user_new": 128, "bug_look": 256, "bug_new": 512, "bug_link": 1024,
-                           "bug_cancel": 2048}
+                           "bug_cancel": 2048, "bug_del": 4096}
 
     def create_user(self, force=False):
         return self.db.create_table(self.user, self.user_desc, force)
