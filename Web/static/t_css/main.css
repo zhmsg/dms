@@ -99,9 +99,9 @@ ul,ol{list-style: none;margin: 0;padding: 0;}
 .checkbox span{width:180px;display: inline-block;}
 .amendPrivilege{width:600px;margin: 0px auto;}
 .amendBtn{width: 230px;display: block;margin: 0 auto;}
-.bugAuthor{width: 200px;display: inline-block;padding: 0 5px;}
-.hand{font-size: 12px;padding-top:3px;}
+.bugAuthor{width:80px;display: inline-block;padding: 0 5px;}
+.hand{font-size: 12px;padding-top:4px;font-weight: normal;}
 .handCurrent{cursor: pointer;}
-.gray{background: #ccc;}
-.orange{background: #e24414;}
+.gray{background: #fd5b78;color: #fff;}
+.orange{background: #e24414;color: #fff;}
 .opacity{opacity: 0;}
