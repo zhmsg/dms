@@ -152,3 +152,23 @@ def add_design_user(bug_no):
     if result is False:
         return link_info
     return redirect(develop_bug_view.url_prefix + "/info?bug_no=%s" % bug_no)
+
+
+@develop_bug_view.route("/<bug_no>/ys/", methods=["DELETE"])
+@login_required
+def del_ys_user(bug_no):
+    ys_user = request.form["ys_user"]
+    result, link_info = control.delete_bug_link(bug_no, current_user.account, current_user.role, ys_user, "ys")
+    if result is False:
+        return link_info
+    return redirect(develop_bug_view.url_prefix + "/info?bug_no=%s" % bug_no)
+
+
+@develop_bug_view.route("/<bug_no>/owner/", methods=["DELETE"])
+@login_required
+def del_own_user(bug_no):
+    bug_owner = request.form["owner"]
+    result, link_info = control.delete_bug_link(bug_no, current_user.account, current_user.role, bug_owner, "owner")
+    if result is False:
+        return link_info
+    return redirect(develop_bug_view.url_prefix + "/info?bug_no=%s" % bug_no)
