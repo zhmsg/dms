@@ -89,25 +89,11 @@ function drawBar(data,father_id,bar_name){
         .attr("y",function(d,i){
             return 95+500 - yScale(d) ;
         })
-        .attr("font-size", 10)
+        .attr("font-size", 15)
         .attr("fill","black")
         .text(function(d,i){
             return d;
         });
-
-    svg.selectAll("text")
-        .data(dataX)
-        .enter()
-        .append("text")
-        .attr("x", function(d,i){
-            return 73 + xScale(i);
-        } )
-        .attr("y",function(d,i){
-            return 95+500  ;
-        })
-        .attr("font-size", 25)
-        .attr("fill","red")
-        .text("I");
 
     svg.append("g")
         .attr("class","axis")
