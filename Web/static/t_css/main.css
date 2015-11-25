@@ -31,7 +31,6 @@ ul,ol{list-style: none;margin: 0;padding: 0;}
 }
 .form-signin .form-control:focus {z-index: 2;}
 /*登陆页 end*/
-
 /*填写信息模块 start*/
 .step{min-width: 470px;padding-left: 100px;padding-bottom:20px;}
 .step p{width: 154px;text-align: center;}
@@ -42,7 +41,6 @@ ul,ol{list-style: none;margin: 0;padding: 0;}
 /*编号start*/
 .number{width: 100px;background: #eae8e6;border-top: 5px solid #ff991d;text-align:center;}
 /*填写信息模块 end*/
-
 /*信息展示模块 start*/
 .infoShowMode{margin-top: 20px;margin-bottom: 50px;}
 /*信息展示模块 end*/
@@ -99,3 +97,9 @@ ul,ol{list-style: none;margin: 0;padding: 0;}
 .checkbox span{width:180px;display: inline-block;}
 .amendPrivilege{width:600px;margin: 0px auto;}
 .amendBtn{width: 230px;display: block;margin: 0 auto;}
+.bugAuthor{width:80px;display: inline-block;padding: 0 5px;}
+.hand{font-size: 12px;padding-top:4px;font-weight: normal;}
+.handCurrent{cursor: pointer;}
+.gray{background: #fd5b78;color: #fff;}
+.orange{background: #e24414;color: #fff;}
+.opacity{opacity: 0;}
