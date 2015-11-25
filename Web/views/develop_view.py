@@ -60,4 +60,8 @@ def show_data_table():
             if table["table_name"] == request.args["table"]:
                 select_table = table
                 break
-    return render_template("/Dev/data_table.html", table_list=table_list, column_info=column_info, select_table=select_table)
+    query_str = ""
+    if "query" in request.args:
+        query_str = request.args["query"]
+    return render_template("/Dev/data_table.html", table_list=table_list, column_info=column_info,
+                           select_table=select_table, query_str=query_str)

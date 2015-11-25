@@ -6,12 +6,11 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='t_css/bootstrap.min.css') }}"><!-- 新 Bootstrap 核心 CSS 文件 -->
 <link rel="stylesheet" href="{{ url_for('static', filename='t_css/main.css') }}"><!--自定义的页面样式 -->
 <script type="text/javascript" src="{{ url_for('static', filename='t_js/jquery.min.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='t_js/data_table.js') }}"></script>
 </head>
 
 <body>
 <div class="data">
-    <input class="form-control" id="search_table" onkeyup="search_table();" placeholder="请按照表名进行搜索" />
+    <input class="form-control" id="search_table" onkeyup="search_table();" placeholder="请按照表名进行搜索" value="{{ query_str }}" />
 </div>
 <div class="data">
 {% for table in table_list %}
@@ -49,4 +48,5 @@
 {% endif %}
 </div>
 </body>
+<script type="text/javascript" src="{{ url_for('static', filename='t_js/data_table.js') }}"></script>
 </html>

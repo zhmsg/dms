@@ -41,3 +41,4 @@ function search_table(){
         }
     }
 }
+search_table();
