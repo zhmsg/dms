@@ -17,8 +17,9 @@ sys.path.append('..')
 
 __author__ = 'Zhouheng'
 
+url_prefix = "/dev/bug"
 
-develop_bug_view = Blueprint('develop_bug_view', __name__, url_prefix="/dev/bug")
+develop_bug_view = Blueprint('develop_bug_view', __name__, url_prefix=url_prefix)
 
 bug_status_desc = [u"等待BUG确认", u"已有BUG疑似拥有者", u"已确认BUG拥有者", u"BUG已被修复", u"BUG被取消", u"BUG现象正常"]
 
@@ -65,7 +66,7 @@ def bug_info():
         return user_list
     return render_template("/Dev/BUG/BUG_Info.html", bug_info=bug_info, bug_status_desc=bug_status_desc, bug_no=bug_no,
                            user_role=current_user.role, current_user=current_user.account, role_value=control.user_role,
-                           user_list=user_list)
+                           user_list=user_list, url_prefix=url_prefix)
 
 
 @develop_bug_view.route("/new/", methods=["POST"])
@@ -76,7 +77,7 @@ def new_bug():
     if result is False:
         return bug_info
     bug_no = bug_info["bug_no"]
-    return redirect(develop_bug_view.url_prefix + "/info?bug_no=%s" % bug_no)
+    return redirect(url_prefix + "/info?bug_no=%s" % bug_no)
 
 
 @develop_bug_view.route("/<bug_no>/str/example/", methods=["POST"])
@@ -86,7 +87,7 @@ def add_str_example(bug_no):
     result, example_info = control.add_bug_str_example(current_user.account, current_user.role, bug_no, str_example)
     if result is False:
         return example_info
-    return redirect(develop_bug_view.url_prefix + "/info?bug_no=%s" % bug_no)
+    return redirect(url_prefix + "/info?bug_no=%s" % bug_no)
 
 
 # bug_img_dir = "static/t_images/BUG_Image/"
@@ -110,7 +111,7 @@ def add_img_example(bug_no):
     result, example_info = control.add_bug_img_example(current_user.account, current_user.role, bug_no, file_name)
     if result is False:
         return example_info
-    return redirect(develop_bug_view.url_prefix + "/info?bug_no=%s" % bug_no)
+    return redirect(url_prefix + "/info?bug_no=%s" % bug_no)
 
 
 @develop_bug_view.route("/<bug_no>/ys/", methods=["POST"])
@@ -120,7 +121,7 @@ def add_ys_user(bug_no):
     result, link_info = control.add_bug_link(bug_no, current_user.account, current_user.role, ys_user, "ys")
     if result is False:
         return link_info
-    return redirect(develop_bug_view.url_prefix + "/info?bug_no=%s" % bug_no)
+    return redirect(url_prefix + "/info?bug_no=%s" % bug_no)
 
 
 @develop_bug_view.route("/<bug_no>/owner/", methods=["POST"])
@@ -130,7 +131,7 @@ def add_own_user(bug_no):
     result, link_info = control.add_bug_link(bug_no, current_user.account, current_user.role, bug_owner, "owner")
     if result is False:
         return link_info
-    return redirect(develop_bug_view.url_prefix + "/info?bug_no=%s" % bug_no)
+    return redirect(url_prefix + "/info?bug_no=%s" % bug_no)
 
 
 @develop_bug_view.route("/<bug_no>/fix/", methods=["POST"])
@@ -139,7 +140,7 @@ def add_fix_user(bug_no):
     result, link_info = control.add_bug_link(bug_no, current_user.account, current_user.role, current_user.account, "fix")
     if result is False:
         return link_info
-    return redirect(develop_bug_view.url_prefix + "/info?bug_no=%s" % bug_no)
+    return redirect(url_prefix + "/info?bug_no=%s" % bug_no)
 
 
 @develop_bug_view.route("/<bug_no>/cancel/", methods=["POST"])
@@ -148,7 +149,7 @@ def add_cancel_user(bug_no):
     result, link_info = control.add_bug_link(bug_no, current_user.account, current_user.role, current_user.account, "cancel")
     if result is False:
         return link_info
-    return redirect(develop_bug_view.url_prefix + "/info?bug_no=%s" % bug_no)
+    return redirect(url_prefix + "/info?bug_no=%s" % bug_no)
 
 
 @develop_bug_view.route("/<bug_no>/design/", methods=["POST"])
@@ -157,7 +158,7 @@ def add_design_user(bug_no):
     result, link_info = control.add_bug_link(bug_no, current_user.account, current_user.role, current_user.account, "design")
     if result is False:
         return link_info
-    return redirect(develop_bug_view.url_prefix + "/info?bug_no=%s" % bug_no)
+    return redirect(url_prefix + "/info?bug_no=%s" % bug_no)
 
 
 @develop_bug_view.route("/<bug_no>/ys/", methods=["DELETE"])
@@ -167,7 +168,7 @@ def del_ys_user(bug_no):
     result, link_info = control.delete_bug_link(bug_no, current_user.account, current_user.role, ys_user, "ys")
     if result is False:
         return link_info
-    return redirect(develop_bug_view.url_prefix + "/info?bug_no=%s" % bug_no)
+    return redirect(url_prefix + "/info?bug_no=%s" % bug_no)
 
 
 @develop_bug_view.route("/<bug_no>/owner/", methods=["DELETE"])
@@ -177,7 +178,7 @@ def del_own_user(bug_no):
     result, link_info = control.delete_bug_link(bug_no, current_user.account, current_user.role, bug_owner, "owner")
     if result is False:
         return link_info
-    return redirect(develop_bug_view.url_prefix + "/info?bug_no=%s" % bug_no)
+    return redirect(url_prefix + "/info?bug_no=%s" % bug_no)
 
 
 @develop_bug_view.route("/<user_name>/<img_path>/", methods=["GET"])

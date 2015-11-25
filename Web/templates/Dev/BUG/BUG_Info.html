@@ -46,19 +46,19 @@
     {% if item["example_type"] == 1 %}
         <p>{{ item["content"] }}</p>
     {% else %}
-        <img src="/dev/bug/{{ bug_info["basic_info"]["submitter"] }}/{{ item['content']}}" width="100%">
+        <img src="{{ url_prefix }}/{{ bug_info["basic_info"]["submitter"] }}/{{ item['content']}}" width="100%">
     {% endif %}
 {% endfor %}
 </div>
 {# 提交关于BUG的描述 只有BUG提交者才可以提交 并且要在BUG的状态小于3即BUG处于未修复状态下才可以 #}
 <div class="clear bottom20 bugUpload">
 {% if bug_info["basic_info"]["submitter"] == current_user and bug_info["basic_info"]["bug_status"] < 3 %}
-    <form class="bugTextMode" action="/dev/bug/{{ bug_no }}/str/example/", method="post">
+    <form class="bugTextMode" action="{{ url_prefix }}/{{ bug_no }}/str/example/" method="post">
         <span class="pull-left">请添加bug的相关文字描述：</span>
         <textarea class="form-control bottom10" rows="5" name="bug_str_example"></textarea>
         <button class="btn btn-primary" type="submit">提交</button>
     </form>
-    <form action="/dev/bug/{{ bug_no }}/img/example/" method="post" enctype="multipart/form-data">
+    <form action="{{ url_prefix }}/{{ bug_no }}/img/example/" method="post" enctype="multipart/form-data">
         <span class="pull-left">请添加bug的相关图片描述：</span>
         <input class="btn btn-default pull-left bugUploadBtn" type="button" value="请选择文件" name="file">
         <input class="pull-left" type="file" accept="image/jpeg, image/png, image/gif" name="bug_img_example">
@@ -67,7 +67,7 @@
 {% endif %}
 {#添加疑似BUG拥有者#}
 {% if bug_info["basic_info"]["bug_status"] < 2 %}
-    <form action="/dev/bug/{{ bug_no }}/ys/", method="post">
+    <form action="{{ url_prefix }}/{{ bug_no }}/ys/" method="post">
         <span class="pull-left">添加疑似BUG拥有者：</span>
         <select class="form-control pull-left bug-input" name="ys_user">
             {% for user in user_list %}
@@ -82,7 +82,7 @@
 {#添加BUG拥有者#}
 {% if bug_info["basic_info"]["bug_status"] < 3 %}
     {% if bug_info["basic_info"]["submitter"] == current_user %}
-    <form action="/dev/bug/{{ bug_no }}/owner/", method="post">
+    <form action="{{ url_prefix }}/{{ bug_no }}/owner/"  method="post">
         <span class="pull-left">添加BUG拥有者：</span>
         <select class="form-control pull-left bug-input" name="owner">
             {% for user in user_list %}
@@ -95,7 +95,7 @@
     </form>
     {% endif %}
     {% if current_user not in bug_info["link_user"]["owner"] %}
-    <form action="/dev/bug/{{ bug_no }}/owner/", method="post">
+    <form action="{{ url_prefix }}/{{ bug_no }}/owner/"  method="post">
         <input name="owner" value="{{ current_user }}" style="display: none"/>
         <button class="btn btn-primary" type="submit">标记为我的BUG</button>
     </form>
@@ -105,7 +105,7 @@
 {#完成BUG#}
 {% if bug_info["basic_info"]["bug_status"] < 3 %}
     {% if bug_info["basic_info"]["submitter"] == current_user %}
-    <form action="/dev/bug/{{ bug_no }}/fix/", method="post">
+    <form action="{{ url_prefix }}/{{ bug_no }}/fix/"  method="post">
         <button class="btn btn-primary" type="submit">BUG已修复</button>
     </form>
     {% endif %}
@@ -113,7 +113,7 @@
 {#取消BUG#}
 {% if bug_info["basic_info"]["bug_status"] < 3 %}
     {% if bug_info["basic_info"]["submitter"] == current_user %}
-    <form action="/dev/bug/{{ bug_no }}/cancel/", method="post">
+    <form action="{{ url_prefix }}/{{ bug_no }}/cancel/" method="post">
         <button class="btn btn-primary" type="submit">取消BUG</button>
     </form>
     {% endif %}
@@ -122,7 +122,7 @@
 {#不过属于BUG 设计如此#}
 {% if bug_info["basic_info"]["bug_status"] < 3 %}
     {% if user_role | bit_and(role_value["bug_cancel"]) == role_value["bug_cancel"] %}
-    <form action="/dev/bug/{{ bug_no }}/design/", method="post">
+    <form action="{{ url_prefix }}/{{ bug_no }}/design/", method="post">
         <button class="btn btn-primary" type="submit">不是BUG，就是这么设计的</button>
     </form>
     {% endif %}
