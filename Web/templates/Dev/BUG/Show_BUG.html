@@ -1,43 +1,56 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>晶云平台BUG列表</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='t_css/bootstrap.min.css') }}"><!-- 新 Bootstrap 核心 CSS 文件 -->
-<link rel="stylesheet" href="{{ url_for('static', filename='t_css/main.css') }}"><!--自定义的页面样式 -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>晶云平台BUG列表</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='t_css/bootstrap.min.css') }}"><!-- 新 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='t_css/main.css') }}"><!--自定义的页面样式 -->
+    <script type="text/javascript" src="{{ url_for('static', filename='t_js/jquery.min.js') }}" charset="utf-8"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='t_js/d3.min.js') }}" charset="utf-8"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='t_js/BUG/show_bug.js') }}" charset="utf-8"></script>
 </head>
 
 <body>
 <div class="container font16">
-{#BUG列表#}
-{% if bug_list %}
-    <table  class="table table-bordered table-hover api-list-table">
-        <caption>BUG列表</caption>
+    {#BUG列表#}
+    {% if bug_list %}
+        <table  class="table table-bordered table-hover api-list-table">
+            <caption>BUG列表</caption>
+            <tr>
+                <th scope="col" width="38%">BUG标题</th>
+                <th scope="col" width="16%">BUG状态</th>
+                <th scope="col" width="8%">BUG提交者</th>
+                <th scope="col" width="12%">BUG提交时间</th>
+                <th class="text-center" scope="col" width="4%">操作</th>
+            </tr>
+            {% for item in bug_list %}
+                <tr>
+                    <td>{{ item["bug_title"] }}</td>
+                    <td>{{ bug_status_desc[item["bug_status"]] }}</td>
+                    <td>{{ item["submitter"] }}</td>
+                    <td>{{ item["submit_time"] }}</td>
+                    <td class="text-center"><a href="/dev/bug/info/?bug_no={{ item["bug_no"] }}">查看</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+    {# 新建BUG #}
+    {% if user_role | bit_and(role_value["bug_new"]) == role_value["bug_new"]  %}
+        <form action="/dev/bug/new/" method="post">
+            <input class="form-control pull-left bug-input" name="bug_title" >
+            <button class="btn btn-primary" type="submit">新建BUG</button>
+        </form>
+    {% endif %}
+    <table>
         <tr>
-            <th scope="col" width="38%">BUG标题</th>
-            <th scope="col" width="16%">BUG状态</th>
-            <th scope="col" width="8%">BUG提交者</th>
-            <th scope="col" width="12%">BUG提交时间</th>
-            <th class="text-center" scope="col" width="4%">操作</th>
+            <td>
+                <div id="bar_month"></div>
+            </td>
+            <td>
+                <div id="bar_all"></div>
+            </td>
         </tr>
-        {% for item in bug_list %}
-        <tr>
-            <td>{{ item["bug_title"] }}</td>
-            <td>{{ bug_status_desc[item["bug_status"]] }}</td>
-            <td>{{ item["submitter"] }}</td>
-            <td>{{ item["submit_time"] }}</td>
-            <td class="text-center"><a href="/dev/bug/info/?bug_no={{ item["bug_no"] }}">查看</a></td>
-        </tr>
-        {% endfor %}
     </table>
-{% endif %}
-{# 新建BUG #}
-{% if user_role | bit_and(role_value["bug_new"]) == role_value["bug_new"]  %}
-<form action="/dev/bug/new/" method="post">
-    <input class="form-control pull-left bug-input" name="bug_title" >
-    <button class="btn btn-primary" type="submit">新建BUG</button>
-</form>
-{% endif %}
 </div>
 </body>
 </html>

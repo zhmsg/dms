@@ -5,7 +5,7 @@
 import sys
 import json
 from datetime import datetime
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect,jsonify
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
 
@@ -47,7 +47,7 @@ def show_bug_list():
 @login_required
 def get_statistic():
     result, sta_info = control.get_bug_statistic(current_user.role)
-    return json.dumps({"status": result, "data": sta_info})
+    return jsonify({"status": result, "data": sta_info})
 
 
 @develop_bug_view.route("/info/", methods=["GET"])
