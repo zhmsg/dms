@@ -126,7 +126,7 @@ function drawBar(data,father_id,bar_name){
     svg.append("text")
         .attr("x",350)
         .attr("y",680)
-        .attr("font-size", 14)
+        .attr("font-size", 18)
         .attr("fill","black")
         .text(bar_name);
 }
