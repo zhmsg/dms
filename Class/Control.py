@@ -373,9 +373,35 @@ class ControlManager:
         else:
             return False, u"错误的请求"
 
-    def delete_bug_link(self, bug_no, user_name, role, link_user, linke_type):
+    def delete_bug_link(self, bug_no, user_name, role, link_user, link_type):
         if role & self.user_role["bug_new"] <= 0:
             return False, u"您没有权限"
+        # 判断当前bug是否允许删除关联者
+        select_sql = "SELECT submitter,bug_status FROM %s WHERE bug_no='%s';" % (self.bug.bug, bug_no)
+        result = self.db.execute(select_sql)
+        if result == 0:
+            return False, u"BUG 不存在"
+        submitter, bug_status = self.db.fetchone()
+        if bug_status > 2:
+            return False, u"BUG 已不能修改"
+        if link_type == "ys":
+            if bug_status > 1:
+                return False, u"BUG 状态已不允许修改疑似拥有者"
+            link_type_num = 1
+        elif link_type == "owner":
+            link_type_num = 2
+        else:
+            return False, u"错误的请求"
+        # 仅当当前关联者超过一个时才可以删除 其他
+        select_sql = "SELECT user_name,adder FROM %s WHERE bug_no='%s' AND type=%s;" \
+                     % (self.bug.bug_owner, bug_no, link_type_num)
+        result = self.db.execute(select_sql)
+        if result <= 1:
+            return False, u"仅当关联者超过1个以后，才能删除"
+        for item in self.db.fetchall():
+            if item[0] == link_user and item[1] == user_name:
+                return self.bug.del_bug_link(bug_no, link_user, link_type_num, user_name)
+        return False, u"您无权限删除"
 
     def _add_ys_link(self, bug_no, user_name, link_user):
         # 有new bug的权限均可添加疑似bug拥有者
