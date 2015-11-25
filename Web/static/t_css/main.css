@@ -31,7 +31,6 @@ ul,ol{list-style: none;margin: 0;padding: 0;}
 }
 .form-signin .form-control:focus {z-index: 2;}
 /*登陆页 end*/
-
 /*填写信息模块 start*/
 .step{min-width: 470px;padding-left: 100px;padding-bottom:20px;}
 .step p{width: 154px;text-align: center;}
