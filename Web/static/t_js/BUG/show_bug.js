@@ -34,7 +34,7 @@ function drawBar(data,father_id,bar_name){
     d3.select("#"+father_id).selectAll("svg").remove();
     var svg = d3.select("#"+father_id)
         .append("svg")
-        .attr("width",700)
+        .attr("width",1000)
         .attr("height",700);
 
     var xAxisScale = d3.scale.ordinal()//x�����
