@@ -8,7 +8,8 @@ $(function(){
         success:function(data){
             console.log("get statistic :",data);
             if(data.status){
-                draw(data.data);
+                drawBar(data.data.month,"bar_month","月统计图");
+                drawBar(data.data.all,"bar_all","总统计图");
             }else{
                 alert("内部错误:获取统计数据失败");
             }
@@ -18,10 +19,6 @@ $(function(){
         }
     });
 });
-function draw(data){
-    drawBar(data.month,"bar_month","月统计图");
-    drawBar(data.all,"bar_all","总统计图");
-}
 function drawBar(data,father_id,bar_name){
     //默认svg 图中上下左右有空白宽度为50px
     var topPadding=50;
