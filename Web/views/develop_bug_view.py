@@ -209,3 +209,9 @@ def upload_test():
     except Exception as e:
         error_mesage = str(e.args)
         return json.dumps({"result": False, "data": error_mesage})
+
+
+@develop_bug_view.route("/testUpload/", methods=["GET"])
+@login_required
+def testUpload():
+    return render_template("testUpload.html", user_role=current_user.role, role_value=control.user_role)
