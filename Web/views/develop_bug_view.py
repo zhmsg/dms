@@ -196,7 +196,7 @@ def upload_test():
         if os.path.exists(mine_bug_img_dir) is False:
             os.makedirs(mine_bug_img_dir)
         save_paths = []
-        for file in request.files:
+        for key, file in request.files.items():
             origin_filename = secure_filename(file.filename)
             file_name = "%s_%s_%s" % (datetime.now().strftime(TIME_FORMAT_STR), random.randint(10000, 99999), origin_filename)
             save_path = "%s/%s" % (mine_bug_img_dir, file_name)
@@ -208,4 +208,4 @@ def upload_test():
 
     except Exception as e:
         error_mesage = str(e.args)
-        return json.dumps({"result": True, "data": error_mesage})
+        return json.dumps({"result": False, "data": error_mesage})
