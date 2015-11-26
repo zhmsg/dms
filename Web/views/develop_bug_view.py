@@ -4,6 +4,7 @@
 
 import sys
 import json
+import random
 import os
 from datetime import datetime
 from flask import Blueprint, render_template, request, redirect,jsonify, send_from_directory
@@ -186,3 +187,25 @@ def del_own_user(bug_no):
 def get_bug_img(user_name, img_path):
     dir = "%s%s" % (bug_img_dir, user_name)
     return send_from_directory(directory=dir, filename=img_path)
+
+
+@develop_bug_view.route("/upload/", methods=["POST"])
+def upload_test():
+    try:
+        mine_bug_img_dir = bug_img_dir + "upload"
+        if os.path.exists(mine_bug_img_dir) is False:
+            os.makedirs(mine_bug_img_dir)
+        save_paths = []
+        for file in request.files:
+            origin_filename = secure_filename(file.filename)
+            file_name = "%s_%s_%s" % (datetime.now().strftime(TIME_FORMAT_STR), random.randint(10000, 99999), origin_filename)
+            save_path = "%s/%s" % (mine_bug_img_dir, file_name)
+            file.save(save_path)
+            if os.path.exists(save_path) is False:
+                return json.dumps({"result": False, "data": "File not exist. file path is %s" % save_path})
+            save_paths.append(save_path)
+        return json.dumps({"result": True, "data": save_paths})
+
+    except Exception as e:
+        error_mesage = str(e.args)
+        return json.dumps({"result": True, "data": error_mesage})
