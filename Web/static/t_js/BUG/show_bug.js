@@ -23,6 +23,14 @@ function draw(data){
     drawBar(data.all,"bar_all","总统计图");
 }
 function drawBar(data,father_id,bar_name){
+    //默认svg 图中上下左右有空白宽度为50px
+    var topPadding=50;
+    var botttomPadding=100;
+    var leftPaddding=50;
+    var rightPadding=50;
+    var xSpace=80;
+    var xWidth=data.length*xSpace;
+    var yHeight=500;
     var dataX=[];
     var dataY=[];
     for(var i=0;i<data.length;i++){
@@ -34,24 +42,24 @@ function drawBar(data,father_id,bar_name){
     d3.select("#"+father_id).selectAll("svg").remove();
     var svg = d3.select("#"+father_id)
         .append("svg")
-        .attr("width",1000)
-        .attr("height",700);
+        .attr("width",leftPaddding+xWidth+rightPadding)
+        .attr("height",topPadding+yHeight+botttomPadding);
 
     var xAxisScale = d3.scale.ordinal()//x�����
         .domain(dataX)
-        .rangeRoundBands([0,dataX.length*80]);
+        .rangeRoundBands([0,xWidth]);
 
     var yAxisScale = d3.scale.linear()
         .domain([0,d3.max(dataY)+10])
-        .range([500,0]);
+        .range([yHeight,0]);
 
     var xScale = d3.scale.ordinal()// ����һ���������ߡ�x������
         .domain(d3.range(dataX.length))
-        .rangeRoundBands([0,dataX.length*80],0.1);
+        .rangeRoundBands([0,xWidth],0.05);
 
     var yScale = d3.scale.linear()// ����һ�����Զ�������ߡ�
         .domain([0,d3.max(dataY)+10])
-        .range([0,500]);
+        .range([0,yHeight]);
 
     var xAxis = d3.svg.axis()
         .scale(xAxisScale)
@@ -66,10 +74,10 @@ function drawBar(data,father_id,bar_name){
         .enter()
         .append("rect")
         .attr("x", function(d,i){
-            return 40+ xScale(i);
+            return leftPaddding+ xScale(i);
         } )
         .attr("y",function(d,i){
-            return 50 + 550 - yScale(d) ;
+            return topPadding + yHeight - yScale(d) ;
         })
         .attr("width", function(d,i){
             return xScale.rangeBand();
@@ -84,10 +92,10 @@ function drawBar(data,father_id,bar_name){
         .enter()
         .append("text")
         .attr("x", function(d,i){
-            return 73 + xScale(i);
+            return leftPaddding  + xSpace*(i+0.5) ;//~= leftPaddding + xScale(i) + xSpace/2
         } )
         .attr("y",function(d,i){
-            return 95+500 - yScale(d) ;
+            return topPadding + yHeight - yScale(d) -5;
         })
         .attr("font-size", 15)
         .attr("fill","black")
@@ -98,7 +106,7 @@ function drawBar(data,father_id,bar_name){
     svg.append("g")
         .attr("class","axis")
         .attr("fill","gray")
-        .attr("transform","translate(40,601)")
+        .attr("transform","translate("+leftPaddding+","+(topPadding+yHeight)+")")
         .call(xAxis)
         .append("g")
     ;
@@ -106,12 +114,12 @@ function drawBar(data,father_id,bar_name){
     svg.append("g")
         .attr("class","axis")
         .attr("fill","gray")
-        .attr("transform","translate(40,100)")
+        .attr("transform","translate("+leftPaddding+","+topPadding+")")
         .call(yAxis);
 
     svg.append("text")
-        .attr("x",350)
-        .attr("y",680)
+        .attr("x",leftPaddding+xWidth/2)
+        .attr("y",topPadding+yHeight+botttomPadding/1.5)
         .attr("font-size", 18)
         .attr("fill","black")
         .text(bar_name);
