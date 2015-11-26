@@ -213,5 +213,5 @@ def upload_test():
 
 @develop_bug_view.route("/testUpload/", methods=["GET"])
 @login_required
-def testUpload():
+def test_upload():
     return render_template("testUpload.html", user_role=current_user.role, role_value=control.user_role)
