@@ -40,12 +40,14 @@ function uploadProgress(evt) {
 }
 function uploadComplete(evt) {
     /* This event is raised when the server send back a response */
+    console.log("uploadComplete",this);
     alert(this.responseText);
     $("#message").show();
     $("#up_vcf").attr("disabled","disabled");
     $("#up_vcf").removeClass("btn-primary");
 }
 function uploadFailed(evt) {
+    console.log("uploadFailed",this);
     alert(this.responseText);
 }
 function uploadCanceled(evt) {

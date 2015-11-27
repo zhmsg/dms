@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title></title>
 {#    <meta name="csrf-token" content="{{ csrf_token() }}">#}
+    <script type="text/javascript" src="{{ url_for('static', filename='t_js/jquery.min.js') }}" charset="utf-8"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='t_js/testUpload.js') }}" charset="utf-8"></script>
 </head>
 <body>
@@ -15,7 +16,7 @@
     <div class="uploader-wjxx" id="fileName"></div>
     <div class="uploader-wjxx" id="fileSize"></div>
     <div class="row">
-        <input id="upB" type="button" onclick="uploadFile()" value="上传" />
+        <input id="upB" type="button" onclick="uploadFile()" value="上传"/>
         <span id="progressNumber"></span><span id="message" class="successMessage" style="display:none;color: #009900">上传成功</span>
     </div>
 </form>
