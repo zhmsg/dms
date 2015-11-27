@@ -2,7 +2,8 @@
  * Created by lsl on 15-11-26.
  */
 <!--上传vcf START-->
-function fileSelected() {
+function fileSelected(evt) {
+    console.log("fileSelected",this);
     var file = document.getElementById('selectB').files[0];
     if (file) {
         var fileSize = 0;
@@ -15,7 +16,8 @@ function fileSelected() {
         //document.getElementById('progressNumber').innerHTML = '0%';
     }
 }
-function uploadFile() {
+function uploadFile(evt) {
+    console.log("uploadFile",this);
     var fd = new FormData();
     fd.append("file", document.getElementById('selectB').files[0]);
     //fd.append("csrf_token", document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
@@ -30,6 +32,7 @@ function uploadFile() {
     $("#selectB").hide();
 }
 function uploadProgress(evt) {
+    console.log("uploadProgress",this);
     if (evt.lengthComputable) {
         var percentComplete = Math.round(evt.loaded * 100 / evt.total);
         document.getElementById('progressNumber').innerHTML = percentComplete.toString() + '%';
@@ -51,6 +54,7 @@ function uploadFailed(evt) {
     alert(this.responseText);
 }
 function uploadCanceled(evt) {
+    console.log("uploadCanceled",this);
     alert("The upload has been canceled by the user or the browser dropped the connection.");
 }
 <!--上传vcf END-->
