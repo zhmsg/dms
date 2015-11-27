@@ -34,7 +34,7 @@ function uploadFile(evt) {
 function uploadProgress(evt) {
     console.log("uploadProgress",this);
     if (evt.lengthComputable) {
-        var percentComplete = Math.round(evt.loaded * 100 / evt.total);
+        var percentComplete = parseInt(evt.loaded * 100 / evt.total);
         document.getElementById('progressNumber').innerHTML = percentComplete.toString() + '%';
     }
     else {
