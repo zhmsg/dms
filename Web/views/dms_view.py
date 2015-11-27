@@ -48,13 +48,13 @@ def calc_redirect(role):
 @dms_view.route("/", methods=["GET"])
 def index():
     next_url = ""
-    # if current_user.is_authenticated():
-    #     if current_user.role == 0:
-    #         return u"您还没有任何权限，请联系管理员授权"
-    #     else:
-    #         return redirect(url_for(calc_redirect(current_user.role)))
-    # if "next" in request.args:
-    #     next_url = request.args["next"]
+    if current_user.is_authenticated():
+        if current_user.role == 0:
+            return u"您还没有任何权限，请联系管理员授权"
+        else:
+            return redirect(url_for(calc_redirect(current_user.role)))
+    if "next" in request.args:
+        next_url = request.args["next"]
     return render_template("login.html", next_url=next_url)
 
 
