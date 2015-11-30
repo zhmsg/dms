@@ -198,3 +198,4 @@ def authorize():
 @login_required
 def select_portal():
     return render_template("portal.html", user_role=current_user.role, role_value=control.user_role)
+
