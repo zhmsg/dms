@@ -9,11 +9,16 @@ function user_select_change(){
     var user_role = parseInt(selected_user.attr("role"));
     console.info(user_role);
     for(var role in role_value) {
+        console.info(role);
+        var role_el = document.getElementById(role);
+        if(role_el == null){
+            continue;
+        }
         if((role_value[role] & user_role) == role_value[role]){
-            document.getElementById(role).checked = true;
+            role_el.checked = true;
         }
         else{
-            document.getElementById(role).checked = false;
+            role_el.checked = false;
         }
     }
 
