@@ -7,9 +7,11 @@ import json
 import random
 import os
 from datetime import datetime
+from time import sleep
 from flask import Blueprint, render_template, request, redirect,jsonify, send_from_directory
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
+from threading import Thread
 
 from Web.views import control
 from Class import TIME_FORMAT_STR
@@ -214,3 +216,23 @@ def upload_test():
 @develop_bug_view.route("/testUpload/", methods=["GET"])
 def test_upload():
     return render_template("testUpload.html")
+
+
+@develop_bug_view.route("/thread/", methods=["GET"])
+def test_thread():
+    begin_time = datetime.now()
+    print("%s enter view" % begin_time)
+    t = Thread(target=run_Thread)
+    t.setDaemon(True)
+    t.start()
+    end_time = datetime.now()
+    print("%s out view" % end_time)
+    run_time = (end_time - begin_time).total_seconds()
+    return str(run_time)
+
+
+def run_Thread():
+    print("%s enter thread" % datetime.now())
+    sleep(30)
+    print("%s out thread" % datetime.now())
+
