@@ -26,7 +26,7 @@
                 </span>
             {% endfor %}
         {#如果当前状态为 已有BUG拥有者 显示拥有者#}
-        {% elif bug_info["basic_info"]["bug_status"] == 2 %}
+        {% elif bug_info["basic_info"]["bug_status"] == 2 or bug_info["basic_info"]["bug_status"] == 3%}
             BUG拥有者：
             {% for user_name in bug_info["link_user"]["owner"].keys() %}
                 <span class="bugAuthor orange">
@@ -35,8 +35,8 @@
                 </span>
             {% endfor %}
         {#如果当前状态为 BUG已修复 显示信息#}
-       {% elif bug_info["basic_info"]["bug_status"] == 3 %}
-            BUG已被修复
+{#       {% elif bug_info["basic_info"]["bug_status"] == 3 %}#}
+{#            BUG已被修复#}
         {% endif %}
     </p>
 </div>
