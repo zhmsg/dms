@@ -9,6 +9,8 @@
 
 <body>
 <div class="container font16">
+    <br />
+    <a class="btn btn-primary pull-right" href="/dms/" title="">主菜单</a>
 <div class="apiMode api-help-mode">
     {% for module_info in module_list %}
         <a href="/dev/api/?module_no={{ module_info["module_no"] }}">{{ module_info["module_name"] }}</a>
