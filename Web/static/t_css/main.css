@@ -103,3 +103,11 @@ ul,ol{list-style: none;margin: 0;padding: 0;}
 .gray{background: #fd5b78;color: #fff;}
 .orange{background: #e24414;color: #fff;}
 .opacity{opacity: 0;}
+
+.redBg{background:#e40203;}
+.orgBg{background:#ff8b00;}
+.yellowBg{background:#feed01;}
+
+.greenBg{background:#007f28;}
+.blueBg{background:#004dff;}
+.purpleBg{background:#750686;}

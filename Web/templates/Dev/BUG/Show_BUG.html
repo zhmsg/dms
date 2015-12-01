@@ -27,7 +27,21 @@
             {% for item in bug_list %}
                 <tr>
                     <td>{{ item["bug_title"] }}</td>
+                    {% if item["bug_status"] == 0 %}
+                    <td class="redBg">{{ bug_status_desc[item["bug_status"]] }}</td>
+                    {% elif item["bug_status"] == 1%}
+                    <td class="orgBg">{{ bug_status_desc[item["bug_status"]] }}</td>
+                    {% elif item["bug_status"] == 2%}
+                    <td class="yellowBg">{{ bug_status_desc[item["bug_status"]] }}</td>
+                    {% elif item["bug_status"] == 3%}
+                    <td class="greenBg">{{ bug_status_desc[item["bug_status"]] }}</td>
+                    {% elif item["bug_status"] == 4%}
+                    <td class="blueBg">{{ bug_status_desc[item["bug_status"]] }}</td>
+                    {% elif item["bug_status"] == 5%}
+                    <td class="purpleBg">{{ bug_status_desc[item["bug_status"]] }}</td>
+                    {% else %}
                     <td>{{ bug_status_desc[item["bug_status"]] }}</td>
+                    {% endif %}
                     <td>{{ item["submitter"] }}</td>
                     <td>{{ item["submit_time"] }}</td>
                     <td class="text-center"><a href="{{ url_prefix }}/info/?bug_no={{ item["bug_no"] }}">查看</a></td>

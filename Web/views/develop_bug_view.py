@@ -233,6 +233,7 @@ def test_thread():
 
 def run_Thread():
     print("%s enter thread" % datetime.now())
+    os.system("fab -f ../gene_devops.py deploy_dms")
     sleep(30)
     print("%s out thread" % datetime.now())
 
