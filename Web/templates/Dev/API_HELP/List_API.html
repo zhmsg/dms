@@ -37,11 +37,13 @@
             <td>{{ item["api_title"] }}</td>
             <td>{{ current_module["module_prefix"].rstrip("/") }}/{{ item["api_path"].lstrip("/") }}</td>
             <td>{{ item["api_method"] }}</td>
-            <td class="text-center"><a href="/dev/api/info/?api_no={{ item["api_no"] }}">查看</a></td>
+            <td class="text-center"><a href="{{ url_prefix }}/info/?api_no={{ item["api_no"] }}">查看</a></td>
         </tr>
         {% endfor %}
     </table>
+    <a class="btn btn-primary pull-right" href="{{ url_prefix }}/new/?module_no={{ current_module["module_no"] }}" title="">添加API</a>
 {% endif %}
+
 </div>
 </body>
 </html>

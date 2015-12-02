@@ -14,8 +14,9 @@ sys.path.append('..')
 
 __author__ = 'Zhouheng'
 
+url_prefix = "/dev/api"
 
-develop_api_view = Blueprint('develop_api_view', __name__, url_prefix="/dev/api")
+develop_api_view = Blueprint('develop_api_view', __name__, url_prefix=url_prefix)
 
 
 print("start success")
@@ -51,7 +52,7 @@ def list_api():
         if current_module is None:
             return "Error"
         return render_template("/Dev/API_HELP/List_API.html",
-                               module_list=module_list, api_list=api_list, current_module=current_module)
+                               module_list=module_list, api_list=api_list, current_module=current_module, url_prefix=url_prefix)
     return render_template("/Dev/API_HELP/List_API.html", module_list=module_list)
 
 
@@ -86,7 +87,9 @@ def new_api_page():
     result, module_list = control.get_module_list(current_user.role)
     if result is False:
         return module_list
-    return render_template("/Dev/API_HELP/New_API.html", module_list=module_list)
+    if "module_no" in request.args:
+        module_no = request.args["module_no"]
+    return render_template("/Dev/API_HELP/New_API.html", module_list=module_list, url_prefix=url_prefix)
 
 
 @develop_api_view.route("/new/", methods=["POST"])
