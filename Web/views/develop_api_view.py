@@ -116,9 +116,10 @@ def update_api_other_info():
     if len(api_no) != 32:
         return "Bad api_no"
     result, api_info = control.get_api_info(api_no, current_user.role)
+    return_url = develop_api_view.url_prefix + "/?module_no=%s" % api_info["basic_info"]["module_no"]
     if result is False:
         return api_info
-    return render_template("/Dev/API_HELP/Update_API.html", api_info=api_info, api_no=api_no)
+    return render_template("/Dev/API_HELP/Update_API.html", api_info=api_info, api_no=api_no, return_url=return_url)
 
 
 @develop_api_view.route("/add/header/", methods=["POST"])
