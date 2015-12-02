@@ -41,9 +41,11 @@
         </tr>
         {% endfor %}
     </table>
+
+{% endif %}
+{% if current_module %}
     <a class="btn btn-primary pull-right" href="{{ url_prefix }}/new/?module_no={{ current_module["module_no"] }}" title="">添加API</a>
 {% endif %}
-
 </div>
 </body>
 </html>
