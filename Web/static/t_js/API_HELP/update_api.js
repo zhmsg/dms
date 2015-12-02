@@ -215,3 +215,9 @@ function delete_output_param(output_no){
         }
     });
 }
+
+function format_input(input_id){
+    var input_content = $("#" + input_id).val();
+    var json_content = JSON.stringify(JSON.parse(input_content), null, 4);
+    $("#" + input_id).val(json_content);
+}

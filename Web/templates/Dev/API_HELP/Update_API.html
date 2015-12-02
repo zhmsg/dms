@@ -98,8 +98,8 @@
         </div>
         {% endfor %}
     </div>
-    <p><input class="form-control" id="input_desc" /></p>
-    <p><textarea class="form-control input_example" id="input_example"></textarea></p>
+    <p><input class="form-control" id="input_desc"  /></p>
+    <p><textarea class="form-control input_example" id="input_example" onchange="format_input(this.id);" onkeyup="format_input(this.id);"></textarea></p>
     <button class="btn btn-info" onclick="new_input_example()">新建</button>
 </div>
 <div class="bottom20 api-example">
@@ -115,7 +115,7 @@
         {% endfor %}
     </div>
     <p><input class="form-control" id="output_desc" /></p>
-    <p><textarea class="form-control input_example" id="output_example"></textarea></p>
+    <p><textarea class="form-control input_example" id="output_example" onchange="format_input(this.id);" onkeyup="format_input(this.id);"></textarea></p>
     <button class="btn btn-info" onclick="new_output_example()">新建</button>
 </div>
 </div>
