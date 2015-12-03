@@ -231,3 +231,9 @@ def delete_output(output_no):
 def delete_care(api_no):
     result, data = control.delete_care(api_no, current_user.account)
     return json.dumps({"status": result, "data": data})
+
+
+@develop_api_view.route("/test/", methods=["GET"])
+@login_required
+def test_api():
+    return render_template("/Dev/API_HELP/Test_API.html")

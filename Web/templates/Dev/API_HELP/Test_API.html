@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>测试API</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='t_css/main.css') }}"><!--自定义的页面样式 -->
+</head>
+
+<body>
+测试主机： <select>
+    <option>线上环境</option>
+    <option>测试环境</option>
+    <option>本地环境</option>
+</select>
+<br/>
+API模块： <select>
+    <option>动态口令相关API</option>
+</select>
+<br/>
+API列表：<select>
+    <option>获得access_token 使用用户名和密码</option>
+</select>
+请求方法： POST
+<br/>
+参数列表:<br/>
+<span>*</span> <span name="param">authorization</span> : <input id="authorization_value" param_type="header" /> <br/> <p>用户身份验证信息，包含username和password属性，username指用户帐户名，password指用户的明文密码<p><br/><br/>
+<span>*</span>  <span name="param">grant_type</span> : <input id="grant_type_value" value="password" param_type="body" disabled/><br/> <p>授权方式，此值必须为"password"，否则将是无效的请求</p> <br/><br/>
+<span>*</span>  <span name="param">scope</span>: <input id="scope_value" param_type="body"/><br/> <p>请求授权范围，此值必须是genetic tumor health其中之一，分别代表指申请拥有遗传频道，肿瘤频道，健康频道权限的密钥</p> <br/><br/>
+<button onclick="test_api()">检查</button>
+<br>
+<textarea id="res_text">
+
+</textarea>
+</body>
+<script type="text/javascript" src="{{ url_for('static', filename='t_js/jquery.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='t_js/API_HELP/test_api.js') }}"></script>
+</html>
