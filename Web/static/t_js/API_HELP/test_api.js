@@ -24,7 +24,7 @@ function test_api(){
         console.info(header_param);
     }
     $.ajax({
-        url: "http://127.0.0.1:58000/api/v3/oauth2/token/",
+        url: "http://127.0.0.1:58000/api/v3/oauth2/token/?geneacdms=test",
         method: "POST",
         contentType: "application/json",
         headers: header_param,
