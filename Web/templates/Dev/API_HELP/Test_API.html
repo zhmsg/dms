@@ -13,7 +13,7 @@
     <a class="btn btn-primary pull-right" href="{{ return_url }}" title="">返回</a>
   <div class="margin20 apiTest">
     <p>
-      <span class="pull-left text-right width150">测试主机：</span>
+      <span class="pull-left text-right width150">测试环境：</span>
       <select class="form-control bug-input" id="test_env">
         <option value="http://gene.ac:58000">测试环境 V3</option>
         <option value="http://gene.ac:8000">线上环境</option>
@@ -45,8 +45,8 @@
             <li><input class="form-control bug-input" id="authorization_value" param_type="header" /></li>
             {% if param_info["param"] | lower == "authorization" %}
             <li>
-                <label><input type="radio" name="auth_method" value="Basic" id="r_basic" checked/>Basic</label>
-                <label><input type="radio" name="auth_method" value="Oauth2" id="r_oauth2" />Oauth2</label>
+                <label><input type="radio" name="auth_method" value="Basic" id="r_basic" checked/> Basic</label>
+                <label><input type="radio" name="auth_method" value="Oauth2" id="r_oauth2" /> Oauth2</label>
             </li>
             {% endif %}
             <div class="clear"></div>
@@ -69,8 +69,7 @@
     <p>
       <button class="btn btn-primary" onclick="test_api()">检查</button>
     </p>
-  <textarea rows="20" cols="120" id="res_text" readonly>
-  </textarea>
+  <textarea class="form-control font16" rows="20" cols="120" id="res_text" readonly></textarea>
   </div>
 </div>
 </body>

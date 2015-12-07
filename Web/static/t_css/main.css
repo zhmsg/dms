@@ -113,10 +113,9 @@ ul,ol{list-style: none;margin: 0;padding: 0;}
 .blueBg{background:#004dff;}
 .purpleBg{background:#750686;}
 /*测试API页面*/
-.apiTest span{background: #ccc;display: block;}
+.apiTest span{background: #ececec;display: block;padding: 0 5px;}
 .width150{width:150px;}
-.star{color: #b60707;font-size: 20px;padding-top: 5px;padding-right: 5px;}
+.star{color: #dd1717;font-size: 20px;padding-top: 5px;padding-right: 5px;}
 .paramListMode{padding-bottom: 50px;}
 .paramListMode ul li{float: left;line-height: 34px;}
 .paramListMode label{font-weight: normal;padding-right:10px;}
-.apiResult{height:460px;line-height:30px;word-wrap:break-word;white-space:normal; word-break:break-all;}
