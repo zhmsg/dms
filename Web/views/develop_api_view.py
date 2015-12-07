@@ -67,10 +67,11 @@ def show_api():
     result, api_info = control.get_api_info(api_no, current_user.role)
     if result is False:
         return api_info
-    return_url = develop_api_view.url_prefix + "/?module_no=%s" % api_info["basic_info"]["module_no"]
+    return_url = url_prefix + "/?module_no=%s" % api_info["basic_info"]["module_no"]
     update_url = None
     if current_user.role & 16 > 0:
-        update_url = develop_api_view.url_prefix + "/update/info/?api_no=%s" % api_no
+        update_url = url_prefix + "/update/info/?api_no=%s" % api_no
+    test_url = url_prefix + "/test/?api_no=%s" % api_no
     my_care = None
     for item in api_info["care_info"]:
         if item["user_name"] == current_user.account:
@@ -78,7 +79,7 @@ def show_api():
             api_info["care_info"].remove(item)
             break
     return render_template("/Dev/API_HELP/Show_API.html", api_info=api_info, api_no=api_no, return_url=return_url,
-                           update_url=update_url, my_care=my_care)
+                           update_url=update_url, my_care=my_care, test_url=test_url)
 
 
 @develop_api_view.route("/new/", methods=["GET"])
@@ -244,5 +245,5 @@ def test_api():
     result, api_info = control.get_api_info(api_no, current_user.role)
     if result is False:
         return api_info
-    return_url = url_prefix + "info/?api_no=%s" % api_no
+    return_url = url_prefix + "/info/?api_no=%s" % api_no
     return render_template("/Dev/API_HELP/Test_API.html", api_info=api_info, return_url=return_url, api_no=api_no)

@@ -9,68 +9,68 @@
 
 <body>
 <div class="container font16">
+    <br>
+    <a class="btn btn-primary pull-right" href="{{ return_url }}" title="">返回</a>
   <div class="margin20 apiTest">
     <p>
       <span class="pull-left text-right width150">测试主机：</span>
-      <select class="form-control bug-input">
-        <option>线上环境</option>
-        <option>测试环境</option>
-        <option>本地环境</option>
+      <select class="form-control bug-input" id="test_env">
+        <option value="http://gene.ac:8000">线上环境</option>
+        <option value="http://gene.ac:58000">测试环境</option>
+        <option value="http://localhost:58000">本地环境</option>
       </select>
     </p>
     <p>
       <span class="pull-left text-right width150">API模块：</span>
       <select class="form-control bug-input">
-        <option>动态口令相关API</option>
+        <option>{{ api_info["basic_info"]["module_name"] }}</option>
       </select>
     </p>
     <p>
       <span class="pull-left text-right width150">API列表：</span>
-      <select class="form-control pull-left bug-input">
-        <option>获得access_token 使用用户名和密码</option>
+      <select class="form-control pull-left bug-input" id="api_url">
+        <option value="{{ api_info["basic_info"]["api_url"] }}">{{ api_info["basic_info"]["api_title"] }}</option>
       </select>
-      <span class="pull-left">请求方法： POST</span>
+      <input value="{{ api_info["basic_info"]["api_method"] }}" id="api_method" style="display: none"/>
+      <span class="pull-left">请求方法： {{ api_info["basic_info"]["api_method"] }}</span>
       <span class="clear"></span>
     </p>
     <p>参数列表:</p>
+    {% for param_info in api_info["header_info"] %}
     <div class="paramListMode">
         <ul>
-            <li class="star">*</li>
-            <li name="param">authorization</li>
+            <li class="star">{% if param_info["necessary"] == true %}* {% endif %}</li>
+            <li name="param">{{ param_info["param"] }}</li>
             <li>：</li>
             <li><input class="form-control bug-input" id="authorization_value" param_type="header" /></li>
+            {% if param_info["param"] | lower == "authorization" %}
             <li>
-                <label><input type="radio" name="RadioGroup1" value="单选" id="RadioGroup1_0" />Basic</label>
-                <label><input type="radio" name="RadioGroup1" value="单选" id="RadioGroup1_1" />Oauth2</label>
+                <label><input type="radio" name="RadioGroup1" value="单选" id="r_basic" checked/>Basic</label>
+                <label><input type="radio" name="RadioGroup1" value="单选" id="r_oauth2" />Oauth2</label>
             </li>
+            {% endif %}
             <div class="clear"></div>
         </ul>
-        <p>用户身份验证信息，包含username和password属性，username指用户帐户名，password指用户的明文密码</p>
+        <p>{{ param_info["param_desc"] }}</p>
     </div>
+    {% endfor %}
+    {% for param_info in api_info["body_info"] %}
     <div class="paramListMode">
         <ul>
-            <li class="star">*</li>
-            <li name="param">grant_type</li>
+            <li class="star">{% if param_info["necessary"] == true %}* {% endif %}</li>
+            <li name="param">{{ param_info["param"] }}</li>
             <li>：</li>
-            <li><input class="form-control bug-input" id="grant_type_value" value="password" param_type="body" disabled/></li>
+            <li><input class="form-control bug-input" id="{{ param_info["param"] }}_value" param_type="body"/></li>
             <div class="clear"></div>
         </ul>
-        <p>授权方式，此值必须为"password"，否则将是无效的请求</p>
+        <p>{{ param_info["param_desc"] }}</p>
     </div>
-    <div class="paramListMode">
-        <ul>
-            <li class="star">*</li>
-            <li name="param">scope</li>
-            <li>：</li>
-            <li><input class="form-control bug-input" id="scope_value" param_type="body"/></li>
-            <div class="clear"></div>
-        </ul>
-        <p>请求授权范围，此值必须是genetic tumor health其中之一，分别代表指申请拥有遗传频道，肿瘤频道，健康频道权限的密钥</p>
-    </div>
+    {% endfor %}
     <p>
       <button class="btn btn-primary" onclick="test_api()">检查</button>
     </p>
-    <div class="form-control apiResult font16" id="res_text"></div>
+  <textarea rows="20" cols="120" id="res_text" readonly>
+  </textarea>
   </div>
 </div>
 </body>

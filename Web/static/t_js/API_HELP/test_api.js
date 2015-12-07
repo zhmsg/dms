@@ -6,6 +6,7 @@ function test_api(){
     update_res("");
     var test_env = $("#test_env").val();
     var api_url = $("#api_url").val();
+    var api_method = $("#api_method").val();
     var request_url = test_env + api_url;
     console.info(request_url);
     var param_el = $("input[id$='_value']");
@@ -16,20 +17,18 @@ function test_api(){
         var id = el.id;
         var param_key = id.substr(0, id.indexOf("_value"));
         var param_value = el.value;
-        console.info(param_key);
         var param_type = el.attributes["param_type"].value;
         if(param_type == "body"){
             body_param[param_key] = param_value;
         }
         else if(param_type == "header"){
-            header_param[param_key] = "Basic " + base64encode(param_value);
+            header_param[param_key] = get_authorization_value(param_value);
+            console.info(header_param[param_key]);
         }
-        console.info(body_param);
-        console.info(header_param);
     }
     $.ajax({
         url: request_url + "?geneacdms=test",
-        method: "POST",
+        method: api_method,
         contentType: "application/json",
         headers: header_param,
         data: JSON.stringify(body_param),
@@ -47,8 +46,19 @@ function test_api(){
     });
 }
 
+function get_authorization_value(v){
+    console.info($("#r_basic").attr("checked"));
+    if($("#r_basic").attr("checked") == "checked"){
+        return "Basic " + base64encode(v);
+    }
+    else{
+        return v;
+    }
+
+}
+
 function update_res(s){
-    $("#res_text").val(s);
+    $("#res_text").text(s);
 }
 
 var base64EncodeChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
