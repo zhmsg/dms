@@ -47,8 +47,11 @@ function test_api(){
 }
 
 function get_authorization_value(v){
-    console.info($("#r_basic").attr("checked"));
-    if($("#r_basic").attr("checked") == "checked"){
+    var cb = $('input:radio[name="auth_method"]:checked');
+    if(cb == null){
+        return v;
+    }
+    if(cb.val() == "Basic"){
         return "Basic " + base64encode(v);
     }
     else{
