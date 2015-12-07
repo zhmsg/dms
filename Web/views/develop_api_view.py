@@ -236,4 +236,13 @@ def delete_care(api_no):
 @develop_api_view.route("/test/", methods=["GET"])
 @login_required
 def test_api():
-    return render_template("/Dev/API_HELP/Test_API.html")
+    if "api_no" not in request.args:
+        return "Need api_no"
+    api_no = request.args["api_no"]
+    if len(api_no) != 32:
+        return "Bad api_no"
+    result, api_info = control.get_api_info(api_no, current_user.role)
+    if result is False:
+        return api_info
+    return_url = url_prefix + "info/?api_no=%s" % api_no
+    return render_template("/Dev/API_HELP/Test_API.html", api_info=api_info, return_url=return_url, api_no=api_no)

@@ -4,6 +4,10 @@
 
 function test_api(){
     update_res("");
+    var test_env = $("#test_env").val();
+    var api_url = $("#api_url").val();
+    var request_url = test_env + api_url;
+    console.info(request_url);
     var param_el = $("input[id$='_value']");
     var body_param = new Object();
     var header_param = new Object();
@@ -24,7 +28,7 @@ function test_api(){
         console.info(header_param);
     }
     $.ajax({
-        url: "http://127.0.0.1:58000/api/v3/oauth2/token/?geneacdms=test",
+        url: request_url + "?geneacdms=test",
         method: "POST",
         contentType: "application/json",
         headers: header_param,
