@@ -8,6 +8,9 @@ function test_api(){
     var api_url = $("#api_url").val();
     var api_method = $("#api_method").val();
     var request_url = test_env + api_url;
+    if($("#request_url").val() != ""){
+        request_url = $("#request_url").val();
+    }
     console.info(request_url);
     var param_el = $("input[id$='_value']");
     var body_param = new Object();
@@ -65,6 +68,13 @@ function get_authorization_value(v){
 
 function update_res(s){
     $("#res_text").text(s);
+}
+
+function update_request_url(){
+    var test_env = $("#test_env").val();
+    var api_url = $("#api_url").val();
+    var request_url = test_env + api_url;
+    $("#request_url").val(request_url);
 }
 
 var base64EncodeChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
