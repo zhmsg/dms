@@ -17,6 +17,9 @@ function test_api(){
         var id = el.id;
         var param_key = id.substr(0, id.indexOf("_value"));
         var param_value = el.value;
+        if(param_value == ""){
+            continue;
+        }
         var param_type = el.attributes["param_type"].value;
         if(param_type == "body"){
             body_param[param_key] = param_value;
