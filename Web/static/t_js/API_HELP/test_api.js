@@ -27,12 +27,19 @@ function test_api(){
         }
         var param_type = el.attributes["param_type"].value;
         if(param_type == "body"){
+            var type = el.attributes["type"].value;
+            if(type == "int"){
+                param_value = Number(param_value);
+                if(isNaN(param_value)){
+                    update_res("无效的" + param_key);
+                    return false;
+                }
+            }
             body_param[param_key] = param_value;
         }
         else if(param_type == "header"){
             header_param[param_key] = get_authorization_value(param_value);
             //xhr.setRequestHeader(param_key, header_param[param_key]);
-            console.info(header_param[param_key]);
         }
     }
     //xhr.addEventListener("load", requestComplete, false);

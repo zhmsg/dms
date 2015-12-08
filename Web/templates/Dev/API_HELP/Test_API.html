@@ -16,6 +16,7 @@
       <span class="pull-left text-right width150">测试环境：</span>
       <select class="form-control bug-input" id="test_env" onchange="update_request_url();">
         <option value="http://gene.ac:58000">测试环境 V3</option>
+        <option value="http://gene.ac:8880">测试环境 V2</option>
         <option value="http://gene.ac:8000">线上环境</option>
         <option value="http://localhost:58000">本地环境 V3</option>
         <option value="http://localhost:8000">本地环境 V2</option>
@@ -65,7 +66,7 @@
             <li class="star">{% if param_info["necessary"] == true %}* {% endif %}</li>
             <li name="param">{{ param_info["param"] }}</li>
             <li>：</li>
-            <li><input class="form-control bug-input" id="{{ param_info["param"] }}_value" param_type="body"/></li>
+            <li><input class="form-control bug-input" id="{{ param_info["param"] }}_value" param_type="body" type="{{ param_info["type"] }}" /></li>
             <div class="clear"></div>
         </ul>
         <p>{{ param_info["param_desc"] }}</p>
