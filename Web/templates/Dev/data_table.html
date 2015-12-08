@@ -9,44 +9,45 @@
 </head>
 
 <body>
-
-<div class="data">
-    <input class="form-control" id="search_table" onkeyup="search_table();" placeholder="请按照表名进行搜索" value="{{ query_str }}" />
-</div>
-<div class="data">
-{% for table in table_list %}
-    <a class="data_title" href="/dev/data/table/?table={{ table["table_name"] }}">{{ table["table_name"] }}</a>
-{% endfor %}
-
-{% if select_table != {} %}
-    <div class="clear data_table_title">
-        <p>表名：{{ select_table["table_name"] }}</p>
-        <p>创建时间： {{ select_table["create_time"] }}</p>
-        <p>注释：{{ select_table["table_comment"] }}</p>
+<div class="container font16">
+    <div class="data">
+        <input class="form-control" id="search_table" onkeyup="search_table();" placeholder="请按照表名进行搜索" value="{{ query_str }}" />
     </div>
-{% endif %}
-{% if column_info != [] %}
-    <table class="clear data_table" cellpadding="0" cellspacing="0">
-    <tr>
-        <th scope="col">列名</th>
-        <th scope="col">类型</th>
-        <th scope="col">主键</th>
-        <th scope="col">默认值</th>
-        <th scope="col">扩展</th>
-        <th scope="col">注释</th>
-    </tr>
-    {% for item in column_info %}
-    <tr>
-        <td>{{ item["column_name"] }}</td>
-        <td>{{ item["column_type"] }}</td>
-        <td>{{ item["column_key"] }}</td>
-        <td>{{ item["column_default"] }}</td>
-        <td>{{ item["extra"] }}</td>
-        <td>{{ item["column_comment"] }}</td>
-    </tr>
+    <div class="data">
+    {% for table in table_list %}
+        <a class="data_title" href="/dev/data/table/?table={{ table["table_name"] }}">{{ table["table_name"] }}</a>
     {% endfor %}
-</table>
-{% endif %}
+
+    {% if select_table != {} %}
+        <div class="clear data_table_title">
+            <p>表名：{{ select_table["table_name"] }}</p>
+            <p>创建时间： {{ select_table["create_time"] }}</p>
+            <p>注释：{{ select_table["table_comment"] }}</p>
+        </div>
+    {% endif %}
+    {% if column_info != [] %}
+        <table class="clear data_table" cellpadding="0" cellspacing="0">
+        <tr>
+            <th scope="col">列名</th>
+            <th scope="col">类型</th>
+            <th scope="col">主键</th>
+            <th scope="col">默认值</th>
+            <th scope="col">扩展</th>
+            <th scope="col">注释</th>
+        </tr>
+        {% for item in column_info %}
+        <tr>
+            <td>{{ item["column_name"] }}</td>
+            <td>{{ item["column_type"] }}</td>
+            <td>{{ item["column_key"] }}</td>
+            <td>{{ item["column_default"] }}</td>
+            <td>{{ item["extra"] }}</td>
+            <td>{{ item["column_comment"] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+    </div>
 </div>
 </body>
 <script type="text/javascript" src="{{ url_for('static', filename='t_js/data_table.js') }}"></script>
