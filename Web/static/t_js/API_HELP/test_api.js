@@ -3,7 +3,7 @@
  */
 
 function test_api(){
-    update_res("");
+    update_res("正在请求...");
     var test_env = $("#test_env").val();
     var api_url = $("#api_url").val();
     var api_method = $("#api_method").val();
