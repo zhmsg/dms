@@ -15,6 +15,8 @@ function test_api(){
     var param_el = $("input[id$='_value']");
     var body_param = new Object();
     var header_param = new Object();
+    //var xhr = new XMLHttpRequest();
+    //xhr.open(api_method, request_url + "?geneacdms=test");
     for(var i=0;i<param_el.length;i++){
         var el = param_el[i];
         var id = el.id;
@@ -29,14 +31,22 @@ function test_api(){
         }
         else if(param_type == "header"){
             header_param[param_key] = get_authorization_value(param_value);
+            //xhr.setRequestHeader(param_key, header_param[param_key]);
             console.info(header_param[param_key]);
         }
     }
+    //xhr.addEventListener("load", requestComplete, false);
+    //xhr.addEventListener("error", requestFailed, false);
+    ////xhr.addEventListener("abort", uploadCanceled, false);
+    //console.info(body_param);
+    ////xhr.send(JSON.stringify(body_param));
+    //xhr.send("mysg");
     $.ajax({
         url: request_url + "?geneacdms=test",
         method: api_method,
         contentType: "application/json",
         headers: header_param,
+        //processData: false,
         data: JSON.stringify(body_param),
         success:function(data){
             console.info(data);
@@ -50,6 +60,21 @@ function test_api(){
             console.info(xhr);
         }
     });
+}
+
+function requestComplete(evt) {
+    /* This event is raised when the server send back a response */
+    console.log(evt.target.response);
+    if(this.status==200){
+        var res = evt.target.response;
+        update_res(JSON.stringify(JSON.parse(res), null, 4));
+    }else{
+        update_res(this.status);
+    }
+}
+
+function requestFailed(evt){
+    console.info(evt);
 }
 
 function get_authorization_value(v){
@@ -76,6 +101,8 @@ function update_request_url(){
     var request_url = test_env + api_url;
     $("#request_url").val(request_url);
 }
+
+update_request_url();
 
 var base64EncodeChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 var base64DecodeChars = new Array(-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 62, -1, -1, -1, 63, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, -1, -1, -1, -1, -1, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, -1, -1, -1, -1, -1, -1, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, -1, -1, -1, -1, -1);
