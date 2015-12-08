@@ -8,25 +8,27 @@
 </head>
 
 <body>
-<br />
-<a class="btn btn-primary pull-right" href="/dms/" title="">主菜单</a>
-<br />
-<table class="table table-bordered table-hover privilegeTable" cellspacing="0" cellpadding="0">
-    <tr>
-        <th scope="col" width="4%">模块</th>
-        <th scope="col" width="48%">操作</th>
-        <th scope="col" width="48%">拥有操作权限的角色</th>
-    </tr>
-    {% for item in operate_auth %}
-    <tr>
-        <td>{{ item["module"] }}</td>
-        <td>{{ item["operate"] }}</td>
-        <td>{{ item["role"] }} {{ item["description"] }}</td>
-    </tr>
-    {% endfor %}
-</table>
-<form method="get" action="/dev/operate/auth/download">
-    <button class="btn btn-success btn-down" type="submit">下载</button>
-</form>
+<div class="container font16">
+    <br />
+    <a class="btn btn-primary pull-right" href="/dms/" title="">主菜单</a>
+    <br />
+    <table class="table table-bordered table-hover privilegeTable" cellspacing="0" cellpadding="0">
+        <tr>
+            <th scope="col" width="4%">模块</th>
+            <th scope="col" width="48%">操作</th>
+            <th scope="col" width="48%">拥有操作权限的角色</th>
+        </tr>
+        {% for item in operate_auth %}
+        <tr>
+            <td>{{ item["module"] }}</td>
+            <td>{{ item["operate"] }}</td>
+            <td>{{ item["role"] }} {{ item["description"] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <form method="get" action="/dev/operate/auth/download">
+        <button class="btn btn-success btn-down" type="submit">下载</button>
+    </form>
+</div>
 </body>
 </html>
