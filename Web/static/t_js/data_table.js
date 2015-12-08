@@ -29,7 +29,8 @@ function search_table(){
     var a_el = $("a");
     var len_a = a_el.length;
     for(var i=0;i<len_a;i++){
-        console.info(a_el.title);
+        var a_href = a_el[i].attributes["title"].value + "&query=" + v;
+        a_el[i].href = a_href;
         a_el[i].hidden = true;
         if(v.length == 0){
             a_el[i].hidden = false;
