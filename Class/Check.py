@@ -45,7 +45,7 @@ def check_password(s, min_len=1, max_len=-1):
 
 
 def check_path(s, min_len=1, max_len=-1):
-    regex = '[^/a-z_<>0-9]'
+    regex = '[^/a-z_<>0-9:]'
     return check(regex, s, min_len, max_len)
 
 
