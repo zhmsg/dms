@@ -53,13 +53,16 @@ function test_api(){
     //console.info(body_param);
     ////xhr.send(JSON.stringify(body_param));
     //xhr.send("mysg");
+    if(api_method != "GET"){
+        body_param = JSON.stringify(body_param)
+    }
     $.ajax({
         url: request_url + "?geneacdms=test",
         method: api_method,
         contentType: "application/json",
         headers: header_param,
         //processData: false,
-        data: JSON.stringify(body_param),
+        data: body_param,
         success:function(data){
             console.info(data);
             update_res(JSON.stringify(JSON.parse(data), null, 4));
