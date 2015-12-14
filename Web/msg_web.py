@@ -2,7 +2,7 @@
 # coding: utf-8
 import sys
 sys.path.append("..")
-from flask import Flask
+from flask import Flask, request
 from Web.views.transport_view import transport_view as transport_view_blueprint
 from Web.views.develop_view import develop_view as develop_view_blueprint
 from Web.views.develop_api_view import develop_api_view as develop_api_view_blueprint
@@ -27,6 +27,20 @@ def bit_and(num1, num2):
     return num1 & num2
 
 msg_web.jinja_env.filters['bit_and'] = bit_and
+
+
+@msg_web.after_request
+def after_request(res):
+    if res.status_code == 302 or res.status_code == 301:
+        if "X-Request-Protocol" in request.headers:
+            pro = request.headers["X-Request-Protocol"]
+            if "Location" in res.headers:
+                location = res.headers["location"]
+                if location.startswith("http"):
+                    res.headers["Location"] = res.headers["Location"].replace("http", pro)
+                else:
+                    res.headers["Location"] = "%s://%s%s" % (pro, request.headers["Host"], location)
+    return res
 
 
 if __name__ == '__main__':
