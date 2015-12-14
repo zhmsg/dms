@@ -66,9 +66,12 @@ class DevManager:
         return True, table_list
 
     def get_table_info(self, table_name):
-        sql = "SELECT COLUMN_NAME, COLUMN_TYPE,COLUMN_KEY,COLUMN_DEFAULT,EXTRA,COLUMN_COMMENT FROM columns WHERE TABLE_NAME='%s';" % table_name
+        sql = "SELECT COLUMN_NAME, COLUMN_TYPE,COLUMN_KEY,COLUMN_DEFAULT,EXTRA,COLUMN_COMMENT,IS_NULLABLE " \
+              "FROM columns WHERE TABLE_NAME='%s';" % table_name
         self.service_db.execute(sql)
         column_info = []
         for item in self.service_db.fetchall():
-            column_info.append({"column_name": item[0], "column_type": item[1], "column_key": item[2], "column_default": item[3], "extra": item[4], "column_comment": item[5]})
+            column_info.append({"column_name": item[0], "column_type": item[1], "column_key": item[2],
+                                "column_default": item[3], "extra": item[4], "column_comment": item[5],
+                                "is_nullable": item[6]})
         return True, column_info

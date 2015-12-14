@@ -32,6 +32,7 @@
             <th scope="col">类型</th>
             <th scope="col">主键</th>
             <th scope="col">默认值</th>
+            <th scope="col">允许为空</th>
             <th scope="col">扩展</th>
             <th scope="col">注释</th>
         </tr>
@@ -41,6 +42,7 @@
             <td>{{ item["column_type"] }}</td>
             <td>{{ item["column_key"] }}</td>
             <td>{{ item["column_default"] }}</td>
+            <td>{{ item["is_nullable"] }}</td>
             <td>{{ item["extra"] }}</td>
             <td>{{ item["column_comment"] }}</td>
         </tr>
