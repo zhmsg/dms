@@ -15,6 +15,7 @@ sys.path.append('..')
 __author__ = 'Zhouheng'
 
 url_prefix = "/dev/api"
+html_dir = "/Dev/API_HELP"
 
 develop_api_view = Blueprint('develop_api_view', __name__, url_prefix=url_prefix)
 
@@ -51,9 +52,9 @@ def list_api():
                 break
         if current_module is None:
             return "Error"
-        return render_template("/Dev/API_HELP/List_API.html",
-                               module_list=module_list, api_list=api_list, current_module=current_module, url_prefix=url_prefix)
-    return render_template("/Dev/API_HELP/List_API.html", module_list=module_list)
+        return render_template("%s/List_API.html" % html_dir, module_list=module_list, api_list=api_list,
+                               current_module=current_module, url_prefix=url_prefix)
+    return render_template("%s/List_API.html" % html_dir, module_list=module_list, url_prefix=url_prefix)
 
 
 @develop_api_view.route("/info/", methods=["GET"])
@@ -78,8 +79,8 @@ def show_api():
             my_care = item
             api_info["care_info"].remove(item)
             break
-    return render_template("/Dev/API_HELP/Show_API.html", api_info=api_info, api_no=api_no, return_url=return_url,
-                           update_url=update_url, my_care=my_care, test_url=test_url)
+    return render_template("%s/Show_API.html" % html_dir, api_info=api_info, api_no=api_no, return_url=return_url,
+                           update_url=update_url, my_care=my_care, test_url=test_url, url_prefix=url_prefix)
 
 
 @develop_api_view.route("/new/", methods=["GET"])
@@ -90,7 +91,7 @@ def new_api_page():
         return module_list
     if "module_no" in request.args:
         module_no = request.args["module_no"]
-    return render_template("/Dev/API_HELP/New_API.html", module_list=module_list, url_prefix=url_prefix)
+    return render_template("%s/New_API.html" % html_dir, module_list=module_list, url_prefix=url_prefix)
 
 
 @develop_api_view.route("/new/", methods=["POST"])
@@ -123,7 +124,7 @@ def update_api_other_info():
     return_url = develop_api_view.url_prefix + "/?module_no=%s" % api_info["basic_info"]["module_no"]
     if result is False:
         return api_info
-    return render_template("/Dev/API_HELP/Update_API.html", api_info=api_info, api_no=api_no, return_url=return_url)
+    return render_template("%s/Update_API.html" % html_dir, api_info=api_info, api_no=api_no, return_url=return_url)
 
 
 @develop_api_view.route("/add/header/", methods=["POST"])
@@ -246,4 +247,4 @@ def test_api():
     if result is False:
         return api_info
     return_url = url_prefix + "/info/?api_no=%s" % api_no
-    return render_template("/Dev/API_HELP/Test_API.html", api_info=api_info, return_url=return_url, api_no=api_no)
+    return render_template("%s/Test_API.html" % html_dir, api_info=api_info, return_url=return_url, api_no=api_no)
