@@ -2,21 +2,21 @@
  * Created by msg on 11/3/15.
  */
 
-function change_care(){
+function change_care(change_url){
     if ($("#make_care").text() == "关注")
     {
-        new_care();
+        new_care(change_url);
     }
     else if($("#make_care").text() == "取消关注")
     {
-        remove_care();
+        remove_care(change_url);
     }
 }
 
-function new_care(){
+function new_care(new_url){
     var api_no = $("#api_no").val();
     $.ajax({
-        url: "/dev/api/add/care/",
+        url: new_url,
         method: "POST",
         data:{api_no:api_no},
         success:function(data){
@@ -35,10 +35,10 @@ function new_care(){
     });
 }
 
-function remove_care(input_no){
+function remove_care(remove_url){
     var api_no = $("#api_no").val();
     $.ajax({
-        url: "/dev/api/delete/care/" + api_no + "/",
+        url: remove_url,
         method: "DELETE",
         success:function(data){
             var json_obj = JSON.parse(data);

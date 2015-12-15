@@ -2,13 +2,13 @@
  * Created by msg on 11/3/15.
  */
 
-function new_header_param(){
+function new_header_param(new_url){
     var api_no = $("#api_no").val();
     var param = $("#header_param_name").val();
     var necessary = $("#header_param_ne").val();
     var desc = $("#header_param_desc").val();
     $.ajax({
-        url: "/dev/api/add/header/",
+        url: new_url,
         method: "POST",
         data:{param:param,necessary:necessary,desc:desc,api_no:api_no},
         success:function(data){
@@ -42,14 +42,14 @@ function new_header_param(){
     });
 }
 
-function new_body_param(){
+function new_body_param(new_url){
     var api_no = $("#api_no").val();
     var param = $("#body_param_name").val();
     var necessary = $("#body_param_ne").val();
     var type = $("#body_param_type").val();
     var desc = $("#body_param_desc").val();
     $.ajax({
-        url: "/dev/api/add/body/",
+        url: new_url,
         method: "POST",
         data:{param:param,necessary:necessary,desc:desc,api_no:api_no, type:type},
         success:function(data){
@@ -80,12 +80,12 @@ function new_body_param(){
     });
 }
 
-function new_input_example(){
+function new_input_example(new_url){
     var api_no = $("#api_no").val();
     var desc = $("#input_desc").val();
     var example = $("#input_example").val();
     $.ajax({
-        url: "/dev/api/add/input/",
+        url: new_url,
         method: "POST",
         data:{desc:desc,api_no:api_no,example:example},
         success:function(data){
@@ -110,12 +110,12 @@ function new_input_example(){
     });
 }
 
-function new_output_example(){
+function new_output_example(new_url){
     var api_no = $("#api_no").val();
     var desc = $("#output_desc").val();
     var example = $("#output_example").val();
     $.ajax({
-        url: "/dev/api/add/output/",
+        url: new_url,
         method: "POST",
         data:{desc:desc,api_no:api_no,example:example},
         success:function(data){

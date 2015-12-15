@@ -48,7 +48,7 @@
             </select>
         </td>
         <td><input class="form-control" id="header_param_desc" /></td>
-        <td><button class="btn btn-info" onclick="new_header_param();">新建</button></td>
+        <td><button class="btn btn-info" onclick="new_header_param('{{ url_prefix }}/add/header/');">新建</button></td>
 </table>
 <table class="table table-bordered api-list-table" id="api_body_param">
     <caption>请求主体参数</caption>
@@ -85,7 +85,7 @@
         </td>
         <td><input class="form-control" id="body_param_type" /></td>
         <td><input class="form-control" id="body_param_desc" /></td>
-        <td><button class="btn btn-info" onclick="new_body_param();">新建</button></td>
+        <td><button class="btn btn-info" onclick="new_body_param('{{ url_prefix }}/add/body/');">新建</button></td>
 </table>
 <div class="bottom20 api-example">
     <b>请求示例</b>
@@ -101,7 +101,7 @@
     </div>
     <p><input class="form-control" id="input_desc"  /></p>
     <p><textarea class="form-control input_example" id="input_example" onchange="format_input(this.id);" onkeyup="format_input(this.id);"></textarea></p>
-    <button class="btn btn-info" onclick="new_input_example()">新建</button>
+    <button class="btn btn-info" onclick="new_input_example('{{ url_prefix }}/add/input/')">新建</button>
 </div>
 <div class="bottom20 api-example">
     <b>返回示例</b>
@@ -117,7 +117,7 @@
     </div>
     <p><input class="form-control" id="output_desc" /></p>
     <p><textarea class="form-control input_example" id="output_example" onchange="format_input(this.id);" onkeyup="format_input(this.id);"></textarea></p>
-    <button class="btn btn-info" onclick="new_output_example()">新建</button>
+    <button class="btn btn-info" onclick="new_output_example('{{ url_prefix }}/add/output/')">新建</button>
 </div>
 </div>
 </body>

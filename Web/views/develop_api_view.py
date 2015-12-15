@@ -124,7 +124,8 @@ def update_api_other_info():
     return_url = develop_api_view.url_prefix + "/?module_no=%s" % api_info["basic_info"]["module_no"]
     if result is False:
         return api_info
-    return render_template("%s/Update_API.html" % html_dir, api_info=api_info, api_no=api_no, return_url=return_url)
+    return render_template("%s/Update_API.html" % html_dir, api_info=api_info, api_no=api_no, return_url=return_url,
+                           url_prefix=url_prefix)
 
 
 @develop_api_view.route("/add/header/", methods=["POST"])
