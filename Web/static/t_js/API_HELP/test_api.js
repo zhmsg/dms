@@ -43,10 +43,16 @@ function test_api(){
             body_param[param_key] = param_value;
         }
         else if(param_type == "header"){
-            header_param[param_key] = get_authorization_value(param_value);
+            if(param_key == "authorization"){
+                header_param[param_key] = get_authorization_value(param_value);
+            }
+            else{
+                header_param[param_key] = param_value;
+            }
             //xhr.setRequestHeader(param_key, header_param[param_key]);
         }
     }
+    console.info(header_param);
     //xhr.addEventListener("load", requestComplete, false);
     //xhr.addEventListener("error", requestFailed, false);
     ////xhr.addEventListener("abort", uploadCanceled, false);

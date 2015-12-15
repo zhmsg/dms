@@ -20,7 +20,7 @@ def check(regex, s, min_len=1, max_len=-1):
 
 
 def check_char_num_underline(s, min_len=1, max_len=-1):
-    regex = '[^a-zA-Z0-9_]'
+    regex = '[^a-zA-Z0-9_-]'
     return check(regex, s, min_len, max_len)
 
 
