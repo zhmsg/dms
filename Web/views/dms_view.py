@@ -10,13 +10,16 @@ from werkzeug.security import gen_salt
 from Class.User import UserManager
 from Web import User
 
+from Web import dms_url_prefix
 from Web.views import control
 
 sys.path.append('..')
 
 __author__ = 'Zhouheng'
 
-dms_view = Blueprint('dms_view', __name__, url_prefix="/dms")
+url_prefix = dms_url_prefix
+
+dms_view = Blueprint('dms_view', __name__, url_prefix=url_prefix)
 
 
 user_m = UserManager()
@@ -55,7 +58,7 @@ def index():
             return redirect(url_for(calc_redirect(current_user.role)))
     if "next" in request.args:
         next_url = request.args["next"]
-    return render_template("login.html", next_url=next_url)
+    return render_template("login.html", next_url=next_url, url_prefix=url_prefix)
 
 
 @dms_view.route("/login/", methods=["GET"])
@@ -65,7 +68,7 @@ def login_page():
     next_url = ""
     if "next" in request.args:
         next_url = request.args["next"]
-    return render_template("login.html", next_url=next_url)
+    return render_template("login.html", next_url=next_url, url_prefix=url_prefix)
 
 
 @dms_view.route("/login/", methods=["POST"])
@@ -101,11 +104,12 @@ def login():
 @dms_view.route("/password/", methods=["GET"])
 def password_page():
     if current_user.is_authenticated():
-        return render_template("password.html", user_name=current_user.account)
+        return render_template("password.html", user_name=current_user.account, url_prefix=url_prefix)
     elif "change_token" in session and "expires_in" in session and "user_name" in session:
         expires_in = session["expires_in"]
         if expires_in > datetime.now():
-            return render_template("password.html", user_name=session["user_name"], change_token=session["change_token"])
+            return render_template("password.html", user_name=session["user_name"],
+                                   change_token=session["change_token"], url_prefix=url_prefix)
     return redirect(url_for("dms_view.login_page"))
 
 
@@ -150,7 +154,7 @@ def password():
 def register_page():
     if current_user.role & control.user_role["user_new"] <= 0:
         return u"用户无权限操作"
-    return render_template("register.html", user_role=current_user.role, role_value=control.user_role)
+    return render_template("register.html", user_role=current_user.role, role_value=control.user_role, url_prefix=url_prefix)
 
 
 @dms_view.route("/register/", methods=["POST"])
