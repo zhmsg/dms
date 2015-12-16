@@ -2,7 +2,7 @@
  * Created by lsl on 15-11-25.
  */
 $(function(){
-    var bug_statistic_url = $("#bug_statistic_url");
+    var bug_statistic_url = $("#bug_statistic_url").val();
     $.ajax({
         url: bug_statistic_url,
         method:"GET",

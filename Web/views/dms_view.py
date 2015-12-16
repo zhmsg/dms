@@ -179,7 +179,8 @@ def authorize_page():
     result, my_user = control.get_my_user(current_user.account, current_user.role)
     if result is False:
         return my_user
-    return render_template("authorize.html", my_user=my_user, user_role=current_user.role, role_value=control.user_role)
+    return render_template("authorize.html", my_user=my_user, user_role=current_user.role, role_value=control.user_role
+                           , url_prefix=url_prefix)
 
 
 @dms_view.route("/authorize/user/", methods=["POST"])
