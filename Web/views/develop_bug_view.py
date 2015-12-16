@@ -13,6 +13,7 @@ from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
 from threading import Thread
 
+from Web import bug_url_prefix
 from Web.views import control
 from Class import TIME_FORMAT_STR
 
@@ -20,7 +21,8 @@ sys.path.append('..')
 
 __author__ = 'Zhouheng'
 
-url_prefix = "/dev/bug"
+url_prefix = bug_url_prefix
+html_dir = "/Dev/BUG"
 
 develop_bug_view = Blueprint('develop_bug_view', __name__, url_prefix=url_prefix)
 
@@ -44,7 +46,7 @@ def show_bug_list():
     result, bug_list = control.get_bug_list(current_user.role)
     if result is False:
         return bug_list
-    return render_template("/Dev/BUG/Show_BUG.html", bug_list=bug_list, bug_status_desc=bug_status_desc,
+    return render_template("%s/Show_BUG.html" % html_dir, bug_list=bug_list, bug_status_desc=bug_status_desc,
                            user_role=current_user.role, role_value=control.user_role, url_prefix=url_prefix)
 
 
@@ -67,7 +69,7 @@ def bug_info():
     result, user_list = control.get_role_user(control.user_role["bug_link"])
     if result is False:
         return user_list
-    return render_template("/Dev/BUG/BUG_Info.html", bug_info=bug_info, bug_status_desc=bug_status_desc, bug_no=bug_no,
+    return render_template("%s/BUG_Info.html" % html_dir, bug_info=bug_info, bug_status_desc=bug_status_desc, bug_no=bug_no,
                            user_role=current_user.role, current_user=current_user.account, role_value=control.user_role,
                            user_list=user_list, url_prefix=url_prefix)
 

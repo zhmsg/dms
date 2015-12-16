@@ -6,7 +6,7 @@ import sys
 import json
 from flask import Blueprint, render_template, request, redirect, url_for
 from flask_login import login_required, current_user
-
+from Web import api_url_prefix
 from Web.views import control
 
 
@@ -14,7 +14,7 @@ sys.path.append('..')
 
 __author__ = 'Zhouheng'
 
-url_prefix = "/dev/api"
+url_prefix = api_url_prefix
 html_dir = "/Dev/API_HELP"
 
 develop_api_view = Blueprint('develop_api_view', __name__, url_prefix=url_prefix)
