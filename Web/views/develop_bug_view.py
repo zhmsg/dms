@@ -24,7 +24,7 @@ __author__ = 'Zhouheng'
 url_prefix = bug_url_prefix
 html_dir = "/Dev/BUG"
 
-develop_bug_view = Blueprint('develop_bug_view', __name__, url_prefix=url_prefix)
+develop_bug_view = Blueprint('develop_bug_view', __name__)
 
 bug_status_desc = [u"等待BUG确认", u"已有BUG疑似拥有者", u"已确认BUG拥有者", u"BUG已被修复", u"BUG被取消", u"BUG现象正常"]
 

@@ -17,7 +17,7 @@ __author__ = 'Zhouheng'
 url_prefix = api_url_prefix
 html_dir = "/Dev/API_HELP"
 
-develop_api_view = Blueprint('develop_api_view', __name__, url_prefix=url_prefix)
+develop_api_view = Blueprint('develop_api_view', __name__)
 
 
 print("start success")

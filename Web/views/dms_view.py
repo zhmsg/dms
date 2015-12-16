@@ -19,7 +19,7 @@ __author__ = 'Zhouheng'
 
 url_prefix = dms_url_prefix
 
-dms_view = Blueprint('dms_view', __name__, url_prefix=url_prefix)
+dms_view = Blueprint('dms_view', __name__)
 
 
 user_m = UserManager()
