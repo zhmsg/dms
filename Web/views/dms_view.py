@@ -10,7 +10,7 @@ from werkzeug.security import gen_salt
 from Class.User import UserManager
 from Web import User
 
-from Web import dms_url_prefix
+from Web import dms_url_prefix, dev_url_prefix, api_url_prefix, bug_url_prefix, data_url_prefix
 from Web.views import control
 
 sys.path.append('..')
@@ -201,5 +201,7 @@ def authorize():
 @dms_view.route("/portal/", methods=["GET"])
 @login_required
 def select_portal():
-    return render_template("portal.html", user_role=current_user.role, role_value=control.user_role)
+    return render_template("portal.html", user_role=current_user.role, role_value=control.user_role,
+                           data_url_prefix=data_url_prefix, api_url_prefix=api_url_prefix, dev_url_prefix=dev_url_prefix
+                           , bug_url_prefix=bug_url_prefix, dms_url_prefix=dms_url_prefix)
 
