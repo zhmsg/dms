@@ -8,12 +8,14 @@ from flask_login import current_user
 
 from flask_login import login_required
 
+from Web import data_url_prefix
 from Web.views import control
 
 sys.path.append('..')
 
 __author__ = 'Zhouheng'
 
+url_prefix = data_url_prefix
 
 transport_view = Blueprint('transport_view', __name__)
 
@@ -38,7 +40,7 @@ def show():
                                market_target=control.market_target, market_attribute=control.market_attribute,
                                market_attribute_ch=control.market_attribute_ch, upload_attribute=control.upload_attribute,
                                upload_attribute_ch=control.upload_attribute_ch, calc_attribute=control.calc_attribute,
-                               calc_attribute_ch=control.calc_attribute_ch)
+                               calc_attribute_ch=control.calc_attribute_ch, url_prefix=url_prefix)
     except Exception as e:
         error_message = u"获得记录失败：%s" % str(e.args)
         return error_message
