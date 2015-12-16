@@ -141,8 +141,9 @@ function new_output_example(new_url){
 }
 
 function delete_header_param(header_no){
+    var del_url = $("#del_header_url").val();
     $.ajax({
-        url: "/dev/api/delete/header/" + header_no + "/",
+        url: del_url + header_no + "/",
         method: "DELETE",
         success:function(data){
             var json_obj = JSON.parse(data);
@@ -150,7 +151,7 @@ function delete_header_param(header_no){
                 $("#tr_"+header_no).remove();
             }
             else{
-                alert(data)
+                alert(data);
             }
         },
         error:function(xhr){
@@ -160,8 +161,9 @@ function delete_header_param(header_no){
 }
 
 function delete_body_param(body_no){
+    var del_url = $("#del_body_url").val();
     $.ajax({
-        url: "/dev/api/delete/body/" + body_no + "/",
+        url: del_url + body_no + "/",
         method: "DELETE",
         success:function(data){
             var json_obj = JSON.parse(data);
@@ -169,7 +171,7 @@ function delete_body_param(body_no){
                 $("#tr_"+body_no).remove();
             }
             else{
-                alert(data)
+                alert(data);
             }
         },
         error:function(xhr){
@@ -179,8 +181,9 @@ function delete_body_param(body_no){
 }
 
 function delete_input_param(input_no){
+    var del_url = $("#del_input_url").val();
     $.ajax({
-        url: "/dev/api/delete/input/" + input_no + "/",
+        url: del_url + input_no + "/",
         method: "DELETE",
         success:function(data){
             var json_obj = JSON.parse(data);
@@ -188,7 +191,7 @@ function delete_input_param(input_no){
                 $("#div_"+input_no).remove();
             }
             else{
-                alert(data)
+                alert(data);
             }
         },
         error:function(xhr){
@@ -198,8 +201,9 @@ function delete_input_param(input_no){
 }
 
 function delete_output_param(output_no){
+    var del_url = $("#del_output_url").val();
     $.ajax({
-        url: "/dev/api/delete/output/" + output_no + "/",
+        url: del_url + output_no + "/",
         method: "DELETE",
         success:function(data){
             var json_obj = JSON.parse(data);
@@ -207,7 +211,7 @@ function delete_output_param(output_no){
                 $("#div_"+output_no).remove();
             }
             else{
-                alert(data)
+                alert(data);
             }
         },
         error:function(xhr){
