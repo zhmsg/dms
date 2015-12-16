@@ -45,4 +45,4 @@ def after_request(res):
 
 if __name__ == '__main__':
     print("start run")
-    msg_web.run(host="0.0.0.0", port=2100)
+    msg_web.run(host="0.0.0.0", port=2200)
