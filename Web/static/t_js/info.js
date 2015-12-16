@@ -3,8 +3,9 @@
  */
 
 function get_info(type,data_no){
+    var data_url = $("#data_url_prefix").val();
     $.ajax({
-        url: "/dms/" + type + "/?data_no=" + data_no,
+        url: data_url+ "/" + type + "/?data_no=" + data_no,
         type: "GET",
         async: false,
         success: function (data) {

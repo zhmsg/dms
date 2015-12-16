@@ -14,7 +14,7 @@
 <body>
 <div class="container font16">
     <br />
-    <a class="btn btn-primary pull-right" href="/dms/" title="">主菜单</a>
+    <a class="btn btn-primary pull-right" href="{{ url_for('dms_view.select_portal') }}" title="">主菜单</a>
     {#BUG列表#}
     {% if bug_list %}
         <table  class="table table-bordered table-hover api-list-table">
