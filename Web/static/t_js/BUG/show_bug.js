@@ -2,8 +2,9 @@
  * Created by lsl on 15-11-25.
  */
 $(function(){
+    var bug_statistic_url = $("#bug_statistic_url");
     $.ajax({
-        url:"/dev/bug/statistic/",
+        url: bug_statistic_url,
         method:"GET",
         success:function(data){
             console.log("get statistic :",data);
