@@ -46,6 +46,6 @@ api_url_prefix = "/dev/api"
 bug_url_prefix = "/dev/bug"
 dev_url_prefix = "/dev"
 dms_url_prefix = ""
-data_url_prefix = "/dms"
+data_url_prefix = "/data"
 
 
