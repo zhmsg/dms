@@ -6,6 +6,7 @@ import sys
 from flask import Blueprint, render_template, send_from_directory, request
 from flask_login import current_user, login_required
 
+from Web import dev_url_prefix
 from Web.views import control
 
 sys.path.append('..')
@@ -14,6 +15,9 @@ __author__ = 'Zhouheng'
 
 
 develop_view = Blueprint('develop_view', __name__)
+
+html_dir = "/Dev"
+url_prefix = dev_url_prefix
 
 
 @develop_view.app_errorhandler(500)
@@ -32,7 +36,7 @@ def operate_auth_show():
     result, data = control.show_operate_auth(current_user.role)
     if result is False:
         return data
-    return render_template("/Dev/operate_auth.html", operate_auth=data)
+    return render_template("%s/operate_auth.html" % html_dir, operate_auth=data, url_prefix=url_prefix)
 
 
 @develop_view.route("/operate/auth/download/", methods=["GET"])
@@ -63,5 +67,5 @@ def show_data_table():
     query_str = ""
     if "query" in request.args:
         query_str = request.args["query"]
-    return render_template("/Dev/data_table.html", table_list=table_list, column_info=column_info,
-                           select_table=select_table, query_str=query_str)
+    return render_template("%s/data_table.html" % html_dir, table_list=table_list, column_info=column_info,
+                           select_table=select_table, query_str=query_str, url_prefix=url_prefix)

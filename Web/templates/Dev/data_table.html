@@ -15,7 +15,7 @@
     </div>
     <div class="data">
     {% for table in table_list %}
-        <a class="data_title" href="/dev/data/table/?table={{ table["table_name"] }}" title="/dev/data/table/?table={{ table["table_name"] }}">{{ table["table_name"] }}</a>
+        <a class="data_title" href="{{ url_prefix }}/data/table/?table={{ table["table_name"] }}" title="{{ url_prefix }}/data/table/?table={{ table["table_name"] }}">{{ table["table_name"] }}</a>
     {% endfor %}
 
     {% if select_table != {} %}

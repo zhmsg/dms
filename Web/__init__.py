@@ -44,5 +44,6 @@ login_manager.login_view = "dms_view.index"
 
 api_url_prefix = "/dev/api"
 bug_url_prefix = "/dev/bug"
+dev_url_prefix = "/dev"
 
 
