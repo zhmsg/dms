@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 # coding: utf-8
 
+import os
 import sys
 sys.path.append("..")
 from Tools.Mysql_db import DB
@@ -118,6 +119,7 @@ class TableManager:
             ["type_desc", "varchar(500)", "NO", "", None, "", "功能模块描述"]
         ]
         self.error_type_comment = "错误类型相关信息"
+        self.error_type_init = True
         self.status_code = "status_code"
         self.status_code_desc = [
             ["function_id", "tinyint(4)", "NO", "PRI", None, "", "错误类型编号 联合主键"],
@@ -130,10 +132,11 @@ class TableManager:
     def create_not_exist_table(self):
         keys = vars(self).keys()
         for key in keys:
-            if key.endswith("_desc") or key.endswith("_comment"):
+            if key.endswith("_desc") or key.endswith("_comment") or key.endswith("_init"):
                 continue
             table_name = key
             table_desc = key + "_desc"
+            table_init = key + "_init"
             if table_desc not in keys:
                 print("%s need info" % table_name)
                 continue
@@ -146,3 +149,42 @@ class TableManager:
                     print("fail create table %s message:%s" % (table_name, message))
             else:
                 print("%s table exist" % table_name)
+            if table_init in keys and eval("self.%s" % table_init) is True:
+                result, message = self.init_table(table_name)
+                if result is True:
+                    print("success init table %s" % table_name)
+                else:
+                    print("fail init table %s message:%s" % (table_name, message))
+
+    def init_table(self, table_name):
+        keys = vars(self).keys()
+        if table_name not in keys or table_name + "_desc" not in keys:
+            return False, "bad table_name"
+        table_desc = eval("self.%s_desc" % table_name)
+        len_col = len(table_desc)
+        file_path = "../Data/%s.data" % table_name
+        if os.path.exists(file_path) is False:
+            return False, "file not exist"
+        read = open(file_path)
+        content = read.read()
+        read.close()
+        lines = content.split("\n")
+        insert_sql_for = "INSERT IGNORE INTO %s VALUES {0} " % table_name
+        value_sql = ""
+        for line in lines:
+            if len(value_sql) >= 10000:
+                insert_sql = insert_sql_for.format(value_sql[:-1])
+                db.execute(insert_sql[:-1])
+                value_sql = ""
+            data = line.split("\t")
+            if len(data) != len_col:
+                return False, "Bad data file"
+            value_sql += "("
+            for v in data:
+                value_sql += "'%s'," % v
+            value_sql = value_sql[:-1] + "),"
+        if value_sql != "":
+            insert_sql = insert_sql_for.format(value_sql[:-1])
+            db.execute(insert_sql[:-1])
+        return True, "success"
+
