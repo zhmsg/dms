@@ -96,6 +96,37 @@ class TableManager:
             ["add_time", "datetime", "NO", "", None, "", "添加的时间"]
         ]
 
+        self.service_module = "service_module"
+        self.service_module_desc = [
+            ["service_id", "int(11)", "NO", "PRI", None, "", "服务模块系统编号 主键"],
+            ["service_title", "varchar(40)", "NO", "", None, "", "服务模块标题"],
+            ["service_desc", "varchar(500)", "NO", "", None, "", "服务模块描述"]
+        ]
+        self.service_module_comment = "服务模块相关信息"
+        self.function_module = "function_module"
+        self.function_module_desc = [
+            ["service_id", "tinyint(11)", "NO", "PRI", None, "", "服务模块系统编号 联合主键"],
+            ["function_id", "tinyint(11)", "NO", "PRI", None, "", "功能模块编号 联合主键"],
+            ["function_title", "varchar(100)", "NO", "", None, "", "功能模块标题"],
+            ["function_desc", "varchar(500)", "NO", "", None, "", "功能模块描述"]
+        ]
+        self.function_module_comment = "功能模块相关信息"
+        self.error_type = "error_type"
+        self.error_type_desc = [
+            ["type_id", "tinyint(11)", "NO", "PRI", None, "", "错误类型编号主键"],
+            ["type_title", "varchar(100)", "NO", "", None, "", "功能模块标题"],
+            ["type_desc", "varchar(500)", "NO", "", None, "", "功能模块描述"]
+        ]
+        self.error_type_comment = "错误类型相关信息"
+        self.status_code = "status_code"
+        self.status_code_desc = [
+            ["function_id", "tinyint(4)", "NO", "PRI", None, "", "错误类型编号 联合主键"],
+            ["type_id", "tinyint(11)", "NO", "", None, "", "错误类型编号 联合主键"],
+            ["error_id", "tinyint(11)", "NO", "", None, "", "错误编号 联合主键"],
+            ["error_desc", "varchar(500)", "NO", "", None, "", "功能模块描述"]
+        ]
+        self.status_code_comment = "错误状态码相关信息"
+
     def create_not_exist_table(self):
         keys = vars(self).keys()
         for key in keys:
