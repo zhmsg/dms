@@ -134,7 +134,7 @@ class TableManager:
         for key in keys:
             if key.endswith("_desc") or key.endswith("_comment") or key.endswith("_init"):
                 continue
-            table_name = key
+            table_name = eval("self.%s" % key)
             table_desc = key + "_desc"
             table_init = key + "_init"
             if table_desc not in keys:
@@ -142,7 +142,7 @@ class TableManager:
                 continue
             if db.check_table(table_name, table_desc) is False:
                 print("start create table %s" % table_name)
-                result, message = db.create_table(eval("self.%s" % table_name), eval("self.%s" % table_desc))
+                result, message = db.create_table(table_name, eval("self.%s" % table_desc))
                 if result is True:
                     print("success create table %s" % table_name)
                 else:

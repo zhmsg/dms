@@ -109,7 +109,7 @@ def new_api_info():
     result, api_info = control.new_api_info(module_no, title, url, method, desc, current_user.account, current_user.role)
     if result is False:
         return api_info
-    return redirect(develop_api_view.url_prefix + "/update/info/?api_no=%s" % api_info["api_no"])
+    return redirect(url_prefix + "/update/info/?api_no=%s" % api_info["api_no"])
 
 
 @develop_api_view.route("/update/info/", methods=["GET"])
@@ -121,9 +121,11 @@ def update_api_other_info():
     if len(api_no) != 32:
         return "Bad api_no"
     result, api_info = control.get_api_info(api_no, current_user.role)
-    return_url = develop_api_view.url_prefix + "/?module_no=%s" % api_info["basic_info"]["module_no"]
+    print(api_info["basic_info"])
+    return_url = url_prefix + "/?module_no=%s" % api_info["basic_info"]["module_no"]
     if result is False:
         return api_info
+    print("dd")
     return render_template("%s/Update_API.html" % html_dir, api_info=api_info, api_no=api_no, return_url=return_url,
                            url_prefix=url_prefix)
 
