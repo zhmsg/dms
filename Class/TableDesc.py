@@ -104,6 +104,7 @@ class TableManager:
             ["service_desc", "varchar(500)", "NO", "", None, "", "服务模块描述"]
         ]
         self.service_module_comment = "服务模块相关信息"
+        self.service_module_init = True
         self.function_module = "function_module"
         self.function_module_desc = [
             ["service_id", "tinyint(11)", "NO", "PRI", None, "", "服务模块系统编号 联合主键"],
@@ -123,8 +124,8 @@ class TableManager:
         self.status_code = "status_code"
         self.status_code_desc = [
             ["function_id", "tinyint(4)", "NO", "PRI", None, "", "错误类型编号 联合主键"],
-            ["type_id", "tinyint(11)", "NO", "", None, "", "错误类型编号 联合主键"],
-            ["error_id", "tinyint(11)", "NO", "", None, "", "错误编号 联合主键"],
+            ["type_id", "tinyint(11)", "NO", "PRI", None, "", "错误类型编号 联合主键"],
+            ["error_id", "tinyint(11)", "NO", "PRI", None, "", "错误编号 联合主键"],
             ["error_desc", "varchar(500)", "NO", "", None, "", "功能模块描述"]
         ]
         self.status_code_comment = "错误状态码相关信息"

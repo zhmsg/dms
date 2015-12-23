@@ -342,6 +342,6 @@ class HelpManager:
         basic_info["api_url"] = basic_info["module_prefix"].rstrip("/") + "/" + basic_info["api_path"].lstrip("/")
         # 逐个发送微信消息
         for care_user in care_info:
-            look_url = "www.gene.ac/dev/api/info/?api_no=%s" % api_no
+            look_url = "dms.gene.ac/dev/api/info/?api_no=%s" % api_no
             wx.send_api_change_template(basic_info["api_url"], basic_info["api_title", look_url, care_user["wx_id"]], change_message)
         return True, "success"
