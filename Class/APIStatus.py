@@ -8,7 +8,7 @@ sys.path.append("..")
 from datetime import datetime
 from Tools.Mysql_db import DB
 from Class import table_manager, TIME_FORMAT
-from Check import check_chinese_en, check_http_method, check_path, check_sql_character, check_char_num_underline, check_char
+from Check import check_chinese_en, check_http_method, check_path, check_sql_character, check_int, check_char, fill_zero
 from Tools.Wx import WxManager
 
 temp_dir = tempfile.gettempdir()
@@ -27,10 +27,41 @@ class StatusManager:
         self.status_code = table_manager.status_code
         self.user = "sys_user"
 
-    def new_status_code(self, fun_id, type_id, error_id, error_desc):
-        if type(fun_id) != int or type(type_id) != int or type(error_id) != int:
-            return False, "Bad fun_id or type_id or error_id"
-        insert_sql = "INSERT IGNORE INTO %s (function_id,type_id,error_id,error_desc) VALUES (%d,%d,%d,'%s');" \
-                     % (fun_id, type_id, error_id, error_desc)
+    def new_status_code(self, fun_id, type_id, error_id, error_desc, adder):
+        if check_int(fun_id) is False:
+            return "Bad fun_id"
+        if check_int(type_id) is False:
+            return "Bad type_id"
+        if check_int(error_id) is False:
+            return "Bad error_id"
+        add_time = datetime.now().strftime(TIME_FORMAT)
+        error_desc = check_sql_character(error_desc)
+        insert_sql = "INSERT IGNORE INTO %s (function_id,type_id,error_id,error_desc,add_time,adder) " \
+                     "VALUES (%d,%d,%d,'%s');" % (fun_id, type_id, error_id, error_desc, add_time, adder)
         self.db.execute(insert_sql)
         return True, "success"
+
+    def get_status_code(self):
+        select_sql = "SELECT service_id,f.function_id,type_id,error_id,error_desc,add_time,adder FROM %s AS f,%s AS s " \
+                     "WHERE f.function_id=s.function_id;" % (self.function_module, self.status_code)
+        self.db.execute(select_sql)
+        status_info = []
+        for item in self.db.fetchall():
+            status_info.append({"service_id": fill_zero(item[0], 2), "fun_id": fill_zero(item[1], 2),
+                                "type_id": fill_zero(item[2], 2), "error_id": fill_zero(item[3], 2),
+                                "error_desc": item[4], "add_time": item[5].strftime(TIME_FORMAT), "adder": item[6]})
+        return True, status_info
+
+    def get_function_info(self):
+        select_sql = "SELECT service_id,service_title,service_desc FROM %s;" % self.service_module
+        self.db.execute(select_sql)
+        module_info = {}
+        for item in self.db.fetchall():
+            module_info[item[0]] = {"title": item[1], "desc": item[2], "fun_info": {}}
+        select_sql = "SELECT service_id,function_id,function_title,function_desc FROM %s;" % self.function_module
+        self.db.execute(select_sql)
+        for item in self.db.fetchall():
+            if item[0] in module_info:
+                module_info[item[0]]["fun_info"][item[item[1]]] = {"title": item[2], "desc": item[3]}
+        return True, module_info
+

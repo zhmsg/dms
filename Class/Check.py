@@ -60,3 +60,24 @@ def check_sql_character(s):
         s = str(s)
     return s.replace("\\", "\\\\").replace("'", "\\'")
 
+
+def check_int(i, min_v=0, max_v=99):
+    if type(i) != int:
+        return False
+    if i< min_v:
+        return False
+    if i > max_v:
+        return False
+
+
+def fill_zero(num, for_len):
+    num_str = "%s" % num
+    while for_len > 1:
+        for_len -= 1
+        num /= 10
+        if num > 0:
+            continue
+        else:
+            num_str = "0%s" % num_str
+    return num_str
+

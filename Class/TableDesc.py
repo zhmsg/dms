@@ -126,7 +126,9 @@ class TableManager:
             ["function_id", "tinyint(4)", "NO", "PRI", None, "", "错误类型编号 联合主键"],
             ["type_id", "tinyint(11)", "NO", "PRI", None, "", "错误类型编号 联合主键"],
             ["error_id", "tinyint(11)", "NO", "PRI", None, "", "错误编号 联合主键"],
-            ["error_desc", "varchar(500)", "NO", "", None, "", "功能模块描述"]
+            ["error_desc", "varchar(500)", "NO", "", None, "", "功能模块描述"],
+            ["add_time", "datetime", "NO", "", None, "", "添加的时间"],
+            ["adder", "varchar(15)", "NO", "", None, "", "添加者账户名"]
         ]
         self.status_code_comment = "错误状态码相关信息"
 
