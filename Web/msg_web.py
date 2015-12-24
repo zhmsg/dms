@@ -43,6 +43,11 @@ def after_request(res):
     return res
 
 
+# @msg_web.teardown_request
+# def teardown_request(e=None):
+#     print("enter teardown request")
+
+
 if __name__ == '__main__':
     print("start run")
     msg_web.run(host="0.0.0.0", port=2200)

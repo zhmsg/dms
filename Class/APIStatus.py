@@ -57,11 +57,14 @@ class StatusManager:
         self.db.execute(select_sql)
         module_info = {}
         for item in self.db.fetchall():
-            module_info[item[0]] = {"title": item[1], "desc": item[2], "fun_info": {}}
+            service_id_s = fill_zero(item[0], 2)
+            module_info[service_id_s] = {"title": item[1], "desc": item[2], "fun_info": {}}
         select_sql = "SELECT service_id,function_id,function_title,function_desc FROM %s;" % self.function_module
         self.db.execute(select_sql)
         for item in self.db.fetchall():
-            if item[0] in module_info:
-                module_info[item[0]]["fun_info"][item[item[1]]] = {"title": item[2], "desc": item[3]}
+            service_id_s = fill_zero(item[0], 2)
+            if service_id_s in module_info:
+                fun_id_s = fill_zero(item[1], 2)
+                module_info[service_id_s]["fun_info"][fun_id_s] = {"title": item[2], "desc": item[3]}
         return True, module_info
 

@@ -42,7 +42,7 @@ class ControlManager:
         self.user = UserManager()
         self.user_role = self.user.role_value
         self.dev = DevManager()
-        table_manager.create_not_exist_table()
+        # table_manager.create_not_exist_table()
         self.api_help = HelpManager()
         self.api_status = StatusManager()
         self.bug = BugManager()
@@ -273,7 +273,7 @@ class ControlManager:
         return self.api_help.del_api_info(api_no, user_name)
 
     # 针对API状态码的应用
-    def get_module_info(self, role):
+    def get_fun_info(self, role):
         if role & self.user_role["api_look"] <= 0:
             return False, u"您没有权限"
         return self.api_status.get_function_info()

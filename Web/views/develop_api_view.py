@@ -251,3 +251,23 @@ def test_api():
         return api_info
     return_url = url_prefix + "/info/?api_no=%s" % api_no
     return render_template("%s/Test_API.html" % html_dir, api_info=api_info, return_url=return_url, api_no=api_no)
+
+
+@develop_api_view.route("/status/", methods=["GET"])
+@login_required
+def show_status_info():
+    result, fun_info = control.get_fun_info(current_user.role)
+    if result is False:
+        return fun_info
+    result, status_info = control.get_status(current_user.role)
+    if result is False:
+        return status_info
+    fun_info_url = url_prefix + "/status/fun/"
+    return render_template("%s/Status_API.html" % html_dir, fun_info_url=fun_info_url, status_info=status_info)
+
+
+@develop_api_view.route("/status/fun/", methods=["GET"])
+@login_required
+def get_fun_info():
+    result, fun_info = control.get_fun_info(current_user.role)
+    return json.dumps({"status": result, "data": fun_info})

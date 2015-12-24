@@ -18,6 +18,18 @@
         </table>
 
     {% endif %}
+    <select name="" id="service_id" class="box-side">
+        <option>Oauth2</option>
+    </select>
+    <select id="fun_id" class="box-side">
+        <option>样本</option>
+    </select>
+    <select id="error_id" class="box-side">
+        <option>sdf</option>
+    </select>
 </div>
+<input id="fun_info_url" value="{{ fun_info_url }}" style="display: none">
 </body>
+<script type="text/javascript" src="{{ url_for('static', filename='t_js/jquery.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='t_js/API_HELP/status_api.js') }}"></script>
 </html>
