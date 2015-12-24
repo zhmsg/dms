@@ -18,17 +18,18 @@
         </table>
 
     {% endif %}
-    <select name="" id="service_id" class="box-side">
-        <option>Oauth2</option>
+    <select name="service_id" id="service_id" class="box-side" onchange="set_fun_id();">
     </select>
-    <select id="fun_id" class="box-side">
-        <option>样本</option>
+    <select id="fun_id" name="fun_id" class="box-side">
     </select>
-    <select id="error_id" class="box-side">
-        <option>sdf</option>
+    <select id="type_id" name="type_id" class="box-side">
     </select>
+    <input name="error_id" id="error_id">
+    <input name="error_desc" id="error_desc">
+    <button type="submit">新建</button>
 </div>
 <input id="fun_info_url" value="{{ fun_info_url }}" style="display: none">
+<input id="error_type_url" value="{{ error_type_url }}" style="display: none">
 </body>
 <script type="text/javascript" src="{{ url_for('static', filename='t_js/jquery.min.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='t_js/API_HELP/status_api.js') }}"></script>

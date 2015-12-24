@@ -68,3 +68,12 @@ class StatusManager:
                 module_info[service_id_s]["fun_info"][fun_id_s] = {"title": item[2], "desc": item[3]}
         return True, module_info
 
+    def get_error_type(self):
+        select_sql = "SELECT type_id,type_title,type_desc FROM %s;" % self.error_type
+        self.db.execute(select_sql)
+        type_info = {}
+        for item in self.db.fetchall():
+            type_id_s = fill_zero(item[0], 2)
+            type_info[type_id_s] = {"title": item[1], "desc": item[2]}
+        return True, type_info
+

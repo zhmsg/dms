@@ -4,7 +4,7 @@
 
 import sys
 import json
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, jsonify
 from flask_login import login_required, current_user
 from Web import api_url_prefix
 from Web.views import control
@@ -263,11 +263,20 @@ def show_status_info():
     if result is False:
         return status_info
     fun_info_url = url_prefix + "/status/fun/"
-    return render_template("%s/Status_API.html" % html_dir, fun_info_url=fun_info_url, status_info=status_info)
+    error_type_url = url_prefix + "/status/type/"
+    return render_template("%s/Status_API.html" % html_dir, fun_info_url=fun_info_url, status_info=status_info,
+                           error_type_url=error_type_url)
 
 
 @develop_api_view.route("/status/fun/", methods=["GET"])
 @login_required
 def get_fun_info():
     result, fun_info = control.get_fun_info(current_user.role)
-    return json.dumps({"status": result, "data": fun_info})
+    return jsonify({"status": result, "data": fun_info})
+
+
+@develop_api_view.route("/status/type/", methods=["GET"])
+@login_required
+def get_error_type():
+    result, error_type = control.get_error_type(current_user.role)
+    return jsonify({"status": result, "data": error_type})

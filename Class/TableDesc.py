@@ -113,6 +113,7 @@ class TableManager:
             ["function_desc", "varchar(500)", "NO", "", None, "", "功能模块描述"]
         ]
         self.function_module_comment = "功能模块相关信息"
+        self.function_module_init = True
         self.error_type = "error_type"
         self.error_type_desc = [
             ["type_id", "tinyint(11)", "NO", "PRI", None, "", "错误类型编号主键"],
@@ -179,8 +180,11 @@ class TableManager:
                 insert_sql = insert_sql_for.format(value_sql[:-1])
                 db.execute(insert_sql[:-1])
                 value_sql = ""
+            if len(line) <= 0:
+                continue
             data = line.split("\t")
             if len(data) != len_col:
+                print(data)
                 return False, "Bad data file"
             value_sql += "("
             for v in data:

@@ -42,7 +42,7 @@ class ControlManager:
         self.user = UserManager()
         self.user_role = self.user.role_value
         self.dev = DevManager()
-        # table_manager.create_not_exist_table()
+        table_manager.create_not_exist_table()
         self.api_help = HelpManager()
         self.api_status = StatusManager()
         self.bug = BugManager()
@@ -282,6 +282,11 @@ class ControlManager:
         if role & self.user_role["api_look"] <= 0:
             return False, u"您没有权限"
         return self.api_status.get_status_code()
+
+    def get_error_type(self, role):
+        if role & self.user_role["api_look"] <= 0:
+            return False, u"您没有权限"
+        return self.api_status.get_error_type()
 
     # 针对BUG的应用
     def get_bug_list(self, role):
