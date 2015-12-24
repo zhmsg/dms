@@ -14,6 +14,7 @@ from Calc import CalcManager
 from User import UserManager
 from Dev import DevManager
 from APIHelp import HelpManager
+from APIStatus import StatusManager
 from Bug import BugManager
 from Class import table_manager
 
@@ -43,6 +44,7 @@ class ControlManager:
         self.dev = DevManager()
         table_manager.create_not_exist_table()
         self.api_help = HelpManager()
+        self.api_status = StatusManager()
         self.bug = BugManager()
         self.manger_email = ["budechao@ict.ac.cn", "biozy@ict.ac.cn"]
         self.wx = WxManager()
@@ -269,6 +271,17 @@ class ControlManager:
 
     def delete_api(self, api_no, user_name):
         return self.api_help.del_api_info(api_no, user_name)
+
+    # 针对API状态码的应用
+    def get_module_info(self, role):
+        if role & self.user_role["api_look"] <= 0:
+            return False, u"您没有权限"
+        return self.api_status.get_function_info()
+
+    def get_status(self, role):
+        if role & self.user_role["api_look"] <= 0:
+            return False, u"您没有权限"
+        return self.api_status.get_status_code()
 
     # 针对BUG的应用
     def get_bug_list(self, role):
