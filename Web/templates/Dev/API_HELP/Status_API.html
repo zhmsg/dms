@@ -14,19 +14,31 @@
     <a class="btn btn-primary pull-right" href="{{ url_for('dms_view.select_portal') }}" title="">API列表</a>
     {% if true %}
         <table class="table table-bordered table-hover api-list-table">
-
+            <tr>
+                <th scope="col" width="20%">状态码</th>
+                <th scope="col" width=80%">解释</th>
+            </tr>
+            {% for item in status_info %}
+                <tr>
+                    <td>{{ item["status_code"] }}</td>
+                    <td>{{ item["code_desc"] }}</td>
+                </tr>
+            {% endfor %}
         </table>
 
     {% endif %}
-    <select name="service_id" id="service_id" class="box-side" onchange="set_fun_id();">
-    </select>
-    <select id="fun_id" name="fun_id" class="box-side">
-    </select>
-    <select id="type_id" name="type_id" class="box-side">
-    </select>
-    <input name="error_id" id="error_id">
-    <input name="error_desc" id="error_desc">
-    <button type="submit">新建</button>
+    <form action="{{ url_for('develop_api_view.new_status') }}" method="post">
+        <select name="service_id" id="service_id" class="box-side" onchange="set_fun_id();">
+        </select>
+        <select id="fun_id" name="fun_id" class="box-side" onchange="update_info();">
+        </select>
+        <select id="type_id" name="type_id" class="box-side" onchange="update_info();">
+        </select>
+        <input name="error_id" id="error_id" onkeyup="update_info();" required>
+        <input name="error_desc" id="error_desc" onkeyup="update_info();" required>
+        <button type="submit">新建</button>
+        <label id="new_info_show"></label>
+    </form>
 </div>
 <input id="fun_info_url" value="{{ fun_info_url }}" style="display: none">
 <input id="error_type_url" value="{{ error_type_url }}" style="display: none">

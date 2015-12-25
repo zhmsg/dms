@@ -27,29 +27,30 @@ class StatusManager:
         self.status_code = table_manager.status_code
         self.user = "sys_user"
 
-    def new_status_code(self, fun_id, type_id, error_id, error_desc, adder):
+    def new_status_code(self, service_id, fun_id, type_id, error_id, error_desc, adder):
+        if check_int(service_id) is False:
+            return "Bad service_id"
         if check_int(fun_id) is False:
             return "Bad fun_id"
         if check_int(type_id) is False:
             return "Bad type_id"
         if check_int(error_id) is False:
             return "Bad error_id"
+        status_code = fill_zero(service_id, 2) + fill_zero(fun_id, 2) + fill_zero(type_id, 2) + fill_zero(error_id, 2)
         add_time = datetime.now().strftime(TIME_FORMAT)
-        error_desc = check_sql_character(error_desc)
-        insert_sql = "INSERT IGNORE INTO %s (function_id,type_id,error_id,error_desc,add_time,adder) " \
-                     "VALUES (%d,%d,%d,'%s');" % (fun_id, type_id, error_id, error_desc, add_time, adder)
+        code_desc = check_sql_character(error_desc)
+        insert_sql = "INSERT IGNORE INTO %s (status_code,code_desc,add_time,adder) " \
+                     "VALUES (%s,'%s','%s','%s');" % (self.status_code, status_code, code_desc, add_time, adder)
         self.db.execute(insert_sql)
         return True, "success"
 
     def get_status_code(self):
-        select_sql = "SELECT service_id,f.function_id,type_id,error_id,error_desc,add_time,adder FROM %s AS f,%s AS s " \
-                     "WHERE f.function_id=s.function_id;" % (self.function_module, self.status_code)
+        select_sql = "SELECT status_code,code_desc,add_time,adder FROM %s;" % self.status_code
         self.db.execute(select_sql)
         status_info = []
         for item in self.db.fetchall():
-            status_info.append({"service_id": fill_zero(item[0], 2), "fun_id": fill_zero(item[1], 2),
-                                "type_id": fill_zero(item[2], 2), "error_id": fill_zero(item[3], 2),
-                                "error_desc": item[4], "add_time": item[5].strftime(TIME_FORMAT), "adder": item[6]})
+            status_info.append({"status_code": fill_zero(item[0], 8), "code_desc": item[1],
+                                "add_time": item[2].strftime(TIME_FORMAT), "adder": item[3]})
         return True, status_info
 
     def get_function_info(self):

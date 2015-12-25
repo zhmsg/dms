@@ -288,6 +288,11 @@ class ControlManager:
             return False, u"您没有权限"
         return self.api_status.get_error_type()
 
+    def new_api_status(self, user_name, role, service_id, fun_id, type_id, error_id, error_desc):
+        if role & self.user_role["api_look"] <= 0:
+            return False, u"您没有权限"
+        return self.api_status.new_status_code(service_id, fun_id, type_id, error_id, error_desc, user_name)
+
     # 针对BUG的应用
     def get_bug_list(self, role):
         if role & self.user_role["bug_look"] <= 0:

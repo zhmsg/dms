@@ -124,10 +124,8 @@ class TableManager:
         self.error_type_init = True
         self.status_code = "status_code"
         self.status_code_desc = [
-            ["function_id", "tinyint(4)", "NO", "PRI", None, "", "错误类型编号 联合主键"],
-            ["type_id", "tinyint(11)", "NO", "PRI", None, "", "错误类型编号 联合主键"],
-            ["error_id", "tinyint(11)", "NO", "PRI", None, "", "错误编号 联合主键"],
-            ["error_desc", "varchar(500)", "NO", "", None, "", "功能模块描述"],
+            ["status_code", "int(4)", "NO", "PRI", None, "", "状态码 主键"],
+            ["code_desc", "varchar(500)", "NO", "", None, "", "状态码描述"],
             ["add_time", "datetime", "NO", "", None, "", "添加的时间"],
             ["adder", "varchar(15)", "NO", "", None, "", "添加者账户名"]
         ]

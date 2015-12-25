@@ -63,13 +63,31 @@ function set_fun_id(){
     for(var key in fun_list){
         add_option(select_obj, key, fun_list[key].title);
     }
+    update_info();
 }
+
 function set_error_type(){
     var select_obj = $("#type_id");
     select_obj.empty();
     for(var key in error_type){
         add_option(select_obj, key, error_type[key].title);
     }
+    update_info();
+}
+function update_info(){
+    var service_id = $("#service_id").val();
+    var service_text = $("#service_id  option:selected").text();
+    var fun_id = $("#fun_id").val();
+    var fun_text = $("#fun_id  option:selected").text();
+    var type_id = $("#type_id").val();
+    var type_text = $("#type_id  option:selected").text();
+    var info = "您将新建一个服务模块为 " + service_text;
+    info += " 功能模块为 " + fun_text;
+    info += " 错误类型为 " + type_text;
+    info += " 错误状态码为 " + $("#error_id").val();
+    info += " 错误描述为 " + $("#error_desc").val();
+    info += " 最终状态码为 " + service_id + " " + fun_id + " " + type_id + " " + $("#error_id").val();
+    $("#new_info_show").text(info);
 }
 get_module_info();
 get_error_type();

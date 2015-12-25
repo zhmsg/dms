@@ -256,12 +256,10 @@ def test_api():
 @develop_api_view.route("/status/", methods=["GET"])
 @login_required
 def show_status_info():
-    result, fun_info = control.get_fun_info(current_user.role)
-    if result is False:
-        return fun_info
     result, status_info = control.get_status(current_user.role)
     if result is False:
         return status_info
+    print(status_info)
     fun_info_url = url_prefix + "/status/fun/"
     error_type_url = url_prefix + "/status/type/"
     return render_template("%s/Status_API.html" % html_dir, fun_info_url=fun_info_url, status_info=status_info,
@@ -280,3 +278,17 @@ def get_fun_info():
 def get_error_type():
     result, error_type = control.get_error_type(current_user.role)
     return jsonify({"status": result, "data": error_type})
+
+
+@develop_api_view.route("/status/new/", methods=["POST"])
+@login_required
+def new_status():
+    request_data = request.form
+    service_id = int(request_data["service_id"])
+    fun_id = int(request_data["fun_id"])
+    type_id = int(request_data["type_id"])
+    error_id = int(request_data["error_id"])
+    error_desc = request_data["error_desc"]
+    result, new_info = control.new_api_status(current_user.account, current_user.role, service_id, fun_id, type_id,
+                                              error_id, error_desc)
+    return redirect(url_for("develop_api_view.show_status_info"))
