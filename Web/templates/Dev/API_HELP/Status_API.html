@@ -1,17 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title>API返回状态码</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='t_css/bootstrap.min.css') }}">
-    <!-- 新 Bootstrap 核心 CSS 文件 -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='t_css/main.css') }}">
-    <!--自定义的页面样式 -->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>API返回状态码</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='t_css/bootstrap.min.css') }}"><!-- 新 Bootstrap 核心 CSS 文件 -->
+<link rel="stylesheet" href="{{ url_for('static', filename='t_css/main.css') }}"><!--自定义的页面样式 -->
 </head>
+
 <body>
 <div class="container font16">
-    <br/>
-    <a class="btn btn-primary pull-right" href="{{ url_for('dms_view.select_portal') }}" title="">API列表</a>
+    <a class="btn btn-primary pull-right margin20" href="{{ url_for('dms_view.select_portal') }}" title="">API列表</a>
     {% if true %}
         <table class="table table-bordered table-hover api-list-table">
             <tr>
@@ -20,24 +18,33 @@
             </tr>
             {% for item in status_info %}
                 <tr>
-                    <td>{{ item["status_code"] }}</td>
+                    <td>
+                        <span>{{ item["status_code"][:2] }}</span>
+                        <span>{{ item["status_code"][2:4] }}</span>
+                        <span>{{ item["status_code"][4:6] }}</span>
+                        <span>{{ item["status_code"][6:8] }}</span>
+                    </td>
                     <td>{{ item["code_desc"] }}</td>
                 </tr>
             {% endfor %}
         </table>
-
     {% endif %}
     <form action="{{ url_for('develop_api_view.new_status') }}" method="post">
-        <select name="service_id" id="service_id" class="box-side" onchange="set_fun_id();">
-        </select>
-        <select id="fun_id" name="fun_id" class="box-side" onchange="update_info();">
-        </select>
-        <select id="type_id" name="type_id" class="box-side" onchange="update_info();">
-        </select>
-        <input name="error_id" id="error_id" onkeyup="update_info();" required>
-        <input name="error_desc" id="error_desc" onkeyup="update_info();" required>
-        <button type="submit">新建</button>
-        <label id="new_info_show"></label>
+      <p class="margin20">
+        <select class="box-side width150 pull-left margin10" id="service_id" name="service_id" onchange="set_fun_id();"></select>
+        <select class="box-side width150 pull-left margin10" id="fun_id" name="fun_id" onchange="update_info();"></select>
+        <select class="box-side width150 pull-left margin10" id="type_id" name="type_id" onchange="update_info();"></select>
+        <input name="error_id" class="form-control pull-left width100 margin10" id="error_id" onkeyup="update_info();" required>
+        <input name="error_desc" class="form-control pull-left width485 margin10" id="error_desc" onkeyup="update_info();" required>
+        <button type="submit" class="btn btn-primary pull-left">新建</button>
+        <span class="clear block"></span>
+      </p>
+      <p>您将新建一个服务模块为：
+          <span class="font-red">Oauth2验证系统</span>
+          功能模块为
+          公共功能模块 错误类型为
+          <span class="font-red">依赖服务错误 </span>错误状态码为 错误描述为 最终状态码为 00 00 98</p>
+      <label id="new_info_show"></label>
     </form>
 </div>
 <input id="fun_info_url" value="{{ fun_info_url }}" style="display: none">
