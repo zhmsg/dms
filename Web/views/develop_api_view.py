@@ -259,7 +259,6 @@ def show_status_info():
     result, status_info = control.get_status(current_user.role)
     if result is False:
         return status_info
-    print(status_info)
     fun_info_url = url_prefix + "/status/fun/"
     error_type_url = url_prefix + "/status/type/"
     return render_template("%s/Status_API.html" % html_dir, fun_info_url=fun_info_url, status_info=status_info,
@@ -291,4 +290,6 @@ def new_status():
     error_desc = request_data["error_desc"]
     result, new_info = control.new_api_status(current_user.account, current_user.role, service_id, fun_id, type_id,
                                               error_id, error_desc)
+    if result is False:
+        return new_info
     return redirect(url_for("develop_api_view.show_status_info"))
