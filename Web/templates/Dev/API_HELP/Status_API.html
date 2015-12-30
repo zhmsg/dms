@@ -9,7 +9,7 @@
 
 <body>
 <div class="container font16">
-    <a class="btn btn-primary pull-right margin20" href="{{ url_for('dms_view.select_portal') }}" title="">API列表</a>
+    <a class="btn btn-primary pull-right margin20" href="{{ return_url }}" title="">返回API解释</a>
     {% if true %}
         <table class="table table-bordered table-hover api-list-table">
             <tr>
@@ -36,15 +36,10 @@
         <select class="box-side width150 pull-left margin10" id="type_id" name="type_id" onchange="update_info();"></select>
         <input name="error_id" class="form-control pull-left width100 margin10" id="error_id" onkeyup="update_info();" required>
         <input name="error_desc" class="form-control pull-left width485 margin10" id="error_desc" onkeyup="update_info();" required>
-        <button type="submit" class="btn btn-primary pull-left">新建</button>
+        <button type="submit" class="btn btn-primary pull-left" id="btn_new">新建</button>
         <span class="clear block"></span>
       </p>
-      <p>您将新建一个服务模块为：
-          <span class="font-red">Oauth2验证系统</span>
-          功能模块为
-          公共功能模块 错误类型为
-          <span class="font-red">依赖服务错误 </span>错误状态码为 错误描述为 最终状态码为 00 00 98</p>
-      <label id="new_info_show"></label>
+      <p id="new_info_show"></p>
     </form>
 </div>
 <input id="fun_info_url" value="{{ fun_info_url }}" style="display: none">

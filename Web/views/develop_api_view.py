@@ -263,8 +263,9 @@ def show_status_info():
         return status_info
     fun_info_url = url_prefix + "/status/fun/"
     error_type_url = url_prefix + "/status/type/"
+    return_url = url_prefix + ("/" if "api_no" not in request.args else "/info/?api_no=%s" % request.args["api_no"])
     return render_template("%s/Status_API.html" % html_dir, fun_info_url=fun_info_url, status_info=status_info,
-                           error_type_url=error_type_url)
+                           error_type_url=error_type_url, return_url=return_url)
 
 
 @develop_api_view.route("/status/fun/", methods=["GET"])

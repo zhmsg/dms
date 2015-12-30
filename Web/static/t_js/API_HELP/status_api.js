@@ -81,13 +81,44 @@ function update_info(){
     var fun_text = $("#fun_id  option:selected").text();
     var type_id = $("#type_id").val();
     var type_text = $("#type_id  option:selected").text();
-    var info = "您将新建一个服务模块为 " + service_text;
-    info += " 功能模块为 " + fun_text;
-    info += " 错误类型为 " + type_text;
-    info += " 错误状态码为 " + $("#error_id").val();
-    info += " 错误描述为 " + $("#error_desc").val();
-    info += " 最终状态码为 " + service_id + " " + fun_id + " " + type_id + " " + $("#error_id").val();
-    $("#new_info_show").text(info);
+    var info = "您将新建一个服务模块为 " + '<span class="font-red">' + service_text + '</span>';
+    info += " 功能模块为 " + '<span class="font-red">' + fun_text + '</span>';
+    info += " 错误类型为 " + '<span class="font-red">' + type_text + '</span>';
+    var error_id = $("#error_id").val();
+    var invalid_input = false;
+    if(error_id.length <= 0){
+        error_id = "请填写";
+        invalid_input = true
+    }
+    else {
+        var error_id_int = parseInt(error_id);
+        if (isNaN(error_id_int)) {
+            error_id = "必须为正整数";
+            invalid_input = true;
+        }
+        else if (error_id_int < 0 || error_id_int >= 100) {
+            error_id = "必须小于100";
+            invalid_input = true
+        }
+    }
+    info += " 错误状态码为 " + '<span class="font-red">' + error_id + '</span>';
+    var error_desc = $("#error_desc").val();
+    if (error_desc.length <= 0){
+        error_desc = "请填写";
+        invalid_input = true;
+    }
+    if(invalid_input == true){
+        console.info("invalid input");
+        $("#btn_new").attr({"disabled":"disabled"});
+    }
+    else{
+        console.info("input right");
+        $("#btn_new").removeAttr("disabled");
+    }
+    //$("#btn_new").disabled = invalid_input;
+    info += " 错误描述为 " + '<span class="font-red">' + error_desc + '</span>';
+    info += " 最终状态码为 " + '<span class="font-red">' + service_id + " " + fun_id + " " + type_id + " " + $("#error_id").val() + '</span>';
+    $("#new_info_show").html(info);
 }
 get_module_info();
 get_error_type();
