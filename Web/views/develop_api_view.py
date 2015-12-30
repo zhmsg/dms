@@ -73,6 +73,7 @@ def show_api():
     if current_user.role & 16 > 0:
         update_url = url_prefix + "/update/info/?api_no=%s" % api_no
     test_url = url_prefix + "/test/?api_no=%s" % api_no
+    status_url = url_prefix + "/status/"
     my_care = None
     for item in api_info["care_info"]:
         if item["user_name"] == current_user.account:
@@ -80,7 +81,8 @@ def show_api():
             api_info["care_info"].remove(item)
             break
     return render_template("%s/Show_API.html" % html_dir, api_info=api_info, api_no=api_no, return_url=return_url,
-                           update_url=update_url, my_care=my_care, test_url=test_url, url_prefix=url_prefix)
+                           update_url=update_url, my_care=my_care, test_url=test_url, url_prefix=url_prefix,
+                           status_url=status_url)
 
 
 @develop_api_view.route("/new/", methods=["GET"])
