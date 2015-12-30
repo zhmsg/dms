@@ -133,7 +133,7 @@ function update_info(){
     }
     //$("#btn_new").disabled = invalid_input;
     info += " 错误描述为 " + '<span class="font-red">' + error_desc + '</span>';
-    info += " 最终状态码为 " + '<span class="font-red">' + service_id + " " + fun_id + " " + type_id + " " + $("#error_id").val() + '</span>';
+    info += " 最终状态码为 " + '<span class="font-red">' + service_id + " " + fun_id + " " + type_id + " " + error_id + '</span>';
     $("#new_info_show").html(info);
 
     fun_update();
