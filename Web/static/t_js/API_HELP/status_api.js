@@ -157,3 +157,7 @@ function search_code(){
         }
     }
 }
+
+function show_code_info(status_code){
+
+}

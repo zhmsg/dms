@@ -21,7 +21,7 @@
             </tr>
             {% for item in status_info %}
                 <tr id="s_{{ item["status_code"] }}">
-                    <td>
+                    <td onmouseover="show_code_info('{{ item["status_code"] }}');">
                         <span>{{ item["status_code"][:2] }}</span>
                         <span>{{ item["status_code"][2:4] }}</span>
                         <span>{{ item["status_code"][4:6] }}</span>
