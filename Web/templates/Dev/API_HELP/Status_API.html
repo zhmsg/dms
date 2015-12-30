@@ -10,6 +10,9 @@
 <body>
 <div class="container font16">
     <a class="btn btn-primary pull-right margin20" href="{{ return_url }}" title="">返回API解释</a>
+    <div class="data">
+        <input class="form-control" id="search_code" onkeyup="search_code();" placeholder="搜索状态码" />
+    </div>
     {% if true %}
         <table class="table table-bordered table-hover api-list-table">
             <tr>
@@ -17,7 +20,7 @@
                 <th scope="col" width=80%">解释</th>
             </tr>
             {% for item in status_info %}
-                <tr>
+                <tr id="s_{{ item["status_code"] }}">
                     <td>
                         <span>{{ item["status_code"][:2] }}</span>
                         <span>{{ item["status_code"][2:4] }}</span>

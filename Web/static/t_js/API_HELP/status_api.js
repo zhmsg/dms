@@ -142,3 +142,19 @@ function update_info(){
 
 get_module_info();
 get_error_type();
+
+function search_code(){
+    var s_s = $("#search_code").val();
+    console.info(s_s);
+    var trs = $("tr[id^='s_']");
+    var tr_len = trs.length;
+    for(var i = 0; i < tr_len; i++){
+        var tr = trs[i];
+        if(tr.id.indexOf(s_s) >= 0){
+            tr.hidden = false;
+        }
+        else{
+            tr.hidden = true;
+        }
+    }
+}
