@@ -158,6 +158,30 @@ function search_code(){
     }
 }
 
-function show_code_info(status_code){
+$(function(){
+    //鼠标移入显示 移出消失 的效果
+    $(".status_move").hover(
+        function(){
+            $(".status_out").show();
+            $(".status_out").css('top',this.offsetTop+'px')
+        },
+        function(){
+            $(".status_out").hide()
+        }
+    );
+});
 
-}
+// 显示或隐藏 按钮
+$(function(){
+    $("#conBtn").click(function(){
+        var conBtnValue = $("#conBtn").html();
+        if(conBtnValue == "显示内容按钮"){
+            $(".newMode").show();
+            $("#conBtn").html("隐藏内容按钮");
+        }
+        if(conBtnValue == "隐藏内容按钮"){
+            $(".newMode").hide();
+            $("#conBtn").html("显示内容按钮");
+        }
+    });
+});

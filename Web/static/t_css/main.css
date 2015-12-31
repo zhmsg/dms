@@ -16,8 +16,10 @@ ul,ol{list-style: none;margin: 0;padding: 0;}
 .font-red{color: #e53b0d;}
 .bugUpload span,.apiTest span{line-height: 34px;}
 .width100{width: 100px;}
-.width485{width: 485px;}
+.width366{width:366px;}
 .block{display: block;}
+.top6{padding-top: 6px;}
+.left5{padding-left: 5px;}
 /*登陆页 start*/
 .form-signin {
     margin: 0 auto;
@@ -122,3 +124,6 @@ ul,ol{list-style: none;margin: 0;padding: 0;}
 .paramListMode{padding-bottom: 50px;}
 .paramListMode ul li{float: left;line-height: 34px;}
 .paramListMode label{font-weight: normal;padding-right:10px;}
+/*API返回状态码*/
+.status_out{width:500px;height: 200px;background: #d9d9d9;line-height: 30px;position: absolute;left: 10%;padding: 5px;display: none;}
+.status_move{cursor: pointer;}

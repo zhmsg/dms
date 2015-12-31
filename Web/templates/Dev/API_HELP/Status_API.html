@@ -8,45 +8,51 @@
 </head>
 
 <body>
-<div class="container font16">
-    <a class="btn btn-primary pull-right margin20" href="{{ return_url }}" title="">返回API解释</a>
-    <div class="data">
-        <input class="form-control" id="search_code" onkeyup="search_code();" placeholder="搜索状态码" />
-    </div>
-    {% if true %}
-        <table class="table table-bordered table-hover api-list-table">
-            <tr>
-                <th scope="col" width="20%">状态码</th>
-                <th scope="col" width=80%">解释</th>
-            </tr>
-            {% for item in status_info %}
-                <tr id="s_{{ item["status_code"] }}">
-                    <td onmouseover="show_code_info('{{ item["status_code"] }}');">
-                        <span>{{ item["status_code"][:2] }}</span>
-                        <span>{{ item["status_code"][2:4] }}</span>
-                        <span>{{ item["status_code"][4:6] }}</span>
-                        <span>{{ item["status_code"][6:8] }}</span>
-                    </td>
-                    <td>{{ item["code_desc"] }}</td>
-                </tr>
-            {% endfor %}
-        </table>
-    {% endif %}
+<div class="container font16"> <a class="btn btn-primary pull-right margin20" href="{{ return_url }}" title="">返回API解释</a>
+  <div class="clear bottom20">
+    <input class="form-control" id="search_code" onkeyup="search_code();" placeholder="搜索状态码" />
+  </div>
+  {% if true %}
+  <div style="position: relative">
+    <table class="table table-bordered table-hover api-list-table">
+      <tr>
+        <th scope="col" width="20%">状态码</th>
+        <th scope="col" width=80%">解释</th>
+      </tr>
+      {% for item in status_info %}
+      <tr id="s_{{ item["status_code"] }}">
+        {#<td onmouseover="show_code_info('{{ item["status_code"] }}');">#}
+        <td class="status_move"><span>{{ item["status_code"][:2] }}</span> <span>{{ item["status_code"][2:4] }}</span> <span>{{ item["status_code"][4:6] }}</span> <span>{{ item["status_code"][6:8] }}</span></td>
+        <td>{{ item["code_desc"] }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    <div class="status_out">454df54ds5f4</div>
+  </div>
+  {% endif %}
+  <button type="button" class="btn btn-primary margin20" id="conBtn">显示内容按钮</button>
+  <div class="newMode" style="display: none;">
     <form action="{{ url_for('develop_api_view.new_status') }}" method="post">
-      <p class="margin20">
+      <p class="bottom10">
         <select class="box-side width150 pull-left margin10" id="service_id" name="service_id" onchange="set_fun_id();"></select>
         <select class="box-side width150 pull-left margin10" id="fun_id" name="fun_id" onchange="update_info();"></select>
         <select class="box-side width150 pull-left margin10" id="type_id" name="type_id" onchange="update_info();"></select>
         <input name="error_id" class="form-control pull-left width100 margin10" id="error_id" onkeyup="update_info();" required>
-        <input name="error_desc" class="form-control pull-left width485 margin10" id="error_desc" onkeyup="update_info();" required>
+        <input name="error_desc" class="form-control pull-left width366 margin10" id="error_desc" onkeyup="update_info();" required>
         <button type="submit" class="btn btn-primary pull-left" id="btn_new">新建</button>
+        <!-- 复选框组 start -->
+        <span class="pull-left top6 left5">
+         <label class="checkbox-inline"><input type="checkbox" name="" value="复选框" />复选框内容1</label>
+        </span>
+        <!-- 复选框组 end -->
         <span class="clear block"></span>
       </p>
-      <p id="new_info_show"></p><br>
+      <p class="bottom20" id="new_info_show"></p>
       <p id="service_desc"></p>
       <p id="fun_desc"></p>
       <p id="error_type_desc"></p>
     </form>
+  </div>
 </div>
 <input id="fun_info_url" value="{{ fun_info_url }}" style="display: none">
 <input id="error_type_url" value="{{ error_type_url }}" style="display: none">
