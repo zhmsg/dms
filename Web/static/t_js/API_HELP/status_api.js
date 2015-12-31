@@ -175,13 +175,13 @@ $(function(){
 $(function(){
     $("#conBtn").click(function(){
         var conBtnValue = $("#conBtn").html();
-        if(conBtnValue == "显示内容按钮"){
+        if(conBtnValue == "我要新建"){
             $(".newMode").show();
-            $("#conBtn").html("隐藏内容按钮");
+            $("#conBtn").html("不再新建");
         }
-        if(conBtnValue == "隐藏内容按钮"){
+        if(conBtnValue == "不再新建"){
             $(".newMode").hide();
-            $("#conBtn").html("显示内容按钮");
+            $("#conBtn").html("我要新建");
         }
     });
 });

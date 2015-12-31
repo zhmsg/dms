@@ -27,10 +27,10 @@
       </tr>
       {% endfor %}
     </table>
-    <div class="status_out">454df54ds5f4</div>
+    <div class="status_out"></div>
   </div>
   {% endif %}
-  <button type="button" class="btn btn-primary margin20" id="conBtn">显示内容按钮</button>
+  <button type="button" class="btn btn-primary margin20" id="conBtn">我要新建</button>
   <div class="newMode" style="display: none;">
     <form action="{{ url_for('develop_api_view.new_status') }}" method="post">
       <p class="bottom10">
@@ -42,7 +42,7 @@
         <button type="submit" class="btn btn-primary pull-left" id="btn_new">新建</button>
         <!-- 复选框组 start -->
         <span class="pull-left top6 left5">
-         <label class="checkbox-inline"><input type="checkbox" name="" value="复选框" />复选框内容1</label>
+         <label class="checkbox-inline"><input type="checkbox" name="" value="复选框" />显示已有状态码</label>
         </span>
         <!-- 复选框组 end -->
         <span class="clear block"></span>
