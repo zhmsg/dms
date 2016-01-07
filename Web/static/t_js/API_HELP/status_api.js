@@ -158,12 +158,25 @@ function search_code(){
     }
 }
 
+function get_info(code){
+    var service_id = code.substr(0, 2);
+    var service_title = module_info[service_id].title;
+    var fun_id = code.substr(2, 2);
+    var fun_title = module_info[service_id]["fun_info"][fun_id].title;
+    var type_id = code.substr(4, 2);
+    var type_title = error_type[type_id].title;
+    var info = service_title + "<br />" + fun_title + "<br />" + type_title;
+    return info;
+}
+
 $(function(){
     //鼠标移入显示 移出消失 的效果
-    $(".status_move").hover(
+    $("tr[id^='s_']").hover(
         function(){
+            var code_info = get_info(this.id.substr(2,8));
+            $("#status_code_info").html(code_info);
             $(".status_out").show();
-            $(".status_out").css('top',this.offsetTop+'px')
+            $(".status_out").css('top',(this.offsetHeight + this.offsetTop)+'px')
         },
         function(){
             $(".status_out").hide()

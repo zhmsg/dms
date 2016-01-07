@@ -16,8 +16,8 @@
   <div style="position: relative">
     <table class="table table-bordered table-hover api-list-table">
       <tr>
-        <th scope="col" width="20%">状态码</th>
-        <th scope="col" width=80%">解释</th>
+        <th scope="col" width="10%">状态码</th>
+        <th scope="col" width=90%">解释</th>
       </tr>
       {% for item in status_info %}
       <tr id="s_{{ item["status_code"] }}">
@@ -27,7 +27,7 @@
       </tr>
       {% endfor %}
     </table>
-    <div class="status_out"></div>
+    <div class="status_out" id="status_code_info">ni</div>
   </div>
   {% endif %}
   <button type="button" class="btn btn-primary margin20" id="conBtn">我要新建</button>
