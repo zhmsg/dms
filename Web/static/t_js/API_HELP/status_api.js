@@ -135,27 +135,54 @@ function update_info(){
     info += " 错误描述为 " + '<span class="font-red">' + error_desc + '</span>';
     info += " 最终状态码为 " + '<span class="font-red">' + service_id + " " + fun_id + " " + type_id + " " + error_id + '</span>';
     $("#new_info_show").html(info);
-
     fun_update();
     error_type_update();
+    console.info($("#show_exist").attr("checked"));
+    if($("#show_exist").is(':checked')) {
+        filter_code(service_id + fun_id + type_id, "start");
+    }
+    else{
+        filter_code("", "start");
+    }
 }
 
 get_module_info();
 get_error_type();
 
-function search_code(){
-    var query_s = $("#search_code").val();
+function compare_str(l_s, s_s, c_type){
+    if(c_type == "in"){
+        if(l_s.indexOf(s_s) >= 0) {
+            return true
+        }
+    }
+    else if(c_type == "start"){
+        console.info(l_s);
+        console.info(s_s);
+        console.info(l_s.indexOf(s_s));
+        if(l_s.indexOf(s_s) == 0) {
+            return true
+        }
+    }
+    return false
+}
+
+function filter_code(code, s_type){
     var trs = $("tr[id^='s_']");
     var tr_len = trs.length;
     for(var i = 0; i < tr_len; i++){
         var tr = trs[i];
-        if(tr.id.indexOf(query_s) >= 0){
+        if(compare_str(tr.id.substr(2, 8), code, s_type) == true){
             tr.hidden = false;
         }
         else{
             tr.hidden = true;
         }
     }
+}
+
+function search_code(){
+    var query_s = $("#search_code").val();
+    filter_code(query_s, "in");
 }
 
 function get_info(code){
@@ -190,9 +217,9 @@ $(function(){
         var conBtnValue = $("#conBtn").html();
         if(conBtnValue == "我要新建"){
             $(".newMode").show();
-            $("#conBtn").html("不再新建");
+            $("#conBtn").html("隐藏新建");
         }
-        if(conBtnValue == "不再新建"){
+        if(conBtnValue == "隐藏新建"){
             $(".newMode").hide();
             $("#conBtn").html("我要新建");
         }
