@@ -149,28 +149,28 @@ def password():
     return "更新失败，请重新登录"
 
 
-@dms_view.route("/register/", methods=["GET"])
-@login_required
-def register_page():
-    if current_user.role & control.user_role["user_new"] <= 0:
-        return u"用户无权限操作"
-    return render_template("register.html", user_role=current_user.role, role_value=control.user_role, url_prefix=url_prefix)
-
-
-@dms_view.route("/register/", methods=["POST"])
-@login_required
-def register():
-    request_data = request.form
-    user_name = request_data["user_name"]
-    nick_name = request_data["nick_name"]
-    user_role = 0
-    for key, value in control.user_role.items():
-        if key in request_data and request_data[key] == "on":
-            user_role += value
-    result, message = control.new_user(user_name, user_role, nick_name, current_user.account, current_user.role)
-    if result is False:
-       return message
-    return redirect(url_for("dms_view.select_portal"))
+# @dms_view.route("/register/", methods=["GET"])
+# @login_required
+# def register_page():
+#     if current_user.role & control.user_role["user_new"] <= 0:
+#         return u"用户无权限操作"
+#     return render_template("register.html", user_role=current_user.role, role_value=control.user_role, url_prefix=url_prefix)
+#
+#
+# @dms_view.route("/register/", methods=["POST"])
+# @login_required
+# def register():
+#     request_data = request.form
+#     user_name = request_data["user_name"]
+#     nick_name = request_data["nick_name"]
+#     user_role = 0
+#     for key, value in control.user_role.items():
+#         if key in request_data and request_data[key] == "on":
+#             user_role += value
+#     result, message = control.new_user(user_name, user_role, nick_name, current_user.account, current_user.role)
+#     if result is False:
+#        return message
+#     return redirect(url_for("dms_view.select_portal"))
 
 
 @dms_view.route("/authorize/", methods=["GET"])
