@@ -42,7 +42,7 @@ class ControlManager:
         self.user = UserManager()
         self.user_role = self.user.role_value
         self.dev = DevManager()
-        table_manager.create_not_exist_table()
+        # table_manager.create_not_exist_table()
         self.api_help = HelpManager()
         self.api_status = StatusManager()
         self.bug = BugManager()
@@ -57,10 +57,7 @@ class ControlManager:
         return self.user.new(user_name, role, nick_name, creator)
 
     def change_password(self, user_name, old_password, new_password):
-        result, role = self.user.check(user_name, old_password)
-        if result is False:
-            return result, u"验证原和用户名密码时出错：" + role
-        return self.user.change_password(user_name, new_password)
+        return self.user.change_password(user_name, old_password, new_password)
 
     def get_my_user(self, user_name, role):
         if role & self.user.role_value["user_new"] <= 0:

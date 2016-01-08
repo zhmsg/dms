@@ -2,14 +2,20 @@
 # coding: utf-8
 
 import sys
+import requests
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 sys.path.append("..")
 from Tools.Mysql_db import DB
 from Check import check_char_num_underline as check_user, check_password
-from Class import TIME_FORMAT
+from Class import TIME_FORMAT, env
 
 __author__ = 'ZhouHeng'
+
+if env == "Development":
+    jy_auth_host = "http://192.168.120.2:1112/auth"
+else:
+    jy_auth_host = "http://10.44.147.219/auth"
 
 
 class UserManager:
@@ -57,32 +63,36 @@ class UserManager:
         return True, user_name
 
     def check(self, user_name, password):
-        if check_user(user_name, 1, 15) is False:
-            return False, u"用户名只能由字母数字和下划线组成且长度不大于15"
-        if check_password(password, 1, 20) is False:
-            return False, u"密码只能由字母数字和下划线@组成且长度不大于20"
-        select_sql = "SELECT user_name,password,role FROM %s WHERE user_name='%s';" % (self.user, user_name)
+        check_url = "%s/confirm/" % jy_auth_host
+        try:
+            res = requests.post(check_url, json={"account": user_name, "password": password})
+        except requests.ConnectionError as ce:
+            res = None
+        if res is None:
+            return False, u"暂时无法登录，请稍后重试"
+        r = res.json()
+        if r["status"] != 2:
+            return False, r["message"]
+        select_sql = "SELECT user_name,role FROM %s WHERE user_name='%s';" % (self.user, user_name)
         result = self.db.execute(select_sql)
         if result <= 0:
-            return False, u"用户名不存在"
+            return True, 0
         db_r = self.db.fetchone()
-        en_password = db_r[1]
-        role = db_r[2]
-        if en_password is None or en_password == "":
-            if password == self.default_password:
-                return True, -1
-            else:
-                return False, u"密码不正确"
-        if check_password_hash(en_password, password) is False:
-            return False, u"密码不正确"
+        role = db_r[1]
         return True, role
 
-    def change_password(self, user_name, new_password):
-        if check_password(new_password, 1, 20) is False:
-            return False, u"密码只能由字母数字和下划线@组成且长度不大于20"
-        en_password = generate_password_hash(new_password)
-        update_sql = "UPDATE %s SET password='%s' WHERE user_name='%s';" % (self.user, en_password, user_name)
-        self.db.execute(update_sql)
+    def change_password(self, user_name, old_password, new_password):
+        change_url = "%s/password/" % jy_auth_host
+        try:
+            res = requests.put(change_url, json={"account": user_name, "old_password": old_password,
+                                                  "new_password": new_password})
+        except requests.ConnectionError as ce:
+            res = None
+        if res is None:
+            return False, u"暂时无法更改密码，请稍后重试"
+        r = res.json()
+        if r["status"] != 2:
+            return False, r["message"]
         return True, u"更新成功"
 
     def clear_password(self, user_name, creator):
