@@ -71,8 +71,12 @@ function test_api(){
         data: body_param,
         success:function(data){
             console.info(data);
-            update_res(JSON.stringify(JSON.parse(data), null, 4));
-            //update_res(JSON.stringify(data, null, 4));
+            if(typeof(data) == "string")
+            {
+                console.info("return json string");
+                data = JSON.parse(data);
+            }
+            update_res(JSON.stringify(data, null, 4));
         },
         error:function(xhr){
             var res = "状态码：" + xhr.status + "\n";
