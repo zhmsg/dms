@@ -22,7 +22,8 @@
 <label style="display: none" id="role_value">{{ role_value | tojson | safe }}</label>
 <div class="container">
   <div class="loginMode">
-    <form class="amendPrivilege" action="{{ url_prefix }}/authorize/user/" method="post">
+    <button type="button" class="btn btn-success pull-right">返回主菜单</button>
+    <form class="clear amendPrivilege" action="{{ url_prefix }}/authorize/user/" method="post">
       <h4 class="form-signin-heading">修改用户权限 按照用户修改</h4>
       <select class="form-control bug-input" id="perm_user" onchange="user_select_change();" name="perm_user">
           {% for user in my_user %}
