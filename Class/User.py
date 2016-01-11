@@ -97,7 +97,6 @@ class UserManager:
         if res is None:
             return False, u"无法检测账户 ，请稍后重试"
         r = res.json()
-        print(r)
         if r["status"] != 1:
             return False, r["message"]
         if len(r["data"]) == 1 and r["data"][0].lower() == check_name.lower():
