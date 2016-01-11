@@ -37,6 +37,9 @@ def load_user(account):
         if result > 0:
             user.role = db.fetchone()[0]
             session["role"] = user.role
+        else:
+            user.role = 0
+            session["role"] = user.role
     return user
 
 
