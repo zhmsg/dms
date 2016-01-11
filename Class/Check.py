@@ -81,3 +81,14 @@ def fill_zero(num, for_len):
             num_str = "0%s" % num_str
     return num_str
 
+
+def check_account_format(account):
+    if len(account) < 3 or len(account) > 20:
+        return False
+    m_result = re.match("[a-z]+[a-z0-9_]*", account, re.I)
+    if m_result is None:
+        return False
+    if m_result.group() != account:
+        return False
+    return True
+

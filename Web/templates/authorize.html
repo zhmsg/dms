@@ -15,7 +15,7 @@
 <script type="text/javascript" src="{{ url_for('static', filename='t_js/jquery.min.js') }}"></script>
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 <script type="text/javascript" src="{{ url_for('static', filename='t_js/bootstrap.min.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='t_js/authorize.js') }}"></script>
+
 </head>
 
 <body>
@@ -25,7 +25,6 @@
     <form class="amendPrivilege" action="{{ url_prefix }}/authorize/user/" method="post">
       <h4 class="form-signin-heading">修改用户权限 按照用户修改</h4>
       <select class="form-control bug-input" id="perm_user" onchange="user_select_change();" name="perm_user">
-          <option role="0" value=""></option>
           {% for user in my_user %}
               <option role="{{ user["role"] }}" value="{{ user["user_name"] }}">{{ user["nick_name"] }}</option>
           {% endfor %}
@@ -36,4 +35,5 @@
   </div>
 </div>
 </body>
+<script type="text/javascript" src="{{ url_for('static', filename='t_js/authorize.js') }}"></script>
 </html>

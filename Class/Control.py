@@ -49,6 +49,11 @@ class ControlManager:
         self.manger_email = ["budechao@ict.ac.cn", "biozy@ict.ac.cn"]
         self.wx = WxManager()
 
+    def check_user_name_exist(self, user_name, role, check_user_name):
+        if role & self.user.role_value["user_new"] <= 0:
+            return False, u"用户无权限新建用户"
+        return self.user.check_account_exist(user_name, check_user_name)
+
     def new_user(self, user_name, role, nick_name, creator, creator_role):
         if creator_role & self.user.role_value["user_new"] <= 0:
             return False, u"用户无权限新建用户"

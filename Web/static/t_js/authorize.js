@@ -23,3 +23,4 @@ function user_select_change(){
     }
 
 }
+user_select_change();

@@ -3,7 +3,7 @@
 
 import sys
 from datetime import datetime, timedelta
-from flask import Blueprint, request, render_template, redirect, session, url_for
+from flask import Blueprint, request, render_template, redirect, session, url_for, jsonify
 from flask_login import login_user, current_user, logout_user
 from flask_login import login_required
 from werkzeug.security import gen_salt
@@ -149,28 +149,44 @@ def password():
     return "更新失败，请重新登录"
 
 
-# @dms_view.route("/register/", methods=["GET"])
-# @login_required
-# def register_page():
-#     if current_user.role & control.user_role["user_new"] <= 0:
-#         return u"用户无权限操作"
-#     return render_template("register.html", user_role=current_user.role, role_value=control.user_role, url_prefix=url_prefix)
-#
-#
-# @dms_view.route("/register/", methods=["POST"])
-# @login_required
-# def register():
-#     request_data = request.form
-#     user_name = request_data["user_name"]
-#     nick_name = request_data["nick_name"]
-#     user_role = 0
-#     for key, value in control.user_role.items():
-#         if key in request_data and request_data[key] == "on":
-#             user_role += value
-#     result, message = control.new_user(user_name, user_role, nick_name, current_user.account, current_user.role)
-#     if result is False:
-#        return message
-#     return redirect(url_for("dms_view.select_portal"))
+@dms_view.route("/register/", methods=["GET"])
+@login_required
+def register_page():
+    if current_user.role & control.user_role["user_new"] <= 0:
+        return u"用户无权限操作"
+    check_url = url_prefix + "/register/check/"
+    return render_template("register.html", user_role=current_user.role, role_value=control.user_role,
+                           url_prefix=url_prefix, check_url=check_url)
+
+
+@dms_view.route("/register/", methods=["POST"])
+@login_required
+def register():
+    request_data = request.form
+    user_name = request_data["user_name"]
+    print(session["register_name"])
+    if "register_name" not in session or session["register_name"] != user_name:
+        return u"页面已过期，请刷新重试"
+    nick_name = request_data["nick_name"]
+    user_role = 0
+    for key, value in control.user_role.items():
+        if key in request_data and request_data[key] == "on":
+            user_role += value
+    result, message = control.new_user(user_name, user_role, nick_name, current_user.account, current_user.role)
+    if result is False:
+       return message
+    return redirect(url_for("dms_view.select_portal"))
+
+
+@dms_view.route("/register/check/", methods=["POST"])
+@login_required
+def register_check():
+    request_data = request.form
+    check_name = request_data["check_name"]
+    result, message = control.check_user_name_exist(current_user.account, current_user.role, check_name)
+    if result is True:
+        session["register_name"] = message
+    return jsonify({"status": result, "message": message})
 
 
 @dms_view.route("/authorize/", methods=["GET"])

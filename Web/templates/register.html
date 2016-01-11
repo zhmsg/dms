@@ -22,15 +22,16 @@
   <div class="loginMode">
     <form class="form-signin" action="{{ url_prefix }}/register/" method="post">
       <h4 class="form-signin-heading">请填写注册信息</h4>
-      <label for="inputUser" class="sr-only">User Name</label>
-      <input type="text" id="inputUser" name="user_name" class="form-control" placeholder="用户名" required autofocus>
+      <input type="text" id="user_name" name="user_name" class="form-control" placeholder="用户名" required autofocus onblur="check_user_name();"> <span id="check_result"></span>
+      <input id="check_url" value="{{ check_url }}" style="display: none"/>
       <input type="text" id="inputName" name="nick_name" class="form-control" placeholder="真实姓名" required>
       {% include "perm_conent.html" %}
       <button class="btn btn-lg btn-primary btn-block" type="submit">注册</button>
     </form>
-    <p>注意：新建账户密码默认为gene.ac,用户首次登录必须修改密码才能继续操作</p>
+{#    <p>注意：新建账户密码默认为gene.ac,用户首次登录必须修改密码才能继续操作</p>#}
   </div>
 
 </div>
 </body>
+<script type="text/javascript" src="{{ url_for('static', filename='t_js/register.js') }}"></script>
 </html>

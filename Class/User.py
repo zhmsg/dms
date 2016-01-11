@@ -4,10 +4,9 @@
 import sys
 import requests
 from datetime import datetime
-from werkzeug.security import generate_password_hash, check_password_hash
 sys.path.append("..")
 from Tools.Mysql_db import DB
-from Check import check_char_num_underline as check_user, check_password
+from Check import check_char_num_underline as check_user, check_account_format
 from Class import TIME_FORMAT, env
 
 __author__ = 'ZhouHeng'
@@ -80,6 +79,30 @@ class UserManager:
         db_r = self.db.fetchone()
         role = db_r[1]
         return True, role
+
+    def check_account_exist(self, user_name, check_name):
+        if check_account_format(check_name) is False:
+            return False, u"账户名仅允许数字和字母，下划线（_），而且必须以字母开头,用户名长度不得低于3位，不得高于20位"
+        select_sql = "SELECT creator FROM %s WHERE user_name='%s';" % (self.user, check_name)
+        result = self.db.execute(select_sql)
+        if result > 0:
+            if self.db.fetchone()[0] == user_name:
+                return False, u"您已注册过该用户"
+            return False, u"该用户已被他人注册"
+        check_url = "%s/account/" % jy_auth_host
+        try:
+            res = requests.post(check_url, json={"list_account": [check_name]})
+        except requests.ConnectionError as ce:
+            res = None
+        if res is None:
+            return False, u"无法检测账户 ，请稍后重试"
+        r = res.json()
+        print(r)
+        if r["status"] != 1:
+            return False, r["message"]
+        if len(r["data"]) == 1 and r["data"][0].lower() == check_name.lower():
+            return True, r["data"][0]
+        return False, u"账户名不存在"
 
     def change_password(self, user_name, old_password, new_password):
         change_url = "%s/password/" % jy_auth_host
