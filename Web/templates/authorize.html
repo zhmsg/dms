@@ -22,7 +22,7 @@
 <label style="display: none" id="role_value">{{ role_value | tojson | safe }}</label>
 <div class="container">
   <div class="loginMode">
-    <button type="button" class="btn btn-success pull-right">返回主菜单</button>
+    <a role="button" class="btn btn-success pull-right" href="{{ url_for('dms_view.select_portal') }}">主菜单</a>
     <form class="clear amendPrivilege" action="{{ url_prefix }}/authorize/user/" method="post">
       <h4 class="form-signin-heading">修改用户权限 按照用户修改</h4>
       <select class="form-control bug-input" id="perm_user" onchange="user_select_change();" name="perm_user">

@@ -20,7 +20,7 @@
 <body>
 <div class="container">
   <div class="loginMode">
-    <button type="button" class="btn btn-success pull-right">返回主菜单</button>
+    <a role="button" class="btn btn-success pull-right" href="{{ url_for('dms_view.select_portal') }}">主菜单</a>
     <form class="clear amendPrivilege" action="{{ url_prefix }}/register/" method="post">
       <h4 class="form-signin-heading">请填写注册信息</h4>
       <input type="text" id="user_name" name="user_name" class="form-control" placeholder="用户名" required autofocus onblur="check_user_name();"> <span class="block bottom10" id="check_result"></span>
