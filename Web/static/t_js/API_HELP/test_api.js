@@ -40,6 +40,18 @@ function test_api(){
                 param_value = JSON.parse(param_value);
                 console.info(param_value);
             }
+            else if (type == "bool"){
+                if(param_value == "true"){
+                    param_value = true;
+                }
+                else if(param_value == "false"){
+                    param_value = false;
+                }
+                else{
+                    update_res("无效的" + param_key);
+                    return false;
+                }
+            }
             body_param[param_key] = param_value;
         }
         else if(param_type == "header"){
