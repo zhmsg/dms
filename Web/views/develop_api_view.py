@@ -252,7 +252,9 @@ def test_api():
     if result is False:
         return api_info
     return_url = url_prefix + "/info/?api_no=%s" % api_no
-    return render_template("%s/Test_API.html" % html_dir, api_info=api_info, return_url=return_url, api_no=api_no)
+    status_url = url_prefix + "/status/"
+    return render_template("%s/Test_API.html" % html_dir, api_info=api_info, return_url=return_url, api_no=api_no,
+                           status_url=status_url)
 
 
 @develop_api_view.route("/status/", methods=["GET"])

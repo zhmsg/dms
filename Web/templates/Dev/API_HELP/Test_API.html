@@ -74,7 +74,11 @@
       <button class="btn btn-primary" onclick="test_api()">检查</button>
     </p>
   <textarea class="form-control font16" rows="20" cols="120" id="res_text" readonly></textarea>
+
   </div>
+  <a  href="{{ status_url }}?api_no={{ api_no }}" title="">查看返回状态码解释</a>
+  <br/>
+  <br/>
 </div>
 </body>
 <script type="text/javascript" src="{{ url_for('static', filename='t_js/jquery.min.js') }}"></script>
