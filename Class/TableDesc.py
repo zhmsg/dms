@@ -60,9 +60,8 @@ class TableManager:
         ]
         self.api_header = "api_header"
         self.api_header_desc = [
-            ["header_no", "char(32)", "NO", "PRI", None, "", "主键 请求头部参数系统编号"],
-            ["api_no", "char(32)", "NO", "", None, "", "API系統编号 參看%s api_no" % self.api_info],
-            ["param", "varchar(30)", "NO", "", None, "", "请求参数"],
+            ["api_no", "char(32)", "NO", "PRI", None, "", "API系統编号 參看%s api_no" % self.api_info],
+            ["param", "varchar(30)", "NO", "PRI", None, "", "请求参数"],
             ["necessary", "bit(1)", "NO", "", None, "", "请求参数是否必需0非必需1必需"],
             ["param_desc", "varchar(1000)", "NO", "", None, "", "请求参数描述"],
             ["add_time", "datetime", "NO", "", None, "", "添加的时间"]

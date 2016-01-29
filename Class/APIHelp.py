@@ -79,10 +79,11 @@ class HelpManager:
                                "desc": param_desc, "add_time": add_time})
         if len(value_sql) < 8:
             return True
-        insert_sql = "INSERT INTO %s (api_no,param,necessary,param_desc, add_time) %s" \
+        insert_sql = "INSERT INTO %s (api_no,param,necessary,param_desc, add_time) %s " \
+                     "ON DUPLICATE KEY UPDATE necessary=VALUES(necessary),param_desc=VALUES(param_desc),add_time=VALUES(add_time)" \
                      % (self.api_header, value_sql)
         result = self.db.execute(insert_sql)
-        if result != 1:
+        if result < 1:
             return False, "sql execute result is %s " % result
         self.set_api_update(api_no)
         return True, new_result
@@ -218,14 +219,14 @@ class HelpManager:
         basic_info["add_time"] = basic_info["add_time"].strftime(TIME_FORMAT) if basic_info["add_time"] is not None else ""
         basic_info["update_time"] = basic_info["update_time"].strftime(TIME_FORMAT) if basic_info["update_time"] is not None else ""
         # 获得请求头部参数列表
-        select_sql = "SELECT header_no,api_no,param,necessary,param_desc FROM %s WHERE api_no='%s' ORDER BY add_time;" \
+        select_sql = "SELECT api_no,param,necessary,param_desc FROM %s WHERE api_no='%s' ORDER BY add_time;" \
                      % (self.api_header, api_no)
         self.db.execute(select_sql)
         header_info = []
         for item in self.db.fetchall():
-            necessary = True if item[3] == "" else False
-            header_info.append({"header_no": item[0], "api_no": item[1], "param": item[2], "necessary": necessary,
-                                "param_desc": item[4]})
+            necessary = True if item[2] == "" else False
+            header_info.append({"api_no": item[0], "param": item[1], "necessary": necessary,
+                                "param_desc": item[3]})
         # 获得请求主体参数列表
         select_sql = "SELECT body_no,api_no,param,necessary,type,param_desc FROM %s WHERE api_no='%s' ORDER BY add_time;" \
                      % (self.api_body, api_no)
