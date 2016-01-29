@@ -248,10 +248,10 @@ class ControlManager:
             return False, u"您没有权限"
         return self.api_help.get_api_list(module_no)
 
-    def delete_header(self, header_no, role):
+    def delete_header(self, role, api_no, param):
         if role & 16 <= 0:
             return False, u"您没有权限"
-        return self.api_help.del_api_header(header_no)
+        return self.api_help.del_api_header(api_no, param)
 
     def delete_body(self, body_no, role):
         if role & 16 <= 0:

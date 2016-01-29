@@ -52,6 +52,12 @@ class HelpManager:
             return False, "sql execute result is %s " % result
         return True, {"api_no": api_no}
 
+    def set_api_update(self, api_no):
+        update_time = datetime.now().strftime(TIME_FORMAT)
+        update_sql = "UPDATE %s SET update_time='%s';" % (self.api_info, update_time)
+        self.db.execute(update_sql)
+        return True
+
     def new_api_header(self, api_no, header_params):
         if len(api_no) != 32:
             return False, "Bad api_no"
@@ -65,20 +71,20 @@ class HelpManager:
             if value["necessary"] != 0 and value["necessary"] != 1:
                 return False, "Bad header param %s, necessary must be 0 or 1" % key
             param_desc = check_sql_character(value["desc"])[:1000]
-            header_no = uuid.uuid1().hex
             add_time = datetime.now().strftime(TIME_FORMAT)
-            value_sql += "('%s','%s','%s',%s,'%s','%s')" \
-                         % (header_no, api_no, key, value["necessary"], param_desc, add_time)
+            value_sql += "('%s','%s',%s,'%s','%s')" \
+                         % (api_no, key, value["necessary"], param_desc, add_time)
             necessary = True if value["necessary"] == 1 else False
-            new_result.append({"api_no": api_no, "header_no": header_no, "necessary": necessary, "param": key,
+            new_result.append({"api_no": api_no, "necessary": necessary, "param": key,
                                "desc": param_desc, "add_time": add_time})
         if len(value_sql) < 8:
             return True
-        insert_sql = "INSERT INTO %s (header_no,api_no,param,necessary,param_desc, add_time) %s" \
+        insert_sql = "INSERT INTO %s (api_no,param,necessary,param_desc, add_time) %s" \
                      % (self.api_header, value_sql)
         result = self.db.execute(insert_sql)
         if result != 1:
             return False, "sql execute result is %s " % result
+        self.set_api_update(api_no)
         return True, new_result
 
     def new_api_body(self, api_no, body_params):
@@ -110,6 +116,7 @@ class HelpManager:
         result = self.db.execute(insert_sql)
         if result != 1:
             return False, "sql execute result is %s " % result
+        self.set_api_update(api_no)
         return True, new_result
 
     def new_api_input(self, api_no, input_examples):
@@ -137,6 +144,7 @@ class HelpManager:
         result = self.db.execute(insert_sql)
         if result != 1:
             return False, "sql execute result is %s " % result
+        self.set_api_update(api_no)
         return True, new_result
 
     def new_api_output(self, api_no, output_examples):
@@ -165,6 +173,7 @@ class HelpManager:
         result = self.db.execute(insert_sql)
         if result != 1:
             return False, "sql execute result is %s " % result
+        self.set_api_update(api_no)
         return True, new_result
 
     def new_api_care(self, api_no, user_name, care_level=2):
@@ -263,11 +272,12 @@ class HelpManager:
                              "api_method": item[4], "api_desc": item[5]})
         return True, api_list
 
-    def del_api_header(self, header_no):
-        if len(header_no) != 32:
-            return False, "Bad header_no"
-        delete_sql = "DELETE FROM %s WHERE header_no='%s';" % (self.api_header, header_no)
+    def del_api_header(self, api_no, param):
+        if len(api_no) != 32:
+            return False, "Bad api_no"
+        delete_sql = "DELETE FROM %s WHERE api_no='%s' AND param='%s';" % (self.api_header, api_no, param)
         result = self.db.execute(delete_sql)
+        self.set_api_update(api_no)
         return True, result
 
     def del_api_body(self, body_no):

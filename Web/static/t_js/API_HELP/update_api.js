@@ -12,12 +12,12 @@ function new_header_param(new_url){
         method: "POST",
         data:{param:param,necessary:necessary,desc:desc,api_no:api_no},
         success:function(data){
-            var json_obj = JSON.parse(data);
+            var json_obj = data;
             if (json_obj.status == true){
                 var new_data = json_obj.data;
                 for(var i=0;i<new_data.length;i++){
                     var t_len = $("#api_header_param").length;
-                    var trHTML = "<tr id='tr_" + new_data[i].header_no + "'><td>" + new_data[i].param;
+                    var trHTML = "<tr id='tr_" + new_data[i].api_no + new_data[i].param + "'><td>" + new_data[i].param;
                     trHTML += '</td><td><select class="form-control" disabled>'
                     if (new_data[i].necessary == true) {
                         trHTML += '<option value="1" selected="selected">是</option><option value="0">否</option></select></td>';
@@ -25,7 +25,7 @@ function new_header_param(new_url){
                     else{
                         trHTML += '<option value="1">是</option><option value="0" selected="selected">否</option></select></td>';
                     }
-                    trHTML += '<td>' + new_data[i].desc + '</td><td><button class="btn btn-success">更新</button> <button class="btn btn-danger"  onclick="delete_header_param('+ "'" + new_data[i].header_no + "'" + ')">删除</button></td></tr>"';
+                    trHTML += '<td>' + new_data[i].desc + '</td><td><button class="btn btn-success">更新</button> <button class="btn btn-danger"  onclick="delete_header_param('+ "'" + new_data[i].api_no + "','" + new_data[i].param + "'" + ')">删除</button></td></tr>"';
                     var tr=$("#api_header_param tr").eq(-2);
                     tr.after(trHTML);
                 }
@@ -140,15 +140,18 @@ function new_output_example(new_url){
     });
 }
 
-function delete_header_param(header_no){
+function delete_header_param(api_no, param){
     var del_url = $("#del_header_url").val();
+    var request_data = JSON.stringify({"api_no": api_no, "param": param});
     $.ajax({
-        url: del_url + header_no + "/",
+        url: del_url,
+        data: request_data,
+        contentType: "application/json",
         method: "DELETE",
         success:function(data){
-            var json_obj = JSON.parse(data);
+            var json_obj = data;
             if (json_obj.status == true){
-                $("#tr_"+header_no).remove();
+                $("#tr_"+api_no + param).remove();
             }
             else{
                 alert(data);

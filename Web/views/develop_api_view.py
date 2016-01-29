@@ -141,7 +141,7 @@ def add_header_param():
     result, param_info = control.add_header_param(api_no, param, necessary, desc, current_user.role)
     if result is False:
         return param_info
-    return json.dumps({"status": True, "data": param_info})
+    return jsonify({"status": True, "data": param_info})
 
 
 @develop_api_view.route("/add/body/", methods=["POST"])
@@ -203,11 +203,14 @@ def delete_api(api_no):
     return redirect(url_for("develop_api_view.list_api"))
 
 
-@develop_api_view.route("/delete/header/<header_no>/", methods=["DELETE"])
+@develop_api_view.route("/delete/header/", methods=["DELETE"])
 @login_required
-def delete_header(header_no):
-    result, data = control.delete_header(header_no, current_user.role)
-    return json.dumps({"status": result, "data": data})
+def delete_header():
+    request_data = request.json
+    if "api_no" in request_data and "param" in request_data:
+        result, data = control.delete_header(current_user.role, request_data["api_no"], request_data["param"])
+        return jsonify({"status": result, "data": data})
+    return jsonify({"status": False, "data": "need api_no and param"})
 
 
 @develop_api_view.route("/delete/body/<body_no>/", methods=["DELETE"])
