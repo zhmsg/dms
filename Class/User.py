@@ -14,7 +14,7 @@ __author__ = 'ZhouHeng'
 if env == "Development":
     jy_auth_host = "http://192.168.120.2:1112/auth"
 else:
-    jy_auth_host = "http://10.44.147.219/auth"
+    jy_auth_host = "http://10.51.72.158/auth"
 
 
 class UserManager:
