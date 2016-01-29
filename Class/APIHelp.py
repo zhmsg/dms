@@ -44,9 +44,9 @@ class HelpManager:
         api_no = uuid.uuid1().hex
         # 新建 api_info
         add_time = datetime.now().strftime(TIME_FORMAT)
-        insert_sql = "INSERT INTO %s (api_no,module_no,api_title,api_path,api_method,api_desc,add_time) " \
-                     "VALUES('%s',%s,'%s','%s','%s','%s','%s')" \
-                     % (self.api_info, api_no, module_no, api_title, api_path, api_method, api_desc, add_time)
+        insert_sql = "INSERT INTO %s (api_no,module_no,api_title,api_path,api_method,api_desc,add_time,update_time) " \
+                     "VALUES('%s',%s,'%s','%s','%s','%s','%s','%s')" \
+                     % (self.api_info, api_no, module_no, api_title, api_path, api_method, api_desc, add_time, add_time)
         result = self.db.execute(insert_sql)
         if result != 1:
             return False, "sql execute result is %s " % result
@@ -194,8 +194,8 @@ class HelpManager:
         if len(api_no) != 32:
             return False, "Bad api_no"
         # get basic info
-        basic_info_col = ("module_no", "api_no", "api_title", "api_path", "api_method", "api_desc", "module_name",
-                          "module_prefix", "module_desc")
+        basic_info_col = ("module_no", "api_no", "api_title", "api_path", "api_method", "api_desc", "add_time",
+                          "update_time", "module_name", "module_prefix", "module_desc")
         select_sql = "SELECT m.%s FROM %s AS i, api_module AS m WHERE i.module_no=m.module_no AND api_no='%s';" \
                      % (",".join(basic_info_col), self.api_info, api_no)
         result = self.db.execute(select_sql)
@@ -206,6 +206,8 @@ class HelpManager:
         for i in range(len(db_info)):
             basic_info[basic_info_col[i]] = db_info[i]
         basic_info["api_url"] = basic_info["module_prefix"].rstrip("/") + "/" + basic_info["api_path"].lstrip("/")
+        basic_info["add_time"] = basic_info["add_time"].strftime(TIME_FORMAT) if basic_info["add_time"] is not None else ""
+        basic_info["update_time"] = basic_info["update_time"].strftime(TIME_FORMAT) if basic_info["update_time"] is not None else ""
         # 获得请求头部参数列表
         select_sql = "SELECT header_no,api_no,param,necessary,param_desc FROM %s WHERE api_no='%s' ORDER BY add_time;" \
                      % (self.api_header, api_no)

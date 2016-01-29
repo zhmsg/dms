@@ -29,7 +29,8 @@ class TableManager:
             ["api_path", "varchar(150)", "NO", "", None, "", "API的URL"],
             ["api_method", "varchar(6)", "NO", "", None, "", "API的请求方法"],
             ["api_desc", "varchar(300)", "NO", "", None, "", "关于API的详细描述"],
-            ["add_time", "datetime", "NO", "", None, "", "添加的时间"]
+            ["add_time", "datetime", "NO", "", None, "", "添加的时间"],
+            ["update_time", "datetime", "NO", "", None, "", "最近更新的时间"]
         ]
         self.api_input = "api_input"
         self.api_input_desc = [
