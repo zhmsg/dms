@@ -26,7 +26,9 @@ class HelpManager:
         self.api_input = table_manager.api_input
         self.api_output = table_manager.api_output
         self.api_header = table_manager.api_header
+        self.predefine_header = table_manager.predefine_header
         self.api_body = table_manager.api_body
+        self.predefine_param = table_manager.predefine_param
         self.api_care = table_manager.api_care
         self.user = "sys_user"
 
@@ -87,6 +89,16 @@ class HelpManager:
             return False, "sql execute result is %s " % result
         self.set_api_update(api_no)
         return True, new_result
+
+    def new_predefine_header(self, api_no, param):
+        if len(api_no) != 32:
+            return False, "Bad api_no"
+        add_time = datetime.now().strftime(TIME_FORMAT)
+        insert_sql = "INSERT INTO %s (api_no,param,param_type,add_time) VALUES ('%s','%s','header','%s') " \
+                     "ON DUPLICATE KEY UPDATE add_time=VALUES(add_time);" \
+                     % (self.predefine_param, api_no, param, add_time)
+        self.db.execute(insert_sql)
+        return True
 
     def new_api_body(self, api_no, body_params):
         if len(api_no) != 32:
