@@ -34,6 +34,22 @@
         <th class="text-center" scope="col" width="8%">是否必须</th>
         <th scope="col" width="40%">参数描述</th>
     </tr>
+{#    加载预定义头部参数描述#}
+    {% for item in api_info["predefine_param"]["header"] %}
+        {% if item in api_info["predefine_header"] %}
+        <tr>
+            <td>{{ api_info["predefine_header"][item]["param"] }}</td>
+            <td class="text-center">
+                {% if api_info["predefine_header"][item]["necessary"] %}
+                    是
+                {% else %}
+                    否
+                {% endif %}
+            </td>
+            <td>{{ api_info["predefine_header"][item]["param_desc"] }}</td>
+        </tr>
+        {% endif %}
+    {% endfor %}
     {% for item in api_info["header_info"] %}
     <tr>
         <td>{{ item["param"] }}</td>

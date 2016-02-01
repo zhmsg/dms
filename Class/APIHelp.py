@@ -236,7 +236,7 @@ class HelpManager:
         self.db.execute(select_sql)
         header_info = []
         for item in self.db.fetchall():
-            necessary = True if item[2] == "" else False
+            necessary = True if item[2] == "\x01" else False
             header_info.append({"api_no": item[0], "param": item[1], "necessary": necessary,
                                 "param_desc": item[3]})
         # 获得请求主体参数列表
@@ -245,9 +245,23 @@ class HelpManager:
         self.db.execute(select_sql)
         body_info = []
         for item in self.db.fetchall():
-            necessary = True if item[3] == "" else False
+            necessary = True if item[3] == "\x01" else False
             body_info.append({"body_no": item[0], "api_no": item[1], "param": item[2], "necessary": necessary,
                               "type": item[4], "param_desc": item[5]})
+        # 获得预定义参数列表
+        select_sql = "SELECT param,param_type FROM %s WHERE api_no='%s' ORDER BY add_time;" % (self.predefine_param, api_no)
+        self.db.execute(select_sql)
+        predefine_param = {"header": [], "body": []}
+        for item in self.db.fetchall():
+            if item[1] in predefine_param:
+                predefine_param[item[1]].append(item[0])
+        # 获得预定义头部参数信息
+        select_sql = "SELECT param,necessary,param_desc FROM %s;" % self.predefine_header
+        self.db.execute(select_sql)
+        predefine_header = {}
+        for item in self.db.fetchall():
+            necessary = True if item[1] == "\x01" else False
+            predefine_header[item[0]] = {"param": item[0], "necessary": necessary, "param_desc": item[2]}
         # 获得请求示例
         select_sql = "SELECT input_no,api_no,input_desc,input_example FROM %s WHERE api_no='%s' ORDER BY add_time;" \
                      % (self.api_input, api_no)
@@ -271,7 +285,8 @@ class HelpManager:
             care_info.append({"api_no": item[0], "user_name": item[1], "care_time": item[2].strftime(TIME_FORMAT),
                               "nick_name": item[3], "level": item[4]})
         return True, {"basic_info": basic_info, "header_info": header_info, "body_info": body_info,
-                      "input_info": input_info, "output_info": output_info, "care_info": care_info}
+                      "input_info": input_info, "output_info": output_info, "care_info": care_info,
+                      "predefine_param": predefine_param, "predefine_header": predefine_header}
 
     def get_api_list(self, module_no):
         if type(module_no) != int:
