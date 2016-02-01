@@ -90,10 +90,11 @@ class HelpManager:
         self.set_api_update(api_no)
         return True, new_result
 
-    def new_predefine_header(self, api_no, param):
+    def new_predefine_header(self, api_no, param, add_time=None):
         if len(api_no) != 32:
             return False, "Bad api_no"
-        add_time = datetime.now().strftime(TIME_FORMAT)
+        if add_time is None:
+            add_time = datetime.now().strftime(TIME_FORMAT)
         insert_sql = "INSERT INTO %s (api_no,param,param_type,add_time) VALUES ('%s','%s','header','%s') " \
                      "ON DUPLICATE KEY UPDATE add_time=VALUES(add_time);" \
                      % (self.predefine_param, api_no, param, add_time)
