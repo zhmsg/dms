@@ -70,15 +70,16 @@ class UserManager:
         if res is None:
             return False, u"暂时无法登录，请稍后重试"
         r = res.json()
-        if r["status"] != 2:
+        if r["status"] != 1:
             return False, r["message"]
-        select_sql = "SELECT user_name,role FROM %s WHERE user_name='%s';" % (self.user, user_name)
+        select_sql = "SELECT user_name,role FROM %s WHERE user_name='%s';" % (self.user, r["data"]["account"])
         result = self.db.execute(select_sql)
         if result <= 0:
             return True, 0
         db_r = self.db.fetchone()
         role = db_r[1]
-        return True, role
+        r["data"]["role"] = role
+        return True, r["data"]
 
     def check_account_exist(self, user_name, check_name):
         if check_account_format(check_name) is False:
