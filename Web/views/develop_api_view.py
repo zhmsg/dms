@@ -215,7 +215,6 @@ def delete_header():
 @develop_api_view.route("/delete/body/", methods=["DELETE"])
 @login_required
 def delete_body():
-    print("e")
     request_data = request.json
     if "api_no" in request_data and "param" in request_data:
         result, data = control.delete_body(current_user.role, request_data["api_no"], request_data["param"])
