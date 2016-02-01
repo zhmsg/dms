@@ -54,7 +54,7 @@ class HelpManager:
 
     def set_api_update(self, api_no):
         update_time = datetime.now().strftime(TIME_FORMAT)
-        update_sql = "UPDATE %s SET update_time='%s';" % (self.api_info, update_time)
+        update_sql = "UPDATE %s SET update_time='%s' WHERE api_no='%s';" % (self.api_info, update_time, api_no)
         self.db.execute(update_sql)
         return True
 

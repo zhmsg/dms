@@ -66,6 +66,20 @@ class TableManager:
             ["param_desc", "varchar(1000)", "NO", "", None, "", "请求参数描述"],
             ["add_time", "datetime", "NO", "", None, "", "添加的时间"]
         ]
+        self.predefine_header = "predefine_header"
+        self.predefine_header_init = False
+        self.predefine_header_desc = [
+            ["param", "varchar(30)", "NO", "PRI", None, "", "请求参数"],
+            ["necessary", "bit(1)", "NO", "", None, "", "请求参数是否必需0非必需1必需"],
+            ["param_desc", "varchar(1000)", "NO", "", None, "", "请求参数描述"]
+        ]
+        self.predefine_param = "predefine_param"
+        self.predefine_param_desc = [
+            ["api_no", "char(32)", "NO", "PRI", None, "", "API系統编号 參看%s api_no" % self.api_info],
+            ["param", "varchar(30)", "NO", "PRI", None, "", "请求参数"],
+            ["param_type", "varchar(10)", "NO", "", None, "", "请求参数类型"],
+            ["add_time", "datetime", "NO", "", None, "", "添加的时间"]
+        ]
         self.api_care = "api_care"
         self.api_care_desc = [
             ["api_no", "char(32)", "NO", "PRI", None, "", "API系统编号"],
