@@ -30,9 +30,9 @@
 <table class="table table-bordered api-list-table" id="api_header_param">
     <caption>请求头部参数</caption>
     <tr>
-        <th scope="col" width="40%">参数名称</th>
+        <th scope="col" width="15%">参数名称</th>
         <th class="text-center" scope="col" width="8%">是否必须</th>
-        <th scope="col" width="40%">参数描述</th>
+        <th scope="col" width="77%">参数描述</th>
     </tr>
 {#    加载预定义头部参数描述#}
     {% for item in api_info["predefine_param"]["header"] %}
@@ -69,10 +69,10 @@
 <table class="table table-bordered api-list-table" id="api_body_param">
     <caption>请求主体参数</caption>
     <tr>
-        <th scope="col" width="25%">参数名称</th>
+        <th scope="col" width="15%">参数名称</th>
         <th class="text-center" scope="col" width="8%">是否必须</th>
         <th class="text-center" scope="col" width="10%">参数类型</th>
-        <th scope="col" width="45%">参数描述</th>
+        <th scope="col" width="67%">参数描述</th>
     </tr>
     {% for item in api_info["body_info"] %}
     <tr>
