@@ -140,9 +140,7 @@ def add_header_param():
     desc = request_form["desc"]
     necessary = int(request_form["necessary"])
     result, param_info = control.add_header_param(api_no, param, necessary, desc, current_user.role)
-    if result is False:
-        return param_info
-    return jsonify({"status": True, "data": param_info})
+    return jsonify({"status": result, "data": param_info})
 
 
 @develop_api_view.route("/add/body/", methods=["POST"])
