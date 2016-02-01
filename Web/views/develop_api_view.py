@@ -212,11 +212,15 @@ def delete_header():
     return jsonify({"status": False, "data": "need api_no and param"})
 
 
-@develop_api_view.route("/delete/body/<body_no>/", methods=["DELETE"])
+@develop_api_view.route("/delete/body/", methods=["DELETE"])
 @login_required
-def delete_body(body_no):
-    result, data = control.delete_body(body_no, current_user.role)
-    return json.dumps({"status": result, "data": data})
+def delete_body():
+    print("e")
+    request_data = request.json
+    if "api_no" in request_data and "param" in request_data:
+        result, data = control.delete_body(current_user.role, request_data["api_no"], request_data["param"])
+        return jsonify({"status": result, "data": data})
+    return jsonify({"status": False, "data": "need api_no and param"})
 
 
 @develop_api_view.route("/delete/input/<input_no>/", methods=["DELETE"])

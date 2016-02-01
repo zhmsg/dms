@@ -263,10 +263,10 @@ class ControlManager:
             return False, u"您没有权限"
         return self.api_help.del_predefine_param(api_no, param)
 
-    def delete_body(self, body_no, role):
+    def delete_body(self, role, api_no, param):
         if role & 16 <= 0:
             return False, u"您没有权限"
-        return self.api_help.del_api_body(body_no)
+        return self.api_help.del_api_body(api_no=api_no, param=param)
 
     def delete_input(self, input_no, role):
         if role & 16 <= 0:

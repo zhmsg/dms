@@ -57,7 +57,7 @@ function new_body_param(new_url){
             if (json_obj.status == true){
                 var new_data = json_obj.data;
                 for(var i=0;i<new_data.length;i++){
-                    var trHTML = "<tr id='tr_" + new_data[i].body_no + "'><td>" + new_data[i].param;
+                    var trHTML = "<tr id='trb_" + new_data[i].api_no + new_data[i].param + "'><td>" + new_data[i].param;
                     trHTML += '</td><td><select class="form-control" disabled>'
                     if (new_data[i].necessary == true) {
                         trHTML += '<option value="1" selected="selected">是</option><option value="0">否</option></select></td>';
@@ -65,7 +65,7 @@ function new_body_param(new_url){
                     else{
                         trHTML += '<option value="1">是</option><option value="0" selected="selected">否</option></select></td>';
                     }
-                    trHTML += '<td>' + new_data[i].type + '</td><td>' + new_data[i].desc + '</td><td><button class="btn btn-success">更新</button> <button class="btn btn-danger"  onclick="delete_body_param('+ "'" + new_data[i].body_no + "'" + ')">删除</button></td></tr>"';
+                    trHTML += '<td>' + new_data[i].type + '</td><td>' + new_data[i].desc + '</td><td><button class="btn btn-success">更新</button> <button class="btn btn-danger"  onclick="delete_body_param('+ "'" + new_data[i].api_no + "','" + new_data[i].param + "'" + ')">删除</button></td></tr>"';
                     var tr=$("#api_body_param tr").eq(-2);
                     tr.after(trHTML);
                 }
@@ -163,15 +163,18 @@ function delete_header_param(api_no, param){
     });
 }
 
-function delete_body_param(body_no){
+function delete_body_param(api_no, param){
     var del_url = $("#del_body_url").val();
+    var request_data = JSON.stringify({"api_no": api_no, "param": param});
     $.ajax({
-        url: del_url + body_no + "/",
+        url: del_url,
         method: "DELETE",
+        contentType: "application/json",
+        data: request_data,
         success:function(data){
-            var json_obj = JSON.parse(data);
+            var json_obj = data;
             if (json_obj.status == true){
-                $("#tr_"+body_no).remove();
+                $("#trb_"+api_no + param).remove();
             }
             else{
                 alert(data);

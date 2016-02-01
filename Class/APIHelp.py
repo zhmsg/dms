@@ -105,16 +105,16 @@ class HelpManager:
             if check_char(value["type"], 1, 20) is False:
                 return False, "Bad body param %s, type must a-z" % key
             param_desc = check_sql_character(value["desc"])[:1000]
-            body_no = uuid.uuid1().hex
             add_time = datetime.now().strftime(TIME_FORMAT)
-            value_sql += "('%s', '%s','%s',%s,'%s','%s','%s')" \
-                         % (body_no, api_no, key, value["necessary"], value["type"], param_desc, add_time)
+            value_sql += "('%s','%s',%s,'%s','%s','%s')" \
+                         % (api_no, key, value["necessary"], value["type"], param_desc, add_time)
             necessary = True if value["necessary"] == 1 else False
-            new_result.append({"api_no": api_no, "body_no": body_no, "necessary": necessary, "param": key,
-                               "desc": param_desc, "type": value["type"], "add_time": add_time})
+            new_result.append({"api_no": api_no, "necessary": necessary, "param": key, "desc": param_desc,
+                               "type": value["type"], "add_time": add_time})
         if len(value_sql) < 8:
             return True
-        insert_sql = "INSERT INTO %s (body_no,api_no,param,necessary,type,param_desc, add_time) %s" \
+        insert_sql = "INSERT INTO %s (api_no,param,necessary,type,param_desc,add_time) %s " \
+                     "ON DUPLICATE KEY UPDATE necessary=VALUES(necessary),param_desc=VALUES(param_desc),add_time=VALUES(add_time)" \
                      % (self.api_body, value_sql)
         result = self.db.execute(insert_sql)
         if result != 1:
@@ -243,14 +243,14 @@ class HelpManager:
             header_info.append({"api_no": item[0], "param": item[1], "necessary": necessary,
                                 "param_desc": item[3]})
         # 获得请求主体参数列表
-        select_sql = "SELECT body_no,api_no,param,necessary,type,param_desc FROM %s WHERE api_no='%s' ORDER BY add_time;" \
+        select_sql = "SELECT api_no,param,necessary,type,param_desc FROM %s WHERE api_no='%s' ORDER BY add_time;" \
                      % (self.api_body, api_no)
         self.db.execute(select_sql)
         body_info = []
         for item in self.db.fetchall():
-            necessary = True if item[3] == "\x01" else False
-            body_info.append({"body_no": item[0], "api_no": item[1], "param": item[2], "necessary": necessary,
-                              "type": item[4], "param_desc": item[5]})
+            necessary = True if item[2] == "\x01" else False
+            body_info.append({"api_no": item[0], "param": item[1], "necessary": necessary,
+                              "type": item[3], "param_desc": item[4]})
         # 获得预定义参数列表
         select_sql = "SELECT param,param_type FROM %s WHERE api_no='%s' ORDER BY add_time;" % (self.predefine_param, api_no)
         self.db.execute(select_sql)
@@ -311,10 +311,10 @@ class HelpManager:
         self.set_api_update(api_no)
         return True, result
 
-    def del_api_body(self, body_no):
-        if len(body_no) != 32:
-            return False, "Bad body_no"
-        delete_sql = "DELETE FROM %s WHERE body_no='%s';" % (self.api_body, body_no)
+    def del_api_body(self, api_no, param):
+        if len(api_no) != 32:
+            return False, "Bad api_no"
+        delete_sql = "DELETE FROM %s WHERE api_no='%s' AND param='%s';" % (self.api_body, api_no, param)
         result = self.db.execute(delete_sql)
         return True, result
 
