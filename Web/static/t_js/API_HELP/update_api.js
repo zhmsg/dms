@@ -228,3 +228,43 @@ function format_input(input_id){
     var json_content = JSON.stringify(JSON.parse(input_content), null, 4);
     $("#" + input_id).val(json_content);
 }
+
+function handle_predefine_param(btn_id){
+    var update_url = $("#update_header_url").val();
+    var btn = $("#" + btn_id);
+    console.info(btn);
+    var inner_value = btn.text();
+    console.info(inner_value);
+    var param = btn.val();
+    console.info(param);
+    if(inner_value.indexOf("不需要") == 0){
+        var class_name = "btn btn-info";
+        var inner_value = inner_value.replace("不", "");
+        var update_type = "delete";
+    }
+    else{
+        var class_name = "btn btn-danger";
+        var inner_value = inner_value.replace("需要", "不需要");
+        var update_type = "new";
+    }
+    $.ajax({
+        url: update_url,
+        method: "PUT",
+        data: {param: param, update_type: update_type},
+        success:function(data){
+            var json_obj = data;
+            if (json_obj.status == true){
+                btn.text(inner_value);
+                btn.removeClass();
+                btn.addClass(class_name);
+            }
+            else{
+                alert(data);
+            }
+        },
+        error:function(xhr){
+            alert(xhr.statusText);
+        }
+    });
+
+}

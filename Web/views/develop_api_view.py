@@ -4,6 +4,7 @@
 
 import sys
 import json
+import re
 from flask import Blueprint, render_template, request, redirect, url_for, jsonify
 from flask_login import login_required, current_user
 from Web import api_url_prefix
@@ -239,6 +240,25 @@ def delete_output(output_no):
 def delete_care(api_no):
     result, data = control.delete_care(api_no, current_user.account)
     return json.dumps({"status": result, "data": data})
+
+
+@develop_api_view.route("/update/header/", methods=["PUT"])
+@login_required
+def update_api_predefine_header():
+    if "Referer" not in request.headers:
+        return jsonify({"status": False, "data": "Bad Request"})
+    ref_url = request.headers["Referer"]
+    find_result = re.findall("api_no=([a-z\d]{32})", ref_url)
+    if len(find_result) < 0:
+        return jsonify({"status": False, "data": "Bad Request."})
+    api_no = find_result[0]
+    param = request.form["param"]
+    update_type = request.form["update_type"]
+    if update_type == "delete":
+        result, message = control.delete_predefine_param(current_user.role, api_no, param)
+    else:
+        result, message = control.add_predefine_header(api_no, param, current_user.role)
+    return jsonify({"status": result, "data": message})
 
 
 @develop_api_view.route("/test/", methods=["GET"])

@@ -42,7 +42,7 @@ class ControlManager:
         self.user = UserManager()
         self.user_role = self.user.role_value
         self.dev = DevManager()
-        table_manager.create_not_exist_table()
+        # table_manager.create_not_exist_table()
         self.api_help = HelpManager()
         self.api_status = StatusManager()
         self.bug = BugManager()
@@ -221,7 +221,12 @@ class ControlManager:
     def add_header_param(self, api_no, param, necessary, desc, role):
         if role & 16 <= 0:
             return False, u"您没有权限"
-        return self.api_help.new_api_header(api_no, {param :{"necessary": necessary, "desc": desc}})
+        return self.api_help.new_api_header(api_no, {param: {"necessary": necessary, "desc": desc}})
+
+    def add_predefine_header(self, api_no, param, role):
+        if role & 16 <= 0:
+            return False, u"您没有权限"
+        return self.api_help.new_predefine_param(api_no, param, "header")
 
     def add_body_param(self, api_no, param, necessary, type, desc, role):
         if role & 16 <= 0:
@@ -252,6 +257,11 @@ class ControlManager:
         if role & 16 <= 0:
             return False, u"您没有权限"
         return self.api_help.del_api_header(api_no, param)
+
+    def delete_predefine_param(self, role, api_no, param):
+        if role & 16 <= 0:
+            return False, u"您没有权限"
+        return self.api_help.del_predefine_param(api_no, param)
 
     def delete_body(self, body_no, role):
         if role & 16 <= 0:
