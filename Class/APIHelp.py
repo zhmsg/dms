@@ -90,17 +90,6 @@ class HelpManager:
         self.set_api_update(api_no)
         return True, new_result
 
-    def new_predefine_header(self, api_no, param, add_time=None):
-        if len(api_no) != 32:
-            return False, "Bad api_no"
-        if add_time is None:
-            add_time = datetime.now().strftime(TIME_FORMAT)
-        insert_sql = "INSERT INTO %s (api_no,param,param_type,add_time) VALUES ('%s','%s','header','%s') " \
-                     "ON DUPLICATE KEY UPDATE add_time=VALUES(add_time);" \
-                     % (self.predefine_param, api_no, param, add_time)
-        self.db.execute(insert_sql)
-        return True
-
     def new_api_body(self, api_no, body_params):
         if len(api_no) != 32:
             return False, "Bad api_no"
@@ -132,6 +121,19 @@ class HelpManager:
             return False, "sql execute result is %s " % result
         self.set_api_update(api_no)
         return True, new_result
+
+    def new_predefine_param(self, api_no, param, param_type, add_time=None):
+        if len(api_no) != 32:
+            return False, "Bad api_no"
+        if param_type not in ("header", "body"):
+            return False, "Bad param_type"
+        if add_time is None:
+            add_time = datetime.now().strftime(TIME_FORMAT)
+        insert_sql = "INSERT INTO %s (api_no,param,param_type,add_time) VALUES ('%s','%s','%s','%s') " \
+                     "ON DUPLICATE KEY UPDATE add_time=VALUES(add_time);" \
+                     % (self.predefine_param, api_no, param, param_type, add_time)
+        self.db.execute(insert_sql)
+        return True, "Success"
 
     def new_api_input(self, api_no, input_examples):
         if len(api_no) != 32:
@@ -313,6 +315,13 @@ class HelpManager:
         if len(body_no) != 32:
             return False, "Bad body_no"
         delete_sql = "DELETE FROM %s WHERE body_no='%s';" % (self.api_body, body_no)
+        result = self.db.execute(delete_sql)
+        return True, result
+
+    def del_predefine_param(self, api_no, param):
+        if len(api_no) != 32:
+            return False, "Bad api_no"
+        delete_sql = "DELETE FROM %s WHERE api_no='%s' AND param='%s';" % (self.predefine_param, api_no, param)
         result = self.db.execute(delete_sql)
         return True, result
 
