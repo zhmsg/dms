@@ -76,11 +76,11 @@ def login():
     request_data = request.form
     user_name = request_data["user_name"]
     password = request_data["password"]
-    result, user = user_m.check(user_name, password)
+    result, info = user_m.check(user_name, password)
     if result is False:
-        return user
-    if user["role"] == -1:
-        session["user_name"] = user["account"]
+        return info
+    if info["role"] == -1:
+        session["user_name"] = info["account"]
         session["change_token"] = gen_salt(57)
         session["expires_in"] = datetime.now() + timedelta(seconds=300)
         session["password"] = password
@@ -90,9 +90,9 @@ def login():
     else:
         remember = False
     user = User()
-    user.account = user["account"]
+    user.account = info["account"]
     login_user(user, remember=remember)
-    session["role"] = user["role"]
+    session["role"] = info["role"]
     if "next" in request_data and request_data["next"] != "":
         return redirect(request_data["next"])
     if session["role"] == 0:
