@@ -89,6 +89,7 @@ function test_api(){
                 data = JSON.parse(data);
             }
             update_res(JSON.stringify(data, null, 4));
+            update_status_url(data.status);
         },
         error:function(xhr){
             var res = "状态码：" + xhr.status + "\n";
@@ -139,7 +140,30 @@ function update_request_url(){
     $("#request_url").val(request_url);
 }
 
+function update_status_url(status_code){
+    status_code = fill_zero(status_code, 8);
+    var look_status = $("#look_status");
+    console.info(look_status);
+    var title = look_status.attr('title');
+    $("#look_status").attr("href", title + "&status=" + status_code);
+}
+
 update_request_url();
+
+function fill_zero(num, for_len) {
+    var num_str = "" + num;
+    while (for_len > 1){
+        for_len -= 1;
+        num /= 10;
+        if (num >= 1) {
+            continue
+        }
+        else{
+            num_str = "0" + num_str;
+        }
+    }
+    return num_str
+}
 
 var base64EncodeChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 var base64DecodeChars = new Array(-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 62, -1, -1, -1, 63, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, -1, -1, -1, -1, -1, -1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, -1, -1, -1, -1, -1, -1, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, -1, -1, -1, -1, -1);
