@@ -142,12 +142,10 @@ function update_info(){
         filter_code(service_id + fun_id + type_id, "start");
     }
     else{
-        filter_code("", "start");
+        filter_code($("#search_code").val(), "in");
     }
 }
 
-get_module_info();
-get_error_type();
 
 function compare_str(l_s, s_s, c_type){
     if(c_type == "in"){
@@ -156,9 +154,6 @@ function compare_str(l_s, s_s, c_type){
         }
     }
     else if(c_type == "start"){
-        console.info(l_s);
-        console.info(s_s);
-        console.info(l_s.indexOf(s_s));
         if(l_s.indexOf(s_s) == 0) {
             return true
         }
@@ -224,4 +219,9 @@ $(function(){
             $("#conBtn").html("我要新建");
         }
     });
+});
+
+$(function(){
+    get_module_info();
+    get_error_type();
 });
