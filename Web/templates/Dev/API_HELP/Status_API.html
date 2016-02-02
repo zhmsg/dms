@@ -10,7 +10,7 @@
 <body>
 <div class="container font16"> <a class="btn btn-primary pull-right margin20" href="{{ return_url }}" title="">返回API解释</a>
   <div class="clear bottom20">
-    <input class="form-control" id="search_code" onkeyup="search_code();" placeholder="搜索状态码" />
+    <input class="form-control" id="search_code" onkeyup="search_code();" placeholder="搜索状态码" value="{{ search_status }}" />
   </div>
   {% if true %}
   <div style="position: relative">
@@ -21,7 +21,6 @@
       </tr>
       {% for item in status_info %}
       <tr id="s_{{ item["status_code"] }}">
-        {#<td onmouseover="show_code_info('{{ item["status_code"] }}');">#}
         <td class="status_move"><span>{{ item["status_code"][:2] }}</span> <span>{{ item["status_code"][2:4] }}</span> <span>{{ item["status_code"][4:6] }}</span> <span>{{ item["status_code"][6:8] }}</span></td>
         <td>{{ item["code_desc"] }}</td>
       </tr>

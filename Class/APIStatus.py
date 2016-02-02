@@ -42,7 +42,7 @@ class StatusManager:
         insert_sql = "INSERT IGNORE INTO %s (status_code,code_desc,add_time,adder) " \
                      "VALUES (%s,'%s','%s','%s');" % (self.status_code, status_code, code_desc, add_time, adder)
         self.db.execute(insert_sql)
-        return True, "success"
+        return True, status_code
 
     def get_status_code(self):
         select_sql = "SELECT status_code,code_desc,add_time,adder FROM %s;" % self.status_code

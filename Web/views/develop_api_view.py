@@ -5,6 +5,7 @@
 import sys
 import json
 import re
+from urlparse import urlparse, parse_qs
 from flask import Blueprint, render_template, request, redirect, url_for, jsonify
 from flask_login import login_required, current_user
 from Web import api_url_prefix
@@ -288,8 +289,9 @@ def show_status_info():
     fun_info_url = url_prefix + "/status/fun/"
     error_type_url = url_prefix + "/status/type/"
     return_url = url_prefix + ("/" if "api_no" not in request.args else "/info/?api_no=%s" % request.args["api_no"])
+    search_status = "" if "status" not in request.args else request.args["status"]
     return render_template("%s/Status_API.html" % html_dir, fun_info_url=fun_info_url, status_info=status_info,
-                           error_type_url=error_type_url, return_url=return_url)
+                           error_type_url=error_type_url, return_url=return_url, search_status=search_status)
 
 
 @develop_api_view.route("/status/fun/", methods=["GET"])
@@ -319,4 +321,11 @@ def new_status():
                                               error_id, error_desc)
     if result is False:
         return new_info
-    return redirect(url_for("develop_api_view.show_status_info"))
+    redirect_url = urlparse(request.headers["Referer"])
+    uq = parse_qs(redirect_url.query)
+    uq["status"] = [new_info]
+    param_list = []
+    for key in uq:
+        param_list.append("%s=%s" % (key, uq[key][0]))
+    redirect_url = redirect_url.path + "?" + "&".join(param_list)
+    return redirect(redirect_url)
