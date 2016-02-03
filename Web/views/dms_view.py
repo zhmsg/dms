@@ -120,6 +120,7 @@ def password_page():
             return render_template("password.html", user_name=session["user_name"],
                                    change_token=session["change_token"], url_prefix=url_prefix)
     print("will login")
+    return "will login"
     return redirect(url_for("dms_view.login_page"))
 
 
