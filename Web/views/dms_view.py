@@ -117,8 +117,8 @@ def password_page():
             if expires_in > datetime.now():
                 return render_template("password.html", user_name=session["user_name"],
                                        change_token=session["change_token"], url_prefix=url_prefix)
-    except:
-        pass
+    except Exception as e:
+        print(e.args)
     return redirect(url_for("dms_view.login_page"))
 
 
