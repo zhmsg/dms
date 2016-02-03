@@ -51,14 +51,11 @@ def calc_redirect(role):
 @dms_view.route("/", methods=["GET"])
 def index():
     next_url = ""
-    try:
-        if current_user.is_authenticated():
-            if current_user.role == 0:
-                return u"您还没有任何权限，请联系管理员授权"
-            else:
-                return redirect(url_for(calc_redirect(current_user.role)))
-    except Exception:
-        pass
+    if current_user.is_authenticated:
+        if current_user.role == 0:
+            return u"您还没有任何权限，请联系管理员授权"
+        else:
+            return redirect(url_for(calc_redirect(current_user.role)))
     if "next" in request.args:
         next_url = request.args["next"]
     return render_template("login.html", next_url=next_url, url_prefix=url_prefix)
@@ -66,11 +63,8 @@ def index():
 
 @dms_view.route("/login/", methods=["GET"])
 def login_page():
-    try:
-        if current_user.is_authenticated():
-            logout_user()
-    except:
-        pass
+    if current_user.is_authenticated:
+        logout_user()
     next_url = ""
     if "next" in request.args:
         next_url = request.args["next"]
@@ -109,18 +103,13 @@ def login():
 
 @dms_view.route("/password/", methods=["GET"])
 def password_page():
-    print("enter password page")
-    return type(current_user)
-    if current_user.is_authenticated():
-        print("current user auth")
+    if current_user.is_authenticated:
         return render_template("password.html", user_name=current_user.account, url_prefix=url_prefix)
     elif "change_token" in session and "expires_in" in session and "user_name" in session:
-        print("update password")
         expires_in = session["expires_in"]
         if expires_in > datetime.now():
             return render_template("password.html", user_name=session["user_name"],
                                    change_token=session["change_token"], url_prefix=url_prefix)
-    print("will login")
     return redirect(url_for("dms_view.login_page"))
 
 
@@ -175,7 +164,6 @@ def register_page():
 def register():
     request_data = request.form
     user_name = request_data["user_name"]
-    print(session["register_name"])
     if "register_name" not in session or session["register_name"] != user_name:
         return u"页面已过期，请刷新重试"
     nick_name = request_data["nick_name"]
