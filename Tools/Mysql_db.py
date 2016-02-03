@@ -23,7 +23,7 @@ Usage:
 current_filename = sys.argv[0][sys.argv[0].rfind(os.sep) + 1:sys.argv[0].rfind(os.extsep)]
 logging.basicConfig(filename=current_filename + '_DB.log', filemode='w')
 
-remote_host = "gene.ac"
+remote_host = "localhost"
 local_host = "127.0.0.1"
 
 
@@ -32,7 +32,7 @@ class DB(object):
     cursor = None
     _sock_file = ''
 
-    def __init__(self, local=False, host="", mysql_user="jingyun", mysql_password="gene.ac898", mysql_db="transport"):
+    def __init__(self, local=False, host="", mysql_user="dms", mysql_password="gene_ac252", mysql_db="dms"):
         try:
             if local is True:
                 self.host = local_host
