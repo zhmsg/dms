@@ -93,9 +93,11 @@ def new_api_page():
     result, module_list = control.get_module_list(current_user.role)
     if result is False:
         return module_list
+    module_no = 1
     if "module_no" in request.args:
-        module_no = request.args["module_no"]
-    return render_template("%s/New_API.html" % html_dir, module_list=module_list, url_prefix=url_prefix)
+        module_no = int(request.args["module_no"])
+    return render_template("%s/New_API.html" % html_dir, module_list=module_list, url_prefix=url_prefix,
+                           module_no=module_no)
 
 
 @develop_api_view.route("/new/", methods=["POST"])

@@ -34,5 +34,5 @@ function show_comp_url(){
     var input_url = lTrim($("#api_url").val(), "/");
     $("#api_comp_url").text(prefix + "/" + input_url);
 }
-
+select_change();
 
