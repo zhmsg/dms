@@ -57,7 +57,7 @@ def index():
                 return u"您还没有任何权限，请联系管理员授权"
             else:
                 return redirect(url_for(calc_redirect(current_user.role)))
-    except:
+    except Exception:
         pass
     if "next" in request.args:
         next_url = request.args["next"]
