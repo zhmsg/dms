@@ -110,7 +110,7 @@ def login():
 @dms_view.route("/password/", methods=["GET"])
 def password_page():
     print("enter password page")
-    return "enter pasword page"
+    return type(current_user)
     if current_user.is_authenticated():
         print("current user auth")
         return render_template("password.html", user_name=current_user.account, url_prefix=url_prefix)
