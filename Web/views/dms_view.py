@@ -109,13 +109,17 @@ def login():
 
 @dms_view.route("/password/", methods=["GET"])
 def password_page():
+    print("enter password page")
     if current_user.is_authenticated():
+        print("current user auth")
         return render_template("password.html", user_name=current_user.account, url_prefix=url_prefix)
     elif "change_token" in session and "expires_in" in session and "user_name" in session:
+        print("update password")
         expires_in = session["expires_in"]
         if expires_in > datetime.now():
             return render_template("password.html", user_name=session["user_name"],
                                    change_token=session["change_token"], url_prefix=url_prefix)
+    print("will login")
     return redirect(url_for("dms_view.login_page"))
 
 
