@@ -276,7 +276,10 @@ def test_api():
     result, api_info = control.get_api_info(api_no, current_user.role)
     if result is False:
         return api_info
-    return_url = url_prefix + "/info/?api_no=%s" % api_no
+    if "Referer" in request.headers:
+        return_url = request.headers["Referer"]
+    else:
+        return_url = url_prefix + "/info/?api_no=%s" % api_no
     status_url = url_prefix + "/status/"
     return render_template("%s/Test_API.html" % html_dir, api_info=api_info, return_url=return_url, api_no=api_no,
                            status_url=status_url)
