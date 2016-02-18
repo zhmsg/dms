@@ -1,0 +1,7 @@
+gunicorn
+gevent
+Flask
+Flask-Login
+MySQL-python
+requests
+xlwt
