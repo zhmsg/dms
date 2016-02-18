@@ -75,7 +75,8 @@ class UserManager:
         select_sql = "SELECT user_name,role FROM %s WHERE user_name='%s';" % (self.user, r["data"]["account"])
         result = self.db.execute(select_sql)
         if result <= 0:
-            return True, 0
+            r["data"]["role"] = 0
+            return True, r["data"]
         db_r = self.db.fetchone()
         role = db_r[1]
         r["data"]["role"] = role
