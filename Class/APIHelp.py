@@ -114,7 +114,7 @@ class HelpManager:
         if len(value_sql) < 8:
             return True
         insert_sql = "INSERT INTO %s (api_no,param,necessary,type,param_desc,add_time) %s " \
-                     "ON DUPLICATE KEY UPDATE necessary=VALUES(necessary),param_desc=VALUES(param_desc),add_time=VALUES(add_time)" \
+                     "ON DUPLICATE KEY UPDATE necessary=VALUES(necessary),param_desc=VALUES(param_desc),type=VALUES(type)" \
                      % (self.api_body, value_sql)
         result = self.db.execute(insert_sql)
         if result < 1:
