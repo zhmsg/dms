@@ -32,6 +32,19 @@ class HelpManager:
         self.api_care = table_manager.api_care
         self.user = "sys_user"
 
+    def new_api_module(self, module_name, module_prefix, module_desc):
+        if check_chinese_en(module_name, 0, 35) is False:
+            return False, "Bad module_name."
+        if check_path(module_prefix, 0, 35) is False:
+            return False, "Bad module_prefix"
+        module_desc = check_sql_character(module_desc)[:240]
+        insert_sql = "INSERT INTO %s (module_name,module_prefix,module_desc) VALUES ('%s','%s','%s');" \
+                     % (self.api_module, module_name, module_prefix, module_desc)
+        result = self.db.execute(insert_sql)
+        if result != 1:
+            return False, "sql execute result is %s " % result
+        return True, "success"
+
     def new_api_info(self, module_no, api_title, api_path, api_method, api_desc):
         if type(module_no) != int:
             return False , "Bad module_no"
