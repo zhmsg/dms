@@ -56,7 +56,24 @@ def list_api():
             return "Error"
         return render_template("%s/List_API.html" % html_dir, module_list=module_list, api_list=api_list,
                                current_module=current_module, url_prefix=url_prefix)
-    return render_template("%s/List_API.html" % html_dir, module_list=module_list, url_prefix=url_prefix)
+    if current_user.role & control.user_role["api_module_new"] == control.user_role["api_module_new"]:
+        new_module = True
+    else:
+        new_module = False
+    return render_template("%s/List_API.html" % html_dir, module_list=module_list, url_prefix=url_prefix,
+                           new_module=new_module)
+
+
+@develop_api_view.route("/module/", methods=["POST"])
+@login_required
+def new_api_module_page():
+    module_name = request.form["module_name"]
+    module_prefix = request.form["module_prefix"]
+    module_desc = request.form["module_desc"]
+    result, message = control.new_api_module(current_user.role, module_name, module_prefix, module_desc)
+    if result is False:
+        return message
+    return redirect(url_prefix)
 
 
 @develop_api_view.route("/info/", methods=["GET"])
