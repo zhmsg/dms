@@ -70,10 +70,18 @@ def new_api_module_page():
     module_name = request.form["module_name"]
     module_prefix = request.form["module_prefix"]
     module_desc = request.form["module_desc"]
-    result, message = control.new_api_module(current_user.role, module_name, module_prefix, module_desc)
+    if "Referer" in request.headers:
+        redirect_url = request.headers["Referer"]
+    else:
+        redirect_url = url_prefix
+    if "module_no" in request.args:
+        module_no = int(request.args["module_no"])
+        result, message = control.update_api_module(current_user.role, module_no, module_name, module_prefix, module_desc)
+    else:
+        result, message = control.new_api_module(current_user.role, module_name, module_prefix, module_desc)
     if result is False:
         return message
-    return redirect(url_prefix)
+    return redirect(redirect_url)
 
 
 @develop_api_view.route("/info/", methods=["GET"])

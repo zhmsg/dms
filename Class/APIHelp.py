@@ -45,6 +45,17 @@ class HelpManager:
             return False, "sql execute result is %s " % result
         return True, "success"
 
+    def update_api_module(self, module_no, module_name, module_prefix, module_desc):
+        if check_chinese_en(module_name, 0, 35) is False:
+            return False, "Bad module_name."
+        if check_path(module_prefix, 0, 35) is False:
+            return False, "Bad module_prefix"
+        module_desc = check_sql_character(module_desc)[:240]
+        update_sql = "UPDATE %s SET module_name='%s',module_prefix='%s',module_desc='%s' WHERE module_no=%s;" \
+                     % (self.api_module, module_name, module_prefix, module_desc, module_no)
+        result = self.db.execute(update_sql)
+        return True, "success"
+
     def new_api_info(self, module_no, api_title, api_path, api_method, api_desc):
         if type(module_no) != int:
             return False , "Bad module_no"
