@@ -46,6 +46,27 @@
 {% if current_module %}
     <a class="btn btn-primary pull-right" href="{{ url_prefix }}/new/?module_no={{ current_module["module_no"] }}" title="">添加API</a>
 {% endif %}
+{% if current_module and update_module %}
+    <form action="{{ url_prefix }}/module/?module_no={{ current_module["module_no"] }}" method="post">
+        <div class="form-group apiContentLine">
+          <ul>
+            <li>
+              <label for="">模块名称：</label>
+              <input class="box-side width300" name="module_name" type="text" value="{{ current_module["module_name"] }}" required />
+            </li>
+            <li>
+              <label for="">模块前缀：</label>
+              <input class="box-side width300" name="module_prefix" type="text" value="{{ current_module["module_prefix"] }}" required />
+            </li>
+            <li>
+              <label class="api-describe" for="">模块描述：</label>
+              <textarea class="box-side" rows="3" name="module_desc" required>{{ current_module["module_desc"] }}</textarea>
+            </li>
+          </ul>
+          <button type="submit" class="btn btn-success btn-down api-newBtn">更新模块</button>
+        </div>
+    </form>
+{% endif %}
 {% if new_module %}
 <form action="{{ url_prefix }}/module/" method="post">
     <div class="form-group apiContentLine">

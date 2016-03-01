@@ -42,6 +42,10 @@ def list_api():
     result, module_list = control.get_module_list(current_user.role)
     if result is False:
         return module_list
+    if current_user.role & control.user_role["api_module_new"] == control.user_role["api_module_new"]:
+        new_module = True
+    else:
+        new_module = False
     if "module_no" in request.args:
         module_no = int(request.args["module_no"])
         result, api_list = control.get_api_list(module_no, current_user.role)
@@ -55,11 +59,7 @@ def list_api():
         if current_module is None:
             return "Error"
         return render_template("%s/List_API.html" % html_dir, module_list=module_list, api_list=api_list,
-                               current_module=current_module, url_prefix=url_prefix)
-    if current_user.role & control.user_role["api_module_new"] == control.user_role["api_module_new"]:
-        new_module = True
-    else:
-        new_module = False
+                               current_module=current_module, url_prefix=url_prefix, update_module=new_module)
     return render_template("%s/List_API.html" % html_dir, module_list=module_list, url_prefix=url_prefix,
                            new_module=new_module)
 
