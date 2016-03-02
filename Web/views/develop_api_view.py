@@ -43,9 +43,9 @@ def list_api():
     if result is False:
         return module_list
     if current_user.role & control.user_role["api_module_new"] == control.user_role["api_module_new"]:
-        new_module = True
+        new_power = True
     else:
-        new_module = False
+        new_power = False
     if "module_no" in request.args:
         module_no = int(request.args["module_no"])
         result, api_list = control.get_api_list(module_no, current_user.role)
@@ -58,10 +58,15 @@ def list_api():
                 break
         if current_module is None:
             return "Error"
+        if "update" in request.args and request.args["update"] == "true" and new_power is True:
+            update_module = True
+        else:
+            update_module = False
         return render_template("%s/List_API.html" % html_dir, module_list=module_list, api_list=api_list,
-                               current_module=current_module, url_prefix=url_prefix, update_module=new_module)
+                               current_module=current_module, url_prefix=url_prefix, update_module=update_module,
+                               new_power=new_power)
     return render_template("%s/List_API.html" % html_dir, module_list=module_list, url_prefix=url_prefix,
-                           new_module=new_module)
+                           new_module=True, new_power=new_power)
 
 
 @develop_api_view.route("/module/", methods=["POST"])
@@ -77,6 +82,7 @@ def new_api_module_page():
     if "module_no" in request.args:
         module_no = int(request.args["module_no"])
         result, message = control.update_api_module(current_user.role, module_no, module_name, module_prefix, module_desc)
+        redirect_url = "%s?module_no=%s" % (url_prefix, module_no)
     else:
         result, message = control.new_api_module(current_user.role, module_name, module_prefix, module_desc)
     if result is False:

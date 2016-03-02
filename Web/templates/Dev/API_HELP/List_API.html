@@ -16,12 +16,36 @@
         <a href="{{ url_prefix }}/?module_no={{ module_info["module_no"] }}">{{ module_info["module_name"] }}</a>
     {% endfor %}
 </div>
-{% if current_module %}
+{% if current_module and update_module %}
+    <form action="{{ url_prefix }}/module/?module_no={{ current_module["module_no"] }}" method="post">
+        <div class="form-group apiContentLine">
+          <ul>
+            <li>
+              <label for="">模块名称：</label>
+              <input class="box-side width300" name="module_name" type="text" value="{{ current_module["module_name"] }}" required />
+            </li>
+            <li>
+              <label for="">模块前缀：</label>
+              <input class="box-side width300" name="module_prefix" type="text" value="{{ current_module["module_prefix"] }}" required />
+            </li>
+            <li>
+              <label class="api-describe" for="">模块描述：</label>
+              <textarea class="box-side" rows="3" name="module_desc" required>{{ current_module["module_desc"] }}</textarea>
+            </li>
+          </ul>
+          <button type="submit" class="btn btn-success btn-down api-newBtn">更新模块</button>
+        </div>
+    </form>
+{% elif current_module %}
     <p>当前模块</p>
     <p>模块编号：{{ current_module["module_no"] }}</p>
     <p>模块名称：{{ current_module["module_name"] }}</p>
     <p>模块URL前缀：{{ current_module["module_prefix"] }}</p>
     <p>模块描述：{{ current_module["module_desc"] }}</p>
+    {% if new_power %}
+        <a href="{{ url_prefix }}/?module_no={{ current_module["module_no"] }}&update=true">更新模块信息</a> &nbsp;
+        <a href="{{ url_prefix }}/?module_no={{ current_module["module_no"] }}">删除模块</a>
+    {% endif %}
 {% endif %}
 {% if api_list and current_module%}
     <table class="table table-bordered table-hover api-list-table">
@@ -46,28 +70,7 @@
 {% if current_module %}
     <a class="btn btn-primary pull-right" href="{{ url_prefix }}/new/?module_no={{ current_module["module_no"] }}" title="">添加API</a>
 {% endif %}
-{% if current_module and update_module %}
-    <form action="{{ url_prefix }}/module/?module_no={{ current_module["module_no"] }}" method="post">
-        <div class="form-group apiContentLine">
-          <ul>
-            <li>
-              <label for="">模块名称：</label>
-              <input class="box-side width300" name="module_name" type="text" value="{{ current_module["module_name"] }}" required />
-            </li>
-            <li>
-              <label for="">模块前缀：</label>
-              <input class="box-side width300" name="module_prefix" type="text" value="{{ current_module["module_prefix"] }}" required />
-            </li>
-            <li>
-              <label class="api-describe" for="">模块描述：</label>
-              <textarea class="box-side" rows="3" name="module_desc" required>{{ current_module["module_desc"] }}</textarea>
-            </li>
-          </ul>
-          <button type="submit" class="btn btn-success btn-down api-newBtn">更新模块</button>
-        </div>
-    </form>
-{% endif %}
-{% if new_module %}
+{% if new_module and new_power%}
 <form action="{{ url_prefix }}/module/" method="post">
     <div class="form-group apiContentLine">
       <ul>
