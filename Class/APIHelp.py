@@ -56,6 +56,11 @@ class HelpManager:
         result = self.db.execute(update_sql)
         return True, "success"
 
+    def del_api_module(self, module_no):
+        delete_sql = "DELETE FROM %s WHERE module_no=%s;" % module_no
+        self.db.execute(delete_sql)
+        return True, "success"
+
     def new_api_info(self, module_no, api_title, api_path, api_method, api_desc):
         if type(module_no) != int:
             return False , "Bad module_no"
