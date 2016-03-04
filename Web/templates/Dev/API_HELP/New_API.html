@@ -10,7 +10,11 @@
 
 <body>
 <div class="container apiMode">
-    <a class="btn btn-primary pull-right" href="{{ url_prefix }}" title="">API列表</a>
+    {% if return_url %}
+        <a class="btn btn-primary pull-right" href="{{ return_url }}" title="">查看API</a>
+    {% else %}
+        <a class="btn btn-primary pull-right" href="{{ url_prefix }}/" title="">API列表</a>
+    {% endif %}
   <div class="form-group">
      <label for="">API所属模块：</label>
      <select class="box-side" id="api_module" onchange="select_change()" >

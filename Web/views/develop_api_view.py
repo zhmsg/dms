@@ -166,7 +166,7 @@ def update_api_info_page():
         return api_info
     module_no = api_info["basic_info"]["module_no"]
     return render_template("%s/New_API.html" % html_dir, module_list=module_list, url_prefix=url_prefix,
-                           module_no=module_no, api_info=api_info)
+                           module_no=module_no, api_info=api_info, return_url=return_url)
 
 
 @develop_api_view.route("/update/", methods=["POST"])
