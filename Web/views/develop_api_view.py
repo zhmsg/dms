@@ -172,8 +172,19 @@ def update_api_info_page():
 @develop_api_view.route("/update/", methods=["POST"])
 @login_required
 def update_api_info():
-    print(request.form)
-    return "true"
+    request_form = request.form
+    api_module = request_form["api_module"]
+    api_no = request_form["api_no"]
+    desc = request_form["api_desc"]
+    url = request_form["api_url"]
+    title = request_form["api_title"]
+    method = request_form["api_method"]
+    module_no = int(api_module)
+    result, message = control.update_api_info(role=current_user.role, api_no=api_no, desc=desc, method=method,
+                                              path=url, module_no=module_no, title=title)
+    if result is False:
+        return message
+    return redirect("%s/info/?api_no=%s" % (url_prefix, api_no))
 
 
 @develop_api_view.route("/update/info/", methods=["GET"])

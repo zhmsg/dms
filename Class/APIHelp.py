@@ -83,6 +83,27 @@ class HelpManager:
             return False, "sql execute result is %s " % result
         return True, {"api_no": api_no}
 
+    def update_api_info(self, api_no, module_no, api_title, api_path, api_method, api_desc):
+        if len(api_no) != 32:
+            return False, "Bad api_no"
+        if type(module_no) != int:
+            return False , "Bad module_no"
+        if check_path(api_path) is False:
+            return False, "Bad api_path"
+        if check_http_method(api_method) is False:
+            return False, "Bad api_method"
+        api_title = check_sql_character(api_title)
+        api_desc = check_sql_character(api_desc)
+        if len(api_desc) < 1:
+            return False, "Bad api_desc"
+        # 更新 api_info
+        update_time = datetime.now().strftime(TIME_FORMAT)
+        update_sql = "UPDATE %s SET module_no=%s,api_title='%s',api_path='%s',api_method='%s',api_desc='%s',update_time='%s' " \
+                     "WHERE api_no='%s'; "  \
+                     % (self.api_info, module_no, api_title, api_path, api_method, api_desc, update_time, api_no)
+        result = self.db.execute(update_sql)
+        return True, "success"
+
     def set_api_update(self, api_no):
         update_time = datetime.now().strftime(TIME_FORMAT)
         update_sql = "UPDATE %s SET update_time='%s' WHERE api_no='%s';" % (self.api_info, update_time, api_no)

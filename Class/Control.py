@@ -228,6 +228,12 @@ class ControlManager:
             self.api_help.new_api_care(data["api_no"], user_name, 0)
         return result, data
 
+    def update_api_info(self, role, api_no, module_no, title, path, method, desc):
+        if role & self.user_role["api_new"] <= 0:
+            return False, u"您没有权限"
+        result, data = self.api_help.update_api_info(api_no, module_no, title, path, method, desc)
+        return result, data
+
     def get_api_info(self, api_no, role):
         if role & self.user_role["api_look"] <= 0:
             return False, u"您没有权限"
