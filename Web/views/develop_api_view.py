@@ -149,6 +149,33 @@ def new_api_info():
     return redirect(url_prefix + "/update/info/?api_no=%s" % api_info["api_no"])
 
 
+@develop_api_view.route("/update/", methods=["GET"])
+@login_required
+def update_api_info_page():
+    if "api_no" not in request.args:
+        return "Need api_no"
+    api_no = request.args["api_no"]
+    if len(api_no) != 32:
+        return "Bad api_no"
+    result, module_list = control.get_module_list(current_user.role)
+    if result is False:
+        return module_list
+    result, api_info = control.get_api_info(api_no, current_user.role)
+    return_url = url_prefix + "/info/?api_no=%s" % api_no
+    if result is False:
+        return api_info
+    module_no = api_info["basic_info"]["module_no"]
+    return render_template("%s/New_API.html" % html_dir, module_list=module_list, url_prefix=url_prefix,
+                           module_no=module_no, api_info=api_info)
+
+
+@develop_api_view.route("/update/", methods=["POST"])
+@login_required
+def update_api_info():
+    print(request.form)
+    return "true"
+
+
 @develop_api_view.route("/update/info/", methods=["GET"])
 @login_required
 def update_api_other_info():
