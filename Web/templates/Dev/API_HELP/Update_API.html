@@ -114,8 +114,8 @@
                 </div>
                 {% endfor %}
             </div>
-            <p><input class="form-control" id="input_desc"  /></p>
-            <p><textarea class="form-control input_example" id="input_example" onchange="format_input(this.id);" onkeyup="format_input(this.id);"></textarea></p>
+            <p><input class="form-control" id="input_desc" placeholder="请求示例描述"  /></p>
+            <p><textarea class="form-control input_example" id="input_example" onchange="format_input(this.id);" onkeyup="format_input(this.id);" placeholder="请求示例"></textarea></p>
             <button class="btn btn-info" onclick="new_input_example('{{ url_prefix }}/add/input/')">新建</button>
 
         </div>
@@ -132,8 +132,8 @@
                    </div>
                 {% endfor %}
             </div>
-            <p><input class="form-control" id="output_desc" /></p>
-            <p><textarea class="form-control input_example" id="output_example" onchange="format_input(this.id);" onkeyup="format_input(this.id);"></textarea></p>
+            <p><input class="form-control" id="output_desc" placeholder="返回示例描述" /></p>
+            <p><textarea class="form-control input_example" id="output_example" onchange="format_input(this.id);" onkeyup="format_input(this.id);" placeholder="返回示例"></textarea></p>
             <button class="btn btn-info" onclick="new_output_example('{{ url_prefix }}/add/output/')">新建</button>
 
         </div>
