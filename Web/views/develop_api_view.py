@@ -96,12 +96,15 @@ def new_api_module_page():
     return redirect(redirect_url)
 
 
-@develop_api_view.route("/module/care/", methods=["POST"])
+@develop_api_view.route("/module/care/", methods=["POST", "DELETE"])
 @login_required
 def add_module_care():
     request_form = request.form
     module_no = int(request_form["module_no"])
-    result, care_info = control.add_module_care(current_user.account, current_user.role, module_no)
+    if request.method == "POST":
+        result, care_info = control.add_module_care(current_user.account, current_user.role, module_no)
+    else:
+        result, care_info = control.delete_module_care(current_user.account, module_no)
     return json.dumps({"status": result, "data": care_info})
 
 
