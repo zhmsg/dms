@@ -70,8 +70,7 @@
 {% endif %}
 {% if current_module %}
     <a class="btn btn-primary pull-right" href="{{ url_prefix }}/new/?module_no={{ current_module["module_no"] }}" title="">添加API</a>&nbsp;&nbsp;
-{% endif %}
-<div class="care">
+    <div class="care">
     {% if my_care %}
        <button class="btn btn-primary pull-right" onclick="change_care('{{ url_prefix }}/module/care/{{ api_no }}/');" id="make_care">取消关注</button>
     {% else %}
@@ -87,6 +86,8 @@
         {% endfor %}
     </div>
 </div>
+{% endif %}
+
 {% if new_module and new_power%}
 <form action="{{ url_prefix }}/module/" method="post">
     <div class="form-group apiContentLine">
