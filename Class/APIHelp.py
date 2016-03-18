@@ -417,10 +417,11 @@ class HelpManager:
         result = self.db.execute(delete_sql)
         return True, result
 
-    def del_module_care(self, module_no, user_name):
+    def del_module_care(self, module_no, user_name, level=2):
         if type(module_no) != int:
             return False, "Bad module_no"
-        delete_sql = "DELETE FROM %s WHERE module_no='%s' AND user_name='%s';" % (self.module_care, module_no, user_name)
+        delete_sql = "DELETE FROM %s WHERE module_no='%s' AND user_name='%s' AND level=%s;" \
+                     % (self.module_care, module_no, user_name, level)
         result = self.db.execute(delete_sql)
         return True, result
 

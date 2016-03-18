@@ -9,7 +9,7 @@
 <script type="text/javascript" src="{{ url_for('static', filename='t_js/API_HELP/update_api.js') }}"></script>
 </head>
 
-<body>
+<body onbeforeunload="send_message();">
     <div class="container font16 apiMode">
         <a class="btn btn-primary pull-right" href="{{ return_url }}" title="">返回</a>
         <input class="form-control bottom10" id="api_no" value="{{ api_no }}" style="display:none;"/>

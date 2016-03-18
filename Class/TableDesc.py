@@ -152,6 +152,15 @@ class TableManager:
             ["level", "tinyint(4)", "NO", "", None, "", "用户关注级别 0 MODULE的创建者 1 修改过MODULE 2 关心MODULE 3 删除MODULE"]
         ]
 
+        self.send_message = "send_message"
+        self.send_message_desc = [
+            ["sys_no", "int(11)", "NO", "PRI", None, "auto_increment", "系统编号"],
+            ["send_user", "varchar(15)", "NO", "", None, "", "发送者的用户账户名"],
+            ["rec_user", "varchar(500)", "NO", "", None, "", "接收者的用户账户名中间用|分割"],
+            ["send_time", "int(11)", "NO", "", None, "", "发送的时间"],
+            ["content", "text", "NO", "", None, "", "发送的内容"]
+        ]
+
     def create_not_exist_table(self):
         keys = vars(self).keys()
         for key in keys:

@@ -271,3 +271,8 @@ function handle_predefine_param(btn_id){
     });
 
 }
+
+function send_message()
+{
+    alert("即将离开");
+}

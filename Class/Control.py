@@ -42,7 +42,6 @@ class ControlManager:
         self.user = UserManager()
         self.user_role = self.user.role_value
         self.dev = DevManager()
-        table_manager.create_not_exist_table()
         self.api_help = HelpManager()
         self.api_status = StatusManager()
         self.bug = BugManager()
