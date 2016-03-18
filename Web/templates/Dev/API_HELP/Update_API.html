@@ -17,6 +17,31 @@
         <p>API URL: {{ api_info["basic_info"]["api_url"] }}</p>
         <p>API 请求方式: {{ api_info["basic_info"]["api_method"] }}</p>
         <a href="{{ url_prefix }}/update/?api_no={{ api_info["basic_info"]["api_no"] }}">更新API信息</a>
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">
+            Launch demo modal
+        </button>
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                    </div>
+                    <div class="modal-body">
+                        <textarea class="text-content" name="" cols="" rows=""></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-info">确定</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <input id="del_header_url" value="{{ url_prefix }}/delete/header/" style="display: none" />
         <input id="del_body_url" value="{{ url_prefix }}/delete/body/" style="display: none" />
         <input id="del_input_url" value="{{ url_prefix }}/delete/input/" style="display: none" />
@@ -140,5 +165,8 @@
 
 
     </div>
+
+<script type="text/javascript" src="{{ url_for('static', filename='t_js/bootstrap.min.js') }}"></script>
+
 </body>
 </html>

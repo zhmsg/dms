@@ -127,3 +127,10 @@ ul,ol{list-style: none;margin: 0;padding: 0;}
 /*API返回状态码*/
 .status_out{width:500px;height: 200px;background: #d9d9d9;line-height: 30px;position: absolute;left: 10%;padding: 5px;display: none;}
 .status_move{cursor: pointer;}
+
+.text-content{
+    width: 568px !important;
+    max-height: 500px;
+    min-height: 100px !important;
+    height: auto;
+}
