@@ -48,9 +48,9 @@ def list_api():
         new_power = False
     if "module_no" in request.args:
         module_no = int(request.args["module_no"])
-        result, api_list = control.get_api_list(module_no, current_user.role)
+        result, module_data = control.get_api_list(module_no, current_user.role)
         if result is False:
-            return api_list
+            return module_data
         current_module = None
         for module_info in module_list:
             if module_info["module_no"] == module_no:
@@ -62,9 +62,15 @@ def list_api():
             update_module = True
         else:
             update_module = False
-        return render_template("%s/List_API.html" % html_dir, module_list=module_list, api_list=api_list,
+        my_care = None
+        for item in module_data["care_info"]:
+            if item["user_name"] == current_user.account:
+                my_care = item
+                module_data["care_info"].remove(item)
+                break
+        return render_template("%s/List_API.html" % html_dir, module_list=module_list, api_list=module_data["api_list"],
                                current_module=current_module, url_prefix=url_prefix, update_module=update_module,
-                               new_power=new_power)
+                               new_power=new_power, my_care=my_care, care_info=module_data["care_info"])
     return render_template("%s/List_API.html" % html_dir, module_list=module_list, url_prefix=url_prefix,
                            new_module=True, new_power=new_power)
 
@@ -88,6 +94,15 @@ def new_api_module_page():
     if result is False:
         return message
     return redirect(redirect_url)
+
+
+@develop_api_view.route("/module/care/", methods=["POST"])
+@login_required
+def add_module_care():
+    request_form = request.form
+    module_no = int(request_form["module_no"])
+    result, care_info = control.add_module_care(current_user.account, current_user.role, module_no)
+    return json.dumps({"status": result, "data": care_info})
 
 
 @develop_api_view.route("/info/", methods=["GET"])
@@ -256,7 +271,7 @@ def add_output_example():
     return json.dumps({"status": True, "data": output_info})
 
 
-@develop_api_view.route("/add/care/", methods=["POST"])
+@develop_api_view.route("/care/", methods=["POST"])
 @login_required
 def add_care():
     request_form = request.form
@@ -308,9 +323,11 @@ def delete_output(output_no):
     return json.dumps({"status": result, "data": data})
 
 
-@develop_api_view.route("/delete/care/<api_no>/", methods=["DELETE"])
+@develop_api_view.route("/care/", methods=["DELETE"])
 @login_required
-def delete_care(api_no):
+def delete_care():
+    request_form = request.form
+    api_no = request_form["api_no"]
     result, data = control.delete_care(api_no, current_user.account)
     return json.dumps({"status": result, "data": data})
 

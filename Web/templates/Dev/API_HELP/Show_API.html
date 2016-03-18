@@ -116,10 +116,11 @@
 {% endif %}
 
 <div class="care">
+    <input id="care_url" value='{{ url_prefix }}/care/' style="display: none"/>
     {% if my_care %}
-       <button class="btn btn-primary pull-right" onclick="change_care('{{ url_prefix }}/delete/care/{{ api_no }}/');" id="make_care">取消关注</button>
+       <button class="btn btn-primary pull-right" onclick="change_care();" id="make_care">取消关注</button>
     {% else %}
-        <button class="btn btn-primary pull-right" onclick="change_care('{{ url_prefix }}/add/care/');" id="make_care">关注</button>
+        <button class="btn btn-primary pull-right" onclick="change_care();" id="make_care">关注</button>
     {% endif %}
     <p><b>已关注的人(如果您使用到该API，请关注，以便API一旦发生更改，能尽快通知您。)</b></p>
     <div id="api_care_user">

@@ -269,6 +269,11 @@ class ControlManager:
             return False, u"您没有权限"
         return self.api_help.new_api_care(api_no, user_name)
 
+    def add_module_care(self, user_name, role, module_no):
+        if role & 8 <= 0:
+            return False, u"您没有权限"
+        return self.api_help.new_module_care(module_no, user_name)
+
     def get_api_list(self, module_no, role):
         if role & self.user_role["api_look"] <= 0:
             return False, u"您没有权限"
@@ -301,6 +306,9 @@ class ControlManager:
 
     def delete_care(self, api_no, user_name):
         return self.api_help.del_api_care(api_no, user_name)
+
+    def delete_module_care(self, user_name, module_no):
+        return self.api_help.del_module_care(module_no, user_name)
 
     def delete_api(self, api_no, user_name):
         return self.api_help.del_api_info(api_no, user_name)

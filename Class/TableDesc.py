@@ -144,6 +144,14 @@ class TableManager:
         ]
         self.status_code_comment = "错误状态码相关信息"
 
+        self.module_care = "module_care"
+        self.module_care_desc = [
+            ["module_no", "int(11)", "NO", "PRI", None, "", "API系统编号"],
+            ["user_name", "varchar(15)", "NO", "PRI", None, "", "用户账户名"],
+            ["care_time", "datetime", "NO", "", None, "", "关注的时间"],
+            ["level", "tinyint(4)", "NO", "", None, "", "用户关注级别 0 MODULE的创建者 1 修改过MODULE 2 关心MODULE 3 删除MODULE"]
+        ]
+
     def create_not_exist_table(self):
         keys = vars(self).keys()
         for key in keys:
