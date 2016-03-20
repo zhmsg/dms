@@ -535,7 +535,7 @@ class ControlManager:
         # 写入更新信息
         self.api_help.new_send_message(user_name, rec_user, email_content)
         for email in rec_email:
-            my_email.send_mail(email, u"模块增加新的API", email_content)
+            my_email.send_mail(email, u"模块增加新的API：%s" % title, email_content)
 
     def _send_api_update_message(self, user_name, api_no, param):
         api_info = self.api_help.get_api_basic_info(api_no)
@@ -562,7 +562,7 @@ class ControlManager:
         # 写入更新信息
         self.api_help.new_send_message(user_name, rec_user, email_content)
         for email in rec_email:
-            my_email.send_mail(email, u"API:%s,更新了参数" % api_info["api_title"], email_content)
+            my_email.send_mail(email, u"API:%s，更新了参数" % api_info["api_title"], email_content)
         return True
 
     def _send_api_update_message_thread(self, user_name, api_no, param):
