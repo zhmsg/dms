@@ -297,7 +297,7 @@ class HelpManager:
         care_info = []
         for item in self.db.fetchall():
             care_info.append({"module_no": item[0], "user_name": item[1], "care_time": item[2].strftime(TIME_FORMAT),
-                              "nick_name": item[3], "level": item[4]})
+                              "nick_name": item[3], "level": item[4], "email": item[5]})
         return care_info
 
     def get_api_info(self, api_no):

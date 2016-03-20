@@ -20,7 +20,7 @@ from Class import table_manager
 
 __author__ = 'ZhouHeng'
 
-my_email = MyEmailManager()
+my_email = MyEmailManager("/home/msg/conf/")
 
 
 class ControlManager:
@@ -225,6 +225,8 @@ class ControlManager:
         result, data = self.api_help.new_api_info(module_no, title, path, method, desc)
         if result is True:
             self.api_help.new_api_care(data["api_no"], user_name, 0)
+            api_no = data["api_no"]
+            self.send_module_message(user_name, module_no, api_no, title, method, desc)
         return result, data
 
     def update_api_info(self, role, api_no, module_no, title, path, method, desc):
@@ -505,12 +507,22 @@ class ControlManager:
         return self.bug.new_bug_link(bug_no, link_user, 5, user_name)
 
     # 发送API更新提醒
-    def send_module_message(self, module_no, api_no, title, path, method, desc):
+    def send_module_message(self, user_name, module_no, api_no, title, method, desc):
         care_info = self.api_help.get_module_care_list(module_no=module_no)
+        rec_user = []
+        rec_email = []
+        for care_user in care_info:
+            rec_user.append("%s|%s" % (care_user["user_name"], care_user["email"]))
+            rec_email.append(care_user["email"])
         # 写入更新信息
-        email_content_lines = ["模块增加新的API"]
-        email_content_lines.append("API标题：%s" % title)
-        email_content_lines.append("API访问路径：%s" % path)
-        email_content_lines.append("API访问方法：%s" % method)
-        email_content_lines.append("API描述：%s" % desc)
-        email_content_lines.append("查看详情： http://dms.gene.ac/dev/api/info/?api_no=%s" % api_no)
+        email_content_lines = []
+        email_content_lines.append(u"模块增加新的API")
+        email_content_lines.append(u"API标题：%s" % title)
+        email_content_lines.append(u"API访问方法：%s" % method)
+        email_content_lines.append(u"API描述：%s" % desc)
+        access_url = "http://dms.gene.ac/dev/api/info/?api_no=%s" % api_no
+        email_content_lines.append(u"<a href='%s'>查看详情</a>" % access_url)
+        email_content = "<br/>".join(email_content_lines)
+        self.api_help.new_send_message(user_name, rec_user, email_content)
+        for email in rec_email:
+            my_email.send_mail(email, u"模块增加新的API", email_content)
