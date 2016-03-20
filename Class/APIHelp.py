@@ -138,8 +138,6 @@ class HelpManager:
                      "ON DUPLICATE KEY UPDATE necessary=VALUES(necessary),param_desc=VALUES(param_desc),add_time=VALUES(add_time)" \
                      % (self.api_header, value_sql)
         result = self.db.execute(insert_sql)
-        if result < 1:
-            return False, "sql execute result is %s " % result
         self.set_api_update(api_no)
         return True, new_result
 
@@ -170,8 +168,6 @@ class HelpManager:
                      "ON DUPLICATE KEY UPDATE necessary=VALUES(necessary),param_desc=VALUES(param_desc),type=VALUES(type)" \
                      % (self.api_body, value_sql)
         result = self.db.execute(insert_sql)
-        if result < 1:
-            return False, "sql execute result is %s " % result
         self.set_api_update(api_no)
         return True, new_result
 
