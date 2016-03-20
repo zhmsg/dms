@@ -515,7 +515,6 @@ class ControlManager:
         for care_user in care_info:
             rec_user.append("%s|%s" % (care_user["user_name"], care_user["email"]))
             rec_email.append(care_user["email"])
-        # 写入更新信息
         email_content_lines = []
         email_content_lines.append(u"模块增加新的API")
         email_content_lines.append(u"API标题：%s" % title)
@@ -524,6 +523,10 @@ class ControlManager:
         access_url = "http://dms.gene.ac/dev/api/info/?api_no=%s" % api_no
         email_content_lines.append(u"<a href='%s'>查看详情</a>" % access_url)
         email_content = "<br/>".join(email_content_lines)
+        # 写入更新信息
         self.api_help.new_send_message(user_name, rec_user, email_content)
         for email in rec_email:
             my_email.send_mail(email, u"模块增加新的API", email_content)
+
+    def _send_api_add_param_message(self, api_no, add_param):
+        api_info = self.api_help.get_api_basic_info(api_no)

@@ -300,9 +300,7 @@ class HelpManager:
                               "nick_name": item[3], "level": item[4], "email": item[5]})
         return care_info
 
-    def get_api_info(self, api_no):
-        if len(api_no) != 32:
-            return False, "Bad api_no"
+    def get_api_basic_info(self, api_no):
         # get basic info
         basic_info_col = ("module_no", "api_no", "api_title", "api_path", "api_method", "api_desc", "add_time",
                           "update_time", "module_name", "module_prefix", "module_desc")
@@ -318,6 +316,24 @@ class HelpManager:
         basic_info["api_url"] = basic_info["module_prefix"].rstrip("/") + "/" + basic_info["api_path"].lstrip("/")
         basic_info["add_time"] = basic_info["add_time"].strftime(TIME_FORMAT) if basic_info["add_time"] is not None else ""
         basic_info["update_time"] = basic_info["update_time"].strftime(TIME_FORMAT) if basic_info["update_time"] is not None else ""
+        return basic_info
+
+    def get_api_care_info(self, api_no):
+        # 获得关注列表
+        select_sql = "SELECT api_no,c.user_name,care_time,nick_name,level,email FROM sys_user as su,%s as c " \
+                     "WHERE su.user_name=c.user_name AND api_no='%s';" % (self.api_care, api_no)
+        self.db.execute(select_sql)
+        care_info = []
+        for item in self.db.fetchall():
+            care_info.append({"api_no": item[0], "user_name": item[1], "care_time": item[2].strftime(TIME_FORMAT),
+                              "nick_name": item[3], "level": item[4], "email": item[5]})
+        return care_info
+
+    def get_api_info(self, api_no):
+        if len(api_no) != 32:
+            return False, "Bad api_no"
+        # get basic info
+        basic_info = self.get_api_basic_info(api_no)
         # 获得请求头部参数列表
         select_sql = "SELECT api_no,param,necessary,param_desc FROM %s WHERE api_no='%s' ORDER BY add_time;" \
                      % (self.api_header, api_no)
@@ -365,13 +381,7 @@ class HelpManager:
         for item in self.db.fetchall():
             output_info.append({"output_no": item[0], "api_no": item[1], "output_desc": item[2], "output_example": item[3]})
         # 获得关注列表
-        select_sql = "SELECT api_no,c.user_name,care_time,nick_name,level FROM sys_user as su,%s as c " \
-                     "WHERE su.user_name=c.user_name AND api_no='%s';" % (self.api_care, api_no)
-        self.db.execute(select_sql)
-        care_info = []
-        for item in self.db.fetchall():
-            care_info.append({"api_no": item[0], "user_name": item[1], "care_time": item[2].strftime(TIME_FORMAT),
-                              "nick_name": item[3], "level": item[4]})
+        care_info = self.get_api_care_info(api_no)
         return True, {"basic_info": basic_info, "header_info": header_info, "body_info": body_info,
                       "input_info": input_info, "output_info": output_info, "care_info": care_info,
                       "predefine_param": predefine_param, "predefine_header": predefine_header}
