@@ -226,7 +226,8 @@ class ControlManager:
         if result is True:
             self.api_help.new_api_care(data["api_no"], user_name, 0)
             api_no = data["api_no"]
-            self.send_module_message(user_name, module_no, api_no, title, method, desc)
+            t = Thread(target=self._send_module_message, args=(user_name, module_no, api_no, title, method, desc))
+            t.start()
         return result, data
 
     def update_api_info(self, role, api_no, module_no, title, path, method, desc):
@@ -507,7 +508,7 @@ class ControlManager:
         return self.bug.new_bug_link(bug_no, link_user, 5, user_name)
 
     # 发送API更新提醒
-    def send_module_message(self, user_name, module_no, api_no, title, method, desc):
+    def _send_module_message(self, user_name, module_no, api_no, title, method, desc):
         care_info = self.api_help.get_module_care_list(module_no=module_no)
         rec_user = []
         rec_email = []
