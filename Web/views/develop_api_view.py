@@ -229,7 +229,7 @@ def add_header_param():
     api_no = request_form["api_no"]
     desc = request_form["desc"]
     necessary = int(request_form["necessary"])
-    result, param_info = control.add_header_param(api_no, param, necessary, desc, current_user.role)
+    result, param_info = control.add_header_param(current_user.account, api_no, param, necessary, desc, current_user.role)
     return jsonify({"status": result, "data": param_info})
 
 
@@ -242,7 +242,7 @@ def add_body_param():
     desc = request_form["desc"]
     necessary = int(request_form["necessary"])
     type = request_form["type"]
-    result, param_info = control.add_body_param(api_no, param, necessary, type, desc, current_user.role)
+    result, param_info = control.add_body_param(current_user.account, api_no, param, necessary, type, desc, current_user.role)
     if result is False:
         return param_info
     return json.dumps({"status": True, "data": param_info})

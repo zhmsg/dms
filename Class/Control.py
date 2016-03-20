@@ -3,6 +3,7 @@
 
 import sys
 from threading import Thread
+from datetime import datetime
 sys.path.append("..")
 from Tools.Mysql_db import DB
 from Tools.MyEmail import MyEmailManager
@@ -16,7 +17,7 @@ from Dev import DevManager
 from APIHelp import HelpManager
 from APIStatus import StatusManager
 from Bug import BugManager
-from Class import table_manager
+from Class import table_manager, TIME_FORMAT
 
 __author__ = 'ZhouHeng'
 
@@ -241,20 +242,26 @@ class ControlManager:
             return False, u"您没有权限"
         return self.api_help.get_api_info(api_no)
 
-    def add_header_param(self, api_no, param, necessary, desc, role):
+    def add_header_param(self, user_name, api_no, param, necessary, desc, role):
         if role & 16 <= 0:
             return False, u"您没有权限"
-        return self.api_help.new_api_header(api_no, {param: {"necessary": necessary, "desc": desc}})
+        result, info = self.api_help.new_api_header(api_no, {param: {"necessary": necessary, "desc": desc}})
+        if result is True:
+            self._send_api_update_message_thread(user_name, api_no, param)
+        return result, info
 
     def add_predefine_header(self, api_no, param, role):
         if role & 16 <= 0:
             return False, u"您没有权限"
         return self.api_help.new_predefine_param(api_no, param, "header")
 
-    def add_body_param(self, api_no, param, necessary, type, desc, role):
+    def add_body_param(self, user_name, api_no, param, necessary, type, desc, role):
         if role & 16 <= 0:
             return False, u"您没有权限"
-        return self.api_help.new_api_body(api_no, {param :{"necessary": necessary, "type": type, "desc": desc}})
+        result, info = self.api_help.new_api_body(api_no, {param: {"necessary": necessary, "type": type, "desc": desc}})
+        if result is True:
+            self._send_api_update_message_thread(user_name, api_no, param)
+        return result, info
 
     def add_input_example(self, api_no, example, desc, role):
         if role & 16 <= 0:
@@ -528,5 +535,32 @@ class ControlManager:
         for email in rec_email:
             my_email.send_mail(email, u"模块增加新的API", email_content)
 
-    def _send_api_add_param_message(self, api_no, add_param):
+    def _send_api_update_message(self, user_name, api_no, param):
         api_info = self.api_help.get_api_basic_info(api_no)
+        # 判断添加时间是否超过5分钟
+        add_time = datetime.strptime(api_info["add_time"], TIME_FORMAT)
+        if (datetime.now() - add_time).total_seconds() < 300:
+            return False
+        care_info = self.api_help.get_api_care_info(api_no)
+        rec_user = []
+        rec_email = []
+        for care_user in care_info:
+            rec_user.append("%s|%s" % (care_user["user_name"], care_user["email"]))
+            rec_email.append(care_user["email"])
+        email_content_lines = []
+        email_content_lines.append(u"API更新了参数")
+        email_content_lines.append(u"API标题：%s" % api_info["api_title"])
+        email_content_lines.append(u"API描述：%s" % api_info["api_desc"])
+        email_content_lines.append(u"更新的参数名称：%s" % param)
+        access_url = "http://dms.gene.ac/dev/api/info/?api_no=%s" % api_no
+        email_content_lines.append(u"<a href='%s'>查看详情</a>" % access_url)
+        email_content = "<br/>".join(email_content_lines)
+        # 写入更新信息
+        self.api_help.new_send_message(user_name, rec_user, email_content)
+        for email in rec_email:
+            my_email.send_mail(email, u"API:%s,更新了参数" % api_info["api_title"], email_content)
+        return True
+
+    def _send_api_update_message_thread(self, user_name, api_no, param):
+        t = Thread(target=self._send_api_update_message, args=(user_name, api_no, param))
+        t.start()
