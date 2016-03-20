@@ -520,6 +520,8 @@ class ControlManager:
         rec_user = []
         rec_email = []
         for care_user in care_info:
+            if care_user["email"] is None:
+                continue
             rec_user.append("%s|%s" % (care_user["user_name"], care_user["email"]))
             rec_email.append(care_user["email"])
         email_content_lines = []
@@ -545,6 +547,8 @@ class ControlManager:
         rec_user = []
         rec_email = []
         for care_user in care_info:
+            if care_user["email"] is None:
+                continue
             rec_user.append("%s|%s" % (care_user["user_name"], care_user["email"]))
             rec_email.append(care_user["email"])
         email_content_lines = []
