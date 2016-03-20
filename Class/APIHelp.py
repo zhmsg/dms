@@ -4,6 +4,7 @@
 import sys
 import tempfile
 import uuid
+from time import time
 sys.path.append("..")
 from datetime import datetime
 from Tools.Mysql_db import DB
@@ -31,6 +32,7 @@ class HelpManager:
         self.predefine_param = table_manager.predefine_param
         self.api_care = table_manager.api_care
         self.module_care = table_manager.module_care
+        self.send_message = table_manager.send_message
         self.user = "sys_user"
 
     def new_api_module(self, module_name, module_prefix, module_desc):
@@ -267,6 +269,15 @@ class HelpManager:
             return False, "sql execute result is %s " % result
         return True, {"user_name": user_name, "module_no": module_no, "care_time": care_time}
 
+    def new_send_message(self, send_user, rec_user, content):
+        content = check_sql_character(content)
+        rec_user_s = ",".join(rec_user)[:500]
+        send_time = int(time())
+        insert_sql = "INSERT INTO %s (send_user,rec_user,send_time,content) VALUES ('%s','%s',%s,'%s');" \
+                     % (self.send_message, send_user, rec_user_s, send_time, content)
+        self.db.execute(insert_sql)
+        return True, "success"
+
     def get_module_list(self, module_no=None):
         select_sql = "SELECT module_no,module_name,module_prefix,module_desc FROM %s" % self.api_module
         if module_no is not None and type(module_no) == int:
@@ -277,6 +288,17 @@ class HelpManager:
         for item in self.db.fetchall():
             module_info.append({"module_no": item[0], "module_name": item[1], "module_prefix": item[2], "module_desc": item[3]})
         return True, module_info
+
+    def get_module_care_list(self, module_no):
+        # 获得关注列表
+        select_sql = "SELECT module_no,c.user_name,care_time,nick_name,level,email FROM sys_user as su,%s as c " \
+                     "WHERE su.user_name=c.user_name AND module_no='%s';" % (self.module_care, module_no)
+        self.db.execute(select_sql)
+        care_info = []
+        for item in self.db.fetchall():
+            care_info.append({"module_no": item[0], "user_name": item[1], "care_time": item[2].strftime(TIME_FORMAT),
+                              "nick_name": item[3], "level": item[4]})
+        return care_info
 
     def get_api_info(self, api_no):
         if len(api_no) != 32:
@@ -364,14 +386,7 @@ class HelpManager:
         for item in self.db.fetchall():
             api_list.append({"api_no": item[0], "module_no": item[1], "api_title": item[2], "api_path": item[3],
                              "api_method": item[4], "api_desc": item[5]})
-        # 获得关注列表
-        select_sql = "SELECT module_no,c.user_name,care_time,nick_name,level FROM sys_user as su,%s as c " \
-                     "WHERE su.user_name=c.user_name AND module_no='%s';" % (self.module_care, module_no)
-        self.db.execute(select_sql)
-        care_info = []
-        for item in self.db.fetchall():
-            care_info.append({"module_no": item[0], "user_name": item[1], "care_time": item[2].strftime(TIME_FORMAT),
-                              "nick_name": item[3], "level": item[4]})
+        care_info = self.get_module_care_list(module_no)
         return True, {"api_list": api_list, "care_info": care_info}
 
     def del_api_header(self, api_no, param):

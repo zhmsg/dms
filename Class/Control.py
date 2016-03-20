@@ -503,3 +503,14 @@ class ControlManager:
         if role & self.user_role["bug_channel"]:
             return False, u"您无权限修改该BUG的状态"
         return self.bug.new_bug_link(bug_no, link_user, 5, user_name)
+
+    # 发送API更新提醒
+    def send_module_message(self, module_no, api_no, title, path, method, desc):
+        care_info = self.api_help.get_module_care_list(module_no=module_no)
+        # 写入更新信息
+        email_content_lines = ["模块增加新的API"]
+        email_content_lines.append("API标题：%s" % title)
+        email_content_lines.append("API访问路径：%s" % path)
+        email_content_lines.append("API访问方法：%s" % method)
+        email_content_lines.append("API描述：%s" % desc)
+        email_content_lines.append("查看详情： http://dms.gene.ac/dev/api/info/?api_no=%s" % api_no)
