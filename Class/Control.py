@@ -3,7 +3,6 @@
 
 import sys
 from threading import Thread
-from datetime import datetime
 sys.path.append("..")
 from Tools.Mysql_db import DB
 from Tools.MyEmail import MyEmailManager
@@ -17,7 +16,6 @@ from Dev import DevManager
 from APIHelp import HelpManager
 from APIStatus import StatusManager
 from Bug import BugManager
-from Class import table_manager, TIME_FORMAT
 
 __author__ = 'ZhouHeng'
 
@@ -326,6 +324,8 @@ class ControlManager:
         if role & self.user.role_value["api_new"] <= 0:
             return False, u"您没有权限"
         result, info = self.api_help.set_api_status(api_no, 2)
+        if result is True:
+            self._send_api_completed_message_thread(user_name, api_no)
         return result, info
 
     # 针对API状态码的应用
@@ -547,9 +547,8 @@ class ControlManager:
         result, api_info = self.api_help.get_api_basic_info(api_no)
         if result is False:
             return False
-        # 判断添加时间是否超过5分钟
-        add_time = datetime.strptime(api_info["add_time"], TIME_FORMAT)
-        if (datetime.now() - add_time).total_seconds() < 300:
+        # 判断添加api是否已完成
+        if api_info["status"] != 2:
             return False
         care_info = self.api_help.get_api_care_info(api_no)
         rec_user = []
@@ -575,4 +574,33 @@ class ControlManager:
 
     def _send_api_update_message_thread(self, user_name, api_no, param):
         t = Thread(target=self._send_api_update_message, args=(user_name, api_no, param))
+        t.start()
+
+    def _send_api_completed_message(self, user_name, api_no):
+        result, api_info = self.api_help.get_api_basic_info(api_no)
+        if result is False:
+            return False
+        care_info = self.api_help.get_api_care_info(api_no)
+        rec_user = []
+        rec_email = []
+        for care_user in care_info:
+            if care_user["email"] is None:
+                continue
+            rec_user.append("%s|%s" % (care_user["user_name"], care_user["email"]))
+            rec_email.append(care_user["email"])
+        email_content_lines = []
+        email_content_lines.append(u"API文档完成")
+        email_content_lines.append(u"API标题：%s" % api_info["api_title"])
+        email_content_lines.append(u"API描述：%s" % api_info["api_desc"])
+        access_url = "http://dms.gene.ac/dev/api/info/?api_no=%s" % api_no
+        email_content_lines.append(u"<a href='%s'>查看详情</a>" % access_url)
+        email_content = "<br/>".join(email_content_lines)
+        # 写入更新信息
+        self.api_help.new_send_message(user_name, rec_user, email_content)
+        for email in rec_email:
+            my_email.send_mail(email, u"API:%s，文档已完成" % api_info["api_title"], email_content)
+        return True
+
+    def _send_api_completed_message_thread(self, user_name, api_no):
+        t = Thread(target=self._send_api_completed_message, args=(user_name, api_no))
         t.start()

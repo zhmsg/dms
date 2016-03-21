@@ -274,12 +274,15 @@ def add_output_example():
     return json.dumps({"status": True, "data": output_info})
 
 
-@develop_api_view.route("/care/", methods=["POST"])
+@develop_api_view.route("/care/", methods=["POST", "DELETE"])
 @login_required
 def add_care():
     request_form = request.form
     api_no = request_form["api_no"]
-    result, care_info = control.add_care(api_no, current_user.account, current_user.role)
+    if request.method == "POST":
+        result, care_info = control.add_care(api_no, current_user.account, current_user.role)
+    else:
+        result, care_info = control.delete_care(api_no, current_user.account)
     return json.dumps({"status": result, "data": care_info})
 
 
@@ -324,16 +327,6 @@ def delete_input(input_no):
 def delete_output(output_no):
     result, data = control.delete_ouput(output_no, current_user.role)
     return json.dumps({"status": result, "data": data})
-
-
-@develop_api_view.route("/care/", methods=["DELETE"])
-@login_required
-def delete_care():
-    request_form = request.form
-    api_no = request_form["api_no"]
-    result, data = control.delete_care(api_no, current_user.account)
-    return json.dumps({"status": result, "data": data})
-
 
 @develop_api_view.route("/update/header/", methods=["PUT"])
 @login_required
