@@ -312,7 +312,7 @@ class HelpManager:
         basic_info["api_url"] = basic_info["module_prefix"].rstrip("/") + "/" + basic_info["api_path"].lstrip("/")
         basic_info["add_time"] = basic_info["add_time"].strftime(TIME_FORMAT) if basic_info["add_time"] is not None else ""
         basic_info["update_time"] = basic_info["update_time"].strftime(TIME_FORMAT) if basic_info["update_time"] is not None else ""
-        return basic_info
+        return True, basic_info
 
     def get_api_care_info(self, api_no):
         # 获得关注列表
@@ -329,7 +329,9 @@ class HelpManager:
         if len(api_no) != 32:
             return False, "Bad api_no"
         # get basic info
-        basic_info = self.get_api_basic_info(api_no)
+        result, basic_info = self.get_api_basic_info(api_no)
+        if result is False:
+            return False, basic_info
         # 获得请求头部参数列表
         select_sql = "SELECT api_no,param,necessary,param_desc FROM %s WHERE api_no='%s' ORDER BY add_time;" \
                      % (self.api_header, api_no)

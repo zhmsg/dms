@@ -538,7 +538,9 @@ class ControlManager:
             my_email.send_mail(email, u"模块增加新的API：%s" % title, email_content)
 
     def _send_api_update_message(self, user_name, api_no, param):
-        api_info = self.api_help.get_api_basic_info(api_no)
+        result, api_info = self.api_help.get_api_basic_info(api_no)
+        if result is False:
+            return False
         # 判断添加时间是否超过5分钟
         add_time = datetime.strptime(api_info["add_time"], TIME_FORMAT)
         if (datetime.now() - add_time).total_seconds() < 300:
