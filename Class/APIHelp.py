@@ -33,6 +33,7 @@ class HelpManager:
         self.api_care = table_manager.api_care
         self.module_care = table_manager.module_care
         self.send_message = table_manager.send_message
+        self.api_status_desc = [u"新建", u"修改中", u"已完成", u"待废弃", u"已废弃", u"已删除"]
         self.user = "sys_user"
 
     def new_api_module(self, module_name, module_prefix, module_desc):
@@ -110,6 +111,13 @@ class HelpManager:
     def set_api_update(self, api_no):
         update_time = datetime.now().strftime(TIME_FORMAT)
         update_sql = "UPDATE %s SET update_time='%s' WHERE api_no='%s';" % (self.api_info, update_time, api_no)
+        self.db.execute(update_sql)
+        return True
+
+    def set_api_status(self, api_no, status):
+        update_time = datetime.now().strftime(TIME_FORMAT)
+        update_sql = "UPDATE %s SET update_time='%s',status=%s WHERE api_no='%s';" \
+                     % (self.api_info, update_time, api_no, status)
         self.db.execute(update_sql)
         return True
 
@@ -299,7 +307,7 @@ class HelpManager:
     def get_api_basic_info(self, api_no):
         # get basic info
         basic_info_col = ("module_no", "api_no", "api_title", "api_path", "api_method", "api_desc", "add_time",
-                          "update_time", "module_name", "module_prefix", "module_desc")
+                          "update_time", "module_name", "module_prefix", "module_desc", "status")
         select_sql = "SELECT m.%s FROM %s AS i, api_module AS m WHERE i.module_no=m.module_no AND api_no='%s';" \
                      % (",".join(basic_info_col), self.api_info, api_no)
         result = self.db.execute(select_sql)

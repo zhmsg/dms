@@ -31,7 +31,7 @@ class TableManager:
             ["api_desc", "varchar(300)", "NO", "", None, "", "关于API的详细描述"],
             ["add_time", "datetime", "NO", "", None, "", "添加的时间"],
             ["update_time", "datetime", "NO", "", None, "", "最近更新的时间"],
-            ["status", "tinyint(4)", "NO", "", 0, "", "0代表新建完成1代表修改中2代表已完成3大废弃4已废弃5已删除"]
+            ["status", "tinyint(4)", "NO", "", 0, "", "api状态0代表新建完成1代表修改中2代表已完成3待废弃4已废弃5已删除"]
         ]
         self.api_input = "api_input"
         self.api_input_desc = [

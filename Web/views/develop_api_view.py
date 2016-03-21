@@ -133,7 +133,7 @@ def show_api():
             break
     return render_template("%s/Show_API.html" % html_dir, api_info=api_info, api_no=api_no, return_url=return_url,
                            update_url=update_url, my_care=my_care, test_url=test_url, url_prefix=url_prefix,
-                           status_url=status_url)
+                           status_url=status_url, api_status_desc=control.api_help.api_status_desc)
 
 
 @develop_api_view.route("/new/", methods=["GET"])
