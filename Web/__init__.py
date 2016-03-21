@@ -10,7 +10,6 @@ __author__ = 'zhouheng'
 db = None
 try:
     db = DB()
-    db.connect()
 except Exception, e:
     print e
 

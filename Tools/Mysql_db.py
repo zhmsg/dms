@@ -6,8 +6,6 @@ import logging
 import time
 import threading
 import ConfigParser
-import sys
-import os
 
 __author__ = 'zhouheng'
 
@@ -20,8 +18,7 @@ Usage:
      db.fetchall()
      :return same as MySQLdb
 """
-current_filename = sys.argv[0][sys.argv[0].rfind(os.sep) + 1:sys.argv[0].rfind(os.extsep)]
-logging.basicConfig(filename=current_filename + '_DB.log', filemode='w')
+
 
 remote_host = "localhost"
 local_host = "127.0.0.1"
@@ -50,7 +47,6 @@ class DB(object):
             self._sock_file = ''
 
     def connect(self):
-        logging.info(time.ctime() + " : connect to mysql server..")
         if self._sock_file != '':
             self.conn = MySQLdb.connect(host=self.host, port=3306, user=self.mysql_user,
                                         passwd=self.mysql_password, db=self.db, charset='utf8',
@@ -88,36 +84,26 @@ class DB(object):
                 return logging.error(time.ctime() + "execute failed")
             handled_item = self.cursor.execute(sql_query)
         except Exception, e:
-            logging.error(e.args)
-            logging.info("Reconnecting..")
             self.connect()
             self.cursor = self.conn.cursor()
-            logging.info(time.ctime() + " : " + sql_query)
             handled_item = self.cursor.execute(sql_query)
         return handled_item
 
     def fetchone(self):
         try:
-            logging.info(time.ctime() + " : fetchone")
             one_item = self.cursor.fetchone()
         except Exception, e:
-            logging.error(e.args)
-            logging.info(time.ctime() + " : fetchone failed, return ()")
             one_item = ()
         return one_item
 
     def fetchall(self):
         try:
-            logging.info(time.ctime() + " : fetchall")
             all_item = self.cursor.fetchall()
         except Exception, e:
-            logging.error(e.args)
-            logging.info(time.ctime() + " : fetchall failed, return ()")
             all_item = ()
         return all_item
 
     def close(self):
-        logging.info(time.ctime() + " : close connect")
         if self.cursor:
             self.cursor.close()
         self.conn.close()
