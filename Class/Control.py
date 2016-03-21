@@ -243,7 +243,7 @@ class ControlManager:
         return self.api_help.get_api_info(api_no)
 
     def add_header_param(self, user_name, api_no, param, necessary, desc, role):
-        if role & 16 <= 0:
+        if role & self.user.role_value["api_new"] <= 0:
             return False, u"您没有权限"
         result, info = self.api_help.new_api_header(api_no, {param: {"necessary": necessary, "desc": desc}})
         if result is True:
@@ -251,12 +251,12 @@ class ControlManager:
         return result, info
 
     def add_predefine_header(self, api_no, param, role):
-        if role & 16 <= 0:
+        if role & self.user.role_value["api_new"] <= 0:
             return False, u"您没有权限"
         return self.api_help.new_predefine_param(api_no, param, "header")
 
     def add_body_param(self, user_name, api_no, param, necessary, type, desc, role):
-        if role & 16 <= 0:
+        if role & self.user.role_value["api_new"] <= 0:
             return False, u"您没有权限"
         result, info = self.api_help.new_api_body(api_no, {param: {"necessary": necessary, "type": type, "desc": desc}})
         if result is True:
@@ -264,12 +264,12 @@ class ControlManager:
         return result, info
 
     def add_input_example(self, api_no, example, desc, role):
-        if role & 16 <= 0:
+        if role & self.user.role_value["api_new"] <= 0:
             return False, u"您没有权限"
         return self.api_help.new_api_input(api_no, [{"desc": desc, "example": example}])
 
     def add_output_example(self, api_no, example, desc, role):
-        if role & 16 <= 0:
+        if role & self.user.role_value["api_new"] <= 0:
             return False, u"您没有权限"
         return self.api_help.new_api_output(api_no, [{"desc": desc, "example": example}])
 
@@ -289,27 +289,27 @@ class ControlManager:
         return self.api_help.get_api_list(module_no)
 
     def delete_header(self, role, api_no, param):
-        if role & 16 <= 0:
+        if role & self.user.role_value["api_new"] <= 0:
             return False, u"您没有权限"
         return self.api_help.del_api_header(api_no, param)
 
     def delete_predefine_param(self, role, api_no, param):
-        if role & 16 <= 0:
+        if role & self.user.role_value["api_new"] <= 0:
             return False, u"您没有权限"
         return self.api_help.del_predefine_param(api_no, param)
 
     def delete_body(self, role, api_no, param):
-        if role & 16 <= 0:
+        if role & self.user.role_value["api_new"] <= 0:
             return False, u"您没有权限"
         return self.api_help.del_api_body(api_no=api_no, param=param)
 
     def delete_input(self, input_no, role):
-        if role & 16 <= 0:
+        if role & self.user.role_value["api_new"] <= 0:
             return False, u"您没有权限"
         return self.api_help.del_api_input(input_no)
 
     def delete_ouput(self, output_no, role):
-        if role & 16 <= 0:
+        if role & self.user.role_value["api_new"] <= 0:
             return False, u"您没有权限"
         return self.api_help.del_api_output(output_no)
 
@@ -321,6 +321,12 @@ class ControlManager:
 
     def delete_api(self, api_no, user_name):
         return self.api_help.del_api_info(api_no, user_name)
+
+    def set_api_completed(self, user_name, role, api_no):
+        if role & self.user.role_value["api_new"] <= 0:
+            return False, u"您没有权限"
+        result, info = self.api_help.set_api_status(api_no, 2)
+        return result, info
 
     # 针对API状态码的应用
     def get_fun_info(self, role):

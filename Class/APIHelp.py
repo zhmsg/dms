@@ -115,11 +115,13 @@ class HelpManager:
         return True
 
     def set_api_status(self, api_no, status):
+        if len(api_no) != 32:
+            return False, "Bad api_no"
         update_time = datetime.now().strftime(TIME_FORMAT)
         update_sql = "UPDATE %s SET update_time='%s',status=%s WHERE api_no='%s';" \
                      % (self.api_info, update_time, api_no, status)
         self.db.execute(update_sql)
-        return True
+        return True, "success"
 
     def new_api_header(self, api_no, header_params):
         if len(api_no) != 32:
