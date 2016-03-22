@@ -119,7 +119,7 @@ class HelpManager:
             return False, "Bad api_no"
         update_time = datetime.now().strftime(TIME_FORMAT)
         update_sql = "UPDATE %s SET update_time='%s',status=%s WHERE api_no='%s';" \
-                     % (self.api_info, update_time, api_no, status)
+                     % (self.api_info, update_time, status, api_no)
         self.db.execute(update_sql)
         return True, "success"
 

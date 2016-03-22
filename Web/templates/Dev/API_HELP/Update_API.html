@@ -16,8 +16,11 @@
         <p>API标题: {{ api_info["basic_info"]["api_title"] }}</p>
         <p>API URL: {{ api_info["basic_info"]["api_url"] }}</p>
         <p>API 请求方式: {{ api_info["basic_info"]["api_method"] }}</p>
-        <a href="{{ url_prefix }}/update/?api_no={{ api_info["basic_info"]["api_no"] }}">更新API信息</a>
-
+        <p>API 状态: {{ api_status_desc[api_info["basic_info"]["status"]] }}</p>
+        <a href="{{ url_prefix }}/update/?api_no={{ api_info["basic_info"]["api_no"] }}">更新API信息</a>&nbsp;
+        {% if api_info["basic_info"]["status"] < 2 %}
+        <a href="{{ url_prefix }}/update/completed/">设置完成</a>
+        {% endif %}
         <!-- Button trigger modal -->
 {#        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">#}
 {#            Launch demo modal#}

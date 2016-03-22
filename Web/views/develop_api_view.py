@@ -218,7 +218,22 @@ def update_api_other_info():
     if result is False:
         return api_info
     return render_template("%s/Update_API.html" % html_dir, api_info=api_info, api_no=api_no, return_url=return_url,
-                           url_prefix=url_prefix)
+                           url_prefix=url_prefix, api_status_desc=control.api_help.api_status_desc)
+
+
+@develop_api_view.route("/update/completed/", methods=["GET"])
+def set_api_completed():
+    if "Referer" not in request.headers:
+        return jsonify({"status": False, "data": "Bad Request"})
+    ref_url = request.headers["Referer"]
+    find_result = re.findall("api_no=([a-z\d]{32})", ref_url)
+    if len(find_result) < 0:
+        return jsonify({"status": False, "data": "Bad Request."})
+    api_no = find_result[0]
+    result, info = control.set_api_completed(current_user.account, current_user.role, api_no)
+    if result is False:
+        return info
+    return redirect(ref_url)
 
 
 @develop_api_view.route("/add/header/", methods=["POST"])
@@ -327,6 +342,7 @@ def delete_input(input_no):
 def delete_output(output_no):
     result, data = control.delete_ouput(output_no, current_user.role)
     return json.dumps({"status": result, "data": data})
+
 
 @develop_api_view.route("/update/header/", methods=["PUT"])
 @login_required
