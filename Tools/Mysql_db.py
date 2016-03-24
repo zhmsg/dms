@@ -27,16 +27,16 @@ class DB(object):
     _sock_file = ''
 
     def __init__(self, local=False, host="", mysql_user="dms", mysql_password="gene_ac252", mysql_db="dms"):
+        if local is True:
+            self.host = local_host
+        else:
+            self.host = remote_host
+        if host != "":
+            self.host = host
+        self.mysql_user = mysql_user
+        self.mysql_password = mysql_password
+        self.db = mysql_db
         try:
-            if local is True:
-                self.host = local_host
-            else:
-                self.host = remote_host
-            if host != "":
-                self.host = host
-            self.mysql_user = mysql_user
-            self.mysql_password = mysql_password
-            self.db = mysql_db
             config = ConfigParser.ConfigParser()
             config.read('/etc/my.cnf')
             self._sock_file = ""  # config.get('mysqld', 'socket')
@@ -44,29 +44,21 @@ class DB(object):
             self._sock_file = ''
 
     def connect(self):
-        if self._sock_file != '':
-            self.conn = MySQLdb.connect(host=self.host, port=3306, user=self.mysql_user,
-                                        passwd=self.mysql_password, db=self.db, charset='utf8',
-                                        unix_socket=self._sock_file)
-            self.cursor = self.conn.cursor()
-        else:
-            self.conn = MySQLdb.connect(host=self.host, port=3306, user=self.mysql_user,
-                                        passwd=self.mysql_password, db=self.db, charset='utf8')
-            self.cursor = self.conn.cursor()
-
+        self.conn = MySQLdb.connect(host=self.host, port=3306, user=self.mysql_user,
+                                    passwd=self.mysql_password, db=self.db, charset='utf8')
+        self.cursor = self.conn.cursor()
         self.conn.autocommit(True)
 
     def execute(self, sql_query, freq=0):
         if self.cursor is None:
             self.connect()
-            self.cursor = self.conn.cursor()
         try:
             handled_item = self.cursor.execute(sql_query)
         except MySQLdb.Error as error:
+            print(error)
             if freq >= 5:
                 raise Exception(error)
             self.connect()
-            self.cursor = self.conn.cursor()
             return self.execute(sql_query=sql_query, freq=freq+1)
         return handled_item
 
