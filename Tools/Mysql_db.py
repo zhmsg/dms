@@ -2,7 +2,6 @@
 # !/usr/bin/env python
 
 import MySQLdb
-import threading
 import ConfigParser
 
 __author__ = 'zhouheng'
@@ -56,17 +55,6 @@ class DB(object):
             self.cursor = self.conn.cursor()
 
         self.conn.autocommit(True)
-
-    # 线程函数
-    def thread(self):
-        t = threading.Thread(target=self.conn.ping, args=())
-        t.setDaemon(True)
-        t.start()
-        t.join(4)
-        if t.isAlive():
-            return 0
-        else:
-            return 1
 
     def execute(self, sql_query, freq=0):
         if self.cursor is None:
