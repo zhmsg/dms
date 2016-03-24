@@ -2,7 +2,7 @@
 # coding: utf-8
 __author__ = 'ZhouHeng'
 
-from TableDesc import TableManager
+from Class.TableDesc import TableManager
 
 tm = TableManager()
 tm.create_not_exist_table()
