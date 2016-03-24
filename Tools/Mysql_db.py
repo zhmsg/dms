@@ -2,8 +2,6 @@
 # !/usr/bin/env python
 
 import MySQLdb
-import logging
-import time
 import threading
 import ConfigParser
 
@@ -70,23 +68,18 @@ class DB(object):
         else:
             return 1
 
-    def execute(self, sql_query):
-        try:
-            logging.info(time.ctime() + " : " + sql_query)
-            # 重启超过五次则不再重启
-            i = 0
-            while i < 3 and self.thread() != 1:
-                self.close()
-                self.connect()
-                self.cursor = self.conn.cursor()
-                i += 1
-            if i == 3:
-                return logging.error(time.ctime() + "execute failed")
-            handled_item = self.cursor.execute(sql_query)
-        except Exception, e:
+    def execute(self, sql_query, freq=0):
+        if self.cursor is None:
             self.connect()
             self.cursor = self.conn.cursor()
+        try:
             handled_item = self.cursor.execute(sql_query)
+        except MySQLdb.Error as error:
+            if freq >= 5:
+                raise Exception(error)
+            self.connect()
+            self.cursor = self.conn.cursor()
+            return self.execute(sql_query=sql_query, freq=freq+1)
         return handled_item
 
     def fetchone(self):
