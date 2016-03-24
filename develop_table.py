@@ -2,6 +2,8 @@
 # coding: utf-8
 __author__ = 'ZhouHeng'
 
+import sys
+sys.path.append("..")
 from Class.TableDesc import TableManager
 
 tm = TableManager()
