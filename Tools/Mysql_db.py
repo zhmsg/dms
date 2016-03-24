@@ -2,7 +2,6 @@
 # !/usr/bin/env python
 
 import MySQLdb
-import ConfigParser
 
 __author__ = 'zhouheng'
 
@@ -36,12 +35,6 @@ class DB(object):
         self.mysql_user = mysql_user
         self.mysql_password = mysql_password
         self.db = mysql_db
-        try:
-            config = ConfigParser.ConfigParser()
-            config.read('/etc/my.cnf')
-            self._sock_file = ""  # config.get('mysqld', 'socket')
-        except ConfigParser.NoSectionError:
-            self._sock_file = ''
 
     def connect(self):
         self.conn = MySQLdb.connect(host=self.host, port=3306, user=self.mysql_user,
