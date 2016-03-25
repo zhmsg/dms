@@ -619,3 +619,12 @@ class ControlManager:
     def _send_api_completed_message_thread(self, user_name, api_no):
         t = Thread(target=self._send_api_completed_message, args=(user_name, api_no))
         t.start()
+
+    def test_send(self, user_name, content):
+        result, user_info = self.user.get_user_info(user_name)
+        if result is False:
+            return False, "user exception"
+        if user_info["email"] is None:
+            return False, "user not config email"
+        my_email.send_mail_thread(user_info["email"], u"晶云文档系统测试发送与接收邮件", content)
+        return True, user_info["email"]

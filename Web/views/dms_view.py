@@ -221,3 +221,22 @@ def select_portal():
                            data_url_prefix=data_url_prefix, api_url_prefix=api_url_prefix, dev_url_prefix=dev_url_prefix
                            , bug_url_prefix=bug_url_prefix, dms_url_prefix=dms_url_prefix)
 
+
+@dms_view.route("/user/email/", methods=["GET"])
+@login_required
+def test_send_email():
+    if "X-Real-IP" in request.headers:
+        request_IP = request.headers["X-Real-IP"]
+    else:
+        request_IP = request.remote_addr
+    info = {"user_name": current_user.account, "request_ip": request_IP}
+    content = u"尊敬的晶云文档系统使用者%(user_name)s:<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;您本次请求的IP为：%(request_ip)s<br /><br/ >"
+    content += u"&nbsp;&nbsp;&nbsp;&nbsp;请求头部信息：<br />"
+    for header in request.headers:
+        content += "&nbsp;&nbsp;&nbsp;&nbsp;%s: %s<br />" % header
+    content += str(request.headers)
+    content = content % info
+    result, email = control.test_send(current_user.account, content)
+    if result is False:
+        return email
+    return u"已将测试邮件发送至%s，请注意查收。" % email

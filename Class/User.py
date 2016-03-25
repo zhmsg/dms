@@ -144,6 +144,17 @@ class UserManager:
                               "creator": item[4], "add_time": item[5].strftime(TIME_FORMAT)})
         return True, user_list
 
+    def get_user_info(self, user_name):
+        select_sql = "SELECT user_name,role,nick_name,wx_id,creator,add_time,email FROM %s WHERE user_name='%s';" \
+                     % (self.user, user_name)
+        result = self.db.execute(select_sql)
+        if result <= 0:
+            return False, "user not exist"
+        item = self.db.fetchone()
+        user_info = {"user_name": item[0], "role": item[1], "nick_name": item[2], "wx_id": item[3], "creator": item[4],
+                     "add_time": item[5], "email": item[6]}
+        return True, user_info
+
     def update_my_user_role(self, role, user_name, my_name):
         if type(role) != int:
             return False, "Bad role"
