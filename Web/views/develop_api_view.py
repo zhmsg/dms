@@ -236,6 +236,21 @@ def set_api_completed():
     return redirect(ref_url)
 
 
+@develop_api_view.route("/update/modify/", methods=["GET"])
+def set_api_completed():
+    if "Referer" not in request.headers:
+        return jsonify({"status": False, "data": "Bad Request"})
+    ref_url = request.headers["Referer"]
+    find_result = re.findall("api_no=([a-z\d]{32})", ref_url)
+    if len(find_result) < 0:
+        return jsonify({"status": False, "data": "Bad Request."})
+    api_no = find_result[0]
+    result, info = control.set_api_modify(current_user.account, current_user.role, api_no)
+    if result is False:
+        return info
+    return redirect(ref_url)
+
+
 @develop_api_view.route("/add/header/", methods=["POST"])
 @login_required
 def add_header_param():

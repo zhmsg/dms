@@ -337,6 +337,12 @@ class ControlManager:
             self._send_api_completed_message_thread(user_name, api_no)
         return result, info
 
+    def set_api_modify(self, user_name, role, api_no):
+        if role & self.user.role_value["api_new"] <= 0:
+            return False, u"您没有权限"
+        result, info = self.api_help.set_api_status(api_no, 1)
+        return result, info
+
     # 针对API状态码的应用
     def get_fun_info(self, role):
         if role & self.user_role["api_look"] <= 0:

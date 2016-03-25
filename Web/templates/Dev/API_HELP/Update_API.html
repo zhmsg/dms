@@ -19,7 +19,9 @@
         <p>API 状态: {{ api_status_desc[api_info["basic_info"]["status"]] }}</p>
         <a href="{{ url_prefix }}/update/?api_no={{ api_info["basic_info"]["api_no"] }}">更新API信息</a>&nbsp;
         {% if api_info["basic_info"]["status"] < 2 %}
-        <a href="{{ url_prefix }}/update/completed/">设置完成</a>
+            <a href="{{ url_prefix }}/update/completed/">设置完成</a>
+        {% elif api_info["basic_info"]["status"] == 2 %}
+            <a href="{{ url_prefix }}/update/modify/">设置为修改中</a>
         {% endif %}
         <!-- Button trigger modal -->
 {#        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal">#}
