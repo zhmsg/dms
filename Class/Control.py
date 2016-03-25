@@ -248,10 +248,13 @@ class ControlManager:
             self._send_api_update_message_thread(user_name, api_no, param)
         return result, info
 
-    def add_predefine_header(self, api_no, param, role):
+    def add_predefine_header(self, user_name, api_no, param, role):
         if role & self.user.role_value["api_new"] <= 0:
             return False, u"您没有权限"
-        return self.api_help.new_predefine_param(api_no, param, "header")
+        result, info = self.api_help.new_predefine_param(api_no, param, "header")
+        if result is True:
+            self._send_api_update_message_thread(user_name, api_no, param)
+        return result, info
 
     def add_body_param(self, user_name, api_no, param, necessary, type, desc, role):
         if role & self.user.role_value["api_new"] <= 0:
@@ -261,15 +264,21 @@ class ControlManager:
             self._send_api_update_message_thread(user_name, api_no, param)
         return result, info
 
-    def add_input_example(self, api_no, example, desc, role):
+    def add_input_example(self, user_name, api_no, example, desc, role):
         if role & self.user.role_value["api_new"] <= 0:
             return False, u"您没有权限"
-        return self.api_help.new_api_input(api_no, [{"desc": desc, "example": example}])
+        result, info = self.api_help.new_api_input(api_no, [{"desc": desc, "example": example}])
+        if result is True:
+            self._send_api_update_message_thread(user_name, api_no, u"请求示例")
+        return result, info
 
-    def add_output_example(self, api_no, example, desc, role):
+    def add_output_example(self, user_name, api_no, example, desc, role):
         if role & self.user.role_value["api_new"] <= 0:
             return False, u"您没有权限"
-        return self.api_help.new_api_output(api_no, [{"desc": desc, "example": example}])
+        result, info = self.api_help.new_api_output(api_no, [{"desc": desc, "example": example}])
+        if result is True:
+            self._send_api_update_message_thread(user_name, api_no, u"返回示例")
+        return result, info
 
     def add_care(self, api_no, user_name, role):
         if role & 8 <= 0:

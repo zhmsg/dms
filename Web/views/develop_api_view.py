@@ -270,7 +270,7 @@ def add_input_example():
     api_no = request_form["api_no"]
     desc = request_form["desc"]
     example = request_form["example"]
-    result, input_info = control.add_input_example(api_no, example, desc, current_user.role)
+    result, input_info = control.add_input_example(current_user.account, api_no, example, desc, current_user.role)
     if result is False:
         return input_info
     return json.dumps({"status": True, "data": input_info})
@@ -283,7 +283,7 @@ def add_output_example():
     api_no = request_form["api_no"]
     desc = request_form["desc"]
     example = request_form["example"]
-    result, output_info = control.add_output_example(api_no, example, desc, current_user.role)
+    result, output_info = control.add_output_example(current_user.account, api_no, example, desc, current_user.role)
     if result is False:
         return output_info
     return json.dumps({"status": True, "data": output_info})
@@ -359,7 +359,7 @@ def update_api_predefine_header():
     if update_type == "delete":
         result, message = control.delete_predefine_param(current_user.role, api_no, param)
     else:
-        result, message = control.add_predefine_header(api_no, param, current_user.role)
+        result, message = control.add_predefine_header(current_user.account, api_no, param, current_user.role)
     return jsonify({"status": result, "data": message})
 
 
