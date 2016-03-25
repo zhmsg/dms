@@ -237,7 +237,7 @@ def set_api_completed():
 
 
 @develop_api_view.route("/update/modify/", methods=["GET"])
-def set_api_completed():
+def set_api_modify():
     if "Referer" not in request.headers:
         return jsonify({"status": False, "data": "Bad Request"})
     ref_url = request.headers["Referer"]
