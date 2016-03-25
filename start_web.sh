@@ -1,4 +1,4 @@
-python c_file.py
+# python c_file.py
 
 cd Class
 python develop_table.py
