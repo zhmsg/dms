@@ -24,6 +24,7 @@ class DevManager:
         self.operate_role = "operate_role"
         self.operate_module = "operate_module"
         self.operate_module_role = "operate_module_role"
+        self.operate_action_role = "operate_action_role"
 
     def get_operate_auth(self):
         try:
@@ -103,3 +104,17 @@ class DevManager:
                 info[select_item[i]] = item[i]
             module_role_info.append(info)
         return True, module_role_info
+
+    def get_operate_action_role(self, module_no):
+        if type(module_no) != int:
+            return False, "Bad module_no"
+        select_item = ["module_no", "action_desc", "min_role"]
+        select_sql = "SELECT %s FROM %s WHERE module_no=%s;" % (",".join(select_item), self.operate_action_role, module_no)
+        self.db.execute(select_sql)
+        action_role_info = []
+        for item in self.db.fetchall():
+            info = {}
+            for i in range(len(item)):
+                info[select_item[i]] = item[i]
+            action_role_info.append(info)
+        return True, action_role_info
