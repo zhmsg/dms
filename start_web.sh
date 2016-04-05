@@ -1,6 +1,6 @@
 # python c_file.py
 
-cd Class
+cd Table
 python develop_table.py
 
 cd ../Web
