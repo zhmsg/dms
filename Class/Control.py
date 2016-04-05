@@ -199,6 +199,12 @@ class ControlManager:
         result, info = self.dev.get_operate_module_role(module_no)
         return result, info
 
+    def get_operate_action_role(self, role, module_no):
+        if role & self.user_role["auth_look"] < self.user_role["auth_look"]:
+            return False, u"您没有权限"
+        result, info = self.dev.get_operate_action_role(module_no)
+        return result, info
+
     def send_email(self, sub, data_no, info, attribute, attribute_ch):
         print("strart send email to %s" % self.manger_email)
         content = sub + "<br>"
