@@ -2,51 +2,47 @@
     {
         "table_cols": [
             {
+                "auto_increment": true,
                 "pri_key": true,
-                "default_value": "",
-                "col_comment": "",
-                "col_name": "role",
-                "col_type": "varchar(2)"
+                "col_comment": "操作模块编号，主键 自增",
+                "col_name": "module_no",
+                "col_type": "tinyint(4)"
             },
             {
-                "col_comment": "",
-                "col_name": "description",
-                "col_type": "varchar(100)",
-                "allow_null": true
+                "col_comment": "操作模块标题",
+                "col_name": "module_title",
+                "col_type": "varchar(8)"
+            },
+            {
+                "col_comment": "操作模块描述",
+                "col_name": "module_desc",
+                "col_type": "varchar(50)"
             }
         ],
-        "table_comment": "",
-        "table_name": "auth_role"
+        "table_comment": "操作的模块",
+        "table_name": "operate_module"
     },
     {
         "table_cols": [
             {
                 "pri_key": true,
-                "default_value": "",
-                "col_comment": "",
-                "col_name": "module",
-                "col_type": "varchar(10)"
+                "col_comment": "操作模块编号，联合主键",
+                "col_name": "module_no",
+                "col_type": "tinyint(4)"
             },
             {
                 "pri_key": true,
-                "default_value": "",
-                "col_comment": "",
-                "col_name": "operate",
-                "col_type": "varchar(100)"
+                "col_comment": "操作模块角色值",
+                "col_name": "module_role",
+                "col_type": "char(1)"
             },
             {
-                "col_comment": "",
-                "col_name": "role",
-                "col_type": "varchar(2)"
-            },
-            {
-                "default_value": "5",
-                "col_comment": "",
-                "col_name": "level",
-                "col_type": "tinyint(4)"
+                "col_comment": "操作模块角色介绍",
+                "col_name": "role_desc",
+                "col_type": "varchar(50)"
             }
         ],
-        "table_comment": "",
-        "table_name": "operate_auth"
+        "table_comment": "操作模块角色介绍",
+        "table_name": "operate_module_role"
     }
 ]
