@@ -55,10 +55,10 @@
         <table class="table table-bordered api-list-table" id="api_header_param">
             <caption>请求头部参数</caption>
             <tr>
-                <th scope="col" width="40%">参数名称</th>
+                <th scope="col" width="25%">参数名称</th>
                 <th scope="col" width="8%">是否必须</th>
-                <th scope="col" width="40%">参数描述</th>
-                <th scope="col" width="11%">操作</th>
+                <th scope="col" width="55%">参数描述</th>
+                <th scope="col" width="12%">操作</th>
             </tr>
             {% for item in api_info["header_info"] %}
             <tr id="tr_{{ item["api_no"] }}{{ item["param"] }}">
@@ -83,7 +83,7 @@
                         <option value="0">否</option>
                     </select>
                 </td>
-                <td><input class="form-control" id="header_param_desc" /></td>
+                <td><input class="form-control" id="header_param_desc" placeholder="如果你不想既浪费了写文档的时间，还得浪费时间给前端解释。请写的傻子都能看懂" /></td>
                 <td><button class="btn btn-info" onclick="new_header_param('{{ url_prefix }}/add/header/');">新建</button></td>
 
         </table>
@@ -128,7 +128,7 @@
                     </select>
                 </td>
                 <td><input class="form-control" id="body_param_type" /></td>
-                <td><input class="form-control" id="body_param_desc" /></td>
+                <td><input class="form-control" id="body_param_desc" placeholder="请详细的描述出后端对参数的限制，包括但不限于字段长度，字符限制等" /></td>
                 <td><button class="btn btn-info" onclick="new_body_param('{{ url_prefix }}/add/body/');">新建</button></td>
         </table>
 
@@ -145,7 +145,7 @@
                 {% endfor %}
             </div>
             <p><input class="form-control" id="input_desc" placeholder="请求示例描述"  /></p>
-            <p><textarea class="form-control input_example" id="input_example" onchange="format_input(this.id);" onkeyup="format_input(this.id);" placeholder="请求示例"></textarea></p>
+            <p><textarea class="form-control input_example" id="input_example" onchange="format_input(this.id);" onkeyup="format_input(this.id);" placeholder="请求示例，写成符合json格式。解释示例，请在描述中解释"></textarea></p>
             <button class="btn btn-info" onclick="new_input_example('{{ url_prefix }}/add/input/')">新建</button>
 
         </div>
@@ -163,7 +163,7 @@
                 {% endfor %}
             </div>
             <p><input class="form-control" id="output_desc" placeholder="返回示例描述" /></p>
-            <p><textarea class="form-control input_example" id="output_example" onchange="format_input(this.id);" onkeyup="format_input(this.id);" placeholder="返回示例"></textarea></p>
+            <p><textarea class="form-control input_example" id="output_example" onchange="format_input(this.id);" onkeyup="format_input(this.id);" placeholder="返回示例，写成符合json格式。解释示例，请在描述中解释。所有完成后请将API状态置为完成"></textarea></p>
             <button class="btn btn-info" onclick="new_output_example('{{ url_prefix }}/add/output/')">新建</button>
 
         </div>
