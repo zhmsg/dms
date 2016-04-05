@@ -173,7 +173,7 @@ class ControlManager:
         return self.dev.get_operate_auth_file()
 
     def show_operate_auth(self, role):
-        if role & self.user_role["auth_look"] <= 0:
+        if role & self.user_role["auth_look"] < self.user_role["auth_look"]:
             return False, u"您没有权限"
         return self.dev.get_operate_auth()
 
@@ -186,6 +186,18 @@ class ControlManager:
         if role & self.user_role["table_look"] <= 0:
             return False, u"您没有权限"
         return self.dev.get_table_info(table_name)
+
+    def get_operate_module(self, role):
+        if role & self.user_role["auth_look"] < self.user_role["auth_look"]:
+            return False, u"您没有权限"
+        result, info = self.dev.get_operate_module()
+        return result, info
+
+    def get_operate_module_role(self, role, module_no):
+        if role & self.user_role["auth_look"] < self.user_role["auth_look"]:
+            return False, u"您没有权限"
+        result, info = self.dev.get_operate_module_role(module_no)
+        return result, info
 
     def send_email(self, sub, data_no, info, attribute, attribute_ch):
         print("strart send email to %s" % self.manger_email)

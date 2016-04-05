@@ -79,7 +79,7 @@ class DevManager:
         return True, column_info
 
     def get_operate_module(self):
-        select_item = ["moudle_no", "module_tile", "module_desc"]
+        select_item = ["module_no", "module_tile", "module_desc"]
         select_sql = "SELECT %s FROM %s;" % (",".join(select_item), self.operate_module)
         self.db.execute(select_sql)
         module_info = []
@@ -90,9 +90,11 @@ class DevManager:
             module_info.append(info)
         return True, module_info
 
-    def get_operate_module_role(self):
-        select_item = ["moudle_no", "module_role", "role_desc"]
-        select_sql = "SELECT %s FROM %s;" % (",".join(select_item), self.operate_module_role)
+    def get_operate_module_role(self, module_no):
+        if type(module_no) != int:
+            return False, "Bad module_no"
+        select_item = ["module_no", "module_role", "role_desc"]
+        select_sql = "SELECT %s FROM %s WHERE module_no=%s;" % (",".join(select_item), self.operate_module_role, module_no)
         self.db.execute(select_sql)
         module_role_info = []
         for item in self.db.fetchall():
