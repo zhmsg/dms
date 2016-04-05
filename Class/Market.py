@@ -16,22 +16,6 @@ class MarketManager:
     def __init__(self):
         self.db = DB()
         self.market = "market_info"
-        self.market_desc = [
-            ["data_no", "int(11)", "NO", "PRI", None, ""],  # 数据编号
-            ["person", "varchar(15)", "NO", "", None, ""],  # 市场负责人
-            ["source", "varchar(40)", "NO", "", None, ""],  # 数据来源单位
-            ["diagnosis", "varchar(40)", "NO", "", None, ""],  # 临床诊断
-            ["representation", "varchar(250)", "NO", "", None, ""],  # 临床表征
-            ["seq", "varchar(40)", "NO", "", None, ""],  # 测序类型
-            ["num", "int(11)", "NO", "", None, ""],  # 样本数
-            ["filename", "varchar(100)", "YES", "", None, ""],  # 文件名
-            ["panel", "varchar(140)", "NO", "", None, ""],  # 靶向文件
-            ["bedfiledir", "varchar(100)", "YES", "", None, ""],  # 靶向文件目录
-            ["arrivetime", "datetime", "NO", "", None, ""],  # 数据到达时间
-            ["deadline", "datetime", "NO", "", None, ""],  # 分析deadline
-            ["inputtime", "datetime", "NO", "", None, ""],  # 录入时间
-            ["inputuser", "varchar(15)", "NO", "", None, ""],  # 录入人
-        ]
         self.attribute = ("person", "source", "diagnosis", "representation", "seq", "num",  "panel",  "arrivetime", "deadline")
         self.attribute_ch = (u"市场负责人", u"数据来源单位", u"临床诊断", u"临床表征", u"测序类型", u"样本数", u"Panel", u"数据达到时间", u"分析deadline")
         read = open("../Class/target.txt")

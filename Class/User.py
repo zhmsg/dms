@@ -22,20 +22,6 @@ class UserManager:
     def __init__(self):
         self.db = DB()
         self.user = "sys_user"
-        self.user_desc = [
-            ["user_name", "varchar(15)", "NO", "PRI", None, ""],
-            ["password", "char(66)", "NO", "", None, ""],
-            ["role", "tinyint(4)", "NO", "", None, ""],  # 1 代表可以市场部权限 2 代表具有上传者权限 4 代表具有计算者权限
-                                                        # 8 代表可以查看API帮助文档 16 代表可以添加API帮助文档
-                                                        # 32 代表可以查看数据库表设计 64 代表可以查看权限设计
-                                                        # 128代表新建和更新用户的权限
-                                                        # 256 代表有查看BUG列表权限 512 代表有新建BUG的权限
-                                                        # 1024 代表被关联BUG的权限 2048 代表有取消他人BUG的权限
-            ["nick_name", "varchar(20)", "NO", "", None, ""],
-            ["wx_id", "char(28)", "NO", "", None, ""],
-            ["creator", "varchar(15)", "NO", "", None, ""],
-            ["add_time", "datetime", "NO", "", None, ""]
-        ]
         self.default_password = "gene.ac"
         self.role_value = {"market": 1, "upload": 2, "calc": 4, "api_look": 8, "api_new": 16, "table_look": 32,
                            "auth_look": 64, "user_new": 128, "bug_look": 256, "bug_new": 512, "bug_link": 1024,

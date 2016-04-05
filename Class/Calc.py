@@ -16,16 +16,6 @@ class CalcManager:
     def __init__(self):
         self.db = DB()
         self.calc = "calc_info"
-        self.calc_desc = [
-            ["data_no", "int(11)", "NO", "PRI", None, ""],  # 数据编号
-            ["import", "varchar(150)", "NO", "", None, ""],  # 导入平台时间
-            ["person", "varchar(40)", "NO", "", None, ""],  # 计算负责人
-            ["completed", "datetime", "NO", "", None, ""],  # 计算完成时间
-            ["account", "varchar(40)", "NO", "", None, ""],  # 导入账户
-            ["project_no", "int(11)", "NO", "", None, ""],  # 导入项目号
-            ["inputtime", "datetime", "NO", "", None, ""],  # 录入时间
-            ["inputuser", "varchar(15)", "NO", "", None, ""],  # 录入人
-        ]
         self.attribute = ("completed", "import", "account", "project_no", "person")
         self.attribute_ch = (u"计算完成时间", u"导入平台时间", u"导入账户", u"导入项目号", u"计算负责人")
 

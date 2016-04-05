@@ -16,14 +16,6 @@ class UploadManager:
     def __init__(self):
         self.db = DB()
         self.upload = "upload_info"
-        self.upload_desc = [
-            ["data_no", "int(11)", "NO", "PRI", None, ""],  # 数据编号
-            ["ossdir", "varchar(150)", "NO", "", None, ""],  # OSS上传目录
-            ["person", "varchar(40)", "NO", "", None, ""],  # 上传负责人
-            ["completed", "datetime", "NO", "", None, ""],  # 上传完成时间
-            ["inputtime", "datetime", "NO", "", None, ""],  # 录入时间
-            ["inputuser", "varchar(15)", "NO", "", None, ""],  # 录入人
-        ]
         self.attribute = ("ossdir", "person", "completed")
         self.attribute_ch = (u"OSS上传目录", u"上传负责人", u"上传完成时间")
 

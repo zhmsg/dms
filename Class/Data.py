@@ -14,12 +14,6 @@ class DataManager:
     def __init__(self):
         self.db = DB()
         self.data = "data_status"
-        self.data_desc = [
-            ["data_no", "int(11)", "NO", "PRI", None, "auto_increment"],
-            ["status", "tinyint(4)", "NO", "", 0, ""],
-            ["inputtime", "datetime", "NO", "", None, ""],
-            ["inputuser", "varchar(15)", "NO", "", None, ""],  # 录入人
-        ]
 
     def new(self, inputuser):
         try:
