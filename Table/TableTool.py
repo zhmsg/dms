@@ -125,9 +125,9 @@ class DBTool:
             for key in uni_key:
                 create_table_sql += " UNIQUE KEY ({0}),".format(key)
         if "table_comment" in table_desc and table_desc["table_comment"] != "":
-            create_table_sql = create_table_sql[:-1] + ") COMMENT '%s';" % table_desc["table_comment"]
+            create_table_sql = create_table_sql[:-1] + ") COMMENT '%s' DEFAULT CHARSET=utf8;" % table_desc["table_comment"]
         else:
-            create_table_sql = create_table_sql[:-1] + ");"
+            create_table_sql = create_table_sql[:-1] + ") DEFAULT CHARSET=utf8;"
         self.cursor.execute(create_table_sql)
         execute_message = "CREATE TABLE %s Success \n" % table_name
         return True, execute_message
