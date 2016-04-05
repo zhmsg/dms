@@ -162,33 +162,6 @@ class TableManager:
             ["content", "text", "NO", "", None, "", "发送的内容"]
         ]
 
-    def create_not_exist_table(self):
-        keys = vars(self).keys()
-        for key in keys:
-            if key.endswith("_desc") or key.endswith("_comment") or key.endswith("_init"):
-                continue
-            table_name = eval("self.%s" % key)
-            table_desc = key + "_desc"
-            table_init = key + "_init"
-            if table_desc not in keys:
-                print("%s need info" % table_name)
-                continue
-            if db.check_table(table_name, table_desc) is False:
-                print("start create table %s" % table_name)
-                result, message = db.create_table(table_name, eval("self.%s" % table_desc))
-                if result is True:
-                    print("success create table %s" % table_name)
-                else:
-                    print("fail create table %s message:%s" % (table_name, message))
-            else:
-                print("%s table exist" % table_name)
-            if table_init in keys and eval("self.%s" % table_init) is True:
-                result, message = self.init_table(table_name)
-                if result is True:
-                    print("success init table %s" % table_name)
-                else:
-                    print("fail init table %s message:%s" % (table_name, message))
-
     def init_table(self, table_name):
         keys = vars(self).keys()
         if table_name not in keys or table_name + "_desc" not in keys:

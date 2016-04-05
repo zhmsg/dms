@@ -39,12 +39,6 @@ class MarketManager:
         read.close()
         self.target = target_content.split("\n")
 
-    def create_market(self, force=False):
-        return self.db.create_table(self.market, self.market_desc, force)
-
-    def check_market(self):
-        return self.db.check_table(self.market, self.market_desc)
-
     def new(self, data_no, market_info, inputuser):
         if check_chinese(market_info["source"], max_len=40) is False:
             return False, u"数据来源单位只能是中文且长度不大于40"

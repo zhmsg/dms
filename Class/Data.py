@@ -21,12 +21,6 @@ class DataManager:
             ["inputuser", "varchar(15)", "NO", "", None, ""],  # 录入人
         ]
 
-    def create_data(self, force=False):
-        return self.db.create_table(self.data, self.data_desc, force)
-
-    def check_data(self):
-        return self.db.check_table(self.data, self.data_desc)
-
     def new(self, inputuser):
         try:
             inputtime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")

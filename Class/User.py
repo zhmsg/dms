@@ -44,9 +44,6 @@ class UserManager:
     def create_user(self, force=False):
         return self.db.create_table(self.user, self.user_desc, force)
 
-    def check_user(self):
-        return self.db.check_table(self.user, self.user_desc)
-
     def new(self, user_name, role, nick_name, creator):
         if check_user(user_name, 1, 15) is False:
             return False, u"用户名只能由字母数字和下划线组成且长度不大于20"

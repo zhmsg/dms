@@ -121,23 +121,3 @@ class DB(object):
             print(create_table_sql)
             return False, "fail:%s." % error_message
 
-    def check_table(self, table_name, table_desc):
-        try:
-            check_sql = "DESC %s;" % table_name
-            self.execute(check_sql)
-            # desc = self.fetchall()
-            # if len(desc) != len(table_desc):
-            #     return False
-            # for i in range(0, len(desc)-1):
-            #     desc_item = desc[i]
-            #     table_desc_item = table_desc[i]
-            #     if len(desc_item) != len(table_desc_item):
-            #         return False
-            #     for j in range(0, len(desc_item)-1):
-            #         if desc_item[j] != table_desc_item[j]:
-            #             return False
-            return True
-        except Exception, e:
-            error_message = str(e.args)
-            print(error_message)
-            return False

@@ -44,5 +44,28 @@
         ],
         "table_comment": "操作模块角色介绍",
         "table_name": "operate_module_role"
+    },
+    {
+        "table_cols": [
+            {
+                "pri_key": true,
+                "col_comment": "操作模块编号，联合主键",
+                "col_name": "module_no",
+                "col_type": "tinyint(4)"
+            },
+            {
+                "pri_key": true,
+                "col_comment": "操作模块角色值",
+                "col_name": "module_role",
+                "col_type": "char(1)"
+            },
+            {
+                "col_comment": "操作模块角色介绍",
+                "col_name": "role_desc",
+                "col_type": "varchar(50)"
+            }
+        ],
+        "table_comment": "每个操作对应的最低操作角色",
+        "table_name": "operate_action_role"
     }
 ]
