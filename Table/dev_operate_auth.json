@@ -1,0 +1,52 @@
+[
+    {
+        "table_cols": [
+            {
+                "pri_key": true,
+                "default_value": "",
+                "col_comment": "",
+                "col_name": "role",
+                "col_type": "varchar(2)"
+            },
+            {
+                "col_comment": "",
+                "col_name": "description",
+                "col_type": "varchar(100)",
+                "allow_null": true
+            }
+        ],
+        "table_comment": "",
+        "table_name": "auth_role"
+    },
+    {
+        "table_cols": [
+            {
+                "pri_key": true,
+                "default_value": "",
+                "col_comment": "",
+                "col_name": "module",
+                "col_type": "varchar(10)"
+            },
+            {
+                "pri_key": true,
+                "default_value": "",
+                "col_comment": "",
+                "col_name": "operate",
+                "col_type": "varchar(100)"
+            },
+            {
+                "col_comment": "",
+                "col_name": "role",
+                "col_type": "varchar(2)"
+            },
+            {
+                "default_value": "5",
+                "col_comment": "",
+                "col_name": "level",
+                "col_type": "tinyint(4)"
+            }
+        ],
+        "table_comment": "",
+        "table_name": "operate_auth"
+    }
+]

@@ -1,0 +1,48 @@
+[
+    {
+        "table_cols": [
+            {
+                "pri_key": true,
+                "col_comment": "",
+                "col_name": "user_name",
+                "col_type": "varchar(15)"
+            },
+            {
+                "col_comment": "",
+                "col_name": "role",
+                "col_type": "int(11)"
+            },
+            {
+                "col_comment": "",
+                "col_name": "nick_name",
+                "col_type": "varchar(20)"
+            },
+            {
+                "col_comment": "",
+                "col_name": "wx_id",
+                "col_type": "char(28)",
+                "allow_null": true
+            },
+            {
+                "col_comment": "",
+                "col_name": "creator",
+                "col_type": "varchar(15)",
+                "allow_null": true
+            },
+            {
+                "col_comment": "",
+                "col_name": "add_time",
+                "col_type": "datetime",
+                "allow_null": true
+            },
+            {
+                "col_comment": "用户邮箱",
+                "col_name": "email",
+                "col_type": "varchar(100)",
+                "allow_null": true
+            }
+        ],
+        "table_comment": "",
+        "table_name": "sys_user"
+    }
+]
