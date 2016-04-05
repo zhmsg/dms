@@ -29,9 +29,6 @@ class CalcManager:
         self.attribute = ("completed", "import", "account", "project_no", "person")
         self.attribute_ch = (u"计算完成时间", u"导入平台时间", u"导入账户", u"导入项目号", u"计算负责人")
 
-    def create_calc(self, force=False):
-        return self.db.create_table(self.calc, self.calc_desc, force)
-
     def new(self, data_no, calc_info, inputuser):
         if check_chinese(calc_info["person"], max_len=5) is False:
             return False, u"计算负责人只能是中文且长度不大于5"

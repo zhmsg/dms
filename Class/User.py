@@ -41,9 +41,6 @@ class UserManager:
                            "auth_look": 64, "user_new": 128, "bug_look": 256, "bug_new": 512, "bug_link": 1024,
                            "bug_cancel": 2048, "bug_del": 4096, "api_module_new": 8192}
 
-    def create_user(self, force=False):
-        return self.db.create_table(self.user, self.user_desc, force)
-
     def new(self, user_name, role, nick_name, creator):
         if check_user(user_name, 1, 15) is False:
             return False, u"用户名只能由字母数字和下划线组成且长度不大于20"

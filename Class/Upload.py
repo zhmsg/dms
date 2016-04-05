@@ -27,9 +27,6 @@ class UploadManager:
         self.attribute = ("ossdir", "person", "completed")
         self.attribute_ch = (u"OSS上传目录", u"上传负责人", u"上传完成时间")
 
-    def create_upload(self, force=False):
-        return self.db.create_table(self.upload, self.upload_desc, force)
-
     def new(self, data_no, upload_info, inputuser):
         if check_chinese(upload_info["person"], max_len=5) is False:
             return False, u"上传负责人只能是中文且长度不大于5"
