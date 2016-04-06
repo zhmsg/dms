@@ -9,74 +9,82 @@
 
 <body>
 <div class="container font16">
-    <br />
-    <a class="btn btn-primary pull-right" href="{{ url_for('dms_view.select_portal') }}" title="">主菜单</a>
-    <br />
-    <div class="apiMode api-help-mode">
-        {% for module_info in module_list %}
-            <a href="{{ url_prefix }}/?module_no={{ module_info["module_no"] }}">{{ module_info["module_title"] }}</a>
-        {% endfor %}
-    </div>
-    {% if module_role_info %}
-    <table class="table table-bordered table-hover privilegeTable" cellspacing="0" cellpadding="0">
-        <tr>
-            <th scope="col" width="10%">权限值</th>
-            <th scope="col" width="80%">解释</th>
-        </tr>
-        {% for key, item in module_role_info.items() %}
-        <tr>
-            <td>{{ item["module_role"] }}</td>
-            <td>{{ item["role_desc"] }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-    {% endif %}
-    {% if action_list %}
-        <table class="table table-bordered table-hover privilegeTable" cellspacing="0" cellpadding="0">
-            <tr>
-                <th scope="col" width="70%">操作</th>
-                <th scope="col" width="20%">最低权限</th>
-                {% if new_right %}
-                <th scope="col" width="10%">操作</th>
-                {% endif %}
-            </tr>
-            {% for item in action_list %}
-            <tr>
-                <td>{{ item["action_desc"] }}</td>
-                <td>{{ item["min_role"] }}{{ module_role_info[item["min_role"]]["role_desc"] }}</td>
-                {% if new_right %}
-                    {% if user_name == item["adder"] %}
-                        <td><a href="{{ url_prefix }}/action/delete/{{ item["action_no"] }}/">删除</a></td>
-                    {% else %}
-                        <td><a>删除{{ user_name }}</a></td>
-                    {% endif %}
-                {% endif %}
-            </tr>
+    <br/>
+    <a class="btn btn-primary pull-right bottom10" href="{{ url_for('dms_view.select_portal') }}" title="">主菜单</a>
+
+    <div class="clear">
+        <div class="api-help-mode pull-left privilegeMenu">
+            {% for module_info in module_list %}
+                <li>
+                    <a href="{{ url_prefix }}/?module_no={{ module_info["module_no"] }}">{{ module_info["module_title"] }}</a>
+                </li>
             {% endfor %}
-        </table>
-    {% endif %}
-    {% if new_right %}
-      <form role="form" action="{{ url_prefix }}/" method="post">
-        <div class="form-group apiContentLine">
-          <ul>
-            <li>
-              <label for="">最低访问权限：</label>
-              <select class="box-side width420" name="min_role">
-              {% for key, item in module_role_info.items() %}
-                <option value="{{ item["module_role"] }}">{{ item["module_role"] }} {{ item["role_desc"] }}</option>
-              {% endfor %}
-              </select>
-            </li>
-            <li>
-              <label class="api-describe" for="">行为描述：</label>
-              <textarea class="box-side" rows="3" name="action_desc" required></textarea>
-            </li>
-          </ul>
         </div>
-        <input name="module_no" value="" style="display: none">
-        <button type="submit" class="btn btn-success btn-down api-newBtn">新建</button>
-      </form>
-    {% endif %}
+
+        <div class="pull-left privilegeCon">
+            {% if module_role_info %}
+                <div class="permission">
+                    <p>
+                        <span>权限值：</span>
+                        <span>解释</span>
+                    </p>
+                    {% for key, item in module_role_info.items() %}
+                        <p>
+                            <span>{{ item["module_role"] }}：</span>
+                            <span>{{ item["role_desc"] }}</span>
+                        </p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% if action_list %}
+                <table class="table table-bordered table-hover privilegeTable" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <th scope="col" width="70%">操作</th>
+                        <th scope="col" width="20%">最低权限</th>
+                        {% if new_right %}
+                            <th scope="col" width="10%">操作</th>
+                        {% endif %}
+                    </tr>
+                    {% for item in action_list %}
+                        <tr>
+                            <td>{{ item["action_desc"] }}</td>
+                            <td>{{ item["min_role"] }}{{ module_role_info[item["min_role"]]["role_desc"] }}</td>
+                            {% if new_right %}
+                                {% if user_name == item["adder"] %}
+                                    <td><a href="{{ url_prefix }}/action/delete/{{ item["action_no"] }}/">删除</a></td>
+                                {% else %}
+                                    <td><a>删除{{ user_name }}</a></td>
+                                {% endif %}
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
+            {% if new_right %}
+                <form role="form" action="{{ url_prefix }}/" method="post">
+                    <div class="form-group apiContentLine">
+                        <ul>
+                            <li>
+                                <label for="">最低访问权限：</label>
+                                <select class="box-side width420" name="min_role">
+                                    {% for key, item in module_role_info.items() %}
+                                        <option value="{{ item["module_role"] }}">{{ item["module_role"] }} {{ item["role_desc"] }}</option>
+                                    {% endfor %}
+                                </select>
+                            </li>
+                            <li>
+                                <label class="api-describe" for="">行为描述：</label>
+                                <textarea class="box-side" rows="3" name="action_desc" required></textarea>
+                            </li>
+                        </ul>
+                    </div>
+                    <input name="module_no" value="" style="display: none">
+                    <button type="submit" class="btn btn-success btn-down api-newBtn">新建</button>
+                </form>
+            {% endif %}
+        </div>
+        <div class="clear"></div>
+    </div>
 </div>
 </body>
 </html>
