@@ -211,6 +211,12 @@ class ControlManager:
         result, info = self.dev.new_right_action(module_no, action_desc, min_role, user_name)
         return result, info
 
+    def delete_right_action(self, user_name, role, action_no):
+        if role & self.user_role["right_new"] < self.user_role["right_new"]:
+            return False, u"您没有权限"
+        result, info = self.dev.del_right_action(user_name, action_no)
+        return result, info
+
     def send_email(self, sub, data_no, info, attribute, attribute_ch):
         print("strart send email to %s" % self.manger_email)
         content = sub + "<br>"

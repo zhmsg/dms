@@ -34,13 +34,23 @@
     {% if action_list %}
         <table class="table table-bordered table-hover privilegeTable" cellspacing="0" cellpadding="0">
             <tr>
-                <th scope="col" width="80%">操作</th>
+                <th scope="col" width="70%">操作</th>
                 <th scope="col" width="20%">最低权限</th>
+                {% if new_right %}
+                <th scope="col" width="10%">操作</th>
+                {% endif %}
             </tr>
             {% for item in action_list %}
             <tr>
                 <td>{{ item["action_desc"] }}</td>
                 <td>{{ item["min_role"] }}{{ module_role_info[item["min_role"]]["role_desc"] }}</td>
+                {% if new_right %}
+                    {% if user_name == item["adder"] %}
+                        <td><a href="">删除</a></td>
+                    {% else %}
+                        <td><a>删除{{ user_name }}</a></td>
+                    {% endif %}
+                {% endif %}
             </tr>
             {% endfor %}
         </table>

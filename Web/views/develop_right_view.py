@@ -48,7 +48,8 @@ def show_module_list():
         else:
             new_right = False
         return render_template("%s/right_module.html" % html_dir, module_list=info, url_prefix=url_prefix,
-                               module_role_info=module_role_info, action_list=action_list, new_right=new_right)
+                               module_role_info=module_role_info, action_list=action_list, new_right=new_right,
+                               user_name=current_user.account)
     return render_template("%s/right_module.html" % html_dir, module_list=info, url_prefix=url_prefix)
 
 

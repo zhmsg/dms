@@ -107,7 +107,7 @@ class DevManager:
     def get_right_action_role(self, module_no):
         if type(module_no) != int:
             return False, "Bad module_no"
-        select_item = ["action_no", "module_no", "action_desc", "min_role"]
+        select_item = ["action_no", "module_no", "action_desc", "min_role", "adder"]
         select_sql = "SELECT %s FROM %s WHERE module_no=%s ORDER BY min_role;" % (",".join(select_item), self.right_action_role, module_no)
         self.db.execute(select_sql)
         action_role_info = []
@@ -126,7 +126,7 @@ class DevManager:
         self.db.execute(insert_sql)
         return True, "success"
 
-    def delete_right_action(self, action_no):
-        delete_sql = "DELETE FROM %s WHERE action_no=%s;" % (self.right_action_role, action_no)
+    def del_right_action(self, adder, action_no):
+        delete_sql = "DELETE FROM %s WHERE action_no=%s AND adder='%s';" % (self.right_action_role, action_no, adder)
         self.db.execute(delete_sql)
         return True, "success"

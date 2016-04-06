@@ -75,9 +75,15 @@
                 "col_type": "varchar(20)"
             },
             {
-                "col_comment": "添加时间，时间戳",
+                "col_comment": "添加时间或删除时间，时间戳",
                 "col_name": "add_time",
                 "col_type": "int(11)"
+            },
+            {
+                "col_comment": "是否删除1代表已删除 0代表未删除",
+                "col_name": "is_delete",
+                "col_type": "bit(1)",
+                "default_value": "0"
             }
         ],
         "table_comment": "每个操作对应的最低操作角色",
