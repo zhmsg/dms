@@ -22,7 +22,7 @@ sys.path.append('..')
 __author__ = 'Zhouheng'
 
 url_prefix = bug_url_prefix
-html_dir = "/Dev/BUG"
+html_dir = "/BUG"
 
 develop_bug_view = Blueprint('develop_bug_view', __name__)
 
