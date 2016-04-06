@@ -40,7 +40,7 @@
             {% for item in action_list %}
             <tr>
                 <td>{{ item["action_desc"] }}</td>
-                <td>{{ item["min_role"] }}{{ module_role_info[item["min_role"]] }}</td>
+                <td>{{ item["min_role"] }}{{ module_role_info[item["min_role"]]["role_desc"] }}</td>
             </tr>
             {% endfor %}
         </table>
