@@ -22,9 +22,9 @@ class DevManager:
         self.service_db = DB(host=service_mysql, mysql_user="gener", mysql_password="gene_ac252", mysql_db="information_schema")
         self.auth_role = "auth_role"
         self.operate_role = "operate_role"
-        self.operate_module = "operate_module"
-        self.operate_module_role = "operate_module_role"
-        self.operate_action_role = "operate_action_role"
+        self.operate_module = "right_module"
+        self.operate_module_role = "right_module_role"
+        self.operate_action_role = "right_action_role"
 
     def get_operate_auth(self):
         try:
@@ -79,8 +79,8 @@ class DevManager:
                                 "is_nullable": item[6]})
         return True, column_info
 
-    def get_operate_module(self):
-        select_item = ["module_no", "module_tile", "module_desc"]
+    def get_right_module(self):
+        select_item = ["module_no", "module_title", "module_desc"]
         select_sql = "SELECT %s FROM %s;" % (",".join(select_item), self.operate_module)
         self.db.execute(select_sql)
         module_info = []
@@ -91,7 +91,7 @@ class DevManager:
             module_info.append(info)
         return True, module_info
 
-    def get_operate_module_role(self, module_no):
+    def get_right_module_role(self, module_no):
         if type(module_no) != int:
             return False, "Bad module_no"
         select_item = ["module_no", "module_role", "role_desc"]
@@ -105,7 +105,7 @@ class DevManager:
             module_role_info.append(info)
         return True, module_role_info
 
-    def get_operate_action_role(self, module_no):
+    def get_right_action_role(self, module_no):
         if type(module_no) != int:
             return False, "Bad module_no"
         select_item = ["module_no", "action_desc", "min_role"]

@@ -187,22 +187,22 @@ class ControlManager:
             return False, u"您没有权限"
         return self.dev.get_table_info(table_name)
 
-    def get_operate_module(self, role):
+    def get_right_module(self, role):
         if role & self.user_role["auth_look"] < self.user_role["auth_look"]:
             return False, u"您没有权限"
-        result, info = self.dev.get_operate_module()
+        result, info = self.dev.get_right_module()
         return result, info
 
-    def get_operate_module_role(self, role, module_no):
+    def get_right_module_role(self, role, module_no):
         if role & self.user_role["auth_look"] < self.user_role["auth_look"]:
             return False, u"您没有权限"
-        result, info = self.dev.get_operate_module_role(module_no)
+        result, info = self.dev.get_right_module_role(module_no)
         return result, info
 
-    def get_operate_action_role(self, role, module_no):
+    def get_right_action_role(self, role, module_no):
         if role & self.user_role["auth_look"] < self.user_role["auth_look"]:
             return False, u"您没有权限"
-        result, info = self.dev.get_operate_action_role(module_no)
+        result, info = self.dev.get_right_action_role(module_no)
         return result, info
 
     def send_email(self, sub, data_no, info, attribute, attribute_ch):

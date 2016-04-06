@@ -20,7 +20,7 @@
             }
         ],
         "table_comment": "操作的模块",
-        "table_name": "operate_module"
+        "table_name": "right_module"
     },
     {
         "table_cols": [
@@ -43,7 +43,7 @@
             }
         ],
         "table_comment": "操作模块角色介绍",
-        "table_name": "operate_module_role"
+        "table_name": "right_module_role"
     },
     {
         "table_cols": [
@@ -64,6 +64,6 @@
             }
         ],
         "table_comment": "每个操作对应的最低操作角色",
-        "table_name": "operate_action_role"
+        "table_name": "right_action_role"
     }
 ]

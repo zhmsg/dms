@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>晶云平台遗传频道权限描述</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='t_css/bootstrap.min.css') }}"><!-- 新 Bootstrap 核心 CSS 文件 -->
+<link rel="stylesheet" href="{{ url_for('static', filename='t_css/main.css') }}"><!--自定义的页面样式 -->
+</head>
+
+<body>
+<div class="container font16">
+    <br />
+    <a class="btn btn-primary pull-right" href="{{ url_for('dms_view.select_portal') }}" title="">主菜单</a>
+    <br />
+    <div class="apiMode api-help-mode">
+        {% for module_info in module_list %}
+            <a href="{{ url_prefix }}/?module_no={{ module_info["module_no"] }}">{{ module_info["module_title"] }}</a>
+        {% endfor %}
+    </div>
+    {% if module_role_info %}
+    <table class="table table-bordered table-hover privilegeTable" cellspacing="0" cellpadding="0">
+        <tr>
+            <th scope="col" width="10%">权限模块</th>
+            <th scope="col" width="10%">权限值</th>
+            <th scope="col" width="80%">解释</th>
+        </tr>
+        {% for item in module_role_info %}
+        <tr>
+            <td>{{ item["module_no"] }}</td>
+            <td>{{ item["module_role"] }}</td>
+            <td>{{ item["role_desc"] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+    {% if action_list %}
+        <table class="table table-bordered table-hover privilegeTable" cellspacing="0" cellpadding="0">
+            <tr>
+                <th scope="col" width="10%">权限模块</th>
+                <th scope="col" width="80%">操作</th>
+                <th scope="col" width="10%">最低权限</th>
+            </tr>
+            {% for item in action_list %}
+            <tr>
+                <td>{{ item["module_no"] }}</td>
+                <td>{{ item["action_desc"] }}</td>
+                <td>{{ item["min_role"] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+    {% if module_role_info %}
+      <form role="form" action="{{ url_prefix }}/" method="post">
+        <div class="form-group apiContentLine">
+          <ul>
+            <li>
+              <label for="">最低访问权限：</label>
+              <select class="box-side width420" name="min_role">
+              {% for item in module_role_info %}
+                <option value="{{ item["module_role"] }}">{{ item["module_role"] }} {{ item["role_desc"] }}</option>
+              {% endfor %}
+              </select>
+            </li>
+            <li>
+              <label class="api-describe" for="">行为描述：</label>
+              <textarea class="box-side" rows="3" name="action_desc" required></textarea>
+            </li>
+          </ul>
+        </div>
+        <input name="module_no" value="" style="display: none">
+        <button type="submit" class="btn btn-success btn-down api-newBtn">新建</button>
+      </form>
+    {% endif %}
+</div>
+</body>
+</html>

@@ -8,7 +8,8 @@ from Web.views.develop_view import develop_view as develop_view_blueprint
 from Web.views.develop_api_view import develop_api_view as develop_api_view_blueprint
 from Web.views.dms_view import dms_view as dms_blueprint
 from Web.views.develop_bug_view import develop_bug_view as bug_blueprint
-from Web import login_manager, data_url_prefix, dev_url_prefix, api_url_prefix, dms_url_prefix, bug_url_prefix
+from Web.views.develop_right_view import develop_right_view as right_blueprint
+from Web import login_manager, data_url_prefix, dev_url_prefix, api_url_prefix, dms_url_prefix, bug_url_prefix, right_url_prefix
 
 __author__ = 'zhouheng'
 
@@ -20,6 +21,7 @@ msg_web.register_blueprint(develop_view_blueprint, url_prefix=dev_url_prefix)
 msg_web.register_blueprint(develop_api_view_blueprint, url_prefix=api_url_prefix)
 msg_web.register_blueprint(dms_blueprint, url_prefix=dms_url_prefix)
 msg_web.register_blueprint(bug_blueprint, url_prefix=bug_url_prefix)
+msg_web.register_blueprint(right_blueprint, url_prefix=right_url_prefix)
 
 
 @msg_web.template_filter('bit_and')
