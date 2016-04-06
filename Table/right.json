@@ -48,6 +48,13 @@
     {
         "table_cols": [
             {
+                "auto_increment": true,
+                "pri_key": true,
+                "col_comment": "操作编号，主键 自增 无实际含义",
+                "col_name": "action_no",
+                "col_type": "int(11)"
+            },
+            {
                 "col_comment": "操作模块编号",
                 "col_name": "module_no",
                 "col_type": "tinyint(4)"
