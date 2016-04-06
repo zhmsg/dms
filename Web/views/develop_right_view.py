@@ -59,5 +59,8 @@ def new_action_role():
         return "Bad Request."
     module_no = int(find_module[0])
     action_desc = request.form["action_desc"]
-    min_role = request.form["min_role"][:1]
+    min_role = request.form["min_role"]
+    result, info = control.new_right_action(current_user.account, current_user.role, module_no, action_desc, min_role)
+    if result is False:
+        return info
     return redirect(ref_url)

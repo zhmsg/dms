@@ -6,7 +6,9 @@ import tempfile
 sys.path.append("..")
 from Tools.Mysql_db import DB
 from Tools.MyExcel import write_excel
+from Check import check_sql_character
 from datetime import datetime
+from time import time
 from Class import TIME_FORMAT_STR
 
 temp_dir = tempfile.gettempdir()
@@ -22,9 +24,9 @@ class DevManager:
         self.service_db = DB(host=service_mysql, mysql_user="gener", mysql_password="gene_ac252", mysql_db="information_schema")
         self.auth_role = "auth_role"
         self.operate_role = "operate_role"
-        self.operate_module = "right_module"
-        self.operate_module_role = "right_module_role"
-        self.operate_action_role = "right_action_role"
+        self.right_module = "right_module"
+        self.right_module_role = "right_module_role"
+        self.right_action_role = "right_action_role"
 
     def get_operate_auth(self):
         try:
@@ -81,7 +83,7 @@ class DevManager:
 
     def get_right_module(self):
         select_item = ["module_no", "module_title", "module_desc"]
-        select_sql = "SELECT %s FROM %s;" % (",".join(select_item), self.operate_module)
+        select_sql = "SELECT %s FROM %s;" % (",".join(select_item), self.right_module)
         self.db.execute(select_sql)
         module_info = []
         for item in self.db.fetchall():
@@ -95,7 +97,7 @@ class DevManager:
         if type(module_no) != int:
             return False, "Bad module_no"
         select_item = ["module_no", "module_role", "role_desc"]
-        select_sql = "SELECT %s FROM %s WHERE module_no=%s;" % (",".join(select_item), self.operate_module_role, module_no)
+        select_sql = "SELECT %s FROM %s WHERE module_no=%s;" % (",".join(select_item), self.right_module_role, module_no)
         self.db.execute(select_sql)
         module_role_info = []
         for item in self.db.fetchall():
@@ -109,7 +111,7 @@ class DevManager:
         if type(module_no) != int:
             return False, "Bad module_no"
         select_item = ["module_no", "action_desc", "min_role"]
-        select_sql = "SELECT %s FROM %s WHERE module_no=%s;" % (",".join(select_item), self.operate_action_role, module_no)
+        select_sql = "SELECT %s FROM %s WHERE module_no=%s;" % (",".join(select_item), self.right_action_role, module_no)
         self.db.execute(select_sql)
         action_role_info = []
         for item in self.db.fetchall():
@@ -120,4 +122,9 @@ class DevManager:
         return True, action_role_info
 
     def new_right_action(self, module_no, action_desc, min_role, adder):
-        return True
+        add_time = int(time())
+        action_desc = check_sql_character(action_desc)
+        insert_sql = "INSERT INTO %s (module_no,action_desc,min_role,adder,add_time) VALUES (%s,'%s','%s','%s',%s)" \
+                     % (self.right_action_role, module_no, action_desc, min_role[:1], adder, add_time)
+        self.db.execute(insert_sql)
+        return True, "success"
