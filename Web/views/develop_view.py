@@ -39,15 +39,6 @@ def operate_auth_show():
     return render_template("%s/operate_auth.html" % html_dir, operate_auth=data, url_prefix=url_prefix)
 
 
-@develop_view.route("/operate/auth/download/", methods=["GET"])
-@login_required
-def download_operate_auth():
-    result, data = control.download_operate_auth(current_user.role)
-    if result is True:
-        return send_from_directory(data["DIR"], data["FILE"], as_attachment=True)
-    return data
-
-
 @develop_view.route("/data/table/", methods=["GET"])
 @login_required
 def show_data_table():

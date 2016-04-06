@@ -40,6 +40,9 @@ def show_module_list():
         result, module_role_info = control.get_right_module_role(current_user.role, module_no)
         if result is False:
             return module_role_info
+        module_role_dict = {}
+        for item in module_role_info:
+            module_role_dict[item["module_role"]] = item
         result, action_list = control.get_right_action_role(current_user.role, module_no)
         if result is False:
             return action_list
@@ -49,7 +52,7 @@ def show_module_list():
             new_right = False
         return render_template("%s/right_module.html" % html_dir, module_list=info, url_prefix=url_prefix,
                                module_role_info=module_role_info, action_list=action_list, new_right=new_right,
-                               user_name=current_user.account)
+                               user_name=current_user.account, module_role_dict=module_role_dict)
     return render_template("%s/right_module.html" % html_dir, module_list=info, url_prefix=url_prefix)
 
 

@@ -167,11 +167,6 @@ class ControlManager:
         return self.calc.select(data_no)
 
     # 针对开发者的应用
-    def download_operate_auth(self, role):
-        if role & self.user_role["right_new"] <= 0:
-            return False, u"您没有权限"
-        return self.dev.get_operate_auth_file()
-
     def show_operate_auth(self, role):
         if role & self.user_role["right_new"] < self.user_role["right_new"]:
             return False, u"您没有权限"

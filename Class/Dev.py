@@ -5,11 +5,8 @@ import sys
 import tempfile
 sys.path.append("..")
 from Tools.Mysql_db import DB
-from Tools.MyExcel import write_excel
 from Check import check_sql_character
-from datetime import datetime
 from time import time
-from Class import TIME_FORMAT_STR
 
 temp_dir = tempfile.gettempdir()
 
@@ -37,26 +34,6 @@ class DevManager:
             for item in self.db.fetchall():
                 operate_auth.append({"module": item[0], "operate": item[1], "description": item[2], "role": item[3]})
             return True, operate_auth
-        except Exception as e:
-            error_message = str(e.args)
-            print(error_message)
-            return False, error_message
-
-    def get_operate_auth_file(self):
-        try:
-            result, operate_auth = self.get_operate_auth()
-            if result is False:
-                return False, operate_auth
-            operate_auth_array = []
-            for item in operate_auth:
-                operate_auth_array.append([item["module"], item["operate"], item["role"] + " " + item["description"]])
-            titles = [u"模块", u"操作", u"拥有操作权限的角色"]
-            file = "operate_auth_%s.xls" % datetime.now().strftime(TIME_FORMAT_STR)
-            save_path = "%s/%s" % (temp_dir, file)
-            write_result, message = write_excel(save_path, operate_auth_array, titles)
-            if write_result is False:
-                return write_result, message
-            return True, {"DIR": temp_dir, "FILE": file}
         except Exception as e:
             error_message = str(e.args)
             print(error_message)
@@ -99,9 +76,12 @@ class DevManager:
         select_item = ["module_no", "module_role", "role_desc"]
         select_sql = "SELECT %s FROM %s WHERE module_no=%s;" % (",".join(select_item), self.right_module_role, module_no)
         self.db.execute(select_sql)
-        module_role_info = {}
+        module_role_info = []
         for item in self.db.fetchall():
-            module_role_info[item[1]] = {"module_role": item[1], "role_desc": item[2]}
+            info = {}
+            for i in range(len(item)):
+                info[select_item[i]] = item[i]
+            module_role_info.append(info)
         return True, module_role_info
 
     def get_right_action_role(self, module_no):
