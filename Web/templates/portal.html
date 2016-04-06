@@ -19,7 +19,7 @@
     {% if user_role | bit_and(role_value["table_look"]) >  0 %}
         <a href="{{ dev_url_prefix }}/data/table/">查看数据表设计</a>
     {% endif %}
-    {% if user_role | bit_and(role_value["auth_look"]) >  0 %}
+    {% if user_role | bit_and(role_value["right_look"]) >  0 %}
         <a href="{{ right_url_prefix }}/">查看晶云平台操作权限</a>
     {% endif %}
     {% if user_role | bit_and(role_value["bug_look"]) >  0 %}
