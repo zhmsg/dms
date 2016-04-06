@@ -28,8 +28,6 @@ msg_web.register_blueprint(right_blueprint, url_prefix=right_url_prefix)
 def bit_and(num1, num2):
     return num1 & num2
 
-msg_web.jinja_env.filters['bit_and'] = bit_and
-
 
 @msg_web.after_request
 def after_request(res):
