@@ -46,7 +46,7 @@
                 <td>{{ item["min_role"] }}{{ module_role_info[item["min_role"]]["role_desc"] }}</td>
                 {% if new_right %}
                     {% if user_name == item["adder"] %}
-                        <td><a href="">删除</a></td>
+                        <td><a href="{{ url_prefix }}/action/delete/{{ item["action_no"] }}/">删除</a></td>
                     {% else %}
                         <td><a>删除{{ user_name }}</a></td>
                     {% endif %}

@@ -108,7 +108,8 @@ class DevManager:
         if type(module_no) != int:
             return False, "Bad module_no"
         select_item = ["action_no", "module_no", "action_desc", "min_role", "adder"]
-        select_sql = "SELECT %s FROM %s WHERE module_no=%s ORDER BY min_role;" % (",".join(select_item), self.right_action_role, module_no)
+        select_sql = "SELECT %s FROM %s WHERE module_no=%s AND is_delete=0 ORDER BY min_role;" \
+                     % (",".join(select_item), self.right_action_role, module_no)
         self.db.execute(select_sql)
         action_role_info = []
         for item in self.db.fetchall():
@@ -127,6 +128,8 @@ class DevManager:
         return True, "success"
 
     def del_right_action(self, adder, action_no):
-        delete_sql = "DELETE FROM %s WHERE action_no=%s AND adder='%s';" % (self.right_action_role, action_no, adder)
+        del_time = int(time())
+        delete_sql = "UPDATE %s SET is_delete=1,add_time=%s WHERE action_no=%s AND adder='%s';" \
+                     % (self.right_action_role, del_time, action_no, adder)
         self.db.execute(delete_sql)
         return True, "success"

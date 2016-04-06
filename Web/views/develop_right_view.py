@@ -69,3 +69,15 @@ def new_action_role():
     if result is False:
         return info
     return redirect(ref_url)
+
+
+@develop_right_view.route("/action/delete/<int:action_no>/", methods=["GET"])
+@login_required
+def del_action_role(action_no):
+    if "Referer" not in request.headers:
+        return "Bad Request"
+    ref_url = request.headers["Referer"]
+    result, info = control.delete_right_action(current_user.account, current_user.role, action_no)
+    if result is False:
+        return info
+    return redirect(ref_url)
