@@ -52,7 +52,7 @@
             <li>
               <label for="">最低访问权限：</label>
               <select class="box-side width420" name="min_role">
-              {% for item in module_role_info %}
+              {% for key, item in module_role_info.items() %}
                 <option value="{{ item["module_role"] }}">{{ item["module_role"] }} {{ item["role_desc"] }}</option>
               {% endfor %}
               </select>
