@@ -168,12 +168,12 @@ class ControlManager:
 
     # 针对开发者的应用
     def download_operate_auth(self, role):
-        if role & self.user_role["auth_look"] <= 0:
+        if role & self.user_role["right_new"] <= 0:
             return False, u"您没有权限"
         return self.dev.get_operate_auth_file()
 
     def show_operate_auth(self, role):
-        if role & self.user_role["auth_look"] < self.user_role["auth_look"]:
+        if role & self.user_role["right_new"] < self.user_role["right_new"]:
             return False, u"您没有权限"
         return self.dev.get_operate_auth()
 
@@ -188,25 +188,25 @@ class ControlManager:
         return self.dev.get_table_info(table_name)
 
     def get_right_module(self, role):
-        if role & self.user_role["auth_look"] < self.user_role["auth_look"]:
+        if role & self.user_role["right_look"] < self.user_role["right_look"]:
             return False, u"您没有权限"
         result, info = self.dev.get_right_module()
         return result, info
 
     def get_right_module_role(self, role, module_no):
-        if role & self.user_role["auth_look"] < self.user_role["auth_look"]:
+        if role & self.user_role["right_look"] < self.user_role["right_look"]:
             return False, u"您没有权限"
         result, info = self.dev.get_right_module_role(module_no)
         return result, info
 
     def get_right_action_role(self, role, module_no):
-        if role & self.user_role["auth_look"] < self.user_role["auth_look"]:
+        if role & self.user_role["right_look"] < self.user_role["right_look"]:
             return False, u"您没有权限"
         result, info = self.dev.get_right_action_role(module_no)
         return result, info
 
     def new_right_action(self, user_name, role, module_no, action_desc, min_role):
-        if role & self.user_role["auth_look"] < self.user_role["auth_look"]:
+        if role & self.user_role["right_new"] < self.user_role["right_new"]:
             return False, u"您没有权限"
         result, info = self.dev.new_right_action(module_no, action_desc, min_role, user_name)
         return result, info

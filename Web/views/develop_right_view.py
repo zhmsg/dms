@@ -3,7 +3,7 @@
 
 import re
 import sys
-from flask import Blueprint, render_template, request, redirect,jsonify, send_from_directory
+from flask import Blueprint, render_template, request, redirect
 from flask_login import login_required, current_user
 
 from Web import right_url_prefix as url_prefix
@@ -43,8 +43,12 @@ def show_module_list():
         result, action_list = control.get_right_action_role(current_user.role, module_no)
         if result is False:
             return action_list
+        if current_user.role & control.user_role["right_new"] > 0:
+            new_right = True
+        else:
+            new_right = False
         return render_template("%s/right_module.html" % html_dir, module_list=info, url_prefix=url_prefix,
-                               module_role_info=module_role_info, action_list=action_list)
+                               module_role_info=module_role_info, action_list=action_list, new_right=new_right)
     return render_template("%s/right_module.html" % html_dir, module_list=info, url_prefix=url_prefix)
 
 

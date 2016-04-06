@@ -24,8 +24,8 @@ class UserManager:
         self.user = "sys_user"
         self.default_password = "gene.ac"
         self.role_value = {"market": 1, "upload": 2, "calc": 4, "api_look": 8, "api_new": 16, "table_look": 32,
-                           "auth_look": 64, "user_new": 128, "bug_look": 256, "bug_new": 512, "bug_link": 1024,
-                           "bug_cancel": 2048, "bug_del": 4096, "api_module_new": 8192}
+                           "right_look": 64, "user_new": 128, "bug_look": 256, "bug_new": 512, "bug_link": 1024,
+                           "bug_cancel": 2048, "bug_del": 4096, "api_module_new": 8192, "right_new": 16384}
 
     def new(self, user_name, role, nick_name, creator):
         if check_user(user_name, 1, 15) is False:
