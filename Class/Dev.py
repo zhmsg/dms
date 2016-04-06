@@ -118,3 +118,6 @@ class DevManager:
                 info[select_item[i]] = item[i]
             action_role_info.append(info)
         return True, action_role_info
+
+    def new_right_action(self, module_no, action_desc, min_role, adder):
+        return True

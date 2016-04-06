@@ -61,6 +61,16 @@
                 "col_comment": "可操作的最小角色值",
                 "col_name": "min_role",
                 "col_type": "char(1)"
+            },
+            {
+                "col_comment": "添加者",
+                "col_name": "adder",
+                "col_type": "varchar(20)"
+            },
+            {
+                "col_comment": "添加时间，时间戳",
+                "col_name": "add_time",
+                "col_type": "int(11)"
             }
         ],
         "table_comment": "每个操作对应的最低操作角色",
