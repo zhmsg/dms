@@ -20,13 +20,11 @@
     {% if module_role_info %}
     <table class="table table-bordered table-hover privilegeTable" cellspacing="0" cellpadding="0">
         <tr>
-            <th scope="col" width="10%">权限模块</th>
             <th scope="col" width="10%">权限值</th>
             <th scope="col" width="80%">解释</th>
         </tr>
-        {% for item in module_role_info %}
+        {% for key, item in module_role_info.items() %}
         <tr>
-            <td>{{ item["module_no"] }}</td>
             <td>{{ item["module_role"] }}</td>
             <td>{{ item["role_desc"] }}</td>
         </tr>
@@ -36,15 +34,13 @@
     {% if action_list %}
         <table class="table table-bordered table-hover privilegeTable" cellspacing="0" cellpadding="0">
             <tr>
-                <th scope="col" width="10%">权限模块</th>
                 <th scope="col" width="80%">操作</th>
-                <th scope="col" width="10%">最低权限</th>
+                <th scope="col" width="20%">最低权限</th>
             </tr>
             {% for item in action_list %}
             <tr>
-                <td>{{ item["module_no"] }}</td>
                 <td>{{ item["action_desc"] }}</td>
-                <td>{{ item["min_role"] }}</td>
+                <td>{{ item["min_role"] }}{{ module_role_info[item["min_role"]] }}</td>
             </tr>
             {% endfor %}
         </table>

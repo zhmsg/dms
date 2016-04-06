@@ -99,19 +99,16 @@ class DevManager:
         select_item = ["module_no", "module_role", "role_desc"]
         select_sql = "SELECT %s FROM %s WHERE module_no=%s;" % (",".join(select_item), self.right_module_role, module_no)
         self.db.execute(select_sql)
-        module_role_info = []
+        module_role_info = {}
         for item in self.db.fetchall():
-            info = {}
-            for i in range(len(item)):
-                info[select_item[i]] = item[i]
-            module_role_info.append(info)
+            module_role_info[item[1]] = {"module_role": item[1], "role_desc": item[2]}
         return True, module_role_info
 
     def get_right_action_role(self, module_no):
         if type(module_no) != int:
             return False, "Bad module_no"
         select_item = ["action_no", "module_no", "action_desc", "min_role"]
-        select_sql = "SELECT %s FROM %s WHERE module_no=%s;" % (",".join(select_item), self.right_action_role, module_no)
+        select_sql = "SELECT %s FROM %s WHERE module_no=%s ORDER BY min_role;" % (",".join(select_item), self.right_action_role, module_no)
         self.db.execute(select_sql)
         action_role_info = []
         for item in self.db.fetchall():
@@ -127,4 +124,9 @@ class DevManager:
         insert_sql = "INSERT INTO %s (module_no,action_desc,min_role,adder,add_time) VALUES (%s,'%s','%s','%s',%s)" \
                      % (self.right_action_role, module_no, action_desc, min_role[:1], adder, add_time)
         self.db.execute(insert_sql)
+        return True, "success"
+
+    def delete_right_action(self, action_no):
+        delete_sql = "DELETE FROM %s WHERE action_no=%s;" % (self.right_action_role, action_no)
+        self.db.execute(delete_sql)
         return True, "success"
