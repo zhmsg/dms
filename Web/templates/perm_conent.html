@@ -11,7 +11,7 @@
   </div>
   <div class="checkbox font16">
     <span class="text-right">权限列表权限：</span>
-    <label><input type="checkbox" id="auth_look" {% if user_role | bit_and(role_value["auth_look"]) <= 0 %}disabled{% else %}name="auth_look" {% endif %}>查看</label>&nbsp;&nbsp;
+    <label><input type="checkbox" id="right_look" {% if user_role | bit_and(role_value["right_look"]) <= 0 %}disabled{% else %}name="right_look" {% endif %}>查看</label>&nbsp;&nbsp;
   </div>
   <div class="checkbox font16">
     <span class="text-right">数据表描述权限：</span>
