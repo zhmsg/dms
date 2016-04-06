@@ -48,7 +48,13 @@
                     {% for item in action_list %}
                         <tr>
                             <td>{{ item["action_desc"] }}</td>
-                            <td>{{ item["min_role"] }}{{ module_role_dict[item["min_role"]]["role_desc"] }}</td>
+                            <td>
+                                {% if item["min_role"] in module_role_dict %}
+                                {{ item["min_role"] }}{{ module_role_dict[item["min_role"]]["role_desc"] }}
+                                {% else %}
+                                {{ item["min_role"] }}
+                                {% endif %}
+                            </td>
                             {% if new_right %}
                                 {% if user_name == item["adder"] %}
                                     <td><a href="{{ url_prefix }}/action/delete/{{ item["action_no"] }}/">删除</a></td>
