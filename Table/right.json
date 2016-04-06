@@ -62,7 +62,7 @@
             {
                 "col_comment": "操作描述",
                 "col_name": "action_desc",
-                "col_type": "varchar(50)"
+                "col_type": "varchar(250)"
             },
             {
                 "col_comment": "可操作的最小角色值",
