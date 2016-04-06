@@ -1,7 +1,7 @@
 @charset "utf-8";
 /* CSS Document */
 body{font-family:"Microsoft Yahei","微软雅黑","宋体",Arial, Helvetica, sans-serif;}
-ul,ol{list-style: none;margin: 0;padding: 0;}
+ul,ol,li{list-style: none;margin: 0;padding: 0;}
 .clear{clear:both;}
 .left{float: left;}
 .loginMode{margin-top: 100px;}
@@ -66,10 +66,17 @@ ul,ol{list-style: none;margin: 0;padding: 0;}
 .data_table{border-left: 1px solid #ccc;border-bottom: 1px solid #ccc;}
 .data_table th,.data_table td{line-height: 40px;border-top:  1px solid #ccc;border-right: 1px solid #ccc;padding:0 10px;}
 /*晶云平台遗传频道权限描述*/
-.privilegeTable{margin:20px;border-top:1px solid #999;border-left: 1px solid #999;border-bottom: none;border-right: none;width: 98%;}
+.privilegeTable{margin:20px 0;border-top:1px solid #999;border-left: 1px solid #999;border-bottom: none;border-right: none;width: 98%;}
 .privilegeTable th,.privilegeTable td{padding: 0 8px 0 !important;line-height:44px !important;}
 .privilegeTable td{color: #080808;}
 .btn-down{margin-left: 20px;margin-bottom: 20px;padding:8px 40px;}
+
+.privilegeMenu{position: fixed;width: 8%;}
+.privilegeMenu li{line-height: 30px;}
+.privilegeMenu li a{display: block;padding-left: 10px;width:90%; border-radius: 3px;font-weight: bold;}
+.privilegeMenu li a:hover{background: #5cb85c;text-decoration: none;}
+.privilegeCon{width:100%;padding-left: 15%;}
+.permission p{margin-bottom: 0;line-height: 24px;font-size: 14px;}
 /*添加API页面*/
 .apiMode{padding: 30px 0;}
 .apiMode label{width:200px;text-align: right;font-weight: normal;}
