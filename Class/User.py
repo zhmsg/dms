@@ -88,7 +88,7 @@ class UserManager:
     def change_password(self, user_name, old_password, new_password):
         change_url = "%s/password/" % jy_auth_host
         try:
-            res = requests.put(change_url, json={"account": user_name, "old_password": old_password,
+            res = requests.put(change_url, json={"account": user_name, "password": old_password,
                                                   "new_password": new_password})
         except requests.ConnectionError as ce:
             res = None
