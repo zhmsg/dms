@@ -91,8 +91,6 @@ class UserManager:
             res = requests.put(change_url, json={"account": user_name, "password": old_password,
                                                   "new_password": new_password})
         except requests.ConnectionError as ce:
-            res = None
-        if res is None:
             return False, u"暂时无法更改密码，请稍后重试"
         r = res.json()
         if r["status"] != 2:

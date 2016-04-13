@@ -120,7 +120,7 @@ def password():
     confirm_password = request.form["confirm_password"]
     if new_password != confirm_password:
         return "两次输入密码不一致"
-    if current_user.is_authenticated():
+    if current_user.is_authenticated:
         old_password= request.form["old_password"]
         if old_password == new_password:
             return u"新密码不能和旧密码一样"
