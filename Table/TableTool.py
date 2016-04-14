@@ -184,7 +184,7 @@ class DBTool:
             return False, "invalid file"
         table_name = table_names[-1]
         self.cursor.execute("SET character_set_database = utf8 ;")
-        load_sql = "LOAD DATA LOCAL INFILE '%s' INTO TABLE %s fields terminated by '\t' ;" % (data_file, table_name)
+        load_sql = "LOAD DATA LOCAL INFILE '%s' IGNORE INTO TABLE %s fields terminated by '\t' ;" % (data_file, table_name)
         self.cursor.execute(load_sql)
         self.conn.commit()
 
