@@ -44,6 +44,12 @@ class StatusManager:
         self.db.execute(insert_sql)
         return True, status_code
 
+    def new_mul_status_code(self, service_id, fun_id, error_info, adder):
+        if check_int(service_id) is False:
+            return "Bad service_id"
+        if check_int(fun_id) is False:
+            return "Bad fun_id"
+
     def get_status_code(self):
         select_sql = "SELECT status_code,code_desc,add_time,adder FROM %s;" % self.status_code
         self.db.execute(select_sql)

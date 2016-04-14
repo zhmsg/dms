@@ -4,6 +4,7 @@
 import MySQLdb
 import json
 import os
+import re
 
 __author__ = 'ZhouHeng'
 
@@ -170,13 +171,41 @@ class DBTool:
         for item in desc_files:
             if not item.endswith(".json"):
                 continue
-            file_path = desc_dir+ "/" + item
-            result, info = self.create_from_json_file(file_path)
-            create_info.append({"file_path": file_path, "create_result": result, "create_info": info})
+            file_path = desc_dir + "/" + item
+            r, info = self.create_from_json_file(file_path)
+            create_info.append({"file_path": file_path, "create_result": r, "create_info": info})
         return True, create_info
 
+    def init_data_from_file(self, data_file):
+        if os.path.isfile(data_file) is False:
+            return False, "data file not exist"
+        table_names = re.findall("([\w]+).data", data_file)
+        if len(table_names) <= 0:
+            return False, "invalid file"
+        table_name = table_names[-1]
+        load_sql = "LOAD DATA LOCAL INFILE '%s' INTO TABLE %s fields terminated by '\t';" % (data_file, table_name)
+        print(load_sql)
+        self.cursor.execute(load_sql)
+        return True, "success"
+
+    def init_data_from_dir(self, data_dir):
+        if os.path.isdir(data_dir) is False:
+            print("desc dir not exist")
+            return False, "data dir not exist"
+        data_files = os.listdir(data_dir)
+        init_info = []
+        for item in data_files:
+            if not item.endswith(".data"):
+                continue
+            data_path = data_dir+ "/" + item
+            r, info = self.init_data_from_file(data_path)
+            init_info.append({"data_path": data_path, "init_result": r, "init_info": info})
+        return True, init_info
+
 # example
-# dbt = DBTool("localhost")
+dbt = DBTool("localhost")
 # result = dbt.create_from_dir(".")
 # print(result)
+result, info = dbt.init_data_from_dir("Data")
+print(result)
 
