@@ -183,7 +183,7 @@ class DBTool:
         if len(table_names) <= 0:
             return False, "invalid file"
         table_name = table_names[-1]
-        load_sql = "LOAD DATA LOCAL INFILE '%s' INTO TABLE %s fields terminated by '\t';" % (data_file, table_name)
+        load_sql = "LOAD DATA LOCAL INFILE '%s' INTO TABLE %s fields terminated by '\t' ;" % (data_file, table_name)
         print(load_sql)
         self.cursor.execute(load_sql)
         return True, "success"
