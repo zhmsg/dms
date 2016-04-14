@@ -182,9 +182,9 @@ class DBTool:
         table_names = re.findall("([\w]+).data", data_file)
         if len(table_names) <= 0:
             return False, "invalid file"
-        table_name = table_names[-1]
+        t_name = table_names[-1]
         self.cursor.execute("SET character_set_database = utf8 ;")
-        load_sql = "LOAD DATA LOCAL INFILE '%s' IGNORE INTO TABLE %s fields terminated by '\t' ;" % (data_file, table_name)
+        load_sql = "LOAD DATA LOCAL INFILE '%s' IGNORE INTO TABLE %s fields terminated by '\t';" % (data_file, t_name)
         self.cursor.execute(load_sql)
         self.conn.commit()
 
