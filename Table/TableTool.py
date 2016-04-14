@@ -72,7 +72,7 @@ class DBTool:
     def __init__(self, mysql_host):
         self.db_name = "dms"
         # "rdsikqm8sr3rugdu1muh3.mysql.rds.aliyuncs.com"
-        self.conn = MySQLdb.connect(host=mysql_host, user="dms", passwd="gene_ac252", db=self.db_name, charset='utf8')
+        self.conn = MySQLdb.connect(host=mysql_host, user="dms", passwd="gene_ac252", db=self.db_name, charset='utf8', local_infile=1)
         self.cursor = self.conn.cursor()
 
     def check_table(self, table_name):
@@ -183,9 +183,11 @@ class DBTool:
         if len(table_names) <= 0:
             return False, "invalid file"
         table_name = table_names[-1]
+        self.cursor.execute("SET character_set_database = utf8 ;")
         load_sql = "LOAD DATA LOCAL INFILE '%s' INTO TABLE %s fields terminated by '\t' ;" % (data_file, table_name)
-        print(load_sql)
         self.cursor.execute(load_sql)
+        self.conn.commit()
+
         return True, "success"
 
     def init_data_from_dir(self, data_dir):
@@ -203,9 +205,9 @@ class DBTool:
         return True, init_info
 
 # example
-dbt = DBTool("localhost")
+# dbt = DBTool("localhost")
 # result = dbt.create_from_dir(".")
 # print(result)
-result, info = dbt.init_data_from_dir("Data")
-print(result)
+# result, info = dbt.init_data_from_dir("Data")
+# print(result)
 
