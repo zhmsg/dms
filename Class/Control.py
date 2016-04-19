@@ -370,24 +370,29 @@ class ControlManager:
 
     # 针对API状态码的应用
     def get_fun_info(self, role):
-        if role & self.user_role["api_look"] <= 0:
+        if role & self.user_role["status_code_look"] <= 0:
             return False, u"您没有权限"
         return self.api_status.get_function_info()
 
     def get_status(self, role):
-        if role & self.user_role["api_look"] <= 0:
+        if role & self.user_role["status_code_look"] <= 0:
             return False, u"您没有权限"
         return self.api_status.get_status_code()
 
     def get_error_type(self, role):
-        if role & self.user_role["api_look"] <= 0:
+        if role & self.user_role["status_code_look"] <= 0:
             return False, u"您没有权限"
         return self.api_status.get_error_type()
 
     def new_api_status(self, user_name, role, service_id, fun_id, type_id, error_id, error_desc):
-        if role & self.user_role["api_look"] <= 0:
+        if role & self.user_role["status_code_new"] <= 0:
             return False, u"您没有权限"
         return self.api_status.new_status_code(service_id, fun_id, type_id, error_id, error_desc, user_name)
+
+    def delete_api_status(self, user_name, role, status_code):
+        if role & self.user_role["status_code_del"] < self.user_role["status_code_del"]:
+            return False, u"您没有权限"
+        return self.api_status.del_status_code(status_code)
 
     # 针对BUG的应用
     def get_bug_list(self, role):

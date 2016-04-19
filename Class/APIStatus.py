@@ -8,7 +8,7 @@ sys.path.append("..")
 from datetime import datetime
 from Tools.Mysql_db import DB
 from Class import table_manager, TIME_FORMAT
-from Check import check_chinese_en, check_http_method, check_path, check_sql_character, check_int, check_char, fill_zero
+from Check import check_sql_character, check_int, fill_zero
 from Tools.Wx import WxManager
 
 temp_dir = tempfile.gettempdir()
@@ -83,4 +83,11 @@ class StatusManager:
             type_id_s = fill_zero(item[0], 2)
             type_info[type_id_s] = {"title": item[1], "desc": item[2]}
         return True, type_info
+
+    def del_status_code(self, status_code):
+        if type(status_code) != int:
+            return False, "Bad status_code"
+        delete_sql = "DELETE FROM %s WHERE status_code=%s;" % (self.status_code, status_code)
+        self.db.execute(delete_sql)
+        return True, "success"
 

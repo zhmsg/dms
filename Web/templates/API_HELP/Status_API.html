@@ -8,53 +8,61 @@
 </head>
 
 <body>
-<div class="container font16"> <a class="btn btn-primary pull-right margin20" href="{{ return_url }}" title="">返回API解释</a>
-  <div class="clear bottom20">
-    <input class="form-control" id="search_code" onkeyup="search_code();" placeholder="搜索状态码" value="{{ search_status }}" />
-  </div>
-  {% if true %}
-  <div style="position: relative">
+<div class="container font16">
+    <a class="btn btn-primary pull-right margin20" href="{{ return_url }}" title="">返回API解释</a>
+    <div class="clear bottom20">
+        <input class="form-control" id="search_code" onkeyup="search_code();" placeholder="搜索状态码" value="{{ search_status }}" />
+    </div>
+    <div style="position: relative">
     <table class="table table-bordered table-hover api-list-table">
       <tr>
         <th scope="col" width="10%">状态码</th>
-        <th scope="col" width=90%">解释</th>
+        <th scope="col" width=85%">解释</th>
+        {% if del_power %}
+            <th scope="col" width=5%">操作</th>
+        {% endif %}
       </tr>
       {% for item in status_info %}
       <tr id="s_{{ item["status_code"] }}">
         <td class="status_move"><span>{{ item["status_code"][:2] }}</span> <span>{{ item["status_code"][2:4] }}</span> <span>{{ item["status_code"][4:6] }}</span> <span>{{ item["status_code"][6:8] }}</span></td>
         <td>{{ item["code_desc"] }}</td>
+        {% if del_power %}
+            <td><a href="{{ del_status_code_url }}?status_code={{ item["status_code"] }}" title="">删除</a></td>
+        {% endif %}
       </tr>
       {% endfor %}
     </table>
     <div class="status_out" id="status_code_info">ni</div>
   </div>
-  {% endif %}
-  <button type="button" class="btn btn-primary margin20" id="conBtn">我要新建</button>
-  <div class="newMode" style="display: none;">
-    <form action="{{ url_for('develop_api_view.new_status') }}" method="post">
-      <p class="bottom10">
-        <select class="box-side width150 pull-left margin10" id="service_id" name="service_id" onchange="set_fun_id();"></select>
-        <select class="box-side width150 pull-left margin10" id="fun_id" name="fun_id" onchange="update_info();"></select>
-        <select class="box-side width150 pull-left margin10" id="type_id" name="type_id" onchange="update_info();"></select>
-        <input name="error_id" class="form-control pull-left width100 margin10" id="error_id" onkeyup="update_info();" required>
-        <input name="error_desc" class="form-control pull-left width366 margin10" id="error_desc" onkeyup="update_info();" required>
-        <button type="submit" class="btn btn-primary pull-left" id="btn_new">新建</button>
-        <!-- 复选框组 start -->
-        <span class="pull-left top6 left5">
-         <label class="checkbox-inline"><input type="checkbox" id="show_exist" value="复选框" onchange="update_info();" />显示已有状态码</label>
-        </span>
-        <!-- 复选框组 end -->
-        <span class="clear block"></span>
-      </p>
-      <p class="bottom20" id="new_info_show"></p>
-      <p id="service_desc"></p>
-      <p id="fun_desc"></p>
-      <p id="error_type_desc"></p>
-    </form>
-  </div>
+    {% if new_power %}
+          <button type="button" class="btn btn-primary margin20" id="conBtn">我要新建</button>
+          <div class="newMode" style="display: none;">
+            <form action="{{ url_for('develop_api_view.new_status') }}" method="post">
+              <p class="bottom10">
+                <select class="box-side width150 pull-left margin10" id="service_id" name="service_id" onchange="set_fun_id();"></select>
+                <select class="box-side width150 pull-left margin10" id="fun_id" name="fun_id" onchange="update_info();"></select>
+                <select class="box-side width150 pull-left margin10" id="type_id" name="type_id" onchange="update_info();"></select>
+                <input name="error_id" class="form-control pull-left width100 margin10" id="error_id" onkeyup="update_info();" required>
+                <input name="error_desc" class="form-control pull-left width366 margin10" id="error_desc" onkeyup="update_info();" required>
+                <button type="submit" class="btn btn-primary pull-left" id="btn_new">新建</button>
+                <!-- 复选框组 start -->
+                <span class="pull-left top6 left5">
+                 <label class="checkbox-inline"><input type="checkbox" id="show_exist" value="复选框" onchange="update_info();" />显示已有状态码</label>
+                </span>
+                <!-- 复选框组 end -->
+                <span class="clear block"></span>
+              </p>
+              <p class="bottom20" id="new_info_show"></p>
+              <p id="service_desc"></p>
+              <p id="fun_desc"></p>
+              <p id="error_type_desc"></p>
+            </form>
+          </div>
+    {% endif %}
 </div>
 <input id="fun_info_url" value="{{ fun_info_url }}" style="display: none">
 <input id="error_type_url" value="{{ error_type_url }}" style="display: none">
+
 </body>
 <script type="text/javascript" src="{{ url_for('static', filename='t_js/jquery.min.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='t_js/API_HELP/status_api.js') }}"></script>
