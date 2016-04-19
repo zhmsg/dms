@@ -28,3 +28,9 @@
     <label><input type="checkbox" id="bug_link" {% if user_role | bit_and(role_value["bug_link"]) <= 0 %}disabled {% else %}name="bug_link" {% endif %}>被关联</label>&nbsp;&nbsp;
     <label><input type="checkbox" id="bug_cancel" {% if user_role | bit_and(role_value["bug_cancel"]) <= 0 %}disabled {% else %}name="bug_cancel" {% endif %}>取消</label>&nbsp;&nbsp;
   </div>
+  <div class="checkbox font16">
+    <span class="text-right">API状态码权限：</span>
+    <label><input type="checkbox" id="status_code_look" {% if user_role | bit_and(role_value["status_code_look"]) <= 0 %}disabled {% else %}name="status_code_look"{% endif %}>查看</label>&nbsp;&nbsp;
+    <label><input type="checkbox" id="status_code_new"  {% if user_role | bit_and(role_value["status_code_new"]) <= 0 %}disabled {% else %}name="status_code_new" {% endif %}>新建</label>&nbsp;&nbsp;
+    <label><input type="checkbox" id="status_code_del" {% if user_role | bit_and(role_value["status_code_del"]) <= 0 %}disabled {% else %}name="status_code_del" {% endif %}>删除</label>&nbsp;&nbsp;
+  </div>
