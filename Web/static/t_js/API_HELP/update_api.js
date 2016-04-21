@@ -18,7 +18,7 @@ function new_header_param(new_url){
                 for(var i=0;i<new_data.length;i++){
                     var t_len = $("#api_header_param").length;
                     var trHTML = "<tr id='tr_" + new_data[i].api_no + new_data[i].param + "'><td>" + new_data[i].param;
-                    trHTML += '</td><td><select class="form-control" disabled>'
+                    trHTML += '</td><td><select class="form-control" disabled>';
                     if (new_data[i].necessary == true) {
                         trHTML += '<option value="1" selected="selected">是</option><option value="0">否</option></select></td>';
                     }
@@ -58,14 +58,17 @@ function new_body_param(new_url){
                 var new_data = json_obj.data;
                 for(var i=0;i<new_data.length;i++){
                     var trHTML = "<tr id='trb_" + new_data[i].api_no + new_data[i].param + "'><td>" + new_data[i].param;
-                    trHTML += '</td><td><select class="form-control" disabled>'
+                    trHTML += '</td><td>';
                     if (new_data[i].necessary == true) {
-                        trHTML += '<option value="1" selected="selected">是</option><option value="0">否</option></select></td>';
+                        trHTML += '是';
                     }
                     else{
-                        trHTML += '<option value="1">是</option><option value="0" selected="selected">否</option></select></td>';
+                        trHTML += '否';
                     }
-                    trHTML += '<td>' + new_data[i].type + '</td><td>' + new_data[i].desc + '</td><td><button class="btn btn-success">更新</button> <button class="btn btn-danger"  onclick="delete_body_param('+ "'" + new_data[i].api_no + "','" + new_data[i].param + "'" + ')">删除</button></td></tr>"';
+                    trHTML += '<td>' + new_data[i].type + '</td><td>' + new_data[i].desc + '</td>';
+                    trHTML += '<td><button class="btn btn-success" onclick="update_body_param(' + "'" + api_no + "','" + param + "'" + ')">更新</button>';
+                    alert(trHTML);
+                    trHTML += '<button class="btn btn-danger"  onclick="delete_body_param('+ "'" + new_data[i].api_no + "','" + new_data[i].param + "'" + ')">删除</button></td></tr>"';
                     var tr=$("#api_body_param tr").eq(-2);
                     tr.after(trHTML);
                 }
@@ -275,4 +278,14 @@ function handle_predefine_param(btn_id){
 function send_message()
 {
     alert("即将离开");
+}
+
+function update_body_param(api_no, param)
+{
+    var param_tr = $("#trb_" + api_no + param);
+    var tds = param_tr.find("td");
+    for(var i=0;i<3;i++)
+    {
+        alert(tds[i].innerHTML);
+    }
 }

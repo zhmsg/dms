@@ -35,7 +35,7 @@ function test_api(){
                     return false;
                 }
             }
-            else if(type == "object"){
+            else if(type == "object" || type == "list"){
                 console.info(param_value);
                 param_value = JSON.parse(param_value);
                 console.info(param_value);

@@ -107,16 +107,11 @@
             {% for item in api_info["body_info"] %}
             <tr id="trb_{{ item["api_no"] }}{{ item["param"] }}">
                 <td>{{ item["param"] }}</td>
-                <td>
-                    <select class="form-control" disabled>
-                        <option value="1" {% if item["necessary"] %}selected="selected"{% endif %}>是</option>
-                        <option value="0" {% if not item["necessary"] %}selected="selected"{% endif %}>否</option>
-                    </select>
-                </td>
+                <td>{% if item["necessary"] %}是{% else %}否{% endif %}</td>
                 <td>{{ item["type"] }}</td>
                 <td>{{ item["param_desc"] }}</td>
                 <td>
-                   <button class="btn btn-success">更新</button>
+                   <button class="btn btn-success" onclick="update_body_param('{{ item["api_no"] }}','{{ item["param"] }}')">更新</button>
                    <button class="btn btn-danger" onclick="delete_body_param('{{ item["api_no"] }}','{{ item["param"] }}')">删除</button>
                 </td>
             </tr>
@@ -128,7 +123,15 @@
                         <option value="0">否</option>
                     </select>
                 </td>
-                <td><input class="form-control" id="body_param_type" /></td>
+                <td>
+                    <select class="form-control" id="body_param_type">
+                        <option value="string">string</option>
+                        <option value="int">int</option>
+                        <option value="list">list</option>
+                        <option value="object">object</option>
+                        <option value="bool">bool</option>
+                    </select>
+                </td>
                 <td><input class="form-control" id="body_param_desc" placeholder="请详细的描述出后端对参数的限制，包括但不限于字段长度，字符限制等" /></td>
                 <td><button class="btn btn-info" onclick="new_body_param('{{ url_prefix }}/add/body/');">新建</button></td>
         </table>
