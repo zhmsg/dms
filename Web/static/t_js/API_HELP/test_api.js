@@ -56,7 +56,11 @@ function test_api(){
         }
         else if(param_type == "header"){
             if(param_key == "authorization"){
-                header_param[param_key] = get_authorization_value(param_value);
+                header_param[param_key] = "Basic " + base64encode(param_value);
+            }
+            else if (param_key == "X-Authorization")
+            {
+                header_param[param_key] = "OAuth2 " + param_value;
             }
             else{
                 header_param[param_key] = param_value;

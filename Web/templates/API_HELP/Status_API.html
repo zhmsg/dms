@@ -60,14 +60,20 @@
         </div>
         <button type="button" class="btn btn-primary margin20" id="mul_new_btn">批量新建</button>
         <div class="mul_newMode" style="display: none;">
-        <form action="{{ url_for('develop_api_view.new_status') }}" method="post">
-          <p class="bottom10">
-            <select class="box-side width150 pull-left margin10" id="mul_service_id" onchange="set_fun_id();"></select>
-            <select class="box-side width150 pull-left margin10" id="mul_fun_id" onchange="update_info();"></select>
-            <select class="box-side width150 pull-left margin10" id="mul_type_id" onchange="update_info();"></select>
-            <input name="error_id" class="form-control pull-left width100 margin10" id="mul_error_id" onkeyup="update_info();" required>
-            <input name="error_desc" class="form-control pull-left width366 margin10" id="mul_error_desc" onkeyup="update_info();" required>
-        </form>
+            <p class="bottom10">
+            请选择所属模块
+            </p>
+            <p class="bottom10">
+                <select class="box-side width150 pull-left margin10" id="mul_service_id" onchange="set_fun_id();"></select>
+                <select class="box-side width150 pull-left margin10" id="mul_fun_id" ></select>
+            </p>
+            <p class="bottom10">
+            添加错误类型
+            </p>
+            <p class="bottom10">
+                <select class="box-side width150 pull-left margin10" id="mul_type_id" ></select>
+            </p><br />
+            添加参数
         </div>
     {% endif %}
 </div>

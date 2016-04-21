@@ -48,12 +48,6 @@
                     <li name="param">{{ api_info["predefine_header"][item]["param"] }}</li>
                     <li>：</li>
                     <li><input class="form-control bug-input" id="{{ api_info["predefine_header"][item]["param"] }}_value" param_type="header" /></li>
-                    {% if api_info["predefine_header"][item]["param"] | lower == "authorization" %}
-                    <li>
-                        <label><input type="radio" name="auth_method" value="Basic" id="r_basic" checked/> Basic</label>
-                        <label><input type="radio" name="auth_method" value="Oauth2" id="r_oauth2" /> Oauth2</label>
-                    </li>
-                    {% endif %}
                     <div class="clear"></div>
                 </ul>
                 <p>{{ api_info["predefine_header"][item]["param_desc"] }}</p>
