@@ -389,6 +389,11 @@ class ControlManager:
             return False, u"您没有权限"
         return self.api_status.new_status_code(service_id, fun_id, type_id, error_id, error_desc, user_name)
 
+    def new_mul_api_status(self, user_name, role, service_id, fun_id, error_info):
+        if role & self.user_role["status_code_new"] <= 0:
+            return False, u"您没有权限"
+        return self.api_status.new_mul_status_code(service_id, fun_id, error_info, user_name)
+
     def delete_api_status(self, user_name, role, status_code):
         if role & self.user_role["status_code_del"] < self.user_role["status_code_del"]:
             return False, u"您没有权限"
