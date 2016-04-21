@@ -27,21 +27,25 @@ class StatusManager:
         self.status_code = table_manager.status_code
         self.user = "sys_user"
 
-    def new_status_code(self, service_id, fun_id, type_id, error_id, error_desc, adder):
-        if check_int(service_id) is False:
-            return "Bad service_id"
-        if check_int(fun_id) is False:
-            return "Bad fun_id"
-        if check_int(type_id) is False:
-            return "Bad type_id"
-        if check_int(error_id) is False:
-            return "Bad error_id"
-        status_code = fill_zero(service_id, 2) + fill_zero(fun_id, 2) + fill_zero(type_id, 2) + fill_zero(error_id, 2)
+    def _insert_status_code(self, status_code, code_desc, adder):
+        code_desc = check_sql_character(code_desc)
         add_time = datetime.now().strftime(TIME_FORMAT)
-        code_desc = check_sql_character(error_desc)
         insert_sql = "INSERT IGNORE INTO %s (status_code,code_desc,add_time,adder) " \
                      "VALUES (%s,'%s','%s','%s');" % (self.status_code, status_code, code_desc, add_time, adder)
-        self.db.execute(insert_sql)
+        result = self.db.execute(insert_sql)
+        return result
+
+    def new_status_code(self, service_id, fun_id, type_id, error_id, error_desc, adder):
+        if check_int(service_id) is False:
+            return False, "Bad service_id"
+        if check_int(fun_id) is False:
+            return False, "Bad fun_id"
+        if check_int(type_id) is False:
+            return False, "Bad type_id"
+        if check_int(error_id) is False:
+            return False, "Bad error_id"
+        status_code = fill_zero(service_id, 2) + fill_zero(fun_id, 2) + fill_zero(type_id, 2) + fill_zero(error_id, 2)
+        self._insert_status_code(status_code, error_desc, adder)
         return True, status_code
 
     def new_mul_status_code(self, service_id, fun_id, error_info, adder):
@@ -49,6 +53,28 @@ class StatusManager:
             return "Bad service_id"
         if check_int(fun_id) is False:
             return "Bad fun_id"
+        basic_code = service_id * 1000000 + fun_id * 10000
+        success_new = []
+        for item in error_info:
+            if "type_id" not in item:
+                continue
+            if "error_desc" not in item:
+                continue
+            type_id = item["type_id"]
+            error_desc = item["error_desc"]
+            if check_int(type_id) is False:
+                continue
+            error_code = basic_code + type_id * 100
+            # 查询该模块下此类错误最大的状态码
+            select_sql = "SELECT status_code FROM %s WHERE status_code>=%s AND status_code<%s " \
+                         "ORDER BY status_code DESC LIMIT 1;" % (self.status_code, error_code, error_code + 100)
+            result = self.db.execute(select_sql)
+            if result > 0:
+                error_code = self.db.fetchone()[0] + 1
+            result = self._insert_status_code(error_code, error_desc, adder)
+            if result == 1:
+                success_new.append({"status_code": error_code, "error_desc": error_desc})
+        return True, success_new
 
     def get_status_code(self):
         select_sql = "SELECT status_code,code_desc,add_time,adder FROM %s;" % self.status_code
@@ -90,4 +116,3 @@ class StatusManager:
         delete_sql = "DELETE FROM %s WHERE status_code=%s;" % (self.status_code, status_code)
         self.db.execute(delete_sql)
         return True, "success"
-
