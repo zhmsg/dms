@@ -69,12 +69,6 @@ function test_api(){
         }
     }
     console.info(header_param);
-    //xhr.addEventListener("load", requestComplete, false);
-    //xhr.addEventListener("error", requestFailed, false);
-    ////xhr.addEventListener("abort", uploadCanceled, false);
-    //console.info(body_param);
-    ////xhr.send(JSON.stringify(body_param));
-    //xhr.send("mysg");
     if(api_method != "GET"){
         body_param = JSON.stringify(body_param)
     }
