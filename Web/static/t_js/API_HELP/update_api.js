@@ -284,7 +284,10 @@ function update_body_param(api_no, param)
 {
     var param_tr = $("#trb_" + api_no + param);
     var tds = param_tr.find("td");
-    for(var i=0;i<3;i++)
+    $("#body_param_name").val(tds[0].innerHTML);
+
+    $("#body_param_ne").selected(tds[1].innerHTML);
+    for(var i=0;i<4;i++)
     {
         alert(tds[i].innerHTML);
     }

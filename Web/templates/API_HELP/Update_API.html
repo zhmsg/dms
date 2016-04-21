@@ -116,24 +116,24 @@
                 </td>
             </tr>
             {% endfor %}
-                <td><input class="form-control" id="body_param_name"/></td>
-                <td>
-                    <select class="form-control" id="body_param_ne">
-                        <option value="1">是</option>
-                        <option value="0">否</option>
-                    </select>
-                </td>
-                <td>
-                    <select class="form-control" id="body_param_type">
-                        <option value="string">string</option>
-                        <option value="int">int</option>
-                        <option value="list">list</option>
-                        <option value="object">object</option>
-                        <option value="bool">bool</option>
-                    </select>
-                </td>
-                <td><input class="form-control" id="body_param_desc" placeholder="请详细的描述出后端对参数的限制，包括但不限于字段长度，字符限制等" /></td>
-                <td><button class="btn btn-info" onclick="new_body_param('{{ url_prefix }}/add/body/');">新建</button></td>
+            <td><input class="form-control" id="body_param_name"/></td>
+            <td>
+                <select class="form-control" id="body_param_ne">
+                    <option value="1">是</option>
+                    <option value="0">否</option>
+                </select>
+            </td>
+            <td>
+                <select class="form-control" id="body_param_type">
+                    <option value="string">string</option>
+                    <option value="int">int</option>
+                    <option value="list">list</option>
+                    <option value="object">object</option>
+                    <option value="bool">bool</option>
+                </select>
+            </td>
+            <td><input class="form-control" id="body_param_desc" placeholder="请详细的描述出后端对参数的限制，包括但不限于字段长度，字符限制等" /></td>
+            <td><button class="btn btn-info" onclick="new_body_param('{{ url_prefix }}/add/body/');">新建</button></td>
         </table>
 
         <div class="bottom20 api-example">
