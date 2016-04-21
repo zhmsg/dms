@@ -210,13 +210,28 @@ $(function(){
 $(function(){
     $("#conBtn").click(function(){
         var conBtnValue = $("#conBtn").html();
-        if(conBtnValue == "我要新建"){
+        if(conBtnValue == "单个新建"){
             $(".newMode").show();
             $("#conBtn").html("隐藏新建");
+            $(".mul_newMode").hide();
+            $("#mul_new_btn").html("批量新建");
         }
         if(conBtnValue == "隐藏新建"){
             $(".newMode").hide();
-            $("#conBtn").html("我要新建");
+            $("#conBtn").html("单个新建");
+        }
+    });
+    $("#mul_new_btn").click(function(){
+        var conBtnValue = $("#mul_new_btn").html();
+        if(conBtnValue == "批量新建"){
+            $(".mul_newMode").show();
+            $("#mul_new_btn").html("隐藏新建");
+            $(".newMode").hide();
+            $("#conBtn").html("单个新建");
+        }
+        if(conBtnValue == "隐藏新建"){
+            $(".mul_newMode").hide();
+            $("#mul_new_btn").html("批量新建");
         }
     });
 });
