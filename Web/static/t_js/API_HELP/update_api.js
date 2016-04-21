@@ -57,6 +57,7 @@ function new_body_param(new_url){
             if (json_obj.status == true){
                 var new_data = json_obj.data;
                 for(var i=0;i<new_data.length;i++){
+                    $("#trb_" + new_data[i].api_no + new_data[i].param).remove();
                     var trHTML = "<tr id='trb_" + new_data[i].api_no + new_data[i].param + "'><td>" + new_data[i].param;
                     trHTML += '</td><td>';
                     if (new_data[i].necessary == true) {
@@ -67,7 +68,6 @@ function new_body_param(new_url){
                     }
                     trHTML += '<td>' + new_data[i].type + '</td><td>' + new_data[i].desc + '</td>';
                     trHTML += '<td><button class="btn btn-success" onclick="update_body_param(' + "'" + api_no + "','" + param + "'" + ')">更新</button>';
-                    alert(trHTML);
                     trHTML += '<button class="btn btn-danger"  onclick="delete_body_param('+ "'" + new_data[i].api_no + "','" + new_data[i].param + "'" + ')">删除</button></td></tr>"';
                     var tr=$("#api_body_param tr").eq(-2);
                     tr.after(trHTML);
@@ -75,6 +75,10 @@ function new_body_param(new_url){
                 $("#body_param_name").val("");
                 $("#body_param_desc").val("");
                 $("#body_param_type").val("");
+                $("#body_param_new").text("新建");
+
+                $("#body_param_new").removeClass();
+                $("#body_param_new").addClass("btn btn-info");
             }
         },
         error:function(xhr){
@@ -280,15 +284,25 @@ function send_message()
     alert("即将离开");
 }
 
+function setSelectChecked(selectId, checkValue){
+    var select = document.getElementById(selectId);
+    for(var i=0; i<select.options.length; i++){
+        if(select.options[i].innerHTML == checkValue){
+            select.options[i].selected = true;
+            break;
+        }
+    }
+};
+
 function update_body_param(api_no, param)
 {
     var param_tr = $("#trb_" + api_no + param);
     var tds = param_tr.find("td");
     $("#body_param_name").val(tds[0].innerHTML);
-
-    $("#body_param_ne").selected(tds[1].innerHTML);
-    for(var i=0;i<4;i++)
-    {
-        alert(tds[i].innerHTML);
-    }
+    setSelectChecked("body_param_ne", tds[1].innerHTML);
+    setSelectChecked("body_param_type", tds[2].innerHTML);
+    $("#body_param_desc").val(tds[3].innerHTML);
+    $("#body_param_new").text("更新");
+    $("#body_param_new").removeClass();
+    $("#body_param_new").addClass("btn btn-success");
 }
