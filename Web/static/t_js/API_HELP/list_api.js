@@ -46,7 +46,7 @@ function remove_care(module_no){
             var json_obj = JSON.parse(data);
             if (json_obj.status == true){
                 $("#make_care").text("关注");
-                $("#module_care_user").remove();
+                $("#mine_care").remove();
             }
             else{
                 alert(data)
