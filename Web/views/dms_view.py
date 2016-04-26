@@ -156,7 +156,7 @@ def register_page():
         return u"用户无权限操作"
     check_url = url_prefix + "/register/check/"
     return render_template("register.html", user_role=current_user.role, role_value=control.user_role,
-                           url_prefix=url_prefix, check_url=check_url)
+                           url_prefix=url_prefix, check_url=check_url, role_desc=control.user.role_desc)
 
 
 @dms_view.route("/register/", methods=["POST"])
@@ -168,9 +168,10 @@ def register():
         return u"页面已过期，请刷新重试"
     nick_name = request_data["nick_name"]
     user_role = 0
-    for key, value in control.user_role.items():
-        if key in request_data and request_data[key] == "on":
-            user_role += value
+    for key, role_module in control.user.role_desc.items():
+        for role_key, role_info in role_module["role_list"].items():
+            if role_key in request.form and request.form[role_key] == "on":
+                user_role += role_info["role_value"]
     result, message = control.new_user(user_name, user_role, nick_name, current_user.account, current_user.role)
     if result is False:
        return message
@@ -195,7 +196,7 @@ def authorize_page():
     if result is False:
         return my_user
     return render_template("authorize.html", my_user=my_user, user_role=current_user.role, role_value=control.user_role
-                           , url_prefix=url_prefix)
+                           , url_prefix=url_prefix, role_desc=control.user.role_desc)
 
 
 @dms_view.route("/authorize/user/", methods=["POST"])
@@ -205,9 +206,10 @@ def authorize():
     if perm_user == "":
         return "请选择一个账户"
     user_role = 0
-    for key, value in control.user_role.items():
-        if key in request.form and request.form[key] == "on":
-            user_role += value
+    for key, role_module in control.user.role_desc.items():
+        for role_key, role_info in role_module["role_list"].items():
+            if role_key in request.form and request.form[role_key] == "on":
+                user_role += role_info["role_value"]
     result, message = control.update_my_user_role(current_user.role, current_user.account, perm_user, user_role)
     if result is False:
         return message

@@ -23,6 +23,115 @@ class UserManager:
         self.db = DB()
         self.user = "sys_user"
         self.default_password = "gene.ac"
+        self.role_desc = {
+                            "data": {
+                                "module_desc": u"数据传输",
+                                "role_list": {
+                                    "market": {
+                                        "role_desc": u"市场",
+                                        "role_value": 1
+                                    },
+                                    "upload": {
+                                        "role_desc": u"上传",
+                                        "role_value": 2
+                                    },
+                                    "calc": {
+                                        "role_desc": u"计算",
+                                        "role_value": 4
+                                    }
+                                }
+                            },
+                            "api": {
+                                "module_desc": u"API文档",
+                                "role_list": {
+                                    "api_look": {
+                                        "role_desc": u"查看",
+                                        "role_value": 8
+                                    },
+                                    "api_new": {
+                                        "role_desc": u"新建",
+                                        "role_value": 16
+                                    },
+                                    "api_module_new": {
+                                        "role_desc": u"新建模块",
+                                        "role_value": 8192
+                                    }
+                                }
+                            },
+                            "table": {
+                                "module_desc": u"数据表描述",
+                                "role_list": {
+                                    "table_look": {
+                                        "role_desc": u"查看",
+                                        "role_value": 32
+                                    }
+                                }
+                            },
+                            "right": {
+                                "module_desc": u"权限列表",
+                                "role_list": {
+                                    "right_look": {
+                                        "role_desc": u"查看",
+                                        "role_value": 64
+                                    },
+                                    "right_new": {
+                                        "role_desc": u"新建",
+                                        "role_value": 16384
+                                    }
+                                }
+                            },
+                            "user": {
+                                "module_desc": u"操作用户",
+                                "role_list": {
+                                    "user_new": {
+                                        "role_desc": u"新建",
+                                        "role_value": 128
+                                    }
+                                }
+                            },
+                            "bug": {
+                                "module_desc": u"BUG操作",
+                                "role_list": {
+                                    "bug_look": {
+                                        "role_desc": u"查看",
+                                        "role_value": 256
+                                    },
+                                    "bug_new": {
+                                        "role_desc": u"新建",
+                                        "role_value": 512
+                                    },
+                                    "bug_link": {
+                                        "role_desc": u"被关联",
+                                        "role_value": 1024
+                                    },
+                                    "bug_cancel": {
+                                        "role_desc": u"取消",
+                                        "role_value": 2048
+                                    },
+                                    "bug_del": {
+                                        "role_desc": u"删除",
+                                        "role_value": 4096
+                                    }
+                                }
+                            },
+                            "status_code": {
+                                "module_desc": u"API状态码",
+                                "role_list": {
+                                    "status_code_look": {
+                                        "role_desc": u"查看",
+                                        "role_value": 32768
+                                    },
+                                    "status_code_new": {
+                                        "role_desc": u"新建",
+                                        "role_value": 65536
+                                    },
+                                    "status_code_del": {
+                                        "role_desc": u"删除",
+                                        "role_value": 131072
+                                    }
+                                }
+                            }
+                        }
         self.role_value = {"market": 1, "upload": 2, "calc": 4, "api_look": 8, "api_new": 16, "table_look": 32,
                            "right_look": 64, "user_new": 128, "bug_look": 256, "bug_new": 512, "bug_link": 1024,
                            "bug_cancel": 2048, "bug_del": 4096, "api_module_new": 8192, "right_new": 16384,

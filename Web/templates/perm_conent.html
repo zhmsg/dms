@@ -1,36 +1,10 @@
-<div class="checkbox font16">
-    <span class="text-right">数据传输权限：</span>
-    <label><input type="checkbox" id="market" {% if user_role | bit_and(role_value["market"]) <= 0 %}disabled{% else %}name="market"  {% endif %}>市场</label>&nbsp;&nbsp;
-    <label><input type="checkbox" id="upload" {% if user_role | bit_and(role_value["upload"]) <= 0 %}disabled{% else %}name="upload" {% endif %}>上传</label>&nbsp;&nbsp;
-    <label><input type="checkbox" id="calc" {% if user_role | bit_and(role_value["calc"]) <= 0 %}disabled{% else %}name="calc" {% endif %}>计算</label>&nbsp;&nbsp;
-  </div>
-  <div class="checkbox font16">
-    <span class="text-right">API文档权限：</span>
-    <label><input type="checkbox" id="api_look" {% if user_role | bit_and(role_value["api_look"]) <= 0 %}disabled{% else %}name="api_look" {% endif %}>查看</label>&nbsp;&nbsp;
-    <label><input type="checkbox" id="api_new" {% if user_role | bit_and(role_value["api_new"]) <= 0 %}disabled{% else %}name="api_new" {% endif %}>新建修改</label>&nbsp;&nbsp;
-  </div>
-  <div class="checkbox font16">
-    <span class="text-right">权限列表权限：</span>
-    <label><input type="checkbox" id="right_look" {% if user_role | bit_and(role_value["right_look"]) <= 0 %}disabled{% else %}name="right_look" {% endif %}>查看</label>&nbsp;&nbsp;
-  </div>
-  <div class="checkbox font16">
-    <span class="text-right">数据表描述权限：</span>
-    <label><input type="checkbox" id="table_look" {% if user_role | bit_and(role_value["table_look"]) <= 0 %}disabled{% else %}name="table_look" {% endif %}>查看</label>&nbsp;&nbsp;
-  </div>
-  <div class="checkbox font16">
-    <span class="text-right">操作用户权限：</span>
-    <label><input type="checkbox" id="user_new" {% if user_role | bit_and(role_value["user_new"]) <= 0 %}disabled {% else %}name="user_new" {% endif %}>新建</label>&nbsp;&nbsp;
-  </div>
-  <div class="checkbox font16">
-    <span class="text-right">BUG操作权限：</span>
-    <label><input type="checkbox" id="bug_look" {% if user_role | bit_and(role_value["bug_look"]) <= 0 %}disabled {% else %}name="bug_look"{% endif %}>查看</label>&nbsp;&nbsp;
-    <label><input type="checkbox" id="bug_new"  {% if user_role | bit_and(role_value["bug_new"]) <= 0 %}disabled {% else %}name="bug_new" {% endif %}>新建</label>&nbsp;&nbsp;
-    <label><input type="checkbox" id="bug_link" {% if user_role | bit_and(role_value["bug_link"]) <= 0 %}disabled {% else %}name="bug_link" {% endif %}>被关联</label>&nbsp;&nbsp;
-    <label><input type="checkbox" id="bug_cancel" {% if user_role | bit_and(role_value["bug_cancel"]) <= 0 %}disabled {% else %}name="bug_cancel" {% endif %}>取消</label>&nbsp;&nbsp;
-  </div>
-  <div class="checkbox font16">
-    <span class="text-right">API状态码权限：</span>
-    <label><input type="checkbox" id="status_code_look" {% if user_role | bit_and(role_value["status_code_look"]) <= 0 %}disabled {% else %}name="status_code_look"{% endif %}>查看</label>&nbsp;&nbsp;
-    <label><input type="checkbox" id="status_code_new"  {% if user_role | bit_and(role_value["status_code_new"]) <= 0 %}disabled {% else %}name="status_code_new" {% endif %}>新建</label>&nbsp;&nbsp;
-    <label><input type="checkbox" id="status_code_del" {% if user_role | bit_and(role_value["status_code_del"]) <= 0 %}disabled {% else %}name="status_code_del" {% endif %}>删除</label>&nbsp;&nbsp;
-  </div>
+{% if role_desc %}
+    {% for key, moudle_item in role_desc.items() %}
+        <div class="checkbox font16">
+            <span class="text-right">{{ moudle_item["module_desc"] }}权限：</span>
+            {% for key, value in moudle_item["role_list"].items() %}
+                <label><input type="checkbox" id="{{ key }}" {% if user_role | bit_and(role_value[key]) <= 0 %}disabled{% else %}name="{{ key }}"  {% endif %}>{{ value["role_desc"] }}</label>
+            {% endfor %}
+        </div>
+    {% endfor %}
+{% endif %}
