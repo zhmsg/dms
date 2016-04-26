@@ -446,7 +446,7 @@ class HelpManager:
     def del_api_care(self, api_no, user_name):
         if len(api_no) != 32:
             return False, "Bad api_no"
-        delete_sql = "DELETE FROM %s WHERE api_no='%s' AND user_name='%s';" % (self.api_care, api_no, user_name)
+        delete_sql = "DELETE FROM %s WHERE api_no='%s' AND user_name='%s' AND level <> 0;" % (self.api_care, api_no, user_name)
         result = self.db.execute(delete_sql)
         return True, result
 
