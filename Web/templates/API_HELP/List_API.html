@@ -14,7 +14,17 @@
     <br />
     <a class="btn btn-primary pull-right" href="{{ url_for('dms_view.select_portal') }}" title="">主菜单</a>
 <div class="apiMode api-help-mode">
-    {% for module_info in module_list %}
+    {% for module_info in module_list["api"] %}
+        <a href="{{ url_prefix }}/?module_no={{ module_info["module_no"] }}">{{ module_info["module_name"] }}</a>
+    {% endfor %}
+</div>
+<div class="apiMode api-help-mode">
+    {% for module_info in module_list["service"] %}
+        <a href="{{ url_prefix }}/?module_no={{ module_info["module_no"] }}">{{ module_info["module_name"] }}</a>
+    {% endfor %}
+</div>
+<div class="apiMode api-help-mode">
+    {% for module_info in module_list["jy"] %}
         <a href="{{ url_prefix }}/?module_no={{ module_info["module_no"] }}">{{ module_info["module_name"] }}</a>
     {% endfor %}
 </div>

@@ -18,12 +18,14 @@
   <div class="form-group">
      <label for="">API所属模块：</label>
      <select class="box-side" id="api_module" onchange="select_change()" >
-        {% for module in module_list %}
-            {% if module["module_no"] == module_no  %}
-                <option about="{{ module["module_desc"] }}" value="{{ module["module_no"] }}" title="{{ module["module_prefix"] }}" selected="selected">{{ module["module_name"] }}</option>
-            {% else %}
-                <option about="{{ module["module_desc"] }}" value="{{ module["module_no"] }}" title="{{ module["module_prefix"] }}">{{ module["module_name"] }}</option>
-            {% endif %}
+        {% for key, module_part in module_list.items() %}
+            {% for module in module_part %}
+                {% if module["module_no"] == module_no  %}
+                    <option about="{{ module["module_desc"] }}" value="{{ module["module_no"] }}" title="{{ module["module_prefix"] }}" selected="selected">{{ module["module_name"] }}</option>
+                {% else %}
+                    <option about="{{ module["module_desc"] }}" value="{{ module["module_no"] }}" title="{{ module["module_prefix"] }}">{{ module["module_name"] }}</option>
+                {% endif %}
+            {% endfor %}
         {% endfor %}
      </select>
   </div>

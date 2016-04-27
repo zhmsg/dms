@@ -52,10 +52,11 @@ def list_api():
         if result is False:
             return module_data
         current_module = None
-        for module_info in module_list:
-            if module_info["module_no"] == module_no:
-                current_module = module_info
-                break
+        for key, module_part in module_list.items():
+            for module_info in module_part:
+                if module_info["module_no"] == module_no:
+                    current_module = module_info
+                    break
         if current_module is None:
             return "Error"
         if "update" in request.args and request.args["update"] == "true" and new_power is True:

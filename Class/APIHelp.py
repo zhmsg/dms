@@ -285,14 +285,20 @@ class HelpManager:
         return True, "success"
 
     def get_module_list(self, module_no=None):
-        select_sql = "SELECT module_no,module_name,module_prefix,module_desc FROM %s" % self.api_module
+        select_sql = "SELECT module_no,module_name,module_prefix,module_desc,module_part FROM %s" % self.api_module
         if module_no is not None and type(module_no) == int:
             select_sql += " WHERE module_no=%s" % module_no
         select_sql += ";"
         self.db.execute(select_sql)
-        module_info = []
+        module_info = {"api": [], "service": [], "jy": []}
         for item in self.db.fetchall():
-            module_info.append({"module_no": item[0], "module_name": item[1], "module_prefix": item[2], "module_desc": item[3]})
+            info = {"module_no": item[0], "module_name": item[1], "module_prefix": item[2], "module_desc": item[3]}
+            if item[4] == 1:
+                module_info["api"].append(info)
+            elif item[4] == 2:
+                module_info["service"].append(info)
+            elif item[4] == 3:
+                module_info["jy"].append(info)
         return True, module_info
 
     def get_module_care_list(self, module_no):
