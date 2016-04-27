@@ -46,7 +46,7 @@ def show_module_list():
         result, action_list = control.get_right_action_role(current_user.role, module_no)
         if result is False:
             return action_list
-        if current_user.role & control.user_role["right_new"] > 0:
+        if current_user.role & control.role_value["right_new"] > 0:
             new_right = True
         else:
             new_right = False

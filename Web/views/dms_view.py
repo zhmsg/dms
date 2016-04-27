@@ -152,7 +152,7 @@ def password():
 @dms_view.route("/register/", methods=["GET"])
 @login_required
 def register_page():
-    if current_user.role & control.user_role["user_new"] <= 0:
+    if current_user.role & control.user_role_desc["user"]["role_list"]["user_new"]["role_value"] <= 0:
         return u"用户无权限操作"
     check_url = url_prefix + "/register/check/"
     return render_template("register.html", user_role=current_user.role, rl_prefix=url_prefix, check_url=check_url,

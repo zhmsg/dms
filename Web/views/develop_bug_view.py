@@ -47,7 +47,7 @@ def show_bug_list():
     if result is False:
         return bug_list
     return render_template("%s/Show_BUG.html" % html_dir, bug_list=bug_list, bug_status_desc=bug_status_desc,
-                           user_role=current_user.role, role_desc=control.user_role_desc, url_prefix=url_prefix)
+                           user_role=current_user.role, role_desc=control.role_value, url_prefix=url_prefix)
 
 
 @develop_bug_view.route("/statistic/", methods=["GET"])
@@ -66,11 +66,11 @@ def bug_info():
     result, bug_info = control.get_bug_info(current_user.role, bug_no)
     if result is False:
         return bug_info
-    result, user_list = control.get_role_user(control.user_role["bug_link"])
+    result, user_list = control.get_role_user(control.role_value["bug_link"])
     if result is False:
         return user_list
     return render_template("%s/BUG_Info.html" % html_dir, bug_info=bug_info, bug_status_desc=bug_status_desc, bug_no=bug_no,
-                           user_role=current_user.role, current_user=current_user.account, role_desc=control.user_role_desc,
+                           user_role=current_user.role, current_user=current_user.account, role_desc=control.role_value,
                            user_list=user_list, url_prefix=url_prefix)
 
 

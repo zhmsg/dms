@@ -40,7 +40,7 @@ class ControlManager:
         self.calc_attribute_ch = self.calc.attribute_ch
         self.user = UserManager()
         self.user_role_desc = self.user.role_desc
-        self.user_role = self.user.role_value
+        self.role_value = self.user.role_value
         self.dev = DevManager()
         self.api_help = HelpManager()
         self.api_status = StatusManager()
@@ -49,12 +49,12 @@ class ControlManager:
         self.wx = WxManager()
 
     def check_user_name_exist(self, user_name, role, check_user_name):
-        if role & self.user.role_desc["user"]["role_list"]["user_new"]["role_value"] <= 0:
+        if role & self.role_value["user_new"] <= 0:
             return False, u"用户无权限新建用户"
         return self.user.check_account_exist(user_name, check_user_name)
 
     def new_user(self, user_name, role, nick_name, creator, creator_role):
-        if creator_role & self.user.role_desc["user"]["role_list"]["user_new"]["role_value"] <= 0:
+        if creator_role & self.role_value["user_new"] <= 0:
             return False, u"用户无权限新建用户"
         if creator_role | role > creator_role:
             return False, u"给新建用户赋予权限过高"
@@ -64,19 +64,19 @@ class ControlManager:
         return self.user.change_password(user_name, old_password, new_password)
 
     def get_my_user(self, user_name, role):
-        if role & self.user.role_desc["user"]["role_list"]["user_new"]["role_value"] <= 0:
+        if role & self.role_value["user_new"] <= 0:
             return False, u"用户无权限操作用户"
         return self.user.my_user(user_name)
 
     def update_my_user_role(self, role, user_name, my_user, my_user_role):
-        if role & self.user.role_desc["user"]["role_list"]["user_new"]["role_value"] <= 0:
+        if role & self.role_value["user_new"] <= 0:
             return False, u"用户无权限操作用户"
         if role & my_user_role != my_user_role:
             return False, u"赋予权限过高"
         return self.user.update_my_user_role(my_user_role, my_user, user_name)
 
     def add_my_user_role(self, role, user_name, add_role, add_user_list):
-        if role & self.user.role_desc["user"]["role_list"]["user_new"]["role_value"] <= 0:
+        if role & self.role_value["user_new"] <= 0:
             return False, u"用户无权限操作用户"
         if role & add_role != add_role:
             return False, u"增加权限过高"
@@ -84,7 +84,7 @@ class ControlManager:
         return self.user.add_role_my_users(add_role, add_user_list, user_name)
 
     def remove_my_user_role(self, role, user_name, remove_role, remove_user_list):
-        if role & self.user.role_desc["user"]["role_list"]["user_new"]["role_value"] <= 0:
+        if role & self.role_value["user_new"] <= 0:
             return False, u"用户无权限操作用户"
         if role & remove_role != remove_role:
             return False, u"移除权限过高"
@@ -169,46 +169,46 @@ class ControlManager:
 
     # 针对开发者的应用
     def show_operate_auth(self, role):
-        if role & self.user_role_desc["right"]["role_list"]["right_new"]["role_value"] < self.user_role_desc["right"]["role_list"]["right_new"]["role_value"]:
+        if role & self.role_value["right_new"] < self.role_value["right_new"]:
             return False, u"您没有权限"
         return self.dev.get_operate_auth()
 
     def list_data_table(self, role):
-        if role & self.user_role_desc["table"]["role_list"]["table_look"]["role_value"] <= 0:
+        if role & self.role_value["table_look"] <= 0:
             return False, u"您没有权限"
         return self.dev.list_table()
 
     def get_table_info(self, table_name, role):
-        if role & self.user_role_desc["table"]["role_list"]["table_look"]["role_value"] <= 0:
+        if role & self.role_value["table_look"] <= 0:
             return False, u"您没有权限"
         return self.dev.get_table_info(table_name)
 
     def get_right_module(self, role):
-        if role & self.user_role_desc["right"]["role_list"]["right_look"]["role_value"] < self.user_role_desc["right"]["role_list"]["right_look"]["role_value"]:
+        if role & self.role_value["right_look"] < self.role_value["right_look"]:
             return False, u"您没有权限"
         result, info = self.dev.get_right_module()
         return result, info
 
     def get_right_module_role(self, role, module_no):
-        if role & self.user_role_desc["right"]["role_list"]["right_look"]["role_value"] < self.user_role_desc["right"]["role_list"]["right_look"]["role_value"]:
+        if role & self.role_value["right_look"] < self.role_value["right_look"]:
             return False, u"您没有权限"
         result, info = self.dev.get_right_module_role(module_no)
         return result, info
 
     def get_right_action_role(self, role, module_no):
-        if role & self.user_role_desc["right"]["role_list"]["right_look"]["role_value"] < self.user_role_desc["right"]["role_list"]["right_look"]["role_value"]:
+        if role & self.role_value["right_look"] < self.role_value["right_look"]:
             return False, u"您没有权限"
         result, info = self.dev.get_right_action_role(module_no)
         return result, info
 
     def new_right_action(self, user_name, role, module_no, action_desc, min_role):
-        if role & self.user_role_desc["right"]["role_list"]["right_new"]["role_value"] < self.user_role_desc["right"]["role_list"]["right_new"]["role_value"]:
+        if role & self.role_value["right_new"] < self.role_value["right_new"]:
             return False, u"您没有权限"
         result, info = self.dev.new_right_action(module_no, action_desc, min_role, user_name)
         return result, info
 
     def delete_right_action(self, user_name, role, action_no):
-        if role & self.user_role_desc["right"]["role_list"]["right_new"]["role_value"] < self.user_role_desc["right"]["role_list"]["right_new"]["role_value"]:
+        if role & self.role_value["right_new"] < self.role_value["right_new"]:
             return False, u"您没有权限"
         result, info = self.dev.del_right_action(user_name, action_no)
         return result, info
@@ -225,27 +225,27 @@ class ControlManager:
 
     # 针对API HELP的应用
     def get_module_list(self, role):
-        if role & self.user_role_desc["api"]["role_list"]["api_look"]["role_value"] <= 0:
+        if role & self.role_value["api_look"] <= 0:
             return False, u"您没有权限"
         return self.api_help.get_module_list()
 
     def new_api_module(self, role, module_name, module_prefix, module_desc):
-        if role & self.user_role_desc["api"]["role_list"]["api_module_new"]["role_value"] <= 0:
+        if role & self.role_value["api_module_new"] <= 0:
             return False, u"您没有权限"
         return self.api_help.new_api_module(module_name, module_prefix, module_desc)
 
     def update_api_module(self, role, module_no, module_name, module_prefix, module_desc):
-        if role & self.user_role_desc["api"]["role_list"]["api_module_new"]["role_value"] <= 0:
+        if role & self.role_value["api_module_new"] <= 0:
             return False, u"您没有权限"
         return self.api_help.update_api_module(module_no, module_name, module_prefix, module_desc)
 
     def delete_api_module(self, role, module_no):
-        if role & self.user_role_desc["api"]["role_list"]["api_module_new"]["role_value"] <= 0:
+        if role & self.role_value["api_module_new"] <= 0:
             return False, u"您没有权限"
         return self.api_help.del_api_module(module_no)
 
     def new_api_info(self, module_no, title, path, method, desc, user_name, role):
-        if role & self.user_role_desc["api"]["role_list"]["api_new"]["role_value"] <= 0:
+        if role & self.role_value["api_new"] <= 0:
             return False, u"您没有权限"
         result, data = self.api_help.new_api_info(module_no, title, path, method, desc)
         if result is True:
@@ -256,18 +256,18 @@ class ControlManager:
         return result, data
 
     def update_api_info(self, role, api_no, module_no, title, path, method, desc):
-        if role & self.user_role_desc["api"]["role_list"]["api_new"]["role_value"] <= 0:
+        if role & self.role_value["api_new"] <= 0:
             return False, u"您没有权限"
         result, data = self.api_help.update_api_info(api_no, module_no, title, path, method, desc)
         return result, data
 
     def get_api_info(self, api_no, role):
-        if role & self.user_role_desc["api"]["role_list"]["api_look"]["role_value"] <= 0:
+        if role & self.role_value["api_look"] <= 0:
             return False, u"您没有权限"
         return self.api_help.get_api_info(api_no)
 
     def add_header_param(self, user_name, api_no, param, necessary, desc, role):
-        if role & self.user_role_desc["api"]["role_list"]["api_new"]["role_value"] <= 0:
+        if role & self.role_value["api_new"] <= 0:
             return False, u"您没有权限"
         result, info = self.api_help.new_api_header(api_no, {param: {"necessary": necessary, "desc": desc}})
         if result is True:
@@ -275,7 +275,7 @@ class ControlManager:
         return result, info
 
     def add_predefine_header(self, user_name, api_no, param, role):
-        if role & self.user_role_desc["api"]["role_list"]["api_new"]["role_value"] <= 0:
+        if role & self.role_value["api_new"] <= 0:
             return False, u"您没有权限"
         result, info = self.api_help.new_predefine_param(api_no, param, "header")
         if result is True:
@@ -283,7 +283,7 @@ class ControlManager:
         return result, info
 
     def add_body_param(self, user_name, api_no, param, necessary, type, desc, role):
-        if role & self.user_role_desc["api"]["role_list"]["api_new"]["role_value"] <= 0:
+        if role & self.role_value["api_new"] <= 0:
             return False, u"您没有权限"
         result, info = self.api_help.new_api_body(api_no, {param: {"necessary": necessary, "type": type, "desc": desc}})
         if result is True:
@@ -291,7 +291,7 @@ class ControlManager:
         return result, info
 
     def add_input_example(self, user_name, api_no, example, desc, role):
-        if role & self.user_role_desc["api"]["role_list"]["api_new"]["role_value"] <= 0:
+        if role & self.role_value["api_new"] <= 0:
             return False, u"您没有权限"
         result, info = self.api_help.new_api_input(api_no, [{"desc": desc, "example": example}])
         if result is True:
@@ -299,7 +299,7 @@ class ControlManager:
         return result, info
 
     def add_output_example(self, user_name, api_no, example, desc, role):
-        if role & self.user_role_desc["api"]["role_list"]["api_new"]["role_value"] <= 0:
+        if role & self.role_value["api_new"] <= 0:
             return False, u"您没有权限"
         result, info = self.api_help.new_api_output(api_no, [{"desc": desc, "example": example}])
         if result is True:
@@ -317,32 +317,32 @@ class ControlManager:
         return self.api_help.new_module_care(module_no, user_name)
 
     def get_api_list(self, module_no, role):
-        if role & self.user_role_desc["api"]["role_list"]["api_look"]["role_value"] <= 0:
+        if role & self.role_value["api_look"] <= 0:
             return False, u"您没有权限"
         return self.api_help.get_api_list(module_no)
 
     def delete_header(self, role, api_no, param):
-        if role & self.user_role_desc["api"]["role_list"]["api_new"]["role_value"] <= 0:
+        if role & self.role_value["api_new"] <= 0:
             return False, u"您没有权限"
         return self.api_help.del_api_header(api_no, param)
 
     def delete_predefine_param(self, role, api_no, param):
-        if role & self.user_role_desc["api"]["role_list"]["api_new"]["role_value"] <= 0:
+        if role & self.role_value["api_new"] <= 0:
             return False, u"您没有权限"
         return self.api_help.del_predefine_param(api_no, param)
 
     def delete_body(self, role, api_no, param):
-        if role & self.user_role_desc["api"]["role_list"]["api_new"]["role_value"] <= 0:
+        if role & self.role_value["api_new"] <= 0:
             return False, u"您没有权限"
         return self.api_help.del_api_body(api_no=api_no, param=param)
 
     def delete_input(self, input_no, role):
-        if role & self.user_role_desc["api"]["role_list"]["api_new"]["role_value"] <= 0:
+        if role & self.role_value["api_new"] <= 0:
             return False, u"您没有权限"
         return self.api_help.del_api_input(input_no)
 
     def delete_ouput(self, output_no, role):
-        if role & self.user_role_desc["api"]["role_list"]["api_new"]["role_value"] <= 0:
+        if role & self.role_value["api_new"] <= 0:
             return False, u"您没有权限"
         return self.api_help.del_api_output(output_no)
 
@@ -356,7 +356,7 @@ class ControlManager:
         return self.api_help.del_api_info(api_no, user_name)
 
     def set_api_completed(self, user_name, role, api_no):
-        if role & self.user_role_desc["api"]["role_list"]["api_new"]["role_value"] <= 0:
+        if role & self.role_value["api_new"] <= 0:
             return False, u"您没有权限"
         result, info = self.api_help.set_api_status(api_no, 2)
         if result is True:
@@ -364,65 +364,65 @@ class ControlManager:
         return result, info
 
     def set_api_modify(self, user_name, role, api_no):
-        if role & self.user_role_desc["api"]["role_list"]["api_new"]["role_value"] <= 0:
+        if role & self.role_value["api_new"] <= 0:
             return False, u"您没有权限"
         result, info = self.api_help.set_api_status(api_no, 1)
         return result, info
 
     # 针对API状态码的应用
     def get_fun_info(self, role):
-        if role & self.user_role_desc["status_code"]["role_list"]["status_code_look"]["role_value"] <= 0:
+        if role & self.role_value["status_code_look"] <= 0:
             return False, u"您没有权限"
         return self.api_status.get_function_info()
 
     def get_status(self, role):
-        if role & self.user_role_desc["status_code"]["role_list"]["status_code_look"]["role_value"] <= 0:
+        if role & self.role_value["status_code_look"] <= 0:
             return False, u"您没有权限"
         return self.api_status.get_status_code()
 
     def get_error_type(self, role):
-        if role & self.user_role_desc["status_code"]["role_list"]["status_code_look"]["role_value"] <= 0:
+        if role & self.role_value["status_code_look"] <= 0:
             return False, u"您没有权限"
         return self.api_status.get_error_type()
 
     def new_api_status(self, user_name, role, service_id, fun_id, type_id, error_id, error_desc):
-        if role & self.user_role_desc["status_code"]["role_list"]["status_code_new"]["role_value"] <= 0:
+        if role & self.role_value["status_code_new"] <= 0:
             return False, u"您没有权限"
         return self.api_status.new_status_code(service_id, fun_id, type_id, error_id, error_desc, user_name)
 
     def new_mul_api_status(self, user_name, role, service_id, fun_id, error_info):
-        if role & self.user_role_desc["status_code"]["role_list"]["status_code_new"]["role_value"] <= 0:
+        if role & self.role_value["status_code_new"] <= 0:
             return False, u"您没有权限"
         return self.api_status.new_mul_status_code(service_id, fun_id, error_info, user_name)
 
     def delete_api_status(self, user_name, role, status_code):
-        if role & self.user_role_desc["status_code"]["role_list"]["status_code_del"]["role_value"] < self.user_role_desc["status_code"]["role_list"]["status_code_del"]["role_value"]:
+        if role & self.role_value["status_code_del"] < self.role_value["status_code_del"]:
             return False, u"您没有权限"
         return self.api_status.del_status_code(status_code)
 
     # 针对BUG的应用
     def get_bug_list(self, role):
-        if role & self.user_role_desc["bug"]["role_list"]["bug_look"]["role_value"] <= 0:
+        if role & self.role_value["bug_look"] <= 0:
             return False, u"您没有权限"
         return self.bug.get_bug_list()
 
     def get_bug_statistic(self, role):
-        if role & self.user_role_desc["bug"]["role_list"]["bug_look"]["role_value"] <= 0:
+        if role & self.role_value["bug_look"] <= 0:
             return False, u"您没有权限"
         return self.bug.get_statistic()
 
     def get_bug_info(self, role, bug_no):
-        if role & self.user_role_desc["bug"]["role_list"]["bug_look"]["role_value"] <= 0:
+        if role & self.role_value["bug_look"] <= 0:
             return False, u"您没有权限"
         return self.bug.get_bug_info(bug_no)
 
     def new_bug(self, user_name, role, bug_title):
-        if role & self.user_role_desc["bug"]["role_list"]["bug_new"]["role_value"] <= 0:
+        if role & self.role_value["bug_new"] <= 0:
             return False, u"您没有权限"
         return self.bug.new_bug_info(bug_title, user_name)
 
     def add_bug_str_example(self, user_name, role, bug_no, content):
-        if role & self.user_role_desc["bug"]["role_list"]["bug_new"]["role_value"] <= 0:
+        if role & self.role_value["bug_new"] <= 0:
             return False, u"您没有权限"
         # 判断该bug是否是user_name提交的
         select_sql = "SELECT submitter,bug_status FROM %s WHERE bug_no='%s';" % (self.bug.bug, bug_no)
@@ -437,7 +437,7 @@ class ControlManager:
         return self.bug.new_bug_example(bug_no, 1, content)
 
     def add_bug_img_example(self, user_name, role, bug_no, path):
-        if role & self.user_role_desc["bug"]["role_list"]["bug_new"]["role_value"] <= 0:
+        if role & self.role_value["bug_new"] <= 0:
             return False, u"您没有权限"
         # 判断该bug是否是user_name提交的
         select_sql = "SELECT submitter,bug_status FROM %s WHERE bug_no='%s';" % (self.bug.bug, bug_no)
@@ -470,7 +470,7 @@ class ControlManager:
         t.start()
 
     def add_bug_link(self, bug_no, user_name, role, link_user, link_type):
-        if role & self.user_role_desc["bug"]["role_list"]["bug_new"]["role_value"] <= 0:
+        if role & self.role_value["bug_new"] <= 0:
             return False, u"您没有权限"
         # 判断当前bug是否允许添加关联者
         select_sql = "SELECT submitter,bug_status FROM %s WHERE bug_no='%s';" % (self.bug.bug, bug_no)
@@ -486,7 +486,7 @@ class ControlManager:
         if result == 0:
             return False, u"添加关联账户不存在"
         link_role = self.db.fetchone()[0]
-        if link_role & self.user_role_desc["bug"]["role_list"]["bug_link"]["role_value"] <= 0:
+        if link_role & self.role_value["bug_link"] <= 0:
             return False, u"添加关联账户无效"
         if link_type == "ys":
             if bug_status > 1:
@@ -504,7 +504,7 @@ class ControlManager:
             return False, u"错误的请求"
 
     def delete_bug_link(self, bug_no, user_name, role, link_user, link_type):
-        if role & self.user_role_desc["bug"]["role_list"]["bug_new"]["role_value"] <= 0:
+        if role & self.role_value["bug_new"] <= 0:
             return False, u"您没有权限"
         # 判断当前bug是否允许删除关联者
         select_sql = "SELECT submitter,bug_status FROM %s WHERE bug_no='%s';" % (self.bug.bug, bug_no)
@@ -561,13 +561,13 @@ class ControlManager:
 
     def _add_channel_link(self, bug_no, user_name, role, link_user, submitter):
         # 只有bug提交者才 或者拥有bug_channel 权限的人可以操作
-        if submitter != user_name and role & self.user_role_desc["bug"]["role_list"]["bug_cancel"]["role_value"]:
+        if submitter != user_name and role & self.role_value["bug_cancel"]:
             return False, u"您无权限修改该BUG的状态"
         return self.bug.new_bug_link(bug_no, link_user, 4, user_name)
 
     def _add_design_link(self, bug_no, user_name, role, link_user):
         # 拥有bug_channel 权限的人可以操作
-        if role & self.user_role_desc["bug"]["role_list"]["bug_cancel"]["role_value"]:
+        if role & self.role_value["bug_cancel"]:
             return False, u"您无权限修改该BUG的状态"
         return self.bug.new_bug_link(bug_no, link_user, 5, user_name)
 

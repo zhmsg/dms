@@ -42,7 +42,7 @@ def list_api():
     result, module_list = control.get_module_list(current_user.role)
     if result is False:
         return module_list
-    if current_user.role & control.user_role["api_module_new"] == control.user_role["api_module_new"]:
+    if current_user.role & control.role_value["api_module_new"] == control.role_value["api_module_new"]:
         new_power = True
     else:
         new_power = False
@@ -411,9 +411,9 @@ def show_status_info():
     return_url = url_prefix + ("/" if "api_no" not in request.args else "/info/?api_no=%s" % request.args["api_no"])
     search_status = "" if "status" not in request.args else request.args["status"]
     new_power = del_power = False
-    if current_user.role & control.user_role["status_code_new"] > 0:
+    if current_user.role & control.role_value["status_code_new"] > 0:
         new_power = True
-    if current_user.role & control.user_role["status_code_del"] > 0:
+    if current_user.role & control.role_value["status_code_del"] > 0:
         del_power = True
     return render_template("%s/Status_API.html" % html_dir, fun_info_url=fun_info_url, status_info=status_info,
                            error_type_url=error_type_url, return_url=return_url, search_status=search_status,
