@@ -193,6 +193,7 @@ def register_check():
 @login_required
 def authorize_page():
     result, my_user = control.get_my_user(current_user.account, current_user.role)
+    print(my_user)
     if result is False:
         return my_user
     return render_template("authorize.html", my_user=my_user, user_role=current_user.role, role_value=control.user_role

@@ -49,12 +49,12 @@ class ControlManager:
         self.wx = WxManager()
 
     def check_user_name_exist(self, user_name, role, check_user_name):
-        if role & self.user.user_role_desc["user"]["role_list"]["user_new"]["role_value"] <= 0:
+        if role & self.user.role_desc["user"]["role_list"]["user_new"]["role_value"] <= 0:
             return False, u"用户无权限新建用户"
         return self.user.check_account_exist(user_name, check_user_name)
 
     def new_user(self, user_name, role, nick_name, creator, creator_role):
-        if creator_role & self.user.user_role_desc["user"]["role_list"]["user_new"]["role_value"] <= 0:
+        if creator_role & self.user.role_desc["user"]["role_list"]["user_new"]["role_value"] <= 0:
             return False, u"用户无权限新建用户"
         if creator_role | role > creator_role:
             return False, u"给新建用户赋予权限过高"
@@ -64,19 +64,19 @@ class ControlManager:
         return self.user.change_password(user_name, old_password, new_password)
 
     def get_my_user(self, user_name, role):
-        if role & self.user.user_role_desc["user"]["role_list"]["user_new"]["role_value"] <= 0:
+        if role & self.user.role_desc["user"]["role_list"]["user_new"]["role_value"] <= 0:
             return False, u"用户无权限操作用户"
         return self.user.my_user(user_name)
 
     def update_my_user_role(self, role, user_name, my_user, my_user_role):
-        if role & self.user.user_role_desc["user"]["role_list"]["user_new"]["role_value"] <= 0:
+        if role & self.user.role_desc["user"]["role_list"]["user_new"]["role_value"] <= 0:
             return False, u"用户无权限操作用户"
         if role & my_user_role != my_user_role:
             return False, u"赋予权限过高"
         return self.user.update_my_user_role(my_user_role, my_user, user_name)
 
     def add_my_user_role(self, role, user_name, add_role, add_user_list):
-        if role & self.user.user_role_desc["user"]["role_list"]["user_new"]["role_value"] <= 0:
+        if role & self.user.role_desc["user"]["role_list"]["user_new"]["role_value"] <= 0:
             return False, u"用户无权限操作用户"
         if role & add_role != add_role:
             return False, u"增加权限过高"
@@ -84,7 +84,7 @@ class ControlManager:
         return self.user.add_role_my_users(add_role, add_user_list, user_name)
 
     def remove_my_user_role(self, role, user_name, remove_role, remove_user_list):
-        if role & self.user.user_role_desc["user"]["role_list"]["user_new"]["role_value"] <= 0:
+        if role & self.user.role_desc["user"]["role_list"]["user_new"]["role_value"] <= 0:
             return False, u"用户无权限操作用户"
         if role & remove_role != remove_role:
             return False, u"移除权限过高"
