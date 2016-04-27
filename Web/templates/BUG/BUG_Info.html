@@ -123,7 +123,7 @@
 
 {#不过属于BUG 设计如此#}
 {% if bug_info["basic_info"]["bug_status"] < 3 %}
-    {% if user_role | bit_and(role_value["bug_cancel"]) == role_value["bug_cancel"] %}
+    {% if user_role | bit_and(role_desc["bug"]["role_list"]["bug_cancel"]) == role_desc["bug"]["role_list"]["bug_cancel"] %}
     <form action="{{ url_prefix }}/{{ bug_no }}/design/", method="post">
         <button class="btn btn-primary" type="submit">不是BUG，就是这么设计的</button>
     </form>

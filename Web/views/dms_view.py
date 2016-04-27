@@ -155,8 +155,8 @@ def register_page():
     if current_user.role & control.user_role["user_new"] <= 0:
         return u"用户无权限操作"
     check_url = url_prefix + "/register/check/"
-    return render_template("register.html", user_role=current_user.role, role_value=control.user_role,
-                           url_prefix=url_prefix, check_url=check_url, role_desc=control.user.role_desc)
+    return render_template("register.html", user_role=current_user.role, rl_prefix=url_prefix, check_url=check_url,
+                           role_desc=control.user.role_desc)
 
 
 @dms_view.route("/register/", methods=["POST"])
@@ -193,11 +193,10 @@ def register_check():
 @login_required
 def authorize_page():
     result, my_user = control.get_my_user(current_user.account, current_user.role)
-    print(my_user)
     if result is False:
         return my_user
-    return render_template("authorize.html", my_user=my_user, user_role=current_user.role, role_value=control.user_role
-                           , url_prefix=url_prefix, role_desc=control.user.role_desc)
+    return render_template("authorize.html", my_user=my_user, user_role=current_user.role, url_prefix=url_prefix,
+                           role_desc=control.user.role_desc)
 
 
 @dms_view.route("/authorize/user/", methods=["POST"])
@@ -220,9 +219,9 @@ def authorize():
 @dms_view.route("/portal/", methods=["GET"])
 @login_required
 def select_portal():
-    return render_template("portal.html", user_role=current_user.role, role_value=control.user_role,
-                           data_url_prefix=data_url_prefix, api_url_prefix=api_url_prefix, dev_url_prefix=dev_url_prefix
-                           , bug_url_prefix=bug_url_prefix, dms_url_prefix=dms_url_prefix, right_url_prefix=right_url_prefix)
+    return render_template("portal.html", user_role=current_user.role, data_url_prefix=data_url_prefix,
+                           api_url_prefix=api_url_prefix, dev_url_prefix=dev_url_prefix, bug_url_prefix=bug_url_prefix,
+                           dms_url_prefix=dms_url_prefix, right_url_prefix=right_url_prefix, role_desc=control.user_role_desc)
 
 
 @dms_view.route("/user/email/", methods=["GET"])

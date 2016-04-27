@@ -52,7 +52,7 @@
         </table>
     {% endif %}
     {# 新建BUG #}
-    {% if user_role | bit_and(role_value["bug_new"]) == role_value["bug_new"]  %}
+    {% if user_role | bit_and(role_desc["bug"]["role_list"]["bug_new"]) == role_desc["bug"]["role_list"]["bug_new"]  %}
         <form action="{{ url_prefix }}/new/" method="post">
             <input class="form-control pull-left bug-input" name="bug_title" >
             <button class="btn btn-primary" type="submit">新建BUG</button>
