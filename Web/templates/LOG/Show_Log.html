@@ -41,7 +41,7 @@
             {% endif %}
             {% if item["run_time"] >= 1 %}
                 <td class="redBg">{{ item["run_time"] }}</td>
-            {% elif item["run_time"] == 0.5 %}
+            {% elif item["run_time"] >= 0.5 %}
                 <td class="orgBg">{{ item["run_time"] }}</td>
             {% else %}
                 <td>{{ item["run_time"] }}</td>
