@@ -15,7 +15,7 @@ __author__ = 'ZhouHeng'
 class LogManager:
 
     def __init__(self):
-        service_mysql = "192.168.120.2"  # "rdsikqm8sr3rugdu1muh3.mysql.rds.aliyuncs.com"
+        service_mysql = "rdsikqm8sr3rugdu1muh3.mysql.rds.aliyuncs.com"
         self.db = DB(host=service_mysql, mysql_user="gener", mysql_password="gene_ac252", mysql_db="clinic")
         self.api_log = "api_log"
         self.log_cols = ["run_begin", "host", "url", "method", "account", "ip", "level", "info", "run_time"]
