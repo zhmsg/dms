@@ -25,6 +25,9 @@
     {% if user_role | bit_and(role_desc["right"]["role_list"]["right_look"]["role_value"]) >  0 %}
         <a href="{{ right_url_prefix }}/">晶云平台操作权限</a>
     {% endif %}
+    {% if user_role | bit_and(role_value["log_look"]) >  0 %}
+        <a href="{{ log_url_prefix }}/">晶云平台日志</a>
+    {% endif %}
     {% if user_role | bit_and(role_desc["bug"]["role_list"]["bug_look"]["role_value"]) >  0 %}
         <a href="{{ bug_url_prefix }}/">BUG</a>
     {% endif %}

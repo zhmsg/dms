@@ -9,7 +9,9 @@
 
 <body>
 <div class="container font16">
-    <a class="btn btn-primary pull-right margin20" href="{{ return_url }}" title="">主菜单</a>
+    <br />
+    <a class="btn btn-primary pull-right" href="{{ url_for('dms_view.select_portal') }}" title="">主菜单</a>
+
     <div class="clear bottom20">
         <input class="form-control" id="search_code" onkeyup="search_code();" placeholder="搜索日志" value="{{ search_status }}" />
     </div>
@@ -19,7 +21,7 @@
         <th scope="col" width="12%">调用时间</th>
         <th scope="col" width=28%">调用地址</th>
         <th scope="col" width=7%">调用方法</th>
-        <th scope="col" width=8%">调用账户</th>
+        <th scope="col" width=10%">调用账户</th>
         <th scope="col" width=7%">日志级别</th>
         <th scope="col" width=8%">运行时间</th>
         <th scope="col" width=10%">访问IP</th>
@@ -30,7 +32,13 @@
             <td>{{ item["url"] }}</td>
             <td>{{ item["method"] }}</td>
             <td>{{ item["account"] }}</td>
-            <td>{{ item["level"] }}</td>
+            {% if item["level"] == "error" %}
+                <td class="redBg">{{ item["level"] }}</td>
+            {% elif item["level"] == "baseerror" %}
+                <td class="orgBg">{{ item["level"] }}</td>
+            {% else %}
+                <td>{{ item["level"] }}</td>
+            {% endif %}
             <td>{{ item["run_time"] }}</td>
             <td>{{ item["ip"] | ip_str }}</td>
         </tr>
