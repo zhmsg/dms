@@ -16,6 +16,7 @@ from Dev import DevManager
 from APIHelp import HelpManager
 from APIStatus import StatusManager
 from Bug import BugManager
+from Log import LogManager
 
 __author__ = 'ZhouHeng'
 
@@ -47,6 +48,7 @@ class ControlManager:
         self.bug = BugManager()
         self.manger_email = ["budechao@ict.ac.cn", "biozy@ict.ac.cn"]
         self.wx = WxManager()
+        self.jy_log = LogManager()
 
     def check_user_name_exist(self, user_name, role, check_user_name):
         if role & self.role_value["user_new"] <= 0:
@@ -664,3 +666,10 @@ class ControlManager:
             return False, "user not config email"
         my_email.send_mail_thread(user_info["email"], u"晶云文档系统测试发送与接收邮件", content)
         return True, user_info["email"]
+
+    # 针对查看晶云平台运行日志
+    def look_jy_log(self, user_name, role, hour, minute, second):
+        if role & self.role_value["log_look"] <=0:
+            return False, u"您没有权限"
+        result, info = self.jy_log.show_log(hour, minute, second)
+        return result, info

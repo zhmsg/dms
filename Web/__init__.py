@@ -50,5 +50,6 @@ right_url_prefix = "/dev/right"
 dev_url_prefix = "/dev"
 dms_url_prefix = ""
 data_url_prefix = "/data"
+log_url_prefix = "/log"
 
 
