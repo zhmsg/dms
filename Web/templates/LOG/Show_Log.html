@@ -15,7 +15,7 @@
     <div class="clear bottom20">
         <form method="post">
         <select class="box-side width150 margin10" id="level" name="log_level" >
-            <option value="">all</option>
+            <option value="all">all</option>
             {% for item in log_level %}
                 {% if item == current_level %}
                     <option value="{{ item }}" selected>{{ item }}</option>
