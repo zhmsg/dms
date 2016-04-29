@@ -13,7 +13,19 @@
     <a class="btn btn-primary pull-right" href="{{ url_for('dms_view.select_portal') }}" title="">主菜单</a>
 
     <div class="clear bottom20">
-        <input class="form-control" id="search_log" placeholder="搜索日志" />
+        <form method="post">
+        <select class="box-side width150 margin10" id="level" name="log_level" >
+            <option value="">all</option>
+            {% for item in log_level %}
+                {% if item == current_level %}
+                    <option value="{{ item }}" selected>{{ item }}</option>
+                {% else %}
+                    <option value="{{ item }}">{{ item }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn btn-primary" id="btn_new">搜索</button>
+        </form>
     </div>
     <div style="position: relative">
     <table class="table table-bordered table-hover api-list-table">

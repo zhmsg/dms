@@ -35,22 +35,19 @@ def show_log_list():
     result, info = control.look_jy_log(current_user.account, current_user.role, 1, 0, 0)
     if result is False:
         return info
-    return render_template("%s/Show_Log.html" % html_dir, log_list=info, url_prefix=url_prefix)
+    return render_template("%s/Show_Log.html" % html_dir, log_list=info, url_prefix=url_prefix,
+                           log_level=control.jy_log.log_level, current_level=None)
 
 
 @jy_log_view.route("/", methods=["POST"])
 @login_required
 def new_action_role():
-    if "Referer" not in request.headers:
-        return "Bad Request"
-    ref_url = request.headers["Referer"]
-    find_module = re.findall("\?module_no=([0-9]+)", ref_url)
-    if len(find_module) < 0:
-        return "Bad Request."
-    module_no = int(find_module[0])
-    action_desc = request.form["action_desc"]
-    min_role = request.form["min_role"]
-    result, info = control.new_right_action(current_user.account, current_user.role, module_no, action_desc, min_role)
+    if "log_level" in request.form and request.form["log_level"] != "all":
+        level = request.form["log_level"]
+    else:
+        level = None
+    result, info = control.look_jy_log(current_user.account, current_user.role, 1, 0, 0, level)
     if result is False:
         return info
-    return redirect(ref_url)
+    return render_template("%s/Show_Log.html" % html_dir, log_list=info, url_prefix=url_prefix,
+                           log_level=control.jy_log.log_level, current_level=level)
