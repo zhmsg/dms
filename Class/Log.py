@@ -33,10 +33,9 @@ class LogManager:
             for i in range(len(self.log_cols)):
                 log_item[self.log_cols[i]] = item[i]
             log_records.insert(0, log_item)
-            # log_records.append(log_item)
         return True, log_records
 
-    def show_log(self, hour, minute, second, look_before=False, level=None):
+    def show_log(self, hour, minute, second, look_before=False, level=None, search_url=""):
         if check_int(hour, 0, 24) is False:
             return False, "Bad hour"
         if check_int(minute, 0, 60) is False:
@@ -51,6 +50,8 @@ class LogManager:
             if level not in self.log_level:
                 return False, "Bad level"
             where_sql_list.append("level = '%s'" % level)
+        if search_url is not None and search_url != "":
+            where_sql_list.append("url like '%s%%'" % search_url)
         where_sql = " AND ".join(where_sql_list)
         return self._select_log(where_sql)
 

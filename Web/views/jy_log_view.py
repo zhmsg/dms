@@ -36,9 +36,15 @@ def show_log_list():
         level = request.args["log_level"]
     else:
         level = None
-    result, info = control.look_jy_log(current_user.account, current_user.role, 1, 0, 0, level)
+
+    if "url_prefix" in request.args and request.args["url_prefix"] != "":
+        search_url = request.args["url_prefix"]
+    else:
+        search_url = ""
+
+    result, info = control.look_jy_log(current_user.account, current_user.role, 1, 0, 0, level, search_url)
     if result is False:
         return info
     return render_template("%s/Show_Log.html" % html_dir, log_list=info, url_prefix=url_prefix,
-                           log_level=control.jy_log.log_level, current_level=level)
+                           log_level=control.jy_log.log_level, current_level=level, search_url=search_url)
 
