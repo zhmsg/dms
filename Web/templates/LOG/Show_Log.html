@@ -49,6 +49,8 @@
                 <td class="orgBg">{{ item["level"] }}</td>
             {% elif item["level"] == "bad_req" %}
                 <td class="yellowBg">{{ item["level"] }}</td>
+            {% elif item["level"] == "http_error" %}
+                <td class="greenBg">{{ item["level"] }}</td>
             {% else %}
                 <td>{{ item["level"] }}</td>
             {% endif %}

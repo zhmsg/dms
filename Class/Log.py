@@ -22,7 +22,7 @@ class LogManager:
         self.db = DB(host=service_mysql, mysql_user="gener", mysql_password="gene_ac252", mysql_db="clinic")
         self.api_log = "api_log"
         self.log_cols = ["run_begin", "host", "url", "method", "account", "ip", "level", "info", "run_time"]
-        self.log_level = ["error", "base_error", "bad_req", "info"]
+        self.log_level = ["error", "base_error", "bad_req", "http_error", "info"]
 
     def _select_log(self, where_sql):
         select_sql = "SELECT %s FROM %s WHERE %s" % (",".join(self.log_cols), self.api_log, where_sql)
