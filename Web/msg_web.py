@@ -38,7 +38,7 @@ def bit_and(num1, num2):
 def unix_timestamp(t):
     if type(t) == int or type(t) == long:
         x = time.localtime(t)
-        return time.strftime('%Y-%m-%d %H:%M:%S', x)
+        return time.strftime('%H:%M:%S', x)
     return t
 
 ip = IPManager()
