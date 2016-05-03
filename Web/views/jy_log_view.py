@@ -32,18 +32,8 @@ def ping():
 @jy_log_view.route("/", methods=["GET"])
 @login_required
 def show_log_list():
-    result, info = control.look_jy_log(current_user.account, current_user.role, 1, 0, 0)
-    if result is False:
-        return info
-    return render_template("%s/Show_Log.html" % html_dir, log_list=info, url_prefix=url_prefix,
-                           log_level=control.jy_log.log_level, current_level=None)
-
-
-@jy_log_view.route("/", methods=["POST"])
-@login_required
-def new_action_role():
-    if "log_level" in request.form and request.form["log_level"] != "all":
-        level = request.form["log_level"]
+    if "log_level" in request.args and request.args["log_level"] != "all":
+        level = request.args["log_level"]
     else:
         level = None
     result, info = control.look_jy_log(current_user.account, current_user.role, 1, 0, 0, level)
@@ -51,3 +41,4 @@ def new_action_role():
         return info
     return render_template("%s/Show_Log.html" % html_dir, log_list=info, url_prefix=url_prefix,
                            log_level=control.jy_log.log_level, current_level=level)
+

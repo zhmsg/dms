@@ -13,8 +13,7 @@
     <a class="btn btn-primary pull-right" href="{{ url_for('dms_view.select_portal') }}" title="">主菜单</a>
 
     <div class="clear bottom20">
-        <form method="post">
-        <select class="box-side width150 margin10" id="level" name="log_level" >
+        <select class="box-side width150 margin10" id="log_level" name="log_level" onchange="update_search_url();">
             <option value="all">all</option>
             {% for item in log_level %}
                 {% if item == current_level %}
@@ -24,8 +23,7 @@
                 {% endif %}
             {% endfor %}
         </select>
-        <button type="submit" class="btn btn-primary" id="btn_new">搜索</button>
-        </form>
+        <a id="start_search"><button class="btn btn-primary" id="btn_new">搜索</button></a>
     </div>
     <div style="position: relative">
     <table class="table table-bordered table-hover api-list-table">
@@ -70,5 +68,5 @@
 
 </body>
 <script type="text/javascript" src="{{ url_for('static', filename='t_js/jquery.min.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='t_js/API_HELP/status_api.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='t_js/LOG/show_log.js') }}"></script>
 </html>
