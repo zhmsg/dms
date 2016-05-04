@@ -16,7 +16,7 @@ Usage:
 """
 
 
-remote_host = "localhost"
+remote_host = "127.0.0.1"
 local_host = "127.0.0.1"
 
 
