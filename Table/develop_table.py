@@ -4,6 +4,6 @@ __author__ = 'ZhouHeng'
 
 from TableTool import DBTool
 
-dbt = DBTool("localhost")
+dbt = DBTool("127.0.0.1")
 dbt.create_from_dir(".")
 dbt.init_data_from_dir("Data")
