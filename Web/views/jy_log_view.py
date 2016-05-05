@@ -41,10 +41,14 @@ def show_log_list():
         search_url = request.args["url_prefix"]
     else:
         search_url = ""
-
-    result, info = control.look_jy_log(current_user.account, current_user.role, 1, 0, 0, level, search_url)
+    if "look_before" in request.args and request.args["look_before"] == "1":
+        look_before = True
+    else:
+        look_before = False
+    result, info = control.look_jy_log(current_user.account, current_user.role, 1, 0, 0, look_before=look_before,
+                                       level=level, search_url=search_url)
     if result is False:
         return info
-    return render_template("%s/Show_Log.html" % html_dir, log_list=info, url_prefix=url_prefix,
+    return render_template("%s/Show_Log.html" % html_dir, log_list=info, url_prefix=url_prefix, look_before=look_before,
                            log_level=control.jy_log.log_level, current_level=level, search_url=search_url)
 

@@ -24,6 +24,7 @@
             {% endfor %}
         </select>
         <input class="box-side width300" id="url_prefix" onchange="update_search_url();" onkeyup="update_search_url();" value="{{ search_url }}"/>
+        <label class="checkbox-inline"><input type="checkbox" id="show_before" value="" onchange="update_search_url();" {% if look_before %} checked{% endif %} />显示Before</label>
         <a id="start_search"><button class="btn btn-primary" id="btn_new">搜索</button></a>
     </div>
     <div style="position: relative">
