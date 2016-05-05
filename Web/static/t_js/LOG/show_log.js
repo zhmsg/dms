@@ -3,8 +3,9 @@
  */
 // $('#search_table').bind('input propertychange', function() {alert("success")});
 
+var init_level = "";
 
-function update_search_url(){
+function update_search_url(refresh){
     var request_args = "?";
     var log_level = $("#log_level").val();
     var url_prefix = $("#url_prefix").val();
@@ -21,6 +22,9 @@ function update_search_url(){
     request_args += "log_level=" + log_level + "&";
     request_args += "url_prefix=" + url_prefix + "&";
     $("#start_search").attr("href", request_args);
+    if(refresh == 1){
+        location.href = request_args;
+    }
 
 }
 update_search_url();

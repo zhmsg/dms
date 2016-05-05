@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="refresh" content="5" />
 <title>查看晶云平台运行日志</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='t_css/bootstrap.min.css') }}"><!-- 新 Bootstrap 核心 CSS 文件 -->
 <link rel="stylesheet" href="{{ url_for('static', filename='t_css/main.css') }}"><!--自定义的页面样式 -->
@@ -13,7 +14,7 @@
     <a class="btn btn-primary pull-right" href="{{ url_for('dms_view.select_portal') }}" title="">主菜单</a>
 
     <div class="clear bottom20">
-        <select class="box-side width150 margin10" id="log_level" name="log_level" onchange="update_search_url();">
+        <select class="box-side width150 margin10" id="log_level" name="log_level" onchange="update_search_url(1);">
             <option value="all">all</option>
             {% for item in log_level %}
                 {% if item == current_level %}
@@ -23,8 +24,8 @@
                 {% endif %}
             {% endfor %}
         </select>
-        <input class="box-side width300" id="url_prefix" onchange="update_search_url();" onkeyup="update_search_url();" value="{{ search_url }}"/>
-        <label class="checkbox-inline" id="lab_show_before"><input type="checkbox" id="show_before" value="" onchange="update_search_url();" {% if look_before %} checked{% endif %} />显示Before</label>
+        <input class="box-side width300" id="url_prefix" onchange="update_search_url(0);" onkeyup="update_search_url(0);" value="{{ search_url }}"/>
+        <label class="checkbox-inline" id="lab_show_before"><input type="checkbox" id="show_before" value="" onchange="update_search_url(1);" {% if look_before %} checked{% endif %} />显示Before</label>
         <a id="start_search"><button class="btn btn-primary" id="btn_new">搜索</button></a>
     </div>
     <div style="position: relative">
