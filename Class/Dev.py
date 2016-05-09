@@ -7,6 +7,7 @@ sys.path.append("..")
 from Tools.Mysql_db import DB
 from Check import check_sql_character
 from time import time
+from Class import env
 
 temp_dir = tempfile.gettempdir()
 
@@ -17,7 +18,10 @@ class DevManager:
 
     def __init__(self):
         self.db = DB()
-        service_mysql = "rdsikqm8sr3rugdu1muh3.mysql.rds.aliyuncs.com"
+        if env == "Development":
+            service_mysql = "192.168.120.2"
+        else:
+            service_mysql = "rdsikqm8sr3rugdu1muh3.mysql.rds.aliyuncs.com"
         self.service_db = DB(host=service_mysql, mysql_user="gener", mysql_password="gene_ac252", mysql_db="information_schema")
         self.auth_role = "auth_role"
         self.operate_role = "operate_role"
