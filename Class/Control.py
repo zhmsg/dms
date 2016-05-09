@@ -668,8 +668,9 @@ class ControlManager:
         return True, user_info["email"]
 
     # 针对查看晶云平台运行日志
-    def look_jy_log(self, user_name, role, hour, minute, second, look_before=False, level=None, search_url=None):
+    def look_jy_log(self, user_name, role, hour, minute, second, look_before=False, level=None, search_url=None, search_account=None):
         if role & self.role_value["log_look"] <=0:
             return False, u"您没有权限"
-        result, info = self.jy_log.show_log(hour, minute, second, look_before=look_before, level=level, search_url=search_url)
+        result, info = self.jy_log.show_log(hour, minute, second, look_before=look_before, level=level,
+                                            search_url=search_url, search_account=search_account)
         return result, info

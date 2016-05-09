@@ -7,7 +7,7 @@ from Tools.Mysql_db import DB
 from datetime import timedelta
 from time import time
 from Class import env
-from Check import check_int
+from Check import check_int, check_sql_character
 
 __author__ = 'ZhouHeng'
 
@@ -25,17 +25,17 @@ class LogManager:
         self.log_level = ["error", "base_error", "bad_req", "http_error", "info"]
 
     def _select_log(self, where_sql):
-        select_sql = "SELECT %s FROM %s WHERE %s" % (",".join(self.log_cols), self.api_log, where_sql)
+        select_sql = "SELECT %s FROM %s WHERE %s ORDER BY log_no DESC LIMIT 250;" % (",".join(self.log_cols), self.api_log, where_sql)
         self.db.execute(select_sql)
         log_records = []
         for item in self.db.fetchall():
             log_item = {}
             for i in range(len(self.log_cols)):
                 log_item[self.log_cols[i]] = item[i]
-            log_records.insert(0, log_item)
+            log_records.append(log_item)
         return True, log_records
 
-    def show_log(self, hour, minute, second, look_before=False, level=None, search_url=""):
+    def show_log(self, hour, minute, second, look_before=False, level=None, search_url="", search_account=""):
         if check_int(hour, 0, 24) is False:
             return False, "Bad hour"
         if check_int(minute, 0, 60) is False:
@@ -51,7 +51,11 @@ class LogManager:
                 return False, "Bad level"
             where_sql_list.append("level = '%s'" % level)
         if search_url is not None and search_url != "":
+            search_url = check_sql_character(search_url)
             where_sql_list.append("url like '%s%%'" % search_url)
+        if search_account is not None and search_account != "":
+            search_account = check_sql_character(search_account)
+            where_sql_list.append("account = '%s'" % search_account)
         where_sql = " AND ".join(where_sql_list)
         return self._select_log(where_sql)
 
