@@ -106,7 +106,10 @@ class DBTool:
                 pass
             else:
                 create_table_sql += " NOT NULL"
-            if "pri_key" in col and col["pri_key"] is True:
+            if "auto_increment" in col and col["auto_increment"] is True:
+                create_table_sql += " auto_increment"
+                primary_key.append(col_name)
+            elif "pri_key" in col and col["pri_key"] is True:
                 primary_key.append(col_name)
             if "uni_key" in col and col["uni_key"] is True:
                 uni_key.append(col_name)
@@ -115,8 +118,7 @@ class DBTool:
                     create_table_sql += " default ''"
                 else:
                     create_table_sql += " default %s" % col["default_value"]
-            if "auto_increment" in col and col["auto_increment"] is True:
-                create_table_sql += " auto_increment"
+
             if "col_comment" in col and col["col_comment"] is not None:
                 create_table_sql += " COMMENT '%s'" % col["col_comment"]
             create_table_sql += ","
