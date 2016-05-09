@@ -40,7 +40,7 @@
         <th scope="col" width=10%">访问IP</th>
       </tr>
       {% for item in log_list %}
-        <tr title="{{ item["info"] }}">
+        <tr title="info: {{ item["info"] }}&#10;host: {{ item["host"] }}">
             <td class="status_move">{{ item["run_begin"] | unix_timestamp }}</td>
             <td>{{ item["url"] }}</td>
             <td>{{ item["method"] }}</td>
