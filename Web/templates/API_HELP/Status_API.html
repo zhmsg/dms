@@ -37,7 +37,7 @@
     {% if new_power %}
         <button type="button" class="btn btn-primary margin20" id="conBtn">单个新建</button>
         <div class="newMode" style="display: none;">
-        <form action="{{ url_for('develop_api_view.new_status') }}" method="post">
+        <form action="{{ url_for('develop_status_view.new_status') }}" method="post">
           <p class="bottom10">
             <select class="box-side width150 pull-left margin10" id="service_id" name="service_id" onchange="set_fun_id();"></select>
             <select class="box-side width150 pull-left margin10" id="fun_id" name="fun_id" onchange="update_info();"></select>
