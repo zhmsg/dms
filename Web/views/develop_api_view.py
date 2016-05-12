@@ -56,6 +56,7 @@ def list_api():
             for module_info in module_part:
                 if module_info["module_no"] == module_no:
                     current_module = module_info
+                    print(current_module)
                     break
         if current_module is None:
             return "Error"
@@ -82,16 +83,18 @@ def new_api_module_page():
     module_name = request.form["module_name"]
     module_prefix = request.form["module_prefix"]
     module_desc = request.form["module_desc"]
+    module_part = int(request.form["module_part"])
+    print(module_part)
     if "Referer" in request.headers:
         redirect_url = request.headers["Referer"]
     else:
         redirect_url = url_prefix
     if "module_no" in request.args:
         module_no = int(request.args["module_no"])
-        result, message = control.update_api_module(current_user.role, module_no, module_name, module_prefix, module_desc)
+        result, message = control.update_api_module(current_user.role, module_no, module_name, module_prefix, module_desc, module_part)
         redirect_url = "%s?module_no=%s" % (url_prefix, module_no)
     else:
-        result, message = control.new_api_module(current_user.role, module_name, module_prefix, module_desc)
+        result, message = control.new_api_module(current_user.role, module_name, module_prefix, module_desc, module_part)
     if result is False:
         return message
     return redirect(redirect_url)

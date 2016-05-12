@@ -71,7 +71,6 @@ def after_request(res):
 # def teardown_request(e=None):
 #     print("enter teardown request")
 msg_web.static_folder = "static2"
-msg_web.static_url_path = "/static2"
 
 if __name__ == '__main__':
     print("start run")

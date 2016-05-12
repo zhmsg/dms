@@ -9,7 +9,7 @@ sys.path.append("..")
 from datetime import datetime
 from Tools.Mysql_db import DB
 from Class import table_manager, TIME_FORMAT
-from Check import check_chinese_en, check_http_method, check_path, check_sql_character, check_char_num_underline, check_char
+from Check import check_chinese_en, check_http_method, check_path, check_sql_character, check_char_num_underline, check_char, check_int
 from Tools.Wx import WxManager
 
 temp_dir = tempfile.gettempdir()
@@ -36,27 +36,32 @@ class HelpManager:
         self.api_status_desc = [u"新建", u"修改中", u"已完成", u"待废弃", u"已废弃", u"已删除"]
         self.user = "sys_user"
 
-    def new_api_module(self, module_name, module_prefix, module_desc):
+    def new_api_module(self, module_name, module_prefix, module_desc, module_part):
         if check_chinese_en(module_name, 0, 35) is False:
             return False, "Bad module_name."
         if check_path(module_prefix, 0, 35) is False:
             return False, "Bad module_prefix"
+        if check_int(module_part, max_v=9999) is False:
+            return False, "Bad module_part"
         module_desc = check_sql_character(module_desc)[:240]
-        insert_sql = "INSERT INTO %s (module_name,module_prefix,module_desc) VALUES ('%s','%s','%s');" \
-                     % (self.api_module, module_name, module_prefix, module_desc)
+        insert_sql = "INSERT INTO %s (module_name,module_prefix,module_desc,module_part) VALUES ('%s','%s','%s',%s);" \
+                     % (self.api_module, module_name, module_prefix, module_desc, module_part)
         result = self.db.execute(insert_sql)
         if result != 1:
             return False, "sql execute result is %s " % result
         return True, "success"
 
-    def update_api_module(self, module_no, module_name, module_prefix, module_desc):
+    def update_api_module(self, module_no, module_name, module_prefix, module_desc, module_part):
         if check_chinese_en(module_name, 0, 35) is False:
             return False, "Bad module_name."
         if check_path(module_prefix, 0, 35) is False:
             return False, "Bad module_prefix"
+        if check_int(module_part, max_v=9999) is False:
+            return False, "Bad module_part"
         module_desc = check_sql_character(module_desc)[:240]
-        update_sql = "UPDATE %s SET module_name='%s',module_prefix='%s',module_desc='%s' WHERE module_no=%s;" \
-                     % (self.api_module, module_name, module_prefix, module_desc, module_no)
+        update_sql = "UPDATE %s SET module_name='%s',module_prefix='%s',module_desc='%s',module_part=%s" \
+                     " WHERE module_no=%s;" \
+                     % (self.api_module, module_name, module_prefix, module_desc, module_part, module_no)
         result = self.db.execute(update_sql)
         return True, "success"
 
@@ -292,7 +297,8 @@ class HelpManager:
         self.db.execute(select_sql)
         module_info = {"api": [], "service": [], "jy": []}
         for item in self.db.fetchall():
-            info = {"module_no": item[0], "module_name": item[1], "module_prefix": item[2], "module_desc": item[3]}
+            info = {"module_no": item[0], "module_name": item[1], "module_prefix": item[2], "module_desc": item[3],
+                    "module_part": item[4]}
             if item[4] == 1:
                 module_info["api"].append(info)
             elif item[4] == 2:

@@ -47,6 +47,14 @@
               <label class="api-describe" for="">模块描述：</label>
               <textarea class="box-side" rows="3" name="module_desc" required>{{ current_module["module_desc"] }}</textarea>
             </li>
+            <li>
+              <label class="api-describe" for="">所属分类：</label>
+              <select class="box-side" name="module_part" required>
+                  <option value="1" {% if current_module["module_part"] == 1 %} selected {% endif %}>API</option>
+                  <option value="2" {% if current_module["module_part"] == 2 %} selected {% endif %}>基础服务</option>
+                  <option value="3" {% if current_module["module_part"] == 3 %} selected {% endif %}>子系统</option>
+              </select>
+            </li>
           </ul>
           <button type="submit" class="btn btn-success btn-down api-newBtn">更新模块</button>
         </div>
@@ -118,6 +126,14 @@
         <li>
           <label class="api-describe" for="">模块描述：</label>
           <textarea class="box-side" rows="3" name="module_desc" required></textarea>
+        </li>
+        <li>
+          <label class="api-describe" for="">所属分类：</label>
+          <select class="box-side" name="module_part" required>
+              <option value="1">API</option>
+              <option value="2">基础服务</option>
+              <option value="3">子系统</option>
+          </select>
         </li>
       </ul>
       <button type="submit" class="btn btn-success btn-down api-newBtn">新建模块</button>
