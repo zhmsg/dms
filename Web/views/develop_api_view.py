@@ -56,7 +56,6 @@ def list_api():
             for module_info in module_part:
                 if module_info["module_no"] == module_no:
                     current_module = module_info
-                    print(current_module)
                     break
         if current_module is None:
             return "Error"
