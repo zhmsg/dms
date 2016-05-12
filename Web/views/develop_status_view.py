@@ -15,7 +15,7 @@ sys.path.append('..')
 __author__ = 'Zhouheng'
 
 url_prefix = status_url_prefix
-html_dir = "/API_HELP"
+html_dir = "/API_Status"
 
 develop_status_view = Blueprint('develop_status_view', __name__)
 
