@@ -44,7 +44,6 @@ def show_status_info():
         new_power = True
     if current_user.role & control.role_value["status_code_del"] > 0:
         del_power = True
-    print("true")
     return render_template("%s/Status_API.html" % html_dir, fun_info_url=fun_info_url, status_info=status_info,
                            error_type_url=error_type_url, return_url=return_url, search_status=search_status,
                            new_power=new_power, del_power=del_power, del_status_code_url=del_status_code_url)
@@ -94,4 +93,4 @@ def remove_status_code():
     result, info = control.delete_api_status(current_user.account, current_user.role, status_code)
     if result is False:
         return info
-    return redirect("%s/status/?status=%s" % (url_prefix, status_code))
+    return redirect("%s/?status=%s" % (url_prefix, status_code))
