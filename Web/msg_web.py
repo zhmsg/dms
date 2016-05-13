@@ -66,7 +66,6 @@ def before_request():
         return make_response(u"浏览器版本过低", 403)
     if "Referer" in request.headers:
         referer = request.headers["Referer"]
-        print(referer)
 
 
 @msg_web.after_request
