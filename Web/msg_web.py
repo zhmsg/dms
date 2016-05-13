@@ -46,7 +46,7 @@ def unix_timestamp(t):
 
 ip = IPManager()
 
-accept_agent = "(firefox|chrome|safari)"
+accept_agent = "(firefox|chrome|safari|window)"
 
 
 @msg_web.template_filter("ip_str")
