@@ -3,7 +3,8 @@
 import sys
 sys.path.append("..")
 import time
-from flask import Flask, request
+import re
+from flask import Flask, request, make_response
 from Tools.MyIP import IPManager
 from Web.views.transport_view import transport_view as transport_view_blueprint
 from Web.views.develop_view import develop_view as develop_view_blueprint
@@ -45,12 +46,27 @@ def unix_timestamp(t):
 
 ip = IPManager()
 
+accept_agent = "(firefox|trident)"
+
 
 @msg_web.template_filter("ip_str")
 def ip_str(ip_v):
     if type(ip_v) == int or type(ip_v) == long:
         return ip.ip_value_str(ip_value=ip_v)
     return ip_v
+
+
+@msg_web.before_request
+def before_request():
+    if "User-Agent" not in request.headers:
+        print("No User-Agent")
+        return make_response(u"请使用浏览器访问", 403)
+    user_agent = request.headers["User-Agent"]
+    if re.search(accept_agent, user_agent, re.I) is None:
+        return make_response(u"浏览器版本过低", 403)
+    if "Referer" in request.headers:
+        referer = request.headers["Referer"]
+        print(referer)
 
 
 @msg_web.after_request

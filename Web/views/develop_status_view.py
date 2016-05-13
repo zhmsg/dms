@@ -23,13 +23,18 @@ develop_status_view = Blueprint('develop_status_view', __name__)
 print("start success")
 
 
+@develop_status_view.before_request
+@login_required
+def before_request():
+    pass
+
+
 @develop_status_view.route("/ping/", methods=["GET"])
 def ping():
     return "true"
 
 
 @develop_status_view.route("/", methods=["GET"])
-@login_required
 def show_status_info():
     result, status_info = control.get_status(current_user.role)
     if result is False:
@@ -47,6 +52,11 @@ def show_status_info():
     return render_template("%s/Status_API.html" % html_dir, fun_info_url=fun_info_url, status_info=status_info,
                            error_type_url=error_type_url, return_url=return_url, search_status=search_status,
                            new_power=new_power, del_power=del_power, del_status_code_url=del_status_code_url)
+
+
+@develop_status_view.route("/module/", methods=["GET"])
+def new_module_page():
+    return render_template("%s/Status_Module.html" % html_dir)
 
 
 @develop_status_view.route("/fun/", methods=["GET"])
