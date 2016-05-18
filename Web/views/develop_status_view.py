@@ -56,7 +56,11 @@ def show_status_info():
 
 @develop_status_view.route("/module/", methods=["GET"])
 def new_module_page():
-    return render_template("%s/Status_Module.html" % html_dir)
+    return_url = url_prefix
+    fun_info_url = url_prefix + "/fun/"
+    error_type_url = url_prefix + "/type/"
+    return render_template("%s/Status_Module.html" % html_dir, return_url=return_url, fun_info_url=fun_info_url,
+                           error_type_url=error_type_url)
 
 
 @develop_status_view.route("/fun/", methods=["GET"])
