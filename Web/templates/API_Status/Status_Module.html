@@ -16,7 +16,7 @@
           </tr>
         </table>
           <p class="bottom10">
-            <input class="form-control pull-left width100 margin10" id="module_no" name="service_id" required>
+            <input class="form-control pull-left width100 margin10" id="module_no" required>
             <input class="form-control pull-left width150 margin10" id="module_title" required>
             <input class="form-control pull-left width366 margin10" id="module_desc"  required>
             <button class="btn btn-primary pull-left" id="btn_new">新建</button>
@@ -35,7 +35,7 @@
           </tr>
         </table>
           <p class="bottom10">
-            <input class="form-control pull-left width100 margin10" id="sub_module_no" name="service_id" required>
+            <input class="form-control pull-left width100 margin10" id="sub_module_no" required>
             <input class="form-control pull-left width150 margin10" id="sub_module_title" required>
             <input class="form-control pull-left width366 margin10" id="sub_module_desc"  required>
             <button class="btn btn-primary pull-left" id="btn_sub_new">新建</button>
@@ -44,6 +44,20 @@
     </div>
     <button type="button" class="btn btn-primary margin20" id="btn_new_error" value="新建错误类型" >新建错误类型</button>
     <div class="div_new_error" style="display: none;">
+       <table class="table table-bordered table-hover api-list-table" id="tb_error_type">
+          <tr>
+            <th scope="col" width="7%">编号</th>
+            <th scope="col" width=15%">错误标题</th>
+            <th scope="col" width=78%">错误解释</th>
+          </tr>
+        </table>
+          <p class="bottom10">
+            <input class="form-control pull-left width100 margin10" id="error_no"  required>
+            <input class="form-control pull-left width150 margin10" id="error_title" required>
+            <input class="form-control pull-left width366 margin10" id="error_desc"  required>
+            <button class="btn btn-primary pull-left" id="btn_error_new">新建</button>
+            <span class="clear block"></span>
+          </p>
     </div>
 
     <input id="fun_info_url" value="{{ fun_info_url }}" style="display: none">

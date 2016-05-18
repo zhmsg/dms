@@ -46,7 +46,19 @@ function get_error_type() {
         success: function (data) {
             if (data.status == true){
                 error_type = data.data;
-                set_error_type();
+                var error_row = new Array();
+                var i = 0;
+                for(var key in error_type)
+                {
+                    var data = new Array();
+                    data[0] = key;
+                    data[1] = error_type[key].title;
+                    data[2] = error_type[key].desc;
+                    console.info(data);
+                    error_row[i] = data;
+                    i++;
+                }
+                add_table_row("tb_error_type", error_row, false);
             }
         },
         error: function (xhr) {
@@ -88,48 +100,6 @@ function set_fun_id(){
     add_table_row("tb_sub_module", mul_row, true);
 }
 
-function set_error_type(){
-    var select_obj = $("#type_id");
-    var mul_select_obj = $("#mul_type_id");
-    select_obj.empty();
-    mul_select_obj.empty();
-    for(var key in error_type){
-        add_option(select_obj, key, error_type[key].title);
-        if(error_type[key].title.substr(0, 2) == "参数") {
-            add_option(mul_select_obj, key, error_type[key].title);
-        }
-    }
-
-}
-
-
-
-
-function get_info(code){
-    var service_id = code.substr(0, 2);
-    var service_title = module_info[service_id].title;
-    var fun_id = code.substr(2, 2);
-    var fun_title = module_info[service_id]["fun_info"][fun_id].title;
-    var type_id = code.substr(4, 2);
-    var type_title = error_type[type_id].title;
-    var info = service_title + "<br />" + fun_title + "<br />" + type_title;
-    return info;
-}
-
-//$(function(){
-//    //鼠标移入显示 移出消失 的效果
-//    $("tr[id^='s_']").hover(
-//        function(){
-//            var code_info = get_info(this.id.substr(2,8));
-//            $("#status_code_info").html(code_info);
-//            $(".status_out").show();
-//            $(".status_out").css('top',(this.offsetHeight + this.offsetTop)+'px')
-//        },
-//        function(){
-//            $(".status_out").hide()
-//        }
-//    );
-//});
 function set_div_show(btn_id, is_show){
     var btn = $("#" + btn_id);
     var btn_v = btn.val();
@@ -200,5 +170,5 @@ function add_table_row(table_id, mul_row, clear){
 }
 $(function(){
     get_module_info();
-    //get_error_type();
+    get_error_type();
 });
