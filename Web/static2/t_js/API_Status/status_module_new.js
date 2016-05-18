@@ -182,7 +182,7 @@ function add_table_row(table_id, mul_row, clear){
     var t = $("#" + table_id);
 
     if(clear == true){
-        t.empty();
+        t.find("tr:not(:first)").remove();
     }
     var row_len = mul_row.length;
     for(var i=0;i<row_len;i++){
