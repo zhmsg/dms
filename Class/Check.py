@@ -7,7 +7,7 @@ __author__ = 'ZhouHeng'
 
 
 def check(regex, s, min_len=1, max_len=-1):
-    if type(s) != unicode and type(s) !=  str:
+    if type(s) != unicode and type(s) != str:
         return False
     if min_len > 0 and len(s) < min_len:
         return False
@@ -59,6 +59,13 @@ def check_sql_character(s):
     if type(s) != unicode and type(s) != str:
         s = str(s)
     return s.replace("\\", "\\\\").replace("'", "\\'")
+
+
+def check_special_character(s):
+    result = re.search("[\'\\\]", s)
+    if result is not None:
+        return False
+    return True
 
 
 def check_int(i, min_v=0, max_v=99):

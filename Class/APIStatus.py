@@ -8,7 +8,7 @@ sys.path.append("..")
 from datetime import datetime
 from Tools.Mysql_db import DB
 from Class import table_manager, TIME_FORMAT
-from Check import check_sql_character, check_int, fill_zero, check_chinese_en
+from Check import check_sql_character, check_int, fill_zero, check_chinese_en, check_special_character
 from Tools.Wx import WxManager
 
 temp_dir = tempfile.gettempdir()
@@ -30,24 +30,30 @@ class StatusManager:
     def insert_service_module(self, service_title, service_desc):
         if check_chinese_en(service_title) is False:
             return False, "Bad service_title"
+        if check_special_character(service_desc) is False:
+            return False, "Bad service_desc"
         select_sql = "SELECT MAX(service_id) FROM %s;" % self.service_module
         result = self.db.execute(select_sql)
         if result == 0:
             service_id = 0
         else:
             service_id = self.db.fetchone()[0] + 1
-        insert_sql = "INSERT INTO %s (service_id,serivce_title,service_desc) VALUES(%s,'%s','%s');" \
+        insert_sql = "INSERT INTO %s (service_id,service_title,service_desc) VALUES (%s,'%s','%s');" \
                      % (self.service_module, service_id, service_title, service_desc)
         self.db.execute(insert_sql)
         return True, {"service_id": fill_zero(service_id, 2), "service_title": service_title, "service_desc": service_desc}
 
     def insert_function_module(self, service_id, function_title, function_desc):
+        if check_chinese_en(function_title) is False:
+            return False, "Bad function_title"
+        if check_special_character(function_desc) is False:
+            return False, "Bad function_desc"
         select_sql = "SELECT MAX(function_id) FROM %s WHERE service_id=%s;" % (self.function_module, service_id)
         result = self.db.execute(select_sql)
         if result == 0:
             function_id = 0
         else:
-            function_id = self.db.fetchone()[0]
+            function_id = self.db.fetchone()[0] + 1
         insert_sql = "INSERT INTO %s (function_id,function_title,function_desc) VALUES(%s,'%s','%s');" \
                      % (self.function_module, function_id, function_title, function_desc)
         self.db.execute(insert_sql)
