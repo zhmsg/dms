@@ -137,3 +137,13 @@ def new_mul_status_page():
     error_type_url = url_prefix + "/type/"
     return render_template("%s/New_Mul_Status.html" % html_dir, return_url=return_url, fun_info_url=fun_info_url,
                            error_type_url=error_type_url)
+
+
+@develop_status_view.route("/mul/", methods=["POST"])
+def new_mul_status():
+    request_data = request.json
+    service_id = int(request_data["service_id"])
+    fun_id = int(request_data["fun_id"])
+    error_info = request_data["error_info"]
+    result, info = control.new_mul_api_status(current_user.account, current_user.role, service_id, fun_id, error_info)
+    return jsonify({"status": result, "data": info})

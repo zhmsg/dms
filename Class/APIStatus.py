@@ -113,7 +113,7 @@ class StatusManager:
                 error_code = self.db.fetchone()[0] + 1
             result = self._insert_status_code(error_code, error_desc, adder)
             if result == 1:
-                success_new.append({"status_code": error_code, "error_desc": error_desc})
+                success_new.append({"status_code": fill_zero(error_code, 8), "error_desc": error_desc})
         return True, success_new
 
     def get_status_code(self):

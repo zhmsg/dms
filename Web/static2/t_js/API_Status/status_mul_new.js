@@ -145,6 +145,43 @@ function preview_status_code(){
     add_table_row("tb_preview_code", new_status_code, true);
 }
 
+function new_mul_status_code_success(data)
+{
+    if(data["status"] == true){
+        var add_rows = new Array();
+        for(var i=0;i<data.data.length;i++){
+            console.info(data.data[i]);
+            add_rows[i] =new Array(data.data[i].status_code, data.data[i].error_desc)
+        }
+        add_table_row("tb_preview_code", add_rows, true);
+    }
+}
+
+function new_mul_status_code()
+{
+    var service_id = $("#service_id").val();
+    var fun_id = $("#fun_id").val();
+    var param_name = $("#param_name").val();
+    if(param_name == ""){
+        alert("【请输入参数名】");
+        return;
+    }
+    t = $("#tb_preview_code");
+    var tr_status = t.find("tr:not(:first)");
+    var body_param = new Object();
+    body_param["service_id"] = service_id;
+    body_param["fun_id"] = fun_id;
+    body_param["error_info"] = new Array();
+    for(var i=0;i<tr_status.length;i++){
+        var code = tr_status[i].cells[0].innerHTML;
+        var type_id = code.substr(6, 2);
+        var desc = tr_status[i].cells[1].innerHTML;
+        body_param["error_info"][i] = new Object();
+        body_param["error_info"][i]["type_id"] = parseInt(type_id);
+        body_param["error_info"][i]["error_desc"]= desc;
+    }
+    my_request(location.href, "POST", body_param, new_mul_status_code_success);
+}
 
 function set_div_show(btn_id, is_show){
     var btn = $("#" + btn_id);
@@ -193,6 +230,9 @@ $(function(){
     });
 });
 
+$(function(){
+    $("#btn_param_mul").click(new_mul_status_code);
+});
 
 function add_table_row(table_id, mul_row, clear){
     var t = $("#" + table_id);
@@ -215,6 +255,6 @@ function add_table_row(table_id, mul_row, clear){
 }
 
 $(function(){
-    get_module_info();
     get_error_type();
+    get_module_info();
 });
