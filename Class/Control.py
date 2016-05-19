@@ -388,7 +388,7 @@ class ControlManager:
         return self.api_status.get_error_type()
 
     def new_service_module(self, user_name, role, service_title, service_desc):
-        if role & self.role_value["status_code_new"] <= 0:
+        if role & self.role_value["status_code_module"] <= 0:
             return False, u"您没有权限"
         result, info = self.api_status.insert_service_module(service_title, service_desc)
         if result is False:
@@ -406,7 +406,7 @@ class ControlManager:
         return result, info
 
     def new_function_module(self, user_name, role, service_id, function_title, function_desc):
-        if role & self.role_value["status_code_new"] <= 0:
+        if role & self.role_value["status_code_module"] <= 0:
             return False, u"您没有权限"
         return self.api_status.insert_function_module(service_id, function_title, function_desc)
 

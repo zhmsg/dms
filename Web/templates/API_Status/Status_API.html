@@ -58,7 +58,9 @@
           <p id="fun_desc"></p>
           <p id="error_type_desc"></p>
         </form>
+        {% if new_module_power %}
         <a href="module/">添加状态码模块</a>
+        {% endif %}
         </div>
         <button type="button" class="btn btn-primary margin20" id="mul_new_btn">批量新建</button>
         <div class="mul_newMode" style="display: none;">
