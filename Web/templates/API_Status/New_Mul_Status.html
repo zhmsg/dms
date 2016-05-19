@@ -4,42 +4,36 @@
 
 {% block content %}
     <a class="btn btn-primary pull-right margin20" href="{{ return_url }}/" >查看状态码</a>
-    <button type="button" class="btn btn-primary margin20" id="btn_new_module" value="新建模块" >新建模块</button>
-    <div class="div_new_module" style="display: none;">
-        <table class="table table-bordered table-hover api-list-table" id="tb_main_module">
-          <tr>
-            <th scope="col" width="8%">模块编码</th>
-            <th scope="col" width=20%">模块标题</th>
-            <th scope="col" width=50%">模块解释</th>
-            <th scope="col" width=6%">操作</th>
-          </tr>
-        </table>
-          <p class="bottom10">
-            <input class="form-control pull-left width150 margin10" id="module_title" placeholder="模块标题" required>
-            <input class="form-control pull-left width366 margin10" id="module_desc" placeholder="模块解释"  required>
-            <button class="btn btn-primary pull-left" id="new_module">新建</button>
-            <span class="clear block"></span>
-          </p>
-        </div>
-    <button type="button" class="btn btn-primary margin20" id="btn_new_sub" value="新建子模块" >新建子模块</button>
+    <button type="button" class="btn btn-primary margin20" id="btn_new_sub" value="新建参数类状态码" >新建参数类状态码</button>
     <div class="div_new_sub" style="display: none;">
-       <select class="box-side width150 pull-left margin20" id="service_id" name="service_id" onchange="set_fun_id();"></select>
-       <table class="table table-bordered table-hover api-list-table" id="tb_sub_module">
-          <tr>
-            <th scope="col" width="8%">子模块编码</th>
-            <th scope="col" width=20%">子模块标题</th>
-            <th scope="col" width=50%">子模块解释</th>
-            <th scope="col" width=6%">操作</th>
-          </tr>
-        </table>
           <p class="bottom10">
-            <input class="form-control pull-left width150 margin10" id="sub_module_title" placeholder="子模块标题" required>
-            <input class="form-control pull-left width366 margin10" id="sub_module_desc" placeholder="子模块解释" required>
-            <button class="btn btn-primary pull-left" id="new_sub_module">新建</button>
-            <span class="clear block"></span>
+              <select class="box-side width150 pull-left margin10" id="service_id" onchange="set_fun_id();"></select>
+              <select class="box-side width150 pull-left margin10" id="fun_id" onchange="preview_status_code();"></select>
           </p>
+          <span class="clear block" style="margin-bottom: 2em"></span>
+          <p class="bottom10" id="p_status_prefix">
+              </p>
+          <span class="clear block" style="margin-bottom: 2em"></span>
+          <p class="bottom10">
+              <input class="form-control pull-left width150 margin10" id="param_name" placeholder="参数名" onkeyup="preview_status_code();">
+              <select class="form-control pull-left width150 margin10" id="param_type" onchange="preview_status_code();">
+                  <option>string</option>
+                  <option>int</option>
+                  <option>list</option>
+                  <option>object</option>
+                  <option>bool</option>
+              </select>
+              <button class="btn btn-primary pull-left" id="new_sub_module">新建</button>
+              <span class="clear block"></span>
+          </p>
+          <table class="table table-bordered table-hover api-list-table" id="tb_preview_code">
+              <tr>
+                <th scope="col" width="17%">状态码</th>
+                <th scope="col" width=78%">解释</th>
+              </tr>
+            </table>
     </div>
-    <button type="button" class="btn btn-primary margin20" id="btn_new_error" value="新建错误类型" >新建错误类型</button>
+    <button type="button" class="btn btn-primary margin20" id="btn_new_error" value="新建依赖服务类状态码" >新建依赖服务类状态码</button>
     <div class="div_new_error" style="display: none;">
        <table class="table table-bordered table-hover api-list-table" id="tb_error_type">
           <tr>

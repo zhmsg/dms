@@ -48,6 +48,14 @@ function get_module_info() {
     my_request(request_url, "GET", null, get_module_success);
 }
 
+function new_checkbox(id, chang_func, lab_text){
+    var lab = $('<label class="checkbox-inline"></label');
+    var cb = $("<input type='checkbox' id='"+ id + "' onchange='" + chang_func + "();' checked>");
+    lab.append(cb);
+    lab.append(lab_text);
+    return lab;
+}
+
 function get_error_type_success(data){
     if (data.status == true){
         error_type = data.data;
@@ -55,12 +63,17 @@ function get_error_type_success(data){
         var i = 0;
         for(var key in error_type)
         {
+
             var data = new Array();
             data[0] = key;
             data[1] = error_type[key].title;
             data[2] = error_type[key].desc;
             error_row[i] = data;
             i++;
+            if(error_type[key].title.indexOf("参数") >= 0) {
+                var new_cb = new_checkbox("error_type_" + key, "preview_status_code", error_type[key].title);
+                $("#p_status_prefix").append(new_cb);
+            }
         }
         add_table_row("tb_error_type", error_row, false);
     }
@@ -85,22 +98,50 @@ function set_service_id(){
     }
     set_fun_id();
 }
+
+
 function set_fun_id(){
+    var select_obj = $("#fun_id");
+    select_obj.empty();
     var service_id = $("#service_id").val();
     var fun_list = module_info[service_id]["fun_info"];
-    var mul_row = new Array();
-    var i = 0;
     for(var key in fun_list){
-        var row_data = new Array();
-        row_data[0] = key;
-        row_data[1] = fun_list[key].title;
-        row_data[2] = fun_list[key].desc;
-        row_data[3] = "<a href='#'>删除</a>";
-        mul_row[i] = row_data;
-        i++;
+        add_option(select_obj, key, fun_list[key].title);
     }
-    add_table_row("tb_sub_module", mul_row, true);
+    preview_status_code();
 }
+
+function preview_status_code(){
+    var service_id = $("#service_id").val();
+    var fun_id = $("#fun_id").val();
+    var param_name = $("#param_name").val();
+    var param_type = $("#param_type").val();
+    var new_status_code = new Array();
+    var prefix_code = service_id+ " " + fun_id;
+    var select_cb = $("input:checkbox[id^='error_type_']:checked");
+    for(var i=0;i<select_cb.length;i++){
+        var error_type_key = select_cb[i].id.substr(11, 2);
+        var status_code_desc = "";
+        if(error_type_key == "01"){
+            status_code_desc += "需要参数" + param_name + "，在请求中未发现此参数";
+        }
+        else if(error_type_key == "02")
+        {
+            status_code_desc += param_name + "类型不正确，应该为" + param_type + "类型";
+        }
+        else if(error_type_key == "03")
+        {
+            status_code_desc += "提供的" + param_name + "不合法，可能包含非法字符或者账户长度不符合基本要求";
+        }
+        else if(error_type_key == "04")
+        {
+            status_code_desc += "提供的" + param_name + "，经服务器验证后判定为无效";
+        }
+        new_status_code[i] = new Array(prefix_code + " " + error_type_key + " **", status_code_desc);
+    }
+    add_table_row("tb_preview_code", new_status_code, true);
+}
+
 
 function set_div_show(btn_id, is_show){
     var btn = $("#" + btn_id);
@@ -168,60 +209,9 @@ function add_table_row(table_id, mul_row, clear){
         }
         t.append(row);
     }
-
 }
 
 $(function(){
     get_module_info();
     get_error_type();
-});
-
-
-function new_module_success(data){
-    if(data["status"] == true) {
-        var new_data = new Array(new Array(data["data"]["service_id"], data["data"]["service_title"], data["data"]["service_desc"], "<a href='#'>删除</a>"));
-        add_table_row("tb_main_module", new_data);
-    }
-    else{
-        alert(data["data"]);
-    }
-}
-
-function new_sub_module_success(data){
-    if(data["status"] == true) {
-        var new_data = new Array(new Array(data["data"]["function_id"], data["data"]["function_title"], data["data"]["function_desc"], "<a href='#'>删除</a>"));
-        add_table_row("tb_sub_module", new_data);
-    }
-    else{
-        alert(data["data"]);
-    }
-    alert("success");
-}
-
-$(function(){
-    $("#new_module").click(function(){
-        var id = this.id;
-        var module_input = $("input[id^='module_']");
-        var body_param = new Object();
-        for(var i=0;i<module_input.length;i++){
-            body_param[module_input[i].id] = module_input[i].value;
-        }
-        console.info(body_param);
-        var request_url = location.href;
-        my_request(request_url, "POST", body_param, new_module_success);
-    });
-    $("#new_sub_module").click(function(){
-        var id = this.id;
-        var module_input = $("input[id^='sub_module_']");
-        var service_id = $("#service_id").val();
-        var body_param = new Object();
-        for(var i=0;i<module_input.length;i++){
-            body_param[module_input[i].id] = module_input[i].value;
-        }
-        body_param["service_id"] = service_id;
-        console.info(body_param);
-        var request_url = $("#fun_info_url").val();
-        console.info(request_url);
-        my_request(request_url, "POST", body_param, new_sub_module_success);
-    });
 });
