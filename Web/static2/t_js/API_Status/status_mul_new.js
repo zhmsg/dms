@@ -115,6 +115,9 @@ function preview_status_code(){
     var service_id = $("#service_id").val();
     var fun_id = $("#fun_id").val();
     var param_name = $("#param_name").val();
+    if(param_name == ""){
+        param_name = "<b>【请输入参数名】</b>";
+    }
     var param_type = $("#param_type").val();
     var new_status_code = new Array();
     var prefix_code = service_id+ " " + fun_id;
