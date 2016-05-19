@@ -25,7 +25,6 @@ function get_module_info() {
                     module_row[i] = data;
                     i++;
                 }
-                console.info(module_row);
                 add_table_row("tb_main_module", module_row);
                 set_service_id();
             }
@@ -54,7 +53,6 @@ function get_error_type() {
                     data[0] = key;
                     data[1] = error_type[key].title;
                     data[2] = error_type[key].desc;
-                    console.info(data);
                     error_row[i] = data;
                     i++;
                 }
@@ -168,7 +166,51 @@ function add_table_row(table_id, mul_row, clear){
     }
 
 }
+
 $(function(){
     get_module_info();
     get_error_type();
+});
+
+
+function my_request(request_url, request_method, body_param, request_success){
+    if(request_method != "GET"){
+        body_param = JSON.stringify(body_param)
+    }
+    $.ajax({
+        url: request_url,
+        method: request_method,
+        contentType: "application/json",
+        data: body_param,
+        success:request_success,
+        error:function(xhr){
+            var res = "状态码：" + xhr.status + "\n";
+            res += "返回值：" + xhr.statusText + "";
+            console.info(xhr);
+        }
+    });
+}
+
+function new_module_success(data){
+    if(data["status"] == true) {
+        var new_data = new Array(new Array(data["data"]["service_id"], data["data"]["service_title"], data["data"]["service_desc"], "<a href='#'>删除</a>"));
+        add_table_row("tb_main_module", new_data);
+    }
+    else{
+        alert(data["data"]);
+    }
+}
+
+$(function(){
+    $("#new_module").click(function(){
+        var id = this.id;
+        var module_input = $("input[id^='module_']");
+        var body_param = new Object();
+        for(var i=0;i<module_input.length;i++){
+            body_param[module_input[i].id] = module_input[i].value;
+        }
+        console.info(body_param);
+        var request_url = location.href;
+        my_request(request_url, "POST", body_param, new_module_success);
+    });
 });

@@ -63,6 +63,16 @@ def new_module_page():
                            error_type_url=error_type_url)
 
 
+@develop_status_view.route("/module/", methods=["POST"])
+def new_module():
+    request_data = request.json
+    module_title = request_data["module_title"]
+    module_desc = request_data["module_desc"]
+    result, info = control.new_service_module(current_user.account, current_user.role, module_title, module_desc)
+
+    return jsonify({"status": result, "data": info})
+
+
 @develop_status_view.route("/fun/", methods=["GET"])
 @login_required
 def get_fun_info():
