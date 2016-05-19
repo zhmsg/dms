@@ -90,9 +90,9 @@ class StatusManager:
 
     def new_mul_status_code(self, service_id, fun_id, error_info, adder):
         if check_int(service_id) is False:
-            return "Bad service_id"
+            return False, "Bad service_id"
         if check_int(fun_id) is False:
-            return "Bad fun_id"
+            return False, "Bad fun_id"
         basic_code = service_id * 1000000 + fun_id * 10000
         success_new = []
         for item in error_info:

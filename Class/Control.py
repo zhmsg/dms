@@ -390,7 +390,20 @@ class ControlManager:
     def new_service_module(self, user_name, role, service_title, service_desc):
         if role & self.role_value["status_code_new"] <= 0:
             return False, u"您没有权限"
-        return self.api_status.insert_service_module(service_title, service_desc)
+        result, info = self.api_status.insert_service_module(service_title, service_desc)
+        if result is False:
+            return result, info
+        service_id = info["service_id"]
+        r, data = self.api_status.insert_function_module(service_id, u"公共功能模块", u"本服务模块所有功能模块可公共使用的错误状态码")
+        if r is True:
+            function_id = data["function_id"]
+            error_info = [{"type_id": 0, "error_desc": u"访问系统正常，待用"},
+                          {"type_id": 0, "error_desc": u"访问系统正常，将返回数据"},
+                          {"type_id": 0, "error_desc": u"访问系统正常，仅返回成功信息"},
+                          {"type_id": 0, "error_desc": u"访问系统正常，返回警告信息"},
+                          {"type_id": 99, "error_desc": u"未经处理的异常，模块统一处理返回内部错误"}]
+            r, data = self.api_status.new_mul_status_code(int(service_id), int(function_id), error_info, user_name)
+        return result, info
 
     def new_function_module(self, user_name, role, service_id, function_title, function_desc):
         if role & self.role_value["status_code_new"] <= 0:
