@@ -201,6 +201,17 @@ function new_module_success(data){
     }
 }
 
+function new_sub_module_success(data){
+    if(data["status"] == true) {
+        var new_data = new Array(new Array(data["data"]["function_id"], data["data"]["function_title"], data["data"]["function_desc"], "<a href='#'>删除</a>"));
+        add_table_row("tb_sub_module", new_data);
+    }
+    else{
+        alert(data["data"]);
+    }
+    alert("success");
+}
+
 $(function(){
     $("#new_module").click(function(){
         var id = this.id;
@@ -212,5 +223,19 @@ $(function(){
         console.info(body_param);
         var request_url = location.href;
         my_request(request_url, "POST", body_param, new_module_success);
+    });
+    $("#new_sub_module").click(function(){
+        var id = this.id;
+        var module_input = $("input[id^='sub_module_']");
+        var service_id = $("#service_id").val();
+        var body_param = new Object();
+        for(var i=0;i<module_input.length;i++){
+            body_param[module_input[i].id] = module_input[i].value;
+        }
+        body_param["service_id"] = service_id;
+        console.info(body_param);
+        var request_url = $("#fun_info_url").val();
+        console.info(request_url);
+        my_request(request_url, "POST", body_param, new_sub_module_success);
     });
 });

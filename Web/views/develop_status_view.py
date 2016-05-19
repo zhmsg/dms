@@ -80,6 +80,18 @@ def get_fun_info():
     return jsonify({"status": result, "data": fun_info})
 
 
+@develop_status_view.route("/fun/", methods=["POST"])
+@login_required
+def new_fun_info():
+    request_data = request.json
+    service_id = request_data["service_id"]
+    sub_module_title = request_data["sub_module_title"]
+    sub_module_desc = request_data["sub_module_desc"]
+    result, info = control.new_function_module(current_user.account, current_user.role, service_id,
+                                               sub_module_title, sub_module_desc)
+    return jsonify({"status": result, "data": info})
+
+
 @develop_status_view.route("/type/", methods=["GET"])
 @login_required
 def get_error_type():

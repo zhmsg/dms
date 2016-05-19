@@ -37,7 +37,11 @@ class StatusManager:
         if result == 0:
             service_id = 0
         else:
-            service_id = self.db.fetchone()[0] + 1
+            db_result = self.db.fetchone()[0]
+            if db_result is None:
+                service_id = 0
+            else:
+                service_id = db_result + 1
         insert_sql = "INSERT INTO %s (service_id,service_title,service_desc) VALUES (%s,'%s','%s');" \
                      % (self.service_module, service_id, service_title, service_desc)
         self.db.execute(insert_sql)
@@ -53,11 +57,15 @@ class StatusManager:
         if result == 0:
             function_id = 0
         else:
-            function_id = self.db.fetchone()[0] + 1
-        insert_sql = "INSERT INTO %s (function_id,function_title,function_desc) VALUES(%s,'%s','%s');" \
-                     % (self.function_module, function_id, function_title, function_desc)
+            db_result = self.db.fetchone()[0]
+            if db_result is None:
+                function_id = 0
+            else:
+                function_id = db_result + 1
+        insert_sql = "INSERT INTO %s (service_id,function_id,function_title,function_desc) VALUES (%s,%s,'%s','%s');" \
+                     % (self.function_module, service_id, function_id, function_title, function_desc)
         self.db.execute(insert_sql)
-        return True, function_id
+        return True, {"function_id": fill_zero(function_id, 2), "function_title": function_title, "function_desc": function_desc}
 
     def _insert_status_code(self, status_code, code_desc, adder):
         code_desc = check_sql_character(code_desc)
