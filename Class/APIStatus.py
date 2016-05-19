@@ -110,7 +110,7 @@ class StatusManager:
                          "ORDER BY status_code DESC LIMIT 1;" % (self.status_code, error_code, error_code + 100)
             result = self.db.execute(select_sql)
             if result > 0:
-                error_code = self.db.fetchone()[0] + 1
+                error_code = (self.db.fetchone()[0] + 1) % 100
             result = self._insert_status_code(error_code, error_desc, adder)
             if result == 1:
                 success_new.append({"status_code": fill_zero(error_code, 8), "error_desc": error_desc})
