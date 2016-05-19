@@ -52,12 +52,9 @@ function add_option(select_obj, value, text){
 
 function set_service_id(){
     var select_obj = $("#service_id");
-    var mul_select_obj = $("#mul_service_id");
     select_obj.empty();
-    mul_select_obj.empty();
     for(var key in module_info){
         add_option(select_obj, key, module_info[key].title);
-        add_option(mul_select_obj, key, module_info[key].title);
     }
     set_fun_id();
 }
@@ -70,27 +67,14 @@ function set_fun_id(){
         add_option(select_obj, key, fun_list[key].title);
     }
 
-    var select_obj = $("#mul_fun_id");
-    select_obj.empty();
-    var service_id = $("#mul_service_id").val();
-    var fun_list = module_info[service_id]["fun_info"];
-    for(var key in fun_list){
-        add_option(select_obj, key, fun_list[key].title);
-    }
-
     update_info();
 }
 
 function set_error_type(){
     var select_obj = $("#type_id");
-    var mul_select_obj = $("#mul_type_id");
     select_obj.empty();
-    mul_select_obj.empty();
     for(var key in error_type){
         add_option(select_obj, key, error_type[key].title);
-        if(error_type[key].title.substr(0, 2) == "参数") {
-            add_option(mul_select_obj, key, error_type[key].title);
-        }
     }
     update_info();
 }
@@ -230,25 +214,10 @@ $(function(){
         if(conBtnValue == "单个新建"){
             $(".newMode").show();
             $("#conBtn").html("隐藏新建");
-            $(".mul_newMode").hide();
-            $("#mul_new_btn").html("批量新建");
         }
         if(conBtnValue == "隐藏新建"){
             $(".newMode").hide();
             $("#conBtn").html("单个新建");
-        }
-    });
-    $("#mul_new_btn").click(function(){
-        var conBtnValue = $("#mul_new_btn").html();
-        if(conBtnValue == "批量新建"){
-            $(".mul_newMode").show();
-            $("#mul_new_btn").html("隐藏新建");
-            $(".newMode").hide();
-            $("#conBtn").html("单个新建");
-        }
-        if(conBtnValue == "隐藏新建"){
-            $(".mul_newMode").hide();
-            $("#mul_new_btn").html("批量新建");
         }
     });
 });

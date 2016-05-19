@@ -77,14 +77,12 @@ def new_module():
 
 
 @develop_status_view.route("/fun/", methods=["GET"])
-@login_required
 def get_fun_info():
     result, fun_info = control.get_fun_info(current_user.role)
     return jsonify({"status": result, "data": fun_info})
 
 
 @develop_status_view.route("/fun/", methods=["POST"])
-@login_required
 def new_fun_info():
     request_data = request.json
     service_id = request_data["service_id"]
@@ -96,14 +94,12 @@ def new_fun_info():
 
 
 @develop_status_view.route("/type/", methods=["GET"])
-@login_required
 def get_error_type():
     result, error_type = control.get_error_type(current_user.role)
     return jsonify({"status": result, "data": error_type})
 
 
 @develop_status_view.route("/new/", methods=["POST"])
-@login_required
 def new_status():
     request_data = request.form
     service_id = int(request_data["service_id"])
@@ -126,10 +122,18 @@ def new_status():
 
 
 @develop_status_view.route("/remove/", methods=["GET"])
-@login_required
 def remove_status_code():
     status_code = int(request.args["status_code"])
     result, info = control.delete_api_status(current_user.account, current_user.role, status_code)
     if result is False:
         return info
     return redirect("%s/?status=%s" % (url_prefix, status_code))
+
+
+@develop_status_view.route("/mul/", methods=["GET"])
+def new_mul_status_page():
+    return_url = url_prefix
+    fun_info_url = url_prefix + "/fun/"
+    error_type_url = url_prefix + "/type/"
+    return render_template("%s/New_Mul_Status.html" % html_dir, return_url=return_url, fun_info_url=fun_info_url,
+                           error_type_url=error_type_url)
