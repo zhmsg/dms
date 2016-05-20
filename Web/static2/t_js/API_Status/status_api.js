@@ -263,7 +263,12 @@ function add_page_num(num, current_page){
         end_num = current_page + 7;
     }
     for(var i=start_num;i<=end_num;i++){
-        u.append('<li id=li_page_' + i + '><a href="#">' + i + '</a></li>');
+        if(i == current_page){
+            u.append('<li class="active" id=li_page_' + i + '><a href="#">' + i + '</a></li>');
+        }
+        else {
+            u.append('<li id=li_page_' + i + '><a href="#">' + i + '</a></li>');
+        }
     }
     $("li[id^='li_page_']").click(function(){
         var page_num = parseInt(this.id.substr(8));
