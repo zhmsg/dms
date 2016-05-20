@@ -243,14 +243,11 @@ $(function(){
 function add_page_num(num){
     var u = $("#pagination");
     u.find("li").remove();
-    u.append('<li><a href="#">&laquo;</a></li>');
     for(var i=1;i<=num;i++){
         u.append('<li id=li_page_' + i + '><a href="#">' + i + '</a></li>');
     }
-    u.append('<li><a href="#">&raquo;</a></li>');
     $("li[id^='li_page_']").click(function(){
         var page_num = parseInt(this.id.substr(8));
-        console.info(page_num);
         search_code(page_num);
     });
 }
