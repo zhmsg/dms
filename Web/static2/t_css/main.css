@@ -132,7 +132,7 @@ ul,ol,li{list-style: none;margin: 0;padding: 0;}
 .paramListMode ul li{float: left;line-height: 34px;}
 .paramListMode label{font-weight: normal;padding-right:10px;}
 /*API返回状态码*/
-.status_out{width:500px;height: 200px;background: #d9d9d9;line-height: 30px;position: absolute;left: 10%;padding: 5px;display: none;}
+.status_out{width:500px;height: 200px;background: #d9d9d9;line-height: 30px;position: absolute;left: 10%;padding: 5px;display: none;z-index: 10;}
 .status_move{cursor: pointer;}
 
 .text-content{
