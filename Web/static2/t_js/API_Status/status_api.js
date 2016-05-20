@@ -264,10 +264,10 @@ function add_page_num(num, current_page){
     }
     for(var i=start_num;i<=end_num;i++){
         if(i == current_page){
-            u.append('<li class="active" id=li_page_' + i + '><a href="#">' + i + '</a></li>');
+            u.append('<li class="active" id=li_page_' + i + '><a href="javascript:void(0)">' + i + '</a></li>');
         }
         else {
-            u.append('<li id=li_page_' + i + '><a href="#">' + i + '</a></li>');
+            u.append('<li id=li_page_' + i + '><a href="javascript:void(0)">' + i + '</a></li>');
         }
     }
     $("li[id^='li_page_']").click(function(){
