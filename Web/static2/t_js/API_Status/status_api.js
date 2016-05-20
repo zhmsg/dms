@@ -185,7 +185,7 @@ function filter_code(code, s_type, page_num){
             tr.hidden = true;
         }
     }
-    add_page_num((match_count - 1 ) / show_count + 1);
+    add_page_num((match_count - 1 ) / show_count + 1, page_num);
 }
 
 function search_code(page_num){
@@ -240,10 +240,27 @@ $(function(){
 });
 
 // 分页相关方法
-function add_page_num(num){
+function add_page_num(num, current_page){
     var u = $("#pagination");
     u.find("li").remove();
-    for(var i=1;i<=num;i++){
+    var start_num = 1;
+    var end_num = num;
+    if(current_page <= 8){
+        if(num > 15){
+            end_num = 15;
+        }
+    }
+    else if(num - current_page < 7)
+    {
+        if(num > 15){
+            start_num = num - 14;
+        }
+    }
+    else{
+        start_num = current_page - 7;
+        end_num = current_page + 7;
+    }
+    for(var i=start_num;i<=end_num;i++){
         u.append('<li id=li_page_' + i + '><a href="#">' + i + '</a></li>');
     }
     $("li[id^='li_page_']").click(function(){
