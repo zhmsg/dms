@@ -185,7 +185,7 @@ function filter_code(code, s_type, page_num){
             tr.hidden = true;
         }
     }
-    var total_page_num = parseInt((match_count - 1 ) / show_count + 1);
+    var total_page_num = (match_count - 1 ) / show_count + 1;
     add_page_num(total_page_num, page_num);
 }
 
@@ -242,8 +242,7 @@ $(function(){
 
 // 分页相关方法
 function add_page_num(num, current_page){
-    console.info(num);
-    console.info(current_page);
+    num = parseInt(num);
     var u = $("#pagination");
     u.find("li").remove();
     var start_num = 1;
