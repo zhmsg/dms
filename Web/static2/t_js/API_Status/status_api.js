@@ -165,25 +165,26 @@ function compare_str(l_s, s_s, c_type){
 function filter_code(code, s_type){
     var trs = $("tr[id^='s_']");
     var tr_len = trs.length;
+    var match_count = 0;
     var show_count = 0;
     var i = 0;
     for(; i < tr_len; i++){
         var tr = trs[i];
         if(compare_str(tr.id.substr(2, 8), code, s_type) == true){
+            match_count++;
             if(show_count >= 15) {
-                break;
+                tr.hidden = true;
             }
-            tr.hidden = false;
-            show_count++;
+            else {
+                tr.hidden = false;
+                show_count++;
+            }
         }
         else{
             tr.hidden = true;
         }
     }
-    for(; i < tr_len; i++) {
-        var tr = trs[i];
-        tr.hidden = true;
-    }
+    add_page_num((match_count - 1 ) / 15 + 1);
 }
 
 function search_code(){
@@ -236,3 +237,14 @@ $(function(){
     get_module_info();
     get_error_type();
 });
+
+// 分页相关方法
+function add_page_num(num){
+    var u = $("#pagination");
+    u.find("li").remove();
+    u.append('<li><a href="#">&laquo;</a></li>');
+    for(var i=1;i<=num;i++){
+        u.append('<li><a href="#">' + i + '</a></li>');
+    }
+    u.append('<li><a href="#">&raquo;</a></li>');
+}
