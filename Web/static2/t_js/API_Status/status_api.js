@@ -140,10 +140,10 @@ function update_info(){
     error_type_update();
     console.info($("#show_exist").attr("checked"));
     if($("#show_exist").is(':checked')) {
-        filter_code(service_id + fun_id + type_id, "start");
+        filter_code(service_id + fun_id + type_id, "start", 1);
     }
     else{
-        filter_code($("#search_code").val(), "in");
+        filter_code($("#search_code").val(), "in", 1);
     }
 }
 
@@ -162,34 +162,35 @@ function compare_str(l_s, s_s, c_type){
     return false
 }
 
-function filter_code(code, s_type){
+function filter_code(code, s_type, page_num){
     var trs = $("tr[id^='s_']");
     var tr_len = trs.length;
     var match_count = 0;
-    var show_count = 0;
+    var show_count = 15;
+    var start_num = (page_num - 1) * show_count;
+    var end_num = start_num + show_count;
     var i = 0;
     for(; i < tr_len; i++){
         var tr = trs[i];
         if(compare_str(tr.id.substr(2, 8), code, s_type) == true){
             match_count++;
-            if(show_count >= 15) {
+            if(match_count <= start_num || match_count > end_num) {
                 tr.hidden = true;
             }
             else {
                 tr.hidden = false;
-                show_count++;
             }
         }
         else{
             tr.hidden = true;
         }
     }
-    add_page_num((match_count - 1 ) / 15 + 1);
+    add_page_num((match_count - 1 ) / show_count + 1);
 }
 
-function search_code(){
+function search_code(page_num){
     var query_s = $("#search_code").val();
-    filter_code(query_s, "in");
+    filter_code(query_s, "in", page_num);
 }
 
 function get_info(code){
@@ -244,7 +245,12 @@ function add_page_num(num){
     u.find("li").remove();
     u.append('<li><a href="#">&laquo;</a></li>');
     for(var i=1;i<=num;i++){
-        u.append('<li><a href="#">' + i + '</a></li>');
+        u.append('<li id=li_page_' + i + '><a href="#">' + i + '</a></li>');
     }
     u.append('<li><a href="#">&raquo;</a></li>');
+    $("li[id^='li_page_']").click(function(){
+        var page_num = parseInt(this.id.substr(8));
+        console.info(page_num);
+        search_code(page_num);
+    });
 }
