@@ -165,14 +165,24 @@ function compare_str(l_s, s_s, c_type){
 function filter_code(code, s_type){
     var trs = $("tr[id^='s_']");
     var tr_len = trs.length;
-    for(var i = 0; i < tr_len; i++){
+    var show_count = 0;
+    var i = 0;
+    for(; i < tr_len; i++){
         var tr = trs[i];
         if(compare_str(tr.id.substr(2, 8), code, s_type) == true){
+            if(show_count >= 15) {
+                break;
+            }
             tr.hidden = false;
+            show_count++;
         }
         else{
             tr.hidden = true;
         }
+    }
+    for(; i < tr_len; i++) {
+        var tr = trs[i];
+        tr.hidden = true;
     }
 }
 
