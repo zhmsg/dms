@@ -185,7 +185,8 @@ function filter_code(code, s_type, page_num){
             tr.hidden = true;
         }
     }
-    add_page_num((match_count - 1 ) / show_count + 1, page_num);
+    var total_page_num = parseInt((match_count - 1 ) / show_count + 1);
+    add_page_num(total_page_num, page_num);
 }
 
 function search_code(page_num){
