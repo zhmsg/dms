@@ -241,6 +241,8 @@ $(function(){
 
 // 分页相关方法
 function add_page_num(num, current_page){
+    console.info(num);
+    console.info(current_page);
     var u = $("#pagination");
     u.find("li").remove();
     var start_num = 1;
