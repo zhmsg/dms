@@ -145,15 +145,30 @@ function preview_status_code(){
     add_table_row("tb_preview_code", new_status_code, true);
 }
 
+function del_status_code_success(data){
+    if(data["status"] == true) {
+        $("#a_del_" + data.data).parent().parent().remove();
+    }
+}
+
 function new_mul_status_code_success(data)
 {
     if(data["status"] == true){
         var add_rows = new Array();
+
         for(var i=0;i<data.data.length;i++){
-            console.info(data.data[i]);
-            add_rows[i] =new Array(data.data[i].status_code, data.data[i].error_desc)
+            var del_code_a = '<a id="a_del_' + data.data[i].status_code + '" href="javascript:void(0)" title="">删除</a>';
+            console.info(del_code_a);
+            add_rows[i] =new Array(data.data[i].status_code, data.data[i].error_desc, del_code_a);
         }
         add_table_row("tb_preview_code", add_rows, true);
+        $("a[id^=a_del_]").click(function(){
+            var status_code = this.id.substring(6);
+            var del_url = $("#del_status_code_url").val();
+            var body_param = new Object();
+            body_param["status_code"] = status_code;
+            my_request(del_url, "DELETE", body_param, del_status_code_success);
+        });
     }
 }
 
@@ -180,6 +195,7 @@ function new_mul_status_code()
         body_param["error_info"][i]["type_id"] = parseInt(type_id);
         body_param["error_info"][i]["error_desc"]= desc;
     }
+    console.info(body_param);
     my_request(location.href, "POST", body_param, new_mul_status_code_success);
 }
 

@@ -29,7 +29,8 @@
           <table class="table table-bordered table-hover api-list-table" id="tb_preview_code">
               <tr>
                 <th scope="col" width="17%">状态码</th>
-                <th scope="col" width=78%">解释</th>
+                <th scope="col" width=70%">解释</th>
+                <th scope="col" width=8%">操作</th>
               </tr>
             </table>
     </div>
@@ -53,5 +54,6 @@
 
     <input id="fun_info_url" value="{{ fun_info_url }}" style="display: none">
     <input id="error_type_url" value="{{ error_type_url }}" style="display: none">
+    <input id="del_status_code_url" value="{{ del_status_code_url }}" style="display: none">
     <script type="text/javascript" src="{{ url_for('static', filename='t_js/API_Status/status_mul_new.js') }}"></script>
 {% endblock %}

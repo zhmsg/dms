@@ -130,13 +130,23 @@ def remove_status_code():
     return redirect("%s/?status=%s" % (url_prefix, status_code))
 
 
+@develop_status_view.route("/remove/", methods=["DELETE"])
+def remove_status_code_d():
+    status_code = int(request.json["status_code"])
+    result, info = control.delete_api_status(current_user.account, current_user.role, status_code)
+    if result is False:
+        return info
+    return jsonify({"status": True, "data": request.json["status_code"]})
+
+
 @develop_status_view.route("/mul/", methods=["GET"])
 def new_mul_status_page():
     return_url = url_prefix
     fun_info_url = url_prefix + "/fun/"
     error_type_url = url_prefix + "/type/"
+    del_status_code_url = url_prefix + "/remove/"
     return render_template("%s/New_Mul_Status.html" % html_dir, return_url=return_url, fun_info_url=fun_info_url,
-                           error_type_url=error_type_url)
+                           error_type_url=error_type_url, del_status_code_url=del_status_code_url)
 
 
 @develop_status_view.route("/mul/", methods=["POST"])
@@ -145,5 +155,6 @@ def new_mul_status():
     service_id = int(request_data["service_id"])
     fun_id = int(request_data["fun_id"])
     error_info = request_data["error_info"]
+    print(error_info)
     result, info = control.new_mul_api_status(current_user.account, current_user.role, service_id, fun_id, error_info)
     return jsonify({"status": result, "data": info})
