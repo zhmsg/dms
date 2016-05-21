@@ -227,6 +227,7 @@ $(function(){
 });
 
 $(function(){
+    search_code(1);
     get_module_info();
     get_error_type();
 });
