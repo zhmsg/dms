@@ -122,7 +122,7 @@ function preview_status_code(){
         {
             status_code_desc += "提供的" + param_name + "，经服务器验证后判定为无效";
         }
-        new_status_code[i] = new Array(prefix_code + " " + error_type_key + " **", status_code_desc);
+        new_status_code[i] = new Array(prefix_code + " " + error_type_key + " **", status_code_desc, "");
     }
     add_table_row("tb_preview_code", new_status_code, true);
 }
