@@ -228,8 +228,10 @@ $(function(){
 
 $(function(){
     search_code(1);
-    get_module_info();
-    get_error_type();
+    if($("#new_info_show").length > 0){
+        get_module_info();
+        get_error_type();
+    }
 });
 
 // 分页相关方法
