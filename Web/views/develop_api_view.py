@@ -5,7 +5,6 @@
 import sys
 import json
 import re
-from urlparse import urlparse, parse_qs
 from flask import Blueprint, render_template, request, redirect, url_for, jsonify
 from flask_login import login_required, current_user
 from Web import api_url_prefix
@@ -397,5 +396,14 @@ def test_api():
     else:
         return_url = url_prefix + "/info/?api_no=%s" % api_no
     status_url = url_prefix + "/status/"
+    api_url = api_info["basic_info"]["api_url"]
+    url_params = re.findall("<([\w:]+)>", api_url)
+    url_param_info = []
+    for param in url_params:
+        param_sp = param.split(":")
+        if len(param_sp) > 1:
+            url_param_info.append({"param_type": param_sp[0], "param_name": param_sp[1]})
+        else:
+            url_param_info.append({"param_type": "string", "param_name": param_sp[0]})
     return render_template("%s/Test_API.html" % html_dir, api_info=api_info, return_url=return_url, api_no=api_no,
-                           status_url=status_url)
+                           status_url=status_url, url_param_info=url_param_info)
