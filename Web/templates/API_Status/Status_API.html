@@ -18,18 +18,17 @@
             {% endif %}
           </tr>
           {% for item in status_info %}
-          <tr id="s_{{ item["status_code"] }}">
-            <td class="status_move"><span>{{ item["status_code"][:2] }}</span> <span>{{ item["status_code"][2:4] }}</span> <span>{{ item["status_code"][4:6] }}</span> <span>{{ item["status_code"][6:8] }}</span></td>
-            <td>{{ item["code_desc"] }}</td>
-            {% if del_power %}
-                <td><a href="{{ del_status_code_url }}?status_code={{ item["status_code"] }}" title="">删除</a></td>
-            {% endif %}
-          </tr>
+              <tr id="s_{{ item["status_code"] }}">
+                 <td class="status_move"><span>{{ item["status_code"][:2] }}</span> <span>{{ item["status_code"][2:4] }}</span> <span>{{ item["status_code"][4:6] }}</span> <span>{{ item["status_code"][6:8] }}</span></td>
+                 <td>{{ item["code_desc"] }}</td>
+                 {% if del_power %}
+                     <td><a href="{{ del_status_code_url }}?status_code={{ item["status_code"] }}" title="">删除</a></td>
+                 {% endif %}
+              </tr>
           {% endfor %}
         </table>
         <div class="status_out" id="status_code_info">ni</div>
         <ul class="pagination" id="pagination">
-
         </ul>
       </div>
         {% if new_power %}
