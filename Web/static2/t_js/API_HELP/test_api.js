@@ -98,34 +98,6 @@ function test_api(){
     });
 }
 
-function requestComplete(evt) {
-    /* This event is raised when the server send back a response */
-    console.log(evt.target.response);
-    if(this.status==200){
-        var res = evt.target.response;
-        update_res(JSON.stringify(JSON.parse(res), null, 4));
-    }else{
-        update_res(this.status);
-    }
-}
-
-function requestFailed(evt){
-    console.info(evt);
-}
-
-function get_authorization_value(v){
-    var cb = $('input:radio[name="auth_method"]:checked');
-    if(cb == null){
-        return v;
-    }
-    if(cb.val() == "Basic"){
-        return "Basic " + base64encode(v);
-    }
-    else{
-        return v;
-    }
-
-}
 
 function update_res(s){
     $("#res_text").text(s);
@@ -135,6 +107,17 @@ function update_request_url(){
     var test_env = $("#test_env").val();
     var api_url = $("#api_url").val();
     var request_url = test_env + api_url;
+    var url_param = $("input[id^='url_value_']");
+    for(var i=0;i<url_param.length;i++){
+        var up = url_param[i];
+        var param_v = up.value;
+        if(param_v == ""){
+            continue;
+        }
+        var origin_param = up.attributes["origin_param"].value;
+        request_url = request_url.replace(origin_param, param_v);
+        //alert(up.attributes["origin_param"].value);
+    }
     $("#request_url").val(request_url);
 }
 

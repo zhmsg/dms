@@ -39,6 +39,21 @@
         <span class="pull-left text-right width150">请求URL：</span>
         <input class="form-control bug-input" id="request_url" />
     </p>
+    {%  if url_param_info | length > 0 %}
+        <p>URL参数列表:</p>
+        {% for item in url_param_info %}
+            <div class="paramListMode">
+                <ul>
+                    <li class="star">*</li>
+                    <li name="param">{{ item["param_name"] }}</li>
+                    <li>：</li>
+                    <li><input class="form-control bug-input" id='url_value_{{ item["param_name"] }}' onkeyup="update_request_url();" origin_param="{{ item["origin_param"] }}" /></li>
+                    <div class="clear"></div>
+                </ul>
+                <p>输入{{ item["param_type"] }}类型</p>
+            </div>
+        {% endfor %}
+    {% endif %}
     <p>参数列表:</p>
     {% for item in api_info["predefine_param"]["header"] %}
         {% if item in api_info["predefine_header"] %}
