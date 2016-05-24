@@ -6,7 +6,6 @@ from threading import Thread
 sys.path.append("..")
 from Tools.Mysql_db import DB
 from Tools.MyEmail import MyEmailManager
-from Tools.Wx import WxManager
 from Data import DataManager
 from Market import MarketManager
 from Upload import UploadManager
@@ -47,7 +46,6 @@ class ControlManager:
         self.api_status = StatusManager()
         self.bug = BugManager()
         self.manger_email = ["budechao@ict.ac.cn", "biozy@ict.ac.cn"]
-        self.wx = WxManager()
         self.jy_log = LogManager()
 
     def check_user_name_exist(self, user_name, role, check_user_name):
@@ -488,7 +486,7 @@ class ControlManager:
                 bug_url = "http://gene.ac/dev/bug/info?bug_no=%s" % bug_no
                 title = u"%s, 您被标记为BUG %s" % (nick_name, link_desc)
                 remark = u"请查看%s,如果是你的BUG，请尽快修复。" % bug_url
-                self.wx.send_bug_link(bug_title, bug_url, wx_id, title, remark)
+                pass
 
     def _wx_send_bug_thread(self, bug_no, user_name, type, link_desc):
         t = Thread(target=self._wx_send_bug, args=(bug_no, user_name, type, link_desc))
@@ -563,7 +561,7 @@ class ControlManager:
         result, info = self.bug.new_bug_link(bug_no, link_user, 1, user_name)
         if result is True:
             # 发送微信消息
-            self._wx_send_bug_thread(bug_no, link_user, 1, u"疑似拥有者")
+            pass
         return result, info
 
     def _add_owner_link(self, bug_no, user_name, link_user, submitter):
@@ -575,7 +573,7 @@ class ControlManager:
         result, info = self.bug.new_bug_link(bug_no, link_user, 2, user_name)
         if result is True:
             # 发送微信消息
-            self._wx_send_bug_thread(bug_no, link_user, 2, u"拥有者")
+            pass
         return result, info
 
     def _add_fix_link(self, bug_no, user_name, link_user, submitter):

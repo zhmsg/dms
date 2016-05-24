@@ -9,10 +9,8 @@ from datetime import datetime
 from Tools.Mysql_db import DB
 from Class import table_manager, TIME_FORMAT
 from Check import check_sql_character, check_int, fill_zero, check_chinese_en, check_special_character
-from Tools.Wx import WxManager
 
 temp_dir = tempfile.gettempdir()
-wx = WxManager()
 
 __author__ = 'ZhouHeng'
 
