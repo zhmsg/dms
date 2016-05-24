@@ -1,151 +1,147 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>API帮助文档</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='t_css/bootstrap.min.css') }}"><!-- 新 Bootstrap 核心 CSS 文件 -->
-<link rel="stylesheet" href="{{ url_for('static', filename='t_css/main.css') }}"><!--自定义的页面样式 -->
-    <script type="text/javascript" src="{{ url_for('static', filename='t_js/jquery.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='t_js/API_HELP/list_api.js') }}"></script>
-</head>
+{% extends "base.html" %}
 
-<body>
-<div class="container font16">
-    <br />
-    <a class="btn btn-primary pull-right" href="{{ url_for('dms_view.select_portal') }}" title="">主菜单</a>
-<div class="apiMode api-help-mode">
-    <div style="margin-bottom: 10px"><b>【API文档 前端可调用】</b><br /></div>
-    {% for module_info in module_list["api"] %}
-        <a href="{{ url_prefix }}/?module_no={{ module_info["module_no"] }}">{{ module_info["module_name"] }}</a>
-    {% endfor %}
-</div>
-<div class="apiMode api-help-mode">
-    <div style="margin-bottom: 10px"><b>【基础服务文档 后台生信可调用】</b></div>
-    {% for module_info in module_list["service"] %}
-        <a href="{{ url_prefix }}/?module_no={{ module_info["module_no"] }}">{{ module_info["module_name"] }}</a>
-    {% endfor %}
-</div>
-<div class="apiMode api-help-mode">
-    <div style="margin-bottom: 10px"><b>【晶云子系统 前端后台可调用】</b></div>
-    {% for module_info in module_list["jy"] %}
-        <a href="{{ url_prefix }}/?module_no={{ module_info["module_no"] }}">{{ module_info["module_name"] }}</a>
-    {% endfor %}
-</div>
-{% if current_module and update_module %}
-    <form action="{{ url_prefix }}/module/?module_no={{ current_module["module_no"] }}" method="post">
+{% block title %}API帮助文档{% endblock %}
+
+{% block content %}
+    <div class="container font16">
+        <br />
+        <a class="btn btn-primary pull-right" href="{{ url_for('dms_view.select_portal') }}" title="">主菜单</a>
+    <div class="apiMode api-help-mode">
+        <div style="margin-bottom: 10px"><b>【API文档 前端可调用】</b><br /></div>
+        {% for module_info in module_list["api"] %}
+            <a href="{{ url_prefix }}/?module_no={{ module_info["module_no"] }}">{{ module_info["module_name"] }}</a>
+        {% endfor %}
+    </div>
+    <div class="apiMode api-help-mode">
+        <div style="margin-bottom: 10px"><b>【基础服务文档 后台生信可调用】</b></div>
+        {% for module_info in module_list["service"] %}
+            <a href="{{ url_prefix }}/?module_no={{ module_info["module_no"] }}">{{ module_info["module_name"] }}</a>
+        {% endfor %}
+    </div>
+    <div class="apiMode api-help-mode">
+        <div style="margin-bottom: 10px"><b>【晶云子系统 前端后台可调用】</b></div>
+        {% for module_info in module_list["jy"] %}
+            <a href="{{ url_prefix }}/?module_no={{ module_info["module_no"] }}">{{ module_info["module_name"] }}</a>
+        {% endfor %}
+    </div>
+    {% if current_module and update_module %}
+        <form action="{{ url_prefix }}/module/?module_no={{ current_module["module_no"] }}" method="post">
+            <div class="form-group apiContentLine">
+              <ul>
+                <li>
+                  <label for="">模块名称：</label>
+                  <input class="box-side width300" name="module_name" type="text" value="{{ current_module["module_name"] }}" required />
+                </li>
+                <li>
+                  <label for="">模块前缀：</label>
+                  <input class="box-side width300" name="module_prefix" type="text" value="{{ current_module["module_prefix"] }}" required />
+                </li>
+                <li>
+                  <label class="api-describe" for="">模块描述：</label>
+                  <textarea class="box-side" rows="3" name="module_desc" required>{{ current_module["module_desc"] }}</textarea>
+                </li>
+                <li>
+                  <label class="api-describe" for="">所属分类：</label>
+                  <select class="box-side" name="module_part" required>
+                      <option value="1" {% if current_module["module_part"] == 1 %} selected {% endif %}>API</option>
+                      <option value="2" {% if current_module["module_part"] == 2 %} selected {% endif %}>基础服务</option>
+                      <option value="3" {% if current_module["module_part"] == 3 %} selected {% endif %}>子系统</option>
+                  </select>
+                </li>
+              </ul>
+              <button type="submit" class="btn btn-success btn-down api-newBtn">更新模块</button>
+            </div>
+        </form>
+    {% elif current_module %}
+        <p>当前模块</p>
+        <p>模块编号：{{ current_module["module_no"] }}</p>
+        <p>模块名称：{{ current_module["module_name"] }}</p>
+        <p>模块URL前缀：{{ current_module["module_prefix"] }}</p>
+        <p>模块描述：{{ current_module["module_desc"] }}</p>
+        {% if new_power %}
+            <a href="{{ url_prefix }}/?module_no={{ current_module["module_no"] }}&update=true">更新模块信息</a> &nbsp;
+            <a href="{{ url_prefix }}/?module_no={{ current_module["module_no"] }}">删除模块</a> &nbsp;
+        {% endif %}
+    {% endif %}
+    {% if api_list and current_module%}
+        <table class="table table-bordered table-hover api-list-table">
+            <caption>API列表</caption>
+            <tr>
+                <th scope="col" width="32%">API标题</th>
+                <th scope="col" width="50%">访问URL</th>
+                <th scope="col" width="8%">请求方式</th>
+                <th class="text-center" scope="col" width="10%">操作</th>
+            </tr>
+            {% for item in api_list %}
+            <tr>
+                <td>{{ item["api_title"] }}</td>
+                <td>{{ current_module["module_prefix"].rstrip("/") }}/{{ item["api_path"].lstrip("/") }}</td>
+                <td>{{ item["api_method"] }}</td>
+                <td class="text-center"><a href="{{ url_prefix }}/info/?api_no={{ item["api_no"] }}">查看</a> | <a href="{{ url_prefix }}/test/?api_no={{ item["api_no"] }}">测试</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+
+    {% endif %}
+    {% if current_module %}
+        <a class="btn btn-primary pull-right" href="{{ url_prefix }}/new/?module_no={{ current_module["module_no"] }}" title="">添加API</a><br/><br/>
+        <div class="care">
+             <input id="care_url" value='{{ url_prefix }}/module/care/' style="display: none"/>
+            {% if my_care %}
+               <button class="btn btn-primary pull-right" onclick="change_care({{current_module["module_no"]}});" id="make_care">取消关注</button>
+            {% else %}
+                <button class="btn btn-primary pull-right" onclick="change_care({{current_module["module_no"]}});" id="make_care">关注</button>
+            {% endif %}
+            <p><b>已关注的人(如果您使用到该API模块，请关注，以便模块增加或删除API，能尽快通知您。)</b></p>
+            <div id="module_care_user">
+                {% if my_care %}
+                    <span id="mine_care">我</span>
+                {% endif %}
+                {% for item in care_info %}
+                    <span>{{ item["nick_name"] }}</span>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
+    {% if new_module and new_power%}
+    <form action="{{ url_prefix }}/module/" method="post">
         <div class="form-group apiContentLine">
-          <ul>
+          <ul style="margin-bottom: 1em">
             <li>
               <label for="">模块名称：</label>
-              <input class="box-side width300" name="module_name" type="text" value="{{ current_module["module_name"] }}" required />
+              <input class="box-side width300" name="module_name" type="text" required />
             </li>
             <li>
               <label for="">模块前缀：</label>
-              <input class="box-side width300" name="module_prefix" type="text" value="{{ current_module["module_prefix"] }}" required />
+              <input class="box-side width300" name="module_prefix" type="text" required />
             </li>
             <li>
               <label class="api-describe" for="">模块描述：</label>
-              <textarea class="box-side" rows="3" name="module_desc" required>{{ current_module["module_desc"] }}</textarea>
+              <textarea class="box-side" rows="3" name="module_desc" required></textarea>
             </li>
             <li>
               <label class="api-describe" for="">所属分类：</label>
               <select class="box-side" name="module_part" required>
-                  <option value="1" {% if current_module["module_part"] == 1 %} selected {% endif %}>API</option>
-                  <option value="2" {% if current_module["module_part"] == 2 %} selected {% endif %}>基础服务</option>
-                  <option value="3" {% if current_module["module_part"] == 3 %} selected {% endif %}>子系统</option>
+                  <option value="1">API</option>
+                  <option value="2">基础服务</option>
+                  <option value="3">子系统</option>
               </select>
             </li>
+          <li id="li_env">
+              <div name="div_add_env" style="margin-top: 1em">
+                  <input class="box-side width20" name="module_prefix" type="text" placeholder="调用环境名称" />
+                  <input class="box-side width300" name="module_prefix" type="text" placeholder="调用环境地址 例如http://ih.gene.ac" />
+                  <span class="glyphicon glyphicon-minus"></span>
+                  <span class="glyphicon glyphicon-plus"></span>
+              </div>
+            </li>
           </ul>
-          <button type="submit" class="btn btn-success btn-down api-newBtn">更新模块</button>
+          <button type="submit" class="btn btn-success btn-down api-newBtn">新建模块</button>
         </div>
     </form>
-{% elif current_module %}
-    <p>当前模块</p>
-    <p>模块编号：{{ current_module["module_no"] }}</p>
-    <p>模块名称：{{ current_module["module_name"] }}</p>
-    <p>模块URL前缀：{{ current_module["module_prefix"] }}</p>
-    <p>模块描述：{{ current_module["module_desc"] }}</p>
-    {% if new_power %}
-        <a href="{{ url_prefix }}/?module_no={{ current_module["module_no"] }}&update=true">更新模块信息</a> &nbsp;
-        <a href="{{ url_prefix }}/?module_no={{ current_module["module_no"] }}">删除模块</a> &nbsp;
+
     {% endif %}
-{% endif %}
-{% if api_list and current_module%}
-    <table class="table table-bordered table-hover api-list-table">
-        <caption>API列表</caption>
-        <tr>
-            <th scope="col" width="32%">API标题</th>
-            <th scope="col" width="50%">访问URL</th>
-            <th scope="col" width="8%">请求方式</th>
-            <th class="text-center" scope="col" width="10%">操作</th>
-        </tr>
-        {% for item in api_list %}
-        <tr>
-            <td>{{ item["api_title"] }}</td>
-            <td>{{ current_module["module_prefix"].rstrip("/") }}/{{ item["api_path"].lstrip("/") }}</td>
-            <td>{{ item["api_method"] }}</td>
-            <td class="text-center"><a href="{{ url_prefix }}/info/?api_no={{ item["api_no"] }}">查看</a> | <a href="{{ url_prefix }}/test/?api_no={{ item["api_no"] }}">测试</a></td>
-        </tr>
-        {% endfor %}
-    </table>
-
-{% endif %}
-{% if current_module %}
-    <a class="btn btn-primary pull-right" href="{{ url_prefix }}/new/?module_no={{ current_module["module_no"] }}" title="">添加API</a><br/><br/>
-    <div class="care">
-         <input id="care_url" value='{{ url_prefix }}/module/care/' style="display: none"/>
-        {% if my_care %}
-           <button class="btn btn-primary pull-right" onclick="change_care({{current_module["module_no"]}});" id="make_care">取消关注</button>
-        {% else %}
-            <button class="btn btn-primary pull-right" onclick="change_care({{current_module["module_no"]}});" id="make_care">关注</button>
-        {% endif %}
-        <p><b>已关注的人(如果您使用到该API模块，请关注，以便模块增加或删除API，能尽快通知您。)</b></p>
-        <div id="module_care_user">
-            {% if my_care %}
-                <span id="mine_care">我</span>
-            {% endif %}
-            {% for item in care_info %}
-                <span>{{ item["nick_name"] }}</span>
-            {% endfor %}
-        </div>
     </div>
-{% endif %}
-
-{% if new_module and new_power%}
-<form action="{{ url_prefix }}/module/" method="post">
-    <div class="form-group apiContentLine">
-      <ul>
-        <li>
-          <label for="">模块名称：</label>
-          <input class="box-side width300" name="module_name" type="text" required />
-        </li>
-        <li>
-          <label for="">模块前缀：</label>
-          <input class="box-side width300" name="module_prefix" type="text" required />
-        </li>
-        <li>
-          <label class="api-describe" for="">模块描述：</label>
-          <textarea class="box-side" rows="3" name="module_desc" required></textarea>
-        </li>
-        <li>
-          <label class="api-describe" for="">所属分类：</label>
-          <select class="box-side" name="module_part" required>
-              <option value="1">API</option>
-              <option value="2">基础服务</option>
-              <option value="3">子系统</option>
-          </select>
-        </li>
-      <li>
-          <div name="div_add_env">
-              <input class="box-side width20" name="module_prefix" type="text" placeholder="调用环境名称" required />
-              <input class="box-side width300" name="module_prefix" type="text" placeholder="调用环境地址 例如http://ih.gene.ac" required />
-          </div>
-        </li>
-      </ul>
-      <button type="submit" class="btn btn-success btn-down api-newBtn">新建模块</button>
-    </div>
-</form>
-{% endif %}
-</div>
-</body>
-</html>
+    <script type="text/javascript" src="{{ url_for('static', filename='t_js/API_HELP/list_api.js') }}"></script>
+{% endblock %}

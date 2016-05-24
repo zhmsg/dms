@@ -57,3 +57,10 @@ function remove_care(module_no){
         }
     });
 }
+
+$(function(){
+    var div_env = $("div[name='div_add_env']:eq(0)");
+    var new_div = div_env.clone(true);
+    new_div.find("input").val("");
+    $("#li_env").append(new_div);
+});
