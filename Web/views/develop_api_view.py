@@ -404,6 +404,6 @@ def test_api():
         if len(param_sp) > 1:
             url_param_info.append({"param_type": param_sp[0], "param_name": param_sp[1], "origin_param": "<%s>" % param})
         else:
-            url_param_info.append({"param_type": "string", "param_name": param_sp[0], "origin_param": param})
+            url_param_info.append({"param_type": "string", "param_name": param_sp[0], "origin_param": "<%s>" % param})
     return render_template("%s/Test_API.html" % html_dir, api_info=api_info, return_url=return_url, api_no=api_no,
                            status_url=status_url, url_param_info=url_param_info)

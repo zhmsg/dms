@@ -58,9 +58,21 @@ function remove_care(module_no){
     });
 }
 
-$(function(){
+function add_env(){
     var div_env = $("div[name='div_add_env']:eq(0)");
+    var all_div_env = $("div[name='div_add_env']");
+    div_env.find("span").remove();
+    div_env.append('<span class="symbol">-</span>');
     var new_div = div_env.clone(true);
     new_div.find("input").val("");
+    if(all_div_env.length < 4) {
+        new_div.append('<span class="symbol" onclick="add_env();">+</span>');
+    }
     $("#li_env").append(new_div);
-});
+    //var all_div_env = $("div[name='div_add_env']");
+    for(var i=0;i<all_div_env.length;i++){
+        all_div_env[i];
+    }
+
+}
+
