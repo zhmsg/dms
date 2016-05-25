@@ -71,8 +71,11 @@ def list_api():
         return render_template("%s/List_API.html" % html_dir, module_list=module_list, api_list=module_data["api_list"],
                                current_module=current_module, url_prefix=url_prefix, update_module=update_module,
                                new_power=new_power, my_care=my_care, care_info=module_data["care_info"])
+    result, test_env = control.get_test_env(current_user.role)
+    if result is False:
+        return test_env
     return render_template("%s/List_API.html" % html_dir, module_list=module_list, url_prefix=url_prefix,
-                           new_module=True, new_power=new_power)
+                           new_module=True, new_power=new_power, test_env=test_env)
 
 
 @develop_api_view.route("/module/", methods=["POST"])

@@ -58,6 +58,13 @@ function remove_care(module_no){
     });
 }
 
+function add_test_env(){
+    var env = $("#s_add_env option:selected");
+    var env_no = env.val();
+    var env_name = env.text();
+    var env_address = env.attr("title");
+}
+
 function add_env(){
     var div_env = $("div[name='div_add_env']:eq(0)");
     console.info(div_env);

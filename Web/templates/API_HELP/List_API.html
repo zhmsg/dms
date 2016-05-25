@@ -128,6 +128,15 @@
                   <option value="3">子系统</option>
               </select>
             </li>
+          <li>
+              <label class="api-describe" for="">调用环境：</label>
+              <select class="box-side" id="s_add_env">
+                  {% for item in test_env %}
+                      <option value="{{ item["env_no"] }}" title="{{ item["env_address"] }}">{{ item["env_name"] }}</option>
+                  {% endfor %}
+              </select>
+              <span class="symbol" onclick="add_test_env();">+</span>
+          </li>
           <li id="li_env" style="display: none">
               <div name="div_add_env" style="margin-top: 1em">
                   <input class="box-side width20" name="env_name" type="text" placeholder="调用环境名称" />

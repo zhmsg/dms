@@ -301,10 +301,12 @@ class HelpManager:
             select_sql = " UNION ".join(union_sql_list)
         else:
             return False, "Bad env_no_list"
-        print(select_sql)
         self.db.execute(select_sql)
         db_result = self.db.fetchall()
-        print(db_result)
+        env_info = []
+        for item in db_result:
+            env_info.append({"env_no": item[0], "env_name": item[1], "env_address": item[2]})
+        return True, env_info
 
     def get_module_list(self, module_no=None):
         select_sql = "SELECT module_no,module_name,module_prefix,module_desc,module_part,module_env FROM %s" % self.api_module
