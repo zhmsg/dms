@@ -213,6 +213,11 @@
                 "col_comment": "文档模块所属部分，1属于晶云平台API 2属于晶云平台基础服务系统 3 晶云系统支持子系统",
                 "col_name": "module_part",
                 "col_type": "tinyint(4)"
+            },
+            {
+                "col_comment": "API可调用的环境集合，用|分割的env_no",
+                "col_name": "module_env",
+                "col_type": "varchar(100)"
             }
         ],
         "table_comment": "",
