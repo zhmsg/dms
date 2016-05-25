@@ -387,6 +387,6 @@
             }
         ],
         "table_comment": "API模块可调用的环境信息",
-        "table_name": "module_env"
+        "table_name": "test_env"
     }
 ]

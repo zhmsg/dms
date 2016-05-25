@@ -8,7 +8,7 @@ from time import time
 sys.path.append("..")
 from datetime import datetime
 from Tools.Mysql_db import DB
-from Class import table_manager, TIME_FORMAT
+from Class import TIME_FORMAT
 from Check import check_chinese_en, check_http_method, check_path, check_sql_character, check_char_num_underline, check_char, check_int
 
 temp_dir = tempfile.gettempdir()
@@ -20,17 +20,18 @@ class HelpManager:
 
     def __init__(self):
         self.db = DB()
-        self.api_module = table_manager.api_module
-        self.api_info = table_manager.api_info
-        self.api_input = table_manager.api_input
-        self.api_output = table_manager.api_output
-        self.api_header = table_manager.api_header
-        self.predefine_header = table_manager.predefine_header
-        self.api_body = table_manager.api_body
-        self.predefine_param = table_manager.predefine_param
-        self.api_care = table_manager.api_care
-        self.module_care = table_manager.module_care
-        self.send_message = table_manager.send_message
+        self.api_module = "api_module"
+        self.api_info = "api_info"
+        self.api_input = "api_input"
+        self.api_output = "api_output"
+        self.api_header = "api_header"
+        self.predefine_header = "predefine_header"
+        self.api_body = "api_body"
+        self.predefine_param = "predefine_param"
+        self.api_care = "api_care"
+        self.module_care = "module_care"
+        self.send_message = "send_message"
+        self.test_env = "test_env"
         self.api_status_desc = [u"新建", u"修改中", u"已完成", u"待废弃", u"已废弃", u"已删除"]
         self.user = "sys_user"
 
@@ -64,7 +65,7 @@ class HelpManager:
         return True, "success"
 
     def del_api_module(self, module_no):
-        delete_sql = "DELETE FROM %s WHERE module_no=%s;" % module_no
+        delete_sql = "DELETE FROM %s WHERE module_no=%s;" % (self.api_module, module_no)
         self.db.execute(delete_sql)
         return True, "success"
 
@@ -287,8 +288,26 @@ class HelpManager:
         self.db.execute(insert_sql)
         return True, "success"
 
+    def get_test_env(self, env_no_list=None):
+        if env_no_list is None:
+            select_sql = "SELECT env_no,env_name,env_address FROM %s;" % self.test_env
+        elif type(env_no_list) == list and len(env_no_list) > 1 and len(env_no_list) <= 5:
+            union_sql_list = []
+            for env_no in env_no_list:
+                if type(env_no) != int:
+                    return False, "Bad env_no_list"
+                part_select_sql = "SELECT env_no,env_name,env_address FROM %s WHERE env_no=%s" % (self.test_env, env_no)
+                union_sql_list.append(part_select_sql)
+            select_sql = " UNION ".join(union_sql_list)
+        else:
+            return False, "Bad env_no_list"
+        print(select_sql)
+        self.db.execute(select_sql)
+        db_result = self.db.fetchall()
+        print(db_result)
+
     def get_module_list(self, module_no=None):
-        select_sql = "SELECT module_no,module_name,module_prefix,module_desc,module_part FROM %s" % self.api_module
+        select_sql = "SELECT module_no,module_name,module_prefix,module_desc,module_part,module_env FROM %s" % self.api_module
         if module_no is not None and type(module_no) == int:
             select_sql += " WHERE module_no=%s" % module_no
         select_sql += ";"
@@ -296,7 +315,7 @@ class HelpManager:
         module_info = {"api": [], "service": [], "jy": []}
         for item in self.db.fetchall():
             info = {"module_no": item[0], "module_name": item[1], "module_prefix": item[2], "module_desc": item[3],
-                    "module_part": item[4]}
+                    "module_part": item[4], "module_env": item[5]}
             if item[4] == 1:
                 module_info["api"].append(info)
             elif item[4] == 2:
@@ -491,3 +510,7 @@ class HelpManager:
             self.db.execute(delete_sql)
         return True, "success"
 
+
+if __name__ == "__main__":
+    api_help = HelpManager()
+    api_help.get_test_env([2, 3])
