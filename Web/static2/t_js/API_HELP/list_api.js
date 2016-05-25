@@ -60,19 +60,72 @@ function remove_care(module_no){
 
 function add_env(){
     var div_env = $("div[name='div_add_env']:eq(0)");
-    var all_div_env = $("div[name='div_add_env']");
+    console.info(div_env);
     div_env.find("span").remove();
-    div_env.append('<span class="symbol">-</span>');
     var new_div = div_env.clone(true);
     new_div.find("input").val("");
-    if(all_div_env.length < 4) {
-        new_div.append('<span class="symbol" onclick="add_env();">+</span>');
-    }
+
     $("#li_env").append(new_div);
-    //var all_div_env = $("div[name='div_add_env']");
-    for(var i=0;i<all_div_env.length;i++){
-        all_div_env[i];
+
+    var all_div_env = $("div[name='div_add_env']");
+    var div_len = all_div_env.length;
+    for(var i=0;i<div_len;i++){
+        var one_div = all_div_env[i];
+        var div_nodes = one_div.childNodes;
+        var node_len = div_nodes.length;
+        for(var j= node_len - 1;j>=0;j--){
+            var one_node = div_nodes[j];
+            if(one_node.nodeName == "SPAN"){
+                one_node.remove();
+            }
+        }
+        var new_span = $('<span class="symbol" onclick="del_env(this);">-</span>');
+        new_span.appendTo(one_div);
+        if(i == div_len - 1 && i < 4){
+            var new_plus_span = $('<span class="symbol" onclick="add_env();">+</span>');
+            new_plus_span.appendTo(one_div);
+        }
     }
 
+}
+
+function del_env(el)
+{
+    el.parentNode.remove();
+    var all_div_env = $("div[name='div_add_env']");
+    var div_len = all_div_env.length;
+    if(div_len == 1){
+        var one_div = all_div_env[0];
+        var div_nodes = one_div.childNodes;
+        var node_len = div_nodes.length;
+        for(var j=node_len - 1;j>=0;j--){
+            var one_node = div_nodes[j];
+            if(one_node.nodeName == "SPAN"){
+                one_node.remove();
+            }
+        }
+        var new_plus_span = $('<span class="symbol" onclick="add_env();">+</span>');
+        new_plus_span.appendTo(one_div);
+    }
+    else
+    {
+        for(var i=0;i<div_len;i++){
+            var one_div = all_div_env[i];
+            var div_nodes = one_div.childNodes;
+            var node_len = div_nodes.length;
+            for(var j=node_len - 1;j>=0;j--){
+                var one_node = div_nodes[j];
+                if(one_node.nodeName == "SPAN"){
+                    one_node.remove();
+                }
+            }
+            var new_span = $('<span class="symbol" onclick="del_env(this);">-</span>');
+            new_span.appendTo(one_div);
+            if(i == div_len - 1 && i < 4){
+                var new_plus_span = $('<span class="symbol" onclick="add_env();">+</span>');
+                new_plus_span.appendTo(one_div);
+            }
+        }
+    }
 }
 
