@@ -77,25 +77,15 @@ def list_api():
 
 @develop_api_view.route("/module/", methods=["POST"])
 @login_required
-def new_api_module_page():
-    module_name = request.form["module_name"]
-    module_prefix = request.form["module_prefix"]
-    module_desc = request.form["module_desc"]
-    module_part = int(request.form["module_part"])
-    print(module_part)
-    if "Referer" in request.headers:
-        redirect_url = request.headers["Referer"]
-    else:
-        redirect_url = url_prefix
-    if "module_no" in request.args:
-        module_no = int(request.args["module_no"])
-        result, message = control.update_api_module(current_user.role, module_no, module_name, module_prefix, module_desc, module_part)
-        redirect_url = "%s?module_no=%s" % (url_prefix, module_no)
-    else:
-        result, message = control.new_api_module(current_user.role, module_name, module_prefix, module_desc, module_part)
-    if result is False:
-        return message
-    return redirect(redirect_url)
+def new_api_module():
+    request_data = request.json
+    module_name = request_data["module_name"]
+    module_prefix = request_data["module_prefix"]
+    module_desc = request_data["module_desc"]
+    module_part = request_data["module_part"]
+    module_env = request_data["module_env"]
+    result, message = control.new_api_module(current_user.role, module_name, module_prefix, module_desc, module_part)
+    return jsonify({"status": result, "data": message})
 
 
 @develop_api_view.route("/module/care/", methods=["POST", "DELETE"])

@@ -129,3 +129,37 @@ function del_env(el)
     }
 }
 
+function new_module_success(data){
+    location.reload();
+}
+
+$(function(){
+    $("#btn_new_module").click(function(){
+        var body_param = new Object();
+        body_param["module_name"] = $("#module_name").val();
+        body_param["module_prefix"] = $("#module_prefix").val();
+        body_param["module_desc"] = $("#module_desc").val();
+        body_param["module_part"] = parseInt($("#module_part").val());
+        body_param["module_env"] = new Array();
+        var all_div_env = $("div[name='div_add_env']");
+        var div_len = all_div_env.length;
+        for(var i=0;i<div_len;i++) {
+            body_param["module_env"][i] = new Object();
+            var one_div = all_div_env[i];
+            var div_nodes = one_div.childNodes;
+            var node_len = div_nodes.length;
+            for (var j = node_len - 1; j >= 0; j--) {
+                var one_node = div_nodes[j];
+                if(one_node.name == "env_name"){
+                    body_param["module_env"][i]["env_name"] = one_node.value;
+                }
+                else if(one_node.name == "env_address"){
+                    body_param["module_env"][i]["env_address"] = one_node.value;
+                }
+            }
+        }
+        var request_url = $("#new_module_url").val();
+        my_request(request_url, "POST", body_param, new_module_success);
+        console.info(body_param);
+    });
+});

@@ -360,5 +360,28 @@
         ],
         "table_comment": "",
         "table_name": "send_message"
+    },
+    {
+        "table_cols": [
+            {
+                "pri_key": true,
+                "auto_increment": true,
+                "col_comment": "系统编号",
+                "col_name": "env_no",
+                "col_type": "int(11)"
+            },
+            {
+                "col_comment": "调用环境名称",
+                "col_name": "env_name",
+                "col_type": "varchar(20)"
+            },
+            {
+                "col_comment": "调用环境地址",
+                "col_name": "env_address",
+                "col_type": "varchar(100)"
+            }
+        ],
+        "table_comment": "API模块可调用的环境信息",
+        "table_name": "module_env"
     }
 ]

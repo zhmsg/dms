@@ -105,30 +105,30 @@
     {% endif %}
 
     {% if new_module and new_power%}
-    <form action="{{ url_prefix }}/module/" method="post">
+        <input value="{{ url_prefix }}/module/" id="new_module_url" style="display: none"/>
         <div class="form-group apiContentLine">
           <ul style="margin-bottom: 1em">
             <li>
               <label for="">模块名称：</label>
-              <input class="box-side width300" name="module_name" type="text" required />
+              <input class="box-side width300" id="module_name" type="text" required />
             </li>
             <li>
               <label for="">模块前缀：</label>
-              <input class="box-side width300" name="module_prefix" type="text" required />
+              <input class="box-side width300" id="module_prefix" type="text" required />
             </li>
             <li>
               <label class="api-describe" for="">模块描述：</label>
-              <textarea class="box-side" rows="3" name="module_desc" required></textarea>
+              <textarea class="box-side" rows="3" id="module_desc" required></textarea>
             </li>
             <li>
               <label class="api-describe" for="">所属分类：</label>
-              <select class="box-side" name="module_part" required>
+              <select class="box-side" id="module_part" required>
                   <option value="1">API</option>
                   <option value="2">基础服务</option>
                   <option value="3">子系统</option>
               </select>
             </li>
-          <li id="li_env">
+          <li id="li_env" style="display: none">
               <div name="div_add_env" style="margin-top: 1em">
                   <input class="box-side width20" name="env_name" type="text" placeholder="调用环境名称" />
                   <input class="box-side width300" name="env_address" type="text" placeholder="调用环境地址 例如http://ih.gene.ac" />
@@ -136,11 +136,12 @@
               </div>
             </li>
           </ul>
-          <button type="submit" class="btn btn-success btn-down api-newBtn">新建模块</button>
+          <button id="btn_new_module" class="btn btn-success btn-down api-newBtn">新建模块</button>
         </div>
-    </form>
+    </input>
 
     {% endif %}
     </div>
+    <script type="text/javascript" src="{{ url_for('static', filename='t_js/Common/my_requests.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='t_js/API_HELP/list_api.js') }}"></script>
 {% endblock %}
