@@ -48,6 +48,20 @@
                       <option value="3" {% if current_module["module_part"] == 3 %} selected {% endif %}>子系统</option>
                   </select>
                 </li>
+              <li>
+                  <label class="api-describe" for="">调用环境：</label>
+                  <select class="box-side" id="s_add_env">
+                      {% for item in test_env %}
+                          <option value="{{ item["env_no"] }}" title="{{ item["env_address"] }}">{{ item["env_name"] }}</option>
+                      {% endfor %}
+                  </select>
+                  <span class="symbol" onclick="add_test_env();">+</span>
+                  <div class="tag" id="div_add_env">
+                      {% for env in module_env_info %}
+                          <span about="{{ env["env_name"] }}" value="{{ env["env_no"] }}" title="{{ env["env_address"] }}" >{{ env["env_name"] }}<b>X</b></span>
+                      {% endfor %}
+                  </div>
+              </li>
               </ul>
               <button type="submit" class="btn btn-success btn-down api-newBtn">更新模块</button>
             </div>

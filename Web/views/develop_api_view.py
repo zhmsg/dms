@@ -45,6 +45,9 @@ def list_api():
         new_power = True
     else:
         new_power = False
+    result, test_env = control.get_test_env(current_user.role)
+    if result is False:
+        return test_env
     if "module_no" in request.args:
         module_no = int(request.args["module_no"])
         result, module_data = control.get_api_list(module_no, current_user.role)
@@ -58,7 +61,15 @@ def list_api():
                     break
         if current_module is None:
             return "Error"
+        module_env_info = []
         if "update" in request.args and request.args["update"] == "true" and new_power is True:
+            module_env = current_module["module_env"]
+            if module_env is not None:
+                module_env_s = module_env.split("|")
+                for env in test_env:
+                    if "%s" % env["env_no"] in module_env_s:
+                        module_env_info.append(env)
+                        test_env.remove(env)
             update_module = True
         else:
             update_module = False
@@ -70,10 +81,8 @@ def list_api():
                 break
         return render_template("%s/List_API.html" % html_dir, module_list=module_list, api_list=module_data["api_list"],
                                current_module=current_module, url_prefix=url_prefix, update_module=update_module,
-                               new_power=new_power, my_care=my_care, care_info=module_data["care_info"])
-    result, test_env = control.get_test_env(current_user.role)
-    if result is False:
-        return test_env
+                               new_power=new_power, my_care=my_care, care_info=module_data["care_info"],
+                               test_env=test_env, module_env_info=module_env_info)
     return render_template("%s/List_API.html" % html_dir, module_list=module_list, url_prefix=url_prefix,
                            new_module=True, new_power=new_power, test_env=test_env)
 
@@ -87,7 +96,7 @@ def new_api_module():
     module_desc = request_data["module_desc"]
     module_part = request_data["module_part"]
     module_env = request_data["module_env"]
-    result, message = control.new_api_module(current_user.role, module_name, module_prefix, module_desc, module_part)
+    result, message = control.new_api_module(current_user.role, module_name, module_prefix, module_desc, module_part, module_env)
     return jsonify({"status": result, "data": message})
 
 

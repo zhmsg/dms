@@ -154,7 +154,12 @@ function del_env(el)
 }
 
 function new_module_success(data){
-    location.reload();
+    if(data.status == true) {
+        location.reload();
+    }
+    else{
+        alert(data.data);
+    }
 }
 
 $(function(){
@@ -168,10 +173,11 @@ $(function(){
         var all_span_env = $("#div_add_env").find("span");
         var span_len = all_span_env.length;
         for(var i=0;i<span_len;i++) {
-            body_param["module_env"][i] = $(all_span_env[i]).attr("value");
+            body_param["module_env"][i] = parseInt($(all_span_env[i]).attr("value"));
         }
         var request_url = $("#new_module_url").val();
         my_request(request_url, "POST", body_param, new_module_success);
         console.info(body_param);
     });
+    $("#div_add_env").find("span").click(remove_test_env);
 });

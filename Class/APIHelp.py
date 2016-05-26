@@ -35,16 +35,27 @@ class HelpManager:
         self.api_status_desc = [u"新建", u"修改中", u"已完成", u"待废弃", u"已废弃", u"已删除"]
         self.user = "sys_user"
 
-    def new_api_module(self, module_name, module_prefix, module_desc, module_part):
-        if check_chinese_en(module_name, 0, 35) is False:
+    def new_api_module(self, module_name, module_prefix, module_desc, module_part, module_env):
+        if check_chinese_en(module_name, 1, 35) is False:
             return False, "Bad module_name."
-        if check_path(module_prefix, 0, 35) is False:
+        if check_path(module_prefix, 1, 35) is False:
             return False, "Bad module_prefix"
         if check_int(module_part, max_v=9999) is False:
             return False, "Bad module_part"
+        if type(module_env) != list:
+            return False, "Bad module_env"
+        if len(module_env) not in range(1, 6):
+            print(module_env)
+            return False, "Bad module_env."
         module_desc = check_sql_character(module_desc)[:240]
-        insert_sql = "INSERT INTO %s (module_name,module_prefix,module_desc,module_part) VALUES ('%s','%s','%s',%s);" \
-                     % (self.api_module, module_name, module_prefix, module_desc, module_part)
+        module_env_s = ""
+        for env_no in module_env:
+            if type(env_no) != int:
+                return False, "Bad env_no"
+            module_env_s += "%s|" % env_no
+        insert_sql = "INSERT INTO %s (module_name,module_prefix,module_desc,module_part,module_env) " \
+                     "VALUES ('%s','%s','%s',%s,'%s');" \
+                     % (self.api_module, module_name, module_prefix, module_desc, module_part, module_env_s[:-1])
         result = self.db.execute(insert_sql)
         if result != 1:
             return False, "sql execute result is %s " % result

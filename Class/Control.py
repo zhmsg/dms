@@ -234,10 +234,10 @@ class ControlManager:
             return False, u"您没有权限"
         return self.api_help.get_test_env()
 
-    def new_api_module(self, role, module_name, module_prefix, module_desc, module_part):
+    def new_api_module(self, role, module_name, module_prefix, module_desc, module_part, module_env):
         if role & self.role_value["api_module_new"] <= 0:
             return False, u"您没有权限"
-        return self.api_help.new_api_module(module_name, module_prefix, module_desc, module_part)
+        return self.api_help.new_api_module(module_name, module_prefix, module_desc, module_part, module_env)
 
     def update_api_module(self, role, module_no, module_name, module_prefix, module_desc, module_part):
         if role & self.role_value["api_module_new"] <= 0:
