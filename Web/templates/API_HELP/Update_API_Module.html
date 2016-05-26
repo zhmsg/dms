@@ -2,6 +2,7 @@
 
 {% block content %}
     {{  super() }}
+    <input value="{{ url_prefix }}/module/{{ current_module["module_no"] }}/" id="module_url" style="display: none"/>
     <div class="form-group apiContentLine">
       <ul>
         <li>
@@ -39,6 +40,6 @@
           </div>
       </li>
       </ul>
-      <button class="btn btn-success btn-down api-newBtn">更新模块</button>
+      <button id="btn_op_module" class="btn btn-success btn-down api-newBtn">更新模块</button>
     </div>
 {% endblock %}

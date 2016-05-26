@@ -23,6 +23,11 @@ develop_api_view = Blueprint('develop_api_view', __name__)
 
 print("start success")
 
+@develop_api_view.before_request
+@login_required
+def before_request():
+    pass
+
 
 @develop_api_view.app_errorhandler(500)
 def handle_500(e):
@@ -36,7 +41,6 @@ def ping():
 
 
 @develop_api_view.route("/")
-@login_required
 def list_api():
     result, module_list = control.get_module_list(current_user.role)
     if result is False:
@@ -66,7 +70,9 @@ def list_api():
             module_env = current_module["module_env"]
             if module_env is not None:
                 module_env_s = module_env.split("|")
-                for env in test_env:
+                env_len = len(test_env)
+                for i in range(env_len-1, -1, -1):
+                    env = test_env[i]
                     if "%s" % env["env_no"] in module_env_s:
                         module_env_info.append(env)
                         test_env.remove(env)
@@ -87,7 +93,6 @@ def list_api():
 
 
 @develop_api_view.route("/module/", methods=["POST"])
-@login_required
 def new_api_module():
     request_data = request.json
     module_name = request_data["module_name"]
@@ -99,8 +104,19 @@ def new_api_module():
     return jsonify({"status": result, "data": message})
 
 
+@develop_api_view.route("/module/<int:module_no>/", methods=["POST"])
+def update_api_module(module_no):
+    request_data = request.json
+    module_name = request_data["module_name"]
+    module_prefix = request_data["module_prefix"]
+    module_desc = request_data["module_desc"]
+    module_part = request_data["module_part"]
+    module_env = request_data["module_env"]
+    result, message = control.update_api_module(current_user.role, module_no, module_name, module_prefix, module_desc, module_part, module_env)
+    return jsonify({"status": result, "data": message})
+
+
 @develop_api_view.route("/module/care/", methods=["POST", "DELETE"])
-@login_required
 def add_module_care():
     request_form = request.form
     module_no = int(request_form["module_no"])
@@ -112,7 +128,6 @@ def add_module_care():
 
 
 @develop_api_view.route("/info/", methods=["GET"])
-@login_required
 def show_api():
     if "api_no" not in request.args:
         return "Need api_no"
@@ -140,7 +155,6 @@ def show_api():
 
 
 @develop_api_view.route("/new/", methods=["GET"])
-@login_required
 def new_api_page():
     result, module_list = control.get_module_list(current_user.role)
     if result is False:
@@ -153,7 +167,6 @@ def new_api_page():
 
 
 @develop_api_view.route("/new/", methods=["POST"])
-@login_required
 def new_api_info():
     request_form = request.form
     api_module = request_form["api_module"]
@@ -171,7 +184,6 @@ def new_api_info():
 
 
 @develop_api_view.route("/update/", methods=["GET"])
-@login_required
 def update_api_info_page():
     if "api_no" not in request.args:
         return "Need api_no"
@@ -191,7 +203,6 @@ def update_api_info_page():
 
 
 @develop_api_view.route("/update/", methods=["POST"])
-@login_required
 def update_api_info():
     request_form = request.form
     api_module = request_form["api_module"]
@@ -209,7 +220,6 @@ def update_api_info():
 
 
 @develop_api_view.route("/update/info/", methods=["GET"])
-@login_required
 def update_api_other_info():
     if "api_no" not in request.args:
         return "Need api_no"
@@ -255,7 +265,6 @@ def set_api_modify():
 
 
 @develop_api_view.route("/add/header/", methods=["POST"])
-@login_required
 def add_header_param():
     request_form = request.form
     param = request_form["param"]
@@ -267,7 +276,6 @@ def add_header_param():
 
 
 @develop_api_view.route("/add/body/", methods=["POST"])
-@login_required
 def add_body_param():
     request_form = request.form
     param = request_form["param"]
@@ -282,7 +290,6 @@ def add_body_param():
 
 
 @develop_api_view.route("/add/input/", methods=["POST"])
-@login_required
 def add_input_example():
     request_form = request.form
     api_no = request_form["api_no"]
@@ -308,7 +315,6 @@ def add_output_example():
 
 
 @develop_api_view.route("/care/", methods=["POST", "DELETE"])
-@login_required
 def add_care():
     request_form = request.form
     api_no = request_form["api_no"]
@@ -320,7 +326,6 @@ def add_care():
 
 
 @develop_api_view.route("/delete/<api_no>/", methods=["GET"])
-@login_required
 def delete_api(api_no):
     result, data = control.delete_api(api_no, current_user.account)
     if result is False:
@@ -339,7 +344,6 @@ def delete_header():
 
 
 @develop_api_view.route("/delete/body/", methods=["DELETE"])
-@login_required
 def delete_body():
     request_data = request.json
     if "api_no" in request_data and "param" in request_data:
@@ -349,21 +353,18 @@ def delete_body():
 
 
 @develop_api_view.route("/delete/input/<input_no>/", methods=["DELETE"])
-@login_required
 def delete_input(input_no):
     result, data = control.delete_input(input_no, current_user.role)
     return json.dumps({"status": result, "data": data})
 
 
 @develop_api_view.route("/delete/output/<output_no>/", methods=["DELETE"])
-@login_required
 def delete_output(output_no):
     result, data = control.delete_ouput(output_no, current_user.role)
     return json.dumps({"status": result, "data": data})
 
 
 @develop_api_view.route("/update/header/", methods=["PUT"])
-@login_required
 def update_api_predefine_header():
     if "Referer" not in request.headers:
         return jsonify({"status": False, "data": "Bad Request"})
@@ -382,7 +383,6 @@ def update_api_predefine_header():
 
 
 @develop_api_view.route("/test/", methods=["GET"])
-@login_required
 def test_api():
     if "api_no" not in request.args:
         return "Need api_no"
