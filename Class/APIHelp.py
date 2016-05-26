@@ -361,7 +361,7 @@ class HelpManager:
     def get_api_basic_info(self, api_no):
         # get basic info
         basic_info_col = ("module_no", "api_no", "api_title", "api_path", "api_method", "api_desc", "add_time",
-                          "update_time", "module_name", "module_prefix", "module_desc", "status")
+                          "update_time", "module_name", "module_prefix", "module_desc", "module_env", "status")
         select_sql = "SELECT m.%s FROM %s AS i, api_module AS m WHERE i.module_no=m.module_no AND api_no='%s';" \
                      % (",".join(basic_info_col), self.api_info, api_no)
         result = self.db.execute(select_sql)

@@ -47,11 +47,11 @@ def list_api():
         return module_list
     if current_user.role & control.role_value["api_module_new"] == control.role_value["api_module_new"]:
         new_power = True
-        result, test_env = control.get_test_env(current_user.role)
-        if result is False:
-            return test_env
     else:
         new_power = False
+    result, test_env = control.get_test_env(current_user.role)
+    if result is False:
+        return test_env
     if "module_no" in request.args:
         module_no = int(request.args["module_no"])
         result, module_data = control.get_api_list(module_no, current_user.role)
@@ -390,6 +390,13 @@ def test_api():
     if len(api_no) != 32:
         return "Bad api_no"
     result, api_info = control.get_api_info(api_no, current_user.role)
+    module_test_env = []
+    if api_info["basic_info"]["module_env"] is not None:
+        module_env_s = api_info["basic_info"]["module_env"].split("|")
+        env_no_list = []
+        for env_no_s in module_env_s:
+            env_no_list.append(int(env_no_s))
+        result, module_test_env = control.get_test_env(current_user.role, env_no_list)
     if result is False:
         return api_info
     if "Referer" in request.headers:
@@ -407,4 +414,4 @@ def test_api():
         else:
             url_param_info.append({"param_type": "string", "param_name": param_sp[0], "origin_param": "<%s>" % param})
     return render_template("%s/Test_API.html" % html_dir, api_info=api_info, return_url=return_url, api_no=api_no,
-                           status_url=status_url, url_param_info=url_param_info)
+                           status_url=status_url, url_param_info=url_param_info, module_test_env=module_test_env)
