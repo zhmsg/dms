@@ -63,6 +63,23 @@ function add_test_env(){
     var env_no = env.val();
     var env_name = env.text();
     var env_address = env.attr("title");
+    var new_span = $("<span></span>");
+    new_span.attr("title", env_address);
+    new_span.attr("value", env_no);
+    new_span.attr("about", env_name);
+    new_span.append(env_name);
+    new_span.append("<b>X</b>");
+    new_span.click(remove_test_env);
+    $("#div_add_env").append(new_span);
+    env.remove();
+}
+
+function remove_test_env(){
+    var env_address = this.title;
+    var env_name = $(this).attr("about");
+    var env_no = $(this).attr("value");
+    this.remove();
+    add_option("s_add_env", env_no, env_name, env_address);
 }
 
 function add_env(){
@@ -148,22 +165,10 @@ $(function(){
         body_param["module_desc"] = $("#module_desc").val();
         body_param["module_part"] = parseInt($("#module_part").val());
         body_param["module_env"] = new Array();
-        var all_div_env = $("div[name='div_add_env']");
-        var div_len = all_div_env.length;
-        for(var i=0;i<div_len;i++) {
-            body_param["module_env"][i] = new Object();
-            var one_div = all_div_env[i];
-            var div_nodes = one_div.childNodes;
-            var node_len = div_nodes.length;
-            for (var j = node_len - 1; j >= 0; j--) {
-                var one_node = div_nodes[j];
-                if(one_node.name == "env_name"){
-                    body_param["module_env"][i]["env_name"] = one_node.value;
-                }
-                else if(one_node.name == "env_address"){
-                    body_param["module_env"][i]["env_address"] = one_node.value;
-                }
-            }
+        var all_span_env = $("#div_add_env").find("span");
+        var span_len = all_span_env.length;
+        for(var i=0;i<span_len;i++) {
+            body_param["module_env"][i] = $(all_span_env[i]).attr("value");
         }
         var request_url = $("#new_module_url").val();
         my_request(request_url, "POST", body_param, new_module_success);

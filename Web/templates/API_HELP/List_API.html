@@ -136,9 +136,7 @@
                   {% endfor %}
               </select>
               <span class="symbol" onclick="add_test_env();">+</span>
-              <div class="tag">
-                  <span>521212<b>X</b></span>
-                  <span>521212<b>X</b></span>
+              <div class="tag" id="div_add_env">
               </div>
           </li>
           <li id="li_env" style="display: none">
@@ -156,5 +154,6 @@
     {% endif %}
     </div>
     <script type="text/javascript" src="{{ url_for('static', filename='t_js/Common/my_requests.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='t_js/Common/add_node.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='t_js/API_HELP/list_api.js') }}"></script>
 {% endblock %}
