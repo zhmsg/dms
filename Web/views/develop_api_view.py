@@ -43,11 +43,11 @@ def list_api():
         return module_list
     if current_user.role & control.role_value["api_module_new"] == control.role_value["api_module_new"]:
         new_power = True
+        result, test_env = control.get_test_env(current_user.role)
+        if result is False:
+            return test_env
     else:
         new_power = False
-    result, test_env = control.get_test_env(current_user.role)
-    if result is False:
-        return test_env
     if "module_no" in request.args:
         module_no = int(request.args["module_no"])
         result, module_data = control.get_api_list(module_no, current_user.role)
@@ -70,21 +70,20 @@ def list_api():
                     if "%s" % env["env_no"] in module_env_s:
                         module_env_info.append(env)
                         test_env.remove(env)
-            update_module = True
-        else:
-            update_module = False
+            return render_template("%s/Update_API_Module.html" % html_dir, module_list=module_list, api_list=module_data["api_list"],
+                                   current_module=current_module, url_prefix=url_prefix, test_env=test_env,
+                                   module_env_info=module_env_info)
         my_care = None
         for item in module_data["care_info"]:
             if item["user_name"] == current_user.account:
                 my_care = item
                 module_data["care_info"].remove(item)
                 break
-        return render_template("%s/List_API.html" % html_dir, module_list=module_list, api_list=module_data["api_list"],
-                               current_module=current_module, url_prefix=url_prefix, update_module=update_module,
-                               new_power=new_power, my_care=my_care, care_info=module_data["care_info"],
-                               test_env=test_env, module_env_info=module_env_info)
-    return render_template("%s/List_API.html" % html_dir, module_list=module_list, url_prefix=url_prefix,
-                           new_module=True, new_power=new_power, test_env=test_env)
+        return render_template("%s/List_Module_API.html" % html_dir, module_list=module_list, api_list=module_data["api_list"],
+                               current_module=current_module, url_prefix=url_prefix, new_power=new_power,
+                               my_care=my_care, care_info=module_data["care_info"])
+    return render_template("%s/New_API_Module.html" % html_dir, module_list=module_list, url_prefix=url_prefix,
+                           new_power=new_power, test_env=test_env)
 
 
 @develop_api_view.route("/module/", methods=["POST"])

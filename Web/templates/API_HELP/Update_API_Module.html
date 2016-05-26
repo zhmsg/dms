@@ -1,0 +1,44 @@
+{% extends "API_HELP/List_API.html" %}
+
+{% block content %}
+    {{  super() }}
+    <div class="form-group apiContentLine">
+      <ul>
+        <li>
+          <label for="">模块名称：</label>
+          <input class="box-side width300" id="module_name" type="text" value="{{ current_module["module_name"] }}" />
+        </li>
+        <li>
+          <label for="">模块前缀：</label>
+          <input class="box-side width300" id="module_prefix" type="text" value="{{ current_module["module_prefix"] }}" />
+        </li>
+        <li>
+          <label class="api-describe" for="">模块描述：</label>
+          <textarea class="box-side" rows="3" id="module_desc" required>{{ current_module["module_desc"] }}</textarea>
+        </li>
+        <li>
+          <label class="api-describe" for="">所属分类：</label>
+          <select class="box-side" id="module_part" >
+              <option value="1" {% if current_module["module_part"] == 1 %} selected {% endif %}>API</option>
+              <option value="2" {% if current_module["module_part"] == 2 %} selected {% endif %}>基础服务</option>
+              <option value="3" {% if current_module["module_part"] == 3 %} selected {% endif %}>子系统</option>
+          </select>
+        </li>
+      <li>
+          <label class="api-describe" for="">调用环境：</label>
+          <select class="box-side" id="s_add_env">
+              {% for item in test_env %}
+                  <option value="{{ item["env_no"] }}" title="{{ item["env_address"] }}">{{ item["env_name"] }}</option>
+              {% endfor %}
+          </select>
+          <span class="symbol" onclick="add_test_env();">+</span>
+          <div class="tag" id="div_add_env">
+              {% for env in module_env_info %}
+                  <span about="{{ env["env_name"] }}" value="{{ env["env_no"] }}" title="{{ env["env_address"] }}" >{{ env["env_name"] }}<b>X</b></span>
+              {% endfor %}
+          </div>
+      </li>
+      </ul>
+      <button class="btn btn-success btn-down api-newBtn">更新模块</button>
+    </div>
+{% endblock %}
