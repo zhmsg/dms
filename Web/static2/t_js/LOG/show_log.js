@@ -114,7 +114,7 @@ $(function(){
         update_search_url(0);
     });
     $("td[name='run_begin']").click(function(){
-        var click_text = this.innerText;
+        var click_text = format_time(this.innerText);
         var start_text = $("#start_time").val();
         var end_text = $("#end_time").val();
         var click_time = calc_time(click_text);
