@@ -32,12 +32,12 @@ def ping():
 @jy_log_view.route("/", methods=["GET"])
 @login_required
 def show_log_list():
-    if "start_time" in request.args and request.args["start_time"] != "":
-        start_time = request.args["start_time"]
+    if "start_time" in request.args and request.args["start_time"] != "0":
+        start_time = int(request.args["start_time"])
     else:
         start_time = None
-    if "end_time" in request.args and request.args["end_time"] != "":
-        end_time = request.args["end_time"]
+    if "end_time" in request.args and request.args["end_time"] != "0":
+        end_time = int(request.args["end_time"])
     else:
         end_time = None
     if "log_level" in request.args and request.args["log_level"] != "all":
@@ -57,14 +57,12 @@ def show_log_list():
         look_before = True
     else:
         look_before = False
-    result, info = control.look_jy_log(current_user.account, current_user.role, 1, 0, 0, look_before=look_before,
+    result, info = control.look_jy_log(current_user.account, current_user.role, start_time, end_time, look_before=look_before,
                                        level=level, search_url=search_url, search_account=search_account)
     if result is False:
         return info
     log_records = info["log_records"]
-    start_time = int(info["require"]["start_time"])
-    end_time = int(info["require"]["end_time"])
     return render_template("%s/Show_Log.html" % html_dir, log_list=log_records, url_prefix=url_prefix, look_before=look_before,
                            log_level=control.jy_log.log_level, current_level=level, search_url=search_url,
-                           search_account=search_account, start_time=start_time, end_time=end_time)
+                           search_account=search_account, require=info["require"])
 

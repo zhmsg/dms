@@ -35,15 +35,16 @@ class LogManager:
             log_records.append(log_item)
         return True, log_records
 
-    def show_log(self, hour, minute, second, look_before=False, level=None, search_url="", search_account=""):
-        if check_int(hour, 0, 24) is False:
-            return False, "Bad hour"
-        if check_int(minute, 0, 60) is False:
-            return False, "Bad minute"
-        if check_int(second, 0, 60) is False:
-            return False, "Bad second"
-        run_begin = time() - timedelta(hours=hour, minutes=minute, seconds=second).total_seconds()
+    def show_log(self, start_time=None, end_time=None, look_before=False, level=None, search_url="", search_account=""):
         run_end = time()
+        run_begin = run_end - timedelta(hours=1).total_seconds()
+        require = {}
+        if start_time is not None and start_time > run_begin:
+            run_begin = start_time
+            require["start_time"] = start_time
+        if end_time is not None and end_time < run_end:
+            run_end = end_time
+            require["end_time"] = end_time
         where_sql_list = ["run_begin>=%s " % run_begin, "run_begin<=%s " % run_end]
         if look_before is False:
             where_sql_list.append("level <> 'before'")
@@ -61,5 +62,5 @@ class LogManager:
         result, log_records = self._select_log(where_sql)
         if result is False:
             return log_records
-        return True, {"log_records": log_records, "require": {"start_time": run_begin, "end_time": run_end}}
+        return True, {"log_records": log_records, "require": require}
 

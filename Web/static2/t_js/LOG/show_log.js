@@ -57,14 +57,29 @@ function calc_time(t){
     var ts = t.split(":");
     var ts_len = ts.length;
     if(ts_len != 3){
-        return ""
+        return 0;
     }
+    var now_time = new Date();
+    var year = now_time.getFullYear();
+    var month = now_time.getMonth() + 1;
+    var day = now_time.getDate();
+    var time_s = year + "/" + month + "/" + day + " " + t;
+    try{
+        return new Date(time_s).getTime() / 1000;
+    }
+    catch (e){
+        return 0;
+    }
+    return 0;
 }
 
 function update_search_url(refresh){
     var request_args = "?";
-    var start_time = $("#start_time").val();
-    var end_time = $("#end_time").val();
+    var start_time = calc_time($("#start_time").val());
+    var end_time = calc_time($("#end_time").val());
+    if(start_time > end_time && end_time > 0){
+        start_time = start_time - 86400;
+    }
     var log_level = $("#log_level").val();
     var url_prefix = $("#url_prefix").val();
     var show_before = $("#show_before").val();
@@ -95,5 +110,6 @@ update_search_url();
 $(function(){
     $("input[id$=_time]").blur(function(){
         this.value = format_time(this.value);
+        update_search_url(0);
     });
 });
