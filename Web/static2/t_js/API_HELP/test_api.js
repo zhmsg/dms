@@ -37,7 +37,13 @@ function test_api(){
             }
             else if(type == "object" || type == "list"){
                 console.info(param_value);
-                param_value = JSON.parse(param_value);
+                try {
+                    param_value = JSON.parse(param_value);
+                }
+                catch(e){
+                    update_res("无效的" + param_key);
+                    return false
+                }
                 console.info(param_value);
             }
             else if (type == "bool"){
