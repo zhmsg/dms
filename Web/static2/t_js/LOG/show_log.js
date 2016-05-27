@@ -132,6 +132,7 @@ $(function(){
         //else{
         //    $("#end_time").val(click_text);
         //}
+        update_search_url(0);
     });
 
 });
