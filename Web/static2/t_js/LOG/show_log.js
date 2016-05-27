@@ -109,11 +109,29 @@ update_search_url();
 
 $(function(){
     $("input[id$=_time]").blur(function(){
-        this.value = format_time(this.value);
+        var v = this.value;
+        this.value = format_time(v);
         update_search_url(0);
     });
-    $("td").click(function(){
-        var data = this.innerHTML;
-        window.clipboardData.setData("Text", data);
+    $("td[name='run_begin']").click(function(){
+        var click_text = this.innerText;
+        var start_text = $("#start_time").val();
+        var end_text = $("#end_time").val();
+        var click_time = calc_time(click_text);
+        if(click_time == 0){
+            return;
+        }
+        var start_time = calc_time(start_text);
+        var end_time = calc_time(end_text);
+        if(click_time > end_time){
+            $("#end_time").val(click_text);
+        }
+        else if(start_time > click_time || start_time == 0){
+            $("#start_time").val(click_text);
+        }
+        //else{
+        //    $("#end_time").val(click_text);
+        //}
     });
+
 });
