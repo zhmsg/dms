@@ -3,10 +3,69 @@
  */
 // $('#search_table').bind('input propertychange', function() {alert("success")});
 
-var init_level = "";
+function format_time(t){
+    t = t.replace(/([^\d:]*)/g, "");
+    var ts = t.split(":");
+    var ts_len = ts.length;
+    if(ts_len != 3){
+        return t;
+    }
+    var hour_s = ts[0];
+    var minute_s = ts[1];
+    var second_s = ts[2];
+    if(hour_s == "" || minute_s == "" || second_s == ""){
+        return t;
+    }
+    var hour = parseInt(hour_s);
+    var minute = parseInt(minute_s);
+    var second = parseInt(second_s);
+    if(hour < 10){
+        hour_s = "0" + hour;
+    }
+    else if(hour <= 23){
+        hour_s = "" + hour;
+    }
+    else{
+        hour_s = "00";
+    }
+    if(minute < 10){
+        minute_s = "0" + minute;
+    }
+    else if(minute <= 59){
+        minute_s = "" + minute;
+    }
+    else{
+        minute_s = "00";
+    }
+
+    if(second < 10){
+        second_s = "0" + second;
+    }
+    else if(second <= 59){
+        second_s = "" + second;
+    }
+    else{
+        second_s = "59";
+    }
+    t = hour_s + ":" + minute_s + ":" + second_s;
+    return t;
+}
+
+function calc_time(t){
+    t = t.replace(/([^\d:]*)/g, "");
+    var ts = t.split(":");
+    var ts_len = ts.length;
+    if(ts_len != 3){
+        return ""
+    }
+}
 
 function update_search_url(refresh){
     var request_args = "?";
+    var start_time = $("#start_time").val();
+    $("#start_time").val(format_time(start_time));
+    var end_time = $("#end_time").val();
+    $("#end_time").val(format_time(end_time));
     var log_level = $("#log_level").val();
     var url_prefix = $("#url_prefix").val();
     var show_before = $("#show_before").val();
@@ -20,6 +79,8 @@ function update_search_url(refresh){
     else{
         $("#lab_show_before").hide();
     }
+    request_args += "start_time=" + start_time + "&";
+    request_args += "end_time=" + end_time + "&";
     request_args += "log_level=" + log_level + "&";
     request_args += "url_prefix=" + url_prefix + "&";
     request_args += "account=" + account;

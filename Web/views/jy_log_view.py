@@ -32,6 +32,14 @@ def ping():
 @jy_log_view.route("/", methods=["GET"])
 @login_required
 def show_log_list():
+    if "start_time" in request.args and request.args["start_time"] != "":
+        start_time = request.args["start_time"]
+    else:
+        start_time = None
+    if "end_time" in request.args and request.args["end_time"] != "":
+        end_time = request.args["end_time"]
+    else:
+        end_time = None
     if "log_level" in request.args and request.args["log_level"] != "all":
         level = request.args["log_level"]
     else:
@@ -53,7 +61,10 @@ def show_log_list():
                                        level=level, search_url=search_url, search_account=search_account)
     if result is False:
         return info
-    return render_template("%s/Show_Log.html" % html_dir, log_list=info, url_prefix=url_prefix, look_before=look_before,
+    log_records = info["log_records"]
+    start_time = int(info["require"]["start_time"])
+    end_time = int(info["require"]["end_time"])
+    return render_template("%s/Show_Log.html" % html_dir, log_list=log_records, url_prefix=url_prefix, look_before=look_before,
                            log_level=control.jy_log.log_level, current_level=level, search_url=search_url,
-                           search_account=search_account)
+                           search_account=search_account, start_time=start_time, end_time=end_time)
 

@@ -43,7 +43,8 @@ class LogManager:
         if check_int(second, 0, 60) is False:
             return False, "Bad second"
         run_begin = time() - timedelta(hours=hour, minutes=minute, seconds=second).total_seconds()
-        where_sql_list = ["run_begin>=%s " % run_begin]
+        run_end = time()
+        where_sql_list = ["run_begin>=%s " % run_begin, "run_begin<=%s " % run_end]
         if look_before is False:
             where_sql_list.append("level <> 'before'")
         if level is not None:
@@ -57,5 +58,8 @@ class LogManager:
             search_account = check_sql_character(search_account)
             where_sql_list.append("account = '%s'" % search_account)
         where_sql = " AND ".join(where_sql_list)
-        return self._select_log(where_sql)
+        result, log_records = self._select_log(where_sql)
+        if result is False:
+            return log_records
+        return True, {"log_records": log_records, "require": {"start_time": run_begin, "end_time": run_end}}
 
