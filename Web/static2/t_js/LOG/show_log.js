@@ -112,4 +112,8 @@ $(function(){
         this.value = format_time(this.value);
         update_search_url(0);
     });
+    $("td").click(function(){
+        var data = this.innerHTML;
+        window.clipboardData.setData("Text", data);
+    });
 });
