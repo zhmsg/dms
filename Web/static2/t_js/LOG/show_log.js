@@ -51,6 +51,7 @@ function format_time(t){
     return t;
 }
 
+
 function calc_time(t){
     t = t.replace(/([^\d:]*)/g, "");
     var ts = t.split(":");
@@ -63,9 +64,7 @@ function calc_time(t){
 function update_search_url(refresh){
     var request_args = "?";
     var start_time = $("#start_time").val();
-    $("#start_time").val(format_time(start_time));
     var end_time = $("#end_time").val();
-    $("#end_time").val(format_time(end_time));
     var log_level = $("#log_level").val();
     var url_prefix = $("#url_prefix").val();
     var show_before = $("#show_before").val();
@@ -91,3 +90,10 @@ function update_search_url(refresh){
 
 }
 update_search_url();
+
+
+$(function(){
+    $("input[id$=_time]").blur(function(){
+        this.value = format_time(this.value);
+    });
+});
