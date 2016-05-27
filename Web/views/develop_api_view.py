@@ -390,6 +390,8 @@ def test_api():
     if len(api_no) != 32:
         return "Bad api_no"
     result, api_info = control.get_api_info(api_no, current_user.role)
+    if result is False:
+        return api_info
     module_test_env = []
     if api_info["basic_info"]["module_env"] is not None:
         module_env_s = api_info["basic_info"]["module_env"].split("|")
@@ -397,8 +399,8 @@ def test_api():
         for env_no_s in module_env_s:
             env_no_list.append(int(env_no_s))
         result, module_test_env = control.get_test_env(current_user.role, env_no_list)
-    if result is False:
-        return api_info
+        if result is False:
+            return module_test_env
     if "Referer" in request.headers:
         return_url = request.headers["Referer"]
     else:

@@ -312,7 +312,7 @@ class HelpManager:
     def get_test_env(self, env_no_list=None):
         if env_no_list is None:
             select_sql = "SELECT env_no,env_name,env_address FROM %s;" % self.test_env
-        elif type(env_no_list) == list and len(env_no_list) > 1 and len(env_no_list) <= 5:
+        elif type(env_no_list) == list and len(env_no_list) >= 1 and len(env_no_list) <= 5:
             union_sql_list = []
             for env_no in env_no_list:
                 if type(env_no) != int:

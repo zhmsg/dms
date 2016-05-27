@@ -11,6 +11,10 @@ function test_api(){
     if($("#request_url").val() != ""){
         request_url = $("#request_url").val();
     }
+    else{
+        update_res("无效的请求URL");
+        return false;
+    }
     console.info(request_url);
     var param_el = $("input[id$='_value']");
     var body_param = new Object();
@@ -111,6 +115,10 @@ function update_res(s){
 
 function update_request_url(){
     var test_env = $("#test_env").val();
+    if(test_env == null){
+        $("#request_url").val("");
+        return;
+    }
     var api_url = $("#api_url").val();
     var request_url = test_env + api_url;
     var url_param = $("input[id^='url_value_']");
