@@ -104,8 +104,6 @@ function update_search_url(refresh){
     }
 
 }
-update_search_url();
-
 
 $(function(){
     $("input[id$=_time]").blur(function(){
@@ -134,5 +132,5 @@ $(function(){
         //}
         update_search_url(0);
     });
-
+    update_search_url(0);
 });
