@@ -5,7 +5,7 @@ sys.path.append("..")
 import time
 import re
 from flask import Flask, request, make_response, g
-from Tools.MyIP import IPManager
+
 from Web.views.transport_view import transport_view as transport_view_blueprint
 from Web.views.develop_view import develop_view as develop_view_blueprint
 from Web.views.develop_api_view import develop_api_view as develop_api_view_blueprint
@@ -15,7 +15,7 @@ from Web.views.develop_bug_view import develop_bug_view as bug_blueprint
 from Web.views.develop_right_view import develop_right_view as right_blueprint
 from Web.views.jy_log_view import jy_log_view as log_blueprint
 from Web import login_manager, data_url_prefix, dev_url_prefix, api_url_prefix, dms_url_prefix, bug_url_prefix
-from Web import right_url_prefix, log_url_prefix, status_url_prefix
+from Web import right_url_prefix, log_url_prefix, status_url_prefix, ip
 
 __author__ = 'zhouheng'
 
@@ -44,9 +44,8 @@ def unix_timestamp(t):
         return time.strftime('%H:%M:%S', x)
     return t
 
-ip = IPManager()
-
 accept_agent = "(firefox|chrome|safari|window)"
+trust_proxy = ["127.0.0.1"]
 
 
 @msg_web.template_filter("ip_str")
@@ -60,7 +59,7 @@ def ip_str(ip_v):
 def before_request():
     request_ip = request.remote_addr
     if "X-Forwarded-For" in request.headers:
-        if request.remote_addr == "127.0.0.1":
+        if request.remote_addr in trust_proxy:
             request_ip = request.headers["X-Forwarded-For"].split(",")[0]
     g.request_IP = ip.ip_value_str(ip_str=request_ip)
     if g.request_IP == 0:
@@ -71,8 +70,6 @@ def before_request():
     user_agent = request.headers["User-Agent"]
     if re.search(accept_agent, user_agent, re.I) is None:
         return make_response(u"浏览器版本过低", 403)
-    if "Referer" in request.headers:
-        referer = request.headers["Referer"]
 
 
 @msg_web.after_request

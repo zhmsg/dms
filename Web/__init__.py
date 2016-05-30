@@ -4,6 +4,7 @@
 from flask import session
 from flask.ext.login import LoginManager, UserMixin
 from Tools.Mysql_db import DB
+from Tools.MyIP import IPManager
 
 __author__ = 'zhouheng'
 
@@ -21,7 +22,7 @@ class User(UserMixin):
         return self.account
 
 login_manager = LoginManager()
-
+ip = IPManager()
 
 @login_manager.user_loader
 def load_user(account):

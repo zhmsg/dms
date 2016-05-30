@@ -3,10 +3,11 @@
 
 
 import sys
-from flask import Blueprint, render_template, request, jsonify
+import time
+from flask import Blueprint, render_template, request, jsonify, g
 from flask_login import login_required, current_user
 
-from Web import log_url_prefix as url_prefix
+from Web import log_url_prefix as url_prefix, ip
 from Web.views import control
 
 sys.path.append('..')
@@ -69,5 +70,10 @@ def show_log_list():
 
 @jy_log_view.route("/login/", methods=["POST", "GET"])
 def record_login():
-    print(request.data)
-    return jsonify({"status": True})
+    request_data = request.json
+    server_ip = g.request_IP
+    user_ip = ip.ip_value_str(ip_str=request_data["login_ip"])
+    login_user = request_data["login_user"]
+    login_time = request_data["login_time"]
+    result, info = control.new_login_server(server_ip, user_ip, login_user, login_time)
+    return jsonify({"status": result, "data": info})
