@@ -1,9 +1,9 @@
 #!/user/bin/env python
 # -*- coding: utf-8 -*-
 
-import re
+
 import sys
-from flask import Blueprint, render_template, request, redirect
+from flask import Blueprint, render_template, request, jsonify
 from flask_login import login_required, current_user
 
 from Web import log_url_prefix as url_prefix
@@ -66,3 +66,8 @@ def show_log_list():
                            log_level=control.jy_log.log_level, current_level=level, search_url=search_url,
                            search_account=search_account, require=info["require"])
 
+
+@jy_log_view.route("/login/", methods=["POST", "GET"])
+def record_login():
+    print(request.data)
+    return jsonify({"status": True})

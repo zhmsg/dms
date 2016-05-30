@@ -4,7 +4,7 @@ import sys
 sys.path.append("..")
 import time
 import re
-from flask import Flask, request, make_response
+from flask import Flask, request, make_response, g
 from Tools.MyIP import IPManager
 from Web.views.transport_view import transport_view as transport_view_blueprint
 from Web.views.develop_view import develop_view as develop_view_blueprint
@@ -58,6 +58,13 @@ def ip_str(ip_v):
 
 @msg_web.before_request
 def before_request():
+    request_ip = request.remote_addr
+    if "X-Forwarded-For" in request.headers:
+        if request.remote_addr == "127.0.0.1":
+            request_ip = request.headers["X-Forwarded-For"].split(",")[0]
+    g.request_IP = ip.ip_value_str(ip_str=request_ip)
+    if g.request_IP == 0:
+        return make_response(u"IP受限", 403)
     if "User-Agent" not in request.headers:
         print("No User-Agent")
         return make_response(u"请使用浏览器访问", 403)
