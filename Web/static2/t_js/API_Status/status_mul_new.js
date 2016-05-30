@@ -116,7 +116,7 @@ function preview_status_code(){
         }
         else if(error_type_key == "03")
         {
-            status_code_desc += "提供的" + param_name + "不合法，可能包含非法字符或者账户长度不符合基本要求";
+            status_code_desc += "提供的" + param_name + "不合法，可能包含非法字符或者长度不符合基本要求";
         }
         else if(error_type_key == "04")
         {
