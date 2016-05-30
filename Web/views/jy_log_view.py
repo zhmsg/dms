@@ -71,11 +71,12 @@ def show_log_list():
 def record_login():
     request_data = request.json
     server_ip = g.request_IP
-    user_ip = ip.ip_value_str(ip_str=request_data["login_ip"])
+    user_ip_s = request_data["login_ip"]
+    user_ip = ip.ip_value_str(ip_str=user_ip_s)
     login_user = request_data["login_user"]
     login_time = request_data["login_time"]
     result, info = control.new_login_server(server_ip, user_ip, login_user, login_time)
-    email_content = u"登录的服务器IP：%s<br>登录者的IP：%s<br>登录时间：%s" % (server_ip, user_ip, login_time)
+    email_content = u"登录的服务器IP：%s<br>登录者的IP：%s<br>登录用户：%s<br>登录时间：%s" \
+                    % (g.request_IP_s, user_ip_s, login_user, login_time)
     my_email.send_mail_thread("zhouheng@gene.ac", u"有用户登录到服务器", email_content)
-    print(info)
     return jsonify({"status": result, "data": info})

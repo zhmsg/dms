@@ -61,6 +61,7 @@ def before_request():
     if "X-Forwarded-For" in request.headers:
         if request.remote_addr in trust_proxy:
             request_ip = request.headers["X-Forwarded-For"].split(",")[0]
+    g.request_IP_s = request_ip
     g.request_IP = ip.ip_value_str(ip_str=request_ip)
     if g.request_IP == 0:
         return make_response(u"IP受限", 403)
