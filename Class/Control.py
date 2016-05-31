@@ -701,5 +701,5 @@ class ControlManager:
                                             search_url=search_url, search_account=search_account)
         return result, info
 
-    def new_login_server(self, server_ip, user_ip, user_name, login_time):
-        return self.jy_log.insert_login_server(server_ip, user_ip, user_name, login_time)
+    def new_login_server(self, server_ip, server_name, user_ip, user_name, login_time):
+        return self.jy_log.insert_login_server(server_ip, server_name, user_ip, user_name, login_time)

@@ -66,7 +66,7 @@ class LogManager:
             return log_records
         return True, {"log_records": log_records, "require": require}
 
-    def insert_login_server(self, server_ip, user_ip, user_name, login_time):
+    def insert_login_server(self, server_ip, server_name, user_ip, user_name, login_time):
         if check_int(server_ip, 1, sys.maxint) is False:
             return False, "Bad server ip"
         if check_int(user_ip, 1, sys.maxint) is False:
@@ -74,8 +74,9 @@ class LogManager:
         now_time = int(time())
         if check_int(login_time, now_time - 100, now_time + 100) is False:
             return False, "Bad login time"
-        user_name = check_sql_character(user_name)
-        insert_sql = "INSERT INTO %s (server_ip,user_ip,user_name,login_time) VALUES (%s,%s,'%s',%s);" \
-                     % (self.login_server, server_ip, user_ip, user_name, login_time)
+        user_name = check_sql_character(user_name)[:50]
+        server_name = check_sql_character(server_name)[:20]
+        insert_sql = "INSERT INTO %s (server_ip,server_name,user_ip,user_name,login_time) VALUES (%s,'%s',%s,'%s',%s);" \
+                     % (self.login_server, server_ip, server_name, user_ip, user_name, login_time)
         self.local_db.execute(insert_sql)
         return True, "success"

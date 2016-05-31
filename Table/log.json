@@ -14,6 +14,11 @@
                 "col_type": "bigint(20)"
             },
             {
+                "col_comment": "服务器的主机名",
+                "col_name": "server_name",
+                "col_type": "varchar(20)"
+            },
+            {
                 "col_comment": "登录者的IP地址",
                 "col_name": "user_ip",
                 "col_type": "bigint(20)"
