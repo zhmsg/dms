@@ -9,7 +9,6 @@ import smtplib
 import thread
 import ConfigParser
 from datetime import datetime
-from My_PC import pc_info
 
 
 class MyEmailManager:
@@ -45,7 +44,7 @@ class MyEmailManager:
             smtp.starttls()
             smtp.login(user, self.m_password)
             user = self.encoded(user, encoding)
-            user = '{nick_name} <{user}>'.format(nick_name=self.encoded(self.sender, encoding), user=user)
+            user = '{nick_name} <{user}>'.format(nick_name=Header(self.sender, encoding), user=user)
             msg = MIMEMultipart('alternative')
             msg['From'] = user
             msg['To'] = self.encoded(to, encoding)
@@ -62,5 +61,3 @@ class MyEmailManager:
 
     def send_mail_thread(self, to, sub, content):
         return thread.start_new_thread(self.send_mail, (to, sub, content))
-
-
