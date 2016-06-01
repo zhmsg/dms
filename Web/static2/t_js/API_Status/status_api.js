@@ -12,7 +12,7 @@ function get_module_info_success(data){
 
 function get_module_info() {
     var request_url = $("#fun_info_url").val();
-    my_request(request_url, "GET", null, get_module_info_success);
+    my_async_request(request_url, "GET", null, get_module_info_success);
 }
 
 function get_error_type() {

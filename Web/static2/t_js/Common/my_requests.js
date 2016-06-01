@@ -25,7 +25,6 @@ function my_async_request(request_url, request_method, body_param, request_succe
     if(request_method != "GET"){
         body_param = JSON.stringify(body_param)
     }
-    alert(request_url);
     $.ajax({
         url: request_url,
         method: request_method,
