@@ -84,6 +84,7 @@ def after_request(res):
                     res.headers["Location"] = res.headers["Location"].replace("http", pro)
                 else:
                     res.headers["Location"] = "%s://%s%s" % (pro, request.headers["Host"], location)
+    res.headers["Server"] = "JingYun Server"
     return res
 
 
