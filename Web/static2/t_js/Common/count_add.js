@@ -10,8 +10,8 @@ $(function(){
             return;
         }
         var next_host = match_next[2];
-        if(next_host != location.host){
-            alert(next_host);
+        if(next_host == location.host){
+            return;
         }
         var request_data = new Object();
         request_data["destination_info"] = next_url;
