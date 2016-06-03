@@ -15,12 +15,58 @@ function test_api(){
         update_res("无效的请求URL");
         return false;
     }
-    console.info(request_url);
+    var test_case_info = get_param_value();
+    if(test_case_info == false){
+        return;
+    }
+    var header_param = test_case_info.header;
+    for(var param_key in header_param) {
+        var param_value = header_param[param_key];
+        if (param_key == "authorization") {
+            header_param[param_key] = "Basic " + base64encode(param_value);
+        }
+        else if (param_key == "X-Authorization") {
+            header_param[param_key] = "OAuth2 " + param_value;
+        }
+        else {
+            header_param[param_key] = param_value;
+        }
+    }
+    var body_param = test_case_info.body;
+    if(api_method != "GET"){
+        body_param = JSON.stringify(body_param)
+    }
+    $.ajax({
+        url: request_url + "?geneacdms=test",
+        method: api_method,
+        contentType: "application/json",
+        headers: header_param,
+        //processData: false,
+        data: body_param,
+        success:function(data){
+            console.info(data);
+            if(typeof(data) == "string")
+            {
+                console.info("return json string");
+                data = JSON.parse(data);
+            }
+            update_res(JSON.stringify(data, null, 4));
+            update_status_url(data.status);
+        },
+        error:function(xhr){
+            var res = "状态码：" + xhr.status + "\n";
+            res += "返回值：" + xhr.statusText + "";
+            update_res(res);
+            console.info(xhr);
+        }
+    });
+}
+
+function get_param_value(){
     var param_el = $("input[id$='_value']");
     var body_param = new Object();
     var header_param = new Object();
-    //var xhr = new XMLHttpRequest();
-    //xhr.open(api_method, request_url + "?geneacdms=test");
+    var url_param = new Object();
     for(var i=0;i<param_el.length;i++){
         var el = param_el[i];
         var id = el.id;
@@ -65,49 +111,56 @@ function test_api(){
             body_param[param_key] = param_value;
         }
         else if(param_type == "header"){
-            if(param_key == "authorization"){
-                header_param[param_key] = "Basic " + base64encode(param_value);
-            }
-            else if (param_key == "X-Authorization")
-            {
-                header_param[param_key] = "OAuth2 " + param_value;
-            }
-            else{
                 header_param[param_key] = param_value;
-            }
-            //xhr.setRequestHeader(param_key, header_param[param_key]);
         }
     }
-    console.info(header_param);
-    if(api_method != "GET"){
-        body_param = JSON.stringify(body_param)
-    }
-    $.ajax({
-        url: request_url + "?geneacdms=test",
-        method: api_method,
-        contentType: "application/json",
-        headers: header_param,
-        //processData: false,
-        data: body_param,
-        success:function(data){
-            console.info(data);
-            if(typeof(data) == "string")
-            {
-                console.info("return json string");
-                data = JSON.parse(data);
-            }
-            update_res(JSON.stringify(data, null, 4));
-            update_status_url(data.status);
-        },
-        error:function(xhr){
-            var res = "状态码：" + xhr.status + "\n";
-            res += "返回值：" + xhr.statusText + "";
-            update_res(res);
-            console.info(xhr);
+    var url_el = $("input[id^='url_value_']");
+    for(var i=0;i<url_el.length;i++) {
+        var el = url_el[i];
+        var param_key = el.id.substr(10);
+        var param_value = el.value;
+        if (param_value == "") {
+            continue;
         }
-    });
+        url_param[param_key] = param_value;
+    }
+    var test_case_info = {body: body_param, header: header_param, url: url_param};
+    return test_case_info;
+
 }
 
+function save_test_case(){
+    var case_name = $("#test_case_name").val();
+    var test_case_info = get_param_value();
+    if(test_case_info != false) {
+        update_res(JSON.stringify(test_case_info, null, 4));
+    }
+}
+
+$(function(){
+    $("#btn_save_case").click(function(){
+        var btn_t = this.innerHTML;
+        var btn_v = this.value;
+        if(btn_t == btn_v){
+            this.innerHTML = btn_v.substr(0, 2);
+            $("#test_case_name").show();
+        }
+        else{
+            this.innerHTML = btn_v;
+            $("#test_case_name").hide();
+            var case_name = $("#test_case_name").val();
+            if(case_name.length<=0 || case_name.length>=15){
+                update_res("未保存测试用例 \n测试用例的名称长度必须在1-15");
+                return;
+            }
+            if(case_name.match(/[^\u4e00-\u9fa5\w\-]/g) != null){
+                update_res("未保存测试用例 \n测试用例的名称仅允许汉字数字字母下划线(_)短横线(-)");
+                return;
+            }
+            save_test_case();
+        }
+    });
+});
 
 function update_res(s){
     $("#res_text").text(s);
