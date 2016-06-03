@@ -1,117 +1,112 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>测试API</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='t_css/bootstrap.min.css') }}"><!-- 新 Bootstrap 核心 CSS 文件 -->
-<link rel="stylesheet" href="{{ url_for('static', filename='t_css/main.css') }}"><!--自定义的页面样式 -->
-</head>
+{% extends "base.html" %}
 
-<body>
-<div class="container font16">
+{% block title %}测试API{% endblock %}
+
+
+{% block content %}
     <br>
     <a class="btn btn-primary pull-right" href="{{ return_url }}" title="">返回</a>
-  <div class="margin20 apiTest">
-    <p>
-      <span class="pull-left text-right width150">服务环境：</span>
-      <select class="form-control bug-input" id="test_env" onchange="update_request_url();">
-          {% for env in module_test_env %}
-              <option value="{{ env["env_address"] }}">{{ env["env_name"] }}</option>
-          {% endfor %}
-      </select>
-    </p>
-    <p>
-      <span class="pull-left text-right width150">API模块：</span>
-      <select class="form-control bug-input">
-        <option>{{ api_info["basic_info"]["module_name"] }}</option>
-      </select>
-    </p>
-    <p>
-      <span class="pull-left text-right width150">API列表：</span>
-      <select class="form-control pull-left bug-input" id="api_url">
-        <option value="{{ api_info["basic_info"]["api_url"] }}">{{ api_info["basic_info"]["api_title"] }}</option>
-      </select>
-      <input value="{{ api_info["basic_info"]["api_method"] }}" id="api_method" style="display: none"/>
-      <span class="pull-left">请求方法： {{ api_info["basic_info"]["api_method"] }}</span>
-      <span class="clear"></span>
-    </p>
-    <p>
-        <span class="pull-left text-right width150">请求URL：</span>
-        <input class="form-control bug-input" id="request_url" readonly/>
-    </p>
-    {%  if url_param_info | length > 0 %}
-        <p>URL参数列表:</p>
-        {% for item in url_param_info %}
+    <div class="margin20 apiTest">
+        <p>
+            <span class="pull-left text-right width150">服务环境：</span>
+            <select class="form-control bug-input" id="test_env" onchange="update_request_url();">
+                {% for env in module_test_env %}
+                    <option value="{{ env["env_address"] }}">{{ env["env_name"] }}</option>
+                {% endfor %}
+            </select>
+        </p>
+        <p>
+            <span class="pull-left text-right width150">API模块：</span>
+            <select class="form-control bug-input">
+                <option>{{ api_info["basic_info"]["module_name"] }}</option>
+            </select>
+        </p>
+        <p>
+            <span class="pull-left text-right width150">API列表：</span>
+            <select class="form-control pull-left bug-input" id="api_url">
+                <option value="{{ api_info["basic_info"]["api_url"] }}">{{ api_info["basic_info"]["api_title"] }}</option>
+            </select>
+            <input value="{{ api_info["basic_info"]["api_method"] }}" id="api_method" style="display: none"/>
+            <span class="pull-left">请求方法： {{ api_info["basic_info"]["api_method"] }}</span>
+            <span class="clear"></span>
+        </p>
+        <p>
+            <span class="pull-left text-right width150">请求URL：</span>
+            <input class="form-control bug-input" id="request_url" readonly/>
+        </p>
+        {% if url_param_info | length > 0 %}
+            <p>URL参数列表:</p>
+            {% for item in url_param_info %}
+                <div class="paramListMode">
+                    <ul>
+                        <li class="star">*</li>
+                        <li name="param">{{ item["param_name"] }}</li>
+                        <li>：</li>
+                        <li><input class="form-control bug-input" id='url_value_{{ item["param_name"] }}'
+                                   onkeyup="update_request_url();" origin_param="{{ item["origin_param"] }}"/></li>
+                        <div class="clear"></div>
+                    </ul>
+                    <p>输入{{ item["param_type"] }}类型</p>
+                </div>
+            {% endfor %}
+        {% endif %}
+        <p>参数列表:</p>
+        {% for item in api_info["predefine_param"]["header"] %}
+            {% if item in api_info["predefine_header"] %}
+                <div class="paramListMode">
+                    <ul>
+                        <li class="star">{% if api_info["predefine_header"][item]["necessary"] == true %}
+                            * {% endif %}</li>
+                        <li name="param">{{ api_info["predefine_header"][item]["param"] }}</li>
+                        <li>：</li>
+                        <li><input class="form-control bug-input"
+                                   id="{{ api_info["predefine_header"][item]["param"] }}_value" param_type="header"/>
+                        </li>
+                        <div class="clear"></div>
+                    </ul>
+                    <p>{{ api_info["predefine_header"][item]["param_desc"] }}</p>
+                </div>
+            {% endif %}
+        {% endfor %}
+        {% for param_info in api_info["header_info"] %}
             <div class="paramListMode">
                 <ul>
-                    <li class="star">*</li>
-                    <li name="param">{{ item["param_name"] }}</li>
+                    <li class="star">{% if param_info["necessary"] == true %}* {% endif %}</li>
+                    <li name="param">{{ param_info["param"] }}</li>
                     <li>：</li>
-                    <li><input class="form-control bug-input" id='url_value_{{ item["param_name"] }}' onkeyup="update_request_url();" origin_param="{{ item["origin_param"] }}" /></li>
+                    <li><input class="form-control bug-input" id="{{ param_info["param"] }}_value" param_type="header"/>
+                    </li>
                     <div class="clear"></div>
                 </ul>
-                <p>输入{{ item["param_type"] }}类型</p>
+                <p>{{ param_info["param_desc"] }}</p>
             </div>
         {% endfor %}
-    {% endif %}
-    <p>参数列表:</p>
-    {% for item in api_info["predefine_param"]["header"] %}
-        {% if item in api_info["predefine_header"] %}
+        {% for param_info in api_info["body_info"] %}
             <div class="paramListMode">
                 <ul>
-                    <li class="star">{% if api_info["predefine_header"][item]["necessary"] == true %}* {% endif %}</li>
-                    <li name="param">{{ api_info["predefine_header"][item]["param"] }}</li>
+                    <li class="star">{% if param_info["necessary"] == true %}* {% endif %}</li>
+                    <li name="param">{{ param_info["param"] }}</li>
                     <li>：</li>
-                    <li><input class="form-control bug-input" id="{{ api_info["predefine_header"][item]["param"] }}_value" param_type="header" /></li>
+                    <li><input class="form-control bug-input" id="{{ param_info["param"] }}_value" param_type="body"
+                               type="{{ param_info["type"] }}"/></li>
                     <div class="clear"></div>
                 </ul>
-                <p>{{ api_info["predefine_header"][item]["param_desc"] }}</p>
+                <p>【{{ param_info["type"] }}】{{ param_info["param_desc"] }}</p>
             </div>
-        {% endif %}
-    {% endfor %}
-    {% for param_info in api_info["header_info"] %}
-    <div class="paramListMode">
-        <ul>
-            <li class="star">{% if param_info["necessary"] == true %}* {% endif %}</li>
-            <li name="param">{{ param_info["param"] }}</li>
-            <li>：</li>
-            <li><input class="form-control bug-input" id="{{ param_info["param"] }}_value" param_type="header" /></li>
-            {% if param_info["param"] | lower == "authorization" %}
-            <li>
-                <label><input type="radio" name="auth_method" value="Basic" id="r_basic" checked/> Basic</label>
-                <label><input type="radio" name="auth_method" value="Oauth2" id="r_oauth2" /> Oauth2</label>
-            </li>
-            {% endif %}
-            <div class="clear"></div>
-        </ul>
-        <p>{{ param_info["param_desc"] }}</p>
-    </div>
-    {% endfor %}
-    {% for param_info in api_info["body_info"] %}
-    <div class="paramListMode">
-        <ul>
-            <li class="star">{% if param_info["necessary"] == true %}* {% endif %}</li>
-            <li name="param">{{ param_info["param"] }}</li>
-            <li>：</li>
-            <li><input class="form-control bug-input" id="{{ param_info["param"] }}_value" param_type="body" type="{{ param_info["type"] }}" /></li>
-            <div class="clear"></div>
-        </ul>
-        <p>【{{ param_info["type"] }}】{{ param_info["param_desc"] }}</p>
-    </div>
-    {% endfor %}
-    <p>
-      <button class="btn btn-primary" onclick="test_api()">检查</button>
-      <input class="box-side width300" id="test_case_name" type="text"  placeholder="请输入测试用例的名称" style="display: none"/>
-      <button class="btn btn-primary" id="btn_save_case" value="保存测试用例">保存测试用例</button>
-    </p>
-  <textarea class="form-control font16" rows="20" cols="120" id="res_text" readonly></textarea>
+        {% endfor %}
+        <p>
+            <button class="btn btn-primary" onclick="test_api()">检查</button>
+            <input class="box-side width300" id="test_case_name" type="text" placeholder="请输入测试用例的名称"
+                   style="display: none"/>
+            <button class="btn btn-primary" id="btn_save_case" value="保存测试用例">保存测试用例</button>
+        </p>
+        <textarea class="form-control font16" rows="20" cols="120" id="res_text" readonly></textarea>
 
-  </div>
-  <a id="look_status" href="{{ status_url }}?api_no={{ api_no }}" title="{{ status_url }}?api_no={{ api_no }}">查看返回状态码解释</a>
-  <br/>
-  <br/>
-</div>
-</body>
-<script type="text/javascript" src="{{ url_for('static', filename='t_js/jquery.min.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='t_js/API_HELP/test_api.js') }}"></script>
-</html>
+    </div>
+    <a id="look_status" href="{{ status_url }}?api_no={{ api_no }}" title="{{ status_url }}?api_no={{ api_no }}">查看返回状态码解释</a>
+
+    <br/>
+    <br/>
+    <script type="text/javascript" src="{{ url_for('static', filename='t_js/API_HELP/test_api.js') }}"></script>
+{% endblock %}
+

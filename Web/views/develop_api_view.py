@@ -5,7 +5,8 @@
 import sys
 import json
 import re
-from flask import Blueprint, render_template, request, redirect, url_for, jsonify
+from functools import wraps
+from flask import Blueprint, render_template, request, redirect, url_for, jsonify, g
 from flask_login import login_required, current_user
 from Web import api_url_prefix
 from Web.views import control
@@ -23,16 +24,25 @@ develop_api_view = Blueprint('develop_api_view', __name__)
 
 print("start success")
 
+
 @develop_api_view.before_request
 @login_required
 def before_request():
     pass
 
 
-@develop_api_view.app_errorhandler(500)
-def handle_500(e):
-    print(e.args)
-    return str(e.args)
+def referer_api_no(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if "Referer" not in request.headers:
+            return jsonify({"status": False, "data": "Bad Request"})
+        g.ref_url = request.headers["Referer"]
+        find_result = re.findall("api_no=([a-z\d]{32})", g.ref_url)
+        if len(find_result) < 0:
+            return jsonify({"status": False, "data": "Bad Request."})
+        g.api_no = find_result[0]
+        return f(*args, **kwargs)
+    return decorated_function
 
 
 @develop_api_view.route("/ping/", methods=["GET"])
@@ -235,33 +245,23 @@ def update_api_other_info():
 
 
 @develop_api_view.route("/update/completed/", methods=["GET"])
+@referer_api_no
 def set_api_completed():
-    if "Referer" not in request.headers:
-        return jsonify({"status": False, "data": "Bad Request"})
-    ref_url = request.headers["Referer"]
-    find_result = re.findall("api_no=([a-z\d]{32})", ref_url)
-    if len(find_result) < 0:
-        return jsonify({"status": False, "data": "Bad Request."})
-    api_no = find_result[0]
+    api_no = g.api_no
     result, info = control.set_api_completed(current_user.account, current_user.role, api_no)
     if result is False:
         return info
-    return redirect(ref_url)
+    return redirect(g.ref_url)
 
 
 @develop_api_view.route("/update/modify/", methods=["GET"])
+@referer_api_no
 def set_api_modify():
-    if "Referer" not in request.headers:
-        return jsonify({"status": False, "data": "Bad Request"})
-    ref_url = request.headers["Referer"]
-    find_result = re.findall("api_no=([a-z\d]{32})", ref_url)
-    if len(find_result) < 0:
-        return jsonify({"status": False, "data": "Bad Request."})
-    api_no = find_result[0]
+    api_no = g.api_no
     result, info = control.set_api_modify(current_user.account, current_user.role, api_no)
     if result is False:
         return info
-    return redirect(ref_url)
+    return redirect(g.ref_url)
 
 
 @develop_api_view.route("/add/header/", methods=["POST"])
@@ -365,14 +365,9 @@ def delete_output(output_no):
 
 
 @develop_api_view.route("/update/header/", methods=["PUT"])
+@referer_api_no
 def update_api_predefine_header():
-    if "Referer" not in request.headers:
-        return jsonify({"status": False, "data": "Bad Request"})
-    ref_url = request.headers["Referer"]
-    find_result = re.findall("api_no=([a-z\d]{32})", ref_url)
-    if len(find_result) < 0:
-        return jsonify({"status": False, "data": "Bad Request."})
-    api_no = find_result[0]
+    api_no = g.api_no
     param = request.form["param"]
     update_type = request.form["update_type"]
     if update_type == "delete":
@@ -406,6 +401,7 @@ def test_api():
     else:
         return_url = url_prefix + "/info/?api_no=%s" % api_no
     status_url = url_prefix + "/status/"
+    test_case_url = url_prefix + "/test/case/"
     api_url = api_info["basic_info"]["api_url"]
     url_params = re.findall("<([\w:]+)>", api_url)
     url_param_info = []
@@ -416,4 +412,13 @@ def test_api():
         else:
             url_param_info.append({"param_type": "string", "param_name": param_sp[0], "origin_param": "<%s>" % param})
     return render_template("%s/Test_API.html" % html_dir, api_info=api_info, return_url=return_url, api_no=api_no,
-                           status_url=status_url, url_param_info=url_param_info, module_test_env=module_test_env)
+                           status_url=status_url, url_param_info=url_param_info, module_test_env=module_test_env,
+                           test_case_url=test_case_url)
+
+
+@develop_api_view.route("/test/case/", methods=["POST"])
+@referer_api_no
+def add_test_case():
+    print(request.json)
+    api_no = g.api_no
+    return jsonify({"status": True, "data": "success"})
