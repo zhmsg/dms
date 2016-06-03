@@ -155,6 +155,11 @@ function get_test_case_success(data){
             $("#" + key + "_value").val(case_info.header[key]);
         }
     }
+    if("body" in case_info){
+        for(var key in case_info.body){
+            $("#" + key + "_value").val(case_info.body[key]);
+        }
+    }
     if("url" in case_info){
         for(var key in case_info.url){
             $("#url_value_" + key).val(case_info.url[key]);
@@ -162,6 +167,7 @@ function get_test_case_success(data){
     }
     update_request_url();
     update_res("加载保存的测试用例 " + case_info.case_name + " 成功");
+    $("#test_case_name").val(case_info.case_name);
 }
 
 function get_test_case_list_success(data){
