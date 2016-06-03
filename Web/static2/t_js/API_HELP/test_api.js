@@ -152,12 +152,24 @@ function get_test_case_success(data){
     var case_info = data.data;
     if("header" in case_info){
         for(var key in case_info.header){
-            $("#" + key + "_value").val(case_info.header[key]);
+            var v = case_info.header[key];
+            if(v instanceof  Array || v instanceof Object) {
+                $("#" + key + "_value").val(JSON.stringify(v));
+            }
+            else{
+                $("#" + key + "_value").val(v);
+            }
         }
     }
     if("body" in case_info){
         for(var key in case_info.body){
-            $("#" + key + "_value").val(case_info.body[key]);
+            var v = case_info.body[key];
+            if(v instanceof  Array || v instanceof Object) {
+                $("#" + key + "_value").val(JSON.stringify(v));
+            }
+            else{
+                $("#" + key + "_value").val(v);
+            }
         }
     }
     if("url" in case_info){
