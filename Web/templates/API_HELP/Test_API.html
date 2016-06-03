@@ -96,17 +96,20 @@
         {% endfor %}
         <p>
             <button class="btn btn-primary" onclick="test_api()">检查</button>
-            <input class="box-side width300" id="test_case_name" type="text" placeholder="请输入测试用例的名称"
-                   style="display: none"/>
+            <input class="box-side width300" id="test_case_name" type="text" placeholder="请输入测试用例的名称" style="display: none"/>
             <button class="btn btn-primary" id="btn_save_case" value="保存测试用例">保存测试用例</button>
         </p>
+        <div id="div_test_case">
+
+        </div>
         <textarea class="form-control font16" rows="20" cols="120" id="res_text" readonly></textarea>
 
     </div>
     <a id="look_status" href="{{ status_url }}?api_no={{ api_no }}" title="{{ status_url }}?api_no={{ api_no }}">查看返回状态码解释</a>
-
+    <input id="test_case_url" value="{{ test_case_url }}" style="display: none">
     <br/>
     <br/>
+    <script type="text/javascript" src="{{ url_for('static', filename='t_js/Common/base64.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='t_js/API_HELP/test_api.js') }}"></script>
 {% endblock %}
 

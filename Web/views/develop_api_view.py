@@ -3,12 +3,13 @@
 
 
 import sys
+import os
 import json
 import re
 from functools import wraps
 from flask import Blueprint, render_template, request, redirect, url_for, jsonify, g
 from flask_login import login_required, current_user
-from Web import api_url_prefix
+from Web import api_url_prefix, data_dir
 from Web.views import control
 
 
@@ -18,6 +19,9 @@ __author__ = 'Zhouheng'
 
 url_prefix = api_url_prefix
 html_dir = "/API_HELP"
+case_dir = "%s/test_case" % data_dir
+if os.path.isdir(case_dir) is False:
+    os.mkdir(case_dir)
 
 develop_api_view = Blueprint('develop_api_view', __name__)
 
@@ -419,6 +423,44 @@ def test_api():
 @develop_api_view.route("/test/case/", methods=["POST"])
 @referer_api_no
 def add_test_case():
-    print(request.json)
+    r_data = request.json
     api_no = g.api_no
+    case_name = r_data["case_name"]
+    user_case_dir = "%s/%s" % (case_dir, current_user.account)
+    if os.path.isdir(user_case_dir) is False:
+        os.mkdir(user_case_dir)
+    case_file = "%s_%s" % (api_no, case_name)
+    case_path = "%s/%s.case" % (user_case_dir, case_file)
+    with open(case_path, "w") as cw:
+        cw.write(json.dumps(r_data, indent=2))
     return jsonify({"status": True, "data": "success"})
+
+
+@develop_api_view.route("/test/case/", methods=["GET"])
+@referer_api_no
+def list_test_case():
+    api_no = g.api_no
+    user_case_dir = "%s/%s" % (case_dir, current_user.account)
+    if os.path.isdir(user_case_dir) is False:
+        return jsonify({"status": True, "data": []})
+    case_files = os.listdir(user_case_dir)
+    api_test_case = []
+    for item in case_files:
+        if item.startswith(api_no):
+            api_test_case.append(item[33:-5])
+    return jsonify({"status": True, "data": api_test_case})
+
+
+@develop_api_view.route("/test/case/<case_name>/", methods=["GET"])
+@referer_api_no
+def test_case_content(case_name):
+    api_no = g.api_no
+    user_case_dir = "%s/%s" % (case_dir, current_user.account)
+    case_path = "%s/%s_%s.case" % (user_case_dir, api_no, case_name)
+    if os.path.isfile(case_path) is False:
+        return jsonify({"status": False, "data": "not exist"})
+    case_info = {}
+    with open(case_path, "r") as cr:
+        content = cr.read()
+        case_info = json.loads(content)
+    return jsonify({"status": True, "data": case_info})

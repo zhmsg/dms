@@ -3,17 +3,13 @@
 
 
 import sys
-import json
-import random
 import os
 from datetime import datetime
-from time import sleep
 from flask import Blueprint, render_template, request, redirect,jsonify, send_from_directory
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
-from threading import Thread
 
-from Web import bug_url_prefix
+from Web import bug_url_prefix, data_dir
 from Web.views import control
 from Class import TIME_FORMAT_STR
 
@@ -96,7 +92,7 @@ def add_str_example(bug_no):
 
 
 # bug_img_dir = "static/t_images/BUG_Image/"
-bug_img_dir = "/data/dms/bug/"
+bug_img_dir = "%s/bug/" % data_dir
 
 
 @develop_bug_view.route("/<bug_no>/img/example/", methods=["POST"])

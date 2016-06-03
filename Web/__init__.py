@@ -57,4 +57,9 @@ dms_url_prefix = ""
 data_url_prefix = "/data"
 log_url_prefix = "/log"
 
+data_dir = "/data/dms"
 
+import os
+
+if os.path.isdir(data_dir) is False:
+    os.mkdir(data_dir)

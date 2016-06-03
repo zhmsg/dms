@@ -95,6 +95,8 @@ class HelpManager:
             return False , "Bad module_no"
         if check_path(api_path) is False:
             return False, "Bad api_path"
+        if api_path.endswith("/") is False:
+            return False, u"api path should end with /"
         if check_http_method(api_method) is False:
             return False, "Bad api_method"
         api_title = check_sql_character(api_title)
@@ -119,6 +121,8 @@ class HelpManager:
             return False , "Bad module_no"
         if check_path(api_path) is False:
             return False, "Bad api_path"
+        if api_path.endswith("/") is False:
+            return False, u"api path should end with /"
         if check_http_method(api_method) is False:
             return False, "Bad api_method"
         api_title = check_sql_character(api_title)
