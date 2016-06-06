@@ -163,7 +163,8 @@ function filter_code(code, s_type, page_num){
     var i = 0;
     for(; i < tr_len; i++){
         var tr = trs[i];
-        if(compare_str(tr.id.substr(2, 8), code, s_type) == true){
+        //console.info(tr.children[1]);
+        if(compare_str(tr.id.substr(2, 8), code, s_type) == true || compare_str(tr.children[1].innerHTML, code, s_type)){
             match_count++;
             if(match_count <= start_num || match_count > end_num) {
                 tr.hidden = true;
