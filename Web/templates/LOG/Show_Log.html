@@ -39,9 +39,9 @@
       {% for item in log_list %}
         <tr title="info: {{ item["info"] }}&#10;host: {{ item["host"] }}">
             <td name="run_begin" class="status_move">{{ item["run_begin"] | unix_timestamp }}</td>
-            <td>{{ item["url"] }}</td>
+            <td name="request_url">{{ item["url"] }}</td>
             <td>{{ item["method"] }}</td>
-            <td>{{ item["account"] }}</td>
+            <td name="request_account">{{ item["account"] }}</td>
             {% if item["level"] == "error" %}
                 <td class="redBg">{{ item["level"] }}</td>
             {% elif item["level"] == "base_error" %}

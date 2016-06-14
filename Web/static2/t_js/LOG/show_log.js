@@ -151,5 +151,13 @@ $(function(){
             td_ip.title = ip_info["info1"];
         }
     }
+    $("td[name='request_account']").click(function(){
+        $("#account").val(this.innerText);
+        update_search_url(0);
+    });
+    $("td[name='request_url']").click(function(){
+        $("#url_prefix").val(this.innerText);
+        update_search_url(0);
+    });
     update_search_url(0);
 });
