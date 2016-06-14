@@ -14,8 +14,9 @@ from Web.views.dms_view import dms_view as dms_blueprint
 from Web.views.develop_bug_view import develop_bug_view as bug_blueprint
 from Web.views.develop_right_view import develop_right_view as right_blueprint
 from Web.views.jy_log_view import jy_log_view as log_blueprint
+from Web.views.tools_view import tools_view as tools_blueprint
 from Web import login_manager, data_url_prefix, dev_url_prefix, api_url_prefix, dms_url_prefix, bug_url_prefix
-from Web import right_url_prefix, log_url_prefix, status_url_prefix, ip
+from Web import right_url_prefix, log_url_prefix, status_url_prefix, tools_url_prefix, ip
 
 __author__ = 'zhouheng'
 
@@ -30,6 +31,7 @@ msg_web.register_blueprint(dms_blueprint, url_prefix=dms_url_prefix)
 msg_web.register_blueprint(bug_blueprint, url_prefix=bug_url_prefix)
 msg_web.register_blueprint(right_blueprint, url_prefix=right_url_prefix)
 msg_web.register_blueprint(log_blueprint, url_prefix=log_url_prefix)
+msg_web.register_blueprint(tools_blueprint, url_prefix=tools_url_prefix)
 
 
 @msg_web.template_filter('bit_and')

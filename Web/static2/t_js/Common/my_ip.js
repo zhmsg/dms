@@ -19,3 +19,25 @@ function ip_2_str(ip_value){
     return ip_str.substr(1);
 }
 
+var ip_info;
+
+function get_ip_info_success(data){
+    if(data.status == true){
+        ip_info = data.data;
+    }
+    else{
+        ip_info = null;
+    }
+}
+
+function get_ip_info(ip_value){
+    var local_ip = localStorage.getItem(ip_value);
+    if(local_ip != null){
+        console.info("from local get " + local_ip);
+        return JSON.parse(local_ip);
+    }
+    var request_url = "/tools/ip/" + ip_value + "/";
+    my_request(request_url, "GET", null, get_ip_info_success);
+    localStorage.setItem(ip_value, JSON.stringify(ip_info));
+    return ip_info;
+}

@@ -135,7 +135,12 @@ $(function(){
     var request_ips = $("td[name='request_ip']");
     for(var i=0;i<request_ips.length;i++){
         var td_ip = request_ips[i];
-        td_ip.innerHTML = ip_2_str(td_ip.innerHTML);
+        var ip_value = td_ip.innerHTML;
+        td_ip.innerHTML = ip_2_str(ip_value);
+        var ip_info = get_ip_info(ip_value);
+        if(ip_info != null){
+            td_ip.title = ip_info["info1"];
+        }
     }
     update_search_url(0);
 });

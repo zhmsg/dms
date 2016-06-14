@@ -16,6 +16,7 @@ from APIHelp import HelpManager
 from APIStatus import StatusManager
 from Bug import BugManager
 from Log import LogManager
+from IP import IPManager
 
 __author__ = 'ZhouHeng'
 
@@ -45,6 +46,7 @@ class ControlManager:
         self.api_help = HelpManager()
         self.api_status = StatusManager()
         self.bug = BugManager()
+        self.ip = IPManager()
         self.manger_email = ["budechao@ict.ac.cn", "biozy@ict.ac.cn"]
         self.jy_log = LogManager()
 
@@ -703,3 +705,7 @@ class ControlManager:
 
     def new_login_server(self, server_ip, server_name, user_ip, user_name, login_time):
         return self.jy_log.insert_login_server(server_ip, server_name, user_ip, user_name, login_time)
+
+    # 针对工具
+    def get_ip_info(self, ip_value):
+        return self.ip.select_info_info(ip_value)
