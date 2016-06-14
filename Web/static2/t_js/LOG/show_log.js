@@ -137,7 +137,16 @@ $(function(){
         var td_ip = request_ips[i];
         var ip_value = td_ip.innerHTML;
         td_ip.innerHTML = ip_2_str(ip_value);
-        var ip_info = get_ip_info(ip_value);
+        var local_ip = localStorage.getItem(ip_value);
+        var ip_info = null;
+        if(local_ip != null){
+            console.info("from local get " + local_ip);
+            ip_info = JSON.parse(local_ip);
+        }
+        else {
+            ip_info = get_ip_info(ip_value);
+            td_ip.className = "redBg";
+        }
         if(ip_info != null){
             td_ip.title = ip_info["info1"];
         }
