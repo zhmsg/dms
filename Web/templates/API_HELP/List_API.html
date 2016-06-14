@@ -3,7 +3,6 @@
 {% block title %}API帮助文档{% endblock %}
 
 {% block content %}
-    <div class="container font16">
         <br />
         <a class="btn btn-primary pull-right" href="{{ url_for('dms_view.select_portal') }}" title="">主菜单</a>
     <div class="apiMode api-help-mode">
@@ -24,9 +23,6 @@
             <a href="{{ url_prefix }}/?module_no={{ module_info["module_no"] }}">{{ module_info["module_name"] }}</a>
         {% endfor %}
     </div>
-
-    </div>
-    <script type="text/javascript" src="{{ url_for('static', filename='t_js/Common/my_requests.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='t_js/Common/add_node.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='t_js/API_HELP/list_api.js') }}"></script>
 {% endblock %}

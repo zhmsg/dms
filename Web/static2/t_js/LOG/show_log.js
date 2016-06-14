@@ -132,5 +132,10 @@ $(function(){
         //}
         update_search_url(0);
     });
+    var request_ips = $("td[name='request_ip']");
+    for(var i=0;i<request_ips.length;i++){
+        var td_ip = request_ips[i];
+        td_ip.innerHTML = ip_2_str(td_ip.innerHTML);
+    }
     update_search_url(0);
 });
