@@ -18,12 +18,6 @@ html_dir = "/LOG"
 jy_log_view = Blueprint('jy_log_view', __name__)
 
 
-@jy_log_view.app_errorhandler(500)
-def handle_500(e):
-    print(e.args)
-    return str(e.args)
-
-
 @jy_log_view.route("/ping/", methods=["GET"])
 def ping():
     return "true"

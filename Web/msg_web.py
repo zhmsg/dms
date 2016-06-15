@@ -90,6 +90,10 @@ def after_request(res):
     return res
 
 
+@msg_web.errorhandler(500)
+def handle_500(e):
+    return str(e)
+
 # @msg_web.teardown_request
 # def teardown_request(e=None):
 #     print("enter teardown request")

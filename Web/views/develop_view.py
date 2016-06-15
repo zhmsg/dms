@@ -20,11 +20,6 @@ html_dir = "/Dev"
 url_prefix = dev_url_prefix
 
 
-@develop_view.app_errorhandler(500)
-def handle_500(e):
-    return str(e.args)
-
-
 @develop_view.route("/ping/", methods=["GET"])
 def ping():
     return "true"

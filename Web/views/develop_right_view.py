@@ -18,12 +18,6 @@ html_dir = "/RIGHT"
 develop_right_view = Blueprint('develop_right_view', __name__)
 
 
-@develop_right_view.app_errorhandler(500)
-def handle_500(e):
-    print(e.args)
-    return str(e.args)
-
-
 @develop_right_view.route("/ping/", methods=["GET"])
 def ping():
     return "true"
