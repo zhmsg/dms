@@ -4,6 +4,7 @@
 
 function test_api(){
     update_res("正在请求...");
+    $("#btn_save_result").hide();
     var test_env = $("#test_env").val();
     var api_url = $("#api_url").val();
     var api_method = $("#api_method").val();
@@ -52,6 +53,9 @@ function test_api(){
             }
             update_res(JSON.stringify(data, null, 4));
             update_status_url(data.status);
+            $("#btn_save_result").show();
+            $("#btn_save_result").text($("#btn_save_result").val());
+            $("#save_name").hide();
         },
         error:function(xhr){
             var res = "状态码：" + xhr.status + "\n";
@@ -226,11 +230,34 @@ $(function(){
             save_test_case();
         }
     });
+    $("#btn_save_result").click(function(){
+        var btn_t = this.innerHTML;
+        var btn_v = this.value;
+        if(btn_t == btn_v){
+            this.innerHTML = btn_v.substr(0, 2);
+            $("#save_name").show();
+        }
+        else{
+            var file_name = $("#save_name").val();
+            if(file_name.length<=0){
+                return;
+            }
+            this.innerHTML = btn_v;
+            $("#save_name").hide();
+            DownloadJson(file_name, $("#res_text").text());
+            $("#save_name").val("");
+        }
+    });
     get_test_case_list();
 });
 
 function update_res(s){
     $("#res_text").text(s);
+    var a_h = "data:application/json;charset=utf-8," + encodeURIComponent(s);
+    var a_s =$("#save_local");
+    a_s.attr("href", a_h);
+    a_s.attr("download", "sdfsd");
+
 }
 
 function update_request_url(){
@@ -279,3 +306,6 @@ function fill_zero(num, for_len) {
     }
     return num_str
 }
+
+
+
