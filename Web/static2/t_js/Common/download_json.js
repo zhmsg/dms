@@ -10,6 +10,5 @@ function DownloadJson(filename,content)
     download_a.href = "data:application/json;charset=utf-8," + encodeURIComponent(content);
     document.body.appendChild(download_a);
     download_a.click();
-    document.removeChild(download_a);
-    alert("download success");
+    document.body.removeChild(download_a);
 }

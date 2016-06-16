@@ -246,7 +246,7 @@ $(function(){
             $("#save_name").hide();
             DownloadJson(file_name + ".json", $("#res_text").text());
             $("#save_name").val("");
-            this.hide();
+            $("#btn_save_result").hide();
         }
     });
     get_test_case_list();
