@@ -244,7 +244,7 @@ $(function(){
             }
             this.innerHTML = btn_v;
             $("#save_name").hide();
-            DownloadJson(file_name, $("#res_text").text());
+            DownloadJson(file_name + ".json", $("#res_text").text());
             $("#save_name").val("");
         }
     });
