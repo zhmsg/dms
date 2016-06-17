@@ -6,14 +6,17 @@
     <a class="btn btn-primary pull-right margin20" href="/">主菜单</a>
     <button type="button" class="btn btn-primary margin20" id="btn_jy_query_ip">晶云IP查询</button>
     <button type="button" class="btn btn-primary margin20" id="btn_jy_wait">待开发</button>
-    <div class="div_jy_query_ip" style="display: none;">
+    <div class="div_jy_query_ip">
         <p class="bottom10">
-            <input class="form-control pull-left width300 margin10" id="param_name" placeholder="请输入IP地址" onkeyup="check_input_ip(this);">
+            <input class="form-control pull-left width300 margin10" id="input_ip" placeholder="请输入IP地址" onkeyup="check_input_ip(this);">
             <button class="btn btn-primary pull-left" id="btn_q_ip" disabled>查询</button>
             <span class="clear block"></span>
         </p>
-        <p class="bottom10">
-        IP地址：
+        <p>
+            <li>IP地址：<label id="ip_str">123.7.182.111</label></li>
+            <li>IP地址：<label id="ip_value">2064103023</label></li>
+            <li>IP归属地：<label id="ip_info1">河南洛阳</label></li>
+            <li>IP归属地：<label id="ip_info2">河南洛阳</label></li>
         </p>
     </div>
     <div class="div_jy_wait" style="display: none;">
