@@ -3,7 +3,7 @@
 
 
 import sys
-from flask import Blueprint, jsonify, render_template
+from flask import Blueprint, jsonify, render_template, g
 from flask_login import current_user
 
 from Web import tools_url_prefix as url_prefix
@@ -26,7 +26,7 @@ def ping():
 
 @tools_view.route("/", methods=["GET"])
 def tools_page():
-    return render_template("%s/Tools.html" % html_dir)
+    return render_template("%s/Tools.html" % html_dir, request_ip=g.request_IP_s)
 
 
 @tools_view.route("/ip/<ip_value>/", methods=["GET"])

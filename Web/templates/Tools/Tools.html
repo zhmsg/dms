@@ -8,7 +8,7 @@
     <button type="button" class="btn btn-primary margin20" id="btn_jy_wait">待开发</button>
     <div class="div_jy_query_ip">
         <p class="bottom10">
-            <input class="form-control pull-left width300 margin10" id="input_ip" placeholder="请输入IP地址" onkeyup="check_input_ip(this);">
+            <input class="form-control pull-left width300 margin10" id="input_ip" placeholder="{{ request_ip }}" onkeyup="check_input_ip(this);" value="{{ request_ip }}">
             <button class="btn btn-primary pull-left" id="btn_q_ip" disabled>查询</button>
             <span class="clear block"></span>
         </p>

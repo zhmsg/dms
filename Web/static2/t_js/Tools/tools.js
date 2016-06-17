@@ -61,5 +61,5 @@ $(function(){
             $("#ip_info2").text("");
         }
     });
-
+    $("#btn_q_ip").click();
 });
