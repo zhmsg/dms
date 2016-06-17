@@ -3,7 +3,7 @@
 
 
 import sys
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, render_template
 from flask_login import current_user
 
 from Web import tools_url_prefix as url_prefix
@@ -13,7 +13,7 @@ sys.path.append('..')
 
 __author__ = 'Zhouheng'
 
-# html_dir = "/LOG"
+html_dir = "/Tools"
 
 
 tools_view = Blueprint('tools_view', __name__)
@@ -22,6 +22,11 @@ tools_view = Blueprint('tools_view', __name__)
 @tools_view.route("/ping/", methods=["GET"])
 def ping():
     return "true"
+
+
+@tools_view.route("/", methods=["GET"])
+def tools_page():
+    return render_template("%s/Tools.html" % html_dir)
 
 
 @tools_view.route("/ip/<ip_value>/", methods=["GET"])

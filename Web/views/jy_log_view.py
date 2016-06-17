@@ -6,7 +6,7 @@ import sys
 from flask import Blueprint, render_template, request, jsonify, g
 from flask_login import login_required, current_user
 
-from Web import log_url_prefix as url_prefix, ip, my_email
+from Web import log_url_prefix as url_prefix, ip, my_email, company_ip_required
 from Web.views import control
 
 sys.path.append('..')
@@ -25,6 +25,7 @@ def ping():
 
 @jy_log_view.route("/", methods=["GET"])
 @login_required
+@company_ip_required
 def show_log_list():
     if "start_time" in request.args and request.args["start_time"] != "0":
         start_time = int(request.args["start_time"])

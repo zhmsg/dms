@@ -1,7 +1,8 @@
 # encoding: utf-8
 # !/usr/bin/python
 
-from flask import session
+from functools import wraps
+from flask import session, g, make_response
 from flask.ext.login import LoginManager, UserMixin
 from Tools.Mysql_db import DB
 from Tools.MyIP import IPManager
@@ -64,3 +65,16 @@ import os
 
 if os.path.isdir(data_dir) is False:
     os.mkdir(data_dir)
+
+company_ips = ["123.7.182.111"]
+
+
+def company_ip_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if "request_IP_s" not in g:
+            return make_response(u"因为一些原因页面丢失了", 404)
+        # if g.request_IP_s not in company_ips:
+        #     return make_response(u"因为一些原因页面不知道去哪了", 404)
+        return f(*args, **kwargs)
+    return decorated_function

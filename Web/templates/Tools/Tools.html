@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}晶云工具{% endblock %}
+
+{% block content %}
+    <a class="btn btn-primary pull-right margin20" href="/">主菜单</a>
+    <button type="button" class="btn btn-primary margin20" id="btn_jy_query_ip">晶云IP查询</button>
+    <button type="button" class="btn btn-primary margin20" id="btn_jy_wait">待开发</button>
+    <div class="div_jy_query_ip" style="display: none;">
+        <p class="bottom10">
+            <input class="form-control pull-left width300 margin10" id="param_name" placeholder="请输入IP地址" onkeyup="check_input_ip(this);">
+            <button class="btn btn-primary pull-left" id="btn_q_ip" disabled>查询</button>
+            <span class="clear block"></span>
+        </p>
+        <p class="bottom10">
+        IP地址：
+        </p>
+    </div>
+    <div class="div_jy_wait" style="display: none;">
+        <p class="bottom10">
+            待开发
+        </p>
+    </div>
+    <script type="text/javascript" src="{{ url_for('static', filename='t_js/Common/my_requests.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='t_js/Common/JY_DIV.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='t_js/Common/my_ip.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='t_js/Tools/tools.js') }}"></script>
+{% endblock %}
