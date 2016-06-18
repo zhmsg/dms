@@ -15,8 +15,9 @@
 <div class="container font16">
     {% block content %} {% endblock %}
 </div>
-<div style="position: fixed;bottom: 20px;left: 20px;">
-<p>{{ "" | current_env }}</p>
+<div style="position: fixed;bottom: 15px;left: 20px;cursor: pointer;">
+    <span>Current</span>
+    <p>{{ "" | current_env }}</p>
 </div>
 </body>
 </html>
