@@ -63,6 +63,13 @@ data_dir = "/data/dms"
 
 import os
 
+if os.path.exists("../env.conf") is False:
+    env = "Development"
+else:
+    with open("../env.conf") as r_env:
+        env = r_env.read()
+
+
 if os.path.isdir(data_dir) is False:
     os.mkdir(data_dir)
 

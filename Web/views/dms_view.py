@@ -8,7 +8,7 @@ from flask_login import login_user, current_user, logout_user
 from flask_login import login_required
 from werkzeug.security import gen_salt
 from Class.User import UserManager
-from Web import User
+from Web import User, env
 
 from Web import dms_url_prefix, dev_url_prefix, api_url_prefix, bug_url_prefix, data_url_prefix, right_url_prefix
 from Web import log_url_prefix
@@ -28,7 +28,7 @@ user_m = UserManager()
 
 @dms_view.route("/ping/", methods=["GET"])
 def ping():
-    return "true"
+    return jsonify({"result": True, "data": "Ping Success! Current Env Is %s" % env})
 
 
 def calc_redirect(role):

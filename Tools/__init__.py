@@ -2,4 +2,10 @@
 # coding: utf-8
 __author__ = 'ZhouHeng'
 
-query_service_url = "http://localhost:1191"
+import os
+
+if os.path.exists("../env.conf") is False:
+    env = "Development"
+else:
+    with open("../env.conf") as r_env:
+        env = r_env.read()

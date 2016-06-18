@@ -2,6 +2,7 @@
 # !/usr/bin/env python
 
 import MySQLdb
+from Tools import env
 
 __author__ = 'zhouheng'
 
@@ -25,11 +26,13 @@ class DB(object):
     cursor = None
     _sock_file = ''
 
-    def __init__(self, local=False, host="", mysql_user="dms", mysql_password="gene_ac252", mysql_db="dms"):
-        if local is True:
-            self.host = local_host
+    def __init__(self, host="", mysql_user="dms", mysql_password="gene_ac252", mysql_db="dms"):
+        if env == "Development":
+            self.host = "192.168.120.10"
+        elif env == "Production":
+            self.host = "localhost"
         else:
-            self.host = remote_host
+            self.host = "10.25.244.32"
         if host != "":
             self.host = host
         self.mysql_user = mysql_user
