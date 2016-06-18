@@ -15,8 +15,8 @@
 <div class="container font16">
     {% block content %} {% endblock %}
 </div>
-<footer class="container font16" style="margin-top: 20px" >
-<p>当前环境：{{ "" | current_env }}</p>
-</footer>
+<div style="position: fixed;bottom: 20px;left: 20px;">
+<p>{{ "" | current_env }}</p>
+</div>
 </body>
 </html>
