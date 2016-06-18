@@ -9,7 +9,6 @@
     <!--自定义的页面样式 -->
     <script type="text/javascript" src="{{ url_for('static', filename='t_js/jquery.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='t_js/Common/my_requests.js') }}"></script>
-    {#        <script type="text/javascript" src="{{ url_for('static', filename='t_js/Common/count_add.js') }}"></script>#}
 </head>
 <body>
 <div class="container font16">
@@ -17,6 +16,7 @@
 </div>
 <div style="position: fixed;bottom: 15px;left: 20px;cursor: pointer;">
     <span>Current</span>
+
     <p>{{ "" | current_env }}</p>
 </div>
 </body>

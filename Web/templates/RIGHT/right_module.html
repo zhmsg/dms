@@ -1,14 +1,8 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>晶云平台遗传频道权限描述</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='t_css/bootstrap.min.css') }}"><!-- 新 Bootstrap 核心 CSS 文件 -->
-<link rel="stylesheet" href="{{ url_for('static', filename='t_css/main.css') }}"><!--自定义的页面样式 -->
-</head>
+{% extends "base.html" %}
 
-<body>
-<div class="container font16">
+{% block title %}晶云平台遗传频道权限描述{% endblock %}
+
+{% block content %}
     <br/>
     <a class="btn btn-primary pull-right bottom10" href="{{ url_for('dms_view.select_portal') }}" title="">主菜单</a>
 
@@ -91,6 +85,4 @@
         </div>
         <div class="clear"></div>
     </div>
-</div>
-</body>
-</html>
+{% endblock %}
