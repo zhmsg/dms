@@ -97,6 +97,7 @@ def handle_500(e):
 # @msg_web.teardown_request
 # def teardown_request(e=None):
 #     print("enter teardown request")
+
 msg_web.static_folder = "static2"
 
 if __name__ == '__main__':
