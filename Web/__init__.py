@@ -59,7 +59,7 @@ data_url_prefix = "/data"
 log_url_prefix = "/log"
 tools_url_prefix = "/tools"
 
-data_dir = "/data/dms"
+data_dir = "/ossdata/dmsdata"
 
 import os
 
