@@ -16,7 +16,7 @@ from Web.views.develop_right_view import develop_right_view as right_blueprint
 from Web.views.jy_log_view import jy_log_view as log_blueprint
 from Web.views.tools_view import tools_view as tools_blueprint
 from Web import login_manager, data_url_prefix, dev_url_prefix, api_url_prefix, dms_url_prefix, bug_url_prefix
-from Web import right_url_prefix, log_url_prefix, status_url_prefix, tools_url_prefix, ip
+from Web import right_url_prefix, log_url_prefix, status_url_prefix, tools_url_prefix, ip, env
 
 __author__ = 'zhouheng'
 
@@ -55,6 +55,11 @@ def ip_str(ip_v):
     if type(ip_v) == int or type(ip_v) == long:
         return ip.ip_value_str(ip_value=ip_v)
     return ip_v
+
+
+@msg_web.template_filter("current_env")
+def current_env(s):
+    return env
 
 
 @msg_web.before_request
