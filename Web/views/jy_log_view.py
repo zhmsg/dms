@@ -72,7 +72,7 @@ def record_login():
     login_time = request_data["login_time"]
     server_name = request_data["server_name"]
     result, info = control.new_login_server(server_ip, server_name, user_ip, login_user, login_time)
-    trust_ip = ["123.7.182.111"]
+    trust_ip = ["123.7.182.111", "10.51.72.158", "10.44.147.192"]
     trust_user = ["msg", "wzh"]
     if g.request_IP_s not in trust_ip or login_user not in trust_user:
         email_content = u"登录的服务器IP：%s<br>登录的服务器主机名：%s<br>登录者的IP：%s<br>登录用户：%s<br>登录时间：%s" \

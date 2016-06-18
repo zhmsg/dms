@@ -80,8 +80,6 @@ class UserManager:
         try:
             res = requests.post(check_url, json={"account": user_name, "password": password})
         except requests.ConnectionError as ce:
-            res = None
-        if res is None:
             return False, u"暂时无法登录，请稍后重试"
         r = res.json()
         if r["status"] != 1:
@@ -109,8 +107,6 @@ class UserManager:
         try:
             res = requests.post(check_url, json={"list_account": [check_name]})
         except requests.ConnectionError as ce:
-            res = None
-        if res is None:
             return False, u"无法检测账户 ，请稍后重试"
         r = res.json()
         if r["status"] != 1:
