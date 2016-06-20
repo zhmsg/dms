@@ -1,16 +1,9 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>查看API解释</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='t_css/bootstrap.min.css') }}"><!-- 新 Bootstrap 核心 CSS 文件 -->
-<link rel="stylesheet" href="{{ url_for('static', filename='t_css/main.css') }}"><!--自定义的页面样式 -->
-<script type="text/javascript" src="{{ url_for('static', filename='t_js/jquery.min.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='t_js/API_HELP/show_api.js') }}"></script>
-</head>
+{% extends "base.html" %}
 
-<body>
-<div class="container font16 apiMode">
+{% block title %}查看API解释{% endblock %}
+
+{% block content %}
+    <br>
     <a class="btn btn-primary pull-right" href="{{ return_url }}" title="">API列表</a>
     {% if update_url %}
     <a class="btn btn-primary pull-right margin10" href="{{ update_url }}" title="">修改</a>
@@ -140,7 +133,4 @@
 {% endif %}
 <br>
 <a  href="{{ status_url }}?api_no={{ api_no }}" title="">查看返回状态码解释</a>
-</div>
-
-</body>
-</html>
+{% endblock %}
