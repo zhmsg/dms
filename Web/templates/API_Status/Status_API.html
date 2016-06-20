@@ -36,15 +36,15 @@
             <div class="newMode" style="display: none;">
             <form action="{{ url_for('develop_status_view.new_status') }}" method="post">
               <p class="bottom10">
-                <select class="box-side width150 pull-left margin10" id="service_id" name="service_id" onchange="set_fun_id();"></select>
-                <select class="box-side width150 pull-left margin10" id="fun_id" name="fun_id" onchange="update_info();"></select>
-                <select class="box-side width150 pull-left margin10" id="type_id" name="type_id" onchange="update_info();"></select>
-                <input name="error_id" class="form-control pull-left width100 margin10" id="error_id" onkeyup="update_info();" required>
-                <input name="error_desc" class="form-control pull-left width366 margin10" id="error_desc" onkeyup="update_info();" required>
+                <select class="box-side width150 pull-left margin10" id="service_id" name="service_id" ></select>
+                <select class="box-side width150 pull-left margin10 updateinfo" id="fun_id" name="fun_id" ></select>
+                <select class="box-side width150 pull-left margin10 updateinfo" id="type_id" name="type_id" ></select>
+                <input name="error_id" class="form-control pull-left width100 margin10" id="error_id" required>
+                <input name="error_desc" class="form-control pull-left width366 margin10" id="error_desc" required>
                 <button type="submit" class="btn btn-primary pull-left" id="btn_new">新建</button>
                 <!-- 复选框组 start -->
                 <span class="pull-left top6 left5">
-                 <label class="checkbox-inline"><input type="checkbox" id="show_exist" value="复选框" onchange="update_info();" />显示已有状态码</label>
+                 <label class="checkbox-inline updateinfo"><input type="checkbox" id="show_exist" value="复选框" />显示已有状态码</label>
                 </span>
                 <!-- 复选框组 end -->
                 <span class="clear block"></span>
@@ -65,5 +65,6 @@
     <input id="fun_info_url" value="{{ fun_info_url }}" style="display: none">
     <input id="error_type_url" value="{{ error_type_url }}" style="display: none">
     <script type="text/javascript" src="{{ url_for('static', filename='t_js/Common/my_requests.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='t_js/Common/add_node.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='t_js/API_Status/status_api.js') }}"></script>
 {% endblock %}

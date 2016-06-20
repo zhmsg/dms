@@ -7,57 +7,40 @@ var error_type = new Object();
 
 function get_module_info_success(data){
     module_info = data.data;
-    set_service_id();
 }
-
 function get_module_info() {
     var request_url = $("#fun_info_url").val();
     my_async_request(request_url, "GET", null, get_module_info_success);
 }
 
+function get_error_type_success(data){
+    if (data.status == true){
+        error_type = data.data;
+    }
+}
 function get_error_type() {
     var request_url = $("#error_type_url").val();
-    console.info(request_url);
-    $.ajax({
-        url: request_url,
-        method: "GET",
-        success: function (data) {
-            if (data.status == true){
-                error_type = data.data;
-                set_error_type();
-            }
-        },
-        error: function (xhr) {
-            var res = "状态码：" + xhr.status + "\n";
-            res += "返回值：" + xhr.statusText + "";
-            console.info(res);
-        }
-    });
-}
-
-function add_option(select_obj, value, text){
-    var option = "<option value='{value}'>{text}</option>";
-    var option_item = option.replace("{value}", value).replace("{text}", text);
-    select_obj.append(option_item);
+    my_async_request(request_url, "GET", null, get_error_type_success);
 }
 
 function set_service_id(){
+
     var select_obj = $("#service_id");
     select_obj.empty();
     for(var key in module_info){
-        add_option(select_obj, key, module_info[key].title);
+        add_option("service_id", key, module_info[key].title, module_info[key].title);
     }
     set_fun_id();
 }
 function set_fun_id(){
+    console.info("enter set fun  id");
     var select_obj = $("#fun_id");
     select_obj.empty();
     var service_id = $("#service_id").val();
     var fun_list = module_info[service_id]["fun_info"];
     for(var key in fun_list){
-        add_option(select_obj, key, fun_list[key].title);
+        add_option("fun_id", key, fun_list[key].title, fun_list[key].title);
     }
-
     update_info();
 }
 
@@ -65,9 +48,8 @@ function set_error_type(){
     var select_obj = $("#type_id");
     select_obj.empty();
     for(var key in error_type){
-        add_option(select_obj, key, error_type[key].title);
+        add_option("type_id", key, error_type[key].title, error_type[key].title);
     }
-    update_info();
 }
 
 function fun_update(){
@@ -86,7 +68,7 @@ function error_type_update(){
 
 function update_info(){
     var service_id = $("#service_id").val();
-    var service_text = $("#service_id  option:selected").text();
+    var service_text = $("#service_id option:selected").text();
     var fun_id = $("#fun_id").val();
     var fun_text = $("#fun_id  option:selected").text();
     var type_id = $("#type_id").val();
@@ -129,7 +111,6 @@ function update_info(){
     $("#new_info_show").html(info);
     fun_update();
     error_type_update();
-    console.info($("#show_exist").attr("checked"));
     if($("#show_exist").is(':checked')) {
         filter_code(service_id + fun_id + type_id, "start", 1);
     }
@@ -217,6 +198,9 @@ $(function(){
     $("#conBtn").click(function(){
         var conBtnValue = $("#conBtn").html();
         if(conBtnValue == "单个新建"){
+            set_error_type();
+            set_service_id();
+
             $(".newMode").show();
             $("#conBtn").html("隐藏新建");
         }
@@ -232,7 +216,11 @@ $(function(){
     if($("#new_info_show").length > 0){
         get_module_info();
         get_error_type();
+        $("#service_id").change(set_fun_id);
+        $(".updateinfo").change(update_info);
+        $("input[id^='error_']").keyup(update_info);
     }
+
 });
 
 // 分页相关方法
