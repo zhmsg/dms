@@ -91,6 +91,7 @@ def after_request(res):
                     res.headers["Location"] = res.headers["Location"].replace("http", pro)
                 else:
                     res.headers["Location"] = "%s://%s%s" % (pro, request.headers["Host"], location)
+    res.set_cookie("token", value="this is a token", domain="gene.ac", httponly=True)
     res.headers["Server"] = "JingYun Server"
     return res
 
