@@ -65,6 +65,7 @@ def index():
 @dms_view.route("/login/", methods=["GET"])
 def login_page():
     if current_user.is_authenticated:
+        print("logout")
         logout_user()
     next_url = ""
     if "next" in request.args:

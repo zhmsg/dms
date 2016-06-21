@@ -105,7 +105,8 @@ def handle_500(e):
 
 msg_web.static_folder = "static2"
 msg_web.session_cookie_name = "jy"
-msg_web.config.update(SESSION_COOKIE_DOMAIN="gene.ac")
+if env != "Development":
+    msg_web.config.update(SESSION_COOKIE_DOMAIN="gene.ac")
 
 if __name__ == '__main__':
     print("start run")
