@@ -91,7 +91,6 @@ def after_request(res):
                     res.headers["Location"] = res.headers["Location"].replace("http", pro)
                 else:
                     res.headers["Location"] = "%s://%s%s" % (pro, request.headers["Host"], location)
-    res.set_cookie("token", value="this is a token", domain="gene.ac", httponly=True)
     res.headers["Server"] = "JingYun Server"
     return res
 
@@ -105,6 +104,8 @@ def handle_500(e):
 #     print("enter teardown request")
 
 msg_web.static_folder = "static2"
+msg_web.session_cookie_name = "jy"
+msg_web.session_cookie_domain = "gene.ac"
 
 if __name__ == '__main__':
     print("start run")
