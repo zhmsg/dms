@@ -71,9 +71,9 @@ else:
         env = r_env.read()
 
 if env == "Development":
-    company_ips = [3232266241, 3232266495]
+    company_ips = [3232266241, 3232266495]  # 192.168.120.1 -- 192.168.120.254
 else:
-    company_ips = [2064103023, 2064103024]
+    company_ips = [2064103023, 2064103024]  # 123.7.182.111
 
 
 if os.path.isdir(data_dir) is False:

@@ -47,7 +47,7 @@ def unix_timestamp(t):
     return t
 
 accept_agent = "(firefox|chrome|safari|window)"
-trust_proxy = ["127.0.0.1"]
+trust_proxy = ["127.0.0.1", "10.25.244.32", "10.44.147.192"]
 
 
 @msg_web.template_filter("ip_str")
