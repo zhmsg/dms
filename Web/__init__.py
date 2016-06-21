@@ -65,23 +65,27 @@ import os
 
 if os.path.exists("../env.conf") is False:
     env = "Development"
+
 else:
     with open("../env.conf") as r_env:
         env = r_env.read()
+
+if env == "Development":
+    company_ips = [3232266241, 3232266495]
+else:
+    company_ips = [2064103023, 2064103024]
 
 
 if os.path.isdir(data_dir) is False:
     os.mkdir(data_dir)
 
-company_ips = ["123.7.182.111"]
-
 
 def company_ip_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        if "request_IP_s" not in g:
+        if "request_IP" not in g:
             return make_response(u"因为一些原因页面丢失了", 404)
-        # if g.request_IP_s not in company_ips:
-        #     return make_response(u"因为一些原因页面不知道去哪了", 404)
+        if g.request_IP not in range(company_ips[0], company_ips[1]):
+            return make_response(u"因为一些原因页面不知道去哪了", 404)
         return f(*args, **kwargs)
     return decorated_function
