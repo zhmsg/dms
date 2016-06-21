@@ -105,7 +105,7 @@ def handle_500(e):
 
 msg_web.static_folder = "static2"
 msg_web.session_cookie_name = "jy"
-msg_web.session_cookie_domain = ".gene.ac"
+msg_web.session_cookie_domain = "gene.ac"
 msg_web.server_name = "gene.ac"
 
 if __name__ == '__main__':
