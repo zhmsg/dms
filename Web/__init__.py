@@ -24,6 +24,8 @@ class User(UserMixin):
         return self.account
 
 login_manager = LoginManager()
+login_manager.session_protection = 'strong'
+
 ip = IPManager()
 my_email = MyEmailManager("/home/msg/conf/")
 
