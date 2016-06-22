@@ -9,7 +9,7 @@ function request_error(xhr){
     swal({
             title: xhr.responseText,
             text: "是否重新登录",
-            type: "info",
+            type: "warning",
             showCancelButton: true,
             confirmButtonColor: '#DD6B55',
             confirmButtonText: '重新登录',
