@@ -132,13 +132,13 @@ def update_api_module(module_no):
 
 @develop_api_view.route("/module/care/", methods=["POST", "DELETE"])
 def add_module_care():
-    request_form = request.form
-    module_no = int(request_form["module_no"])
+    request_data = request.json
+    module_no = request_data["module_no"]
     if request.method == "POST":
         result, care_info = control.add_module_care(current_user.account, current_user.role, module_no)
     else:
         result, care_info = control.delete_module_care(current_user.account, module_no)
-    return json.dumps({"status": result, "data": care_info})
+    return jsonify({"status": result, "data": care_info})
 
 
 @develop_api_view.route("/info/", methods=["GET"])
@@ -320,8 +320,8 @@ def add_output_example():
 
 @develop_api_view.route("/care/", methods=["POST", "DELETE"])
 def add_care():
-    request_form = request.form
-    api_no = request_form["api_no"]
+    request_data = request.json
+    api_no = request_data["api_no"]
     if request.method == "POST":
         result, care_info = control.add_care(api_no, current_user.account, current_user.role)
     else:

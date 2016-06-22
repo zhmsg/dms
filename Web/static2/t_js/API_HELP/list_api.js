@@ -14,10 +14,19 @@ function change_care(module_no){
     }
 }
 
-function new_care_success(data){
+function change_care_success(data){
     if (data.status == true){
-        $("#make_care").text("取消关注");
-        $("#module_care_user").append('<span id="mine_care">我</span>');
+        if ($("#make_care").text() == "关注")
+        {
+            $("#make_care").text("取消关注");
+            $("#module_care_user").append('<span id="mine_care">我</span>');
+        }
+        else if($("#make_care").text() == "取消关注")
+        {
+            $("#make_care").text("关注");
+            $("#mine_care").remove();
+        }
+
     }
     else{
         sweetAlert(data.data);
@@ -26,29 +35,12 @@ function new_care_success(data){
 
 function new_care(module_no){
     var change_url = $("#care_url").val();
-    my_async_request(change_url, "POST", {module_no:module_no}, new_care_success);
+    my_async_request(change_url, "POST", {module_no:module_no}, change_care_success);
 }
 
 function remove_care(module_no){
     var change_url = $("#care_url").val();
-    $.ajax({
-        url: change_url,
-        method: "DELETE",
-        data:{module_no:module_no},
-        success:function(data){
-            var json_obj = JSON.parse(data);
-            if (json_obj.status == true){
-                $("#make_care").text("关注");
-                $("#mine_care").remove();
-            }
-            else{
-                alert(data)
-            }
-        },
-        error:function(xhr){
-            alert(xhr.statusText);
-        }
-    });
+    my_async_request(change_url, "DELETE", {module_no:module_no}, change_care_success);
 }
 
 function add_test_env(){
