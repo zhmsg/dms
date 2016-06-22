@@ -100,7 +100,8 @@ def login():
     if session["role"] == 0:
             return u"您还没有任何权限，请联系管理员授权"
     else:
-        return redirect(url_for(calc_redirect(session["role"])))
+        resp = redirect(url_for(calc_redirect(session["role"])))
+        return resp
 
 
 @dms_view.route("/password/", methods=["GET"])

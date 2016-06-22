@@ -108,12 +108,11 @@ def handle_500(e):
 #     print("enter teardown request")
 
 msg_web.static_folder = "static2"
-msg_web.session_cookie_name = "jy"
+msg_web.session_cookie_name = "jydms"
 if env != "Development":
     msg_web.config.update(SESSION_COOKIE_DOMAIN="gene.ac")
+msg_web.config.update(PERMANENT_SESSION_LIFETIME=7200)
 
 if __name__ == '__main__':
     print("start run")
-    from werkzeug.contrib.fixers import LighttpdCGIRootFix
-    msg_web.wsgi_app = LighttpdCGIRootFix(msg_web.wsgi_app)
     msg_web.run(host="0.0.0.0", port=2200)
