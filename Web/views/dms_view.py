@@ -3,7 +3,7 @@
 
 import sys
 from datetime import datetime, timedelta
-from flask import Blueprint, request, render_template, redirect, session, url_for, jsonify, g
+from flask import Blueprint, request, render_template, redirect, session, url_for, jsonify, g, make_response
 from flask_login import login_user, current_user, logout_user
 from flask_login import login_required
 from werkzeug.security import gen_salt
@@ -59,7 +59,8 @@ def index():
             return redirect(url_for(calc_redirect(current_user.role)))
     if "X-Requested-With" in request.headers:
         if request.headers["X-Requested-With"] == "XMLHttpRequest":
-            return jsonify({"result": False, "data": "登录状态已过期，需要重新登录"})
+            # return jsonify({"result": False, "data": "登录状态已过期，需要重新登录"})
+            return make_response("登录状态已过期，需要重新登录", 302)
     if "next" in request.args:
         next_url = request.args["next"]
     return render_template("login.html", next_url=next_url, url_prefix=url_prefix)

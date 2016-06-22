@@ -157,9 +157,6 @@ function new_module_success(data){
     if(data.status == true) {
         location.reload();
     }
-    else{
-        sweetAlert(data.data);
-    }
 }
 
 $(function(){
