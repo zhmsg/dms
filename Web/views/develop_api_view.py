@@ -326,7 +326,7 @@ def add_care():
         result, care_info = control.add_care(api_no, current_user.account, current_user.role)
     else:
         result, care_info = control.delete_care(api_no, current_user.account)
-    return json.dumps({"status": result, "data": care_info})
+    return jsonify({"status": result, "data": care_info})
 
 
 @develop_api_view.route("/delete/<api_no>/", methods=["GET"])

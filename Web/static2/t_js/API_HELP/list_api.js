@@ -14,26 +14,19 @@ function change_care(module_no){
     }
 }
 
+function new_care_success(data){
+    if (data.status == true){
+        $("#make_care").text("取消关注");
+        $("#module_care_user").append('<span id="mine_care">我</span>');
+    }
+    else{
+        sweetAlert(data.data);
+    }
+}
+
 function new_care(module_no){
     var change_url = $("#care_url").val();
-    $.ajax({
-        url: change_url,
-        method: "POST",
-        data:{module_no:module_no},
-        success:function(data){
-            var json_obj = JSON.parse(data);
-            if (json_obj.status == true){
-                $("#make_care").text("取消关注");
-                $("#module_care_user").append('<span id="mine_care">我</span>');
-            }
-            else{
-                alert(data)
-            }
-        },
-        error:function(xhr){
-            alert(xhr.statusText);
-        }
-    });
+    my_async_request(change_url, "POST", {module_no:module_no}, new_care_success);
 }
 
 function remove_care(module_no){

@@ -59,7 +59,6 @@ def index():
             return redirect(url_for(calc_redirect(current_user.role)))
     if "X-Requested-With" in request.headers:
         if request.headers["X-Requested-With"] == "XMLHttpRequest":
-            # return jsonify({"result": False, "data": "登录状态已过期，需要重新登录"})
             return make_response("登录状态已过期，需要重新登录", 302)
     if "next" in request.args:
         next_url = request.args["next"]
@@ -186,7 +185,7 @@ def register():
 @dms_view.route("/register/check/", methods=["POST"])
 @login_required
 def register_check():
-    request_data = request.form
+    request_data = request.json
     check_name = request_data["check_name"]
     result, message = control.check_user_name_exist(current_user.account, current_user.role, check_name)
     if result is True:
