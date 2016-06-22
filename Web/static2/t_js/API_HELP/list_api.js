@@ -158,7 +158,7 @@ function new_module_success(data){
         location.reload();
     }
     else{
-        alert(data.data);
+        sweetAlert(data.data);
     }
 }
 

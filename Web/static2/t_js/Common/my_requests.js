@@ -17,6 +17,7 @@ function my_request(request_url, request_method, body_param, request_success){
             var res = "状态码：" + xhr.status + "\n";
             res += "返回值：" + xhr.statusText + "";
             console.info(xhr);
+            sweetAlert(xhr.statusText);
         }
     });
 }

@@ -57,6 +57,9 @@ def index():
             return u"您还没有任何权限，请联系管理员授权"
         else:
             return redirect(url_for(calc_redirect(current_user.role)))
+    if "X-Requested-With" in request.headers:
+        if request.headers["X-Requested-With"] == "XMLHttpRequest":
+            return jsonify({"result": False, "data": "登录状态已过期，需要重新登录"})
     if "next" in request.args:
         next_url = request.args["next"]
     return render_template("login.html", next_url=next_url, url_prefix=url_prefix)
@@ -65,7 +68,6 @@ def index():
 @dms_view.route("/login/", methods=["GET"])
 def login_page():
     if current_user.is_authenticated:
-        print("logout")
         logout_user()
     next_url = ""
     if "next" in request.args:
