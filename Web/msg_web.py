@@ -111,7 +111,7 @@ msg_web.static_folder = "static2"
 msg_web.session_cookie_name = "jydms"
 if env != "Development":
     msg_web.config.update(SESSION_COOKIE_DOMAIN="gene.ac")
-msg_web.config.update(PERMANENT_SESSION_LIFETIME=7200)
+msg_web.config.update(PERMANENT_SESSION_LIFETIME=600)
 
 if __name__ == '__main__':
     print("start run")

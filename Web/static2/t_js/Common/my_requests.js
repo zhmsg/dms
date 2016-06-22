@@ -6,7 +6,23 @@ function request_error(xhr){
     var res = "状态码：" + xhr.status + "\n";
     res += "返回值：" + xhr.statusText + "";
     console.info(xhr);
-    sweetAlert(xhr.responseText);
+    swal({
+            title: xhr.responseText,
+            text: "是否重新登录",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: '#DD6B55',
+            confirmButtonText: '重新登录',
+            cancelButtonText: "取消",
+            closeOnConfirm: true,
+            closeOnCancel: true
+        },
+        function(isConfirm){
+            if (isConfirm){
+                location.reload(true);
+            }
+        }
+    );
 }
 
 function my_request(request_url, request_method, body_param, request_success){
