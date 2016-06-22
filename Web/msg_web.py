@@ -5,6 +5,7 @@ sys.path.append("..")
 import time
 import re
 from flask import Flask, request, make_response, g
+from flask_login import current_user
 
 from Web.views.transport_view import transport_view as transport_view_blueprint
 from Web.views.develop_view import develop_view as develop_view_blueprint
@@ -78,6 +79,9 @@ def before_request():
     user_agent = request.headers["User-Agent"]
     if re.search(accept_agent, user_agent, re.I) is None:
         return make_response(u"浏览器版本过低", 403)
+    if current_user.is_authenticated:
+        g.user_role = current_user.role
+        g.user_name = current_user.account
 
 
 @msg_web.after_request
@@ -110,4 +114,6 @@ if env != "Development":
 
 if __name__ == '__main__':
     print("start run")
+    from werkzeug.contrib.fixers import LighttpdCGIRootFix
+    msg_web.wsgi_app = LighttpdCGIRootFix(msg_web.wsgi_app)
     msg_web.run(host="0.0.0.0", port=2200)

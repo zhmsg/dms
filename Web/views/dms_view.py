@@ -3,7 +3,7 @@
 
 import sys
 from datetime import datetime, timedelta
-from flask import Blueprint, request, render_template, redirect, session, url_for, jsonify
+from flask import Blueprint, request, render_template, redirect, session, url_for, jsonify, g
 from flask_login import login_user, current_user, logout_user
 from flask_login import login_required
 from werkzeug.security import gen_salt
@@ -105,8 +105,8 @@ def login():
 
 @dms_view.route("/password/", methods=["GET"])
 def password_page():
-    if current_user.is_authenticated:
-        return render_template("password.html", user_name=current_user.account, url_prefix=url_prefix)
+    if "user_name" in g:
+        return render_template("password.html", url_prefix=url_prefix)
     elif "change_token" in session and "expires_in" in session and "user_name" in session:
         expires_in = session["expires_in"]
         if expires_in > datetime.now():
@@ -154,11 +154,10 @@ def password():
 @dms_view.route("/register/", methods=["GET"])
 @login_required
 def register_page():
-    if current_user.role & control.role_value["user_new"] <= 0:
+    if g.user_role & control.role_value["user_new"] <= 0:
         return u"用户无权限操作"
     check_url = url_prefix + "/register/check/"
-    return render_template("register.html", user_role=current_user.role, rl_prefix=url_prefix, check_url=check_url,
-                           role_desc=control.user.role_desc)
+    return render_template("register.html", url_prefix=url_prefix, check_url=check_url, role_desc=control.user.role_desc)
 
 
 @dms_view.route("/register/", methods=["POST"])
@@ -197,7 +196,7 @@ def authorize_page():
     result, my_user = control.get_my_user(current_user.account, current_user.role)
     if result is False:
         return my_user
-    return render_template("authorize.html", my_user=my_user, user_role=current_user.role, url_prefix=url_prefix,
+    return render_template("authorize.html", my_user=my_user, url_prefix=url_prefix,
                            role_desc=control.user.role_desc)
 
 
@@ -221,7 +220,7 @@ def authorize():
 @dms_view.route("/portal/", methods=["GET"])
 @login_required
 def select_portal():
-    return render_template("portal.html", user_role=current_user.role, data_url_prefix=data_url_prefix,
+    return render_template("portal.html", data_url_prefix=data_url_prefix,
                            api_url_prefix=api_url_prefix, dev_url_prefix=dev_url_prefix, bug_url_prefix=bug_url_prefix,
                            dms_url_prefix=dms_url_prefix, right_url_prefix=right_url_prefix, log_url_prefix=log_url_prefix,
                            role_desc=control.user_role_desc, role_value=control.role_value)
