@@ -98,53 +98,6 @@ function set_fun_id(){
     add_table_row("tb_sub_module", mul_row, true);
 }
 
-function set_div_show(btn_id, is_show){
-    var btn = $("#" + btn_id);
-    var btn_v = btn.val();
-    var div_class = btn_id.replace("btn", "div");
-    if (is_show == true)
-    {
-        btn.html("隐藏" + btn_v);
-        $("." + div_class).show();
-    }
-    else{
-        btn.html(btn_v);
-        $("." + div_class).hide();
-    }
-}
-function div_show(btn_id)
-{
-    var btn = $("#" + btn_id);
-    var btn_v = btn.val();
-    var btn_html = btn.html();
-    if(btn_v == btn_html){
-        set_div_show(btn_id, true);
-        return true;
-    }
-    else
-    {
-        set_div_show(btn_id, false);
-        return false;
-    }
-}
-
-$(function(){
-    $("button[id^='btn_new_']").click(function(){
-        var id = this.id;
-        div_show(id);
-        var all_btn = $("button[id^='btn_new_']");
-        for(var i=0;i<all_btn.length;i++)
-        {
-            if(all_btn[i].id == id){
-                continue;
-            }
-            else{
-                set_div_show(all_btn[i].id, false)
-            }
-        }
-    });
-});
-
 
 function add_table_row(table_id, mul_row, clear){
     var t = $("#" + table_id);
@@ -171,25 +124,6 @@ $(function(){
     get_module_info();
     get_error_type();
 });
-
-
-function my_request(request_url, request_method, body_param, request_success){
-    if(request_method != "GET"){
-        body_param = JSON.stringify(body_param)
-    }
-    $.ajax({
-        url: request_url,
-        method: request_method,
-        contentType: "application/json",
-        data: body_param,
-        success:request_success,
-        error:function(xhr){
-            var res = "状态码：" + xhr.status + "\n";
-            res += "返回值：" + xhr.statusText + "";
-            console.info(xhr);
-        }
-    });
-}
 
 function new_module_success(data){
     if(data["status"] == true) {
@@ -222,7 +156,7 @@ $(function(){
         }
         console.info(body_param);
         var request_url = location.href;
-        my_request(request_url, "POST", body_param, new_module_success);
+        my_async_request(request_url, "POST", body_param, new_module_success);
     });
     $("#new_sub_module").click(function(){
         var id = this.id;
@@ -236,6 +170,6 @@ $(function(){
         console.info(body_param);
         var request_url = $("#fun_info_url").val();
         console.info(request_url);
-        my_request(request_url, "POST", body_param, new_sub_module_success);
+        my_async_request(request_url, "POST", body_param, new_sub_module_success);
     });
 });

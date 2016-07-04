@@ -4,8 +4,10 @@
 
 {% block content %}
     <a class="btn btn-primary pull-right margin20" href="{{ return_url }}/" >查看状态码</a>
-    <button type="button" class="btn btn-primary margin20" id="btn_new_module" value="新建模块" >新建模块</button>
-    <div class="div_new_module" style="display: none;">
+    <button type="button" class="btn btn-primary margin20" id="btn_jy_module" value="新建模块" >新建模块</button>
+    <button type="button" class="btn btn-primary margin20" id="btn_jy_sub" value="新建子模块" >新建子模块</button>
+    <button type="button" class="btn btn-primary margin20" id="btn_jy_error" value="新建错误类型" >新建错误类型</button>
+    <div class="div_jy_module" style="display: none;">
         <table class="table table-bordered table-hover api-list-table" id="tb_main_module">
           <tr>
             <th scope="col" width="8%">模块编码</th>
@@ -21,8 +23,8 @@
             <span class="clear block"></span>
           </p>
         </div>
-    <button type="button" class="btn btn-primary margin20" id="btn_new_sub" value="新建子模块" >新建子模块</button>
-    <div class="div_new_sub" style="display: none;">
+
+    <div class="div_jy_sub" style="display: none;">
        <select class="box-side width150 pull-left margin20" id="service_id" name="service_id" onchange="set_fun_id();"></select>
        <table class="table table-bordered table-hover api-list-table" id="tb_sub_module">
           <tr>
@@ -39,8 +41,8 @@
             <span class="clear block"></span>
           </p>
     </div>
-    <button type="button" class="btn btn-primary margin20" id="btn_new_error" value="新建错误类型" >新建错误类型</button>
-    <div class="div_new_error" style="display: none;">
+
+    <div class="div_jy_error" style="display: none;">
        <table class="table table-bordered table-hover api-list-table" id="tb_error_type">
           <tr>
             <th scope="col" width="7%">编码</th>
@@ -60,4 +62,5 @@
     <input id="fun_info_url" value="{{ fun_info_url }}" style="display: none">
     <input id="error_type_url" value="{{ error_type_url }}" style="display: none">
     <script type="text/javascript" src="{{ url_for('static', filename='t_js/API_Status/status_module_new.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='t_js/Common/JY_DIV.js') }}"></script>
 {% endblock %}

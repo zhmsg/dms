@@ -152,6 +152,11 @@ class HelpManager:
         self.db.execute(update_sql)
         return True, "success"
 
+    def new_test_env(self, env_name, env_address):
+        insert_sql = "INSERT INTO %s VALUES ('%s','%s');" % (self.test_env, env_name, env_address)
+        self.db.execute(insert_sql)
+        return True, "success"
+
     def new_api_header(self, api_no, header_params):
         if len(api_no) != 32:
             return False, "Bad api_no"
