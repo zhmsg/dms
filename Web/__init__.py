@@ -3,7 +3,7 @@
 
 from functools import wraps
 from flask import session, g, make_response
-from flask.ext.login import LoginManager, UserMixin
+from flask_login import LoginManager, UserMixin
 from Tools.Mysql_db import DB
 from Tools.MyIP import IPManager
 from Tools.MyEmail import MyEmailManager
