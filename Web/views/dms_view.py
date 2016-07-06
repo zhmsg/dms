@@ -89,6 +89,12 @@ def login():
         session["expires_in"] = datetime.now() + timedelta(seconds=300)
         session["password"] = password
         return redirect(url_for("dms_view.password_page"))
+    if info["tel"] is None:
+        session["user_name"] = info["account"]
+        session["bind_token"] = gen_salt(57)
+        session["expires_in"] = datetime.now() + timedelta(seconds=300)
+        session["password"] = password
+        return redirect("%s/tel/" % url_prefix)
     if "remember" in request_data and request_data["remember"] == "on":
         remember = True
     else:
@@ -115,6 +121,16 @@ def password_page():
         if expires_in > datetime.now():
             return render_template("password.html", user_name=session["user_name"],
                                    change_token=session["change_token"], url_prefix=url_prefix)
+    return redirect(url_for("dms_view.login_page"))
+
+
+@dms_view.route("/tel/", methods=["GET"])
+def bind_tel_page():
+    if "bind_token" in session and "expires_in" in session and "user_name" in session and "password" in session:
+        expires_in = session["expires_in"]
+        if expires_in > datetime.now():
+            return render_template("tel.html", user_name=session["user_name"],
+                                   bind_token=session["bind_token"], url_prefix=url_prefix)
     return redirect(url_for("dms_view.login_page"))
 
 
