@@ -7,7 +7,7 @@ function request_error(xhr){
     res += "返回值：" + xhr.statusText + "";
     console.info(res);
     console.info(xhr);
-    if(xhr.status === 301){
+    if(xhr.status === 301 || xhr.status === 302){
         swal({
                 title: xhr.responseText,
                 text: "是否重新登录",
