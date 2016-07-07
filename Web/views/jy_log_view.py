@@ -3,10 +3,10 @@
 
 
 import sys
-from flask import Blueprint, render_template, request, jsonify, g
+from flask import render_template, request, jsonify, g
 from flask_login import login_required, current_user
 
-from Web import log_url_prefix as url_prefix, ip, my_email, company_ip_required
+from Web import log_url_prefix as url_prefix, ip, my_email, company_ip_required, create_blue
 from Web.views import control
 
 sys.path.append('..')
@@ -15,12 +15,7 @@ __author__ = 'Zhouheng'
 
 html_dir = "/LOG"
 
-jy_log_view = Blueprint('jy_log_view', __name__)
-
-
-@jy_log_view.route("/ping/", methods=["GET"])
-def ping():
-    return "true"
+jy_log_view = create_blue('jy_log_view', url_prefix=url_prefix, auth_required=False)
 
 
 @jy_log_view.route("/", methods=["GET"])

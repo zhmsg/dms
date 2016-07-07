@@ -2,19 +2,17 @@
 # !/usr/bin/python
 
 from functools import wraps
-from flask import session, g, make_response
-from flask_login import LoginManager, UserMixin
+from flask import session, g, make_response, Blueprint, jsonify,request
+from flask_login import LoginManager, UserMixin, login_required
 from Tools.Mysql_db import DB
 from Tools.MyIP import IPManager
 from Tools.MyEmail import MyEmailManager
 
 __author__ = 'zhouheng'
 
-db = None
-try:
-    db = DB()
-except Exception, e:
-    print e
+db = DB()
+ip = IPManager()
+my_email = MyEmailManager("/home/msg/conf/")
 
 
 class User(UserMixin):
@@ -25,9 +23,6 @@ class User(UserMixin):
 
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
-
-ip = IPManager()
-my_email = MyEmailManager("/home/msg/conf/")
 
 
 @login_manager.user_loader
@@ -91,3 +86,23 @@ def company_ip_required(f):
             return make_response(u"因为一些原因页面不知道去哪了", 404)
         return f(*args, **kwargs)
     return decorated_function
+
+
+blues = {}
+
+
+def create_blue(blue_name, url_prefix="/", auth_required=True):
+    add_blue = Blueprint(blue_name, __name__)
+    if auth_required:
+        @add_blue.before_request
+        @login_required
+        def before_request():
+                pass
+
+    @add_blue.route("/ping/", methods=["GET"])
+    def ping():
+        return jsonify({"status": True, "message": "ping %s success" % request.path})
+
+    if blue_name not in blues:
+        blues[blue_name] = [add_blue, url_prefix]
+    return add_blue

@@ -3,10 +3,10 @@
 
 import re
 import sys
-from flask import Blueprint, render_template, request, redirect
-from flask_login import login_required, current_user
+from flask import render_template, request, redirect
+from flask_login import current_user
 
-from Web import right_url_prefix as url_prefix
+from Web import right_url_prefix as url_prefix, create_blue
 from Web.views import control
 
 sys.path.append('..')
@@ -15,16 +15,10 @@ __author__ = 'Zhouheng'
 
 html_dir = "/RIGHT"
 
-develop_right_view = Blueprint('develop_right_view', __name__)
-
-
-@develop_right_view.route("/ping/", methods=["GET"])
-def ping():
-    return "true"
+develop_right_view = create_blue('develop_right_view', url_prefix=url_prefix)
 
 
 @develop_right_view.route("/", methods=["GET"])
-@login_required
 def show_module_list():
     result, info = control.get_right_module(current_user.role)
     if result is False:
@@ -51,7 +45,6 @@ def show_module_list():
 
 
 @develop_right_view.route("/", methods=["POST"])
-@login_required
 def new_action_role():
     if "Referer" not in request.headers:
         return "Bad Request"
@@ -69,7 +62,6 @@ def new_action_role():
 
 
 @develop_right_view.route("/action/delete/<int:action_no>/", methods=["GET"])
-@login_required
 def del_action_role(action_no):
     if "Referer" not in request.headers:
         return "Bad Request"

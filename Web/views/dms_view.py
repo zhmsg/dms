@@ -3,15 +3,15 @@
 
 import sys
 from datetime import datetime, timedelta
-from flask import Blueprint, request, render_template, redirect, session, url_for, jsonify, g, make_response
+from flask import request, render_template, redirect, session, url_for, jsonify, g, make_response
 from flask_login import login_user, current_user, logout_user
 from flask_login import login_required
 from werkzeug.security import gen_salt
 from Class.User import UserManager
-from Web import User, env
+from Web import User
 
 from Web import dms_url_prefix, dev_url_prefix, api_url_prefix, bug_url_prefix, data_url_prefix, right_url_prefix
-from Web import log_url_prefix
+from Web import log_url_prefix, create_blue
 from Web.views import control
 
 sys.path.append('..')
@@ -20,15 +20,10 @@ __author__ = 'Zhouheng'
 
 url_prefix = dms_url_prefix
 
-dms_view = Blueprint('dms_view', __name__)
+dms_view = create_blue('dms_view', url_prefix=url_prefix, auth_required=False)
 
 
 user_m = UserManager()
-
-
-@dms_view.route("/ping/", methods=["GET"])
-def ping():
-    return jsonify({"result": True, "data": "Ping Success! Current Env Is %s" % env})
 
 
 def calc_redirect(role):

@@ -7,9 +7,9 @@ import os
 import json
 import re
 from functools import wraps
-from flask import Blueprint, render_template, request, redirect, url_for, jsonify, g
-from flask_login import login_required, current_user
-from Web import api_url_prefix, data_dir
+from flask import render_template, request, redirect, url_for, jsonify, g
+from flask_login import current_user
+from Web import api_url_prefix, data_dir, create_blue
 from Web.views import control
 
 
@@ -23,16 +23,8 @@ case_dir = "%s/test_case" % data_dir
 if os.path.isdir(case_dir) is False:
     os.mkdir(case_dir)
 
-develop_api_view = Blueprint('develop_api_view', __name__)
 
-
-print("start success")
-
-
-@develop_api_view.before_request
-@login_required
-def before_request():
-    pass
+develop_api_view = create_blue('develop_api_view', url_prefix=url_prefix)
 
 
 def referer_api_no(f):
@@ -47,11 +39,6 @@ def referer_api_no(f):
         g.api_no = find_result[0]
         return f(*args, **kwargs)
     return decorated_function
-
-
-@develop_api_view.route("/ping/", methods=["GET"])
-def ping():
-    return "true"
 
 
 @develop_api_view.route("/")
@@ -306,7 +293,6 @@ def add_input_example():
 
 
 @develop_api_view.route("/add/output/", methods=["POST"])
-@login_required
 def add_output_example():
     request_form = request.form
     api_no = request_form["api_no"]
@@ -338,7 +324,6 @@ def delete_api(api_no):
 
 
 @develop_api_view.route("/delete/header/", methods=["DELETE"])
-@login_required
 def delete_header():
     request_data = request.json
     if "api_no" in request_data and "param" in request_data:

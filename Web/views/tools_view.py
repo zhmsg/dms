@@ -3,10 +3,9 @@
 
 
 import sys
-from flask import Blueprint, jsonify, render_template, g
-from flask_login import current_user
+from flask import jsonify, render_template, g
 
-from Web import tools_url_prefix as url_prefix
+from Web import tools_url_prefix as url_prefix, create_blue
 from Web.views import control
 
 sys.path.append('..')
@@ -16,12 +15,7 @@ __author__ = 'Zhouheng'
 html_dir = "/Tools"
 
 
-tools_view = Blueprint('tools_view', __name__)
-
-
-@tools_view.route("/ping/", methods=["GET"])
-def ping():
-    return "true"
+tools_view = create_blue('tools_view', url_prefix=url_prefix)
 
 
 @tools_view.route("/", methods=["GET"])

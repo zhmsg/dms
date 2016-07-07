@@ -4,9 +4,9 @@
 
 import sys
 from urlparse import urlparse, parse_qs
-from flask import Blueprint, render_template, request, redirect, jsonify
-from flask_login import login_required, current_user
-from Web import status_url_prefix, api_url_prefix
+from flask import render_template, request, redirect, jsonify
+from flask_login import current_user
+from Web import status_url_prefix, api_url_prefix, create_blue
 from Web.views import control
 
 
@@ -17,21 +17,7 @@ __author__ = 'Zhouheng'
 url_prefix = status_url_prefix
 html_dir = "/API_Status"
 
-develop_status_view = Blueprint('develop_status_view', __name__)
-
-
-print("start success")
-
-
-@develop_status_view.before_request
-@login_required
-def before_request():
-    pass
-
-
-@develop_status_view.route("/ping/", methods=["GET"])
-def ping():
-    return "true"
+develop_status_view = create_blue('develop_status_view', url_prefix=url_prefix)
 
 
 @develop_status_view.route("/", methods=["GET"])

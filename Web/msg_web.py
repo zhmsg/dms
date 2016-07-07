@@ -3,36 +3,37 @@
 import sys
 sys.path.append("..")
 import time
+import os
 import re
 from flask import Flask, request, make_response, g
 from flask_login import current_user
 
-from Web.views.transport_view import transport_view as transport_view_blueprint
-from Web.views.develop_view import develop_view as develop_view_blueprint
-from Web.views.develop_api_view import develop_api_view as develop_api_view_blueprint
-from Web.views.develop_status_view import develop_status_view as develop_status_view_blueprint
-from Web.views.dms_view import dms_view as dms_blueprint
-from Web.views.develop_bug_view import develop_bug_view as bug_blueprint
-from Web.views.develop_right_view import develop_right_view as right_blueprint
-from Web.views.jy_log_view import jy_log_view as log_blueprint
-from Web.views.tools_view import tools_view as tools_blueprint
-from Web import login_manager, data_url_prefix, dev_url_prefix, api_url_prefix, dms_url_prefix, bug_url_prefix
-from Web import right_url_prefix, log_url_prefix, status_url_prefix, tools_url_prefix, ip, env
+# from Web.views.transport_view import transport_view as transport_view_blueprint
+# from Web.views.develop_view import develop_view as develop_view_blueprint
+# from Web.views.develop_api_view import develop_api_view as develop_api_view_blueprint
+# from Web.views.develop_status_view import develop_status_view as develop_status_view_blueprint
+# from Web.views.dms_view import dms_view as dms_blueprint
+# from Web.views.develop_bug_view import develop_bug_view as bug_blueprint
+# from Web.views.develop_right_view import develop_right_view as right_blueprint
+# from Web.views.jy_log_view import jy_log_view as log_blueprint
+# from Web.views.tools_view import tools_view as tools_blueprint
+from Web import login_manager  #, data_url_prefix, dev_url_prefix, api_url_prefix, dms_url_prefix, bug_url_prefix
+from Web import ip, env  #right_url_prefix, log_url_prefix, status_url_prefix, tools_url_prefix, ip, env
 
 __author__ = 'zhouheng'
 
 msg_web = Flask("__name__")
 msg_web.secret_key = 'meisanggou'
 login_manager.init_app(msg_web)
-msg_web.register_blueprint(transport_view_blueprint, url_prefix=data_url_prefix)
-msg_web.register_blueprint(develop_view_blueprint, url_prefix=dev_url_prefix)
-msg_web.register_blueprint(develop_api_view_blueprint, url_prefix=api_url_prefix)
-msg_web.register_blueprint(develop_status_view_blueprint, url_prefix=status_url_prefix)
-msg_web.register_blueprint(dms_blueprint, url_prefix=dms_url_prefix)
-msg_web.register_blueprint(bug_blueprint, url_prefix=bug_url_prefix)
-msg_web.register_blueprint(right_blueprint, url_prefix=right_url_prefix)
-msg_web.register_blueprint(log_blueprint, url_prefix=log_url_prefix)
-msg_web.register_blueprint(tools_blueprint, url_prefix=tools_url_prefix)
+# msg_web.register_blueprint(transport_view_blueprint, url_prefix=data_url_prefix)
+# msg_web.register_blueprint(develop_view_blueprint, url_prefix=dev_url_prefix)
+# msg_web.register_blueprint(develop_api_view_blueprint, url_prefix=api_url_prefix)
+# msg_web.register_blueprint(develop_status_view_blueprint, url_prefix=status_url_prefix)
+# msg_web.register_blueprint(dms_blueprint, url_prefix=dms_url_prefix)
+# msg_web.register_blueprint(bug_blueprint, url_prefix=bug_url_prefix)
+# msg_web.register_blueprint(right_blueprint, url_prefix=right_url_prefix)
+# msg_web.register_blueprint(log_blueprint, url_prefix=log_url_prefix)
+# msg_web.register_blueprint(tools_blueprint, url_prefix=tools_url_prefix)
 
 
 @msg_web.template_filter('bit_and')
@@ -112,6 +113,21 @@ msg_web.session_cookie_name = "jydms"
 if env != "Development":
     msg_web.config.update(SESSION_COOKIE_DOMAIN="gene.ac")
 msg_web.config.update(PERMANENT_SESSION_LIFETIME=600)
+
+
+api_files = os.listdir("./views")
+for api_file in api_files:
+    if api_file.endswith("_view.py"):
+        exec "from Web.views import %s" % api_file[:-3]
+
+
+from Web import blues
+for key, value in blues.items():
+    if len(value[1]) > 1:
+        msg_web.register_blueprint(value[0], url_prefix=value[1])
+    else:
+        msg_web.register_blueprint(value[0])
+
 
 if __name__ == '__main__':
     print("start run")

@@ -3,12 +3,11 @@
 
 import json
 import sys
-from flask import Blueprint, request, render_template, redirect, url_for
+from flask import request, render_template, redirect, url_for
 from flask_login import current_user
 
-from flask_login import login_required
 
-from Web import data_url_prefix
+from Web import data_url_prefix, create_blue
 from Web.views import control
 
 sys.path.append('..')
@@ -17,11 +16,10 @@ __author__ = 'Zhouheng'
 
 url_prefix = data_url_prefix
 
-transport_view = Blueprint('transport_view', __name__)
+transport_view = create_blue('transport_view', url_prefix=url_prefix)
 
 
 @transport_view.route("/records/", methods=["GET"])
-@login_required
 def show():
     try:
         data_info = control.get_data()
@@ -47,7 +45,6 @@ def show():
 
 
 @transport_view.route("/data/", methods=["POST"])
-@login_required
 def new_data():
     try:
         result, message = control.new_data(current_user.role, current_user.account)
@@ -60,7 +57,6 @@ def new_data():
 
 
 @transport_view.route("/market/", methods=["POST"])
-@login_required
 def new_market():
     try:
         request_data = request.form
@@ -78,7 +74,6 @@ def new_market():
 
 
 @transport_view.route("/market/", methods=["GET"])
-@login_required
 def get_market():
     try:
         data_no = int(request.args["data_no"])
@@ -92,7 +87,6 @@ def get_market():
 
 
 @transport_view.route("/upload/", methods=["POST"])
-@login_required
 def new_upload():
     try:
         request_data = request.form
@@ -110,7 +104,6 @@ def new_upload():
 
 
 @transport_view.route("/upload/", methods=["GET"])
-@login_required
 def get_upload():
     try:
         data_no = int(request.args["data_no"])
@@ -125,7 +118,6 @@ def get_upload():
 
 
 @transport_view.route("/calc/", methods=["POST"])
-@login_required
 def new_calc():
     try:
         request_data = request.form
@@ -143,7 +135,6 @@ def new_calc():
 
 
 @transport_view.route("/calc/", methods=["GET"])
-@login_required
 def get_calc():
     try:
         data_no = int(request.args["data_no"])

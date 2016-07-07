@@ -3,30 +3,23 @@
 
 
 import sys
-from flask import Blueprint, render_template, send_from_directory, request
-from flask_login import current_user, login_required
+from flask import render_template, request
+from flask_login import current_user
 
-from Web import dev_url_prefix
+from Web import dev_url_prefix, create_blue
 from Web.views import control
 
 sys.path.append('..')
 
 __author__ = 'Zhouheng'
 
-
-develop_view = Blueprint('develop_view', __name__)
-
 html_dir = "/Dev"
 url_prefix = dev_url_prefix
 
-
-@develop_view.route("/ping/", methods=["GET"])
-def ping():
-    return "true"
+develop_view = create_blue('develop_view', url_prefix=url_prefix)
 
 
 @develop_view.route("/operate/auth/", methods=["GET"])
-@login_required
 def operate_auth_show():
     result, data = control.show_operate_auth(current_user.role)
     if result is False:
@@ -35,7 +28,6 @@ def operate_auth_show():
 
 
 @develop_view.route("/data/table/", methods=["GET"])
-@login_required
 def show_data_table():
     result, table_list = control.list_data_table(current_user.role)
     if result is False:
