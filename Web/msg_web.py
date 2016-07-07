@@ -65,6 +65,8 @@ def before_request():
     if current_user.is_authenticated:
         g.user_role = current_user.role
         g.user_name = current_user.account
+    else:
+        g.user_role = 0
 
 
 @msg_web.after_request

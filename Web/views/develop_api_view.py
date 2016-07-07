@@ -8,7 +8,6 @@ import json
 import re
 from functools import wraps
 from flask import render_template, request, redirect, url_for, jsonify, g
-from flask_login import current_user
 from Web import api_url_prefix, data_dir, create_blue
 from Web.views import control
 
@@ -43,19 +42,19 @@ def referer_api_no(f):
 
 @develop_api_view.route("/")
 def list_api():
-    result, module_list = control.get_module_list(current_user.role)
+    result, module_list = control.get_module_list(g.user_role)
     if result is False:
         return module_list
-    if current_user.role & control.role_value["api_module_new"] == control.role_value["api_module_new"]:
+    if g.user_role & control.role_value["api_module_new"] == control.role_value["api_module_new"]:
         new_power = True
     else:
         new_power = False
-    result, test_env = control.get_test_env(current_user.role)
+    result, test_env = control.get_test_env(g.user_role)
     if result is False:
         return test_env
     if "module_no" in request.args:
         module_no = int(request.args["module_no"])
-        result, module_data = control.get_api_list(module_no, current_user.role)
+        result, module_data = control.get_api_list(module_no, g.user_role)
         if result is False:
             return module_data
         current_module = None
@@ -82,7 +81,7 @@ def list_api():
                                    module_env_info=module_env_info)
         my_care = None
         for item in module_data["care_info"]:
-            if item["user_name"] == current_user.account:
+            if item["user_name"] == g.user_name:
                 my_care = item
                 module_data["care_info"].remove(item)
                 break
@@ -101,7 +100,7 @@ def new_api_module():
     module_desc = request_data["module_desc"]
     module_part = request_data["module_part"]
     module_env = request_data["module_env"]
-    result, message = control.new_api_module(current_user.role, module_name, module_prefix, module_desc, module_part, module_env)
+    result, message = control.new_api_module(g.user_role, module_name, module_prefix, module_desc, module_part, module_env)
     return jsonify({"status": result, "data": message})
 
 
@@ -113,7 +112,7 @@ def update_api_module(module_no):
     module_desc = request_data["module_desc"]
     module_part = request_data["module_part"]
     module_env = request_data["module_env"]
-    result, message = control.update_api_module(current_user.role, module_no, module_name, module_prefix, module_desc, module_part, module_env)
+    result, message = control.update_api_module(g.user_role, module_no, module_name, module_prefix, module_desc, module_part, module_env)
     return jsonify({"status": result, "data": message})
 
 
@@ -122,9 +121,9 @@ def add_module_care():
     request_data = request.json
     module_no = request_data["module_no"]
     if request.method == "POST":
-        result, care_info = control.add_module_care(current_user.account, current_user.role, module_no)
+        result, care_info = control.add_module_care(g.user_name, g.user_role, module_no)
     else:
-        result, care_info = control.delete_module_care(current_user.account, module_no)
+        result, care_info = control.delete_module_care(g.user_name, module_no)
     return jsonify({"status": result, "data": care_info})
 
 
@@ -135,18 +134,18 @@ def show_api():
     api_no = request.args["api_no"]
     if len(api_no) != 32:
         return "Bad api_no"
-    result, api_info = control.get_api_info(api_no, current_user.role)
+    result, api_info = control.get_api_info(api_no, g.user_role)
     if result is False:
         return api_info
     return_url = url_prefix + "/?module_no=%s" % api_info["basic_info"]["module_no"]
     update_url = None
-    if current_user.role & 16 > 0:
+    if g.user_role & 16 > 0:
         update_url = url_prefix + "/update/info/?api_no=%s" % api_no
     test_url = url_prefix + "/test/?api_no=%s" % api_no
     status_url = url_prefix + "/status/"
     my_care = None
     for item in api_info["care_info"]:
-        if item["user_name"] == current_user.account:
+        if item["user_name"] == g.user_name:
             my_care = item
             api_info["care_info"].remove(item)
             break
@@ -157,7 +156,7 @@ def show_api():
 
 @develop_api_view.route("/new/", methods=["GET"])
 def new_api_page():
-    result, module_list = control.get_module_list(current_user.role)
+    result, module_list = control.get_module_list(g.user_role)
     if result is False:
         return module_list
     module_no = 1
@@ -178,7 +177,7 @@ def new_api_info():
     title = request_form["api_title"]
     method = request_form["api_method"]
     module_no = int(api_module)
-    result, api_info = control.new_api_info(module_no, title, url, method, desc, current_user.account, current_user.role)
+    result, api_info = control.new_api_info(module_no, title, url, method, desc, g.user_name, g.user_role)
     if result is False:
         return api_info
     return redirect(url_prefix + "/update/info/?api_no=%s" % api_info["api_no"])
@@ -191,10 +190,10 @@ def update_api_info_page():
     api_no = request.args["api_no"]
     if len(api_no) != 32:
         return "Bad api_no"
-    result, module_list = control.get_module_list(current_user.role)
+    result, module_list = control.get_module_list(g.user_role)
     if result is False:
         return module_list
-    result, api_info = control.get_api_info(api_no, current_user.role)
+    result, api_info = control.get_api_info(api_no, g.user_role)
     return_url = url_prefix + "/info/?api_no=%s" % api_no
     if result is False:
         return api_info
@@ -213,7 +212,7 @@ def update_api_info():
     title = request_form["api_title"]
     method = request_form["api_method"]
     module_no = int(api_module)
-    result, message = control.update_api_info(role=current_user.role, api_no=api_no, desc=desc, method=method,
+    result, message = control.update_api_info(role=g.user_role, api_no=api_no, desc=desc, method=method,
                                               path=url, module_no=module_no, title=title)
     if result is False:
         return message
@@ -227,7 +226,7 @@ def update_api_other_info():
     api_no = request.args["api_no"]
     if len(api_no) != 32:
         return "Bad api_no"
-    result, api_info = control.get_api_info(api_no, current_user.role)
+    result, api_info = control.get_api_info(api_no, g.user_role)
     return_url = url_prefix + "/info/?api_no=%s" % api_no
     if result is False:
         return api_info
@@ -239,7 +238,7 @@ def update_api_other_info():
 @referer_api_no
 def set_api_completed():
     api_no = g.api_no
-    result, info = control.set_api_completed(current_user.account, current_user.role, api_no)
+    result, info = control.set_api_completed(g.user_name, g.user_role, api_no)
     if result is False:
         return info
     return redirect(g.ref_url)
@@ -249,7 +248,7 @@ def set_api_completed():
 @referer_api_no
 def set_api_modify():
     api_no = g.api_no
-    result, info = control.set_api_modify(current_user.account, current_user.role, api_no)
+    result, info = control.set_api_modify(g.user_name, g.user_role, api_no)
     if result is False:
         return info
     return redirect(g.ref_url)
@@ -262,7 +261,7 @@ def add_header_param():
     api_no = request_form["api_no"]
     desc = request_form["desc"]
     necessary = int(request_form["necessary"])
-    result, param_info = control.add_header_param(current_user.account, api_no, param, necessary, desc, current_user.role)
+    result, param_info = control.add_header_param(g.user_name, api_no, param, necessary, desc, g.user_role)
     return jsonify({"status": result, "data": param_info})
 
 
@@ -274,7 +273,7 @@ def add_body_param():
     desc = request_form["desc"]
     necessary = int(request_form["necessary"])
     type = request_form["type"]
-    result, param_info = control.add_body_param(current_user.account, api_no, param, necessary, type, desc, current_user.role)
+    result, param_info = control.add_body_param(g.user_name, api_no, param, necessary, type, desc, g.user_role)
     if result is False:
         return param_info
     return json.dumps({"status": True, "data": param_info})
@@ -286,7 +285,7 @@ def add_input_example():
     api_no = request_form["api_no"]
     desc = request_form["desc"]
     example = request_form["example"]
-    result, input_info = control.add_input_example(current_user.account, api_no, example, desc, current_user.role)
+    result, input_info = control.add_input_example(g.user_name, api_no, example, desc, g.user_role)
     if result is False:
         return input_info
     return json.dumps({"status": True, "data": input_info})
@@ -298,7 +297,7 @@ def add_output_example():
     api_no = request_form["api_no"]
     desc = request_form["desc"]
     example = request_form["example"]
-    result, output_info = control.add_output_example(current_user.account, api_no, example, desc, current_user.role)
+    result, output_info = control.add_output_example(g.user_name, api_no, example, desc, g.user_role)
     if result is False:
         return output_info
     return json.dumps({"status": True, "data": output_info})
@@ -309,15 +308,15 @@ def add_care():
     request_data = request.json
     api_no = request_data["api_no"]
     if request.method == "POST":
-        result, care_info = control.add_care(api_no, current_user.account, current_user.role)
+        result, care_info = control.add_care(api_no, g.user_name, g.user_role)
     else:
-        result, care_info = control.delete_care(api_no, current_user.account)
+        result, care_info = control.delete_care(api_no, g.user_name)
     return jsonify({"status": result, "data": care_info})
 
 
 @develop_api_view.route("/delete/<api_no>/", methods=["GET"])
 def delete_api(api_no):
-    result, data = control.delete_api(api_no, current_user.account)
+    result, data = control.delete_api(api_no, g.user_name)
     if result is False:
         return data
     return redirect(url_for("develop_api_view.list_api"))
@@ -327,7 +326,7 @@ def delete_api(api_no):
 def delete_header():
     request_data = request.json
     if "api_no" in request_data and "param" in request_data:
-        result, data = control.delete_header(current_user.role, request_data["api_no"], request_data["param"])
+        result, data = control.delete_header(g.user_role, request_data["api_no"], request_data["param"])
         return jsonify({"status": result, "data": data})
     return jsonify({"status": False, "data": "need api_no and param"})
 
@@ -336,20 +335,20 @@ def delete_header():
 def delete_body():
     request_data = request.json
     if "api_no" in request_data and "param" in request_data:
-        result, data = control.delete_body(current_user.role, request_data["api_no"], request_data["param"])
+        result, data = control.delete_body(g.user_role, request_data["api_no"], request_data["param"])
         return jsonify({"status": result, "data": data})
     return jsonify({"status": False, "data": "need api_no and param"})
 
 
 @develop_api_view.route("/delete/input/<input_no>/", methods=["DELETE"])
 def delete_input(input_no):
-    result, data = control.delete_input(input_no, current_user.role)
+    result, data = control.delete_input(input_no, g.user_role)
     return json.dumps({"status": result, "data": data})
 
 
 @develop_api_view.route("/delete/output/<output_no>/", methods=["DELETE"])
 def delete_output(output_no):
-    result, data = control.delete_ouput(output_no, current_user.role)
+    result, data = control.delete_ouput(output_no, g.user_role)
     return json.dumps({"status": result, "data": data})
 
 
@@ -360,9 +359,9 @@ def update_api_predefine_header():
     param = request.form["param"]
     update_type = request.form["update_type"]
     if update_type == "delete":
-        result, message = control.delete_predefine_param(current_user.role, api_no, param)
+        result, message = control.delete_predefine_param(g.user_role, api_no, param)
     else:
-        result, message = control.add_predefine_header(current_user.account, api_no, param, current_user.role)
+        result, message = control.add_predefine_header(g.user_name, api_no, param, g.user_role)
     return jsonify({"status": result, "data": message})
 
 
@@ -373,7 +372,7 @@ def test_api():
     api_no = request.args["api_no"]
     if len(api_no) != 32:
         return "Bad api_no"
-    result, api_info = control.get_api_info(api_no, current_user.role)
+    result, api_info = control.get_api_info(api_no, g.user_role)
     if result is False:
         return api_info
     module_test_env = []
@@ -382,7 +381,7 @@ def test_api():
         env_no_list = []
         for env_no_s in module_env_s:
             env_no_list.append(int(env_no_s))
-        result, module_test_env = control.get_test_env(current_user.role, env_no_list)
+        result, module_test_env = control.get_test_env(g.user_role, env_no_list)
         if result is False:
             return module_test_env
     if "Referer" in request.headers:
@@ -411,7 +410,7 @@ def add_test_case():
     r_data = request.json
     api_no = g.api_no
     case_name = r_data["case_name"]
-    user_case_dir = "%s/%s" % (case_dir, current_user.account)
+    user_case_dir = "%s/%s" % (case_dir, g.user_name)
     if os.path.isdir(user_case_dir) is False:
         os.mkdir(user_case_dir)
     case_file = "%s_%s" % (api_no, case_name)
@@ -425,7 +424,7 @@ def add_test_case():
 @referer_api_no
 def list_test_case():
     api_no = g.api_no
-    user_case_dir = "%s/%s" % (case_dir, current_user.account)
+    user_case_dir = "%s/%s" % (case_dir, g.user_name)
     if os.path.isdir(user_case_dir) is False:
         return jsonify({"status": True, "data": []})
     case_files = os.listdir(user_case_dir)
@@ -440,7 +439,7 @@ def list_test_case():
 @referer_api_no
 def test_case_content(case_name):
     api_no = g.api_no
-    user_case_dir = "%s/%s" % (case_dir, current_user.account)
+    user_case_dir = "%s/%s" % (case_dir, g.user_name)
     case_path = "%s/%s_%s.case" % (user_case_dir, api_no, case_name)
     if os.path.isfile(case_path) is False:
         return jsonify({"status": False, "data": "not exist"})
