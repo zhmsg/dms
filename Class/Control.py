@@ -65,6 +65,12 @@ class ControlManager:
     def change_password(self, user_name, old_password, new_password):
         return self.user.change_password(user_name, old_password, new_password)
 
+    def send_code(self, user_name, password, tel):
+        return self.user.send_code(user_name, password, tel)
+
+    def bind_tel(self, user_name, password, tel, code):
+        return self.user.bind_tel(user_name, password, tel, code)
+
     def get_my_user(self, user_name, role):
         if role & self.role_value["user_new"] <= 0:
             return False, u"用户无权限操作用户"

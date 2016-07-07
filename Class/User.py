@@ -127,6 +127,40 @@ class UserManager:
             return False, r["message"]
         return True, u"更新成功"
 
+    def send_code(self, user_name, password, tel):
+        change_url = "%s/code/bind/" % jy_auth_host
+        try:
+            res = requests.post(change_url, json={"account": user_name, "password": password, "tel": tel})
+        except requests.ConnectionError as ce:
+            return False, u"暂时无法发送，请稍后重试"
+        r = res.json()
+        if r["status"] == 2:
+            return True, u"发送成功"
+        if r["status"] == 10701:
+            return False, u"请求频率过高，请稍后重试"
+        if r["status"] == 10402:
+            return False, u"手机号已被他人绑定，请更改还手机号"
+        if r["status"] == 10801:
+            return False, u"请求超过限制，请稍后重试"
+        return False, r["message"]
+
+    def bind_tel(self, user_name, password, tel, code):
+        change_url = "%s/tel/" % jy_auth_host
+        try:
+            res = requests.post(change_url, json={"account": user_name, "password": password, "tel": tel, "code": code})
+        except requests.ConnectionError as ce:
+            return False, u"暂时绑定，请稍后重试"
+        r = res.json()
+        if r["status"] == 2:
+            return True, u"绑定成功"
+        if r["status"] == 10404:
+            return False, u"验证码不正确，请重新输入"
+        if r["status"] == 10405:
+            return False, u"验证码已过期，请重新获得"
+        if r["status"] == 10402:
+            return False, u"手机号已被他人绑定，请更改还手机号"
+        return False, r["message"]
+
     def clear_password(self, user_name, creator):
         update_sql = "UPDATE %s SET password=null WHERE user_name='%s' AND creator='%s';" % (self.user, user_name, creator)
         self.db.execute(update_sql)

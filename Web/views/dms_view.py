@@ -134,6 +134,56 @@ def bind_tel_page():
     return redirect(url_for("dms_view.login_page"))
 
 
+@dms_view.route("/tel/", methods=["PUT"])
+def send_tel_code():
+    if "bind_token" in session and "expires_in" in session and "user_name" in session and "password" in session:
+        expires_in = session["expires_in"]
+        if expires_in > datetime.now():
+            request_data = request.json
+            bind_token = request_data["bind_token"]
+            if bind_token != session["bind_token"]:
+                return redirect(url_for("dms_view.login_page"))
+            tel = request_data["tel"]
+            result, info = control.send_code(session["user_name"], session["password"], tel)
+            if result is True:
+                session["tel"] = tel
+                return jsonify({"status": True, "data": {"tel": tel}})
+            return jsonify({"status": False, "data": info})
+    return redirect(url_for("dms_view.login_page"))
+
+
+@dms_view.route("/tel/", methods=["POST"])
+def bind_tel_func():
+    if "bind_token" in session and "expires_in" in session and "user_name" in session and "password" in session:
+        expires_in = session["expires_in"]
+        if expires_in > datetime.now():
+            if "tel" not in session:
+                return jsonify({"status": False, "data": "Please Send Code"})
+            request_data = request.json
+            bind_token = request_data["bind_token"]
+            if bind_token != session["bind_token"]:
+                return redirect(url_for("dms_view.login_page"))
+            tel = request_data["tel"]
+            if tel != session["tel"]:
+                return jsonify({"status": False, "data": "Please Send Code First"})
+            code = request_data["code"]
+            user_name = session["user_name"]
+            result, info = control.bind_tel(user_name, session["password"], tel, code)
+            if result is True:
+                user = User()
+                user.account = user_name
+                login_user(user)
+                del session["bind_token"]
+                del session["expires_in"]
+                del session["user_name"]
+                del session["password"]
+                del session["tel"]
+                return jsonify({"status": True, "data": {"tel": tel}})
+            else:
+                return jsonify({"status": False, "data": info})
+    return redirect(url_for("dms_view.login_page"))
+
+
 @dms_view.route("/password/", methods=["POST"])
 def password():
     user_name = request.form["user_name"]
