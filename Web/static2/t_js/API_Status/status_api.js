@@ -5,6 +5,8 @@
 var module_info = new Object();
 var error_type = new Object();
 
+var search_type = "in";
+
 function get_module_info_success(data){
     module_info = data.data;
 }
@@ -114,9 +116,11 @@ function update_info(){
     if($("#show_exist").is(':checked')) {
         var code = service_id + fun_id + type_id;
         $("#search_code").val(code);
+        search_type = "start";
         filter_code(code, "start", 1);
     }
     else{
+        search_type = "in";
         filter_code($("#search_code").val(), "in", 1);
     }
 }
@@ -166,7 +170,7 @@ function filter_code(code, s_type, page_num){
 
 function search_code(page_num){
     var query_s = $("#search_code").val();
-    filter_code(query_s, "in", page_num);
+    filter_code(query_s, search_type, page_num);
 }
 
 function get_info(code){
@@ -205,10 +209,12 @@ $(function(){
 
             $(".newMode").show();
             $("#conBtn").html("隐藏新建");
+            search_type = "start";
         }
         if(conBtnValue == "隐藏新建"){
             $(".newMode").hide();
             $("#conBtn").html("单个新建");
+            search_type = "in";
         }
     });
 });
