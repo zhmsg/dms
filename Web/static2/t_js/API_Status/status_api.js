@@ -112,7 +112,9 @@ function update_info(){
     fun_update();
     error_type_update();
     if($("#show_exist").is(':checked')) {
-        filter_code(service_id + fun_id + type_id, "start", 1);
+        var code = service_id + fun_id + type_id;
+        $("#search_code").val(code);
+        filter_code(code, "start", 1);
     }
     else{
         filter_code($("#search_code").val(), "in", 1);
