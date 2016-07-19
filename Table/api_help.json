@@ -309,6 +309,33 @@
         "table_cols": [
             {
                 "pri_key": true,
+                "col_comment": "请求参数",
+                "col_name": "param",
+                "col_type": "varchar(30)"
+            },
+            {
+                "col_comment": "请求参数是否必需0非必需1必需",
+                "col_name": "necessary",
+                "col_type": "bit(1)"
+            },
+            {
+                "col_comment": "请求参数类型",
+                "col_name": "type",
+                "col_type": "varchar(20)"
+            },
+            {
+                "col_comment": "请求参数描述",
+                "col_name": "param_desc",
+                "col_type": "varchar(1000)"
+            }
+        ],
+        "table_comment": "",
+        "table_name": "predefine_body"
+    },
+    {
+        "table_cols": [
+            {
+                "pri_key": true,
                 "col_comment": "API系統编号 參看api_info api_no",
                 "col_name": "api_no",
                 "col_type": "char(32)"
@@ -320,7 +347,7 @@
                 "col_type": "varchar(30)"
             },
             {
-                "col_comment": "请求参数类型",
+                "col_comment": "请求参数类型 body or header",
                 "col_name": "param_type",
                 "col_type": "varchar(10)"
             },
