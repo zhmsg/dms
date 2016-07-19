@@ -359,7 +359,6 @@ def update_api_predefine_header():
     param = request.form["param"]
     update_type = request.form["update_type"]
     param_type = request.form["param_type"]
-    print(param_type)
     if update_type == "delete":
         result, message = control.delete_predefine_param(g.user_role, api_no, param)
     else:
