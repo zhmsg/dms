@@ -358,10 +358,12 @@ def update_api_predefine_header():
     api_no = g.api_no
     param = request.form["param"]
     update_type = request.form["update_type"]
+    param_type = request.form["param_type"]
+    print(param_type)
     if update_type == "delete":
         result, message = control.delete_predefine_param(g.user_role, api_no, param)
     else:
-        result, message = control.add_predefine_header(g.user_name, api_no, param, g.user_role)
+        result, message = control.add_predefine_header(g.user_name, api_no, param, param_type, g.user_role)
     return jsonify({"status": result, "data": message})
 
 

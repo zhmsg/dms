@@ -77,9 +77,9 @@
     </table>
     {% for item in api_info["predefine_header"] %}
         {% if item in api_info["predefine_param"]["header"] %}
-            <button id="pp_{{ item }}" class="btn btn-danger" onclick="handle_predefine_param(this.id);" title="{{ api_info["predefine_header"][item]["param_desc"] }}" value="{{ item }}">不需要{{ item }}</button>
+            <button id="pp_{{ item }}" class="btn btn-danger" onclick="handle_predefine_param(this.id, 'header');" title="{{ api_info["predefine_header"][item]["param_desc"] }}" value="{{ item }}">不需要{{ item }}</button>
         {% else %}
-            <button id="pp_{{ item }}" class="btn btn-info" onclick="handle_predefine_param(this.id);" title="{{ api_info["predefine_header"][item]["param_desc"] }}" value="{{ item }}">需要{{ item }}</button>
+            <button id="pp_{{ item }}" class="btn btn-info" onclick="handle_predefine_param(this.id, 'header');" title="{{ api_info["predefine_header"][item]["param_desc"] }}" value="{{ item }}">需要{{ item }}</button>
         {% endif %}
     {% endfor %}
     <table class="table table-bordered api-list-table" id="api_body_param">
@@ -122,7 +122,14 @@
         <td><input class="form-control" id="body_param_desc" placeholder="请详细的描述出后端对参数的限制，包括但不限于字段长度，字符限制等" /></td>
         <td><button class="btn btn-info" id="body_param_new" onclick="new_body_param('{{ url_prefix }}/add/body/' );">新建</button></td>
     </table>
-
+    {% for item in api_info["predefine_body"] %}
+        {% if item in api_info["predefine_param"]["body"] %}
+            <button id="pp_{{ item }}" class="btn btn-danger" onclick="handle_predefine_param(this.id, 'body');" title="{{ api_info["predefine_body"][item]["param_desc"] }}" value="{{ item }}">不需要{{ item }}</button>
+        {% else %}
+            <button id="pp_{{ item }}" class="btn btn-info" onclick="handle_predefine_param(this.id, 'body');" title="{{ api_info["predefine_body"][item]["param_desc"] }}" value="{{ item }}">需要{{ item }}</button>
+        {% endif %}
+    {% endfor %}
+    <br>
     <div class="bottom20 api-example">
         <b>请求示例</b>
         <div id="api_input_exist">

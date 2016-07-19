@@ -26,6 +26,7 @@ class HelpManager:
         self.api_output = "api_output"
         self.api_header = "api_header"
         self.predefine_header = "predefine_header"
+        self.predefine_body = "predefine_body"
         self.api_body = "api_body"
         self.predefine_param = "predefine_param"
         self.api_care = "api_care"
@@ -435,6 +436,13 @@ class HelpManager:
         for item in self.db.fetchall():
             necessary = True if item[1] == "\x01" else False
             predefine_header[item[0]] = {"param": item[0], "necessary": necessary, "param_desc": item[2]}
+        # 获得预定义头部主体信息
+        select_sql = "SELECT param,necessary,type,param_desc FROM %s;" % self.predefine_body
+        self.db.execute(select_sql)
+        predefine_body = {}
+        for item in self.db.fetchall():
+            necessary = True if item[1] == "\x01" else False
+            predefine_body[item[0]] = {"param": item[0], "type": item[2], "necessary": necessary, "param_desc": item[3]}
         # 获得请求示例
         select_sql = "SELECT input_no,api_no,input_desc,input_example FROM %s WHERE api_no='%s' ORDER BY add_time;" \
                      % (self.api_input, api_no)
@@ -453,7 +461,8 @@ class HelpManager:
         care_info = self.get_api_care_info(api_no)
         return True, {"basic_info": basic_info, "header_info": header_info, "body_info": body_info,
                       "input_info": input_info, "output_info": output_info, "care_info": care_info,
-                      "predefine_param": predefine_param, "predefine_header": predefine_header}
+                      "predefine_param": predefine_param, "predefine_header": predefine_header,
+                      "predefine_body": predefine_body}
 
     def get_api_list(self, module_no):
         if type(module_no) != int:

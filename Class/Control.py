@@ -287,10 +287,10 @@ class ControlManager:
             self._send_api_update_message_thread(user_name, api_no, param)
         return result, info
 
-    def add_predefine_header(self, user_name, api_no, param, role):
+    def add_predefine_header(self, user_name, api_no, param, param_type, role):
         if role & self.role_value["api_new"] <= 0:
             return False, u"您没有权限"
-        result, info = self.api_help.new_predefine_param(api_no, param, "header")
+        result, info = self.api_help.new_predefine_param(api_no, param, param_type)
         if result is True:
             self._send_api_update_message_thread(user_name, api_no, param)
         return result, info

@@ -239,7 +239,7 @@ function format_input(input_id){
     $("#" + input_id).val(json_content);
 }
 
-function handle_predefine_param(btn_id){
+function handle_predefine_param(btn_id, param_type){
     var update_url = $("#update_header_url").val();
     var btn = $("#" + btn_id);
     console.info(btn);
@@ -260,7 +260,7 @@ function handle_predefine_param(btn_id){
     $.ajax({
         url: update_url,
         method: "PUT",
-        data: {param: param, update_type: update_type},
+        data: {param: param, update_type: update_type, param_type: param_type},
         success:function(data){
             var json_obj = data;
             if (json_obj.status == true){
