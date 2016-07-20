@@ -277,7 +277,11 @@ class ControlManager:
     def get_api_info(self, api_no, role):
         if role & self.role_value["api_look"] <= 0:
             return False, u"您没有权限"
-        return self.api_help.get_api_info(api_no)
+        result, api_info = self.api_help.get_api_info(api_no)
+        if result is True:
+            if role & self.role_value["api_new"] <= 0 and api_info["basic_info"]["status"] == u'新建':
+                return False, u"您没有权限"
+        return result, api_info
 
     def add_header_param(self, user_name, api_no, param, necessary, desc, role):
         if role & self.role_value["api_new"] <= 0:
@@ -332,7 +336,14 @@ class ControlManager:
     def get_api_list(self, module_no, role):
         if role & self.role_value["api_look"] <= 0:
             return False, u"您没有权限"
-        return self.api_help.get_api_list(module_no)
+        result, api_list = self.api_help.get_api_list(module_no)
+        if result is True and role & self.role_value["api_new"] <= 0:
+            len_api = len(api_list["api_list"])
+            for i in range(len_api - 1, -1, -1):
+                api_item = api_list["api_list"][i]
+                if api_item["status"] == u'新建':
+                    api_list["api_list"].remove(api_item)
+        return result, api_list
 
     def delete_header(self, role, api_no, param):
         if role & self.role_value["api_new"] <= 0:
