@@ -5,7 +5,6 @@
 {% block content %}
         <br />
         <a class="btn btn-primary pull-right" href="{{ url_for('dms_view.select_portal') }}" title="">主菜单</a>
-{#    <div class="apiMode api-help-mode">#}
         {% for part in part_module %}
             <div class="apiMode api-help-mode">
                 <div style="margin-bottom: 10px"><b>【{{ part["part_desc"] }}】</b><br /></div>
@@ -14,23 +13,6 @@
                 {% endfor %}
             </div>
         {% endfor %}
-{#        <div style="margin-bottom: 10px"><b>【API文档 前端可调用】</b><br /></div>#}
-{#        {% for module_info in module_list["api"] %}#}
-{#            <a href="{{ url_prefix }}/?module_no={{ module_info["module_no"] }}">{{ module_info["module_name"] }}</a>#}
-{#        {% endfor %}#}
-{#    </div>#}
-{#    <div class="apiMode api-help-mode">#}
-{#        <div style="margin-bottom: 10px"><b>【基础服务文档 后台生信可调用】</b></div>#}
-{#        {% for module_info in module_list["service"] %}#}
-{#            <a href="{{ url_prefix }}/?module_no={{ module_info["module_no"] }}">{{ module_info["module_name"] }}</a>#}
-{#        {% endfor %}#}
-{#    </div>#}
-{#    <div class="apiMode api-help-mode">#}
-{#        <div style="margin-bottom: 10px"><b>【晶云子系统 前端后台可调用】</b></div>#}
-{#        {% for module_info in module_list["jy"] %}#}
-{#            <a href="{{ url_prefix }}/?module_no={{ module_info["module_no"] }}">{{ module_info["module_name"] }}</a>#}
-{#        {% endfor %}#}
-{#    </div>#}
     <script type="text/javascript" src="{{ url_for('static', filename='t_js/Common/add_node.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='t_js/API_HELP/list_api.js') }}"></script>
 {% endblock %}
