@@ -227,6 +227,34 @@
         "table_cols": [
             {
                 "pri_key": true,
+                "auto_increment": true,
+                "col_comment": "主键 自增 API模块分类 系統编号",
+                "col_name": "part_no",
+                "col_type": "int(11)"
+            },
+            {
+                "col_comment": "分类的名称",
+                "col_name": "part_name",
+                "col_type": "varchar(20)"
+            },
+            {
+                "col_comment": "关于分类的描述",
+                "col_name": "part_desc",
+                "col_type": "varchar(40)"
+            },
+            {
+                "col_comment": "关于分类的详细描述",
+                "col_name": "part_detail",
+                "col_type": "varchar(240)"
+            }
+        ],
+        "table_comment": "",
+        "table_name": "api_part_info"
+    },
+    {
+        "table_cols": [
+            {
+                "pri_key": true,
                 "col_comment": "主键 输出系统编号",
                 "col_name": "output_no",
                 "col_type": "char(32)"
