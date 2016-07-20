@@ -381,6 +381,9 @@ class HelpManager:
         basic_info = {}
         for i in range(len(db_info)):
             basic_info[basic_info_col[i]] = db_info[i]
+        if basic_info["status"] >= len(self.api_status_desc) or basic_info["status"] < 0:
+            return False, "Not Exist api_no"
+        basic_info["status"] = self.api_status_desc[basic_info["status"]]
         basic_info["api_url"] = basic_info["module_prefix"].rstrip("/") + "/" + basic_info["api_path"].lstrip("/")
         basic_info["add_time"] = basic_info["add_time"].strftime(TIME_FORMAT) if basic_info["add_time"] is not None else ""
         basic_info["update_time"] = basic_info["update_time"].strftime(TIME_FORMAT) if basic_info["update_time"] is not None else ""
@@ -467,13 +470,16 @@ class HelpManager:
     def get_api_list(self, module_no):
         if type(module_no) != int:
             return False, "Bad module_no"
-        select_sql = "SELECT api_no,module_no,api_title,api_path,api_method,api_desc FROM %s WHERE module_no=%s ORDER BY api_path;" \
-                     % (self.api_info, module_no)
+        select_sql = "SELECT api_no,module_no,api_title,api_path,api_method,api_desc,status FROM %s WHERE module_no=%s " \
+                     "ORDER BY status, api_path;" % (self.api_info, module_no)
         self.db.execute(select_sql)
         api_list = []
         for item in self.db.fetchall():
+            if item[6] >= len(self.api_status_desc) or item[6] < 0:
+                continue
+            api_status = self.api_status_desc[item[6]]
             api_list.append({"api_no": item[0], "module_no": item[1], "api_title": item[2], "api_path": item[3],
-                             "api_method": item[4], "api_desc": item[5]})
+                             "api_method": item[4], "api_desc": item[5], "status": api_status})
         care_info = self.get_module_care_list(module_no)
         return True, {"api_list": api_list, "care_info": care_info}
 
