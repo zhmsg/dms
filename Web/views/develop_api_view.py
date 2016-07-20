@@ -42,9 +42,9 @@ def referer_api_no(f):
 
 @develop_api_view.route("/")
 def list_api():
-    result, module_list = control.get_module_list(g.user_role)
+    result, part_module = control.get_part_api(g.user_name, g.user_role)
     if result is False:
-        return module_list
+        return part_module
     if g.user_role & control.role_value["api_module_new"] == control.role_value["api_module_new"]:
         new_power = True
     else:
@@ -58,10 +58,12 @@ def list_api():
         if result is False:
             return module_data
         current_module = None
-        for key, module_part in module_list.items():
-            for module_info in module_part:
+        for part in part_module:
+            for module_info in part["module_list"]:
                 if module_info["module_no"] == module_no:
                     current_module = module_info
+                    current_module["part_no"] = part["part_no"]
+                    current_module["part_name"] = part["part_name"]
                     break
         if current_module is None:
             return "Error"
@@ -76,7 +78,7 @@ def list_api():
                     if "%s" % env["env_no"] in module_env_s:
                         module_env_info.append(env)
                         test_env.remove(env)
-            return render_template("%s/Update_API_Module.html" % html_dir, module_list=module_list, api_list=module_data["api_list"],
+            return render_template("%s/Update_API_Module.html" % html_dir, part_module=part_module, api_list=module_data["api_list"],
                                    current_module=current_module, url_prefix=url_prefix, test_env=test_env,
                                    module_env_info=module_env_info)
         my_care = None
@@ -85,10 +87,10 @@ def list_api():
                 my_care = item
                 module_data["care_info"].remove(item)
                 break
-        return render_template("%s/List_Module_API.html" % html_dir, module_list=module_list, api_list=module_data["api_list"],
+        return render_template("%s/List_Module_API.html" % html_dir, part_module=part_module, api_list=module_data["api_list"],
                                current_module=current_module, url_prefix=url_prefix, new_power=new_power,
                                my_care=my_care, care_info=module_data["care_info"])
-    return render_template("%s/New_API_Module.html" % html_dir, module_list=module_list, url_prefix=url_prefix,
+    return render_template("%s/New_API_Module.html" % html_dir, part_module=part_module, url_prefix=url_prefix,
                            new_power=new_power, test_env=test_env)
 
 

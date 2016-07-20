@@ -20,6 +20,7 @@ class HelpManager:
 
     def __init__(self):
         self.db = DB()
+        self.api_part_info = "api_part_info"
         self.api_module = "api_module"
         self.api_info = "api_info"
         self.api_input = "api_input"
@@ -339,23 +340,31 @@ class HelpManager:
             env_info.append({"env_no": item[0], "env_name": item[1], "env_address": item[2]})
         return True, env_info
 
-    def get_module_list(self, module_no=None):
-        select_sql = "SELECT module_no,module_name,module_prefix,module_desc,module_part,module_env FROM %s" % self.api_module
-        if module_no is not None and type(module_no) == int:
-            select_sql += " WHERE module_no=%s" % module_no
-        select_sql += ";"
+    def get_part_list(self, user_name):
+        select_sql = "SELECT part_no,part_name,part_desc,part_detail FROM %s;" % self.api_part_info
         self.db.execute(select_sql)
-        module_info = {"api": [], "service": [], "jy": []}
+        part_list = []
+        for item in self.db.fetchall():
+            part_list.append({"part_no": item[0], "part_name": item[1], "part_desc": item[2], "part_detail": item[3]})
+        return part_list
+
+    def get_part_api(self, user_name):
+        part_list = self.get_part_list(user_name)
+        for api_part in part_list:
+            result, module_list= self.get_module_list(part_no=api_part["part_no"])
+            api_part["module_list"] = module_list
+        return True, part_list
+
+    def get_module_list(self, part_no=None):
+        select_sql = "SELECT module_no,module_name,module_prefix,module_desc,module_part,module_env " \
+                     "FROM %s WHERE module_part=%s;" % (self.api_module, part_no)
+        self.db.execute(select_sql)
+        module_list = []
         for item in self.db.fetchall():
             info = {"module_no": item[0], "module_name": item[1], "module_prefix": item[2], "module_desc": item[3],
                     "module_part": item[4], "module_env": item[5]}
-            if item[4] == 1:
-                module_info["api"].append(info)
-            elif item[4] == 2:
-                module_info["service"].append(info)
-            elif item[4] == 3:
-                module_info["jy"].append(info)
-        return True, module_info
+            module_list.append(info)
+        return True, module_list
 
     def get_module_care_list(self, module_no):
         # 获得关注列表

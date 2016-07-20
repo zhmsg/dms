@@ -20,9 +20,9 @@
         <li>
           <label class="api-describe" for="">所属分类：</label>
           <select class="box-side" id="module_part" >
-              <option value="1" {% if current_module["module_part"] == 1 %} selected {% endif %}>API</option>
-              <option value="2" {% if current_module["module_part"] == 2 %} selected {% endif %}>基础服务</option>
-              <option value="3" {% if current_module["module_part"] == 3 %} selected {% endif %}>子系统</option>
+              {% for part in part_module %}
+                  <option value="{{ part["part_no"] }}" {% if current_module["part_no"] == part["part_no"] %} selected {% endif %}>{{ part["part_name"] }}</option>
+              {% endfor %}
           </select>
         </li>
       <li>

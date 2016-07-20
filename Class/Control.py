@@ -232,6 +232,11 @@ class ControlManager:
             my_email.send_mail_thread(email, sub, content)
 
     # 针对API HELP的应用
+    def get_part_api(self, user_name, role):
+        if role & self.role_value["api_look"] <= 0:
+            return False, u"您没有权限"
+        return self.api_help.get_part_api(user_name=user_name)
+
     def get_module_list(self, role):
         if role & self.role_value["api_look"] <= 0:
             return False, u"您没有权限"

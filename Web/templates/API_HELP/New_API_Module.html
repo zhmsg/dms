@@ -21,9 +21,9 @@
             <li>
               <label class="api-describe" for="">所属分类：</label>
               <select class="box-side" id="module_part" required>
-                  <option value="1">API</option>
-                  <option value="2">基础服务</option>
-                  <option value="3">子系统</option>
+                  {% for part in part_module %}
+                     <option value="{{ part["part_no"] }}">{{ part["part_name"] }}</option>
+                  {% endfor %}
               </select>
             </li>
           <li>
