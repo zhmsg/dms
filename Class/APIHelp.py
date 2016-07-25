@@ -38,6 +38,7 @@ class HelpManager:
         self.user = "sys_user"
 
     def new_api_module(self, module_name, module_prefix, module_desc, module_part, module_env):
+        module_name = module_name.strip(" ")
         if check_chinese_en(module_name, 1, 35) is False:
             return False, "Bad module_name."
         if check_path(module_prefix, 1, 35) is False:
