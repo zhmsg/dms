@@ -158,13 +158,13 @@ def show_api():
 
 @develop_api_view.route("/new/", methods=["GET"])
 def new_api_page():
-    result, module_list = control.get_module_list(g.user_role)
+    result, part_module = control.get_part_api(g.user_name, g.user_role)
     if result is False:
-        return module_list
+        return part_module
     module_no = 1
     if "module_no" in request.args:
         module_no = int(request.args["module_no"])
-    return render_template("%s/New_API.html" % html_dir, module_list=module_list, url_prefix=url_prefix,
+    return render_template("%s/New_API.html" % html_dir, part_module=part_module, url_prefix=url_prefix,
                            module_no=module_no)
 
 
@@ -192,15 +192,15 @@ def update_api_info_page():
     api_no = request.args["api_no"]
     if len(api_no) != 32:
         return "Bad api_no"
-    result, module_list = control.get_module_list(g.user_role)
+    result, part_module = control.get_part_api(g.user_name, g.user_role)
     if result is False:
-        return module_list
+        return part_module
     result, api_info = control.get_api_info(api_no, g.user_role)
     return_url = url_prefix + "/info/?api_no=%s" % api_no
     if result is False:
         return api_info
     module_no = api_info["basic_info"]["module_no"]
-    return render_template("%s/New_API.html" % html_dir, module_list=module_list, url_prefix=url_prefix,
+    return render_template("%s/New_API.html" % html_dir, part_module=part_module, url_prefix=url_prefix,
                            module_no=module_no, api_info=api_info, return_url=return_url)
 
 

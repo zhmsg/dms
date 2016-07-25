@@ -12,8 +12,8 @@
   <div class="form-group">
      <label for="">API所属模块：</label>
      <select class="box-side" id="api_module" onchange="select_change()" >
-        {% for key, module_part in module_list.items() %}
-            {% for module in module_part %}
+        {% for part in part_module %}
+            {% for module in part["module_list"] %}
                 {% if module["module_no"] == module_no  %}
                     <option about="{{ module["module_desc"] }}" value="{{ module["module_no"] }}" title="{{ module["module_prefix"] }}" selected="selected">{{ module["module_name"] }}</option>
                 {% else %}
