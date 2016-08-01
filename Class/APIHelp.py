@@ -399,6 +399,16 @@ class HelpManager:
         basic_info["update_time"] = basic_info["update_time"].strftime(TIME_FORMAT) if basic_info["update_time"] is not None else ""
         return True, basic_info
 
+    def get_api_output(self, api_no):
+        # 获得返回示例
+        select_sql = "SELECT output_no,api_no,output_desc,output_example FROM %s WHERE api_no='%s' ORDER BY add_time;" \
+                     % (self.api_output, api_no)
+        self.db.execute(select_sql)
+        output_info = []
+        for item in self.db.fetchall():
+            output_info.append({"output_no": item[0], "api_no": item[1], "output_desc": item[2], "output_example": item[3]})
+        return output_info
+
     def get_api_care_info(self, api_no):
         # 获得关注列表
         select_sql = "SELECT api_no,c.user_name,care_time,nick_name,level,email FROM sys_user as su,%s as c " \
@@ -464,12 +474,7 @@ class HelpManager:
         for item in self.db.fetchall():
             input_info.append({"input_no": item[0], "api_no": item[1], "input_desc": item[2], "input_example": item[3]})
         # 获得返回示例
-        select_sql = "SELECT output_no,api_no,output_desc,output_example FROM %s WHERE api_no='%s' ORDER BY add_time;" \
-                     % (self.api_output, api_no)
-        self.db.execute(select_sql)
-        output_info = []
-        for item in self.db.fetchall():
-            output_info.append({"output_no": item[0], "api_no": item[1], "output_desc": item[2], "output_example": item[3]})
+        output_info = self.get_api_output(api_no)
         # 获得关注列表
         care_info = self.get_api_care_info(api_no)
         return True, {"basic_info": basic_info, "header_info": header_info, "body_info": body_info,
