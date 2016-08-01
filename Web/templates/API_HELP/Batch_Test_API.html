@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}测试API{% endblock %}
+{% block title %}批量测试API{% endblock %}
 
 
 {% block content %}
@@ -81,23 +81,6 @@
                 <p>{{ param_info["param_desc"] }}</p>
             </div>
         {% endfor %}
-        {% for item in api_info["predefine_param"]["body"] %}
-                {% if item in api_info["predefine_body"] %}
-                    <div class="paramListMode">
-                        <ul>
-                            <li class="star">{% if api_info["predefine_body"][item]["necessary"] == true %}
-                                * {% endif %}</li>
-                            <li name="param">{{ api_info["predefine_body"][item]["param"] }}</li>
-                            <li>：</li>
-                            <li><input class="form-control bug-input"
-                                       id="{{ api_info["predefine_body"][item]["param"] }}_value" param_type="body"/>
-                            </li>
-                            <div class="clear"></div>
-                        </ul>
-                        <p>{{ api_info["predefine_body"][item]["param_desc"] }}</p>
-                    </div>
-                {% endif %}
-            {% endfor %}
         {% for param_info in api_info["body_info"] %}
             <div class="paramListMode">
                 <ul>

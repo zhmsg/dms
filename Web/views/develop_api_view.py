@@ -407,6 +407,45 @@ def test_api():
                            test_case_url=test_case_url)
 
 
+@develop_api_view.route("/test/batch/", methods=["GET"])
+def batch_test_api():
+    if "api_no" not in request.args:
+        return "Need api_no"
+    api_no = request.args["api_no"]
+    if len(api_no) != 32:
+        return "Bad api_no"
+    result, api_info = control.get_api_info(api_no, g.user_role)
+    if result is False:
+        return api_info
+    module_test_env = []
+    if api_info["basic_info"]["module_env"] is not None:
+        module_env_s = api_info["basic_info"]["module_env"].split("|")
+        env_no_list = []
+        for env_no_s in module_env_s:
+            env_no_list.append(int(env_no_s))
+        result, module_test_env = control.get_test_env(g.user_role, env_no_list)
+        if result is False:
+            return module_test_env
+    if "Referer" in request.headers:
+        return_url = request.headers["Referer"]
+    else:
+        return_url = url_prefix + "/info/?api_no=%s" % api_no
+    status_url = url_prefix + "/status/"
+    test_case_url = url_prefix + "/test/case/"
+    api_url = api_info["basic_info"]["api_url"]
+    url_params = re.findall("<([\w:]+)>", api_url)
+    url_param_info = []
+    for param in url_params:
+        param_sp = param.split(":")
+        if len(param_sp) > 1:
+            url_param_info.append({"param_type": param_sp[0], "param_name": param_sp[1], "origin_param": "<%s>" % param})
+        else:
+            url_param_info.append({"param_type": "string", "param_name": param_sp[0], "origin_param": "<%s>" % param})
+    return render_template("%s/Batch_Test_API.html" % html_dir, api_info=api_info, return_url=return_url, api_no=api_no,
+                           status_url=status_url, url_param_info=url_param_info, module_test_env=module_test_env,
+                           test_case_url=test_case_url)
+
+
 @develop_api_view.route("/test/case/", methods=["POST"])
 @referer_api_no
 def add_test_case():
