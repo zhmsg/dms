@@ -7,38 +7,31 @@
     <br>
     <a class="btn btn-primary pull-right" href="{{ return_url }}" title="">返回</a>
     <div class="margin20 apiTest" id="div_test_info">
-        <p>
-            <span class="pull-left text-right width150">服务环境：</span>
-            <select class="form-control bug-input" id="test_env" onchange="update_request_url();">
-                {% for env in module_test_env %}
-                    <option value="{{ env["env_address"] }}">{{ env["env_name"] }}</option>
-                {% endfor %}
-            </select>
-        </p>
-        <p>
-            <span class="pull-left text-right width150">API模块：</span>
-            <select class="form-control bug-input">
-                <option>{{ api_info["basic_info"]["module_name"] }}</option>
-            </select>
-        </p>
-        <p>
-            <span class="pull-left text-right width150">API列表：</span>
-            <select class="form-control pull-left bug-input" id="api_url">
-                <option value="{{ api_info["basic_info"]["api_url"] }}">{{ api_info["basic_info"]["api_title"] }}</option>
-            </select>
-            <input value="{{ api_info["basic_info"]["api_method"] }}" id="api_method" style="display: none"/>
-            <span class="pull-left">请求方法： {{ api_info["basic_info"]["api_method"] }}</span>
-            <span class="clear"></span>
-        </p>
-        <p>
-            <span class="pull-left text-right width150">请求URL：</span>
-            <input class="form-control bug-input" id="request_url" readonly/>
-        </p>
-
+        <div style="display: none">
+            <p>
+                <select class="form-control bug-input" id="test_env">
+                    {% for env in module_test_env %}
+                        <option value="{{ env["env_address"] }}">{{ env["env_name"] }}</option>
+                    {% endfor %}
+                </select>
+            </p>
+            <p>
+                <input id="module_name" value="{{ api_info["basic_info"]["module_name"] }}" />
+            </p>
+            <p>
+                <input id="api_url" value="{{ api_info["basic_info"]["api_url"] }}" />
+                <input id="api_title" value="{{ api_info["basic_info"]["api_title"] }}" />
+                <input value="{{ api_info["basic_info"]["api_method"] }}" id="api_method" style="display: none"/>
+                <span class="clear"></span>
+            </p>
+            <p>
+                <input class="form-control bug-input" id="request_url" readonly/>
+            </p>
+            <textarea class="form-control font16" rows="20" cols="120" id="res_text" readonly></textarea>
+        </div>
         <div id="div_test_case">
 
         </div>
-        <textarea class="form-control font16" rows="20" cols="120" id="res_text" readonly></textarea>
 
     </div>
     <input id="test_case_url" value="{{ test_case_url }}" style="display: none">
@@ -46,7 +39,6 @@
     <br/>
     <script type="text/javascript" src="{{ url_for('static', filename='t_js/Common/base64.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='t_js/Common/download_json.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='t_js/API_HELP/test_api.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='t_js/API_HELP/batch_test_api.js') }}"></script>
 {% endblock %}
 
