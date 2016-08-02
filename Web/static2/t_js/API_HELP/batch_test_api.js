@@ -4,7 +4,7 @@
 
 function Add_Test(api_module_name, api_name, case_name)
 {
-    var OneTestInfo = "<div>";
+    var OneTestInfo = '<div class="top_div">';
     OneTestInfo += '<span class="pull-left text-right width150">API模块：</span>';
     OneTestInfo += '<input class="form-control bug-input" readonly value="' + api_module_name + '"></input>';
     OneTestInfo += '<span class="pull-left text-right width150">API名称：</span>';
@@ -18,7 +18,7 @@ function Add_Test(api_module_name, api_name, case_name)
 
 function Add_Test_Info(server_name, api_url, id)
 {
-    var OneTestInfo = "<div>";
+    var OneTestInfo = '<div class="bottom_div">';
     OneTestInfo += '<span class="pull-left text-right width150">服务环境：</span>';
     OneTestInfo += '<span class="pull-left">' + server_name + '</span>';
     OneTestInfo += '<span class="pull-left text-right width150">请求URL：</span>';
@@ -115,7 +115,7 @@ function Write_Result(id, result, status, message)
     }
     else
     {
-        $("#" + id).html("失败" + " 状态码：" + status + " 信息：" + message);
+        $("#" + id).html('<span class="pull-left error_result">失败' + " 状态码：" + status + " 信息：" + message + '</span><a href="#">重新测试</a>');
     }
 }
 
@@ -160,6 +160,10 @@ function Run_API(api_url, api_method, case_info, id)
 
 function Test_One_API(module_name, api_url, api_title, api_method, test_env, test_case)
 {
+    if(test_case.length <=0){
+        Notice_No_Case();
+        return;
+    }
     var index  = 0;
     for(var i=0;i<test_case.length;i++)
     {
@@ -193,10 +197,6 @@ function Test_One_API(module_name, api_url, api_title, api_method, test_env, tes
 function get_test_case_list_success(data){
     if(data.status != true){
         update_res(JSON.stringify(data, null, 4));
-    }
-    if(data.data.length <= 0) {
-        Notice_No_Case();
-        return;
     }
     var test_envs = $("#test_env option");
     var test_env_info = new Array();

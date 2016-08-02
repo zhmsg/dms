@@ -21,6 +21,7 @@
             <p>
                 <input id="api_url" value="{{ api_info["basic_info"]["api_url"] }}" />
                 <input id="api_title" value="{{ api_info["basic_info"]["api_title"] }}" />
+                <input id="api_no" value="{{ api_info["basic_info"]["api_no"] }}" />
                 <input value="{{ api_info["basic_info"]["api_method"] }}" id="api_method" style="display: none"/>
                 <span class="clear"></span>
             </p>
@@ -36,6 +37,7 @@
     </div>
     <input id="look_status" value="{{ status_url }}?api_no={{ api_no }}" title="{{ status_url }}?api_no={{ api_no }}" style="display: none">
     <input id="test_case_url" value="{{ test_case_url }}" style="display: none">
+    <input id="one_test_url" value="{{ test_url }}" style="display: none">
     <br/>
     <br/>
     <script type="text/javascript" src="{{ url_for('static', filename='t_js/Common/base64.js') }}"></script>

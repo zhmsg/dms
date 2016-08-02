@@ -436,9 +436,10 @@ def batch_test_api_page():
         return_url = url_prefix + "/info/?api_no=%s" % api_no
     status_url = url_prefix + "/status/"
     test_case_url = url_prefix + "/test/case/"
+    test_url = url_prefix + "/test/"
     return render_template("%s/Batch_Test_API.html" % html_dir, api_info=api_info, return_url=return_url, api_no=api_no,
-                           status_url=status_url, module_test_env=module_test_env,
-                           test_case_url=test_case_url)
+                           status_url=status_url, module_test_env=module_test_env, test_case_url=test_case_url,
+                           test_url=test_url)
 
 
 @develop_api_view.route("/test/case/", methods=["POST"])
