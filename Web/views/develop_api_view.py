@@ -141,10 +141,11 @@ def show_api():
         return api_info
     return_url = url_prefix + "/?module_no=%s" % api_info["basic_info"]["module_no"]
     update_url = None
-    if g.user_role & 16 > 0:
-        update_url = url_prefix + "/update/info/?api_no=%s" % api_no
     test_url = url_prefix + "/test/?api_no=%s" % api_no
-    batch_test_url = url_prefix + "/test/batch/?api_no=%s" % api_no
+    batch_test_url = None
+    if g.user_role & control.role_value["api_new"] == control.role_value["api_new"]:
+        update_url = url_prefix + "/update/info/?api_no=%s" % api_no
+        batch_test_url = url_prefix + "/test/batch/?api_no=%s" % api_no
     status_url = url_prefix + "/status/"
     my_care = None
     for item in api_info["care_info"]:
@@ -410,6 +411,8 @@ def test_api_page():
 
 @develop_api_view.route("/test/batch/", methods=["GET"])
 def batch_test_api_page():
+    if g.user_role & control.role_value["api_new"] != control.role_value["api_new"]:
+        return "用户无权限"
     if "api_no" not in request.args:
         return "Need api_no"
     api_no = request.args["api_no"]
@@ -433,17 +436,8 @@ def batch_test_api_page():
         return_url = url_prefix + "/info/?api_no=%s" % api_no
     status_url = url_prefix + "/status/"
     test_case_url = url_prefix + "/test/case/"
-    api_url = api_info["basic_info"]["api_url"]
-    url_params = re.findall("<([\w:]+)>", api_url)
-    url_param_info = []
-    for param in url_params:
-        param_sp = param.split(":")
-        if len(param_sp) > 1:
-            url_param_info.append({"param_type": param_sp[0], "param_name": param_sp[1], "origin_param": "<%s>" % param})
-        else:
-            url_param_info.append({"param_type": "string", "param_name": param_sp[0], "origin_param": "<%s>" % param})
     return render_template("%s/Batch_Test_API.html" % html_dir, api_info=api_info, return_url=return_url, api_no=api_no,
-                           status_url=status_url, url_param_info=url_param_info, module_test_env=module_test_env,
+                           status_url=status_url, module_test_env=module_test_env,
                            test_case_url=test_case_url)
 
 
