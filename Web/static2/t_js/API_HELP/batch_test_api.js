@@ -99,9 +99,9 @@ function get_test_case_success(data){
 
 function Write_Result(id, result, status, message)
 {
-    console.info(id);
-    console.info($("#" + id));
+    var status_url = $("#look_status").val();
     if(result == true) {
+        status = '<a href="' + status_url + '&status=' + status + '">' + status + '</a>';
         $("#" + id).html("成功" + " 状态码：" + status + " 信息：" + message);
     }
     else

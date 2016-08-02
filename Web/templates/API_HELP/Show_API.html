@@ -11,6 +11,9 @@
     {% if test_url %}
     <a class="btn btn-primary pull-right margin10" href="{{ test_url }}" title="">测试API</a>
     {% endif %}
+    {% if batch_test_url %}
+    <a class="btn btn-primary pull-right margin10" href="{{ batch_test_url }}" title="">批量测试</a>
+    {% endif %}
     <div class="clear"></div>
     <input class="form-control bottom10" id="api_no" value="{{ api_no }}" style="display:none;"/>
     <p>API标题: {{ api_info["basic_info"]["api_title"] }}</p>

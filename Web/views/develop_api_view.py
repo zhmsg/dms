@@ -144,6 +144,7 @@ def show_api():
     if g.user_role & 16 > 0:
         update_url = url_prefix + "/update/info/?api_no=%s" % api_no
     test_url = url_prefix + "/test/?api_no=%s" % api_no
+    batch_test_url = url_prefix + "/test/batch/?api_no=%s" % api_no
     status_url = url_prefix + "/status/"
     my_care = None
     for item in api_info["care_info"]:
@@ -153,7 +154,7 @@ def show_api():
             break
     return render_template("%s/Show_API.html" % html_dir, api_info=api_info, api_no=api_no, return_url=return_url,
                            update_url=update_url, my_care=my_care, test_url=test_url, url_prefix=url_prefix,
-                           status_url=status_url)
+                           status_url=status_url, batch_test_url=batch_test_url)
 
 
 @develop_api_view.route("/new/", methods=["GET"])
@@ -369,7 +370,7 @@ def update_api_predefine_header():
 
 
 @develop_api_view.route("/test/", methods=["GET"])
-def test_api():
+def test_api_page():
     if "api_no" not in request.args:
         return "Need api_no"
     api_no = request.args["api_no"]
@@ -408,7 +409,7 @@ def test_api():
 
 
 @develop_api_view.route("/test/batch/", methods=["GET"])
-def batch_test_api():
+def batch_test_api_page():
     if "api_no" not in request.args:
         return "Need api_no"
     api_no = request.args["api_no"]
