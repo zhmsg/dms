@@ -2,19 +2,28 @@
  * Created by msg on 8/1/16.
  */
 
-function Add_Test_Info(server_name, api_module_name, api_name, api_url, case_name, id)
+function Add_Test(api_module_name, api_name, case_name)
 {
     var OneTestInfo = "<div>";
-    OneTestInfo += '<span class="pull-left text-right width150">服务环境：</span>';
-    OneTestInfo += '<input class="form-control bug-input" readonly value="' + server_name + '"></input>';
     OneTestInfo += '<span class="pull-left text-right width150">API模块：</span>';
     OneTestInfo += '<input class="form-control bug-input" readonly value="' + api_module_name + '"></input>';
     OneTestInfo += '<span class="pull-left text-right width150">API名称：</span>';
     OneTestInfo += '<input class="form-control bug-input" readonly value="' + api_name + '"></input>';
-    OneTestInfo += '<span class="pull-left text-right width150">请求URL：</span>';
-    OneTestInfo += '<input class="form-control bug-input" readonly value="' + api_url + '"></input>';
     OneTestInfo += '<span class="pull-left text-right width150">测试名称：</span>';
     OneTestInfo += '<input class="form-control bug-input" readonly value="' + case_name + '"></input>';
+    OneTestInfo += '<span class="clear"></span>';
+    OneTestInfo += "</div>";
+    $("#div_test_info").append(OneTestInfo);
+}
+
+function Add_Test_Info(server_name, api_url, id)
+{
+    var OneTestInfo = "<div>";
+    OneTestInfo += '<span class="pull-left text-right width150">服务环境：</span>';
+    OneTestInfo += '<span class="pull-left">' + server_name + '</span>';
+    OneTestInfo += '<span class="pull-left text-right width150">请求URL：</span>';
+    OneTestInfo += '<span class="pull-left">' + api_url + '</span>';
+    OneTestInfo += '<span class="clear"></span>';
     OneTestInfo += '<span class="pull-left text-right width150">测试结果：</span>';
     OneTestInfo += '<span class="pull-left" id="' + id + '">正在测试中</span>';
     OneTestInfo += '<span class="clear"></span>';
@@ -155,6 +164,7 @@ function Test_One_API(module_name, api_url, api_title, api_method, test_env, tes
     for(var i=0;i<test_case.length;i++)
     {
         var case_name = test_case[i];
+        Add_Test(module_name, api_title, case_name);
         var test_case_url = $("#test_case_url").val() + case_name + "/";
         my_request(test_case_url, "GET", null, get_test_case_success);
         if(Get_Case_Info_Success == false)
@@ -172,7 +182,7 @@ function Test_One_API(module_name, api_url, api_title, api_method, test_env, tes
                 request_url = request_url.replace(reg, Url_Param[key]);
             }
             var id = "Span_Result_" + index;
-            Add_Test_Info(test_env[j].env_name, module_name, api_title, request_url, test_case[i], id);
+            Add_Test_Info(test_env[j].env_name,  request_url, id);
             Run_API(request_url, api_method, Get_Case_Info_Data, id);
             index ++;
         }
