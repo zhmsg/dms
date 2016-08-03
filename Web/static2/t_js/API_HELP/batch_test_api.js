@@ -41,63 +41,6 @@ function Notice_No_Case()
     $("#div_test_info").append(info);
 }
 
-function test_api(){
-    if($("#request_url").val() != ""){
-        request_url = $("#request_url").val();
-    }
-    else{
-        update_res("无效的请求URL");
-        return false;
-    }
-    var test_case_info = get_param_value();
-    if(test_case_info == false){
-        return;
-    }
-    var header_param = test_case_info.header;
-    for(var param_key in header_param) {
-        var param_value = header_param[param_key];
-        if (param_key == "authorization") {
-            header_param[param_key] = "Basic " + base64encode(param_value);
-        }
-        else if (param_key == "X-Authorization") {
-            header_param[param_key] = "OAuth2 " + param_value;
-        }
-        else {
-            header_param[param_key] = param_value;
-        }
-    }
-    var body_param = test_case_info.body;
-    if(api_method != "GET"){
-        body_param = JSON.stringify(body_param)
-    }
-    $.ajax({
-        url: request_url + "?geneacdms=test",
-        method: api_method,
-        contentType: "application/json",
-        headers: header_param,
-        //processData: false,
-        data: body_param,
-        success:function(data){
-            console.info(data);
-            if(typeof(data) == "string")
-            {
-                console.info("return json string");
-                data = JSON.parse(data);
-            }
-            update_res(JSON.stringify(data, null, 4));
-            update_status_url(data.status);
-            $("#btn_save_result").show();
-            $("#btn_save_result").text($("#btn_save_result").val());
-            $("#save_name").hide();
-        },
-        error:function(xhr){
-            var res = "状态码：" + xhr.status + "\n";
-            res += "返回值：" + xhr.statusText + "";
-            update_res(res);
-            console.info(xhr);
-        }
-    });
-}
 
 var Get_Case_Info_Success = false;
 var Get_Case_Info_Data = "";
