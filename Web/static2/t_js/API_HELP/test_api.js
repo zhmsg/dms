@@ -205,6 +205,18 @@ function get_test_case_list_success(data){
         var test_case_url = $("#test_case_url").val() + case_name + "/";
         my_async_request(test_case_url, "GET", null, get_test_case_success);
     });
+    var reg_env = new RegExp("(&|^)env_name=([^&]*)(&|$)");
+    var env_name = window.location.search.substr(1).match(reg_env);
+    if(env_name != null)
+    {
+        var env_option = $('#test_env option');
+        for(var i=0;i<env_option.length;i++){
+            if(decodeURI(env_name[2]) == env_option[i].innerHTML){
+                env_option[i].selected = true;
+                break;
+            }
+        }
+    }
     var reg = new RegExp("(&|^)case_name=([^&]*)(&|$)");
     var case_name = window.location.search.substr(1).match(reg);
     if(case_name != null){
