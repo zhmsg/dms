@@ -202,6 +202,12 @@ function get_test_case_list_success(data){
         var test_case_url = $("#test_case_url").val() + case_name + "/";
         my_async_request(test_case_url, "GET", null, get_test_case_success);
     });
+    var reg = new RegExp("(&|^)case_name=([^&]*)(&|$)");
+    var case_name = window.location.search.substr(1).match(reg);
+    if(case_name != null){
+        var test_case_url = $("#test_case_url").val() + case_name[2] + "/";
+        my_async_request(test_case_url, "GET", null, get_test_case_success);
+    }
 }
 
 function get_test_case_list(){
