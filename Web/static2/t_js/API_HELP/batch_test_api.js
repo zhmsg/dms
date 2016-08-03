@@ -21,7 +21,7 @@ function Add_Test_Info(server_name, api_url, id)
 {
     var OneTestInfo = '<div class="bottom_div">';
     OneTestInfo += '<span class="pull-left text-right width150">服务环境：</span>';
-    OneTestInfo += '<span class="pull-left">' + server_name + '</span>';
+    OneTestInfo += '<span name="env_name" class="pull-left">' + server_name + '</span>';
     OneTestInfo += '<span class="pull-left text-right width150">请求URL：</span>';
     OneTestInfo += '<span class="pull-left">' + api_url + '</span>';
     OneTestInfo += '<span class="clear"></span>';
@@ -113,7 +113,8 @@ function ReTest(el)
     var id_info = id.split("_");
     var api_no = id_info[2];
     var case_name = id_info[3];
-    var test_url = $("#one_test_url").val() + "?api_no=" + api_no + "&case_name=" + case_name;
+    var env_name = el.parentNode.parentNode.childNodes[1].innerText;
+    var test_url = $("#one_test_url").val() + "?api_no=" + api_no + "&case_name=" + case_name + "&env_name=" + env_name;
     window.open(test_url);
 }
 

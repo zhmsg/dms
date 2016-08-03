@@ -184,6 +184,9 @@ function get_test_case_success(data){
             $("#url_value_" + key).val(case_info.url[key]);
         }
     }
+    if("expect_status" in case_info){
+        $("#expect_status").val(case_info.expect_status);
+    }
     update_request_url();
     update_res("加载保存的测试用例 " + case_info.case_name + " 成功");
     $("#test_case_name").val(case_info.case_name);
