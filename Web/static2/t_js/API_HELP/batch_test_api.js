@@ -2,12 +2,13 @@
  * Created by msg on 8/1/16.
  */
 
-function Add_Test(api_module_name, api_name, case_name)
+function Add_Test(api_module_name, api_no, api_name, case_name)
 {
     var OneTestInfo = '<div class="top_div">';
     OneTestInfo += '<span class="pull-left text-right width150">API模块：</span>';
     OneTestInfo += '<input class="form-control bug-input" readonly value="' + api_module_name + '"></input>';
     OneTestInfo += '<span class="pull-left text-right width150">API名称：</span>';
+    OneTestInfo += '<input class="form-control bug-input" name="api_no" style="display: none" value="' + api_no + '"></input>';
     OneTestInfo += '<input class="form-control bug-input" readonly value="' + api_name + '"></input>';
     OneTestInfo += '<span class="pull-left text-right width150" name="case_name">测试名称：</span>';
     OneTestInfo += '<input class="form-control bug-input" readonly value="' + case_name + '"></input>';
@@ -106,12 +107,21 @@ function get_test_case_success(data){
     Get_Case_Info_Data = data.data;
 }
 
+function ReTest(el)
+{
+    var id = el.parentNode.id;
+    var id_info = id.split("_");
+    var api_no = id_info[2];
+    var case_name = id_info[3];
+    var test_url = $("#one_test_url").val() + "?api_no=" + api_no + "&case_name=" + case_name;
+    window.open(test_url);
+}
+
+
 function Write_Result(id, result, status, message, expect_status)
 {
     var status_url = $("#look_status").val();
     if(result == true) {
-        console.info(expect_status);
-        console.info(status);
         var status_a = '<a href="' + status_url + '&status=' + status + '">' + status + '</a>';
         if(expect_status == status) {
             $("#" + id).html("成功" + " 状态码：" + status_a + " 信息：" + message);
@@ -122,7 +132,7 @@ function Write_Result(id, result, status, message, expect_status)
     }
     else
     {
-        $("#" + id).html('<span class="pull-left error_result">失败' + " 状态码：" + status + " 信息：" + message + '</span><a href="#">重新测试</a>');
+        $("#" + id).html('<span class="pull-left error_result">失败' + " 状态码：" + status + " 信息：" + message + '</span><a href="#" onclick="ReTest(this);">重新测试</a>');
     }
 }
 
@@ -170,7 +180,7 @@ function Run_API(api_url, api_method, case_info, id)
     });
 }
 
-function Test_One_API(module_name, api_url, api_title, api_method, test_env, test_case)
+function Test_One_API(module_name, api_no, api_url, api_title, api_method, test_env, test_case)
 {
     if(test_case.length <=0){
         Notice_No_Case();
@@ -180,7 +190,7 @@ function Test_One_API(module_name, api_url, api_title, api_method, test_env, tes
     for(var i=0;i<test_case.length;i++)
     {
         var case_name = test_case[i];
-        Add_Test(module_name, api_title, case_name);
+        Add_Test(module_name, api_no, api_title, case_name);
         var test_case_url = $("#test_case_url").val() + case_name + "/";
         my_request(test_case_url, "GET", null, get_test_case_success);
         if(Get_Case_Info_Success == false)
@@ -197,8 +207,8 @@ function Test_One_API(module_name, api_url, api_title, api_method, test_env, tes
                 var reg = RegExp("<[^/>]*" + key + ">");
                 request_url = request_url.replace(reg, Url_Param[key]);
             }
-            var id = "Span_Result_" + index;
-            Add_Test_Info(test_env[j].env_name,  request_url, id);
+            var id = "Span_Result_" + api_no + "_" + case_name + "_" + index;
+            Add_Test_Info(test_env[j].env_name, request_url, id);
             Run_API(request_url, api_method, Get_Case_Info_Data, id);
             index ++;
         }
@@ -219,7 +229,7 @@ function get_test_case_list_success(data){
         env["env_address"] = test_envs[i].value;
         test_env_info[i] = env;
     }
-    Test_One_API($("#module_name").val(), $("#api_url").val(), $("#api_title").val(), $("#api_method").val(), test_env_info, data.data);
+    Test_One_API($("#module_name").val(), $("#api_no").val(), $("#api_url").val(), $("#api_title").val(), $("#api_method").val(), test_env_info, data.data);
 }
 
 function get_test_case_list(){
