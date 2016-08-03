@@ -26,7 +26,7 @@ function Add_Test_Info(server_name, api_url, id)
     OneTestInfo += '<span class="pull-left">' + api_url + '</span>';
     OneTestInfo += '<span class="clear"></span>';
     OneTestInfo += '<span class="pull-left text-right width150">测试结果：</span>';
-    OneTestInfo += '<span class="pull-left" id="' + id + '">正在测试中</span>';
+    OneTestInfo += '<span class="pull-left" id="' + id + '"><span class="error_result">正在测试中</span></span>';
     OneTestInfo += '<span class="clear"></span>';
     OneTestInfo += "</div>";
     $("#div_test_info").append(OneTestInfo);
