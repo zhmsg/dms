@@ -9,7 +9,7 @@ function Add_Test(api_module_name, api_name, case_name)
     OneTestInfo += '<input class="form-control bug-input" readonly value="' + api_module_name + '"></input>';
     OneTestInfo += '<span class="pull-left text-right width150">API名称：</span>';
     OneTestInfo += '<input class="form-control bug-input" readonly value="' + api_name + '"></input>';
-    OneTestInfo += '<span class="pull-left text-right width150">测试名称：</span>';
+    OneTestInfo += '<span class="pull-left text-right width150" name="case_name">测试名称：</span>';
     OneTestInfo += '<input class="form-control bug-input" readonly value="' + case_name + '"></input>';
     OneTestInfo += '<span class="clear"></span>';
     OneTestInfo += "</div>";

@@ -52,6 +52,7 @@ function test_api(){
                 data = JSON.parse(data);
             }
             update_res(JSON.stringify(data, null, 4));
+            $("#expect_status").val(data.status);
             update_status_url(data.status);
             $("#btn_save_result").show();
             $("#btn_save_result").text($("#btn_save_result").val());
@@ -139,6 +140,7 @@ function save_test_case_success(data){
 
 function save_test_case(){
     var case_name = $("#test_case_name").val();
+    var expect_status = $("#expect_status").val();
     var test_case_info = get_param_value();
     if(test_case_info == false) {
         return;
@@ -146,6 +148,7 @@ function save_test_case(){
     update_res(JSON.stringify(test_case_info, null, 4));
     var test_case_url = $("#test_case_url").val();
     test_case_info["case_name"] = case_name;
+    test_case_info["expect_status"] = parseInt(expect_status);
     my_async_request(test_case_url, "POST", test_case_info, save_test_case_success);
 }
 
@@ -214,17 +217,29 @@ $(function(){
         if(btn_t == btn_v){
             this.innerHTML = btn_v.substr(0, 2);
             $("#test_case_name").show();
+            $("#expect_status").show();
         }
         else{
             this.innerHTML = btn_v;
+            $("#expect_status").hide();
             $("#test_case_name").hide();
             var case_name = $("#test_case_name").val();
-            if(case_name.length<=0 || case_name.length>=15){
+            if(case_name.length<=0 || case_name.length>15){
                 update_res("未保存测试用例 \n测试用例的名称长度必须在1-15");
                 return;
             }
             if(case_name.match(/[^\u4e00-\u9fa5\w\-]/g) != null){
                 update_res("未保存测试用例 \n测试用例的名称仅允许汉字数字字母下划线(_)短横线(-)");
+                return;
+            }
+
+            var expect_status = $("#expect_status").val();
+            if(expect_status.length<=0 || expect_status.length>=8){
+                update_res("未保存测试用例 \n测试用例期待的状态码必须在1-8");
+                return;
+            }
+            if(expect_status.match(/[^\d]/g) != null){
+                update_res("未保存测试用例 \n测试用例期待的状态码必须为正整数");
                 return;
             }
             save_test_case();
@@ -236,6 +251,7 @@ $(function(){
         if(btn_t == btn_v){
             this.innerHTML = btn_v.substr(0, 2);
             $("#save_name").show();
+
         }
         else{
             var file_name = $("#save_name").val();
