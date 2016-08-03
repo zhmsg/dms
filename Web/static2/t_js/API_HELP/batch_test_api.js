@@ -106,12 +106,19 @@ function get_test_case_success(data){
     Get_Case_Info_Data = data.data;
 }
 
-function Write_Result(id, result, status, message)
+function Write_Result(id, result, status, message, expect_status)
 {
     var status_url = $("#look_status").val();
     if(result == true) {
-        status = '<a href="' + status_url + '&status=' + status + '">' + status + '</a>';
-        $("#" + id).html("成功" + " 状态码：" + status + " 信息：" + message);
+        console.info(expect_status);
+        console.info(status);
+        var status_a = '<a href="' + status_url + '&status=' + status + '">' + status + '</a>';
+        if(expect_status == status) {
+            $("#" + id).html("成功" + " 状态码：" + status_a + " 信息：" + message);
+        }
+        else{
+            $("#" + id).html('<span class="pull-left error_result">失败' + " 状态码：" + status_a + " 信息：" + message + '</span><a href="#">重新测试</a>');
+        }
     }
     else
     {
@@ -138,6 +145,10 @@ function Run_API(api_url, api_method, case_info, id)
     if(api_method != "GET"){
         body_param = JSON.stringify(body_param)
     }
+    var expect_status = 1000001;
+    if("expect_status" in Get_Case_Info_Data){
+        expect_status = Get_Case_Info_Data.expect_status;
+    }
     $.ajax({
         url: api_url + "?geneacdms=test",
         method: api_method,
@@ -150,7 +161,8 @@ function Run_API(api_url, api_method, case_info, id)
                 console.info("return json string");
                 data = JSON.parse(data);
             }
-            Write_Result(id, true, data.status, data.message);
+
+            Write_Result(id, true, data.status, data.message, expect_status);
         },
         error:function(xhr){
             Write_Result(id, false, xhr.status, xhr.responseText);
