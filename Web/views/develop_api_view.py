@@ -283,7 +283,7 @@ def add_body_param():
     result, param_info = control.add_body_param(g.user_name, api_no, param, necessary, type, desc, g.user_role)
     if result is False:
         return param_info
-    return json.dumps({"status": True, "data": param_info})
+    return jsonify({"status": True, "data": param_info})
 
 
 @develop_api_view.route("/add/input/", methods=["POST"])
@@ -295,7 +295,7 @@ def add_input_example():
     result, input_info = control.add_input_example(g.user_name, api_no, example, desc, g.user_role)
     if result is False:
         return input_info
-    return json.dumps({"status": True, "data": input_info})
+    return jsonify({"status": True, "data": input_info})
 
 
 @develop_api_view.route("/add/output/", methods=["POST"])
@@ -307,7 +307,7 @@ def add_output_example():
     result, output_info = control.add_output_example(g.user_name, api_no, example, desc, g.user_role)
     if result is False:
         return output_info
-    return json.dumps({"status": True, "data": output_info})
+    return jsonify({"status": True, "data": output_info})
 
 
 @develop_api_view.route("/care/", methods=["POST", "DELETE"])
@@ -350,13 +350,13 @@ def delete_body():
 @develop_api_view.route("/delete/input/<input_no>/", methods=["DELETE"])
 def delete_input(input_no):
     result, data = control.delete_input(input_no, g.user_role)
-    return json.dumps({"status": result, "data": data})
+    return jsonify({"status": result, "data": data})
 
 
 @develop_api_view.route("/delete/output/<output_no>/", methods=["DELETE"])
 def delete_output(output_no):
     result, data = control.delete_ouput(output_no, g.user_role)
-    return json.dumps({"status": result, "data": data})
+    return jsonify({"status": result, "data": data})
 
 
 @develop_api_view.route("/update/header/", methods=["PUT"])
