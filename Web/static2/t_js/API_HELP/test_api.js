@@ -2,69 +2,19 @@
  * Created by msg on 12/3/15.
  */
 
-function test_api(){
-    update_res("正在请求...");
-    $("#btn_save_result").hide();
-    var test_env = $("#test_env").val();
-    var api_url = $("#api_url").val();
-    var api_method = $("#api_method").val();
-    var request_url = test_env + api_url;
-    if($("#request_url").val() != ""){
-        request_url = $("#request_url").val();
-    }
-    else{
-        update_res("无效的请求URL");
-        return false;
-    }
-    var test_case_info = get_param_value();
-    if(test_case_info == false){
-        return;
-    }
-    var header_param = test_case_info.header;
-    for(var param_key in header_param) {
-        var param_value = header_param[param_key];
-        if (param_key == "authorization") {
-            header_param[param_key] = "Basic " + base64encode(param_value);
+function fill_zero(num, for_len) {
+    var num_str = "" + num;
+    while (for_len > 1){
+        for_len -= 1;
+        num /= 10;
+        if (num >= 1) {
+            continue
         }
-        else if (param_key == "X-Authorization") {
-            header_param[param_key] = "OAuth2 " + param_value;
-        }
-        else {
-            header_param[param_key] = param_value;
+        else{
+            num_str = "0" + num_str;
         }
     }
-    var body_param = test_case_info.body;
-    if(api_method != "GET"){
-        body_param = JSON.stringify(body_param)
-    }
-    $.ajax({
-        url: request_url + "?geneacdms=test",
-        method: api_method,
-        contentType: "application/json",
-        headers: header_param,
-        //processData: false,
-        data: body_param,
-        success:function(data){
-            console.info(data);
-            if(typeof(data) == "string")
-            {
-                console.info("return json string");
-                data = JSON.parse(data);
-            }
-            update_res(JSON.stringify(data, null, 4));
-            $("#expect_status").val(data.status);
-            update_status_url(data.status);
-            $("#btn_save_result").show();
-            $("#btn_save_result").text($("#btn_save_result").val());
-            $("#save_name").hide();
-        },
-        error:function(xhr){
-            var res = "状态码：" + xhr.status + "\n";
-            res += "返回值：" + xhr.statusText + "";
-            update_res(res);
-            console.info(xhr);
-        }
-    });
+    return num_str
 }
 
 function get_param_value(){
@@ -134,101 +84,44 @@ function get_param_value(){
 
 }
 
-function save_test_case_success(data){
-    update_res(JSON.stringify(data, null, 4));
+function update_res(s){
+    $("#res_text").text(s);
 }
 
-function save_test_case(){
-    var case_name = $("#test_case_name").val();
-    var expect_status = $("#expect_status").val();
-    var test_case_info = get_param_value();
-    if(test_case_info == false) {
+function update_request_url(){
+    var test_env = $("#test_env").val();
+    if(test_env == null){
+        $("#request_url").val("");
         return;
     }
-    update_res(JSON.stringify(test_case_info, null, 4));
-    var test_case_url = $("#test_case_url").val();
-    test_case_info["case_name"] = case_name;
-    test_case_info["expect_status"] = parseInt(expect_status);
-    my_async_request(test_case_url, "POST", test_case_info, save_test_case_success);
+    var api_url = $("#api_url").val();
+    var request_url = test_env + api_url;
+    var url_param = $("input[id^='url_value_']");
+    for(var i=0;i<url_param.length;i++){
+        var up = url_param[i];
+        var param_v = up.value;
+        if(param_v == ""){
+            continue;
+        }
+        var origin_param = up.attributes["origin_param"].value;
+        request_url = request_url.replace(origin_param, param_v);
+    }
+    $("#request_url").val(request_url);
 }
 
-function get_test_case_success(data){
-    if(data.status != true){
-        update_res(JSON.stringify(data, null, 4));
-    }
-    var case_info = data.data;
-    if("header" in case_info){
-        for(var key in case_info.header){
-            var v = case_info.header[key];
-            if(v instanceof  Array || v instanceof Object) {
-                $("#" + key + "_value").val(JSON.stringify(v));
-            }
-            else{
-                $("#" + key + "_value").val(v);
-            }
-        }
-    }
-    if("body" in case_info){
-        for(var key in case_info.body){
-            var v = case_info.body[key];
-            if(v instanceof  Array || v instanceof Object) {
-                $("#" + key + "_value").val(JSON.stringify(v));
-            }
-            else{
-                $("#" + key + "_value").val(v);
-            }
-        }
-    }
-    if("url" in case_info){
-        for(var key in case_info.url){
-            $("#url_value_" + key).val(case_info.url[key]);
-        }
-    }
-    if("expect_status" in case_info){
-        $("#expect_status").val(case_info.expect_status);
-    }
-    update_request_url();
-    update_res("加载保存的测试用例 " + case_info.case_name + " 成功");
-    $("#test_case_name").val(case_info.case_name);
+function update_status_url(status_code){
+    status_code = fill_zero(status_code, 8);
+    var look_status = $("#look_status");
+    console.info(look_status);
+    var title = look_status.attr('title');
+    $("#look_status").attr("href", title + "&status=" + status_code);
 }
 
-function get_test_case_list_success(data){
-    if(data.status != true){
-        update_res(JSON.stringify(data, null, 4));
-    }
-    var div_test_case = $("#div_test_case");
-    for(var index in data.data){
-        div_test_case.append('<a href="javascript:void(0)" name="test_case" class="test_case margin10">' + data.data[index] + '</a>');
-    }
-    $("a[name='test_case']").click(function(){
-        var case_name = this.innerHTML;
-        var test_case_url = $("#test_case_url").val() + case_name + "/";
-        my_async_request(test_case_url, "GET", null, get_test_case_success);
-    });
-    var reg_env = new RegExp("(&|^)env_name=([^&]*)(&|$)");
-    var env_name = window.location.search.substr(1).match(reg_env);
-    if(env_name != null)
-    {
-        var env_option = $('#test_env option');
-        for(var i=0;i<env_option.length;i++){
-            if(decodeURI(env_name[2]) == env_option[i].innerHTML){
-                env_option[i].selected = true;
-                break;
-            }
-        }
-    }
-    var reg = new RegExp("(&|^)case_name=([^&]*)(&|$)");
-    var case_name = window.location.search.substr(1).match(reg);
-    if(case_name != null){
-        var test_case_url = $("#test_case_url").val() + case_name[2] + "/";
-        my_async_request(test_case_url, "GET", null, get_test_case_success);
-    }
+function set_default_type()
+{
+    var type_select = $("select[name]");
 }
 
-function get_test_case_list(){
-    var test_case_url = $("#test_case_url").val();
-    my_async_request(test_case_url, "GET", null, get_test_case_list_success);
-}
 
 
 $(function(){
@@ -286,64 +179,7 @@ $(function(){
             $("#btn_save_result").hide();
         }
     });
-    get_test_case_list();
+    update_request_url();
 });
-
-function update_res(s){
-    $("#res_text").text(s);
-    var a_h = "data:application/json;charset=utf-8," + encodeURIComponent(s);
-    var a_s =$("#save_local");
-    a_s.attr("href", a_h);
-    a_s.attr("download", "sdfsd");
-
-}
-
-function update_request_url(){
-    var test_env = $("#test_env").val();
-    if(test_env == null){
-        $("#request_url").val("");
-        return;
-    }
-    var api_url = $("#api_url").val();
-    var request_url = test_env + api_url;
-    var url_param = $("input[id^='url_value_']");
-    for(var i=0;i<url_param.length;i++){
-        var up = url_param[i];
-        var param_v = up.value;
-        if(param_v == ""){
-            continue;
-        }
-        var origin_param = up.attributes["origin_param"].value;
-        request_url = request_url.replace(origin_param, param_v);
-        //alert(up.attributes["origin_param"].value);
-    }
-    $("#request_url").val(request_url);
-}
-
-function update_status_url(status_code){
-    status_code = fill_zero(status_code, 8);
-    var look_status = $("#look_status");
-    console.info(look_status);
-    var title = look_status.attr('title');
-    $("#look_status").attr("href", title + "&status=" + status_code);
-}
-
-update_request_url();
-
-function fill_zero(num, for_len) {
-    var num_str = "" + num;
-    while (for_len > 1){
-        for_len -= 1;
-        num /= 10;
-        if (num >= 1) {
-            continue
-        }
-        else{
-            num_str = "0" + num_str;
-        }
-    }
-    return num_str
-}
-
 
 

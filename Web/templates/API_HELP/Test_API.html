@@ -89,12 +89,21 @@
                                 * {% endif %}</li>
                             <li name="param">{{ api_info["predefine_body"][item]["param"] }}</li>
                             <li>：</li>
-                            <li><input class="form-control bug-input"
-                                       id="{{ api_info["predefine_body"][item]["param"] }}_value" param_type="body"/>
+                            <li>
+                                <input class="form-control bug-input"  id="{{ api_info["predefine_body"][item]["param"] }}_value" param_type="body" type="{{ api_info["predefine_body"][item]["type"] }}"/>
+                            </li>
+                            <li>
+                                <select class="form-control" name="body_param_type_{{ api_info["predefine_body"][item]["type"] }}">
+                                    <option value="string">string</option>
+                                    <option value="int">int</option>
+                                    <option value="list">list</option>
+                                    <option value="object">object</option>
+                                    <option value="bool">bool</option>
+                                </select>
                             </li>
                             <div class="clear"></div>
                         </ul>
-                        <p>{{ api_info["predefine_body"][item]["param_desc"] }}</p>
+                        <p>【{{ api_info["predefine_body"][item]["type"] }}】{{ api_info["predefine_body"][item]["param_desc"] }}</p>
                     </div>
                 {% endif %}
             {% endfor %}
@@ -106,6 +115,15 @@
                     <li>：</li>
                     <li><input class="form-control bug-input" id="{{ param_info["param"] }}_value" param_type="body"
                                type="{{ param_info["type"] }}"/></li>
+                    <li>
+                        <select class="form-control" name="body_param_type_{{ param_info["type"] }}">
+                            <option value="string">string</option>
+                            <option value="int">int</option>
+                            <option value="list">list</option>
+                            <option value="object">object</option>
+                            <option value="bool">bool</option>
+                        </select>
+                    </li>
                     <div class="clear"></div>
                 </ul>
                 <p>【{{ param_info["type"] }}】{{ param_info["param_desc"] }}</p>
@@ -132,5 +150,6 @@
     <script type="text/javascript" src="{{ url_for('static', filename='t_js/Common/base64.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='t_js/Common/download_json.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='t_js/API_HELP/test_api.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='t_js/API_HELP/test_api_data.js') }}"></script>
 {% endblock %}
 
