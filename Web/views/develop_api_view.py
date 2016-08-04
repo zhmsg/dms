@@ -389,10 +389,10 @@ def test_api_page():
         result, module_test_env = control.get_test_env(g.user_role, env_no_list)
         if result is False:
             return module_test_env
-    if "Referer" in request.headers:
-        return_url = request.headers["Referer"]
+    if g.user_role & control.role_value["api_new"] == control.role_value["api_new"]:
+        new_right = True
     else:
-        return_url = url_prefix + "/info/?api_no=%s" % api_no
+        new_right = False
     api_info_url = url_prefix + "/info/?api_no=%s" % api_no
     status_url = url_prefix + "/status/"
     test_case_url = url_prefix + "/test/case/"
@@ -407,7 +407,7 @@ def test_api_page():
             url_param_info.append({"param_type": "string", "param_name": param_sp[0], "origin_param": "<%s>" % param})
     return render_template("%s/Test_API.html" % html_dir, api_info=api_info, api_no=api_no, status_url=status_url,
                            url_param_info=url_param_info, module_test_env=module_test_env, test_case_url=test_case_url,
-                           api_info_url=api_info_url)
+                           api_info_url=api_info_url, new_right=new_right)
 
 
 @develop_api_view.route("/test/batch/", methods=["GET"])

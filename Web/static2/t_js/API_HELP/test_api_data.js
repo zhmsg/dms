@@ -94,24 +94,30 @@ function get_test_case_success(data){
     var case_info = data.data;
     if("header" in case_info){
         for(var key in case_info.header){
-            var v = case_info.header[key];
-            if(v instanceof  Array || v instanceof Object) {
-                $("#" + key + "_value").val(JSON.stringify(v));
-            }
-            else{
-                $("#" + key + "_value").val(v);
-            }
+            $("#" + key + "_value").val(v);
         }
     }
     if("body" in case_info){
         for(var key in case_info.body){
             var v = case_info.body[key];
-            if(v instanceof  Array || v instanceof Object) {
-                $("#" + key + "_value").val(JSON.stringify(v));
+            if(v instanceof  Array) {
+                v = JSON.stringify(v);
+                $("#" + key + "_type").val("list");
+            }
+            else if(v instanceof Object) {
+                v = JSON.stringify(v);
+                $("#" + key + "_type").val("object");
+            }
+            else if(typeof v == "number"){
+                $("#" + key + "_type").val("int");
+            }
+            else if(typeof v == "boolean"){
+                $("#" + key + "_type").val("bool");
             }
             else{
-                $("#" + key + "_value").val(v);
+                $("#" + key + "_type").val("string");
             }
+            $("#" + key + "_value").val(v);
         }
     }
     if("url" in case_info){

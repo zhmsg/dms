@@ -93,7 +93,7 @@
                                 <input class="form-control bug-input"  id="{{ api_info["predefine_body"][item]["param"] }}_value" param_type="body" type="{{ api_info["predefine_body"][item]["type"] }}"/>
                             </li>
                             <li>
-                                <select class="form-control" id="{{ api_info["predefine_body"][item]["param"] }}_type" name="body_param_type_{{ api_info["predefine_body"][item]["type"] }}">
+                                <select class="form-control" id="{{ api_info["predefine_body"][item]["param"] }}_type" name="body_param_type_{{ api_info["predefine_body"][item]["type"] }}" {% if not new_right %}disabled {% endif %}>
                                     <option value="string">string</option>
                                     <option value="int">int</option>
                                     <option value="list">list</option>
@@ -116,7 +116,7 @@
                     <li>
                         <input class="form-control bug-input" id="{{ param_info["param"] }}_value" param_type="body" type="{{ param_info["type"] }}"/></li>
                     <li>
-                        <select class="form-control" id="{{ param_info["param"] }}_type" name="body_param_type_{{ param_info["type"] }}">
+                        <select class="form-control" id="{{ param_info["param"] }}_type" name="body_param_type_{{ param_info["type"] }}" {% if not new_right %}disabled {% endif %}>
                             <option value="string">string</option>
                             <option value="int">int</option>
                             <option value="list">list</option>
