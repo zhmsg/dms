@@ -2,6 +2,8 @@
  * Created by msg on 12/3/15.
  */
 
+var new_right = false;
+
 function fill_zero(num, for_len) {
     var num_str = "" + num;
     while (for_len > 1){
@@ -32,7 +34,12 @@ function get_param_value(){
         }
         var param_type = el.attributes["param_type"].value;
         if(param_type == "body"){
-            var type = $("#" + param_key + "_type").val();
+            if(new_right == true){
+                var type = $("#" + param_key + "_type").val();
+            }
+            else{
+                var type = el.attributes["type"].value;
+            }
             if(type == "int"){
                 param_value = Number(param_value);
                 if(isNaN(param_value)){
@@ -129,7 +136,6 @@ function set_default_type()
 }
 
 
-
 $(function(){
     $("#btn_save_case").click(function(){
         var btn_t = this.innerHTML;
@@ -187,6 +193,9 @@ $(function(){
     });
     update_request_url();
     set_default_type();
+    if($("#new_right").val() == "True"){
+        new_right = true;
+    }
 });
 
 
