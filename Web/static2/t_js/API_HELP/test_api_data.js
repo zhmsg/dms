@@ -94,6 +94,7 @@ function get_test_case_success(data){
     var case_info = data.data;
     if("header" in case_info){
         for(var key in case_info.header){
+            var v = case_info.header[key];
             $("#" + key + "_value").val(v);
         }
     }

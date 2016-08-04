@@ -39,6 +39,7 @@ function my_request(request_url, request_method, body_param, request_success){
         url: request_url,
         method: request_method,
         contentType: "application/json",
+        dataType: "json",
         data: body_param,
         async:false,
         success:request_success,
@@ -54,6 +55,7 @@ function my_async_request(request_url, request_method, body_param, request_succe
         url: request_url,
         method: request_method,
         contentType: "application/json",
+        dataType: "json",
         data: body_param,
         success:request_success,
         error:request_error
