@@ -80,9 +80,9 @@ def after_request(res):
                     res.headers["Location"] = res.headers["Location"].replace("http", pro)
                 else:
                     res.headers["Location"] = "%s://%s%s" % (pro, request.headers["Host"], location)
-    if "X-Requested-With" in request.headers and "Content-Type" in res.headers and res.status_code == 200:
-        if request.headers["X-Requested-With"] == "XMLHttpRequest" and res.headers["Content-Type"] != "application/json":
-            res = jsonify({"status": False, "data": res.response[0]})
+    # if "X-Requested-With" in request.headers and "Content-Type" in res.headers and res.status_code == 200:
+    #     if request.headers["X-Requested-With"] == "XMLHttpRequest" and res.headers["Content-Type"] != "application/json":
+    #         res = jsonify({"status": False, "data": res.response[0]})
     res.headers["Server"] = "JingYun Server"
     return res
 
