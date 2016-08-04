@@ -198,9 +198,9 @@ function get_test_case_list_success(data){
     }
     var div_test_case = $("#div_test_case");
     for(var index in data.data){
-        div_test_case.append('<a href="javascript:void(0)" class="test_case">' + data.data[index] + '</a>');
+        div_test_case.append('<a href="javascript:void(0)" name="test_case" class="test_case margin10">' + data.data[index] + '</a>');
     }
-    $("a[class='test_case']").click(function(){
+    $("a[name='test_case']").click(function(){
         var case_name = this.innerHTML;
         var test_case_url = $("#test_case_url").val() + case_name + "/";
         my_async_request(test_case_url, "GET", null, get_test_case_success);
