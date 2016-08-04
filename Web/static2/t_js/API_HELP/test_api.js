@@ -32,7 +32,7 @@ function get_param_value(){
         }
         var param_type = el.attributes["param_type"].value;
         if(param_type == "body"){
-            var type = el.attributes["type"].value;
+            var type = $("#" + param_key + "_type").val();
             if(type == "int"){
                 param_value = Number(param_value);
                 if(isNaN(param_value)){
@@ -119,7 +119,13 @@ function update_status_url(status_code){
 
 function set_default_type()
 {
-    var type_select = $("select[name]");
+    var type_select = $("select[name^='body_param_type_']");
+    for(var i=0;i<type_select.length;i++){
+        var one_select = type_select[i];
+        var default_type = one_select.name.split("_")[3];
+        console.info(default_type);
+        one_select.value = default_type;
+    }
 }
 
 
@@ -180,6 +186,7 @@ $(function(){
         }
     });
     update_request_url();
+    set_default_type();
 });
 
 
