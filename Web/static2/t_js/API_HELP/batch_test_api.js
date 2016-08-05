@@ -119,7 +119,7 @@ function Run_API(api_url, api_method, case_info, id)
             Write_Result(id, true, data.status, data.message, expect_status);
         },
         error:function(xhr){
-            Write_Result(id, false, xhr.status, xhr.responseText);
+            Write_Result(id, false, xhr.status, xhr.statusText);
         }
     });
 }
