@@ -14,10 +14,10 @@ function Add_Test(api_module_name, api_no, api_name, case_name)
     OneTestInfo += '<input class="form-control bug-input" readonly value="' + case_name + '"></input>';
     OneTestInfo += '<span class="clear"></span>';
     OneTestInfo += "</div>";
-    $("#div_test_info").append(OneTestInfo);
+    $("#div_test_" + api_no).append(OneTestInfo);
 }
 
-function Add_Test_Info(server_name, api_url, id)
+function Add_Test_Info(server_name, api_no, api_url, id)
 {
     var OneTestInfo = '<div class="bottom_div">';
     OneTestInfo += '<span class="pull-left text-right width150">服务环境：</span>';
@@ -29,7 +29,7 @@ function Add_Test_Info(server_name, api_url, id)
     OneTestInfo += '<span class="pull-left" id="' + id + '"><span class="error_result">正在测试中</span></span>';
     OneTestInfo += '<span class="clear"></span>';
     OneTestInfo += "</div>";
-    $("#div_test_info").append(OneTestInfo);
+    $("#div_test_" + api_no).append(OneTestInfo);
 }
 
 function Notice_No_Case()
@@ -158,7 +158,7 @@ function Test_One_API(api_no, test_env)
                 request_url = request_url.replace(reg, Url_Param[key]);
             }
             var id = "Span_Result_" + api_no + "_" + case_name + "_" + index;
-            Add_Test_Info(test_env[j].env_name, request_url, id);
+            Add_Test_Info(test_env[j].env_name, api_no, request_url, id);
             Run_API(request_url, api_method, Get_Case_Info_Data, id);
             index ++;
         }
@@ -202,6 +202,7 @@ function Get_API_Info_Success(data) {
 function Get_API_Info(api_no)
 {
     var request_url = $("#api_info_url").val() + "?api_no=" + api_no;
+    $("#div_test_info").append("<div id='div_test_" + api_no + "'></div>");
     my_async_request(request_url, "GET", null, Get_API_Info_Success);
 
 }

@@ -156,4 +156,5 @@ def test_case_content(case_name):
     with open(case_path, "r") as cr:
         content = cr.read()
         case_info = json.loads(content)
+    case_info["api_no"] = api_no
     return jsonify({"status": True, "data": case_info})
