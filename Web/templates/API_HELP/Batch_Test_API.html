@@ -5,28 +5,20 @@
 
 {% block content %}
     <br>
+    {% if api_no %}
     <a class="btn btn-primary pull-right" href="{{ api_info_url }}?api_no={{ api_no }}" title="">API信息</a>
+    {% endif %}
     <div class="margin20 apiTest" id="div_test_info">
-        <div style="display: none">
-            <p>
-                <select class="form-control bug-input" id="test_env">
-                    {% for env in module_test_env %}
-                        <option value="{{ env["env_address"] }}">{{ env["env_name"] }}</option>
-                    {% endfor %}
-                </select>
-            </p>
-        </div>
-
     </div>
     <input id="look_status" value="{{ status_url }}?api_no={{ api_no }}" title="{{ status_url }}?api_no={{ api_no }}" style="display: none">
     <input id="test_case_url" value="{{ test_case_url }}" style="display: none">
     <input id="one_test_url" value="{{ test_url }}" style="display: none">
     <input id="api_info_url" value="{{ api_info_url }}" style="display: none">
-    <br/>
-    <br/>
+    <input id="env_info_url" value="{{ env_info_url }}" style="display: none">
     <script type="text/javascript" src="{{ url_for('static', filename='t_js/Common/base64.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='t_js/Common/download_json.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='t_js/Common/url_tool.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='t_js/API_HELP/batch_test_api.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='t_js/API_Test/batch_test_api_dom.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='t_js/API_Test/batch_test_api.js') }}"></script>
 {% endblock %}
 

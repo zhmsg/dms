@@ -87,30 +87,25 @@ def test_api_page():
 def batch_test_api_page():
     if g.user_role & control.role_value["api_new"] != control.role_value["api_new"]:
         return "用户无权限"
-    if "api_no" not in request.args:
-        return "Need api_no"
-    api_no = request.args["api_no"]
-    if len(api_no) != 32:
-        return "Bad api_no"
-    result, api_info = control.get_api_info(api_no, g.user_role)
-    if result is False:
-        return api_info
-    module_test_env = []
-    if api_info["basic_info"]["module_env"] is not None:
-        module_env_s = api_info["basic_info"]["module_env"].split("|")
-        env_no_list = []
-        for env_no_s in module_env_s:
-            env_no_list.append(int(env_no_s))
-        result, module_test_env = control.get_test_env(g.user_role, env_no_list)
-        if result is False:
-            return module_test_env
+    api_no = None
+    if "api_no" in request.args:
+        api_no = request.args["api_no"]
+        if len(api_no) != 32:
+            return "Bad api_no"
     api_info_url = api_url_prefix + "/info/"
     status_url = status_url_prefix + "/"
     test_case_url = url_prefix + "/case/"
     test_url = url_prefix + "/"
+    env_info_url = url_prefix + "/env/"
     return render_template("%s/Batch_Test_API.html" % html_dir, api_no=api_no, status_url=status_url,
-                           module_test_env=module_test_env, test_case_url=test_case_url, test_url=test_url,
-                           api_info_url=api_info_url)
+                           test_case_url=test_case_url, test_url=test_url, api_info_url=api_info_url,
+                           env_info_url=env_info_url)
+
+
+@develop_test_view.route("/env/", methods=["GET"])
+def get_test_env():
+    result, env_info = control.get_test_env(g.user_role)
+    return jsonify({"status": result, "data": env_info})
 
 
 @develop_test_view.route("/case/", methods=["POST"])
