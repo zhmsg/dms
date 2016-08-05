@@ -38,7 +38,7 @@ def referer_api_no(f):
     return decorated_function
 
 
-@develop_api_view.route("/")
+@develop_api_view.route("/", methods=["GET"])
 def list_api():
     result, part_module = control.get_part_api(g.user_name, g.user_role)
     if result is False:
@@ -91,6 +91,15 @@ def list_api():
                                my_care=my_care, care_info=module_data["care_info"], test_module_url=test_module_url)
     return render_template("%s/New_API_Module.html" % html_dir, part_module=part_module, url_prefix=url_prefix,
                            new_power=new_power, test_env=test_env)
+
+
+@develop_api_view.route("/module/", methods=["GET"])
+def get_module_api():
+    if "module_no" not in request.args:
+        return jsonify({"status": False, "data": "Need module_no"})
+    module_no = int(request.args["module_no"])
+    result, module_data = control.get_api_list(module_no, g.user_role)
+    return jsonify({"status": result, "data": module_data})
 
 
 @develop_api_view.route("/module/", methods=["POST"])

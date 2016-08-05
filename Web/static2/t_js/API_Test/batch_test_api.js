@@ -153,14 +153,28 @@ function Get_Env_Info()
     my_request(request_url, "GET", null, Get_Env_Info_Success)
 }
 
+function Get_API_List_Success(data)
+{
+    console.info(data);
+}
+
+function Get_API_List(module_no)
+{
+    var request_url = $("#module_api_url").val() + "?module_no=" + module_no;
+    my_async_request(request_url, "GET", null, Get_API_List_Success);
+}
+
 $(function() {
     Get_Env_Info();
     var module_no = UrlArgsValue(window.location.toString(), "module_no");
-
-    var api_no = UrlArgsValue(window.location.toString(), "api_no");
-    if(api_no != null)
-    {
-        Get_API_Info(api_no);
+    if(module_no != null){
+        Get_API_List(module_no);
+    }
+    else {
+        var api_no = UrlArgsValue(window.location.toString(), "api_no");
+        if (api_no != null) {
+            Get_API_Info(api_no);
+        }
     }
 });
 

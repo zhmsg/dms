@@ -97,9 +97,10 @@ def batch_test_api_page():
     test_case_url = url_prefix + "/case/"
     test_url = url_prefix + "/"
     env_info_url = url_prefix + "/env/"
+    module_api_url = api_url_prefix + "/module/"
     return render_template("%s/Batch_Test_API.html" % html_dir, api_no=api_no, status_url=status_url,
                            test_case_url=test_case_url, test_url=test_url, api_info_url=api_info_url,
-                           env_info_url=env_info_url)
+                           env_info_url=env_info_url, module_api_url=module_api_url)
 
 
 @develop_test_view.route("/env/", methods=["GET"])
