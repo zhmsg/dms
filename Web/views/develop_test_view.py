@@ -108,7 +108,7 @@ def batch_test_api_page():
     status_url = status_url_prefix + "/"
     test_case_url = url_prefix + "/case/"
     test_url = url_prefix + "/"
-    return render_template("%s/Batch_Test_API.html" % html_dir, api_info=api_info, api_no=api_no, status_url=status_url,
+    return render_template("%s/Batch_Test_API.html" % html_dir, api_no=api_no, status_url=status_url,
                            module_test_env=module_test_env, test_case_url=test_case_url, test_url=test_url,
                            api_info_url=api_info_url)
 
@@ -135,13 +135,13 @@ def list_test_case():
     api_no = g.api_no
     user_case_dir = "%s/%s" % (case_dir, g.user_name)
     if os.path.isdir(user_case_dir) is False:
-        return jsonify({"status": True, "data": []})
+        return jsonify({"status": True, "data": {"api_no": api_no, "case": []}})
     case_files = os.listdir(user_case_dir)
     api_test_case = []
     for item in case_files:
         if item.startswith(api_no):
             api_test_case.append(item[33:-5])
-    return jsonify({"status": True, "data": api_test_case})
+    return jsonify({"status": True, "data": {"api_no": api_no, "case": api_test_case}})
 
 
 @develop_test_view.route("/case/<case_name>/", methods=["GET"])

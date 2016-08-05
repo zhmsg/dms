@@ -44,6 +44,7 @@ function Notice_No_Case()
 
 var Get_Case_Info_Success = false;
 var Get_Case_Info_Data = "";
+var API_Info = new Object();
 
 function get_test_case_success(data){
     Get_Case_Info_Success = data.status;
@@ -124,8 +125,13 @@ function Run_API(api_url, api_method, case_info, id)
     });
 }
 
-function Test_One_API(module_name, api_no, api_url, api_title, api_method, test_env, test_case)
+function Test_One_API(api_no, test_env)
 {
+    var module_name = API_Info[api_no].basic_info.module_name;
+    var test_case = API_Info[api_no]["test_case"];
+    var api_title = API_Info[api_no].basic_info.api_title;
+    var api_method = API_Info[api_no].basic_info.api_method;
+    var api_url = API_Info[api_no].basic_info.api_url;
     if(test_case.length <=0){
         Notice_No_Case();
         return;
@@ -164,6 +170,9 @@ function get_test_case_list_success(data){
     if(data.status != true){
         update_res(JSON.stringify(data, null, 4));
     }
+    var api_no = data.data.api_no;
+    API_Info[api_no]["test_case"] = data.data.case;
+    console.info(API_Info);
     var test_envs = $("#test_env option");
     var test_env_info = new Array();
     for(var i=0;i<test_envs.length;i++)
@@ -173,7 +182,7 @@ function get_test_case_list_success(data){
         env["env_address"] = test_envs[i].value;
         test_env_info[i] = env;
     }
-    Test_One_API($("#module_name").val(), $("#api_no").val(), $("#api_url").val(), $("#api_title").val(), $("#api_method").val(), test_env_info, data.data);
+    Test_One_API(api_no, test_env_info);
 }
 
 function get_test_case_list(api_no){
@@ -184,8 +193,9 @@ function get_test_case_list(api_no){
 function Get_API_Info_Success(data) {
     if(data.status == true)
     {
-        console.info(data.data.api_info.basic_info);
-        get_test_case_list(data.data.api_info.basic_info.api_no);
+        var api_no = data.data.api_info.basic_info.api_no;
+        API_Info[api_no] = data.data.api_info;
+        get_test_case_list(api_no);
     }
 }
 

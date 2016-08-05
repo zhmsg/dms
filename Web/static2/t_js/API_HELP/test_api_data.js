@@ -151,8 +151,9 @@ function get_test_case_list_success(data){
         update_res(JSON.stringify(data, null, 4));
     }
     var div_test_case = $("#div_test_case");
-    for(var index in data.data){
-        add_case_node(data.data[index]);
+    var case_list = data.data.case;
+    for(var index in case_list){
+        add_case_node(case_list[index]);
     }
 
     var reg_env = new RegExp("(&|^)env_name=([^&]*)(&|$)");
