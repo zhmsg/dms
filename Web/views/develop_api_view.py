@@ -6,7 +6,7 @@ import sys
 import re
 from functools import wraps
 from flask import render_template, request, redirect, url_for, jsonify, g
-from Web import api_url_prefix, create_blue
+from Web import api_url_prefix, create_blue, test_url_prefix
 from Web.views import control
 
 
@@ -85,9 +85,10 @@ def list_api():
                 my_care = item
                 module_data["care_info"].remove(item)
                 break
+        test_module_url = test_url_prefix + "/batch/"
         return render_template("%s/List_Module_API.html" % html_dir, part_module=part_module, api_list=module_data["api_list"],
                                current_module=current_module, url_prefix=url_prefix, new_power=new_power,
-                               my_care=my_care, care_info=module_data["care_info"])
+                               my_care=my_care, care_info=module_data["care_info"], test_module_url=test_module_url)
     return render_template("%s/New_API_Module.html" % html_dir, part_module=part_module, url_prefix=url_prefix,
                            new_power=new_power, test_env=test_env)
 

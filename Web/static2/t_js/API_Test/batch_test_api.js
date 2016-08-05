@@ -155,6 +155,8 @@ function Get_Env_Info()
 
 $(function() {
     Get_Env_Info();
+    var module_no = UrlArgsValue(window.location.toString(), "module_no");
+
     var api_no = UrlArgsValue(window.location.toString(), "api_no");
     if(api_no != null)
     {

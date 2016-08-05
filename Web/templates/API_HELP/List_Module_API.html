@@ -8,8 +8,9 @@
     <p>模块URL前缀：{{ current_module["module_prefix"] }}</p>
     <p>模块描述：{{ current_module["module_desc"] }}</p>
     {% if new_power %}
-        <a href="{{ url_prefix }}/?module_no={{ current_module["module_no"] }}&update=true">更新模块信息</a> &nbsp;
-        <a href="{{ url_prefix }}/?module_no={{ current_module["module_no"] }}">删除模块</a> &nbsp;
+        <a href="{{ url_prefix }}/?module_no={{ current_module["module_no"] }}&update=true" class="margin10">更新模块信息</a>
+        <a href="{{ url_prefix }}/?module_no={{ current_module["module_no"] }}" class="margin10">删除模块</a>
+        <a href="{{ test_module_url }}?module_no={{ current_module["module_no"] }}" class="margin10">测试模块</a>
     {% endif %}
     <table class="table table-bordered table-hover api-list-table">
         <caption>API列表</caption>
