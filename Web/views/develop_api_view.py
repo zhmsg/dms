@@ -3,12 +3,10 @@
 
 
 import sys
-import os
-import json
 import re
 from functools import wraps
 from flask import render_template, request, redirect, url_for, jsonify, g
-from Web import api_url_prefix, data_dir, create_blue
+from Web import api_url_prefix, create_blue
 from Web.views import control
 
 
@@ -18,9 +16,6 @@ __author__ = 'Zhouheng'
 
 url_prefix = api_url_prefix
 html_dir = "/API_HELP"
-case_dir = "%s/test_case" % data_dir
-if os.path.isdir(case_dir) is False:
-    os.mkdir(case_dir)
 
 
 develop_api_view = create_blue('develop_api_view', url_prefix=url_prefix)
@@ -33,9 +28,12 @@ def referer_api_no(f):
             return jsonify({"status": False, "data": "Bad Request"})
         g.ref_url = request.headers["Referer"]
         find_result = re.findall("api_no=([a-z\d]{32})", g.ref_url)
-        if len(find_result) < 0:
+        if len(find_result) > 0:
+            g.api_no = find_result[0]
+        elif "api_no" in request.args:
+            g.api_no = request.args["api_no"]
+        else:
             return jsonify({"status": False, "data": "Bad Request."})
-        g.api_no = find_result[0]
         return f(*args, **kwargs)
     return decorated_function
 
@@ -329,7 +327,7 @@ def delete_api(api_no):
     return redirect(url_for("develop_api_view.list_api"))
 
 
-@develop_api_view.route("/delete/header/", methods=["DELETE"])
+@develop_api_view.route("/header/", methods=["DELETE"])
 def delete_header():
     request_data = request.json
     if "api_no" in request_data and "param" in request_data:
@@ -338,7 +336,7 @@ def delete_header():
     return jsonify({"status": False, "data": "need api_no and param"})
 
 
-@develop_api_view.route("/delete/body/", methods=["DELETE"])
+@develop_api_view.route("/body/", methods=["DELETE"])
 def delete_body():
     request_data = request.json
     if "api_no" in request_data and "param" in request_data:
@@ -347,13 +345,13 @@ def delete_body():
     return jsonify({"status": False, "data": "need api_no and param"})
 
 
-@develop_api_view.route("/delete/input/<input_no>/", methods=["DELETE"])
+@develop_api_view.route("/input/<input_no>/", methods=["DELETE"])
 def delete_input(input_no):
     result, data = control.delete_input(input_no, g.user_role)
     return jsonify({"status": result, "data": data})
 
 
-@develop_api_view.route("/delete/output/<output_no>/", methods=["DELETE"])
+@develop_api_view.route("/output/<output_no>/", methods=["DELETE"])
 def delete_output(output_no):
     result, data = control.delete_ouput(output_no, g.user_role)
     return jsonify({"status": result, "data": data})
@@ -371,119 +369,3 @@ def update_api_predefine_header():
     else:
         result, message = control.add_predefine_header(g.user_name, api_no, param, param_type, g.user_role)
     return jsonify({"status": result, "data": message})
-
-
-@develop_api_view.route("/test/", methods=["GET"])
-def test_api_page():
-    if "api_no" not in request.args:
-        return "Need api_no"
-    api_no = request.args["api_no"]
-    if len(api_no) != 32:
-        return "Bad api_no"
-    result, api_info = control.get_api_info(api_no, g.user_role)
-    if result is False:
-        return api_info
-    module_test_env = []
-    if api_info["basic_info"]["module_env"] is not None:
-        module_env_s = api_info["basic_info"]["module_env"].split("|")
-        env_no_list = []
-        for env_no_s in module_env_s:
-            env_no_list.append(int(env_no_s))
-        result, module_test_env = control.get_test_env(g.user_role, env_no_list)
-        if result is False:
-            return module_test_env
-    if g.user_role & control.role_value["api_new"] == control.role_value["api_new"]:
-        new_right = True
-    else:
-        new_right = False
-    api_info_url = url_prefix + "/info/?api_no=%s" % api_no
-    status_url = url_prefix + "/status/"
-    test_case_url = url_prefix + "/test/case/"
-    api_url = api_info["basic_info"]["api_url"]
-    url_params = re.findall("<([\w:]+)>", api_url)
-    url_param_info = []
-    for param in url_params:
-        param_sp = param.split(":")
-        if len(param_sp) > 1:
-            url_param_info.append({"param_type": param_sp[0], "param_name": param_sp[1], "origin_param": "<%s>" % param})
-        else:
-            url_param_info.append({"param_type": "string", "param_name": param_sp[0], "origin_param": "<%s>" % param})
-    return render_template("%s/Test_API.html" % html_dir, api_info=api_info, api_no=api_no, status_url=status_url,
-                           url_param_info=url_param_info, module_test_env=module_test_env, test_case_url=test_case_url,
-                           api_info_url=api_info_url, new_right=new_right)
-
-
-@develop_api_view.route("/test/batch/", methods=["GET"])
-def batch_test_api_page():
-    if g.user_role & control.role_value["api_new"] != control.role_value["api_new"]:
-        return "用户无权限"
-    if "api_no" not in request.args:
-        return "Need api_no"
-    api_no = request.args["api_no"]
-    if len(api_no) != 32:
-        return "Bad api_no"
-    result, api_info = control.get_api_info(api_no, g.user_role)
-    if result is False:
-        return api_info
-    module_test_env = []
-    if api_info["basic_info"]["module_env"] is not None:
-        module_env_s = api_info["basic_info"]["module_env"].split("|")
-        env_no_list = []
-        for env_no_s in module_env_s:
-            env_no_list.append(int(env_no_s))
-        result, module_test_env = control.get_test_env(g.user_role, env_no_list)
-        if result is False:
-            return module_test_env
-    api_info_url = url_prefix + "/info/?api_no=%s" % api_no
-    status_url = url_prefix + "/status/"
-    test_case_url = url_prefix + "/test/case/"
-    test_url = url_prefix + "/test/"
-    return render_template("%s/Batch_Test_API.html" % html_dir, api_info=api_info, api_no=api_no, status_url=status_url,
-                           module_test_env=module_test_env, test_case_url=test_case_url, test_url=test_url,
-                           api_info_url=api_info_url)
-
-
-@develop_api_view.route("/test/case/", methods=["POST"])
-@referer_api_no
-def add_test_case():
-    r_data = request.json
-    api_no = g.api_no
-    case_name = r_data["case_name"]
-    user_case_dir = "%s/%s" % (case_dir, g.user_name)
-    if os.path.isdir(user_case_dir) is False:
-        os.mkdir(user_case_dir)
-    case_file = "%s_%s" % (api_no, case_name)
-    case_path = "%s/%s.case" % (user_case_dir, case_file)
-    with open(case_path, "w") as cw:
-        cw.write(json.dumps(r_data, indent=2))
-    return jsonify({"status": True, "data": "success"})
-
-
-@develop_api_view.route("/test/case/", methods=["GET"])
-@referer_api_no
-def list_test_case():
-    api_no = g.api_no
-    user_case_dir = "%s/%s" % (case_dir, g.user_name)
-    if os.path.isdir(user_case_dir) is False:
-        return jsonify({"status": True, "data": []})
-    case_files = os.listdir(user_case_dir)
-    api_test_case = []
-    for item in case_files:
-        if item.startswith(api_no):
-            api_test_case.append(item[33:-5])
-    return jsonify({"status": True, "data": api_test_case})
-
-
-@develop_api_view.route("/test/case/<case_name>/", methods=["GET"])
-@referer_api_no
-def test_case_content(case_name):
-    api_no = g.api_no
-    user_case_dir = "%s/%s" % (case_dir, g.user_name)
-    case_path = "%s/%s_%s.case" % (user_case_dir, api_no, case_name)
-    if os.path.isfile(case_path) is False:
-        return jsonify({"status": False, "data": "not exist"})
-    case_info = {}
-    with open(case_path, "r") as cr:
-        content = cr.read()
-        case_info = json.loads(content)
-    return jsonify({"status": True, "data": case_info})

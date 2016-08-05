@@ -176,12 +176,32 @@ function get_test_case_list_success(data){
     Test_One_API($("#module_name").val(), $("#api_no").val(), $("#api_url").val(), $("#api_title").val(), $("#api_method").val(), test_env_info, data.data);
 }
 
-function get_test_case_list(){
-    var test_case_url = $("#test_case_url").val();
+function get_test_case_list(api_no){
+    var test_case_url = $("#test_case_url").val() + "?api_no=" + api_no;
     my_async_request(test_case_url, "GET", null, get_test_case_list_success);
 }
 
+function Get_API_Info_Success(data) {
+    if(data.status == true)
+    {
+        console.info(data.data.api_info.basic_info);
+        get_test_case_list(data.data.api_info.basic_info.api_no);
+    }
+}
+
+function Get_API_Info(api_no)
+{
+    var request_url = $("#api_info_url").val() + "?api_no=" + api_no;
+    my_async_request(request_url, "GET", null, Get_API_Info_Success);
+
+}
+
 $(function() {
-    get_test_case_list();
+    var api_no = UrlArgsValue(window.location.toString(), "api_no");
+    if(api_no != null)
+    {
+        Get_API_Info(api_no);
+    }
 });
+
 

@@ -5,7 +5,7 @@
 
 {% block content %}
     <br>
-    <a class="btn btn-primary pull-right" href="{{ api_info_url }}" title="">API信息</a>
+    <a class="btn btn-primary pull-right" href="{{ api_info_url }}?api_no={{ api_no }}" title="">API信息</a>
     <div class="margin20 apiTest" id="div_test_info">
         <div style="display: none">
             <p>
@@ -25,23 +25,18 @@
                 <input value="{{ api_info["basic_info"]["api_method"] }}" id="api_method" style="display: none"/>
                 <span class="clear"></span>
             </p>
-            <p>
-                <input class="form-control bug-input" id="request_url" readonly/>
-            </p>
-            <textarea class="form-control font16" rows="20" cols="120" id="res_text" readonly></textarea>
-        </div>
-        <div id="div_test_case">
-
         </div>
 
     </div>
     <input id="look_status" value="{{ status_url }}?api_no={{ api_no }}" title="{{ status_url }}?api_no={{ api_no }}" style="display: none">
     <input id="test_case_url" value="{{ test_case_url }}" style="display: none">
     <input id="one_test_url" value="{{ test_url }}" style="display: none">
+    <input id="api_info_url" value="{{ api_info_url }}" style="display: none">
     <br/>
     <br/>
     <script type="text/javascript" src="{{ url_for('static', filename='t_js/Common/base64.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='t_js/Common/download_json.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='t_js/Common/url_tool.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='t_js/API_HELP/batch_test_api.js') }}"></script>
 {% endblock %}
 
