@@ -128,10 +128,18 @@ function Get_API_Info_Success(data) {
     }
 }
 
+var Div_Index = 0;
+
 function Get_API_Info(api_no)
 {
     var request_url = $("#api_info_url").val() + "?api_no=" + api_no;
-    $("#div_test_info").append("<div id='div_" + api_no + "' style='border:solid 1px #666;margin-bottom:15px'></div>");
+    if(Div_Index % 2 == 0){
+        $("#div_test_info").append("<div id='div_" + api_no + "' style='margin-bottom:15px'></div>");
+    }
+    else{
+        $("#div_test_info").append("<div id='div_" + api_no + "' style='border:solid 1px #666;margin-bottom:15px'></div>");
+    }
+    Div_Index ++;
     my_async_request(request_url, "GET", null, Get_API_Info_Success);
 
 }
