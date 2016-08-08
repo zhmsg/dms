@@ -131,7 +131,7 @@ function Get_API_Info_Success(data) {
 function Get_API_Info(api_no)
 {
     var request_url = $("#api_info_url").val() + "?api_no=" + api_no;
-    $("#div_test_info").append("<div id='div_" + api_no + "'></div>");
+    $("#div_test_info").append("<div id='div_" + api_no + "' style='border:solid 1px #666'></div>");
     my_async_request(request_url, "GET", null, Get_API_Info_Success);
 
 }

@@ -4,7 +4,7 @@
 
 function Add_Test(api_module_name, api_no, api_name, case_name)
 {
-    var OneTestInfo = "<div id='div_" + api_no + "_"+ case_name+"' style='border:solid 1px #666'>";
+    var OneTestInfo = "<div id='div_" + api_no + "_"+ case_name+"'>";
     OneTestInfo += '<div class="top_div">';
     OneTestInfo += '<span class="pull-left text-right width150">API模块：</span>';
     OneTestInfo += '<input class="form-control bug-input" readonly value="' + api_module_name + '"></input>';
