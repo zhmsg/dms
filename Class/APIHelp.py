@@ -172,10 +172,11 @@ class HelpManager:
                 return False, "Bad header param %s, need necessary and desc" % key
             if value["necessary"] != 0 and value["necessary"] != 1:
                 return False, "Bad header param %s, necessary must be 0 or 1" % key
-            param_desc = check_sql_character(value["desc"])[:1000]
+            value["desc"] = value["desc"][:1000]
+            param_desc = check_sql_character(value["desc"])
             add_time = datetime.now().strftime(TIME_FORMAT)
             value_sql += "('%s','%s',%s,'%s','%s')" \
-                         % (api_no, key, value["necessary"], param_desc, add_time)
+                         % (api_no, key, value["necessary"], value["desc"], add_time)
             necessary = True if value["necessary"] == 1 else False
             new_result.append({"api_no": api_no, "necessary": necessary, "param": key,
                                "desc": param_desc, "add_time": add_time})
