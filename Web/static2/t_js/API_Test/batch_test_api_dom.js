@@ -40,7 +40,7 @@ function Notice_No_Case(api_no)
     var info = "<div>";
     info += "<span class='error_result'>API " + API_Info[api_no].basic_info.api_title + " 还没有测试用例 </sapn>";
     info += '<a href="' + add_url + '">点击添加</a>';
-    $("#div_test_" + api_no).append(info);
+    $("#div_" + api_no).append(info);
 }
 
 function Write_Result(id, result, status, message, expect_status)
@@ -52,7 +52,7 @@ function Write_Result(id, result, status, message, expect_status)
             $("#" + id).html("成功" + " 状态码：" + status_a + " 信息：" + message);
         }
         else{
-            $("#" + id).html('<span class="pull-left error_result">失败' + " 状态码：" + status_a + " 信息：" + message + '</span><a href="#">重新测试</a>');
+            $("#" + id).html('<span class="pull-left error_result">失败' + " 状态码：" + status_a + " 信息：" + message + '</span><a href="#" onclick="ReTest(this);">重新测试</a>');
         }
     }
     else
