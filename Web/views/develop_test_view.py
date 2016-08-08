@@ -92,6 +92,9 @@ def batch_test_api_page():
         api_no = request.args["api_no"]
         if len(api_no) != 32:
             return "Bad api_no"
+    module_no = None
+    if "module_no" in request.args:
+        module_no = request.args["module_no"]
     api_info_url = api_url_prefix + "/info/"
     status_url = status_url_prefix + "/"
     test_case_url = url_prefix + "/case/"
@@ -100,7 +103,8 @@ def batch_test_api_page():
     module_api_url = api_url_prefix + "/module/"
     return render_template("%s/Batch_Test_API.html" % html_dir, api_no=api_no, status_url=status_url,
                            test_case_url=test_case_url, test_url=test_url, api_info_url=api_info_url,
-                           env_info_url=env_info_url, module_api_url=module_api_url)
+                           env_info_url=env_info_url, module_api_url=module_api_url, module_no=module_no,
+                           api_url_prefix=api_url_prefix)
 
 
 @develop_test_view.route("/env/", methods=["GET"])

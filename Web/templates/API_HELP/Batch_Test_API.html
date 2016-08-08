@@ -8,6 +8,9 @@
     {% if api_no %}
     <a class="btn btn-primary pull-right" href="{{ api_info_url }}?api_no={{ api_no }}" title="">API信息</a>
     {% endif %}
+    {% if module_no %}
+    <a class="btn btn-primary pull-right" href="{{ api_url_prefix }}?module_no={{ module_no }}" title="">API列表</a>
+    {% endif %}
     <div class="margin20 apiTest" id="div_test_info">
     </div>
     <input id="look_status" value="{{ status_url }}?api_no={{ api_no }}" title="{{ status_url }}?api_no={{ api_no }}" style="display: none">
