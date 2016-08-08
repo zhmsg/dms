@@ -91,7 +91,7 @@ function Test_One_API(api_no)
     {
         var case_name = test_case[i];
         Add_Test(module_name, api_no, api_title, case_name);
-        var test_case_url = $("#test_case_url").val() + case_name + "/";
+        var test_case_url = $("#test_case_url").val() + case_name + "/?api_no=" + api_no;
         my_async_request(test_case_url, "GET", null, Get_Case_Info_Success);
     }
 
@@ -155,7 +155,13 @@ function Get_Env_Info()
 
 function Get_API_List_Success(data)
 {
-    console.info(data);
+    if(data.status == true)
+    {
+        var api_list = data.data.api_list;
+        for(var i=0;i<api_list.length;i++){
+            Get_API_Info(api_list[i].api_no);
+        }
+    }
 }
 
 function Get_API_List(module_no)

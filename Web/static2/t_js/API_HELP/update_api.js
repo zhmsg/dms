@@ -282,7 +282,7 @@ function setSelectChecked(selectId, checkValue){
             break;
         }
     }
-};
+}
 
 function update_body_param(api_no, param)
 {
