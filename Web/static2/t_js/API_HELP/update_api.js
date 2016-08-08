@@ -12,9 +12,7 @@ function new_header_param(new_url){
         method: "POST",
         data:{param:param,necessary:necessary,desc:desc,api_no:api_no},
         success:function(data){
-            var json_obj = data;
-            if (json_obj.status == true){
-                var new_data = json_obj.data;
+            if (data.status == true){
                 for(var i=0;i<new_data.length;i++){
                     var t_len = $("#api_header_param").length;
                     var trHTML = "<tr id='tr_" + new_data[i].api_no + new_data[i].param + "'><td>" + new_data[i].param;
@@ -53,9 +51,8 @@ function new_body_param(new_url){
         method: "POST",
         data:{param:param,necessary:necessary,desc:desc,api_no:api_no, type:type},
         success:function(data){
-            var json_obj = JSON.parse(data);
-            if (json_obj.status == true){
-                var new_data = json_obj.data;
+            if (data.status == true){
+                var new_data = data.data;
                 for(var i=0;i<new_data.length;i++){
                     $("#trb_" + new_data[i].api_no + new_data[i].param).remove();
                     var trHTML = "<tr id='trb_" + new_data[i].api_no + new_data[i].param + "'><td>" + new_data[i].param;
@@ -96,9 +93,8 @@ function new_input_example(new_url){
         method: "POST",
         data:{desc:desc,api_no:api_no,example:example},
         success:function(data){
-            var json_obj = JSON.parse(data);
-            if (json_obj.status == true) {
-                var new_data = json_obj.data;
+            if (data.status == true) {
+                var new_data = data.data;
                 for(var i=0;i<new_data.length;i++) {
                     var div_html = '<div id="div_' + new_data[i].input_no + '"><p>' + new_data[i].desc +'</p><p><textarea class="form-control" readonly>' + new_data[i].example + '</textarea></p>'
                     div_html += '<button class="btn btn-success">更新</button> <button class="btn btn-danger" onclick="delete_input_param(' + "'" + new_data[i].input_no + "'" + ')">删除</button></div>';
@@ -126,9 +122,8 @@ function new_output_example(new_url){
         method: "POST",
         data:{desc:desc,api_no:api_no,example:example},
         success:function(data){
-            var json_obj = JSON.parse(data);
-            if (json_obj.status == true) {
-                var new_data = json_obj.data;
+            if (data.status == true) {
+                var new_data = data.data;
                 for(var i=0;i<new_data.length;i++) {
                     var div_html = '<div id="div_' + new_data[i].output_no + '"><p>' + new_data[i].desc +'</p><p><textarea class="form-control" readonly>' + new_data[i].example + '</textarea></p>'
                     div_html += '<button class="btn btn-success">更新</button> <button class="btn btn-danger" onclick="delete_output_param(' + "'" + new_data[i].output_no + "'" + ')">删除</button></div>';
@@ -156,8 +151,7 @@ function delete_header_param(api_no, param){
         contentType: "application/json",
         method: "DELETE",
         success:function(data){
-            var json_obj = data;
-            if (json_obj.status == true){
+            if (data.status == true){
                 $("#tr_"+api_no + param).remove();
             }
             else{
@@ -179,8 +173,7 @@ function delete_body_param(api_no, param){
         contentType: "application/json",
         data: request_data,
         success:function(data){
-            var json_obj = data;
-            if (json_obj.status == true){
+            if (data.status == true){
                 $("#trb_"+api_no + param).remove();
             }
             else{
@@ -199,8 +192,7 @@ function delete_input_param(input_no){
         url: del_url + input_no + "/",
         method: "DELETE",
         success:function(data){
-            var json_obj = JSON.parse(data);
-            if (json_obj.status == true){
+            if (data.status == true){
                 $("#div_"+input_no).remove();
             }
             else{
@@ -219,8 +211,7 @@ function delete_output_param(output_no){
         url: del_url + output_no + "/",
         method: "DELETE",
         success:function(data){
-            var json_obj = JSON.parse(data);
-            if (json_obj.status == true){
+            if (data.status == true){
                 $("#div_"+output_no).remove();
             }
             else{
@@ -262,8 +253,7 @@ function handle_predefine_param(btn_id, param_type){
         method: "PUT",
         data: {param: param, update_type: update_type, param_type: param_type},
         success:function(data){
-            var json_obj = data;
-            if (json_obj.status == true){
+            if (data.status == true){
                 btn.text(inner_value);
                 btn.removeClass();
                 btn.addClass(class_name);
