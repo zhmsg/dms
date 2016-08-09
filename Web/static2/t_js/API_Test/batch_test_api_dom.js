@@ -41,6 +41,7 @@ function Notice_No_Case(api_no)
     info += "<span class='error_result'>API " + API_Info[api_no].basic_info.api_title + " 还没有测试用例 </sapn>";
     info += '<a href="' + add_url + '">点击添加</a>';
     $("#div_" + api_no).append(info);
+    $("#div_" + api_no).css("border", "none");
 }
 
 function Write_Result(id, result, status, message, expect_status)

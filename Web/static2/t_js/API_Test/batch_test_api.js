@@ -122,24 +122,16 @@ function Get_API_Info_Success(data) {
                 i++;
             }
         }
-        console.info(API_Info[api_no]);
         var test_case_url = $("#test_case_url").val() + "?api_no=" + api_no;
         my_async_request(test_case_url, "GET", null, Get_Case_List_Success);
     }
 }
 
-var Div_Index = 0;
 
 function Get_API_Info(api_no)
 {
     var request_url = $("#api_info_url").val() + "?api_no=" + api_no;
-    if(Div_Index % 2 == 0){
-        $("#div_test_info").append("<div id='div_" + api_no + "' style='margin-bottom:15px'></div>");
-    }
-    else{
-        $("#div_test_info").append("<div id='div_" + api_no + "' style='border:solid 1px #666;margin-bottom:15px'></div>");
-    }
-    Div_Index ++;
+    $("#div_test_info").append("<div id='div_" + api_no + "' style='border:solid 1px #666;margin-bottom:15px'></div>");
     my_async_request(request_url, "GET", null, Get_API_Info_Success);
 
 }
