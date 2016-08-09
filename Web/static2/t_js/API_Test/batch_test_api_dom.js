@@ -65,9 +65,8 @@ function Write_Result(id, result, status, message, expect_status)
 function ReTest(el)
 {
     var id = el.parentNode.id;
-    var id_info = id.split("_");
-    var api_no = id_info[2];
-    var case_name = id_info[3];
+    var api_no = id.substr(12, 32);
+    var case_name = id.substr(45).replace(/_\d$/g, "");
     var env_name = el.parentNode.parentNode.childNodes[1].innerText;
     var test_url = $("#one_test_url").val() + "?api_no=" + api_no + "&case_name=" + case_name + "&env_name=" + env_name;
     window.open(test_url);
