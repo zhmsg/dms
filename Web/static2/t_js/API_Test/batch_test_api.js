@@ -71,7 +71,7 @@ function Get_Case_Info_Success(data){
             var reg = RegExp("<[^/>]*" + key + ">");
             request_url = request_url.replace(reg, Url_Param[key]);
         }
-        var id = "Span_Result_" + api_no + "_" + case_name;
+        var id = "Span_Result_" + api_no + "_" + case_name + "_" + index;
         Add_Test_Info(test_env_info[j].env_name, api_no, case_name, request_url, id);
         Run_API(request_url, api_method, case_info, id);
         index ++;
