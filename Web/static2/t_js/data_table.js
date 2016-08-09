@@ -47,3 +47,7 @@ function search_table(){
     }
 }
 search_table();
+
+function change_table_comment()
+{
+}

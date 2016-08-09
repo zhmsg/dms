@@ -62,6 +62,11 @@ class DevManager:
                                 "is_nullable": item[6]})
         return True, column_info
 
+    def update_table_comment(self, table_name, table_comment):
+        sql = "ALTER TABLE clinic.%s COMMENT '%s';" % (table_name, table_comment)
+        self.service_db.execute(sql)
+        return True
+
     def get_right_module(self):
         select_item = ["module_no", "module_title", "module_desc"]
         select_sql = "SELECT %s FROM %s;" % (",".join(select_item), self.right_module)
