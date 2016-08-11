@@ -62,7 +62,7 @@
     {% endfor %}
 </table>
 {% endif %}
-{% if api_info["body_info"] | length > 0 %}
+{% if api_info["body_info"] | length > 0 or api_info["predefine_param"]["body"] | length > 0 %}
 <table class="table table-bordered api-list-table" id="api_body_param">
     <caption>请求主体参数</caption>
     <tr>
