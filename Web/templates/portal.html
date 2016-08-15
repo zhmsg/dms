@@ -4,9 +4,9 @@
 
 {% block content %}
 <div class="apiMode api-help-mode">
-    {% if g.user_role | bit_and(role_desc["data"]["role_list"]["market"]["role_value"]) >  0 or g.user_role | bit_and(role_desc["data"]["role_list"]["upload"]["role_value"]) >  0 or g.user_role | bit_and(role_desc["data"]["role_list"]["calc"]["role_value"]) >  0%}
-        <a href="{{ data_url_prefix }}/records/">数据管理</a>
-    {% endif %}
+{#    {% if g.user_role | bit_and(role_desc["data"]["role_list"]["market"]["role_value"]) >  0 or g.user_role | bit_and(role_desc["data"]["role_list"]["upload"]["role_value"]) >  0 or g.user_role | bit_and(role_desc["data"]["role_list"]["calc"]["role_value"]) >  0%}#}
+{#        <a href="{{ data_url_prefix }}/records/">数据管理</a>#}
+{#    {% endif %}#}
     {% if g.user_role | bit_and(role_desc["api"]["role_list"]["api_look"]["role_value"]) >  0 %}
         <a href="{{ api_url_prefix }}/">API文档</a>
     {% endif %}
@@ -19,6 +19,7 @@
     {% if g.user_role | bit_and(role_desc["right"]["role_list"]["right_look"]["role_value"]) >  0 %}
         <a href="{{ right_url_prefix }}/">晶云平台操作权限</a>
     {% endif %}
+    <a href="{{ param_url_prefix }}/">晶云公共参数</a>
     {% if g.user_role | bit_and(role_value["log_look"]) >  0 %}
         <a href="{{ log_url_prefix }}/">晶云平台日志</a>
     {% endif %}

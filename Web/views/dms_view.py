@@ -11,7 +11,7 @@ from Class.User import UserManager
 from Web import User
 
 from Web import dms_url_prefix, dev_url_prefix, api_url_prefix, bug_url_prefix, data_url_prefix, right_url_prefix
-from Web import log_url_prefix, create_blue
+from Web import log_url_prefix, create_blue, param_url_prefix
 from Web.views import control
 
 sys.path.append('..')
@@ -287,4 +287,4 @@ def select_portal():
     return render_template("portal.html", data_url_prefix=data_url_prefix,
                            api_url_prefix=api_url_prefix, dev_url_prefix=dev_url_prefix, bug_url_prefix=bug_url_prefix,
                            dms_url_prefix=dms_url_prefix, right_url_prefix=right_url_prefix, log_url_prefix=log_url_prefix,
-                           role_desc=control.user_role_desc, role_value=control.role_value)
+                           role_desc=control.user_role_desc, role_value=control.role_value, param_url_prefix=param_url_prefix)
