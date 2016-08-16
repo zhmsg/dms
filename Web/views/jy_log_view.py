@@ -6,7 +6,7 @@ import sys
 from flask import render_template, request, jsonify, g
 from flask_login import login_required, current_user
 
-from Web import log_url_prefix as url_prefix, ip, my_email, company_ip_required, create_blue
+from Web import log_url_prefix as url_prefix, ip, my_email, company_ip_required, create_blue, status_url_prefix
 from Web.views import control
 
 sys.path.append('..')
@@ -54,7 +54,7 @@ def show_log_list():
     log_records = info["log_records"]
     return render_template("%s/Show_Log.html" % html_dir, log_list=log_records, url_prefix=url_prefix, look_before=look_before,
                            log_level=control.jy_log.log_level, current_level=level, search_url=search_url,
-                           search_account=search_account, require=info["require"])
+                           search_account=search_account, require=info["require"], status_url_prefix=status_url_prefix)
 
 
 @jy_log_view.route("/login/", methods=["POST", "GET"])

@@ -132,6 +132,17 @@ $(function(){
         //}
         update_search_url(0);
     });
+    $("td[class$='Bg']").click(function() {
+        var info = this.parentNode.title;
+        var result = info.match(/"status": (\d+)/i);
+        if(result != null)
+        {
+            var status = result[1];
+            var status_url = $("#status_url_prefix").val() + "/?status=" + status;
+            window.open(status_url);
+        }
+
+    });
     var request_ips = $("td[name='request_ip']");
     for(var i=0;i<request_ips.length;i++){
         var td_ip = request_ips[i];
