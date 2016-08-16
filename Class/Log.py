@@ -37,7 +37,7 @@ class LogManager:
             log_records.append(log_item)
         return True, log_records
 
-    def show_log(self, start_time=None, end_time=None, look_before=False, level=None, search_url="", search_account=""):
+    def show_log(self, start_time=None, end_time=None, level=None, search_url="", search_account=""):
         run_end = time()
         run_begin = run_end - timedelta(hours=1).total_seconds()
         require = {}
@@ -48,8 +48,6 @@ class LogManager:
             run_end = end_time
             require["end_time"] = end_time
         where_sql_list = ["run_begin>=%s " % run_begin, "run_begin<=%s " % run_end]
-        if look_before is False:
-            where_sql_list.append("level <> 'before'")
         if level is not None:
             if level not in self.log_level:
                 return False, "Bad level"

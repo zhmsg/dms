@@ -43,16 +43,12 @@ def show_log_list():
         search_account = request.args["account"]
     else:
         search_account = ""
-    if "look_before" in request.args and request.args["look_before"] == "1":
-        look_before = True
-    else:
-        look_before = False
-    result, info = control.look_jy_log(current_user.account, current_user.role, start_time, end_time, look_before=look_before,
-                                       level=level, search_url=search_url, search_account=search_account)
+    result, info = control.look_jy_log(current_user.account, current_user.role, start_time, end_time, level=level,
+                                       search_url=search_url, search_account=search_account)
     if result is False:
         return info
     log_records = info["log_records"]
-    return render_template("%s/Show_Log.html" % html_dir, log_list=log_records, url_prefix=url_prefix, look_before=look_before,
+    return render_template("%s/Show_Log.html" % html_dir, log_list=log_records, url_prefix=url_prefix,
                            log_level=control.jy_log.log_level, current_level=level, search_url=search_url,
                            search_account=search_account, require=info["require"], status_url_prefix=status_url_prefix)
 
