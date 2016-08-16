@@ -82,17 +82,7 @@ function update_search_url(refresh){
     }
     var log_level = $("#log_level").val();
     var url_prefix = $("#url_prefix").val();
-    var show_before = $("#show_before").val();
     var account = $("#account").val();
-    if(log_level == "all") {
-        if ($("#show_before").is(':checked')) {
-            request_args += "look_before=1&"
-        }
-        $("#lab_show_before").show();
-    }
-    else{
-        $("#lab_show_before").hide();
-    }
     request_args += "start_time=" + start_time + "&";
     request_args += "end_time=" + end_time + "&";
     request_args += "log_level=" + log_level + "&";
