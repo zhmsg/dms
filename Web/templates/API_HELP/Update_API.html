@@ -165,6 +165,6 @@
         <button class="btn btn-info" onclick="new_output_example('{{ url_prefix }}/add/output/')">新建</button>
 
     </div>
-    <script type="text/javascript" src="{{ url_for('static', filename='t_js/bootstrap.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='t_js/API_HELP/update_api.js') }}"></script>
+    <script type="text/javascript" src="{{ 't_js/bootstrap.min.js' | make_static_url }}"></script>
+    <script type="text/javascript" src="{{ 't_js/API_HELP/update_api.js' | make_static_url }}"></script>
 {% endblock %}

@@ -24,7 +24,7 @@
             待开发
         </p>
     </div>
-    <script type="text/javascript" src="{{ url_for('static', filename='t_js/Common/JY_DIV.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='t_js/Common/my_ip.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='t_js/Tools/tools.js') }}"></script>
+    <script type="text/javascript" src="{{ 't_js/Common/JY_DIV.js' | make_static_url }}"></script>
+    <script type="text/javascript" src="{{ 't_js/Common/my_ip.js' | make_static_url }}"></script>
+    <script type="text/javascript" src="{{ 't_js/Tools/tools.js' | make_static_url }}"></script>
 {% endblock %}

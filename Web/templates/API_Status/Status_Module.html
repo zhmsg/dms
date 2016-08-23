@@ -61,6 +61,6 @@
 
     <input id="fun_info_url" value="{{ fun_info_url }}" style="display: none">
     <input id="error_type_url" value="{{ error_type_url }}" style="display: none">
-    <script type="text/javascript" src="{{ url_for('static', filename='t_js/API_Status/status_module_new.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='t_js/Common/JY_DIV.js') }}"></script>
+    <script type="text/javascript" src="{{ 't_js/API_Status/status_module_new.js' | make_static_url }}"></script>
+    <script type="text/javascript" src="{{ 't_js/Common/JY_DIV.js' | make_static_url }}"></script>
 {% endblock %}

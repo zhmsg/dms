@@ -148,9 +148,9 @@
     <input id="new_right" value="{{ new_right }}" style="display: none">
     <br/>
     <br/>
-    <script type="text/javascript" src="{{ url_for('static', filename='t_js/Common/base64.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='t_js/Common/download_json.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='t_js/API_HELP/test_api.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='t_js/API_HELP/test_api_data.js') }}"></script>
+    <script type="text/javascript" src="{{ 't_js/Common/base64.js' | make_static_url }}"></script>
+    <script type="text/javascript" src="{{ 't_js/Common/download_json.js' | make_static_url }}"></script>
+    <script type="text/javascript" src="{{ 't_js/API_HELP/test_api.js' | make_static_url }}"></script>
+    <script type="text/javascript" src="{{ 't_js/API_HELP/test_api_data.js' | make_static_url }}"></script>
 {% endblock %}
 

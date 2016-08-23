@@ -13,6 +13,6 @@
                 {% endfor %}
             </div>
         {% endfor %}
-    <script type="text/javascript" src="{{ url_for('static', filename='t_js/Common/add_node.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='t_js/API_HELP/list_api.js') }}"></script>
+    <script type="text/javascript" src="{{ 't_js/Common/add_node.js' | make_static_url }}"></script>
+    <script type="text/javascript" src="{{ 't_js/API_HELP/list_api.js' | make_static_url }}"></script>
 {% endblock %}

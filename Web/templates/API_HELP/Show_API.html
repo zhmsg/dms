@@ -153,5 +153,5 @@
 {% endif %}
 <br>
 <a  href="{{ status_url }}?api_no={{ api_no }}" title="">查看返回状态码解释</a>
-<script type="text/javascript" src="{{ url_for('static', filename='t_js/API_HELP/show_api.js') }}"></script>
+<script type="text/javascript" src="{{ 't_js/API_HELP/show_api.js' | make_static_url }}"></script>
 {% endblock %}

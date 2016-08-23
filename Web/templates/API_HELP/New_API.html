@@ -123,7 +123,7 @@
   </form>
 
 {% endif %}
-<script type="text/javascript" src="{{ url_for('static', filename='t_js/API_HELP/new_api.js') }}"></script>
+<script type="text/javascript" src="{{ 't_js/API_HELP/new_api.js' | make_static_url }}"></script>
 </div>
 {% endblock %}
 
