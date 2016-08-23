@@ -5,15 +5,15 @@
     <meta http-equiv="X-UA-COMPATIBLE" content="IE=edge,chrome=1">
     <meta name="renderer" content="webkit">
     <title>{% block title %}文档系统{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='t_css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ 't_css/bootstrap.min.css' | make_static_url }}">
     <!-- 新 Bootstrap 核心 CSS 文件 -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='t_css/main.css') }}">
+    <link rel="stylesheet" href="{{ 't_css/main.css' | make_static_url }}">
     <!--自定义的页面样式 -->
-    <script type="text/javascript" src="{{ url_for('static', filename='t_js/jquery.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='t_js/Common/my_requests.js') }}"></script>
+    <script type="text/javascript" src="{{ 't_js/jquery.min.js'| make_static_url  }}"></script>
+    <script type="text/javascript" src="{{ 't_js/Common/my_requests.js' | make_static_url }}"></script>
     <!-- Sweet Alert 弹窗 -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='t_css/sweetalert.css') }}">
-    <script type="text/javascript" src="{{ url_for('static', filename='t_js/Common/sweetalert-dev.js') }}"></script>
+    <link rel="stylesheet" href="{{ 't_css/sweetalert.css' | make_static_url }}">
+    <script type="text/javascript" src="{{ 't_js/Common/sweetalert-dev.js' | make_static_url }}"></script>
 </head>
 <body>
 <div class="container font16">
