@@ -15,7 +15,6 @@ class MyEmailManager:
     def __init__(self, conf_dir=""):
         self.email_server = "ym.163.com"
         self.sender = "晶云平台"
-        self.manger_email = ["budechao@ict.ac.cn"]
         self.expires_time = datetime.now()
         conf_path = conf_dir + "email_app.conf"
         self._int_app(conf_path)

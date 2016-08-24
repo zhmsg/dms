@@ -122,6 +122,46 @@ for key, value in blues.items():
     else:
         msg_web.register_blueprint(value[0])
 
+from Class.Log import LogManager
+log = LogManager()
+result, info = log.select_daily_log()
+table_content = ""
+for item in info["log_records"]:
+    tr_content = '<tr title="info: %s&#10;host: %s">' % (item["info"].replace(">", "&gt;"), item["host"])
+    tr_content += '<td name="run_begin" class="status_move">%s</td>\n' % unix_timestamp(item["run_begin"])
+    tr_content += '<td name="request_url">%s</td>\n' % item["url"]
+    tr_content += '<td>%s</td>' % item["method"]
+    tr_content += '<td name="request_account">%s</td>\n' % item["account"]
+    if item["level"] == "error":
+        tr_content += '<td class="redBg">%s</td>' % item["level"]
+    elif item["level"] == "base_error":
+        tr_content += '<td class="orgBg">%s</td>' % item["level"]
+    elif item["level"] == "bad_req":
+        tr_content += '<td class="yellowBg">%s</td>' % item["level"]
+    elif item["level"] == "http_error":
+        tr_content += '<td class="greenBg">%s</td>' % item["level"]
+    else:
+        tr_content += '<td>%s</td>' % item["level"]
+    tr_content += "\n"
+    if item["run_time"] >= 1:
+        tr_content += '<td class="redBg">%s</td>' % item["run_time"]
+    elif item["run_time"] >= 0.5:
+        tr_content += '<td class="orgBg">%s</td>' % item["run_time"]
+    else:
+        tr_content += '<td>%s</td>' % item["run_time"]
+    tr_content += "\n"
+    tr_content += '<td name="request_ip">%s</td>' % ip_str(item["ip"])
+    tr_content += "\n"
+    tr_content += '</tr>\n'
+    table_content += tr_content
+
+from Tools.MyEmail import MyEmailManager
+my_email = MyEmailManager("/home/msg/conf/")
+with open("../Web/templates/LOG/Daily_Log.html") as rt:
+    content = rt.read()
+    content = content.replace("{{ TR }}", table_content.encode("utf-8"))
+    my_email.send_mail("zhouheng@gene.ac", u"运行日志", content)
+
 
 if __name__ == '__main__':
     print("start run")

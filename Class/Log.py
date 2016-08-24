@@ -26,8 +26,9 @@ class LogManager:
         self.log_cols = ["run_begin", "host", "url", "method", "account", "ip", "level", "info", "run_time"]
         self.log_level = ["error", "base_error", "bad_req", "http_error", "info"]
 
-    def _select_log(self, where_sql):
-        select_sql = "SELECT %s FROM %s WHERE %s ORDER BY log_no DESC LIMIT 250;" % (",".join(self.log_cols), self.api_log, where_sql)
+    def _select_log(self, where_sql, limit_num=250):
+        select_sql = "SELECT %s FROM %s WHERE %s ORDER BY log_no DESC LIMIT %s;" \
+                     % (",".join(self.log_cols), self.api_log, where_sql, limit_num)
         self.db.execute(select_sql)
         log_records = []
         for item in self.db.fetchall():
@@ -61,7 +62,17 @@ class LogManager:
         where_sql = " AND ".join(where_sql_list)
         result, log_records = self._select_log(where_sql)
         if result is False:
-            return log_records
+            return False, log_records
+        return True, {"log_records": log_records, "require": require}
+
+    def select_daily_log(self):
+        run_end = time()
+        run_begin = run_end - timedelta(days=1).total_seconds()
+        require = {"start_time": run_begin, "end_time": run_end}
+        where_sql = "run_begin >= %s AND run_begin <= %s AND level <> 'info'" % (run_begin, run_end)
+        result, log_records = self._select_log(where_sql)
+        if result is False:
+            return False, log_records
         return True, {"log_records": log_records, "require": require}
 
     def insert_login_server(self, server_ip, server_name, user_ip, user_name, login_time):
