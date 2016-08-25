@@ -127,22 +127,23 @@ log = LogManager()
 result, info = log.select_daily_log()
 table_content = ""
 for item in info["log_records"]:
-    tr_content = '<tr title="info: %s&#10;host: %s">' % (item["info"].replace(">", "&gt;"), item["host"])
+    tr_content = '<tr title="info: %s&#10;host: %s">' % (item["info"].replace(">", "&gt;").replace('"', "&quot;"), item["host"])
     tr_content += '<td name="run_begin" class="status_move">%s</td>\n' % unix_timestamp(item["run_begin"])
     tr_content += '<td name="request_url">%s</td>\n' % item["url"]
     tr_content += '<td>%s</td>' % item["method"]
     tr_content += '<td name="request_account">%s</td>\n' % item["account"]
     if item["level"] == "error":
-        tr_content += '<td class="redBg">%s</td>' % item["level"]
+        level_class = "redBg"
     elif item["level"] == "base_error":
-        tr_content += '<td class="orgBg">%s</td>' % item["level"]
+        level_class = "orgBg"
     elif item["level"] == "bad_req":
-        tr_content += '<td class="yellowBg">%s</td>' % item["level"]
+        level_class = "yellowBg"
     elif item["level"] == "http_error":
-        tr_content += '<td class="greenBg">%s</td>' % item["level"]
+        level_class = "greenBg"
     else:
-        tr_content += '<td>%s</td>' % item["level"]
-    tr_content += "\n"
+        level_class = ""
+    tr_content += '<td name="log_level" class="%s">%s</td>\n' % (level_class, item["level"])
+
     if item["run_time"] >= 1:
         tr_content += '<td class="redBg">%s</td>' % item["run_time"]
     elif item["run_time"] >= 0.5:
@@ -161,7 +162,8 @@ with open("../Web/templates/LOG/Daily_Log.html") as rt:
     content = rt.read()
     content = content.replace("{{ TR }}", table_content.encode("utf-8"))
     my_email.send_mail("zhouheng@gene.ac", u"运行日志", content)
-
+with open("daily.html", "w") as dw:
+    dw.write(content)
 
 if __name__ == '__main__':
     print("start run")
