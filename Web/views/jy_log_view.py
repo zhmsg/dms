@@ -7,7 +7,7 @@ from flask import render_template, request, jsonify, g
 from flask_login import login_required, current_user
 
 from Web import log_url_prefix as url_prefix, ip, my_email, company_ip_required, create_blue, status_url_prefix
-from Web import unix_timestamp, ip_str, dms_scheduler
+from Web import unix_timestamp, ip_str, dms_scheduler, env
 from Web.views import control
 
 sys.path.append('..')
@@ -75,6 +75,8 @@ def record_login():
 
 # 发送每日日志
 def send_log_func():
+    if env != "Production":
+        return
     result, info = control.get_daily_log()
     table_content = ""
     for item in info["log_records"]:
