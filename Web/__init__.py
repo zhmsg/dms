@@ -1,9 +1,11 @@
 # encoding: utf-8
 # !/usr/bin/python
 
+import time
 from functools import wraps
 from flask import session, g, make_response, Blueprint, jsonify,request
 from flask_login import LoginManager, UserMixin, login_required
+from flask_apscheduler import APScheduler
 from Tools.Mysql_db import DB
 from Tools.MyIP import IPManager
 from Tools.MyEmail import MyEmailManager
@@ -13,6 +15,8 @@ __author__ = 'zhouheng'
 db = DB()
 ip = IPManager()
 my_email = MyEmailManager("/home/msg/conf/")
+dms_scheduler = APScheduler()
+dms_scheduler.start()
 
 
 class User(UserMixin):
@@ -108,3 +112,24 @@ def create_blue(blue_name, url_prefix="/", auth_required=True):
     if blue_name not in blues:
         blues[blue_name] = [add_blue, url_prefix]
     return add_blue
+
+
+def unix_timestamp(t):
+    if type(t) == int or type(t) == long:
+        x = time.localtime(t)
+        return time.strftime('%H:%M:%S', x)
+    return t
+
+
+def bit_and(num1, num2):
+    return num1 & num2
+
+
+def current_env(s):
+    return env
+
+
+def ip_str(ip_v):
+    if type(ip_v) == int or type(ip_v) == long:
+        return ip.ip_value_str(ip_value=ip_v)
+    return ip_v

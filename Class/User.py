@@ -169,13 +169,17 @@ class UserManager:
         return True, u"重置成功"
 
     def get_role_user(self, role):
-        select_sql = "SELECT user_name,role,nick_name,wx_id,creator,add_time FROM %s WHERE role & %s > 0;" \
-                     % (self.user, role)
+        cols = ["user_name", "role", "nick_name", "wx_id", "creator", "add_time", "email"]
+        select_sql = "SELECT %s FROM %s WHERE role & %s > 0;" \
+                     % (",".join(cols), self.user, role)
         self.db.execute(select_sql)
         user_list = []
         for item in self.db.fetchall():
-            user_list.append({"user_name": item[0], "role": item[1], "nick_name": item[2], "wx_id": item[3],
-                              "creator": item[4], "add_time": item[5].strftime(TIME_FORMAT)})
+            info = {}
+            for i in range(len(cols)):
+                info[cols[i]] = item[i]
+            info["add_time"] = info["add_time"].strftime(TIME_FORMAT)
+            user_list.append(info)
         return True, user_list
 
     def my_user(self, user_name):

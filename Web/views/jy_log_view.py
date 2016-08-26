@@ -7,6 +7,7 @@ from flask import render_template, request, jsonify, g
 from flask_login import login_required, current_user
 
 from Web import log_url_prefix as url_prefix, ip, my_email, company_ip_required, create_blue, status_url_prefix
+from Web import unix_timestamp, ip_str, dms_scheduler
 from Web.views import control
 
 sys.path.append('..')
@@ -70,3 +71,43 @@ def record_login():
                         % (g.request_IP_s, server_name, user_ip_s, login_user, login_time)
         my_email.send_mail_thread("zhouheng@gene.ac", u"有用户登录到服务器", email_content)
     return jsonify({"status": result, "data": info})
+
+
+# 发送每日日志
+def send_log_func():
+    result, info = control.get_daily_log()
+    table_content = ""
+    for item in info["log_records"]:
+        tr_content = '<tr title="info: %s&#10;host: %s">' % (item["info"].replace(">", "&gt;").replace('"', "&quot;"), item["host"])
+        tr_content += '<td name="run_begin" class="status_move">%s</td>\n' % unix_timestamp(item["run_begin"])
+        tr_content += '<td name="request_url">%s</td>\n' % item["url"]
+        tr_content += '<td>%s</td>' % item["method"]
+        tr_content += '<td name="request_account">%s</td>\n' % item["account"]
+        if item["level"] == "error":
+            level_class = "redBg"
+        elif item["level"] == "base_error":
+            level_class = "orgBg"
+        elif item["level"] == "bad_req":
+            level_class = "yellowBg"
+        elif item["level"] == "http_error":
+            level_class = "greenBg"
+        else:
+            level_class = ""
+        tr_content += '<td name="log_level" class="%s">%s</td>\n' % (level_class, item["level"])
+
+        if item["run_time"] >= 1:
+            tr_content += '<td class="redBg">%s</td>' % item["run_time"]
+        elif item["run_time"] >= 0.5:
+            tr_content += '<td class="orgBg">%s</td>' % item["run_time"]
+        else:
+            tr_content += '<td>%s</td>' % item["run_time"]
+        tr_content += "\n"
+        tr_content += '<td name="request_ip">%s</td>' % ip_str(item["ip"])
+        tr_content += "\n"
+        tr_content += '</tr>\n'
+        table_content += tr_content
+    with open("../Web/templates/LOG/Daily_Log.html") as rt:
+        content = rt.read()
+        content = content.replace("{{ TR }}", table_content.encode("utf-8"))
+        control.send_daily_log(content)
+dms_scheduler.add_job("send_daily_log", send_log_func, trigger="cron", hour=8, minute=30)

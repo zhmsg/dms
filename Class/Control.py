@@ -3,6 +3,7 @@
 
 import sys
 from threading import Thread
+from datetime import datetime
 sys.path.append("..")
 from Tools.Mysql_db import DB
 from Tools.MyEmail import MyEmailManager
@@ -17,6 +18,7 @@ from APIStatus import StatusManager
 from Bug import BugManager
 from Log import LogManager
 from IP import IPManager
+from Class import DATE_FORMAT_STR
 
 __author__ = 'ZhouHeng'
 
@@ -731,6 +733,16 @@ class ControlManager:
 
     def new_login_server(self, server_ip, server_name, user_ip, user_name, login_time):
         return self.jy_log.insert_login_server(server_ip, server_name, user_ip, user_name, login_time)
+
+    def get_daily_log(self):
+        return self.jy_log.select_daily_log()
+
+    def send_daily_log(self, template_html):
+        result, user_list = self.user.get_role_user(self.role_value["log_receive"])
+        subject = u"%s运行日志" % datetime.now().strftime(DATE_FORMAT_STR)
+        if result is True:
+            for u in user_list:
+                my_email.send_mail(u["email"], subject, template_html)
 
     # 针对工具
     def get_ip_info(self, ip_value):

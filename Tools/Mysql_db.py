@@ -45,18 +45,51 @@ class DB(object):
         self.cursor = self.conn.cursor()
         self.conn.autocommit(True)
 
-    def execute(self, sql_query, freq=0):
+    def execute(self, sql_query, args=None, freq=0):
         if self.cursor is None:
             self.connect()
         try:
-            handled_item = self.cursor.execute(sql_query)
+            handled_item = self.cursor.execute(sql_query, args=args)
         except MySQLdb.Error as error:
             print(error)
             if freq >= 5:
                 raise Exception(error)
             self.connect()
-            return self.execute(sql_query=sql_query, freq=freq+1)
+            return self.execute(sql_query=sql_query, args=args, freq=freq+1)
         return handled_item
+
+    def execute_select(self, table_name, where_value, cols=None):
+        args = dict(where_value).values()
+        if len(args) <= 0:
+            return 0
+        if cols is None:
+            select_item = "*"
+        else:
+            select_item = ",".join(tuple(cols))
+        sql_query = "SELECT * FROM %s WHERE %s=%%s;" \
+                    % (select_item, table_name, "=%s AND ".join(dict(where_value).keys()))
+        return self.execute(sql_query, args)
+
+    def execute_insert(self, table_name, args):
+        keys = dict(args).keys()
+        sql_query = "INSERT INTO %s (%s) VALUES (%%(%s)s);" % (table_name, ",".join(keys), ")s,%(".join(keys))
+        return self.execute(sql_query, args=args)
+
+    def execute_update(self, table_name, update_value, where_value):
+        args = dict(update_value).values()
+        if len(args) <= 0:
+            return 0
+        where_args = dict(where_value).values()
+        args.extend(where_args)
+        sql_query = "UPDATE %s SET %s=%%s WHERE %s=%%s;" % (table_name, "=%s,".join(dict(update_value).keys()), "=%s,".join(dict(where_value).keys()))
+        return self.execute(sql_query, args=args)
+
+    def execute_delete(self, table_name, where_value):
+        args = dict(where_value).values()
+        if len(args) <= 0:
+            return 0
+        sql_query = "DELETE FROM %s WHERE %s=%%s;" % (table_name, "=%s AND ".join(dict(where_value).keys()))
+        return self.execute(sql_query, args)
 
     def fetchone(self):
         try:
