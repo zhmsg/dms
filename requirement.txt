@@ -5,4 +5,4 @@ Flask-Login
 MySQL-python
 requests
 xlwt
-Flask-APScheduler
+Flask-APScheduler==1.4.0
