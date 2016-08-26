@@ -122,48 +122,47 @@ for key, value in blues.items():
     else:
         msg_web.register_blueprint(value[0])
 
-from Class.Log import LogManager
-log = LogManager()
-result, info = log.select_daily_log()
-table_content = ""
-for item in info["log_records"]:
-    tr_content = '<tr title="info: %s&#10;host: %s">' % (item["info"].replace(">", "&gt;").replace('"', "&quot;"), item["host"])
-    tr_content += '<td name="run_begin" class="status_move">%s</td>\n' % unix_timestamp(item["run_begin"])
-    tr_content += '<td name="request_url">%s</td>\n' % item["url"]
-    tr_content += '<td>%s</td>' % item["method"]
-    tr_content += '<td name="request_account">%s</td>\n' % item["account"]
-    if item["level"] == "error":
-        level_class = "redBg"
-    elif item["level"] == "base_error":
-        level_class = "orgBg"
-    elif item["level"] == "bad_req":
-        level_class = "yellowBg"
-    elif item["level"] == "http_error":
-        level_class = "greenBg"
-    else:
-        level_class = ""
-    tr_content += '<td name="log_level" class="%s">%s</td>\n' % (level_class, item["level"])
+def send_daily_log():
+    from Class.Log import LogManager
+    log = LogManager()
+    result, info = log.select_daily_log()
+    table_content = ""
+    for item in info["log_records"]:
+        tr_content = '<tr title="info: %s&#10;host: %s">' % (item["info"].replace(">", "&gt;").replace('"', "&quot;"), item["host"])
+        tr_content += '<td name="run_begin" class="status_move">%s</td>\n' % unix_timestamp(item["run_begin"])
+        tr_content += '<td name="request_url">%s</td>\n' % item["url"]
+        tr_content += '<td>%s</td>' % item["method"]
+        tr_content += '<td name="request_account">%s</td>\n' % item["account"]
+        if item["level"] == "error":
+            level_class = "redBg"
+        elif item["level"] == "base_error":
+            level_class = "orgBg"
+        elif item["level"] == "bad_req":
+            level_class = "yellowBg"
+        elif item["level"] == "http_error":
+            level_class = "greenBg"
+        else:
+            level_class = ""
+        tr_content += '<td name="log_level" class="%s">%s</td>\n' % (level_class, item["level"])
 
-    if item["run_time"] >= 1:
-        tr_content += '<td class="redBg">%s</td>' % item["run_time"]
-    elif item["run_time"] >= 0.5:
-        tr_content += '<td class="orgBg">%s</td>' % item["run_time"]
-    else:
-        tr_content += '<td>%s</td>' % item["run_time"]
-    tr_content += "\n"
-    tr_content += '<td name="request_ip">%s</td>' % ip_str(item["ip"])
-    tr_content += "\n"
-    tr_content += '</tr>\n'
-    table_content += tr_content
+        if item["run_time"] >= 1:
+            tr_content += '<td class="redBg">%s</td>' % item["run_time"]
+        elif item["run_time"] >= 0.5:
+            tr_content += '<td class="orgBg">%s</td>' % item["run_time"]
+        else:
+            tr_content += '<td>%s</td>' % item["run_time"]
+        tr_content += "\n"
+        tr_content += '<td name="request_ip">%s</td>' % ip_str(item["ip"])
+        tr_content += "\n"
+        tr_content += '</tr>\n'
+        table_content += tr_content
 
-from Tools.MyEmail import MyEmailManager
-my_email = MyEmailManager("/home/msg/conf/")
-with open("../Web/templates/LOG/Daily_Log.html") as rt:
-    content = rt.read()
-    content = content.replace("{{ TR }}", table_content.encode("utf-8"))
-    my_email.send_mail("zhouheng@gene.ac", u"运行日志", content)
-with open("daily.html", "w") as dw:
-    dw.write(content)
+    from Tools.MyEmail import MyEmailManager
+    my_email = MyEmailManager("/home/msg/conf/")
+    with open("../Web/templates/LOG/Daily_Log.html") as rt:
+        content = rt.read()
+        content = content.replace("{{ TR }}", table_content.encode("utf-8"))
+        # my_email.send_mail("zhouheng@gene.ac", u"运行日志", content)
 
 if __name__ == '__main__':
     print("start run")
