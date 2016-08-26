@@ -7,7 +7,7 @@ import re
 from flask import Flask, request, make_response, g, jsonify
 from flask_login import current_user
 
-from Web import login_manager, unix_timestamp, bit_and, current_env, ip_str
+from Web import login_manager, unix_timestamp, bit_and, current_env, ip_str, make_static_url
 from Web import ip, env
 
 __author__ = 'zhouheng'
@@ -15,13 +15,6 @@ __author__ = 'zhouheng'
 msg_web = Flask("__name__")
 msg_web.secret_key = 'meisanggou'
 login_manager.init_app(msg_web)
-
-
-env = msg_web.jinja_env
-env.filters['unix_timestamp'] = unix_timestamp
-env.filters['bit_and'] = bit_and
-env.filters['current_env'] = current_env
-env.filters['ip_str'] = ip_str
 
 
 accept_agent = "(firefox|chrome|safari|window)"
@@ -79,16 +72,9 @@ def handle_500(e):
 
 msg_web.static_folder = "static2"
 msg_web.session_cookie_name = "jydms"
-static_prefix_url = "/static"
 if env != "Development":
     msg_web.config.update(SESSION_COOKIE_DOMAIN="gene.ac")
-    static_prefix_url = "http://static.gene.ac/dms_static"
 msg_web.config.update(PERMANENT_SESSION_LIFETIME=600)
-
-
-@msg_web.template_filter("make_static_url")
-def make_static_url(filename):
-    return static_prefix_url + "/" + filename
 
 
 api_files = os.listdir("./views")
@@ -104,6 +90,12 @@ for key, value in blues.items():
     else:
         msg_web.register_blueprint(value[0])
 
+env = msg_web.jinja_env
+env.filters['unix_timestamp'] = unix_timestamp
+env.filters['bit_and'] = bit_and
+env.filters['current_env'] = current_env
+env.filters['ip_str'] = ip_str
+env.filters['make_static_url'] = make_static_url
 
 if __name__ == '__main__':
     print("start run")

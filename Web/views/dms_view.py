@@ -239,7 +239,7 @@ def register():
                 user_role += role_info["role_value"]
     result, message = control.new_user(user_name, user_role, nick_name, current_user.account, current_user.role)
     if result is False:
-       return message
+        return message
     return redirect(url_for("dms_view.select_portal"))
 
 

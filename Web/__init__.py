@@ -74,8 +74,10 @@ else:
         env = r_env.read()
 
 if env == "Development":
+    static_prefix_url = "/static"
     company_ips = [3232266241, 3232266495]  # 192.168.120.1 -- 192.168.120.254
 else:
+    static_prefix_url = "http://static.gene.ac/dms_static"
     company_ips = [2064103023, 2064103024]  # 123.7.182.111
 
 
@@ -133,3 +135,7 @@ def ip_str(ip_v):
     if type(ip_v) == int or type(ip_v) == long:
         return ip.ip_value_str(ip_value=ip_v)
     return ip_v
+
+
+def make_static_url(filename):
+    return static_prefix_url + "/" + filename
