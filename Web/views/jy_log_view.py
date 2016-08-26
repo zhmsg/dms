@@ -110,4 +110,5 @@ def send_log_func():
         content = rt.read()
         content = content.replace("{{ TR }}", table_content.encode("utf-8"))
         control.send_daily_log(content)
+
 dms_scheduler.add_job("send_daily_log", send_log_func, trigger="cron", hour=8, minute=30)
