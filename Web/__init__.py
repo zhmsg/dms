@@ -16,7 +16,6 @@ db = DB()
 ip = IPManager()
 my_email = MyEmailManager("/home/msg/conf/")
 dms_scheduler = APScheduler()
-dms_scheduler.start()
 
 
 class User(UserMixin):
@@ -71,7 +70,7 @@ if os.path.exists("../env.conf") is False:
 
 else:
     with open("../env.conf") as r_env:
-        env = r_env.read()
+        env = r_env.read().strip()
 
 if env == "Development":
     static_prefix_url = "/static"

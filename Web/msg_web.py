@@ -8,14 +8,14 @@ from flask import Flask, request, make_response, g, jsonify
 from flask_login import current_user
 
 from Web import login_manager, unix_timestamp, bit_and, current_env, ip_str, make_static_url
-from Web import ip, env
+from Web import ip, env, dms_scheduler
 
 __author__ = 'zhouheng'
 
 msg_web = Flask("__name__")
 msg_web.secret_key = 'meisanggou'
 login_manager.init_app(msg_web)
-
+dms_scheduler.start()
 
 accept_agent = "(firefox|chrome|safari|window)"
 trust_proxy = ["127.0.0.1", "10.25.244.32", "10.44.147.192"]
