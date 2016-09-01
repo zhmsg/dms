@@ -99,4 +99,4 @@ env.filters['make_static_url'] = make_static_url
 
 if __name__ == '__main__':
     print("start run")
-    msg_web.run(host="0.0.0.0", port=2200)
+    msg_web.run(port=2200)
