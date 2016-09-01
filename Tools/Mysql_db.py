@@ -92,17 +92,11 @@ class DB(object):
         return self.execute(sql_query, args)
 
     def fetchone(self):
-        try:
-            one_item = self.cursor.fetchone()
-        except Exception, e:
-            one_item = ()
+        one_item = self.cursor.fetchone()
         return one_item
 
     def fetchall(self):
-        try:
-            all_item = self.cursor.fetchall()
-        except Exception, e:
-            all_item = ()
+        all_item = self.cursor.fetchall()
         return all_item
 
     def close(self):

@@ -55,9 +55,6 @@ def after_request(res):
                     res.headers["Location"] = res.headers["Location"].replace("http", pro)
                 else:
                     res.headers["Location"] = "%s://%s%s" % (pro, request.headers["Host"], location)
-    # if "X-Requested-With" in request.headers and "Content-Type" in res.headers and res.status_code == 200:
-    #     if request.headers["X-Requested-With"] == "XMLHttpRequest" and res.headers["Content-Type"] != "application/json":
-    #         res = jsonify({"status": False, "data": res.response[0]})
     res.headers["Server"] = "JingYun Server"
     return res
 
@@ -66,9 +63,6 @@ def after_request(res):
 def handle_500(e):
     return str(e)
 
-# @msg_web.teardown_request
-# def teardown_request(e=None):
-#     print("enter teardown request")
 
 msg_web.static_folder = "static2"
 msg_web.session_cookie_name = "jydms"
@@ -80,7 +74,7 @@ msg_web.config.update(PERMANENT_SESSION_LIFETIME=600)
 api_files = os.listdir("./views")
 for api_file in api_files:
     if api_file.endswith("_view.py"):
-        exec "from Web.views import %s" % api_file[:-3]
+        __import__("Web.views.%s" % api_file[:-3])
 
 
 from Web import blues
