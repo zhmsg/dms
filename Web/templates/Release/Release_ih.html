@@ -2,11 +2,14 @@
 
 {% block title %}重新发布晶云测试环境{% endblock %}
 
-
 {% block content %}
     <br />
     <a class="btn btn-primary pull-right" href="{{ url_for('dms_view.select_portal') }}" title="">主菜单</a>
-
+    <div name="url">
+        <input id="url_task_list" value="{{ url_task_list }}" style="display: none">
+        <input style="display: none">
+        <input style="display: none">
+    </div>
   <!--系统备注及说明模块 start-->
     <div class="declare">
       <p class="redColor">预约需知：</p>
@@ -72,5 +75,6 @@
           <div class="clear"></div>
         </div>
     {% endfor %}
-
+<script type="text/javascript" src="{{ 't_js/Release/Release_Data.js' | make_static_url }}"></script>
+<script type="text/javascript" src="{{ 't_js/Release/Release_Dom.js' | make_static_url }}"></script>
 {% endblock %}

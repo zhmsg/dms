@@ -21,7 +21,7 @@ class ReleaseManager:
     def __init__(self):
         self.db = DB()
         self.release_task = "release_task"
-        self.basic_time = datetime.strptime("2016-09-02 11:27:11", TIME_FORMAT)
+        self.basic_time = datetime.strptime("2016-09-02 00:00:00", TIME_FORMAT)
 
     def new_release_task(self, user_name, reason, reason_desc):
         release_time = datetime.now() - self.basic_time
@@ -40,3 +40,22 @@ class ReleaseManager:
                      % (self.release_task, status_info, release_no)
         self.db.execute(update_sql)
         return True, "success"
+
+    def select_release_task(self):
+        release_time = datetime.now() - self.basic_time
+        min_release_no = release_time.days * 24
+        cols = ["release_no", "user_name", "reason", "reason_desc", "status_info"]
+        select_sql = "SELECT %s FROM %s WHERE release_no>=%s;" \
+                     % (",".join(cols), self.release_task, min_release_no)
+        self.db.execute(select_sql)
+        db_r = self.db.fetchall()
+        task_list = []
+        for item in db_r:
+            task_info = {}
+            for i in range(len(cols)):
+                task_info[cols[i]] = item[i]
+            task_list.append(task_info)
+        return True, task_list
+
+
+

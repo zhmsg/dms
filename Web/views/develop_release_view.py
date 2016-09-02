@@ -30,13 +30,20 @@ def before_request():
         g.release_period = True
     else:
         g.release_period = False
-        allow_url = [url_prefix + "/"]
+        allow_url = [url_prefix + "/", url_prefix + "/task/"]
         if request.path not in allow_url:
             user_blacklist.append(g.user_name)
             return jsonify({"status": False, "data": u"非法时段"})
 
 
 @develop_release_view.route("/", methods=["GET"])
-def list_api():
-    return render_template("%s/Release_ih.html" % html_dir)
+def index_func():
+    context = {}
+    context["url_task_list"] = url_prefix + "/task/"
+    return render_template("%s/Release_ih.html" % html_dir, **context)
 
+
+@develop_release_view.route("/task/", methods=["GET"])
+def list_task():
+    result, info = control.get_task(g.user_name, g.user_role)
+    return jsonify({"status": result, "data": info})

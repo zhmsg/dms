@@ -18,6 +18,7 @@ from APIStatus import StatusManager
 from Bug import BugManager
 from Log import LogManager
 from IP import IPManager
+from Release import ReleaseManager
 from Class import DATE_FORMAT_STR
 
 __author__ = 'ZhouHeng'
@@ -49,6 +50,7 @@ class ControlManager:
         self.api_status = StatusManager()
         self.bug = BugManager()
         self.ip = IPManager()
+        self.relase_man = ReleaseManager()
         self.manger_email = ["budechao@ict.ac.cn", "biozy@ict.ac.cn"]
         self.jy_log = LogManager()
 
@@ -747,3 +749,7 @@ class ControlManager:
     # 针对工具
     def get_ip_info(self, ip_value):
         return self.ip.select_info_info(ip_value)
+
+    # 针对发布
+    def get_task(self, user_name, user_role):
+        return self.relase_man.select_release_task()
