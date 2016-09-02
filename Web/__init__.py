@@ -106,7 +106,7 @@ def create_blue(blue_name, url_prefix="/", auth_required=True):
         @add_blue.before_request
         @login_required
         def before_request():
-                pass
+            pass
 
     @add_blue.route("/ping/", methods=["GET"])
     def ping():

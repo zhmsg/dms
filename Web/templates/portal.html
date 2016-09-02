@@ -23,6 +23,7 @@
     {% if g.user_role | bit_and(role_value["log_look"]) >  0 %}
         <a href="{{ log_url_prefix }}/">晶云平台日志</a>
     {% endif %}
+    <a href="/dev/release/">重启晶云服务</a>
     {% if g.user_role | bit_and(role_desc["bug"]["role_list"]["bug_look"]["role_value"]) >  0 %}
         <a href="{{ bug_url_prefix }}/">BUG</a>
     {% endif %}
