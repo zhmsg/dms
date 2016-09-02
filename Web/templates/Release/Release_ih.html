@@ -32,7 +32,7 @@
           <textarea class="box-side" rows="3" id="module_desc" required></textarea>
         </li>
       </ul>
-      <button id="btn_op_module" class="btn btn-success btn-down api-newBtn" {% if not g.release_period %}disabled>非预约时段{% else %}>预约{% endif %}</button>
+      <button id="btn_op_module" class="btn btn-success btn-down api-newBtn" disabled>{% if not g.release_period %}非预约时段{% else %}预约{% endif %}</button>
     </div>
   </div>
 
@@ -50,27 +50,24 @@
         <div class="step">
 
           <div class="pull-left market" title="10:10"><img src="{{ 't_images/one_success.png' | make_static_url }}" alt="" border="0">
-            <p>预约成功</p>
+            <p>预约成功<br />10:11</p>
           </div>
 
+
         <div class="pull-left market"><img src="{{ 't_images/two_success.png' | make_static_url }}" alt="" border="0">
-            <p>启动任务</p>
+            <p>发布中<br />10:15</p>
         </div>
 
         <div class="pull-left market"><img src="{{ 't_images/two_success.png' | make_static_url }}" alt="" border="0">
-            <p>发布中</p>
+            <p>发布完成<br />10:16</p>
         </div>
 
         <div class="pull-left market"><img src="{{ 't_images/two_success.png' | make_static_url }}" alt="" border="0">
-            <p>发布完成</p>
-        </div>
-
-        <div class="pull-left market"><img src="{{ 't_images/two_success.png' | make_static_url }}" alt="" border="0">
-            <p>测试成功</p>
+            <p>测试成功<br />10:17</p>
         </div>
 
         <div class="pull-left market"><img src="{{ 't_images/end_gray.png' | make_static_url }}" alt="" border="0">
-            <p>提交成功</p>
+            <p>提交成功<br />10:18</p>
         </div>
           <div class="clear"></div>
         </div>
