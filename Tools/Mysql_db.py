@@ -70,9 +70,12 @@ class DB(object):
                     % (select_item, table_name, "=%s AND ".join(dict(where_value).keys()))
         return self.execute(sql_query, args)
 
-    def execute_insert(self, table_name, args):
+    def execute_insert(self, table_name, args, ignore=False):
         keys = dict(args).keys()
-        sql_query = "INSERT INTO %s (%s) VALUES (%%(%s)s);" % (table_name, ",".join(keys), ")s,%(".join(keys))
+        if ignore is True:
+            sql_query = "INSERT IGNORE INTO %s (%s) VALUES (%%(%s)s);" % (table_name, ",".join(keys), ")s,%(".join(keys))
+        else:
+            sql_query = "INSERT INTO %s (%s) VALUES (%%(%s)s);" % (table_name, ",".join(keys), ")s,%(".join(keys))
         return self.execute(sql_query, args=args)
 
     def execute_update(self, table_name, update_value, where_value):
