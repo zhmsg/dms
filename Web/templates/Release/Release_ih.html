@@ -7,6 +7,12 @@
     <a class="btn btn-primary pull-right" href="{{ url_for('dms_view.select_portal') }}" title="">主菜单</a>
     <div name="url">
         <input id="url_task_list" value="{{ url_task_list }}" style="display: none">
+        <input id="url_start_success" value="{{ 't_images/one_success.png' | make_static_url }}" style="display: none">
+        <input id="url_middle_success" value="{{ 't_images/two_success.png' | make_static_url }}" style="display: none">
+        <input id="url_end_success" value="{{ 't_images/end_success.png' | make_static_url }}" style="display: none">
+        <input id="url_end_gray" value="{{ 't_images/end_gray.png' | make_static_url }}" style="display: none">
+        <input id="url_middle_gray" value="{{ 't_images/two_gray.png' | make_static_url }}" style="display: none">
+        <input id="url_start_gray" value="{{ 't_images/one_gray.png' | make_static_url }}" style="display: none">
         <input style="display: none">
         <input style="display: none">
     </div>
@@ -38,43 +44,9 @@
       <button id="btn_op_module" class="btn btn-success btn-down api-newBtn" disabled>{% if not g.release_period %}非预约时段{% else %}预约{% endif %}</button>
     </div>
   </div>
-
-    {% for data in range(3)  %}
-
-        <div class="pull-left number">
-          <form>
-            <h4>zh_test</h4>
-            <p>修复BUG</p>
-          </form>
-        </div>
-        <!-- 编号 end -->
-
-        <!-- 步骤模块 start -->
-        <div class="step">
-
-          <div class="pull-left market" title="10:10"><img src="{{ 't_images/one_success.png' | make_static_url }}" alt="" border="0">
-            <p>预约成功<br />10:11</p>
-          </div>
-
-
-        <div class="pull-left market"><img src="{{ 't_images/two_success.png' | make_static_url }}" alt="" border="0">
-            <p>发布中<br />10:15</p>
-        </div>
-
-        <div class="pull-left market"><img src="{{ 't_images/two_success.png' | make_static_url }}" alt="" border="0">
-            <p>发布完成<br />10:16</p>
-        </div>
-
-        <div class="pull-left market"><img src="{{ 't_images/two_success.png' | make_static_url }}" alt="" border="0">
-            <p>测试成功<br />10:17</p>
-        </div>
-
-        <div class="pull-left market"><img src="{{ 't_images/end_gray.png' | make_static_url }}" alt="" border="0">
-            <p>提交成功<br />10:18</p>
-        </div>
-          <div class="clear"></div>
-        </div>
-    {% endfor %}
+  <div id="div_task_list">
+    
+  </div>
 <script type="text/javascript" src="{{ 't_js/Release/Release_Data.js' | make_static_url }}"></script>
 <script type="text/javascript" src="{{ 't_js/Release/Release_Dom.js' | make_static_url }}"></script>
 {% endblock %}
