@@ -8,7 +8,7 @@ from flask import Flask, request, make_response, g, jsonify
 from flask_login import current_user
 
 from Web import login_manager, unix_timestamp, bit_and, current_env, ip_str, make_static_url
-from Web import ip, env, dms_scheduler
+from Web import ip, env, dms_scheduler, user_blacklist
 
 __author__ = 'zhouheng'
 
@@ -40,6 +40,8 @@ def before_request():
     if current_user.is_authenticated:
         g.user_role = current_user.role
         g.user_name = current_user.account
+        if g.user_name in user_blacklist:
+            return u"不好意思，您的帐号存在异常，可能访问本系统出现不稳定的想象，现在就是不稳定中。本系统不是很智能，所以不知道啥时候会稳定，也许一分钟，也许一天，也许。。。"
     else:
         g.user_role = 0
 

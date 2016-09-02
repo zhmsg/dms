@@ -60,6 +60,7 @@ dms_url_prefix = ""
 data_url_prefix = "/data"
 log_url_prefix = "/log"
 tools_url_prefix = "/tools"
+release_url_prefix = "/dev/release"
 
 data_dir = "/ossdata/dmsdata"
 
@@ -96,6 +97,7 @@ def company_ip_required(f):
 
 
 blues = {}
+user_blacklist = []
 
 
 def create_blue(blue_name, url_prefix="/", auth_required=True):
