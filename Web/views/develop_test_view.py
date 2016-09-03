@@ -19,8 +19,8 @@ __author__ = 'Zhouheng'
 url_prefix = test_url_prefix
 html_dir = "/API_HELP"
 case_dir = "%s/test_case" % data_dir
-# if os.path.isdir(case_dir) is False:
-#     os.mkdir(case_dir)
+if os.path.isdir(case_dir) is False:
+    os.mkdir(case_dir)
 
 
 develop_test_view = create_blue('develop_test_view', url_prefix=url_prefix)
