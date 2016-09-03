@@ -753,3 +753,6 @@ class ControlManager:
     # 针对发布
     def get_task(self, user_name, user_role):
         return self.relase_man.select_release_task()
+
+    def new_task(self, user_name, user_role, reason, reason_desc):
+        return self.relase_man.new_release_task(user_name, reason, reason_desc)

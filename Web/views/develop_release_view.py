@@ -43,6 +43,13 @@ def index_func():
     return render_template("%s/Release_ih.html" % html_dir, **context)
 
 
+@develop_release_view.route("/task/", methods=["POST"])
+def new_task():
+    request_data = request.json;
+    result, info = control.new_task(g.user_name, g.user_role, request_data["reason"], request_data["reason_desc"])
+    return jsonify({"status": result, "data": info})
+
+
 @develop_release_view.route("/task/", methods=["GET"])
 def list_task():
     result, info = control.get_task(g.user_name, g.user_role)

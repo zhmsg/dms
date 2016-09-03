@@ -20,7 +20,7 @@
     <div class="declare">
       <p class="redColor">预约需知：</p>
       <p>【1】预约需谨慎。</p>
-      <p>【2】仅允许在每天的9、10、11、14、15、16、17点的10-20预约，例如10：10-10：20。</p>
+      <p>【2】仅允许在每天的9、10、11、14、15、16、17点的10-20分预约，例如10：10-10：20。</p>
       <p>【3】每个时段仅允许一个用户预约。例如10：10-10：20为一个时段。</p>
       <p>【4】每个帐号每天最多预约两次。</p>
       <p>【5】预约成功后，可通过查看下面的任务进度确定是否发布成功。</p>
@@ -32,20 +32,20 @@
       <ul style="margin-bottom: 1em">
           <li>
           <label class="api-describe" for="">重启原因：</label>
-          <select class="box-side" id="module_part" required>
+          <select class="box-side" id="request_reaseon" required>
              <option>修复BUG</option>
           </select>
         </li>
         <li>
           <label class="api-describe" for="">具体描述：</label>
-          <textarea class="box-side" rows="3" id="module_desc" required></textarea>
+          <textarea class="box-side" rows="3" id="request_reaseon_desc" required></textarea>
         </li>
       </ul>
-      <button id="btn_op_module" class="btn btn-success btn-down api-newBtn" disabled>{% if not g.release_period %}非预约时段{% else %}预约{% endif %}</button>
+      <button id="btn_add_task" class="btn btn-success btn-down api-newBtn" disabled>{% if not g.release_period %}非预约时段{% else %}预约{% endif %}</button>
     </div>
   </div>
   <div id="div_task_list">
-    
+
   </div>
 <script type="text/javascript" src="{{ 't_js/Release/Release_Data.js' | make_static_url }}"></script>
 <script type="text/javascript" src="{{ 't_js/Release/Release_Dom.js' | make_static_url }}"></script>
