@@ -756,3 +756,6 @@ class ControlManager:
 
     def new_task(self, user_name, user_role, reason, reason_desc):
         return self.relase_man.new_release_task(user_name, reason, reason_desc)
+
+    def update_task(self, release_no, run_result):
+        return self.relase_man.update_release_task(release_no, run_result)

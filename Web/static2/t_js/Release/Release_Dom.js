@@ -61,7 +61,11 @@ function New_Div_Step(step_info, index, is_start, is_end)
 
 function Add_Task_Info(task_info)
 {
-    console.info(task_info);
+    if(task_info == null)
+    {
+        $("#div_task_list").text("");
+        return;
+    }
     var h_user_name = $("<h4></h4>").text(task_info.user_name);
     var h_reason = $("<p></p>").text(task_info.reason);
     var div_left = $('<div class="pull-left number"></div>');

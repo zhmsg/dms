@@ -2,12 +2,15 @@
  * Created by meisanggou on 2016/9/2.
  */
 
-var has_task = false;
 var max_hour = 0;
+var max_owner = "";
+var max_time = 0;
+var book_num = 0;
+var current_user = $("#user_name").val();
 
 function timestamp_2_str(timestamp)
 {
-    var d = new Date(parseInt(timestamp) * 1000);
+    var d = new Date(timestamp * 1000);
     var hour = d.getHours();
     var minute = d.getMinutes();
     if(hour > max_hour)
@@ -21,11 +24,22 @@ function ensure_right_time()
     var hour = now_time.getHours();
     var minute = now_time.getMinutes();
     $("#btn_add_task").unbind('click');
-    if((9<=hour && hour<=11 || 14<=hour && hour<=17) && 10 <= minute &&　minute<=20){
+    if((9<=hour && hour<=11 || 14<=hour && hour<=18) && 10 <= minute &&　minute<=20){
         if(hour <= max_hour)
         {
             $("#btn_add_task").attr("disabled", "disabled");
-            $("#btn_add_task").text("已有他人预约");
+
+            if(max_owner == current_user){
+                $("#btn_add_task").text("已预约本时段");
+            }
+            else {
+                $("#btn_add_task").text("已有他人预约");
+            }
+        }
+        else if(book_num >= 2)
+        {
+            $("#btn_add_task").attr("disabled", "disabled");
+            $("#btn_add_task").text("今日已预约2次");
         }
         else {
             $("#btn_add_task").removeAttr("disabled");
@@ -42,6 +56,7 @@ function ensure_right_time()
 
 function save_task()
 {
+    $("#btn_add_task").attr("disabled", "disabled");
     var reason = $("#request_reaseon").val();
     var reason_desc = $("#request_reaseon_desc").val();
     var request_data = new Object();
@@ -57,6 +72,8 @@ function request_task_list_success(data)
         sweetAlert(data.data);
     }
     var today_task_list = data.data;
+    Add_Task_Info();
+    book_num = 0;
     for(var i=0;i<today_task_list.length;i++){
         var status_list = new Array();
         var status_s_list = today_task_list[i].status_info.split("|");
@@ -65,13 +82,19 @@ function request_task_list_success(data)
         {
             var status_item = status_s_list[j];
             status_list[j] = new Object();
-            status_list[j].time = timestamp_2_str(status_item.substr(0, status_item.length - 1));
-            if(status_item[status_item.length - 1] == "0")
-            {
+            var time = parseInt(status_item.substr(0, status_item.length - 1));
+            if(time > max_time){
+                max_time = time;
+                max_owner = today_task_list[i].user_name;
+            }
+            if(today_task_list[i].user_name == current_user){
+                book_num += 1;
+            }
+            status_list[j].time = timestamp_2_str(time);
+            if(status_item[status_item.length - 1] == "0"){
                 status_list[j].result = false;
             }
-            else
-            {
+            else{
                 status_list[j].result = true;
             }
         }

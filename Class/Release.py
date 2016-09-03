@@ -32,7 +32,7 @@ class ReleaseManager:
         result = self.db.execute_insert(self.release_task, args=args, ignore=True)
         if result <= 0:
             return False, u"任务已存在"
-        return True, release_no
+        return True, args
 
     def update_release_task(self, release_no, run_result=True):
         status_info = "|%s%s" % (int(time()), 1 if run_result is True else 0)
@@ -45,7 +45,7 @@ class ReleaseManager:
         release_time = datetime.now() - self.basic_time
         min_release_no = release_time.days * 24
         cols = ["release_no", "user_name", "reason", "reason_desc", "status_info"]
-        select_sql = "SELECT %s FROM %s WHERE release_no>=%s;" \
+        select_sql = "SELECT %s FROM %s WHERE release_no>=%s ORDER BY release_no DESC;" \
                      % (",".join(cols), self.release_task, min_release_no)
         self.db.execute(select_sql)
         db_r = self.db.fetchall()
