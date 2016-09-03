@@ -755,6 +755,11 @@ class ControlManager:
         return self.relase_man.select_release_task()
 
     def new_task(self, user_name, user_role, reason, reason_desc):
+        result, info = self.relase_man.select_release_task(user_name=user_name)
+        if result is False:
+            return info
+        elif len(info) >= 2:
+            return u"今日已不再允许预约"
         return self.relase_man.new_release_task(user_name, reason, reason_desc)
 
     def update_task(self, release_no, run_result):

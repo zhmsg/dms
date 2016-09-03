@@ -17,15 +17,15 @@
 </head>
 <body>
 <div class="container font16">
+    {% if g.user_name %}
+        <input id="user_name" value="{{ g.user_name }}" style="display: none">
+    {% endif %}
     {% block content %} {% endblock %}
 </div>
 <div style="position: fixed;bottom: 15px;left: 20px;cursor: pointer;">
     <span>Current</span>
 
     <p>{{ "" | current_env }}</p>
-    {% if g.user_name %}
-        <input id="user_name" value="{{ g.user_name }}" style="display: none">
-    {% endif %}
 </div>
 </body>
 </html>
