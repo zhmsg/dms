@@ -31,7 +31,7 @@ def before_request():
     else:
         g.release_period = False
         allow_url = [url_prefix + "/", url_prefix + "/task/"]
-        if request.path not in allow_url:
+        if request.path not in allow_url or request.method != "GET":
             user_blacklist.append(g.user_name)
             return jsonify({"status": False, "data": u"非法时段"})
     g.now_time = now_time
