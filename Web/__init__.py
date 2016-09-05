@@ -74,16 +74,14 @@ else:
     with open("../env.conf") as r_env:
         env = r_env.read().strip()
 
-if env == "Development":
-    company_ips = [3232266241, 3232266495]  # 192.168.120.1 -- 192.168.120.254
-else:
-    company_ips = [2064103023, 2064103024]  # 123.7.182.111
-
 # read config
 config = ConfigParser.ConfigParser()
 config.read("../config.conf")
 
 static_prefix_url = config.get(env, "static_prefix_url")
+company_ip_start = config.getint(env, "company_ip_start")
+company_ip_end = config.getint(env, "company_ip_end")
+company_ips = [company_ip_start, company_ip_end]
 
 if os.path.isdir(data_dir) is False:
     os.mkdir(data_dir)
