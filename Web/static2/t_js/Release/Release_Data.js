@@ -88,6 +88,7 @@ function request_task_list_success(data)
                 max_owner = today_task_list[i].user_name;
             }
             if(today_task_list[i].user_name == current_user){
+                console.info(book_num);
                 book_num += 1;
             }
             status_list[j].time = timestamp_2_str(time);
