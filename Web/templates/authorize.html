@@ -12,7 +12,9 @@
       <h4 class="form-signin-heading">修改用户权限 按照用户修改</h4>
       <select class="form-control bug-input" id="perm_user" onchange="user_select_change();" name="perm_user">
           {% for user in my_user %}
-              <option role="{{ user["role"] }}" value="{{ user["user_name"] }}">{{ user["nick_name"] }}</option>
+              {% if user["user_name"] != g.user_name %}
+                <option role="{{ user["role"] }}" value="{{ user["user_name"] }}">{{ user["nick_name"] }}({{ user["user_name"] }})</option>
+              {% endif %}
           {% endfor %}
       </select>
       {% include "perm_conent.html" %}
