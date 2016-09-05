@@ -83,7 +83,6 @@ company_ip_start = config.getint(env, "company_ip_start")
 company_ip_end = config.getint(env, "company_ip_end")
 company_ips = [company_ip_start, company_ip_end]
 cookie_domain = config.get(env, "cookie_domain")
-print(company_ips)
 
 if os.path.isdir(data_dir) is False:
     os.mkdir(data_dir)
@@ -95,7 +94,7 @@ def company_ip_required(f):
         if "request_IP" not in g:
             return make_response(u"因为一些原因页面丢失了", 404)
         if g.request_IP not in range(company_ips[0], company_ips[1]):
-            return make_response(u"因为一些原因页面不知道去哪了[%s] [%s] %s" % (company_ips[0], company_ips[1], g.request_IP), 404)
+            return make_response(u"因为一些原因页面不知道去哪了", 404)
         return f(*args, **kwargs)
     return decorated_function
 
