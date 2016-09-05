@@ -38,7 +38,7 @@
         </li>
         <li>
           <label class="api-describe" for="">具体描述：</label>
-          <textarea class="box-side" rows="3" id="request_reaseon_desc" required></textarea>
+          <textarea class="box-side" rows="3" id="request_reaseon_desc" placeholder="所填将作为通知内容，请认真填写" required></textarea>
         </li>
       </ul>
       <button id="btn_add_task" class="btn btn-success btn-down api-newBtn" disabled>{% if not g.release_period %}非预约时段{% else %}预约{% endif %}</button>
