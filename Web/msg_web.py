@@ -20,7 +20,6 @@ def create_app():
     msg_web = Flask("__name__")
     msg_web.secret_key = 'meisanggou'
     login_manager.init_app(msg_web)
-    dms_scheduler.start()
 
     @msg_web.before_request
     def before_request():
@@ -95,5 +94,6 @@ def create_app():
 
 if __name__ == '__main__':
     print("start run")
+    dms_scheduler.start()
     msg_app = create_app()
     msg_app.run(port=2200)
