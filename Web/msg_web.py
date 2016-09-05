@@ -95,5 +95,5 @@ def create_app():
 if __name__ == '__main__':
     print("start run")
     dms_scheduler.start()
-    msg_app = create_app()
-    msg_app.run(port=2200)
+    msg_web = create_app()
+    msg_web.run(port=2200)
