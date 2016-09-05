@@ -49,10 +49,15 @@ def run_task(release_no):
     control.update_task(release_no, True)
     from time import sleep
     sleep(15)
+    print("start release pull")
+    control.release_pull()
     control.update_task(release_no, True)
     sleep(30)
+    print("start test")
     control.update_task(release_no, True)
     sleep(15)
+    print("start release push")
+    control.release_push()
     control.update_task(release_no, True)
 
 
