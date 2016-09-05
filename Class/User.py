@@ -52,9 +52,13 @@ class UserManager:
         self._log_role_desc = {"module_desc": u"晶云平台日志", "role_list":
             {"log_look": {"role_desc": u"查看", "role_value": 262144},
              "log_receive": {"role_desc": u"接收", "role_value": 1048576} } }
+        self._release_role_desc = {"module_desc": u"重新发布环境", "role_list":
+            {"release_ih_N": {"role_desc": u"ih普通", "role_value": 2097152},
+             "release_ih_V": {"role_desc": u"ihVIP", "role_value": 4194304} } }
         self.role_desc = {"data": self._data_role_desc, "api": self._api_role_desc, "table": self._table_role_desc,
                           "right": self._right_role_desc, "user": self._user_role_desc, "bug": self._bug_role_desc,
-                          "status_code": self._status_code_role_desc, "log": self._log_role_desc}
+                          "status_code": self._status_code_role_desc, "log": self._log_role_desc,
+                          "release": self._release_role_desc}
         self.__init_role__()
 
     def __init_role__(self):

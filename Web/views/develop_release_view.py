@@ -67,20 +67,3 @@ def list_task():
     result, info = control.get_task(g.user_name, g.user_role)
     return jsonify({"status": result, "data": info})
 
-
-@develop_release_view.route("/pull/", methods=["GET"])
-def pull_master():
-    control.release_pull()
-    return "true"
-
-
-@develop_release_view.route("/push/", methods=["GET"])
-def push_online():
-    control.release_push()
-    return "true"
-
-
-@develop_release_view.route("/run/", methods=["GET"])
-def run():
-    run_task(86)
-    return "true"

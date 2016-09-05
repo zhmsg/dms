@@ -752,9 +752,13 @@ class ControlManager:
 
     # 针对发布
     def get_task(self, user_name, user_role):
+        if user_role & self.role_value["release_ih_N"] <= 0:
+            return False, u"您没有权限"
         return self.relase_man.select_release_task()
 
     def new_task(self, user_name, user_role, reason, reason_desc):
+        if user_role & self.role_value["release_ih_N"] <= 0:
+            return False, u"您没有权限"
         result, info = self.relase_man.select_release_task(user_name=user_name)
         if result is False:
             return False, info
@@ -767,9 +771,3 @@ class ControlManager:
 
     def release_ih(self):
         return self.relase_man.release_ih()
-
-    def release_pull(self):
-        self.relase_man.release_pull()
-
-    def release_push(self):
-        self.relase_man.release_commit()
