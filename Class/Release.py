@@ -3,13 +3,11 @@
 
 import sys
 import tempfile
-import uuid
-from datetime import datetime, timedelta
+from datetime import datetime
 from time import time
 sys.path.append("..")
 from Tools.Mysql_db import DB
 from Class import TIME_FORMAT
-from Check import check_chinese_en, check_http_method, check_path, check_sql_character, check_char_num_underline, check_char, check_int
 
 temp_dir = tempfile.gettempdir()
 
