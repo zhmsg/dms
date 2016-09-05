@@ -2,6 +2,7 @@
 # !/usr/bin/python
 
 import time
+import ConfigParser
 from functools import wraps
 from flask import session, g, make_response, Blueprint, jsonify,request
 from flask_login import LoginManager, UserMixin, login_required
@@ -74,12 +75,15 @@ else:
         env = r_env.read().strip()
 
 if env == "Development":
-    static_prefix_url = "/static"
     company_ips = [3232266241, 3232266495]  # 192.168.120.1 -- 192.168.120.254
 else:
-    static_prefix_url = "http://static.gene.ac/dms_static"
     company_ips = [2064103023, 2064103024]  # 123.7.182.111
 
+# read config
+config = ConfigParser.ConfigParser()
+config.read("../config.conf")
+
+static_prefix_url = config.get(env, "static_prefix_url")
 
 if os.path.isdir(data_dir) is False:
     os.mkdir(data_dir)
