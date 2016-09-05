@@ -10,7 +10,7 @@ from Tools.Mysql_db import DB
 from Class import TIME_FORMAT
 
 
-env.host_string = "gene.ac"
+env.host_string = "10.51.72.158"
 
 __author__ = 'ZhouHeng'
 
@@ -69,7 +69,7 @@ class ReleaseManager:
 
     def release_commit(self):
         with cd("/home/msg/BioMed"):
-            run("git commit -m '%s'" % "marge master")
+            run("git commit -m '%s'" % "marge master", quiet=True)
             run("git push")
 
 
