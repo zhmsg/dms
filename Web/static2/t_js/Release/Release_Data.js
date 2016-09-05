@@ -87,10 +87,6 @@ function request_task_list_success(data)
                 max_time = time;
                 max_owner = today_task_list[i].user_name;
             }
-            if(today_task_list[i].user_name == current_user){
-                console.info(book_num);
-                book_num += 1;
-            }
             status_list[j].time = timestamp_2_str(time);
             if(status_item[status_item.length - 1] == "0"){
                 status_list[j].result = false;
@@ -101,6 +97,10 @@ function request_task_list_success(data)
         }
         for(;j < 5; j++){
             status_list[j] = null;
+        }
+        if(today_task_list[i].user_name == current_user){
+            console.info(book_num);
+            book_num += 1;
         }
         today_task_list[i].status_list = status_list;
         Add_Task_Info(today_task_list[i]);
