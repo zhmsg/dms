@@ -6,7 +6,7 @@ var max_hour = 0;
 var max_owner = "";
 var max_time = 0;
 var book_num = 0;
-var current_user = $("#user_name").val();
+var current_user = $("#current_user_name").val();
 
 function timestamp_2_str(timestamp)
 {
