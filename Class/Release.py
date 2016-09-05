@@ -2,14 +2,15 @@
 # coding: utf-8
 
 import sys
-import tempfile
+from fabric.api import *
 from datetime import datetime
 from time import time
 sys.path.append("..")
 from Tools.Mysql_db import DB
 from Class import TIME_FORMAT
 
-temp_dir = tempfile.gettempdir()
+
+env.host_string = "10.51.72.158"
 
 __author__ = 'ZhouHeng'
 
@@ -20,6 +21,7 @@ class ReleaseManager:
         self.db = DB()
         self.release_task = "release_task"
         self.basic_time = datetime.strptime("2016-09-02 00:00:00", TIME_FORMAT)
+        self.latest_branch = "master"
 
     def new_release_task(self, user_name, reason, reason_desc):
         release_time = datetime.now() - self.basic_time
@@ -59,5 +61,15 @@ class ReleaseManager:
             task_list.append(task_info)
         return True, task_list
 
+    def release_pull(self):
+        with cd("/home/msg/BioMed"):
+            run("git -c diff.mnemonicprefix=false -c core.quotepath=false fetch origin")
+            run("git pull")
+            run("git -c diff.mnemonicprefix=false -c core.quotepath=false pull --no-commit origin %s" % self.latest_branch)
+
+    def release_commit(self):
+        with cd("/home/msg/BioMed"):
+            run("git commit '%s'" % "marge master")
+            run("git push")
 
 

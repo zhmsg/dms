@@ -30,10 +30,10 @@ def before_request():
         g.release_period = True
     else:
         g.release_period = False
-        allow_url = [url_prefix + "/", url_prefix + "/task/"]
-        if request.path not in allow_url or request.method != "GET":
-            user_blacklist.append(g.user_name)
-            return jsonify({"status": False, "data": u"非法时段"})
+        # allow_url = [url_prefix + "/", url_prefix + "/task/"]
+        # if request.path not in allow_url or request.method != "GET":
+        #     user_blacklist.append(g.user_name)
+        #     return jsonify({"status": False, "data": u"非法时段"})
     g.now_time = now_time
 
 
@@ -71,3 +71,15 @@ def new_task():
 def list_task():
     result, info = control.get_task(g.user_name, g.user_role)
     return jsonify({"status": result, "data": info})
+
+
+@develop_release_view.route("/pull/", methods=["GET"])
+def pull_master():
+    control.release_pull()
+    return "true"
+
+
+@develop_release_view.route("/push/", methods=["GET"])
+def pull_master():
+    control.release_push()
+    return "true"

@@ -764,3 +764,10 @@ class ControlManager:
 
     def update_task(self, release_no, run_result):
         return self.relase_man.update_release_task(release_no, run_result)
+
+
+    def release_pull(self):
+        self.relase_man.release_pull()
+
+    def release_push(self):
+        self.relase_man.release_commit()
