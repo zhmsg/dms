@@ -83,6 +83,7 @@ company_ip_start = config.getint(env, "company_ip_start")
 company_ip_end = config.getint(env, "company_ip_end")
 company_ips = [company_ip_start, company_ip_end]
 cookie_domain = config.get(env, "cookie_domain")
+print(company_ips)
 
 if os.path.isdir(data_dir) is False:
     os.mkdir(data_dir)
