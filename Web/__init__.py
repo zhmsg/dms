@@ -95,7 +95,7 @@ def company_ip_required(f):
         if "request_IP" not in g:
             return make_response(u"因为一些原因页面丢失了", 404)
         if g.request_IP not in range(company_ips[0], company_ips[1]):
-            return make_response(u"因为一些原因页面不知道去哪了 %s" % g.request_IP, 404)
+            return make_response(u"因为一些原因页面不知道去哪了[%s] [%s] %s" % (company_ips[0], company_ips[1], g.request_IP), 404)
         return f(*args, **kwargs)
     return decorated_function
 
