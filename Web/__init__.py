@@ -4,7 +4,7 @@
 import time
 import ConfigParser
 from functools import wraps
-from flask import session, g, make_response, Blueprint, jsonify,request
+from flask import session, g, make_response, Blueprint, jsonify, request
 from flask_login import LoginManager, UserMixin, login_required
 from flask_apscheduler import APScheduler
 from Tools.Mysql_db import DB
@@ -82,6 +82,7 @@ static_prefix_url = config.get(env, "static_prefix_url")
 company_ip_start = config.getint(env, "company_ip_start")
 company_ip_end = config.getint(env, "company_ip_end")
 company_ips = [company_ip_start, company_ip_end]
+cookie_domain = config.get(env, "cookie_domain")
 
 if os.path.isdir(data_dir) is False:
     os.mkdir(data_dir)
