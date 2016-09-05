@@ -10,9 +10,6 @@ DATE_FORMAT = "%Y-%m-%d"
 TIME_FORMAT_STR = "%Y%m%d%H%M%S"
 DATE_FORMAT_STR = "%Y%m%d"
 
-from TableDesc import TableManager
-
-table_manager = TableManager()
 
 if os.path.exists("../env.conf") is False:
     env = "Development"

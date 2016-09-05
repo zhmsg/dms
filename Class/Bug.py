@@ -7,7 +7,7 @@ import uuid
 sys.path.append("..")
 from datetime import datetime, timedelta
 from Tools.Mysql_db import DB
-from Class import table_manager, TIME_FORMAT
+from Class import TIME_FORMAT
 from Check import check_sql_character
 
 temp_dir = tempfile.gettempdir()
@@ -19,9 +19,9 @@ class BugManager:
 
     def __init__(self):
         self.db = DB()
-        self.bug = table_manager.bug
-        self.bug_owner = table_manager.bug_owner
-        self.bug_example = table_manager.bug_example
+        self.bug = "bug_info"
+        self.bug_owner = "bug_owner"
+        self.bug_example = "bug_example"
         self.user = "sys_user"
 
     def new_bug_info(self, bug_title, submitter):

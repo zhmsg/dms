@@ -7,7 +7,7 @@ import uuid
 sys.path.append("..")
 from datetime import datetime
 from Tools.Mysql_db import DB
-from Class import table_manager, TIME_FORMAT
+from Class import TIME_FORMAT
 from Check import check_sql_character, check_int, fill_zero, check_chinese_en, check_special_character
 
 temp_dir = tempfile.gettempdir()
@@ -19,10 +19,10 @@ class StatusManager:
 
     def __init__(self):
         self.db = DB()
-        self.service_module = table_manager.service_module
-        self.function_module = table_manager.function_module
-        self.error_type = table_manager.error_type
-        self.status_code = table_manager.status_code
+        self.service_module = "service_module"
+        self.function_module = "function_module"
+        self.error_type = "error_type"
+        self.status_code = "status_code"
         self.user = "sys_user"
 
     def insert_service_module(self, service_title, service_desc):
