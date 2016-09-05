@@ -45,20 +45,10 @@ def index_func():
 
 
 def run_task(release_no):
-    print("start run release %s" % release_no)
-    control.update_task(release_no, True)
-    from time import sleep
-    sleep(15)
-    print("start release pull")
-    control.release_pull()
-    control.update_task(release_no, True)
-    sleep(30)
-    print("start test")
-    control.update_task(release_no, True)
-    sleep(15)
-    print("start release push")
-    control.release_push()
-    control.update_task(release_no, True)
+    result, info = control.release_ih()
+    if result is False:
+        control.update_task(release_no, False)
+    print(info)
 
 
 @develop_release_view.route("/task/", methods=["POST"])
@@ -87,4 +77,10 @@ def pull_master():
 @develop_release_view.route("/push/", methods=["GET"])
 def push_online():
     control.release_push()
+    return "true"
+
+
+@develop_release_view.route("/run/", methods=["GET"])
+def run():
+    run_task(86)
     return "true"

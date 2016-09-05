@@ -63,7 +63,7 @@ class ReleaseManager:
 
     def release_pull_code(self):
         with cd("/home/msg/BioMed"):
-            run("git statsh")
+            run("git stash")
             run("git fetch origin")
             run("git pull")
             run("git pull --no-commit origin %s" % self.latest_branch)
@@ -92,16 +92,17 @@ class ReleaseManager:
         if info[0]["release_no"] != release_no:
             return False, "No Task"
         print("start run release %s" % release_no)
-        self.update_task(release_no, True)
+        self.update_release_task(release_no, True)
         print("start pull code")
         self.release_pull_code()
         self.release_restart_app()
-        self.update_task(release_no, True)
+        self.update_release_task(release_no, True)
         print("start test")
-        self.update_task(release_no, True)
+        self.update_release_task(release_no, True)
         print("start release push")
         self.release_push_code(info[0]["reason_desc"])
-        self.update_task(release_no, True)
+        self.update_release_task(release_no, True)
+        return True, "success"
 
     def release_pull(self):
         with cd("/home/msg/BioMed"):

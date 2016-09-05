@@ -765,6 +765,8 @@ class ControlManager:
     def update_task(self, release_no, run_result):
         return self.relase_man.update_release_task(release_no, run_result)
 
+    def release_ih(self):
+        return self.relase_man.release_ih()
 
     def release_pull(self):
         self.relase_man.release_pull()
