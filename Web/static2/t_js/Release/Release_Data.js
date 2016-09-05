@@ -99,7 +99,6 @@ function request_task_list_success(data)
             status_list[j] = null;
         }
         if(today_task_list[i].user_name == current_user){
-            console.info(book_num);
             book_num += 1;
         }
         today_task_list[i].status_list = status_list;
