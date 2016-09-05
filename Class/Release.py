@@ -10,7 +10,7 @@ from Tools.Mysql_db import DB
 from Class import TIME_FORMAT
 
 
-env.host_string = "10.51.72.158"
+env.host_string = "gene.ac"
 
 __author__ = 'ZhouHeng'
 
@@ -63,13 +63,13 @@ class ReleaseManager:
 
     def release_pull(self):
         with cd("/home/msg/BioMed"):
-            run("git -c diff.mnemonicprefix=false -c core.quotepath=false fetch origin")
+            run("git fetch origin")
             run("git pull")
-            run("git -c diff.mnemonicprefix=false -c core.quotepath=false pull --no-commit origin %s" % self.latest_branch)
+            run("git pull --no-commit origin %s" % self.latest_branch)
 
     def release_commit(self):
         with cd("/home/msg/BioMed"):
-            run("git commit '%s'" % "marge master")
+            run("git commit -m '%s'" % "marge master")
             run("git push")
 
 
