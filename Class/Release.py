@@ -22,6 +22,7 @@ class ReleaseManager:
         self.release_task = "release_task"
         self.basic_time = datetime.strptime("2016-09-02 00:00:00", TIME_FORMAT)
         self.latest_branch = "master"
+        self.work_dir = "/data/Web2/ih_BioMed"
 
     def new_release_task(self, user_name, reason, reason_desc):
         release_time = datetime.now() - self.basic_time
@@ -62,22 +63,22 @@ class ReleaseManager:
         return True, task_list
 
     def release_pull_code(self):
-        with cd("/home/msg/BioMed"):
+        with cd(self.work_dir):
             run("git stash")
             run("git fetch origin")
             run("git pull")
             run("git pull --no-commit origin %s" % self.latest_branch)
 
     def release_restart_app(self):
-        with cd("/home/msg/BioMed"):
+        with cd(self.work_dir):
             run('find -name "*.log" | xargs rm -rf')
             run("sh stop.sh")
             run('ssh service "sh /home/msg/BioMed/restart_service.sh"')
             run("sh start_api.sh")
 
     def release_push_code(self, message):
-        with cd("/home/msg/BioMed"):
-            run("git commit -m '%s'" % "marge master", quiet=True)
+        with cd(self.work_dir):
+            run("git commit -m '%s'" % message, quiet=True)
             run("git push")
 
     def release_ih(self):
