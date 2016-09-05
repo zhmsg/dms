@@ -80,6 +80,6 @@ def pull_master():
 
 
 @develop_release_view.route("/push/", methods=["GET"])
-def pull_master():
+def push_online():
     control.release_push()
     return "true"
