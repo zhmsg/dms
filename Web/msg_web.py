@@ -92,9 +92,9 @@ def create_app():
     env.filters['make_static_url'] = make_static_url
     return msg_web
 
+dms_scheduler.start()
 msg_web = create_app()
 
 if __name__ == '__main__':
     print("start run")
-    dms_scheduler.start()
     msg_web.run(port=2200)
