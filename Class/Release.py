@@ -8,10 +8,11 @@ from time import time
 sys.path.append("..")
 from Tools.Mysql_db import DB
 from Class.WeiXin import WeiXinManager
-from Class import TIME_FORMAT, wx_service, release_host
+from Class import TIME_FORMAT, wx_service, release_host, release_host_port
 
 
 env.host_string = release_host
+env.port = release_host_port
 
 __author__ = 'ZhouHeng'
 
@@ -75,7 +76,7 @@ class ReleaseManager:
         with cd(self.work_dir):
             run('find -name "*.log" | xargs rm -rf')
             run("sh stop.sh")
-            run('ssh service "sh /home/msg/BioMed/restart_service.sh"')
+            run('ssh service "sh /home/msg/BioMed/restart_service.sh"', quiet=True)
             run("sh start_api.sh")
 
     def release_push_code(self, message):
