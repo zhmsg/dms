@@ -17,7 +17,7 @@ function timestamp_2_str(timestamp)
         max_hour = hour;
     if(minute < 10)
         minute = "0" + minute;
-    return  hour + ":" + minute;
+    return hour + ":" + minute;
 }
 
 //function ensure_right_time()
