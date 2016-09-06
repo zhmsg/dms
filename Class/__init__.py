@@ -2,6 +2,7 @@
 # coding: utf-8
 
 import os
+import ConfigParser
 
 __author__ = 'ZhouHeng'
 
@@ -15,4 +16,10 @@ if os.path.exists("../env.conf") is False:
     env = "Development"
 else:
     with open("../env.conf") as r_env:
-        env = r_env.read()
+        env = r_env.read().strip()
+
+# read config
+config = ConfigParser.ConfigParser()
+config.read("../config.conf")
+
+wx_service = config.get(env, "wx_service")
