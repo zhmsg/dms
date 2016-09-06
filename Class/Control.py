@@ -19,7 +19,7 @@ from Bug import BugManager
 from Log import LogManager
 from IP import IPManager
 from Release import ReleaseManager
-from Class import DATE_FORMAT_STR
+from Class import DATE_FORMAT_STR, release_dir
 
 __author__ = 'ZhouHeng'
 
@@ -50,7 +50,7 @@ class ControlManager:
         self.api_status = StatusManager()
         self.bug = BugManager()
         self.ip = IPManager()
-        self.relase_man = ReleaseManager()
+        self.relase_man = ReleaseManager(release_dir)
         self.manger_email = ["budechao@ict.ac.cn", "biozy@ict.ac.cn"]
         self.jy_log = LogManager()
 

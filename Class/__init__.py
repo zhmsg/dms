@@ -23,3 +23,5 @@ config = ConfigParser.ConfigParser()
 config.read("../config.conf")
 
 wx_service = config.get(env, "wx_service")
+release_host = config.get(env, "release_host")
+release_dir = config.get(env, "release_dir")

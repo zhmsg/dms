@@ -8,22 +8,22 @@ from time import time
 sys.path.append("..")
 from Tools.Mysql_db import DB
 from Class.WeiXin import WeiXinManager
-from Class import TIME_FORMAT, wx_service
+from Class import TIME_FORMAT, wx_service, release_host
 
 
-env.host_string = "10.51.72.158"
+env.host_string = release_host
 
 __author__ = 'ZhouHeng'
 
 
 class ReleaseManager:
 
-    def __init__(self):
+    def __init__(self, release_dir):
         self.db = DB()
         self.release_task = "release_task"
         self.basic_time = datetime.strptime("2016-09-02 00:00:00", TIME_FORMAT)
         self.latest_branch = "master"
-        self.work_dir = "/data/Web2/ih_BioMed"
+        self.work_dir = release_dir
         self.wx = WeiXinManager(wx_service)
 
     def new_release_task(self, user_name, reason, reason_desc):
@@ -86,12 +86,14 @@ class ReleaseManager:
     def send_wx_msg(self, msg):
         result, user_list = self.wx.user_info()
         for user_info in user_list:
+            # self.wx.send_status(u"后台开发", "ochiws2EiR0cq3qzXYjQkw0m9jdE", "Test", msg)
+            # break
             if user_info["groupid"] == 100:
-                self.wx.send_status(u"后台开发", user_info["openid"], env, msg)
+                self.wx.send_status(u"后台开发", user_info["openid"], "Test", msg)
             elif user_info["groupid"] == 101:
-                self.wx.send_status(u"前端开发", user_info["openid"], env, msg)
+                self.wx.send_status(u"前端开发", user_info["openid"], "Test", msg)
             elif user_info["groupid"] == 102:
-                self.wx.send_status(u"产品设计", user_info["openid"], env, msg)
+                self.wx.send_status(u"产品设计", user_info["openid"], "Test", msg)
 
     def release_ih(self):
         # 获得任务
