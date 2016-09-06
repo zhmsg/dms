@@ -87,8 +87,8 @@ class ReleaseManager:
     def send_wx_msg(self, msg):
         result, user_list = self.wx.user_info()
         for user_info in user_list:
-            self.wx.send_status(u"后台开发", "ochiws2EiR0cq3qzXYjQkw0m9jdE", "Test", msg)
-            break
+            # self.wx.send_status(u"后台开发", "ochiws2EiR0cq3qzXYjQkw0m9jdE", "Test", msg)
+            # break
             if user_info["groupid"] == 100:
                 self.wx.send_status(u"后台开发", user_info["openid"], "Test", msg)
             elif user_info["groupid"] == 101:
@@ -104,10 +104,11 @@ class ReleaseManager:
         if len(info) <= 0:
             return False, info
         release_time = datetime.now() - self.basic_time
-        release_no = release_time.seconds / 3600 + release_time.days * 24
+        release_no = (release_time.seconds - 600) / 3600 + release_time.days * 24
         if info[0]["release_no"] != release_no:
             return False, "No Task"
-        reason_desc = info[0]["reason_desc"]
+        user_name = info[0]["user_name"]
+        reason_desc = "%s %s\n%s" % (user_name, info[0]["reason"], info[0]["reason_desc"])
         print("start run release %s" % release_no)
         self.update_release_task(release_no, True)
         print("start pull code")
