@@ -7,7 +7,8 @@ from datetime import datetime
 from time import time
 sys.path.append("..")
 from Tools.Mysql_db import DB
-from Class import TIME_FORMAT
+from Class.WeiXin import WeiXinManager
+from Class import TIME_FORMAT, wx_service
 
 
 env.host_string = "10.51.72.158"
@@ -23,6 +24,7 @@ class ReleaseManager:
         self.basic_time = datetime.strptime("2016-09-02 00:00:00", TIME_FORMAT)
         self.latest_branch = "master"
         self.work_dir = "/data/Web2/ih_BioMed"
+        self.wx = WeiXinManager(wx_service)
 
     def new_release_task(self, user_name, reason, reason_desc):
         release_time = datetime.now() - self.basic_time
@@ -81,6 +83,16 @@ class ReleaseManager:
             run("git commit -m '%s'" % message, quiet=True)
             run("git push")
 
+    def send_wx_msg(self, msg):
+        result, user_list = self.wx.user_info()
+        for user_info in user_list:
+            if user_info["groupid"] == 100:
+                self.wx.send_status(u"后台开发", user_info["openid"], env, msg)
+            elif user_info["groupid"] == 101:
+                self.wx.send_status(u"前端开发", user_info["openid"], env, msg)
+            elif user_info["groupid"] == 102:
+                self.wx.send_status(u"产品设计", user_info["openid"], env, msg)
+
     def release_ih(self):
         # 获得任务
         result, info = self.select_release_task()
@@ -92,6 +104,7 @@ class ReleaseManager:
         release_no = release_time.seconds / 3600 + release_time.days * 24
         if info[0]["release_no"] != release_no:
             return False, "No Task"
+        reason_desc = info[0]["reason_desc"]
         print("start run release %s" % release_no)
         self.update_release_task(release_no, True)
         print("start pull code")
@@ -101,19 +114,11 @@ class ReleaseManager:
         print("start test")
         self.update_release_task(release_no, True)
         print("start release push")
-        self.release_push_code(info[0]["reason_desc"])
+        self.release_push_code(reason_desc)
         self.update_release_task(release_no, True)
+        self.send_wx_msg(reason_desc)
         return True, "success"
 
-    def release_pull(self):
-        with cd("/home/msg/BioMed"):
-            run("git fetch origin")
-            run("git pull")
-            run("git pull --no-commit origin %s" % self.latest_branch)
 
-    def release_commit(self):
-        with cd("/home/msg/BioMed"):
-            run("git commit -m '%s'" % "marge master", quiet=True)
-            run("git push")
 
 
