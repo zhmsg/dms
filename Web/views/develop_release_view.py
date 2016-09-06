@@ -56,7 +56,7 @@ def run_task(release_no):
 @develop_release_view.route("/task/", methods=["POST"])
 def new_task():
     request_data = request.json
-    result, info = control.new_task(g.user_name, g.user_role, request_data["reason"], request_data["reason_desc"])
+    result, info = control.new_task(g.user_name, g.user_role, u"修复BUG", request_data["reason_desc"])
     if result is True:
         release_no = info["release_no"]
         wait_minute = 10 - g.now_minute % 10
