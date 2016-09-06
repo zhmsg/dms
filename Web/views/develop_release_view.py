@@ -59,7 +59,8 @@ def new_task():
     result, info = control.new_task(g.user_name, g.user_role, request_data["reason"], request_data["reason_desc"])
     if result is True:
         release_no = info["release_no"]
-        run_date = g.now_time + timedelta(minutes=21-g.now_minute)
+        wait_minute = 10 - g.now_minute % 10
+        run_date = g.now_time + timedelta(minutes=wait_minute)
         dms_scheduler.add_job("run_release_%s" % release_no, run_task, args=[release_no], trigger="date", run_date=run_date)
     return jsonify({"status": result, "data": info})
 
