@@ -26,7 +26,10 @@ def before_request():
     now_time = datetime.now()
     now_hour = now_time.hour
     g.now_minute = now_time.minute
-    if now_hour in [9, 10, 11, 14, 15, 16, 17] and 10 <= g.now_minute <= 20:
+    g.ihVIP = False
+    if g.user_role & control.role_value["release_ih_V"] > 0:
+        g.ihVIP = True
+    if now_hour in [9, 10, 11, 14, 15, 16, 17] and 10 <= g.now_minute <= 20 or g.ihVIP is True:
         g.release_period = True
     else:
         g.release_period = False
