@@ -757,7 +757,7 @@ class ControlManager:
         return self.relase_man.select_release_task()
 
     def new_task(self, user_name, user_role, reason, reason_desc):
-        if user_role & self.role_value["release_ih_N"] <= 0:
+        if user_role & self.role_value["release_ih_N"] <= 0 and user_name != "system":
             return False, u"您没有权限"
         result, info = self.relase_man.select_release_task(user_name=user_name)
         if result is False:

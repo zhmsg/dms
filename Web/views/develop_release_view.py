@@ -3,11 +3,10 @@
 
 
 import sys
-import re
+import random
 from datetime import datetime, timedelta
-from functools import wraps
-from flask import render_template, request, redirect, url_for, jsonify, g
-from Web import release_url_prefix as url_prefix, create_blue, user_blacklist, dms_scheduler
+from flask import render_template, request, jsonify, g
+from Web import release_url_prefix as url_prefix, create_blue, user_blacklist, dms_scheduler, env, dms_job
 from Web.views import control
 
 
@@ -53,15 +52,30 @@ def run_task(release_no):
     print(info)
 
 
+def system_auto_release():
+    if env != "Production" and env != "Development":
+        return
+    result, info = control.new_task("system", 0, u"自动发布", u"系统每天12：10，18：10左右自动重新发布晶云测试环境")
+    if result is True:
+        release_no = info["release_no"]
+        wait_seconds = random.randint(20, 60)
+        run_date = datetime.now() + timedelta(seconds=wait_seconds)
+        dms_scheduler.add_job(id="run_release_%s" % release_no, func=run_task, args=[release_no], trigger="date",
+                              run_date=run_date)
+    print(info)
+
+
 @develop_release_view.route("/task/", methods=["POST"])
 def new_task():
     request_data = request.json
+    reason = request_data["reason"]
     result, info = control.new_task(g.user_name, g.user_role, u"修复BUG", request_data["reason_desc"])
     if result is True:
         release_no = info["release_no"]
         wait_minute = 10 - g.now_minute % 10
         run_date = g.now_time + timedelta(minutes=wait_minute)
-        dms_scheduler.add_job(id="run_release_%s" % release_no, func=run_task, args=[release_no], trigger="date", run_date=run_date)
+        dms_scheduler.add_job(id="run_release_%s" % release_no, func=run_task, args=[release_no], trigger="date",
+                              run_date=run_date)
     return jsonify({"status": result, "data": info})
 
 
@@ -70,3 +84,4 @@ def list_task():
     result, info = control.get_task(g.user_name, g.user_role)
     return jsonify({"status": result, "data": info})
 
+dms_job.append({"func": "%s:system_auto_release" % __name__, "trigger": "cron", "id": "release_ih_daily", "hour": "12,18", "minute": "10", "replace_existing": True})
