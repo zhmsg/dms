@@ -28,10 +28,11 @@ function release_ytj(secret_key)
 {
     var service_ip = $("#service_IP").val();
     var release_style = $("#use_style").val();
-    var request_data = {"secret_key": secret_key, "ip": service_ip, "style": release_style};
+    var request_data = "secret_key=" + secret_key +"&ip=" + service_ip + "&style=" + release_style;
+    //var request_data = {"secret_key": secret_key, "ip": service_ip, "style": release_style};
     console.info(request_data);
     var request_url = "http://local.gene.ac:3285/yitiji/fabu/";
-    my_async_request(request_url, "POST", request_data, release_success)
+    my_async_form_request(request_url, "POST", request_data, release_success)
 }
 
 $(function(){

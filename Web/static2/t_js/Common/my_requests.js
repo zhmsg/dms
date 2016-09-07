@@ -61,3 +61,16 @@ function my_async_request(request_url, request_method, body_param, request_succe
         error:request_error
     });
 }
+
+
+function my_async_form_request(request_url, request_method, body_param, request_success){
+    $.ajax({
+        url: request_url,
+        method: request_method,
+        //contentType: "application/json",
+        dataType: "json",
+        data: body_param,
+        success:request_success,
+        error:request_error
+    });
+}
