@@ -6,7 +6,8 @@ import ConfigParser
 from functools import wraps
 from flask import session, g, make_response, Blueprint, jsonify, request
 from flask_login import LoginManager, UserMixin, login_required
-from flask_apscheduler import APScheduler
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 from Tools.Mysql_db import DB
 from Tools.MyIP import IPManager
 from Tools.MyEmail import MyEmailManager
@@ -16,7 +17,9 @@ __author__ = 'zhouheng'
 db = DB()
 ip = IPManager()
 my_email = MyEmailManager("/home/msg/conf/")
-dms_scheduler = APScheduler()
+dms_scheduler = BackgroundScheduler()
+job_store = SQLAlchemyJobStore(url=db.url)
+dms_scheduler.add_jobstore(job_store)
 
 
 class User(UserMixin):
@@ -101,6 +104,7 @@ def company_ip_required(f):
 
 blues = {}
 user_blacklist = []
+dms_job = []
 
 
 def create_blue(blue_name, url_prefix="/", auth_required=True):

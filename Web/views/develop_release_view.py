@@ -61,7 +61,7 @@ def new_task():
         release_no = info["release_no"]
         wait_minute = 10 - g.now_minute % 10
         run_date = g.now_time + timedelta(minutes=wait_minute)
-        dms_scheduler.add_job("run_release_%s" % release_no, run_task, args=[release_no], trigger="date", run_date=run_date)
+        dms_scheduler.add_job(id="run_release_%s" % release_no, func=run_task, args=[release_no], trigger="date", run_date=run_date)
     return jsonify({"status": result, "data": info})
 
 

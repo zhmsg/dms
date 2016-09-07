@@ -7,7 +7,7 @@ from flask import render_template, request, jsonify, g
 from flask_login import login_required, current_user
 
 from Web import log_url_prefix as url_prefix, ip, my_email, company_ip_required, create_blue, status_url_prefix
-from Web import unix_timestamp, ip_str, dms_scheduler, env
+from Web import unix_timestamp, ip_str, dms_scheduler, env, dms_job
 from Web.views import control
 
 sys.path.append('..')
@@ -113,4 +113,5 @@ def send_log_func():
         content = content.replace("{{ TR }}", table_content.encode("utf-8"))
         control.send_daily_log(content)
 
-dms_scheduler.add_job("send_daily_log", send_log_func, trigger="cron", hour=8, minute=30)
+dms_job.append({"func": "%s:send_log_func" % __name__, "trigger": "cron", "id": "send_daily_log", "hour": 8, "minute": "30", "replace_existing": True})
+# dms_scheduler.add_job(send_log_func, trigger="cron", id="send_daily_log", hour=8, minute=30)

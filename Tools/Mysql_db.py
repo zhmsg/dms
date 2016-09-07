@@ -38,6 +38,7 @@ class DB(object):
         self.mysql_user = mysql_user
         self.mysql_password = mysql_password
         self.db = mysql_db
+        self.url = "mysql://%s:%s@%s/%s" % (self.mysql_user, self.mysql_password, self.host, self.db)
 
     def connect(self):
         self.conn = MySQLdb.connect(host=self.host, port=3306, user=self.mysql_user,

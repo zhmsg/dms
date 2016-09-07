@@ -8,7 +8,7 @@ from flask import Flask, request, make_response, g, jsonify
 from flask_login import current_user
 
 from Web import login_manager, unix_timestamp, bit_and, current_env, ip_str, make_static_url
-from Web import ip, dms_scheduler, user_blacklist, cookie_domain
+from Web import ip, dms_scheduler, user_blacklist, cookie_domain, dms_job
 
 __author__ = 'zhouheng'
 
@@ -92,8 +92,13 @@ def create_app():
     env.filters['make_static_url'] = make_static_url
     return msg_web
 
-dms_scheduler.start()
 msg_web = create_app()
+
+for item in dms_job:
+    print(item)
+    dms_scheduler.add_job(**item)
+dms_scheduler.start()
+
 
 if __name__ == '__main__':
     print("start run")
