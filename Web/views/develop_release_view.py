@@ -62,7 +62,8 @@ def system_auto_release():
         run_date = datetime.now() + timedelta(seconds=wait_seconds)
         dms_scheduler.add_job(id="run_release_%s" % release_no, func=run_task, args=[release_no], trigger="date",
                               run_date=run_date)
-    print(info)
+    else:
+        print(info)
 
 
 @develop_release_view.route("/task/", methods=["POST"])
