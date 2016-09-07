@@ -18,8 +18,8 @@ db = DB()
 ip = IPManager()
 my_email = MyEmailManager("/home/msg/conf/")
 dms_scheduler = BackgroundScheduler()
-job_store = SQLAlchemyJobStore(url=db.url)
-dms_scheduler.add_jobstore(job_store)
+# job_store = SQLAlchemyJobStore(url=db.url)
+# dms_scheduler.add_jobstore(job_store)
 
 
 class User(UserMixin):
