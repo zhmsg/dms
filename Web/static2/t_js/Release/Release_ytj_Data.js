@@ -14,5 +14,5 @@ function receive_secret_key(){
 
 
 $(function(){
-    receive_secret_key();
+    //receive_secret_key();
 });
