@@ -14,14 +14,20 @@ function check_input_ip(el){
     }
     else{
         ip_value = parseInt(ip_str);
+        $("#ip_str").text(ip_2_str(ip_value));
     }
     if(ip_value >= 0) {
+
+        $("#ip_value").text(ip_value);
         $("#btn_q_ip").removeAttr("disabled");
         console.info(ip_value);
     }
     else{
+        $("#ip_value").text("");
         $("#btn_q_ip").attr("disabled", "disabled");
     }
+    $("#ip_info1").text("");
+    $("#ip_info2").text("");
 }
 
 $(function(){
@@ -34,11 +40,13 @@ $(function(){
             $("#ip_str").text(ip_str);
             ip_value = str_2_ip(ip_str);
         }
-        else{
+        else {
             ip_value = parseInt(ip_str);
         }
         if(ip_value >= 0) {
             $("#btn_q_ip").removeAttr("disabled");
+            $("#ip_str").text(ip_2_str(ip_value));
+            $("#ip_value").text(ip_value);
             var local_ip = localStorage.getItem(ip_value);
             var ip_info = null;
             if(local_ip != null){
@@ -49,7 +57,6 @@ $(function(){
                 ip_info = get_ip_info(ip_value);
             }
             if(ip_info != null){
-                $("#ip_value").text(ip_value);
                 $("#ip_info1").text(ip_info["info1"]);
                 $("#ip_info2").text(ip_info["info2"]);
             }
