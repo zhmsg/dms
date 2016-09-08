@@ -67,10 +67,8 @@ class ReleaseManager:
 
     def release_pull_code(self):
         with cd(self.work_dir):
-            run("git stash")
-            run("git fetch origin")
-            run("git pull")
-            run("git pull --no-commit origin %s" % self.latest_branch)
+            run("git stash && git fetch origin")
+            run("git pull && git pull --no-commit origin %s" % self.latest_branch)
 
     def release_restart_app(self):
         with cd(self.work_dir):
@@ -112,14 +110,19 @@ class ReleaseManager:
             return False, "No Task"
         user_name = info[0]["user_name"]
         reason_desc = "%s %s\n%s" % (user_name, info[0]["reason"], info[0]["reason_desc"])
+
         print("start run release %s" % release_no)
         self.update_release_task(release_no, True)
+
         print("start pull code")
         self.release_pull_code()
+        print("start restart service")
         self.release_restart_app()
         self.update_release_task(release_no, True)
+
         print("start test")
         self.update_release_task(release_no, True)
+
         print("start release push")
         self.release_push_code(reason_desc)
         self.update_release_task(release_no, True)
