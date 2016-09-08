@@ -66,10 +66,10 @@ def record_login():
     result, info = control.new_login_server(server_ip, server_name, user_ip, login_user, login_time)
     trust_ip = ["123.7.182.111", "10.51.72.158", "10.44.147.192"]
     trust_user = ["msg", "wzh"]
-    if user_ip_s not in trust_ip or login_user not in trust_user:
-        email_content = u"登录的服务器IP：%s<br>登录的服务器主机名：%s<br>登录者的IP：%s<br>登录用户：%s<br>登录时间：%s" \
-                        % (g.request_IP_s, server_name, user_ip_s, login_user, login_time)
-        my_email.send_mail_thread("zhouheng@gene.ac", u"有用户登录到服务器", email_content)
+    # if user_ip_s not in trust_ip or login_user not in trust_user:
+    #     email_content = u"登录的服务器IP：%s<br>登录的服务器主机名：%s<br>登录者的IP：%s<br>登录用户：%s<br>登录时间：%s" \
+    #                     % (g.request_IP_s, server_name, user_ip_s, login_user, login_time)
+    #     my_email.send_mail_thread("zhouheng@gene.ac", u"有用户登录到服务器", email_content)
     return jsonify({"status": result, "data": info})
 
 
