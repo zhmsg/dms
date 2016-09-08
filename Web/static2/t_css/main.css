@@ -58,7 +58,7 @@ ul,ol,li{list-style: none;margin: 0;padding: 0;}
 /*系统备注及说明模块 end*/
 .toolTip{line-height: 30px;padding-bottom: 5px;}
 /*晶云平台数据表页的样式美化*/
-.data{padding:10px 30px;}
+.data{padding:10px 30px;margin-top: 10px;}
 .data_title{padding-right: 30px;color: #333;text-decoration: none;line-height: 40px;}
 .data_title:hover{color: #cb1010;}
 .data_table_title{line-height:30px;padding-top:50px;padding-bottom:10px;color: #666;}
