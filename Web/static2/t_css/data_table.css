@@ -1,0 +1,60 @@
+
+.modal-header{  border-radius:4px 4px 0 0; background-color: #dadada;}
+.modal-title {
+	font-size: 14px !important;
+}
+
+.pro_td_add{
+    border:0px solid red!important;
+    /*padding: 0px 0px 9px 0px !important;*/
+    margin:0;
+    /*line-height: 38px !important;*/
+    /*vertical-align:middle !important;*/
+    text-align:right;
+    padding-right: 0 !important;
+    width: 15%;
+}
+.pro_td label{
+    vertical-align: middle;
+    width:75px;
+    text-align:right !important;
+    font-weight: normal;
+    display: block;margin-bottom: 0;line-height: 38px;
+}
+.pro_td_con{
+    border:0px solid blue!important;
+    text-align:left!important;
+    width: 65%;
+}
+
+
+.pro_td_tag_project{
+    height:35px;
+    line-height:34px !important;
+    padding: 5px!important;
+    padding-left: 10px!important;
+    margin:0!important;
+    font-size: 12px;
+    border:0px solid #40ba11 !important;
+    text-align:left!important;
+}
+.pro_td_tag_project span{font-size: 14px;color: #000;vertical-align: middle;}
+
+
+/*新建项目和添加样本中弹框内容的样式*/
+.depict label{padding-top: 5px;}
+
+
+.project_table{margin-top: 4px;margin-bottom: 0;}
+.project_table tr{clear: both;}
+.project_table tr td{padding-right: 0 !important;}
+.project_table label{font-weight: normal;padding-top: 6px;}
+.depict{padding-top: 13px !important;}
+.depict textarea{
+    max-height: 240px;
+    min-height: 120px !important;
+    height: auto;
+    width: 340px !important;
+}
+.pro_input{width:96%;}
+

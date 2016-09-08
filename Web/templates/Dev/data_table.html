@@ -11,24 +11,34 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">修改表注释</h4>
             </div>
-            <form method="post">
-                <div class="modal-body list-body">
-                    <ul>
-                        <li>
-                            <label>表名:</label>
-                            <input class="form-control pull-right" type="text" readonly>
-                        </li>
-                        <li>
-                            <label>描述:</label>
-                            <textarea class="form-control pull-right"></textarea>
-                        </li>
-                    </ul>
-                </div>
-                <div class="modal-footer">
-                    <input type="submit"  class="btn btn-primary" value="确定">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                </div>
-            </form>
+            <div class="modal-body">
+                <table class="table project_table">
+                    <tbody><tr>
+
+                        <td class="pro_td_add" style="vertical-align: middle;"><label for="project_name">表名:</label></td>
+                        <td class="pro_td_con">
+                            <input class="form-control pro_input" id="in_table_name" name="in_table_name" value="" type="text" readonly>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="pro_td_add"><label>描述:</label></td>
+                        <td class="pro_td_con depict">
+                            <textarea class="form-control pro_input" id="in_table_comment" name="in_table_comment"></textarea>
+                        </td>
+                        <td class="pro_td_tag_project"></td>
+                    </tr>
+                    <tr>
+                    <td class="pro_td_add" style="vertical-align: middle;"><label for="project_name">SQL:</label></td>
+                        <td class="pro_td_con">
+                            <textarea class="form-control pro_input" id="out_sql" readonly></textarea>
+                        </td>
+                    </tr>
+                </tbody></table>
+            </div>
+            <div class="modal-footer">
+                <input type="button"  class="btn btn-primary" value="确定">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
         </div>
     </div>
 </div>
@@ -46,9 +56,9 @@
 
     {% if select_table != {} %}
         <div class="clear data_table_title">
-            <p>表名：{{ select_table["table_name"] }}</p>
+            <p id="p_table_name">表名：{{ select_table["table_name"] }}</p>
             <p>创建时间： {{ select_table["create_time"] }}</p>
-            <p>注释：{{ select_table["table_comment"] }}</p>
+            <p id="p_table_comment">注释：{{ select_table["table_comment"] }}</p>
             <a href="javascript:void(0)" onclick="change_table_comment();" data-toggle="modal" data-target="#update_comment">修改注释</a>
         </div>
     {% endif %}
@@ -78,7 +88,7 @@
     {% endif %}
     </div>
 </div>
-
+<link rel="stylesheet" href="{{ 't_css/data_table.css' | make_static_url }}">
 <script type="text/javascript" src="{{ 't_js/data_table.js' | make_static_url }}"></script>
 <script type="text/javascript" src="{{ 't_js/bootstrap.min.js' | make_static_url }}"></script>
 {% endblock %}

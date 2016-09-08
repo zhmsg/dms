@@ -50,4 +50,9 @@ search_table();
 
 function change_table_comment()
 {
+    var table_name = $("#p_table_name").text();
+    var table_comment = $("#p_table_comment").text();
+    console.info(table_comment);
+    $("#in_table_name").val(table_name.substr(3));
+    $("#in_table_comment").val(table_comment.substr(3));
 }
