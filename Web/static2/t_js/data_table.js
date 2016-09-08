@@ -26,7 +26,7 @@ function msg_include(str, include_str){
 
 function search_table(){
     var v = $("#search_table").val();
-    var a_el = $("a");
+    var a_el = $("a[class='data_title']");
     var len_a = a_el.length;
     for(var i=0;i<len_a;i++){
         if (a_el[i].id == "main_menu"){

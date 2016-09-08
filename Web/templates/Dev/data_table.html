@@ -4,44 +4,44 @@
 
 {% block center_content %}
 
-<div class="modal fade" id="update_comment" role="dialog" tabindex="-1" aria-hidden="true" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">修改表注释</h4>
-            </div>
-            <div class="modal-body">
-                <table class="table data_popup_table">
-                    <tbody><tr>
+    <div class="modal fade" id="update_comment" role="dialog" tabindex="-1" aria-hidden="true" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">修改表注释</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table data_popup_table">
+                        <tbody><tr>
 
-                        <td class="data_td_add" style="vertical-align: middle;"><label>表名:</label></td>
-                        <td class="data_td_con">
-                            <input class="form-control data_input" id="in_table_name" name="in_table_name" value="" type="text" readonly>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="data_td_add"><label>描述:</label></td>
-                        <td class="data_td_con depict">
-                            <textarea class="form-control data_input" id="in_table_comment" name="in_table_comment"></textarea>
-                        </td>
-                        <td class="data_popup_table_tag"></td>
-                    </tr>
-                    <tr>
-                    <td class="data_td_add" style="vertical-align: middle;"><label>SQL:</label></td>
-                        <td class="data_td_con">
-                            <textarea class="form-control data_input" id="out_sql" readonly></textarea>
-                        </td>
-                    </tr>
-                </tbody></table>
-            </div>
-            <div class="modal-footer">
-                <button type="button"  class="btn btn-primary" value="确定" id="btn_produce_table">确定</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <td class="data_td_add" style="vertical-align: middle;"><label>表名:</label></td>
+                            <td class="data_td_con">
+                                <input class="form-control data_input" id="in_table_name" name="in_table_name" value="" type="text" readonly>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="data_td_add"><label>描述:</label></td>
+                            <td class="data_td_con depict">
+                                <textarea class="form-control data_input" id="in_table_comment" name="in_table_comment"></textarea>
+                            </td>
+                            <td class="data_popup_table_tag"></td>
+                        </tr>
+                        <tr>
+                        <td class="data_td_add" style="vertical-align: middle;"><label>SQL:</label></td>
+                            <td class="data_td_con">
+                                <textarea class="form-control data_input" id="out_sql" readonly></textarea>
+                            </td>
+                        </tr>
+                    </tbody></table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button"  class="btn btn-primary" value="确定" id="btn_produce_table">确定</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
     <br />
     <div class="data">
         <input class="form-control" id="search_table" onkeyup="search_table();" placeholder="请按照表名进行搜索" value="{{ query_str }}" />
