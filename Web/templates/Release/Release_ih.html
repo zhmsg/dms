@@ -5,105 +5,110 @@
 {% block content %}
     <br/>
     <a class="btn btn-primary pull-right" href="{{ url_for('dms_view.select_portal') }}" title="">主菜单</a>
+    {% if g.user_role | bit_and(g.role_value["release_ih_N"] + g.role_value["release_ytj_N"]) >= g.role_value["release_ih_N"] + g.role_value["release_ytj_N"]%}
     <button type="button" class="btn btn-primary margin20" id="btn_jy_release_ih" value="晶云测试环境">晶云测试环境</button>
     <button type="button" class="btn btn-primary margin20" id="btn_jy_release_ytj" value="晶云一体机">晶云一体机</button>
-    <div class="div_jy_release_ih">
-        <div name="url">
-            <input id="url_task_list" value="{{ url_task_list }}" style="display: none">
-            <input id="url_start_success" value="{{ 't_images/one_success.png' | make_static_url }}"
-                   style="display: none">
-            <input id="url_middle_success" value="{{ 't_images/two_success.png' | make_static_url }}"
-                   style="display: none">
-            <input id="url_end_success" value="{{ 't_images/end_success.png' | make_static_url }}"
-                   style="display: none">
-            <input id="url_end_gray" value="{{ 't_images/end_gray.png' | make_static_url }}" style="display: none">
-            <input id="url_middle_gray" value="{{ 't_images/two_gray.png' | make_static_url }}" style="display: none">
-            <input id="url_start_gray" value="{{ 't_images/one_gray.png' | make_static_url }}" style="display: none">
-            <input style="display: none">
-            <input style="display: none">
-        </div>
-        <!--系统备注及说明模块 start-->
-        <div class="declare">
-            <p class="redColor">预约 晶云测试环境 须知：</p>
-
-            <p>【1】预约需谨慎。</p>
-
-            <p>【2】仅允许在每天的9、10、11、14、15、16、17点的10-20分预约，例如10：10-10：20。</p>
-
-            <p>【3】每个时段仅允许一个用户预约。例如10：10-10：20为一个时段。</p>
-
-            <p>【4】每个帐号每天最多预约2次。</p>
-
-            <p>【5】预约成功后，可通过查看下面的任务进度确定是否发布成功。</p>
-
-            <p>【6】预约成功后，测试环境并不会立即重新发布，本系统会找个合适的实际启动重新发布任务。</p>
-
-            <p>【7】周一到周五，每天的12:10、18:10系统会自动预约发布。</p>
-            {% if g.ihVIP %}
-                <p>【8】VIP用户不受第【2】条限制</p>
-            {% endif %}
-        </div>
-        <!--系统备注及说明模块 end-->
-        <div class="infoShow">
-            <div class="form-group apiContentLine">
-                <ul style="margin-bottom: 1em">
-                    <li>
-                        <label class="api-describe" for="">重启原因：</label>
-                        <select class="box-side" id="request_reaseon" required>
-                            <option>修复BUG</option>
-                        </select>
-                    </li>
-                    <li>
-                        <label class="api-describe" for="">具体描述：</label>
-                    <textarea class="box-side" rows="3" id="request_reaseon_desc" placeholder="所填将作为通知内容，请认真填写"
-                              required></textarea>
-                    </li>
-                </ul>
-                <button id="btn_add_task" class="btn btn-success btn-down api-newBtn" disabled>
-                    {% if not g.release_period %}
-                        非预约时段{% else %}预约{% endif %}</button>
-            </div>
-        </div>
-        <div id="div_task_list">
-
-        </div>
-    </div>
-    <div class="div_jy_release_ytj" style="display: none">
-        <div class="declare">
-            <p class="redColor">预约 晶云一体机 须知：</p>
-
-            <p>【1】通过dms平台1小时不论谁操作，一体机只能发布一次，一天24个小时，24次机会。</p>
-
-            <p>【2】参数必须正确。</p>
-
-            <p>【3】服务器地址和样式名字写错，发布了，本小时发布机会报废。</p>
-
-        </div>
-        <div class="infoShow">
-            <div class="form-group apiContentLine">
-                <ul style="margin-bottom: 1em">
-                    <li>
-                        <label class="api-describe" for="">服务器IP：</label>
-                        <input class="box-side width300" id="service_IP" type="text" required />
-                    </li>
-                    <li>
-                      <label for="">使用样式：</label>
-                      <input class="box-side width300" id="use_style" type="text" required />
-                    </li>
-                </ul>
-                <button id="btn_release_ytj" class="btn btn-success btn-down api-newBtn">预约</button>
-            </div>
-        </div>
-    </div>
-    {% if g.ihVIP %}
-        <script type="text/javascript" src="{{ 't_js/Release/Release_Data_V.js' | make_static_url }}"></script>
-    {% else %}
-        <script type="text/javascript" src="{{ 't_js/Release/Release_Data_N.js' | make_static_url }}"></script>
     {% endif %}
-    <script type="text/javascript" src="{{ 't_js/Release/Release_Data.js' | make_static_url }}"></script>
-    <script type="text/javascript" src="{{ 't_js/Release/Release_Dom.js' | make_static_url }}"></script>
-    <script type="text/javascript" src="{{ 't_js/Common/JY_DIV.js' | make_static_url }}"></script>
-    <script type="text/javascript" src="{{ 't_js/Common/my_ip.js' | make_static_url }}"></script>
-    <script type="text/javascript" src="{{ 't_js/Release/Release_ytj_Data.js' | make_static_url }}"></script>
+    {% if g.user_role | bit_and(g.role_value["release_ih_N"]) >= g.role_value["release_ih_N"] %}
+        <div class="div_jy_release_ih" style="display: none">
+            <div name="url">
+                <input id="url_task_list" value="{{ url_task_list }}" style="display: none">
+                <input id="url_start_success" value="{{ 't_images/one_success.png' | make_static_url }}"
+                       style="display: none">
+                <input id="url_middle_success" value="{{ 't_images/two_success.png' | make_static_url }}"
+                       style="display: none">
+                <input id="url_end_success" value="{{ 't_images/end_success.png' | make_static_url }}"
+                       style="display: none">
+                <input id="url_end_gray" value="{{ 't_images/end_gray.png' | make_static_url }}" style="display: none">
+                <input id="url_middle_gray" value="{{ 't_images/two_gray.png' | make_static_url }}" style="display: none">
+                <input id="url_start_gray" value="{{ 't_images/one_gray.png' | make_static_url }}" style="display: none">
+                <input style="display: none">
+                <input style="display: none">
+            </div>
+            <!--系统备注及说明模块 start-->
+            <div class="declare">
+                <p class="redColor">预约 晶云测试环境 须知：</p>
 
+                <p>【1】预约需谨慎。</p>
+
+                <p>【2】仅允许在每天的9、10、11、14、15、16、17点的10-20分预约，例如10：10-10：20。</p>
+
+                <p>【3】每个时段仅允许一个用户预约。例如10：10-10：20为一个时段。</p>
+
+                <p>【4】每个帐号每天最多预约2次。</p>
+
+                <p>【5】预约成功后，可通过查看下面的任务进度确定是否发布成功。</p>
+
+                <p>【6】预约成功后，测试环境并不会立即重新发布，本系统会找个合适的实际启动重新发布任务。</p>
+
+                <p>【7】周一到周五，每天的12:10、18:10系统会自动预约发布。</p>
+                {% if g.ihVIP %}
+                    <p>【8】VIP用户不受第【2】条限制</p>
+                {% endif %}
+            </div>
+            <!--系统备注及说明模块 end-->
+            <div class="infoShow">
+                <div class="form-group apiContentLine">
+                    <ul style="margin-bottom: 1em">
+                        <li>
+                            <label class="api-describe" for="">重启原因：</label>
+                            <select class="box-side" id="request_reaseon" required>
+                                <option>修复BUG</option>
+                            </select>
+                        </li>
+                        <li>
+                            <label class="api-describe" for="">具体描述：</label>
+                        <textarea class="box-side" rows="3" id="request_reaseon_desc" placeholder="所填将作为通知内容，请认真填写"
+                                  required></textarea>
+                        </li>
+                    </ul>
+                    <button id="btn_add_task" class="btn btn-success btn-down api-newBtn" disabled>
+                        {% if not g.release_period %}
+                            非预约时段{% else %}预约{% endif %}</button>
+                </div>
+            </div>
+            <div id="div_task_list">
+
+            </div>
+        </div>
+        {% if g.ihVIP %}
+            <script type="text/javascript" src="{{ 't_js/Release/Release_Data_V.js' | make_static_url }}"></script>
+        {% else %}
+            <script type="text/javascript" src="{{ 't_js/Release/Release_Data_N.js' | make_static_url }}"></script>
+        {% endif %}
+        <script type="text/javascript" src="{{ 't_js/Release/Release_Data.js' | make_static_url }}"></script>
+        <script type="text/javascript" src="{{ 't_js/Release/Release_Dom.js' | make_static_url }}"></script>
+    {% endif %}
+    {% if g.user_role | bit_and(g.role_value["release_ytj_N"]) >= g.role_value["release_ytj_N"] %}
+        <div class="div_jy_release_ytj" style="display: none">
+            <div class="declare">
+                <p class="redColor">预约 晶云一体机 须知：</p>
+
+                <p>【1】通过dms平台1小时不论谁操作，一体机只能发布一次，一天24个小时，24次机会。</p>
+
+                <p>【2】参数必须正确。</p>
+
+                <p>【3】服务器地址和样式名字写错，发布了，本小时发布机会报废。</p>
+
+            </div>
+            <div class="infoShow">
+                <div class="form-group apiContentLine">
+                    <ul style="margin-bottom: 1em">
+                        <li>
+                            <label class="api-describe" for="">服务器IP：</label>
+                            <input class="box-side width300" id="service_IP" type="text" required />
+                        </li>
+                        <li>
+                          <label for="">使用样式：</label>
+                          <input class="box-side width300" id="use_style" type="text" required />
+                        </li>
+                    </ul>
+                    <button id="btn_release_ytj" class="btn btn-success btn-down api-newBtn">预约</button>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript" src="{{ 't_js/Common/my_ip.js' | make_static_url }}"></script>
+        <script type="text/javascript" src="{{ 't_js/Release/Release_ytj_Data.js' | make_static_url }}"></script>
+    {% endif %}
+    <script type="text/javascript" src="{{ 't_js/Common/JY_DIV.js' | make_static_url }}"></script>
 {% endblock %}

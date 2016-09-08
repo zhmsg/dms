@@ -23,7 +23,7 @@
     {% if g.user_role | bit_and(role_value["log_look"]) >  0 %}
         <a href="{{ log_url_prefix }}/">晶云平台日志</a>
     {% endif %}
-    {% if g.user_role | bit_and(role_value["release_ih_N"]) >  0 %}
+    {% if g.user_role | bit_and(role_value["release_ih_N"]) > 0 or g.user_role | bit_and(role_value["release_ytj_N"]) > 0 %}
         <a href="{{ release_url_prefix }}">重启晶云服务</a>
     {% endif %}
     {% if g.user_role | bit_and(role_desc["bug"]["role_list"]["bug_look"]["role_value"]) >  0 %}

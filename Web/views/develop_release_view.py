@@ -25,6 +25,7 @@ def before_request():
     now_time = datetime.now()
     now_hour = now_time.hour
     g.now_minute = now_time.minute
+    g.role_value = control.role_value
     g.ihVIP = False
     if g.user_role & control.role_value["release_ih_V"] > 0:
         g.ihVIP = True

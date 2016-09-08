@@ -31,4 +31,5 @@ $(function(){
             }
         }
     });
+    $("div[class^='div_jy_']:first").show();
 });
