@@ -54,7 +54,7 @@ def run_task(release_no):
 
 
 def system_auto_release():
-    if env != "Production" and env != "Development":
+    if env != "Production":
         return
     result, info = control.new_task("system", 0, u"自动发布", u"系统每天12：10，18：10左右自动重新发布晶云测试环境")
     if result is True:
