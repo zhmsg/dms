@@ -51,9 +51,9 @@ function search_table(){
 function produce_alter_sql()
 {
     var table_name = $("#table_name").val();
-    var table_comment = $("#comment").val();
+    var comment = $("#comment").val();
     if($("#sign").val() == "0") {
-        var sql = "ALTER TABLE " + table_name + " COMMENT '" + table_comment + "';";
+        var sql = "ALTER TABLE " + table_name + " COMMENT '" + comment + "';";
         $("#out_sql").val(sql);
     }
     else
