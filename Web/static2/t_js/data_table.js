@@ -48,12 +48,19 @@ function search_table(){
 }
 
 
-function produce_table_comment_sql()
+function produce_alter_sql()
 {
     var table_name = $("#table_name").val();
-    var table_comment = $("#table_comment").val();
-    var sql = "ALTER TABLE " + table_name + " COMMENT '" + table_comment + "';";
-    $("#out_sql").val(sql);
+    var table_comment = $("#comment").val();
+    if($("#sign").val() == "0") {
+        var sql = "ALTER TABLE " + table_name + " COMMENT '" + table_comment + "';";
+        $("#out_sql").val(sql);
+    }
+    else
+    {
+        var sql = "Wait";
+        $("#out_sql").val(sql);
+    }
 }
 
 function change_table_comment()
@@ -61,24 +68,28 @@ function change_table_comment()
     var table_name = $("#p_table_name").text();
     var table_comment = $("#p_table_comment").text();
     $("#table_name").val(table_name.substr(3));
-    $("#table_comment").val(table_comment.substr(3));
+    $("#comment").val(table_comment.substr(3));
+    $("tr[name='col_info']").hide();
     $("#out_sql").val("");
+    $("#sign").val("0");
 }
 
 
 $(function() {
-    $("#btn_produce_table").click(produce_table_comment_sql);
+    $("#btn_produce_sql").click(produce_alter_sql);
     $("a[name='a_change_struct']").click(function(){
         var table_name = $("#p_table_name").text();
-        $("#table_name2").val(table_name.substr(3));
-        $("#out_sql2").val("");
+        $("#table_name").val(table_name.substr(3));
+        $("#out_sql").val("");
         var tr_col = this.parentNode.parentNode;
         var children_td = tr_col.children;
         $("#col_name").val(children_td[0].innerHTML);
         $("#col_type").val(children_td[1].innerHTML);
         $("#default_value").val(children_td[3].innerHTML);
         $("#allow_null").val(children_td[4].innerHTML);
-        $("#col_comment").val(children_td[6].innerHTML);
+        $("#comment").val(children_td[6].innerHTML);
+        $("tr[name='col_info']").show();
+        $("#sign").val("1");
       }
     );
     search_table();

@@ -4,25 +4,49 @@
 
 {% block center_content %}
 
-    <div class="modal fade" id="update_comment" tabindex="-1" aria-hidden="true" >
+    <div class="modal fade" id="update_table" tabindex="-1" aria-hidden="true" >
+        <input style="display: none" value="" id="sign">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">修改表注释</h4>
+                    <h4 class="modal-title">修改表</h4>
                 </div>
                 <div class="modal-body">
                     <table class="table data_popup_table">
-                        <tbody><tr>
-
+                        <tr>
                             <td class="data_td_add" style="vertical-align: middle;"><label>表名:</label></td>
                             <td class="data_td_con">
                                 <input class="form-control data_input" id="table_name" type="text" readonly>
                             </td>
                         </tr>
+                        <tr name="col_info">
+                            <td class="data_td_add" style="vertical-align: middle;"><label>列名:</label></td>
+                            <td class="data_td_con">
+                                <input class="form-control data_input" id="col_name" type="text" readonly>
+                            </td>
+                        </tr>
+                        <tr name="col_info">
+                            <td class="data_td_add" style="vertical-align: middle;"><label>类型:</label></td>
+                            <td class="data_td_con">
+                                <input class="form-control data_input" id="col_type" type="text" readonly>
+                            </td>
+                        </tr>
+                        <tr name="col_info">
+                            <td class="data_td_add" style="vertical-align: middle;"><label>默认值:</label></td>
+                            <td class="data_td_con">
+                                <input class="form-control data_input" id="default_value" type="text" readonly>
+                            </td>
+                        </tr>
+                        <tr name="col_info">
+                            <td class="data_td_add" style="vertical-align: middle;"><label>允许未空:</label></td>
+                            <td class="data_td_con">
+                                <input class="form-control data_input" id="allow_null" type="text" readonly>
+                            </td>
+                        </tr>
                         <tr>
                             <td class="data_td_add"><label>注释:</label></td>
                             <td class="data_td_con depict">
-                                <textarea class="form-control data_input" id="table_comment"></textarea>
+                                <textarea class="form-control data_input" id="comment"></textarea>
                             </td>
                             <td class="data_popup_table_tag"></td>
                         </tr>
@@ -32,71 +56,10 @@
                                 <textarea class="form-control data_input" id="out_sql" readonly></textarea>
                             </td>
                         </tr>
-                    </tbody></table>
-                </div>
-                <div class="modal-footer">
-                    <button type="button"  class="btn btn-primary" value="确定" id="btn_produce_table">确定</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="update_cols" tabindex="-1" aria-hidden="true" >
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">修改表结构</h4>
-                </div>
-                <div class="modal-body">
-                    <table class="table data_popup_table">
-                        <tr>
-                            <td class="data_td_add" style="vertical-align: middle;"><label>表名:</label></td>
-                            <td class="data_td_con">
-                                <input class="form-control data_input" id="table_name2" type="text" readonly>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="data_td_add" style="vertical-align: middle;"><label>列名:</label></td>
-                            <td class="data_td_con">
-                                <input class="form-control data_input" id="col_name" type="text" readonly>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="data_td_add" style="vertical-align: middle;"><label>类型:</label></td>
-                            <td class="data_td_con">
-                                <input class="form-control data_input" id="col_type" type="text" readonly>
-                            </td>
-                        </tr>
-                        <tr>
-                        <tr>
-                            <td class="data_td_add" style="vertical-align: middle;"><label>默认值:</label></td>
-                            <td class="data_td_con">
-                                <input class="form-control data_input" id="default_value" type="text" readonly>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="data_td_add" style="vertical-align: middle;"><label>允许未空:</label></td>
-                            <td class="data_td_con">
-                                <input class="form-control data_input" id="allow_null" type="text" readonly>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="data_td_add"><label>注释:</label></td>
-                            <td class="data_td_con depict">
-                                <textarea class="form-control data_input" id="col_comment"></textarea>
-                            </td>
-                            <td class="data_popup_table_tag"></td>
-                        </tr>
-                        <tr>
-                        <td class="data_td_add" style="vertical-align: middle;"><label>SQL:</label></td>
-                            <td class="data_td_con">
-                                <textarea class="form-control data_input" id="out_sql2" readonly></textarea>
-                            </td>
-                        </tr>
                     </table>
                 </div>
                 <div class="modal-footer">
-                    <button type="button"  class="btn btn-primary" value="确定" id="btn_produce_col">确定</button>
+                    <button type="button"  class="btn btn-primary" id="btn_produce_sql">确定</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
                 </div>
             </div>
@@ -115,7 +78,7 @@
             <p id="p_table_name">表名：{{ select_table["table_name"] }}</p>
             <p>创建时间： {{ select_table["create_time"] }}</p>
             <p id="p_table_comment">注释：{{ select_table["table_comment"] }}</p>
-            <a href="javascript:void(0)" onclick="change_table_comment();" data-toggle="modal" data-target="#update_comment">修改注释</a>
+            <a href="javascript:void(0)" onclick="change_table_comment();" data-toggle="modal" data-target="#update_table">修改注释</a>
         </div>
     {% endif %}
     {% if column_info != [] %}
@@ -139,7 +102,7 @@
             <td>{{ item["is_nullable"] }}</td>
             <td>{{ item["extra"] }}</td>
             <td>{{ item["column_comment"] }}</td>
-            <td><a href="javascript:void(0)" name="a_change_struct" data-toggle="modal"  data-target="#update_cols">修改</a></td>
+            <td><a href="javascript:void(0)" name="a_change_struct" data-toggle="modal"  data-target="#update_table">修改</a></td>
         </tr>
         {% endfor %}
     </table>
