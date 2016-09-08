@@ -43,7 +43,7 @@ def before_request():
 @develop_release_view.route("/", methods=["GET"])
 def index_func():
     context = {"url_task_list": url_prefix + "/task/"}
-    return render_template("%s/Release_ih.html" % html_dir, **context)
+    return render_template("%s/Release_Main.html" % html_dir, **context)
 
 
 def run_task(release_no):

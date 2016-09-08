@@ -1,0 +1,29 @@
+<div class="div_jy_release_ytj" style="display: none">
+    <div class="declare">
+        <p class="redColor">预约 晶云一体机 须知：</p>
+
+        <p>【1】通过dms平台1小时不论谁操作，一体机只能发布一次，一天24个小时，24次机会。</p>
+
+        <p>【2】参数必须正确。</p>
+
+        <p>【3】服务器地址和样式名字写错，发布了，本小时发布机会报废。</p>
+
+    </div>
+    <div class="infoShow">
+        <div class="form-group apiContentLine">
+            <ul style="margin-bottom: 1em">
+                <li>
+                    <label class="api-describe" for="">服务器IP：</label>
+                    <input class="box-side width300" id="service_IP" type="text" required/>
+                </li>
+                <li>
+                    <label for="">使用样式：</label>
+                    <input class="box-side width300" id="use_style" type="text" required/>
+                </li>
+            </ul>
+            <button id="btn_release_ytj" class="btn btn-success btn-down api-newBtn">预约</button>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="{{ 't_js/Common/my_ip.js' | make_static_url }}"></script>
+<script type="text/javascript" src="{{ 't_js/Release/Release_ytj_Data.js' | make_static_url }}"></script>
