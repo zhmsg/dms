@@ -1,12 +1,11 @@
-{% extends "base.html" %}
+{% extends "base_menu.html" %}
 
 {% block title %}内部管理系统-注册用户{% endblock %}
 
-{% block content %}
+{% block center_content %}
 
 <div class="container">
   <div class="loginMode">
-    <a role="button" class="btn btn-success pull-right" href="{{ url_for('dms_view.select_portal') }}">主菜单</a>
     <form class="clear amendPrivilege" action="{{ url_prefix }}/register/" method="post">
       <h4 class="form-signin-heading">请填写注册信息</h4>
       <input type="text" id="user_name" name="user_name" class="form-control" placeholder="用户名" required autofocus onblur="check_user_name();"> <span class="block bottom10" id="check_result"></span>

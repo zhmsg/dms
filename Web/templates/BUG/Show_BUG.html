@@ -1,10 +1,8 @@
-{% extends "base.html" %}
+{% extends "base_menu.html" %}
 
 {% block title %}晶云平台BUG列表{% endblock %}
 
-{% block content %}
-    <br />
-    <a class="btn btn-primary pull-right" href="{{ url_for('dms_view.select_portal') }}" title="">主菜单</a>
+{% block center_content %}
     {#BUG列表#}
     {% if bug_list %}
         <table  class="table table-bordered table-hover api-list-table">

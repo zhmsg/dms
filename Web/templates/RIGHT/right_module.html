@@ -1,11 +1,8 @@
-{% extends "base.html" %}
+{% extends "base_menu.html" %}
 
 {% block title %}晶云平台遗传频道权限描述{% endblock %}
 
-{% block content %}
-    <br/>
-    <a class="btn btn-primary pull-right bottom10" href="{{ url_for('dms_view.select_portal') }}" title="">主菜单</a>
-
+{% block center_content %}
     <div class="clear">
         <div class="api-help-mode pull-left privilegeMenu">
             {% for module_info in module_list %}

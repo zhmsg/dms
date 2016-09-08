@@ -1,12 +1,9 @@
-{% extends "base.html" %}
+{% extends "base_menu.html" %}
 
 {% block title %}查看晶云平台运行日志{% endblock %}
 
 
-{% block content %}
-    <br />
-    <a class="btn btn-primary pull-right" href="{{ url_for('dms_view.select_portal') }}" title="">主菜单</a>
-
+{% block center_content %}
     <div class="clear bottom20">
         <input class="box-side width150" id="start_time" onkeyup="update_search_url(0);" value="{% if "start_time" in require %}{{ require["start_time"] | unix_timestamp }} {% endif %}" placeholder="开始时间08:41:15"/>
         <input class="box-side width150" id="end_time" onkeyup="update_search_url(0);" value="{% if "end_time" in require %}{{ require["end_time"] | unix_timestamp }} {% endif %}" placeholder="结束时间8:45:15"/>
