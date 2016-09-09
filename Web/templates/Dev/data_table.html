@@ -52,7 +52,6 @@
                                     <option>NO</option>
                                     <option>YES</option>
                                 </select>
-{#                                <input class="form-control data_input" id="allow_null" type="text" readonly>#}
                             </td>
                             <td class="data_td_con" style="vertical-align: middle;">
                                 <a href="javascript:void(0)" name="remove_readonly">修改</a>
@@ -95,7 +94,7 @@
             <p>创建时间： {{ select_table["create_time"] }}</p>
             <p id="p_table_comment">注释：{{ select_table["table_comment"] }}</p>
             <a href="javascript:void(0)" onclick="change_table_comment();" data-toggle="modal" data-target="#update_table">修改注释</a>
-{#            <a href="javascript:void(0)" onclick="change_table_comment();" data-toggle="modal" data-target="#update_table">添加列</a>#}
+            <a href="javascript:void(0)" onclick="table_add_col();" data-toggle="modal" data-target="#update_table">添加列</a>
         </div>
     {% endif %}
     {% if column_info != [] %}

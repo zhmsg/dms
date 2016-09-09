@@ -53,22 +53,40 @@ function produce_alter_sql()
     var table_name_origin = $("#table_name_origin").val();
     var table_name = $("#table_name").val();
     var comment = $("#comment").val();
-    if($("#sign").val() == "0") {
+    if(comment.length<=0){
+        $("#out_sql").val("注释不能为空");
+        return;
+    }
+
+    var sign = $("#sign").val();
+    if(sign == "0") {
         var sql = "ALTER TABLE " + table_name_origin + " COMMENT '" + comment + "';";
         $("#out_sql").val(sql);
     }
-    else
+    else if(sign == "1" || sign == "2")
     {
         var col_name_origin = $("#col_name_origin").val();
         var col_name = $("#col_name").val();
         var col_type = $("#col_type").val();
         var default_value = $("#default_value").val().toLowerCase();
         var allow_null = $("#allow_null").val();
+        if(col_name.length <= 0){
+            $("#out_sql").val("列名不能为空");
+            return;
+        }
+        if(col_type.length<=0){
+            $("#out_sql").val("类型不能为空");
+            return;
+        }
 
         var sql = "ALTER TABLE " + table_name_origin;
-        sql += " CHANGE COLUMN " + col_name_origin + " " + col_name;
+        if(sign == 1)
+            sql += " CHANGE";
+        else
+            sql += " ADD";
+        sql += " COLUMN " + col_name_origin + " " + col_name;
         sql += " " + col_type;
-        if(default_value != "none" && default_value != "null"){
+        if(default_value != "none" && default_value != "null" && default_value != ""){
             sql += " DEFAULT " + default_value;
         }
         if(allow_null != "YES"){
@@ -90,6 +108,23 @@ function change_table_comment()
     $("#sign").val("0");
 }
 
+function table_add_col()
+{
+    var table_name = $("#p_table_name").text();
+    $("input[id^='table_name']").val(table_name.substr(3));
+    $("#out_sql").val("");
+    $("input[id^='col_name']").val("");
+    $("#col_type").val("");
+    $("#default_value").val("");
+    $("#allow_null").val("NO");
+    $("#comment").val("");
+    $("tr[name='col_info']").show();
+    $("input[name='update_value']").removeAttr("readonly");
+    $("select").removeAttr("disabled");
+    $("a[name='remove_readonly']").hide();
+    $("#sign").val("2");
+}
+
 
 $(function() {
     $("#btn_produce_sql").click(produce_alter_sql);
@@ -107,6 +142,7 @@ $(function() {
         $("tr[name='col_info']").show();
         $("input[name='update_value']").attr("readonly", "readonly");
         $("select").attr("disabled", "disabled");
+        $("a[name='remove_readonly']").show();
         $("#sign").val("1");
       }
     );
