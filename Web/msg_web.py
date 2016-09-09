@@ -95,6 +95,8 @@ def create_app():
 msg_web = create_app()
 
 for item in dms_job:
+    item["max_instances"] = 10
+    item["replace_existing"] = True
     dms_scheduler.add_job(**item)
 dms_scheduler.start()
 
