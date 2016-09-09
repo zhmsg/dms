@@ -15,6 +15,7 @@ class TaskManager:
     def __init__(self, task_type):
         self.db = DB()
         self.register_task = "register_task"
+        self.scheduler_status = "task_scheduler_status"
         self.task_type = task_type
 
     def register_new_task(self, task_no, user_name, reason, reason_desc):
@@ -51,3 +52,32 @@ class TaskManager:
                 task_info[cols[i]] = item[i]
             task_list.append(task_info)
         return True, task_list
+
+    def _new_task_status(self, task_status, user_name, reason_desc):
+        update_time = int(time())
+        args = dict(task_type=self.task_type, task_status=task_status, user_name=user_name, reason_desc=reason_desc,
+                    update_time=update_time)
+        result = self.db.execute_insert(self.scheduler_status, args=args)
+        return True, result
+
+    def update_scheduler_status(self, task_status, user_name, reason_desc):
+        update_time = int(time())
+        update_value = dict(task_status="%s" % task_status, user_name=user_name, reason_desc=reason_desc,
+                            update_time=update_time)
+        result = self.db.execute_update(self.scheduler_status, update_value, {"task_type": self.task_type})
+        if result <=0:
+            return self._new_task_status(task_status, user_name, reason_desc)
+        return True, result
+
+    def select_scheduler_status(self):
+        cols = ["task_status", "user_name", "reason_desc", "update_time"]
+        result = self.db.execute_select(self.scheduler_status, {"task_type": self.task_type}, cols)
+        info = {}
+        if result <= 0:
+            for col in cols:
+                info[col] = None
+            return True, info
+        db_r = self.db.fetchone()
+        for i in range(len(cols)):
+            info[cols[i]] = db_r[i]
+        return True, info

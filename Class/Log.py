@@ -24,7 +24,7 @@ class LogManager:
         self.local_db = DB()
         self.api_log = "api_log"
         self.login_server = "login_server"
-        self.log_cols = ["run_begin", "host", "url", "method", "account", "ip", "level", "info", "run_time"]
+        self.log_cols = ["log_no", "run_begin", "host", "url", "method", "account", "ip", "level", "info", "run_time"]
         self.log_level = ["error", "base_error", "bad_req", "http_error", "info"]
         self.log_task = TaskManager(1)
         self.basic_time = 1473350400  # 2016/09/09 00:00:00
@@ -69,13 +69,23 @@ class LogManager:
         return True, {"log_records": log_records, "require": require}
 
     def select_daily_log(self):
-        run_end = time()
-        run_begin = run_end - timedelta(days=1).total_seconds()
-        require = {"start_time": run_begin, "end_time": run_end}
-        where_sql = "run_begin >= %s AND run_begin <= %s AND level <> 'info'" % (run_begin, run_end)
+        result, info = self.log_task.select_scheduler_status()
+        if result is False:
+            return False, info
+        if info["task_status"] is None:
+            run_end = time()
+            run_begin = run_end - timedelta(days=1).total_seconds()
+            require = {"start_time": run_begin, "end_time": run_end}
+            where_sql = "run_begin >= %s AND run_begin <= %s AND level <> 'info'" % (run_begin, run_end)
+        else:
+            log_no = int(info["task_status"])
+            require = {"log_no": log_no}
+            where_sql = "log_no > %s AND level <> 'info'" % log_no
         result, log_records = self._select_log(where_sql)
         if result is False:
             return False, log_records
+        if len(log_records) > 0:
+            self.log_task.update_scheduler_status(log_records[0]["log_no"], "system", "daily log")
         return True, {"log_records": log_records, "require": require}
 
     def insert_login_server(self, server_ip, server_name, user_ip, user_name, login_time):

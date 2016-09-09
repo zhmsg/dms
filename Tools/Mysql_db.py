@@ -67,7 +67,7 @@ class DB(object):
             select_item = "*"
         else:
             select_item = ",".join(tuple(cols))
-        sql_query = "SELECT * FROM %s WHERE %s=%%s;" \
+        sql_query = "SELECT %s FROM %s WHERE %s=%%s;" \
                     % (select_item, table_name, "=%s AND ".join(dict(where_value).keys()))
         return self.execute(sql_query, args)
 
