@@ -25,8 +25,10 @@ class LogManager:
         self.api_log = "api_log"
         self.login_server = "login_server"
         self.log_cols = ["log_no", "run_begin", "host", "url", "method", "account", "ip", "level", "info", "run_time"]
+        self.login_cols = ["login_no", "server_ip", "server_name", "user_ip", "login_time"]
         self.log_level = ["error", "base_error", "bad_req", "http_error", "info"]
         self.log_task = TaskManager(1)
+        self.login_task = TaskManager(2)
         self.basic_time = 1473350400  # 2016/09/09 00:00:00
 
     def _select_log(self, where_sql, limit_num=250):
@@ -88,6 +90,25 @@ class LogManager:
             self.log_task.update_scheduler_status(log_records[0]["log_no"], "system", "daily log")
         return True, {"log_records": log_records, "require": require}
 
+    def register_daily_task(self):
+        user_name = "system"
+        reason = u"每日运行"
+        reason_desc = u"每天8：30，将一天前到现在所有的不正确或者未正确执行的请求日志发送给相关权限人员。"
+        task_no = (int(time()) - self.basic_time) / 86400
+        return self.log_task.register_new_task(task_no, user_name=user_name, reason=reason, reason_desc=reason_desc)
+
+    def _select_login(self, where_sql, limit_num=250):
+        select_sql = "SELECT %s FROM %s WHERE %s ORDER BY login_no DESC LIMIT %s;" \
+                     % (",".join(self.login_cols), self.login_server, where_sql, limit_num)
+        self.local_db.execute(select_sql)
+        login_records = []
+        for item in self.local_db.fetchall():
+            login_item = {}
+            for i in range(len(self.login_cols)):
+                login_item[self.login_cols[i]] = item[i]
+            login_records.append(login_item)
+        return True, login_records
+
     def insert_login_server(self, server_ip, server_name, user_ip, user_name, login_time):
         if check_int(server_ip, 1, sys.maxint) is False:
             return False, "Bad server ip"
@@ -103,9 +124,20 @@ class LogManager:
         self.local_db.execute(insert_sql)
         return True, "success"
 
-    def register_daily_task(self):
-        user_name = "system"
-        reason = u"每日运行"
-        reason_desc = u"每天8：30，将一天前到现在所有的不正确或者未正确执行的请求日志发送给相关权限人员。"
-        task_no = (int(time()) - self.basic_time) / 86400
-        return self.log_task.register_new_task(task_no, user_name=user_name, reason=reason, reason_desc=reason_desc)
+    def select_login_log(self):
+        result, info = self.login_task.select_scheduler_status()
+        if result is False:
+            return False, info
+        if info["task_status"] is None:
+            run_end = time()
+            run_begin = run_end - timedelta(days=1).total_seconds()
+            where_sql = "login_time >= %s AND login_time <= %s" % (run_begin, run_end)
+        else:
+            login_no = int(info["task_status"])
+            where_sql = "login_no > %s" % login_no
+        result, login_records = self._select_login(where_sql)
+        if result is False:
+            return False, login_records
+        if len(login_records) > 0:
+            self.login_task.update_scheduler_status(login_records[0]["login_no"], "system", "")
+        return True, {"login_records": login_records}
