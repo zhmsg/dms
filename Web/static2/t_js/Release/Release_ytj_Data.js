@@ -28,7 +28,7 @@ function release_ytj(secret_key)
 {
     var service_ip = $("#service_IP").val();
     var release_style = $("#use_style").val();
-    var request_data = "secret_key=" + secret_key +"&ip=" + service_ip + "&style=" + release_style + "&user_name=" + $("#current_user_name").val();
+    var request_data = "secret_key=" + secret_key +"&ip=" + service_ip + "&style=" + release_style + "&user_name=" + $("#current_user_name").val() + "&publish_case=" + $("#publish_case").val();
     //var request_data = {"secret_key": secret_key, "ip": service_ip, "style": release_style};
     console.info(request_data);
     var request_url = "http://local.gene.ac:3285/yitiji/fabu/";
