@@ -105,7 +105,8 @@ $(function() {
         $("#allow_null").val(children_td[4].innerHTML);
         $("#comment").val(children_td[6].innerHTML);
         $("tr[name='col_info']").show();
-        $("input").attr("readonly", "readonly");
+        $("input[name='update_value']").attr("readonly", "readonly");
+        $("select").attr("disabled", "disabled");
         $("#sign").val("1");
       }
     );
@@ -113,6 +114,7 @@ $(function() {
         console.info(this);
         var input = $(this.parentNode).prev().children(":input");
         input.removeAttr("readonly");
+        input.removeAttr("disabled");
     });
     search_table();
 

@@ -17,20 +17,20 @@
                             <td class="data_td_add" style="vertical-align: middle;"><label>表名:</label></td>
                             <td class="data_td_con">
                                 <input id="table_name_origin" type="text" style="display: none">
-                                <input class="form-control data_input" id="table_name" type="text" readonly>
+                                <input name="update_value" class="form-control data_input" id="table_name" type="text" readonly>
                             </td>
                         </tr>
                         <tr name="col_info">
                             <td class="data_td_add" style="vertical-align: middle;"><label>列名:</label></td>
                             <td class="data_td_con">
                                 <input id="col_name_origin" type="text" style="display: none">
-                                <input class="form-control data_input" id="col_name" type="text" readonly>
+                                <input name="update_value" class="form-control data_input" id="col_name" type="text" readonly>
                             </td>
                         </tr>
                         <tr name="col_info">
                             <td class="data_td_add" style="vertical-align: middle;"><label>类型:</label></td>
                             <td class="data_td_con">
-                                <input class="form-control data_input" id="col_type" type="text" readonly>
+                                <input name="update_value" class="form-control data_input" id="col_type" type="text" readonly>
                             </td>
                             <td class="data_td_con" style="vertical-align: middle;">
                                 <a href="javascript:void(0)" name="remove_readonly">修改</a>
@@ -39,7 +39,7 @@
                         <tr name="col_info">
                             <td class="data_td_add" style="vertical-align: middle;"><label>默认值:</label></td>
                             <td class="data_td_con">
-                                <input class="form-control data_input" id="default_value" type="text" readonly>
+                                <input name="update_value" class="form-control data_input" id="default_value" type="text" readonly>
                             </td>
                             <td class="data_td_con" style="vertical-align: middle;">
                                 <a href="javascript:void(0)" name="remove_readonly">修改</a>
@@ -48,7 +48,11 @@
                         <tr name="col_info">
                             <td class="data_td_add" style="vertical-align: middle;"><label>允许未空:</label></td>
                             <td class="data_td_con">
-                                <input class="form-control data_input" id="allow_null" type="text" readonly>
+                                <select id="allow_null" class="form-control data_input" disabled>
+                                    <option>NO</option>
+                                    <option>YES</option>
+                                </select>
+{#                                <input class="form-control data_input" id="allow_null" type="text" readonly>#}
                             </td>
                             <td class="data_td_con" style="vertical-align: middle;">
                                 <a href="javascript:void(0)" name="remove_readonly">修改</a>
@@ -65,7 +69,7 @@
                         <tr>
                         <td class="data_td_add" style="vertical-align: middle;"><label>SQL:</label></td>
                             <td class="data_td_con">
-                                <textarea class="form-control data_input" id="out_sql" readonly></textarea>
+                                <textarea class="form-control data_input" id="out_sql" readonly rows="4"></textarea>
                             </td>
                         </tr>
                     </table>
