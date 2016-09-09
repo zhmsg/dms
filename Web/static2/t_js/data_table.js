@@ -50,15 +50,31 @@ function search_table(){
 
 function produce_alter_sql()
 {
+    var table_name_origin = $("#table_name_origin").val();
     var table_name = $("#table_name").val();
     var comment = $("#comment").val();
     if($("#sign").val() == "0") {
-        var sql = "ALTER TABLE " + table_name + " COMMENT '" + comment + "';";
+        var sql = "ALTER TABLE " + table_name_origin + " COMMENT '" + comment + "';";
         $("#out_sql").val(sql);
     }
     else
     {
-        var sql = "Wait";
+        var col_name_origin = $("#col_name_origin").val();
+        var col_name = $("#col_name").val();
+        var col_type = $("#col_type").val();
+        var default_value = $("#default_value").val().toLowerCase();
+        var allow_null = $("#allow_null").val();
+
+        var sql = "ALTER TABLE " + table_name_origin;
+        sql += " CHANGE COLUMN " + col_name_origin + " " + col_name;
+        sql += " " + col_type;
+        if(default_value != "none" && default_value != "null"){
+            sql += " DEFAULT " + default_value;
+        }
+        if(allow_null != "YES"){
+            sql += " NOT NULL"
+        }
+        sql += " COMMENT '" + comment + "';";
         $("#out_sql").val(sql);
     }
 }
@@ -67,7 +83,7 @@ function change_table_comment()
 {
     var table_name = $("#p_table_name").text();
     var table_comment = $("#p_table_comment").text();
-    $("#table_name").val(table_name.substr(3));
+    $("input[id^='table_name']").val(table_name.substr(3));
     $("#comment").val(table_comment.substr(3));
     $("tr[name='col_info']").hide();
     $("#out_sql").val("");
@@ -79,19 +95,25 @@ $(function() {
     $("#btn_produce_sql").click(produce_alter_sql);
     $("a[name='a_change_struct']").click(function(){
         var table_name = $("#p_table_name").text();
-        $("#table_name").val(table_name.substr(3));
+        $("input[id^='table_name']").val(table_name.substr(3));
         $("#out_sql").val("");
         var tr_col = this.parentNode.parentNode;
         var children_td = tr_col.children;
-        $("#col_name").val(children_td[0].innerHTML);
+        $("input[id^='col_name']").val(children_td[0].innerHTML);
         $("#col_type").val(children_td[1].innerHTML);
         $("#default_value").val(children_td[3].innerHTML);
         $("#allow_null").val(children_td[4].innerHTML);
         $("#comment").val(children_td[6].innerHTML);
         $("tr[name='col_info']").show();
+        $("input").attr("readonly", "readonly");
         $("#sign").val("1");
       }
     );
+    $("a[name='remove_readonly']").click(function(){
+        console.info(this);
+        var input = $(this.parentNode).prev().children(":input");
+        input.removeAttr("readonly");
+    });
     search_table();
 
 });
