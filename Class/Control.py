@@ -736,6 +736,9 @@ class ControlManager:
     def new_login_server(self, server_ip, server_name, user_ip, user_name, login_time):
         return self.jy_log.insert_login_server(server_ip, server_name, user_ip, user_name, login_time)
 
+    def get_login_info(self):
+        return self.jy_log.select_login_log()
+
     def register_log_task(self):
         return self.jy_log.register_daily_task()
 
@@ -748,6 +751,9 @@ class ControlManager:
         if result is True:
             for u in user_list:
                 my_email.send_mail(u["email"], subject, template_html)
+
+    def register_login_task(self):
+        return self.jy_log.register_login_task()
 
     # 针对工具
     def get_ip_info(self, ip_value):

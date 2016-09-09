@@ -118,5 +118,39 @@ def send_log_func():
         content = content.replace("{{ TR }}", table_content.encode("utf-8"))
         control.send_daily_log(content)
 
-dms_job.append({"func": "%s:send_log_func" % __name__, "trigger": "cron", "id": "send_daily_log", "hour": 8, "minute": "30", "replace_existing": True})
-# dms_scheduler.add_job(send_log_func, trigger="cron", id="send_daily_log", hour=8, minute=30)
+
+# 每小时发送登录信息
+def send_login_info_func():
+    if env != "Production" and env != "Development":
+        return
+    result, info = control.register_login_task()
+    if result is False:
+        print("register login task fail")
+        return
+    print("start run login task %s" % info["task_no"])
+    result, info = control.get_login_info()
+    table_content = ""
+    if len(info["login_records"]) <= 0:
+        print("No Login Records")
+        return
+    for item in info["login_records"]:
+        tr_content = '<tr>'
+        tr_content += '<td>%s</td>\n' % ip_str(item["server_ip"]) # unix_timestamp(item["run_begin"])
+        tr_content += '<td>%s</td>\n' % item["server_name"]
+        tr_content += '<td>%s</td>' % ip_str(item["user_ip"])
+        tr_content += '<td>%s</td>\n' % item["user_name"]
+        tr_content += '<td>%s</td>\n' % unix_timestamp(item["login_time"], style="datetime")
+        tr_content += '</tr>\n'
+        table_content += tr_content
+    with open("../Web/templates/LOG/Login_Log.html") as rt:
+        content = rt.read()
+        content = content.replace("{{ TR }}", table_content.encode("utf-8"))
+        subject = u"有用户登录到服务器"
+        my_email.send_mail("zhouheng@gene.ac", subject, content)
+    print("send success")
+
+
+if env == "Production" or env == "Development":
+    dms_job.append({"func": "%s:send_log_func" % __name__, "trigger": "cron", "id": "send_daily_log", "hour": 8, "minute": "30", "replace_existing": True})
+    dms_job.append({"func": "%s:send_login_info_func" % __name__, "trigger": "cron", "id": "send_login_info", "hour": "9-15", "minute": "5", "replace_existing": True})
+

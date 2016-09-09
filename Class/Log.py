@@ -25,7 +25,7 @@ class LogManager:
         self.api_log = "api_log"
         self.login_server = "login_server"
         self.log_cols = ["log_no", "run_begin", "host", "url", "method", "account", "ip", "level", "info", "run_time"]
-        self.login_cols = ["login_no", "server_ip", "server_name", "user_ip", "login_time"]
+        self.login_cols = ["login_no", "server_ip", "server_name", "user_ip", "user_name", "login_time"]
         self.log_level = ["error", "base_error", "bad_req", "http_error", "info"]
         self.log_task = TaskManager(1)
         self.login_task = TaskManager(2)
@@ -92,7 +92,7 @@ class LogManager:
 
     def register_daily_task(self):
         user_name = "system"
-        reason = u"每日运行"
+        reason = u"每日运行日志"
         reason_desc = u"每天8：30，将一天前到现在所有的不正确或者未正确执行的请求日志发送给相关权限人员。"
         task_no = (int(time()) - self.basic_time) / 86400
         return self.log_task.register_new_task(task_no, user_name=user_name, reason=reason, reason_desc=reason_desc)
@@ -141,3 +141,10 @@ class LogManager:
         if len(login_records) > 0:
             self.login_task.update_scheduler_status(login_records[0]["login_no"], "system", "")
         return True, {"login_records": login_records}
+
+    def register_login_task(self):
+        user_name = "system"
+        reason = u"登录记录"
+        reason_desc = u"每天9-15点5分，将服务器登录记录送给相关权限人员。"
+        task_no = (int(time()) - self.basic_time) / 3600
+        return self.login_task.register_new_task(task_no, user_name=user_name, reason=reason, reason_desc=reason_desc)

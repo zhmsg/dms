@@ -124,10 +124,13 @@ def create_blue(blue_name, url_prefix="/", auth_required=True):
     return add_blue
 
 
-def unix_timestamp(t):
+def unix_timestamp(t, style="time"):
     if type(t) == int or type(t) == long:
         x = time.localtime(t)
-        return time.strftime('%H:%M:%S', x)
+        if style == "time":
+            return time.strftime('%H:%M:%S', x)
+        else:
+            return time.strftime("%Y-%m-%d %H:%M:%S", x)
     return t
 
 
