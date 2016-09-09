@@ -736,6 +736,9 @@ class ControlManager:
     def new_login_server(self, server_ip, server_name, user_ip, user_name, login_time):
         return self.jy_log.insert_login_server(server_ip, server_name, user_ip, user_name, login_time)
 
+    def register_log_task(self):
+        return self.jy_log.register_daily_task()
+
     def get_daily_log(self):
         return self.jy_log.select_daily_log()
 

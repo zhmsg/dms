@@ -7,6 +7,7 @@ from Tools.Mysql_db import DB
 from datetime import timedelta
 from time import time
 from Class import env
+from Class.Task import TaskManager
 from Check import check_int, check_sql_character
 
 __author__ = 'ZhouHeng'
@@ -25,6 +26,8 @@ class LogManager:
         self.login_server = "login_server"
         self.log_cols = ["run_begin", "host", "url", "method", "account", "ip", "level", "info", "run_time"]
         self.log_level = ["error", "base_error", "bad_req", "http_error", "info"]
+        self.log_task = TaskManager(1)
+        self.basic_time = 1473350400  # 2016/09/09 00:00:00
 
     def _select_log(self, where_sql, limit_num=250):
         select_sql = "SELECT %s FROM %s WHERE %s ORDER BY log_no DESC LIMIT %s;" \
@@ -89,3 +92,10 @@ class LogManager:
                      % (self.login_server, server_ip, server_name, user_ip, user_name, login_time)
         self.local_db.execute(insert_sql)
         return True, "success"
+
+    def register_daily_task(self):
+        user_name = "system"
+        reason = u"每日运行"
+        reason_desc = u"每天8：30，将一天前到现在所有的不正确或者未正确执行的请求日志发送给相关权限人员。"
+        task_no = (int(time()) - self.basic_time) / 86400
+        return self.log_task.register_new_task(task_no, user_name=user_name, reason=reason, reason_desc=reason_desc)

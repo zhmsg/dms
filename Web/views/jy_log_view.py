@@ -77,6 +77,11 @@ def record_login():
 def send_log_func():
     if env != "Production" and env != "Development":
         return
+    result, info = control.register_log_task()
+    if result is False:
+        print("register log task fail")
+        return
+    print("start run log task %s" % info["task_no"])
     result, info = control.get_daily_log()
     table_content = ""
     for item in info["log_records"]:
