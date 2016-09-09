@@ -1,0 +1,40 @@
+[
+    {
+        "table_cols": [
+            {
+                "pri_key": true,
+                "col_comment": "任务类型，联合主键",
+                "col_name": "task_type",
+                "col_type": "int(11)"
+            },
+            {
+                "pri_key": true,
+                "col_comment": "任务编号，主键",
+                "col_name": "task_no",
+                "col_type": "int(11)"
+            },
+            {
+                "col_comment": "帐号",
+                "col_name": "user_name",
+                "col_type": "varchar(20)"
+            },
+            {
+                "col_comment": "任务原因",
+                "col_name": "reason",
+                "col_type": "varchar(20)"
+            },
+            {
+                "col_comment": "任务具体描述",
+                "col_name": "reason_desc",
+                "col_type": "varchar(500)"
+            },
+            {
+                "col_comment": "当前运行运行状态 状态到达时间+0或1（0成功1失败） 每个状态中间中|分割",
+                "col_name": "status_info",
+                "col_type": "varchar(150)"
+            }
+        ],
+        "table_comment": "注册任务列表",
+        "table_name": "register_task"
+    }
+]
