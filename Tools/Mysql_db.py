@@ -6,20 +6,6 @@ from Tools import env
 
 __author__ = 'zhouheng'
 
-"""
-Usage:
-    from Mysql_db import DB
-     db = DB()
-     db.execute(sql)
-     db.fetchone()
-     db.fetchall()
-     :return same as MySQLdb
-"""
-
-
-remote_host = "127.0.0.1"
-local_host = "127.0.0.1"
-
 
 class DB(object):
     conn = None
@@ -107,6 +93,3 @@ class DB(object):
         if self.cursor:
             self.cursor.close()
         self.conn.close()
-
-    def format_string(self, str):
-        return MySQLdb.escape_string(str)
