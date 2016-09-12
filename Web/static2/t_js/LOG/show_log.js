@@ -133,6 +133,7 @@ $(function(){
         }
 
     });
+    $("td[class$='Bg']").addClass("status_move");
     var request_ips = $("td[name='request_ip']");
     for(var i=0;i<request_ips.length;i++){
         var td_ip = request_ips[i];
