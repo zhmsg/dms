@@ -56,7 +56,7 @@ def run_task(release_no):
 def system_auto_release():
     if env != "Production":
         return
-    result, info = control.new_task("system", 0, u"自动发布", u"系统每天12：10，18：10左右自动重新发布晶云测试环境")
+    result, info = control.new_task("system", 0, u"自动发布", u"系统周一到周五每天12：10，18：10左右自动重新发布晶云测试环境")
     if result is True:
         release_no = info["release_no"]
         wait_seconds = random.randint(20, 60)
