@@ -45,7 +45,7 @@ class DB(object):
             return self.execute(sql_query=sql_query, args=args, freq=freq+1)
         return handled_item
 
-    def execute_select(self, table_name, where_value, cols=None):
+    def execute_select(self, table_name, where_value={"1": 1}, cols=None):
         args = dict(where_value).values()
         if len(args) <= 0:
             return 0

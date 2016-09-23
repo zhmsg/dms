@@ -20,6 +20,10 @@ develop_param_view = create_blue('develop_param_view', url_prefix=url_prefix)
 
 @develop_param_view.route("/", methods=["GET"])
 def show_param_info_func():
+    if "X-Requested-With" in request.headers:
+        if request.headers["X-Requested-With"] == "XMLHttpRequest":
+            result, info = control.get_params_info(g.user_name, g.user_role)
+            return jsonify({"status": result, "data": info})
     return render_template("%s/Param_Info.html" % html_dir)
 
 
