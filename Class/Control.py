@@ -19,6 +19,7 @@ from Bug import BugManager
 from Log import LogManager
 from IP import IPManager
 from Release import ReleaseManager
+from ParamFormat import ParamFormatManager
 from Class import DATE_FORMAT_STR, release_dir
 
 __author__ = 'ZhouHeng'
@@ -51,6 +52,7 @@ class ControlManager:
         self.bug = BugManager()
         self.ip = IPManager()
         self.relase_man = ReleaseManager(release_dir)
+        self.param_man = ParamFormatManager()
         self.manger_email = ["budechao@ict.ac.cn", "biozy@ict.ac.cn"]
         self.jy_log = LogManager()
 
@@ -780,3 +782,7 @@ class ControlManager:
 
     def release_ih(self):
         return self.relase_man.release_ih()
+
+    # 针对公共参数格式
+    def add_param_format(self, user_name, user_role, param, param_type, **kwargs):
+        return self.param_man.new_param_format(param, param_type, **kwargs)

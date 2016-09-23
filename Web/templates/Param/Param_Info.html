@@ -50,4 +50,72 @@
 {#        </tr>#}
 {#      {% endfor %}#}
     </table>
+    <a href="javascript:void(0)" data-toggle="modal" data-target="#div_add_param" id="a_popup">添加参数</a>
+    <div class="modal fade" id="div_add_param" tabindex="-1" aria-hidden="true" >
+        <input style="display: none" value="" id="sign">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">添加公共参数介绍</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table data_popup_table">
+                        <tr>
+                            <td class="data_td_add" style="vertical-align: middle;"><label>参数名称:</label></td>
+                            <td class="data_td_con">
+                                <input name="update_value" class="form-control data_input" id="param" type="text">
+                            </td>
+                        </tr>
+                        <tr name="col_info">
+                            <td class="data_td_add" style="vertical-align: middle;"><label>参数类型:</label></td>
+                            <td class="data_td_con">
+                                <select id="param_type" class="form-control data_input">
+                                    <option>string</option>
+                                    <option>int</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr name="col_info">
+                            <td class="data_td_add" style="vertical-align: middle;"><label id="lab_min_len">最小长度:</label></td>
+                            <td class="data_td_con">
+                                <input name="update_value" class="form-control data_input" id="min_len" type="text">
+                            </td>
+                        </tr>
+                        <tr name="col_info">
+                            <td class="data_td_add" style="vertical-align: middle;"><label id="lan_max_len">最大长度:</label></td>
+                            <td class="data_td_con">
+                                <input name="update_value" class="form-control data_input" id="max_len" type="text">
+                            </td>
+                        </tr>
+                        <tr name="col_info">
+                            <td class="data_td_add" style="vertical-align: middle;"><label>不允许字符:</label></td>
+                            <td class="data_td_con">
+                                <input name="update_value" class="form-control data_input" id="not_allow" type="text">
+                            </td>
+                        </tr>
+                        <tr name="col_info">
+                            <td class="data_td_add" style="vertical-align: middle;"><label>匹配字符:</label></td>
+                            <td class="data_td_con">
+                                <input name="update_value" class="form-control data_input" id="match_str" type="text">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="data_td_add"><label>注释:</label></td>
+                            <td class="data_td_con depict">
+                                <textarea class="form-control data_input" id="param_desc"></textarea>
+                            </td>
+                            <td class="data_popup_table_tag"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button"  class="btn btn-primary" id="btn_add_param">添加</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <link rel="stylesheet" href="{{ 't_css/data_table.css' | make_static_url }}">
+    <script type="text/javascript" src="{{ 't_js/Param_Format/param_show.js' | make_static_url }}"></script>
+    <script type="text/javascript" src="{{ 't_js/bootstrap.min.js' | make_static_url }}"></script>
 {% endblock %}
