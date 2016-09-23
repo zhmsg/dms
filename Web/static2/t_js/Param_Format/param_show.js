@@ -79,6 +79,11 @@ function check_input_value()
     return true;
 }
 
+function click_update()
+{
+    //alert("");
+}
+
 function add_param()
 {
     if(check_input_value() == false){

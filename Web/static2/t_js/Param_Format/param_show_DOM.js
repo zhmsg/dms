@@ -29,4 +29,13 @@ function Add_TR(param_obj){
         var key = keys[i];
         add_tr.append(New_TD(key, param_obj));
     }
+
+    var op_td = $("<td></td>");
+    var up_a = $("<a href='javascript:void' data-toggle='modal' data-target='#div_add_param'>更新</a>");
+    up_a.click(click_update);
+    op_td.append(up_a);
+    op_td.append(" | ");
+    var del_a = $("<a href='javascript:void'>删除</a>");
+    op_td.append(del_a);
+    add_tr.append(op_td);
 }
