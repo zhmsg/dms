@@ -81,7 +81,15 @@ function check_input_value()
 
 function click_update()
 {
-    //alert("");
+    var children_td = this.parentNode.parentNode.children;
+    $("#param").val(children_td[0].innerHTML);
+    $("#param_type").val(children_td[1].innerHTML);
+    $("#min_len").val(children_td[2].innerHTML);
+    $("#max_len").val(children_td[3].innerHTML);
+    $("#not_allow").val(children_td[4].innerHTML);
+    $("#match_str").val(children_td[5].innerHTML);
+    $("#param_desc").val(children_td[6].innerHTML);
+    check_input_value();
 }
 
 function add_param()
