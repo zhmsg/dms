@@ -9,7 +9,7 @@
     margin:0;
     text-align:right;
     padding-right: 0 !important;
-    width: 18%;
+    width: 15%;
 }
 .data_td label{
     vertical-align: middle;
@@ -21,7 +21,7 @@
 .data_td_con{
     border:0px solid blue!important;
     text-align:left!important;
-    width: 65%;
+    width: 55%;
 }
 
 
@@ -50,3 +50,6 @@
 }
 .data_input{width:96%;}
 
+.glyphicon-pink {
+	color: #fc7675;
+}

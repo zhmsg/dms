@@ -177,3 +177,8 @@ font-size: 14px;}
     padding-left: 10px;
     cursor: pointer;
 }
+
+body, td, th {
+    font-family: "微软雅黑";
+    font-size: 14px;
+}

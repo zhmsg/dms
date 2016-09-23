@@ -3,7 +3,7 @@
 
 import re
 import sys
-from flask import render_template, request, redirect, jsonify
+from flask import render_template, request, redirect, jsonify, g
 from flask_login import current_user
 
 from Web import param_url_prefix as url_prefix, create_blue
@@ -25,4 +25,10 @@ def show_param_info_func():
 
 @develop_param_view.route("/", methods=["POST"])
 def add_param_func():
-    return jsonify({"status": True, "data": "success"})
+    r_data = request.json
+    param = r_data["param"]
+    param_type = r_data["param_type"]
+    del r_data["param"]
+    del r_data["param_type"]
+    result, info = control.add_param_format(g.user_name, g.user_role, param, param_type, **r_data)
+    return jsonify({"status": result, "data": info})

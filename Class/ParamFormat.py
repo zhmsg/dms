@@ -20,4 +20,4 @@ class ParamFormatManager:
             if col_item in kwargs:
                 sql_args[col_item] = kwargs[col_item]
         result = self.db.execute_insert(self.t_param_format, args=sql_args, ignore=True)
-        return True, result
+        return True, sql_args
