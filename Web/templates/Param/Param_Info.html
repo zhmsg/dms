@@ -1,6 +1,53 @@
-{% extends "base.html" %}
+{% extends "base_menu.html" %}
 
 {% block title %}晶云系统公共参数介绍{% endblock %}
 
-{% block content %}
+{% block center_content %}
+    <div class="clear bottom20">
+        <input class="box-side width150"  placeholder="参数名称"/>
+        <select class="box-side width150 margin10">
+            <option value="all">all</option>
+            <option value="unicode">string</option>
+            <option value="int">int</option>
+        </select>
+        <a><button class="btn btn-primary" id="btn_new">搜索</button></a>
+    </div>
+    <table class="table table-bordered table-hover api-list-table">
+        <tr>
+            <th scope="col" width="14%">参数名称</th>
+            <th scope="col" width=10%">参数类型</th>
+            <th scope="col" width=10%">最小长度(值)</th>
+            <th scope="col" width=10%">最大长度(值)</th>
+            <th scope="col" width=18%">不允许字符</th>
+            <th scope="col" width=18%">匹配字符</th>
+            <th scope="col" width=20%">说明</th>
+        </tr>
+{#      {% for item in log_list %}#}
+{#        <tr title="info: {{ item["info"] }}&#10;host: {{ item["host"] }}">#}
+{#            <td name="run_begin" class="status_move">{{ item["run_begin"] | unix_timestamp }}</td>#}
+{#            <td name="request_url" class="status_move">{{ item["url"] }}</td>#}
+{#            <td>{{ item["method"] }}</td>#}
+{#            <td name="request_account" class="status_move">{{ item["account"] }}</td>#}
+{#            {% if item["level"] == "error" %}#}
+{#                <td class="redBg">{{ item["level"] }}</td>#}
+{#            {% elif item["level"] == "base_error" %}#}
+{#                <td class="orgBg">{{ item["level"] }}</td>#}
+{#            {% elif item["level"] == "bad_req" %}#}
+{#                <td class="yellowBg">{{ item["level"] }}</td>#}
+{#            {% elif item["level"] == "http_error" %}#}
+{#                <td class="greenBg">{{ item["level"] }}</td>#}
+{#            {% else %}#}
+{#                <td>{{ item["level"] }}</td>#}
+{#            {% endif %}#}
+{#            {% if item["run_time"] >= 1 %}#}
+{#                <td class="redBg">{{ item["run_time"] }}</td>#}
+{#            {% elif item["run_time"] >= 0.5 %}#}
+{#                <td class="orgBg">{{ item["run_time"] }}</td>#}
+{#            {% else %}#}
+{#                <td>{{ item["run_time"] }}</td>#}
+{#            {% endif %}#}
+{#            <td name="request_ip">{{ item["ip"] }}</td>#}
+{#        </tr>#}
+{#      {% endfor %}#}
+    </table>
 {% endblock %}
