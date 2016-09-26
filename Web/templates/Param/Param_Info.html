@@ -24,6 +24,8 @@
             <th scope="col" width=10%">操作</th>
         </tr>
     </table>
+    <input id="param_role_level" style="display: none" value="{{ g.role_level }}">
+    {% if g.role_level >  0 %}
     <a href="javascript:void(0)" data-toggle="modal" data-target="#div_add_param" id="a_popup">添加参数</a>
     <div class="modal fade" id="div_add_param" tabindex="-1" aria-hidden="true" >
         <input style="display: none" value="" id="sign">
@@ -101,8 +103,11 @@
             </div>
         </div>
     </div>
-    <link rel="stylesheet" href="{{ 't_css/data_table.css' | make_static_url }}">
     <script type="text/javascript" src="{{ 't_js/Param_Format/param_show.js' | make_static_url }}"></script>
+    {% endif %}
+
+    <link rel="stylesheet" href="{{ 't_css/data_table.css' | make_static_url }}">
+    <script type="text/javascript" src="{{ 't_js/Param_Format/param_show_Data.js' | make_static_url }}"></script>
     <script type="text/javascript" src="{{ 't_js/Param_Format/param_show_DOM.js' | make_static_url }}"></script>
     <script type="text/javascript" src="{{ 't_js/bootstrap.min.js' | make_static_url }}"></script>
 {% endblock %}

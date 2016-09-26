@@ -6,8 +6,7 @@ import sys
 from flask import render_template, request, redirect, jsonify, g
 from flask_login import current_user
 
-from Web import param_url_prefix as url_prefix, create_blue
-from Web.views import control
+from Web import param_url_prefix as url_prefix, create_blue, control
 
 sys.path.append('..')
 
@@ -24,6 +23,14 @@ def show_param_info_func():
         if request.headers["X-Requested-With"] == "XMLHttpRequest":
             result, info = control.get_params_info(g.user_name, g.user_role)
             return jsonify({"status": result, "data": info})
+    if g.user_role & g.role_value["param_new"] <= 0:
+        g.role_level = 0
+    elif g.user_role & g.role_value["param_update"] <= 0:
+        g.role_level = 1
+    elif g.user_role & g.role_value["param_del"] <= 0:
+        g.role_level = 2
+    else:
+        g.role_level = 3
     return render_template("%s/Param_Info.html" % html_dir)
 
 

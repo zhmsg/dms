@@ -136,16 +136,9 @@ function add_param()
         my_async_request(location.href, "POST", request_data, add_success);
 }
 
-function get_success(data){
-    for(var i=0;i<data.data.length;i++){
-        Add_TR(data.data[i]);
-    }
-}
-
 $(function() {
     $("#a_popup").click(click_add);
     $("#param_type").change(param_type_change);
     $("input[class*='data_input']").change(check_input_value);
     $("textarea").change(check_input_value);
-    my_async_request(location.href, "GET", null, get_success);
 });

@@ -11,10 +11,13 @@ from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 from Tools.Mysql_db import DB
 from Tools.MyIP import IPManager
 from Tools.MyEmail import MyEmailManager
+from Class.Control import ControlManager
+
 
 __author__ = 'zhouheng'
 
 db = DB()
+control = ControlManager()
 ip = IPManager()
 my_email = MyEmailManager("/home/msg/conf/")
 dms_scheduler = BackgroundScheduler()
@@ -113,7 +116,7 @@ def create_blue(blue_name, url_prefix="/", auth_required=True):
         @add_blue.before_request
         @login_required
         def before_request():
-            pass
+            g.role_value = control.role_value
 
     @add_blue.route("/ping/", methods=["GET"])
     def ping():

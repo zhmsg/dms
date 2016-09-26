@@ -31,11 +31,23 @@ function Add_TR(param_obj){
     }
 
     var op_td = $("<td></td>");
-    var up_a = $("<a href='javascript:void' data-toggle='modal' data-target='#div_add_param'>更新</a>");
-    up_a.click(click_update);
-    op_td.append(up_a);
-    op_td.append(" | ");
-    var del_a = $("<a href='javascript:void'>删除</a>");
+    var role_level = parseInt($("#param_role_level").val());
+    if(role_level > 1) {
+        var up_a = $("<a href='javascript:void(0)' data-toggle='modal' data-target='#div_add_param'>更新</a>");
+        up_a.click(click_update);
+        op_td.append(up_a);
+        op_td.append(" | ");
+        if(role_level > 2)
+            var del_a = $("<a href='javascript:void(0)'>删除</a>");
+        else
+            var del_a = $("<a href='javascript:void(0)' style='color:#CCC'>删除</a>");
+    }
+    else{
+        var up_a = $("<a href='javascript:void(0)' style='color:#CCC'>更新</a>");
+        op_td.append(up_a);
+        op_td.append(" | ");
+        var del_a = $("<a href='javascript:void(0)' style='color:#CCC'>删除</a>");
+    }
     op_td.append(del_a);
     add_tr.append(op_td);
 }
