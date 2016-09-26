@@ -40,6 +40,26 @@
                 "col_comment": "参数说明",
                 "col_name": "param_desc",
                 "col_type": "varchar(200)"
+            },
+            {
+                "col_comment": "参数添加者",
+                "col_name": "add_user",
+                "col_type": "varchar(20)"
+            },
+            {
+                "col_comment": "参数添加时间",
+                "col_name": "add_time",
+                "col_type": "int(11)"
+            },
+            {
+                "col_comment": "参数添加者",
+                "col_name": "update_user",
+                "col_type": "varchar(20)"
+            },
+            {
+                "col_comment": "参数添加时间",
+                "col_name": "update_time",
+                "col_type": "int(11)"
             }
         ],
         "table_comment": "参数格式统一限制",
