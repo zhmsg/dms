@@ -22,6 +22,16 @@ class ParamFormatManager:
         result = self.db.execute_insert(self.t_param_format, args=sql_args, ignore=True)
         return True, sql_args
 
+    def update_param_format(self, param, **kwargs):
+        cols = ["param_type", "min_len", "max_len", "not_allow", "match_str", "param_desc"]
+        sql_args = dict()
+        for col_item in cols:
+            if col_item in kwargs:
+                sql_args[col_item] = kwargs[col_item]
+        result = self.db.execute_update(self.t_param_format, update_value=sql_args, where_value={"param": param})
+        sql_args["param"] = param
+        return True, sql_args
+
     def select_param_format(self):
         cols = ["param", "param_type", "min_len", "max_len", "not_allow", "match_str", "param_desc"]
         self.db.execute_select(self.t_param_format, cols=cols)

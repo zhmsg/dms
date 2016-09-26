@@ -83,13 +83,23 @@ function click_update()
 {
     var children_td = this.parentNode.parentNode.children;
     $("#param").val(children_td[0].innerHTML);
+    $("#param").attr("disabled", "disabled");
     $("#param_type").val(children_td[1].innerHTML);
     $("#min_len").val(children_td[2].innerHTML);
     $("#max_len").val(children_td[3].innerHTML);
     $("#not_allow").val(children_td[4].innerHTML);
     $("#match_str").val(children_td[5].innerHTML);
     $("#param_desc").val(children_td[6].innerHTML);
+    $("#btn_add_param").text("更新");
     check_input_value();
+}
+
+function click_add(){
+    if($("#btn_add_param").text() == "更新"){
+        $("#btn_add_param").text("添加");
+        $("#param").removeAttr("disabled");
+        clear_input_value();
+    }
 }
 
 function add_param()
@@ -116,8 +126,14 @@ function add_param()
                 request_data[value_item.id] = value_item.value;
             }
         }
+        else{
+            request_data[value_item.id] = null;
+        }
     }
-    my_async_request(location.href, "POST", request_data, add_success);
+    if($("#btn_add_param").text() == "更新")
+        my_async_request(location.href, "PUT", request_data, add_success);
+    else
+        my_async_request(location.href, "POST", request_data, add_success);
 }
 
 function get_success(data){
@@ -127,6 +143,7 @@ function get_success(data){
 }
 
 $(function() {
+    $("#a_popup").click(click_add);
     $("#param_type").change(param_type_change);
     $("input[class*='data_input']").change(check_input_value);
     $("textarea").change(check_input_value);

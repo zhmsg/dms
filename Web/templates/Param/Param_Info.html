@@ -23,33 +23,6 @@
             <th scope="col" width=20%">说明</th>
             <th scope="col" width=10%">操作</th>
         </tr>
-{#      {% for item in log_list %}#}
-{#        <tr title="info: {{ item["info"] }}&#10;host: {{ item["host"] }}">#}
-{#            <td name="run_begin" class="status_move">{{ item["run_begin"] | unix_timestamp }}</td>#}
-{#            <td name="request_url" class="status_move">{{ item["url"] }}</td>#}
-{#            <td>{{ item["method"] }}</td>#}
-{#            <td name="request_account" class="status_move">{{ item["account"] }}</td>#}
-{#            {% if item["level"] == "error" %}#}
-{#                <td class="redBg">{{ item["level"] }}</td>#}
-{#            {% elif item["level"] == "base_error" %}#}
-{#                <td class="orgBg">{{ item["level"] }}</td>#}
-{#            {% elif item["level"] == "bad_req" %}#}
-{#                <td class="yellowBg">{{ item["level"] }}</td>#}
-{#            {% elif item["level"] == "http_error" %}#}
-{#                <td class="greenBg">{{ item["level"] }}</td>#}
-{#            {% else %}#}
-{#                <td>{{ item["level"] }}</td>#}
-{#            {% endif %}#}
-{#            {% if item["run_time"] >= 1 %}#}
-{#                <td class="redBg">{{ item["run_time"] }}</td>#}
-{#            {% elif item["run_time"] >= 0.5 %}#}
-{#                <td class="orgBg">{{ item["run_time"] }}</td>#}
-{#            {% else %}#}
-{#                <td>{{ item["run_time"] }}</td>#}
-{#            {% endif %}#}
-{#            <td name="request_ip">{{ item["ip"] }}</td>#}
-{#        </tr>#}
-{#      {% endfor %}#}
     </table>
     <a href="javascript:void(0)" data-toggle="modal" data-target="#div_add_param" id="a_popup">添加参数</a>
     <div class="modal fade" id="div_add_param" tabindex="-1" aria-hidden="true" >

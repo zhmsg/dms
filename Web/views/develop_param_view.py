@@ -27,12 +27,16 @@ def show_param_info_func():
     return render_template("%s/Param_Info.html" % html_dir)
 
 
-@develop_param_view.route("/", methods=["POST"])
+@develop_param_view.route("/", methods=["POST", "PUT"])
 def add_param_func():
     r_data = request.json
+    print(r_data)
     param = r_data["param"]
-    param_type = r_data["param_type"]
     del r_data["param"]
-    del r_data["param_type"]
-    result, info = control.add_param_format(g.user_name, g.user_role, param, param_type, **r_data)
+    if request.method == "POST":
+        param_type = r_data["param_type"]
+        del r_data["param_type"]
+        result, info = control.add_param_format(g.user_name, g.user_role, param, param_type, **r_data)
+    else:
+        result, info = control.update_param_format(g.user_name, g.user_role, param, **r_data)
     return jsonify({"status": result, "data": info})

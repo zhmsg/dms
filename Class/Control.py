@@ -787,5 +787,8 @@ class ControlManager:
     def add_param_format(self, user_name, user_role, param, param_type, **kwargs):
         return self.param_man.new_param_format(param, param_type, **kwargs)
 
+    def update_param_format(self, user_name, user_role, param, **kwargs):
+        return self.param_man.update_param_format(param, **kwargs)
+
     def get_params_info(self, user_name, user_role):
         return self.param_man.select_param_format()
