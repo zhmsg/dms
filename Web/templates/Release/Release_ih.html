@@ -42,6 +42,9 @@
                     <label class="api-describe" for="">重启服务：</label>
                     <select class="box-side" id="request_service"  onchange="ensure_right_time();" required>
                         <option value="">选择服务</option>
+                        {% if g.ihVIP %}
+                            <option value="0">API&WEB 测试环境</option>
+                        {% endif %}
                         <option value="1">API 测试环境</option>
                         <option value="2">WEB 测试环境</option>
                     </select>
