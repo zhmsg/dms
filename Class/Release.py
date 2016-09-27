@@ -94,7 +94,7 @@ class ReleaseManager:
             run('find -name "*.log" | xargs rm -rf')
             run("sh stop.sh")
             run('ssh service "sh /home/msg/GATCAPI/restart_service.sh"', quiet=True)
-            run("sh start_api.sh")
+            run('nohup gunicorn -b 0.0.0.0:8100 -t 3600 -w 5 -k "gevent" --backlog 2048 -p "/tmp/api_gunicorn_test.pid" --chdir API run:app 1>> API.log 2>> API.log & echo $! >> service.pid && sleep 3')
 
     def release_ih(self):
         # 获得任务
@@ -129,7 +129,3 @@ class ReleaseManager:
         self.update_release_task(release_no, True)
         self.send_wx_msg(reason_desc)
         return True, "success"
-
-
-
-
