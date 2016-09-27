@@ -767,7 +767,7 @@ class ControlManager:
             return False, u"您没有权限"
         return self.relase_man.select_release_task()
 
-    def new_task(self, user_name, user_role, reason, reason_desc):
+    def new_task(self, user_name, user_role, reason, restart_service, reason_desc):
         if user_role & self.role_value["release_ih_N"] <= 0 and user_name != "system":
             return False, u"您没有权限"
         result, info = self.relase_man.select_release_task(user_name=user_name)
@@ -775,7 +775,7 @@ class ControlManager:
             return False, info
         elif len(info) >= 2:
             return False, u"今日已不再允许预约"
-        return self.relase_man.new_release_task(user_name, reason, reason_desc)
+        return self.relase_man.new_release_task(user_name, reason, restart_service, reason_desc)
 
     def update_task(self, release_no, run_result):
         return self.relase_man.update_release_task(release_no, run_result)

@@ -27,12 +27,12 @@ class ReleaseManager:
         self.api_work_dir = release_dir + "/ih_GATCAPI"
         self.wx = WeiXinManager(wx_service)
 
-    def new_release_task(self, user_name, reason, reason_desc):
+    def new_release_task(self, user_name, reason, restart_service, reason_desc):
         release_time = datetime.now() - self.basic_time
         release_no = release_time.seconds / 3600 + release_time.days * 24
         status_info = "%s1" % int(time())
-        args = dict(release_no=release_no, user_name=user_name, reason=reason, reason_desc=reason_desc,
-                    status_info=status_info)
+        args = dict(release_no=release_no, user_name=user_name, reason=reason, restart_service=restart_service,
+                    reason_desc=reason_desc, status_info=status_info)
         result = self.db.execute_insert(self.release_task, args=args, ignore=True)
         if result <= 0:
             return False, u"任务已存在"
@@ -48,7 +48,7 @@ class ReleaseManager:
     def select_release_task(self, user_name=None):
         release_time = datetime.now() - self.basic_time
         min_release_no = release_time.days * 24
-        cols = ["release_no", "user_name", "reason", "reason_desc", "status_info"]
+        cols = ["release_no", "user_name", "restart_service", "reason", "reason_desc", "status_info"]
         if user_name is None:
             zero = 1
         else:
@@ -109,12 +109,16 @@ class ReleaseManager:
             return False, "No Task"
         user_name = info[0]["user_name"]
         reason_desc = "%s %s\n%s" % (user_name, info[0]["reason"], info[0]["reason_desc"])
-
+        restart_service = info[0]["restart_service"]
         print("start run release %s" % release_no)
         self.update_release_task(release_no, True)
 
         print("start restart")
-        self._restart_api()
+        if restart_service == 1:
+            self._restart_api()
+        else:
+            self.update_release_task(release_no, False)
+            return False, "invalid restart service code"
         self.update_release_task(release_no, True)
 
         print("start test")

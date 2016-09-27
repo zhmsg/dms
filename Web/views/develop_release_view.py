@@ -56,7 +56,7 @@ def run_task(release_no):
 def system_auto_release():
     if env != "Production":
         return
-    result, info = control.new_task("system", 0, u"自动发布", u"系统周一到周五每天12：10，18：10左右自动重新发布晶云测试环境")
+    result, info = control.new_task("system", 0, u"自动发布", 0, u"系统周一到周五每天12：10，18：10左右自动重新发布晶云测试环境")
     if result is True:
         release_no = info["release_no"]
         wait_seconds = random.randint(20, 60)
@@ -71,7 +71,9 @@ def system_auto_release():
 def new_task():
     request_data = request.json
     reason = request_data["reason"]
-    result, info = control.new_task(g.user_name, g.user_role, u"修复BUG", request_data["reason_desc"])
+    reason_desc = request_data["reason_desc"]
+    restart_service = request_data["restart_service"]
+    result, info = control.new_task(g.user_name, g.user_role, u"修复BUG", restart_service, reason_desc)
     if result is True:
         release_no = info["release_no"]
         wait_minute = 10 - g.now_minute % 10
