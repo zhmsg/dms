@@ -66,7 +66,7 @@ class ReleaseManager:
         return True, task_list
 
     def release_push_code(self, message):
-        with cd(self.work_dir):
+        with cd(self.api_work_dir):
             run("git commit -m '%s'" % message, quiet=True)
             run("git push")
 
