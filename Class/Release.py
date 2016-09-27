@@ -115,10 +115,11 @@ class ReleaseManager:
         self.update_release_task(release_no, True)
 
         print("start restart")
-        if restart_service == 1:
+        if restart_service == 0:
+            self._restart_api()
+        elif restart_service == 1:
             self._restart_api()
         else:
-            self.update_release_task(release_no, False)
             return False, "invalid restart service code"
         self.update_release_task(release_no, True)
 
