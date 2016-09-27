@@ -111,7 +111,7 @@ class ReleaseManager:
             run('cat /tmp/web_gunicorn_test.pid >> service.pid')
 
     def _release_api(self, user_name, release_no, reason, reason_desc):
-        reason_desc = "%s %s\n%s" % (user_name, reason, reason_desc)
+        reason_desc = u"%s 重启API测试环境 %s\n%s" % (user_name, reason, reason_desc)
         print("start restart")
         self._restart_api()
         self.update_release_task(release_no, True)
@@ -124,7 +124,7 @@ class ReleaseManager:
         return True, "success"
 
     def _release_web(self, user_name, release_no, reason, reason_desc):
-        reason_desc = "%s %s\n%s" % (user_name, reason, reason_desc)
+        reason_desc = u"%s 重启WEB测试环境 %s\n%s" % (user_name, reason, reason_desc)
         print("start restart")
         self._restart_web()
         self.update_release_task(release_no, True)
@@ -137,7 +137,7 @@ class ReleaseManager:
         return True, "success"
 
     def _release_ih(self, user_name, release_no, reason, reason_desc):
-        reason_desc = "%s %s\n%s" % (user_name, reason, reason_desc)
+        reason_desc = u"%s 重启API&WEB测试环境 %s\n%s" % (user_name, reason, reason_desc)
         print("start restart")
         self._restart_api()
         self._restart_web()
