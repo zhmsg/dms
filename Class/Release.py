@@ -172,7 +172,7 @@ class ReleaseManager:
         if restart_service == 0:
             return self._release_ih(user_name, release_no, reason, reason_desc)
         elif restart_service == 1:
-            return self._restart_api(user_name, release_no, reason, reason_desc)
+            return self._release_api(user_name, release_no, reason, reason_desc)
         elif restart_service == 2:
             return self._release_web(user_name, release_no, reason, reason_desc)
         else:
