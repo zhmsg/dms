@@ -10,11 +10,23 @@ from Tools.Mysql_db import DB
 from Class.WeiXin import WeiXinManager
 from Class import TIME_FORMAT, wx_service, release_host, release_host_port
 
+__author__ = 'ZhouHeng'
 
 env.host_string = release_host
 env.port = release_host_port
 
-__author__ = 'ZhouHeng'
+
+def _push_code(work_dir, message):
+    with cd(work_dir):
+        run("git commit -m '%s'" % message, quiet=True)
+        run("git push")
+
+
+def _pull_code(work_dir, branch):
+    # 拉取代码
+    with cd(work_dir):
+        run("git stash && git fetch origin")
+        run("git pull && git pull --no-commit origin %s" % branch)
 
 
 class ReleaseManager:
@@ -25,6 +37,7 @@ class ReleaseManager:
         self.basic_time = datetime.strptime("2016-09-02 00:00:00", TIME_FORMAT)
         self.latest_branch = "master"
         self.api_work_dir = release_dir + "/ih_GATCAPI"
+        self.web_work_dir = release_dir + "/ih_GATCWeb"
         self.wx = WeiXinManager(wx_service)
 
     def new_release_task(self, user_name, reason, restart_service, reason_desc):
@@ -65,11 +78,6 @@ class ReleaseManager:
             task_list.append(task_info)
         return True, task_list
 
-    def release_push_code(self, message):
-        with cd(self.api_work_dir):
-            run("git commit -m '%s'" % message, quiet=True)
-            run("git push")
-
     def send_wx_msg(self, msg):
         result, user_list = self.wx.user_info()
         if result is False:
@@ -86,16 +94,62 @@ class ReleaseManager:
         return True, "success"
 
     def _restart_api(self):
-        # 拉取代码
-        with cd(self.api_work_dir):
-            run("git stash && git fetch origin")
-            run("git pull && git pull --no-commit origin %s" % self.latest_branch)
+        _pull_code(self.api_work_dir, self.latest_branch)
         with cd(self.api_work_dir):
             run('find -name "*.log" | xargs rm -rf')
             run("sh stop.sh")
             run('ssh service "sh /home/msg/GATCAPI/restart_service.sh"', quiet=True)
             run('nohup gunicorn -b 0.0.0.0:8100 -t 3600 -w 5 -k "gevent" --backlog 2048 -p "/tmp/api_gunicorn_test.pid" --chdir API run:app 1>> API.log 2>> API.log & sleep 3')
             run('cat /tmp/api_gunicorn_test.pid >> service.pid')
+
+    def _restart_web(self):
+        _pull_code(self.web_work_dir, self.latest_branch)
+        with cd(self.web_work_dir):
+            run('find -name "*.log" | xargs rm -rf')
+            run("sh stop.sh")
+            run('nohup gunicorn -b 0.0.0.0:8100 -t 3600 -w 5 -k "gevent" --backlog 2048 -p "/tmp/web_gunicorn_test.pid" --chdir Web2 Webstart:app 1>> WEB.log 2>> WEB.log & sleep 3')
+            run('cat /tmp/web_gunicorn_test.pid >> service.pid')
+
+    def _release_api(self, user_name, release_no, reason, reason_desc):
+        reason_desc = "%s %s\n%s" % (user_name, reason, reason_desc)
+        print("start restart")
+        self._restart_api()
+        self.update_release_task(release_no, True)
+        print("start test")
+        self.update_release_task(release_no, True)
+        print("start push")
+        _push_code(self.api_work_dir, reason_desc)
+        self.update_release_task(release_no, True)
+        self.send_wx_msg(reason_desc)
+        return True, "success"
+
+    def _release_web(self, user_name, release_no, reason, reason_desc):
+        reason_desc = "%s %s\n%s" % (user_name, reason, reason_desc)
+        print("start restart")
+        self._restart_web()
+        self.update_release_task(release_no, True)
+        print("start test")
+        self.update_release_task(release_no, True)
+        print("start push")
+        _push_code(self.web_work_dir, reason_desc)
+        self.update_release_task(release_no, True)
+        self.send_wx_msg(reason_desc)
+        return True, "success"
+
+    def _release_ih(self, user_name, release_no, reason, reason_desc):
+        reason_desc = "%s %s\n%s" % (user_name, reason, reason_desc)
+        print("start restart")
+        self._restart_api()
+        self._restart_web()
+        self.update_release_task(release_no, True)
+        print("start test")
+        self.update_release_task(release_no, True)
+        print("start push")
+        _push_code(self.api_work_dir, reason_desc)
+        _push_code(self.web_work_dir, reason_desc)
+        self.update_release_task(release_no, True)
+        self.send_wx_msg(reason_desc)
+        return True, "success"
 
     def release_ih(self):
         # 获得任务
@@ -108,26 +162,19 @@ class ReleaseManager:
         release_no = (release_time.seconds - 600) / 3600 + release_time.days * 24
         if info[0]["release_no"] != release_no:
             return False, "No Task"
-        user_name = info[0]["user_name"]
-        reason_desc = "%s %s\n%s" % (user_name, info[0]["reason"], info[0]["reason_desc"])
         restart_service = info[0]["restart_service"]
+        user_name = info[0]["user_name"]
+        reason = info[0]["reason"]
+        reason_desc = info[0]["reason_desc"]
         print("start run release %s" % release_no)
         self.update_release_task(release_no, True)
 
-        print("start restart")
         if restart_service == 0:
-            self._restart_api()
+            return self._release_ih(user_name, release_no, reason, reason_desc)
         elif restart_service == 1:
-            self._restart_api()
+            return self._restart_api(user_name, release_no, reason, reason_desc)
+        elif restart_service == 2:
+            return self._release_web(user_name, release_no, reason, reason_desc)
         else:
             return False, "invalid restart service code"
-        self.update_release_task(release_no, True)
 
-        print("start test")
-        self.update_release_task(release_no, True)
-
-        print("start release push")
-        self.release_push_code(reason_desc)
-        self.update_release_task(release_no, True)
-        self.send_wx_msg(reason_desc)
-        return True, "success"
