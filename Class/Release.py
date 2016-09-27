@@ -24,7 +24,7 @@ class ReleaseManager:
         self.release_task = "release_task"
         self.basic_time = datetime.strptime("2016-09-02 00:00:00", TIME_FORMAT)
         self.latest_branch = "master"
-        self.work_dir = release_dir
+        self.api_work_dir = release_dir + "/ih_GATCAPI"
         self.wx = WeiXinManager(wx_service)
 
     def new_release_task(self, user_name, reason, reason_desc):
@@ -65,18 +65,6 @@ class ReleaseManager:
             task_list.append(task_info)
         return True, task_list
 
-    def release_pull_code(self):
-        with cd(self.work_dir):
-            run("git stash && git fetch origin")
-            run("git pull && git pull --no-commit origin %s" % self.latest_branch)
-
-    def release_restart_app(self):
-        with cd(self.work_dir):
-            run('find -name "*.log" | xargs rm -rf')
-            run("sh stop.sh")
-            run('ssh service "sh /home/msg/BioMed/restart_service.sh"', quiet=True)
-            run("sh start_api.sh")
-
     def release_push_code(self, message):
         with cd(self.work_dir):
             run("git commit -m '%s'" % message, quiet=True)
@@ -87,8 +75,8 @@ class ReleaseManager:
         if result is False:
             return False, user_list
         for user_info in user_list:
-            # self.wx.send_status(u"后台开发", "ochiws2EiR0cq3qzXYjQkw0m9jdE", "Test", msg)
-            # break
+            self.wx.send_status(u"后台开发", "ochiws2EiR0cq3qzXYjQkw0m9jdE", "Test", msg)
+            break
             if user_info["groupid"] == 100:
                 self.wx.send_status(u"后台开发", user_info["openid"], "Test", msg)
             elif user_info["groupid"] == 101:
@@ -96,6 +84,17 @@ class ReleaseManager:
             elif user_info["groupid"] == 102:
                 self.wx.send_status(u"产品设计", user_info["openid"], "Test", msg)
         return True, "success"
+
+    def _restart_api(self):
+        # 拉取代码
+        with cd(self.api_work_dir):
+            run("git stash && git fetch origin")
+            run("git pull && git pull --no-commit origin %s" % self.latest_branch)
+        with cd(self.api_work_dir):
+            run('find -name "*.log" | xargs rm -rf')
+            run("sh stop.sh")
+            run('ssh service "sh /home/msg/GATCAPI/restart_service.sh"', quiet=True)
+            run("sh start_api.sh")
 
     def release_ih(self):
         # 获得任务
@@ -114,10 +113,8 @@ class ReleaseManager:
         print("start run release %s" % release_no)
         self.update_release_task(release_no, True)
 
-        print("start pull code")
-        self.release_pull_code()
-        print("start restart service")
-        self.release_restart_app()
+        print("start restart")
+        self._restart_api()
         self.update_release_task(release_no, True)
 
         print("start test")
