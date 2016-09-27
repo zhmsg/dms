@@ -94,7 +94,8 @@ class ReleaseManager:
             run('find -name "*.log" | xargs rm -rf')
             run("sh stop.sh")
             run('ssh service "sh /home/msg/GATCAPI/restart_service.sh"', quiet=True)
-            run('nohup gunicorn -b 0.0.0.0:8100 -t 3600 -w 5 -k "gevent" --backlog 2048 -p "/tmp/api_gunicorn_test.pid" --chdir API run:app 1>> API.log 2>> API.log & echo $! >> service.pid && sleep 3')
+            run('nohup gunicorn -b 0.0.0.0:8100 -t 3600 -w 5 -k "gevent" --backlog 2048 -p "/tmp/api_gunicorn_test.pid" --chdir API run:app 1>> API.log 2>> API.log & sleep 3')
+            run('cat /tmp/api_gunicorn_test.pid >> service.pid')
 
     def release_ih(self):
         # 获得任务
