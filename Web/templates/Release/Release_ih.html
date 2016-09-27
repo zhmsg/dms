@@ -40,7 +40,8 @@
             <ul style="margin-bottom: 1em">
                 <li>
                     <label class="api-describe" for="">重启服务：</label>
-                    <select class="box-side" id="request_service" required>
+                    <select class="box-side" id="request_service"  onchange="ensure_right_time();" required>
+                        <option value="">选择服务</option>
                         <option value="1">API 测试环境</option>
                         <option value="2">WEB 测试环境</option>
                     </select>

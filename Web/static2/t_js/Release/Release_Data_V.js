@@ -26,9 +26,16 @@ function ensure_right_time()
         $("#btn_add_task").text("今日已预约2次");
     }
     else {
-        $("#btn_add_task").removeAttr("disabled");
-        $("#btn_add_task").click(save_task);
-        $("#btn_add_task").text("预约");
+        if($("#request_service").val() != "") {
+            $("#btn_add_task").removeAttr("disabled");
+            $("#btn_add_task").click(save_task);
+            $("#btn_add_task").text("预约");
+        }
+        else
+        {
+            $("#btn_add_task").attr("disabled", "disabled");
+            $("#btn_add_task").text("请选择服务");
+        }
     }
     setTimeout(ensure_right_time, 30000);
 }
