@@ -107,7 +107,7 @@ class ReleaseManager:
         with cd(self.web_work_dir):
             run('find -name "*.log" | xargs rm -rf')
             run("sh stop.sh")
-            run('nohup gunicorn -b 0.0.0.0:8100 -t 3600 -w 5 -k "gevent" --backlog 2048 -p "/tmp/web_gunicorn_test.pid" --chdir Web2 Webstart:app 1>> WEB.log 2>> WEB.log & sleep 3')
+            run('nohup gunicorn -b 0.0.0.0:9101 -t 3600 -w 5 -k "gevent" --backlog 2048 -p "/tmp/web_gunicorn_test.pid" --chdir Web2 Webstart:app 1>> WEB.log 2>> WEB.log & sleep 3')
             run('cat /tmp/web_gunicorn_test.pid >> service.pid')
 
     def _release_api(self, user_name, release_no, reason, reason_desc):
