@@ -93,25 +93,24 @@ function add_output_success(data)
     }
 }
 
-function add_api_info(new_url, type){
-    var api_no = $("#api_no").val();
+function add_api_info(type){
+    var request_url = $("#url_prefix").val() + "/" + type + "/";
     var id_prefix = type + "_param_";
     var post_params = $("[id^="+ id_prefix +"]");
     var request_data = new Object();
-    request_data["api_no"] = api_no;
     for(var i=0;i<post_params.length;i++){
         var one_param = post_params[i];
         request_data[one_param.id.substring(id_prefix.length)] = one_param.value;
     }
     if(type == "header")
-        my_async_request(new_url, "POST", request_data, add_header_success);
+        my_async_request(request_url, "POST", request_data, add_header_success);
     else if (type == "body")
-        my_async_request(new_url, "POST", request_data, add_body_success);
+        my_async_request(request_url, "POST", request_data, add_body_success);
     else if(type == "input")
-        my_async_request(new_url, "POST", request_data, add_input_success);
+        my_async_request(request_url, "POST", request_data, add_input_success);
     else if(type == "output")
-        my_async_request(new_url, "POST", request_data, add_output_success);
-        console.info(request_data);
+        my_async_request(request_url, "POST", request_data, add_output_success);
+    console.info(request_data);
 }
 
 function delete_header_param(api_no, param){

@@ -269,22 +269,24 @@ def set_api_modify():
     return redirect(g.ref_url)
 
 
-@develop_api_view.route("/add/header/", methods=["POST"])
+@develop_api_view.route("/header/", methods=["POST"])
+@referer_api_no
 def add_header_param():
     request_form = request.json
     param = request_form["name"]
-    api_no = request_form["api_no"]
+    api_no = g.api_no
     desc = request_form["desc"]
     necessary = int(request_form["necessary"])
     result, param_info = control.add_header_param(g.user_name, api_no, param, necessary, desc, g.user_role)
     return jsonify({"status": result, "data": param_info})
 
 
-@develop_api_view.route("/add/body/", methods=["POST"])
+@develop_api_view.route("/body/", methods=["POST"])
+@referer_api_no
 def add_body_param():
     request_form = request.json
     param = request_form["name"]
-    api_no = request_form["api_no"]
+    api_no = g.api_no
     desc = request_form["desc"]
     necessary = int(request_form["necessary"])
     type = request_form["type"]
@@ -294,10 +296,11 @@ def add_body_param():
     return jsonify({"status": True, "data": param_info})
 
 
-@develop_api_view.route("/add/input/", methods=["POST"])
+@develop_api_view.route("/input/", methods=["POST"])
+@referer_api_no
 def add_input_example():
     request_form = request.json
-    api_no = request_form["api_no"]
+    api_no = g.api_no
     desc = request_form["desc"]
     example = request_form["example"]
     result, input_info = control.add_input_example(g.user_name, api_no, example, desc, g.user_role)
@@ -306,10 +309,11 @@ def add_input_example():
     return jsonify({"status": True, "data": input_info})
 
 
-@develop_api_view.route("/add/output/", methods=["POST"])
+@develop_api_view.route("/output/", methods=["POST"])
+@referer_api_no
 def add_output_example():
     request_form = request.json
-    api_no = request_form["api_no"]
+    api_no = g.api_no
     desc = request_form["desc"]
     example = request_form["example"]
     result, output_info = control.add_output_example(g.user_name, api_no, example, desc, g.user_role)
@@ -379,3 +383,8 @@ def update_api_predefine_header():
     else:
         result, message = control.add_predefine_header(g.user_name, api_no, param, param_type, g.user_role)
     return jsonify({"status": result, "data": message})
+#
+# import requests
+#
+# res = requests.get("http://127.0.0.1:8000/api/v2/variant/gene/check/", auth=("zh_test", "admin0"), json={"gene_list": "dsfsfws sers"})
+# print(res.text)

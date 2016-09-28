@@ -76,7 +76,7 @@
                 </select>
             </td>
             <td><input class="form-control" id="header_param_desc" placeholder="如果你不想既浪费了写文档的时间，还得浪费时间给前端解释。请写的傻子都能看懂" /></td>
-            <td><button class="btn btn-info" onclick="add_api_info('{{ url_prefix }}/add/header/', 'header');">新建</button></td>
+            <td><button class="btn btn-info" onclick="add_api_info('header');">新建</button></td>
 
     </table>
     {% for item in api_info["predefine_header"] %}
@@ -124,7 +124,7 @@
             </select>
         </td>
         <td><input class="form-control" id="body_param_desc" placeholder="请详细的描述出后端对参数的限制，包括但不限于字段长度，字符限制等" /></td>
-        <td><button class="btn btn-info" id="btn_new_body" onclick="add_api_info('{{ url_prefix }}/add/body/', 'body');">新建</button></td>
+        <td><button class="btn btn-info" id="btn_new_body" onclick="add_api_info('body');">新建</button></td>
     </table>
     {% for item in api_info["predefine_body"] %}
         {% if item in api_info["predefine_param"]["body"] %}
@@ -148,7 +148,7 @@
         </div>
         <p><input class="form-control" id="input_param_desc" placeholder="请求示例描述"  /></p>
         <p><textarea class="form-control input_example" id="input_param_example" onchange="format_input(this.id);" onkeyup="format_input(this.id);" placeholder="请求示例，写成符合json格式。解释示例，请在描述中解释"></textarea></p>
-        <button class="btn btn-info" onclick="add_api_info('{{ url_prefix }}/add/input/', 'input')">新建</button>
+        <button class="btn btn-info" onclick="add_api_info('input')">新建</button>
 
     </div>
 
@@ -166,9 +166,10 @@
         </div>
         <p><input class="form-control" id="output_param_desc" placeholder="返回示例描述" /></p>
         <p><textarea class="form-control input_example" id="output_param_example" onchange="format_input(this.id);" onkeyup="format_input(this.id);" placeholder="返回示例，写成符合json格式。解释示例，请在描述中解释。所有完成后请将API状态置为完成"></textarea></p>
-        <button class="btn btn-info" onclick="add_api_info('{{ url_prefix }}/add/output/', 'output')">新建</button>
+        <button class="btn btn-info" onclick="add_api_info('output')">新建</button>
 
     </div>
+    <input id="url_prefix" value="{{ url_prefix }}" style="display: none">
     <script type="text/javascript" src="{{ 't_js/bootstrap.min.js' | make_static_url }}"></script>
     <script type="text/javascript" src="{{ 't_js/API_HELP/update_api.js' | make_static_url }}"></script>
 {% endblock %}
