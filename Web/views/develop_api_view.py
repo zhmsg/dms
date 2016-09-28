@@ -249,6 +249,16 @@ def update_api_other_info():
                            url_prefix=url_prefix)
 
 
+@develop_api_view.route("/status/<int:api_status>/", methods=["GET"])
+@referer_api_no
+def update_api_status_func(api_status):
+    api_no = g.api_no
+    result, info = control.set_api_status(g.user_name, g.user_role, api_no, api_status)
+    if result is False:
+        return info
+    return redirect(g.ref_url)
+
+
 @develop_api_view.route("/update/completed/", methods=["GET"])
 @referer_api_no
 def set_api_completed():
@@ -383,8 +393,3 @@ def update_api_predefine_header():
     else:
         result, message = control.add_predefine_header(g.user_name, api_no, param, param_type, g.user_role)
     return jsonify({"status": result, "data": message})
-#
-# import requests
-#
-# res = requests.get("http://127.0.0.1:8000/api/v2/variant/gene/check/", auth=("zh_test", "admin0"), json={"gene_list": "dsfsfws sers"})
-# print(res.text)

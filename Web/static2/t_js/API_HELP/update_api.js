@@ -267,3 +267,21 @@ function update_body_param(api_no, param)
     $("#btn_new_body").removeClass();
     $("#btn_new_body").addClass("btn btn-success");
 }
+
+$(function(){
+    var status = $("#api_status").val();
+    if(status == "新建" || status == "修改中"){
+        $("#span_modify_status").append('<a class="margin10" href="/dev/api/status/2/">设置完成</a>');
+        $("#span_modify_status").append('<a class="margin10" href="/dev/api/status/3/">设置待废弃</a>');
+    }
+    else if(status == "已完成")
+    {
+        $("#span_modify_status").append('<a class="margin10" href="/dev/api/status/1/">设置修改中</a>');
+        $("#span_modify_status").append('<a class="margin10" href="/dev/api/status/3/">设置待废弃</a>');
+
+    }
+    else{
+
+    }
+    $("#span_modify_status").append('<a class="margin10" href="/dev/api/status/4/">废弃</a>');
+});

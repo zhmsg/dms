@@ -402,10 +402,15 @@ class ControlManager:
             self._send_api_completed_message_thread(user_name, api_no)
         return result, info
 
-    def set_api_modify(self, user_name, role, api_no):
+    def set_api_status(self, user_name, role, api_no, status):
         if role & self.role_value["api_new"] <= 0:
             return False, u"您没有权限"
-        result, info = self.api_help.set_api_status(api_no, 1)
+        if status == 2:
+            # 必须至少一个返回示例
+            output_info = self.api_help.get_api_output(api_no)
+            if len(output_info) <= 0:
+                return False, u"请至少提交一个返回示例"
+        result, info = self.api_help.set_api_status(api_no, status)
         return result, info
 
     # 针对API状态码的应用

@@ -149,6 +149,8 @@ class HelpManager:
     def set_api_status(self, api_no, status):
         if len(api_no) != 32:
             return False, "Bad api_no"
+        if status < 0 or status > 4:
+            return False, "Bad status"
         update_time = datetime.now().strftime(TIME_FORMAT)
         update_sql = "UPDATE %s SET update_time='%s',status=%s WHERE api_no='%s';" \
                      % (self.api_info, update_time, status, api_no)
@@ -486,8 +488,8 @@ class HelpManager:
     def get_api_list(self, module_no):
         if type(module_no) != int:
             return False, "Bad module_no"
-        select_sql = "SELECT api_no,module_no,api_title,api_path,api_method,api_desc,status FROM %s WHERE module_no=%s " \
-                     "ORDER BY status, api_path;" % (self.api_info, module_no)
+        select_sql = "SELECT api_no,module_no,api_title,api_path,api_method,api_desc,status FROM %s " \
+                     "WHERE module_no=%s AND status<4 ORDER BY status, api_path;" % (self.api_info, module_no)
         self.db.execute(select_sql)
         api_list = []
         for item in self.db.fetchall():
