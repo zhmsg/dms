@@ -283,5 +283,5 @@ $(function(){
     else{
 
     }
-    $("#span_modify_status").append('<a class="margin10" href="/dev/api/status/4/">废弃</a>');
+    $("#span_modify_status").append('<a class="margin10" href="/dev/api/status/4/">设置废弃</a>');
 });
