@@ -149,7 +149,7 @@ class HelpManager:
     def set_api_status(self, api_no, status):
         if len(api_no) != 32:
             return False, "Bad api_no"
-        if status < 0 or status > 4:
+        if status <= 0 or status > 4:
             return False, "Bad status"
         update_time = datetime.now().strftime(TIME_FORMAT)
         update_sql = "UPDATE %s SET update_time='%s',status=%s WHERE api_no='%s';" \

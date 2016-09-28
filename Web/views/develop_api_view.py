@@ -259,26 +259,6 @@ def update_api_status_func(api_status):
     return redirect(g.ref_url)
 
 
-@develop_api_view.route("/update/completed/", methods=["GET"])
-@referer_api_no
-def set_api_completed():
-    api_no = g.api_no
-    result, info = control.set_api_completed(g.user_name, g.user_role, api_no)
-    if result is False:
-        return info
-    return redirect(g.ref_url)
-
-
-@develop_api_view.route("/update/modify/", methods=["GET"])
-@referer_api_no
-def set_api_modify():
-    api_no = g.api_no
-    result, info = control.set_api_modify(g.user_name, g.user_role, api_no)
-    if result is False:
-        return info
-    return redirect(g.ref_url)
-
-
 @develop_api_view.route("/header/", methods=["POST"])
 @referer_api_no
 def add_header_param():

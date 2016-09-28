@@ -390,18 +390,6 @@ class ControlManager:
     def delete_api(self, api_no, user_name):
         return self.api_help.del_api_info(api_no, user_name)
 
-    def set_api_completed(self, user_name, role, api_no):
-        if role & self.role_value["api_new"] <= 0:
-            return False, u"您没有权限"
-        # 必须至少一个返回示例
-        output_info = self.api_help.get_api_output(api_no)
-        if len(output_info) <= 0:
-            return False, u"请至少提交一个返回示例"
-        result, info = self.api_help.set_api_status(api_no, 2)
-        if result is True:
-            self._send_api_completed_message_thread(user_name, api_no)
-        return result, info
-
     def set_api_status(self, user_name, role, api_no, status):
         if role & self.role_value["api_new"] <= 0:
             return False, u"您没有权限"
