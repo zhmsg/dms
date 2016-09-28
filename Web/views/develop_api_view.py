@@ -271,8 +271,8 @@ def set_api_modify():
 
 @develop_api_view.route("/add/header/", methods=["POST"])
 def add_header_param():
-    request_form = request.form
-    param = request_form["param"]
+    request_form = request.json
+    param = request_form["name"]
     api_no = request_form["api_no"]
     desc = request_form["desc"]
     necessary = int(request_form["necessary"])
@@ -282,8 +282,8 @@ def add_header_param():
 
 @develop_api_view.route("/add/body/", methods=["POST"])
 def add_body_param():
-    request_form = request.form
-    param = request_form["param"]
+    request_form = request.json
+    param = request_form["name"]
     api_no = request_form["api_no"]
     desc = request_form["desc"]
     necessary = int(request_form["necessary"])
@@ -296,7 +296,7 @@ def add_body_param():
 
 @develop_api_view.route("/add/input/", methods=["POST"])
 def add_input_example():
-    request_form = request.form
+    request_form = request.json
     api_no = request_form["api_no"]
     desc = request_form["desc"]
     example = request_form["example"]
@@ -308,7 +308,7 @@ def add_input_example():
 
 @develop_api_view.route("/add/output/", methods=["POST"])
 def add_output_example():
-    request_form = request.form
+    request_form = request.json
     api_no = request_form["api_no"]
     desc = request_form["desc"]
     example = request_form["example"]

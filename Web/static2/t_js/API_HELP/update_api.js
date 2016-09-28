@@ -2,144 +2,116 @@
  * Created by msg on 11/3/15.
  */
 
-function new_header_param(new_url){
-    var api_no = $("#api_no").val();
-    var param = $("#header_param_name").val();
-    var necessary = $("#header_param_ne").val();
-    var desc = $("#header_param_desc").val();
-    $.ajax({
-        url: new_url,
-        method: "POST",
-        data:{param:param,necessary:necessary,desc:desc,api_no:api_no},
-        success:function(data){
-            if (data.status == true){
-                for(var i=0;i<new_data.length;i++){
-                    var t_len = $("#api_header_param").length;
-                    var trHTML = "<tr id='tr_" + new_data[i].api_no + new_data[i].param + "'><td>" + new_data[i].param;
-                    trHTML += '</td><td><select class="form-control" disabled>';
-                    if (new_data[i].necessary == true) {
-                        trHTML += '<option value="1" selected="selected">是</option><option value="0">否</option></select></td>';
-                    }
-                    else{
-                        trHTML += '<option value="1">是</option><option value="0" selected="selected">否</option></select></td>';
-                    }
-                    trHTML += '<td>' + new_data[i].desc + '</td><td><button class="btn btn-success">更新</button> <button class="btn btn-danger"  onclick="delete_header_param('+ "'" + new_data[i].api_no + "','" + new_data[i].param + "'" + ')">删除</button></td></tr>"';
-                    var tr=$("#api_header_param tr").eq(-2);
-                    tr.after(trHTML);
-                }
-                $("#header_param_name").val("");
-                $("#header_param_desc").val("");
+function add_header_success(data)
+{
+    if (data.status == true){
+        var new_data = data.data;
+        for(var i=0;i<new_data.length;i++){
+            var t_len = $("#api_header_param").length;
+            var trHTML = "<tr id='tr_" + new_data[i].api_no + new_data[i].param + "'><td>" + new_data[i].param;
+            trHTML += '</td><td><select class="form-control" disabled>';
+            if (new_data[i].necessary == true) {
+                trHTML += '<option value="1" selected="selected">是</option><option value="0">否</option></select></td>';
             }
             else{
-                alert(data)
+                trHTML += '<option value="1">是</option><option value="0" selected="selected">否</option></select></td>';
             }
-        },
-        error:function(xhr){
-            alert(xhr.statusText);
+            trHTML += '<td>' + new_data[i].desc + '</td><td><button class="btn btn-success">更新</button> <button class="btn btn-danger"  onclick="delete_header_param('+ "'" + new_data[i].api_no + "','" + new_data[i].param + "'" + ')">删除</button></td></tr>"';
+            var tr=$("#api_header_param tr").eq(-2);
+            tr.after(trHTML);
         }
-    });
+        $("#header_param_name").val("");
+        $("#header_param_desc").val("");
+    }
+    else{
+        alert(data)
+    }
 }
 
-function new_body_param(new_url){
-    var api_no = $("#api_no").val();
-    var param = $("#body_param_name").val();
-    var necessary = $("#body_param_ne").val();
-    var type = $("#body_param_type").val();
-    var desc = $("#body_param_desc").val();
-    $.ajax({
-        url: new_url,
-        method: "POST",
-        data:{param:param,necessary:necessary,desc:desc,api_no:api_no, type:type},
-        success:function(data){
-            if (data.status == true){
-                var new_data = data.data;
-                for(var i=0;i<new_data.length;i++){
-                    $("#trb_" + new_data[i].api_no + new_data[i].param).remove();
-                    var trHTML = "<tr id='trb_" + new_data[i].api_no + new_data[i].param + "'><td>" + new_data[i].param;
-                    trHTML += '</td><td>';
-                    if (new_data[i].necessary == true) {
-                        trHTML += '是';
-                    }
-                    else{
-                        trHTML += '否';
-                    }
-                    trHTML += '<td>' + new_data[i].type + '</td><td>' + new_data[i].desc + '</td>';
-                    trHTML += '<td><button class="btn btn-success" onclick="update_body_param(' + "'" + api_no + "','" + param + "'" + ')">更新</button>';
-                    trHTML += '<button class="btn btn-danger"  onclick="delete_body_param('+ "'" + new_data[i].api_no + "','" + new_data[i].param + "'" + ')">删除</button></td></tr>"';
-                    var tr=$("#api_body_param tr").eq(-2);
-                    tr.after(trHTML);
-                }
-                $("#body_param_name").val("");
-                $("#body_param_desc").val("");
-                $("#body_param_type").val("");
-                $("#body_param_new").text("新建");
-
-                $("#body_param_new").removeClass();
-                $("#body_param_new").addClass("btn btn-info");
-            }
-        },
-        error:function(xhr){
-            alert(xhr.statusText);
-        }
-    });
-}
-
-function new_input_example(new_url){
-    var api_no = $("#api_no").val();
-    var desc = $("#input_desc").val();
-    var example = $("#input_example").val();
-    $.ajax({
-        url: new_url,
-        method: "POST",
-        data:{desc:desc,api_no:api_no,example:example},
-        success:function(data){
-            if (data.status == true) {
-                var new_data = data.data;
-                for(var i=0;i<new_data.length;i++) {
-                    var div_html = '<div id="div_' + new_data[i].input_no + '"><p>' + new_data[i].desc +'</p><p><textarea class="form-control" readonly>' + new_data[i].example + '</textarea></p>'
-                    div_html += '<button class="btn btn-success">更新</button> <button class="btn btn-danger" onclick="delete_input_param(' + "'" + new_data[i].input_no + "'" + ')">删除</button></div>';
-                    $("#api_input_exist").append(div_html);
-                }
-                $("#input_desc").val("");
-                $("#input_example").val("");
+function add_body_success(data)
+{
+    if (data.status == true){
+        var new_data = data.data;
+        for(var i=0;i<new_data.length;i++){
+            var param = new_data[i].param;
+            $("#trb_" + new_data[i].api_no + new_data[i].param).remove();
+            var trHTML = "<tr id='trb_" + new_data[i].api_no + new_data[i].param + "'><td>" + new_data[i].param;
+            trHTML += '</td><td>';
+            if (new_data[i].necessary == true) {
+                trHTML += '是';
             }
             else{
-                alert(data);
+                trHTML += '否';
             }
-        },
-        error:function(xhr){
-            alert(xhr.statusText);
+            trHTML += '<td>' + new_data[i].type + '</td><td>' + new_data[i].desc + '</td>';
+            trHTML += '<td><button class="btn btn-success" onclick="update_body_param(' + "'" + api_no + "','" + param + "'" + ')">更新</button>';
+            trHTML += '<button class="btn btn-danger"  onclick="delete_body_param('+ "'" + new_data[i].api_no + "','" + new_data[i].param + "'" + ')">删除</button></td></tr>"';
+            var tr=$("#api_body_param tr").eq(-2);
+            tr.after(trHTML);
         }
-    });
+        $("#body_param_name").val("");
+        $("#body_param_desc").val("");
+        $("#body_param_type").val("");
+        $("#btn_new_body").text("新建");
+
+        $("#btn_new_body").removeClass();
+        $("#btn_new_body").addClass("btn btn-info");
+    }
 }
 
-function new_output_example(new_url){
-    var api_no = $("#api_no").val();
-    var desc = $("#output_desc").val();
-    var example = $("#output_example").val();
-    $.ajax({
-        url: new_url,
-        method: "POST",
-        data:{desc:desc,api_no:api_no,example:example},
-        success:function(data){
-            if (data.status == true) {
-                var new_data = data.data;
-                for(var i=0;i<new_data.length;i++) {
-                    var div_html = '<div id="div_' + new_data[i].output_no + '"><p>' + new_data[i].desc +'</p><p><textarea class="form-control" readonly>' + new_data[i].example + '</textarea></p>'
-                    div_html += '<button class="btn btn-success">更新</button> <button class="btn btn-danger" onclick="delete_output_param(' + "'" + new_data[i].output_no + "'" + ')">删除</button></div>';
-                    $("#api_output_exist").append(div_html);
-                }
-                $("#output_desc").val("");
-                $("#output_example").val("");
-            }
-            else{
-                alert(data);
-            }
-        },
-        error:function(xhr){
-            alert(xhr.statusText);
+function add_input_success(data)
+{
+    if (data.status == true) {
+        var new_data = data.data;
+        for(var i=0;i<new_data.length;i++) {
+            var div_html = '<div id="div_' + new_data[i].input_no + '"><p>' + new_data[i].desc +'</p><p><textarea class="form-control" readonly>' + new_data[i].example + '</textarea></p>';
+            div_html += '<button class="btn btn-success">更新</button> <button class="btn btn-danger" onclick="delete_input_param(' + "'" + new_data[i].input_no + "'" + ')">删除</button></div>';
+            $("#api_input_exist").append(div_html);
         }
-    });
+        $("#input_param_desc").val("");
+        $("#input_param_example").val("");
+    }
+    else{
+        alert(data);
+    }
+}
+
+function add_output_success(data)
+{
+    if (data.status == true) {
+        var new_data = data.data;
+        for(var i=0;i<new_data.length;i++) {
+            var div_html = '<div id="div_' + new_data[i].output_no + '"><p>' + new_data[i].desc +'</p><p><textarea class="form-control" readonly>' + new_data[i].example + '</textarea></p>'
+            div_html += '<button class="btn btn-success">更新</button> <button class="btn btn-danger" onclick="delete_output_param(' + "'" + new_data[i].output_no + "'" + ')">删除</button></div>';
+            $("#api_output_exist").append(div_html);
+        }
+        $("#output_param_desc").val("");
+        $("#output_param_example").val("");
+    }
+    else{
+        alert(data);
+    }
+}
+
+function add_api_info(new_url, type){
+    var api_no = $("#api_no").val();
+    var id_prefix = type + "_param_";
+    var post_params = $("[id^="+ id_prefix +"]");
+    var request_data = new Object();
+    request_data["api_no"] = api_no;
+    for(var i=0;i<post_params.length;i++){
+        var one_param = post_params[i];
+        request_data[one_param.id.substring(id_prefix.length)] = one_param.value;
+    }
+    if(type == "header")
+        my_async_request(new_url, "POST", request_data, add_header_success);
+    else if (type == "body")
+        my_async_request(new_url, "POST", request_data, add_body_success);
+    else if(type == "input")
+        my_async_request(new_url, "POST", request_data, add_input_success);
+    else if(type == "output")
+        my_async_request(new_url, "POST", request_data, add_output_success);
+        console.info(request_data);
 }
 
 function delete_header_param(api_no, param){
@@ -289,10 +261,10 @@ function update_body_param(api_no, param)
     var param_tr = $("#trb_" + api_no + param);
     var tds = param_tr.find("td");
     $("#body_param_name").val(tds[0].innerHTML);
-    setSelectChecked("body_param_ne", tds[1].innerHTML);
+    setSelectChecked("body_param_necessary", tds[1].innerHTML);
     setSelectChecked("body_param_type", tds[2].innerHTML);
     $("#body_param_desc").val(tds[3].innerHTML);
-    $("#body_param_new").text("更新");
-    $("#body_param_new").removeClass();
-    $("#body_param_new").addClass("btn btn-success");
+    $("#btn_new_body").text("更新");
+    $("#btn_new_body").removeClass();
+    $("#btn_new_body").addClass("btn btn-success");
 }
