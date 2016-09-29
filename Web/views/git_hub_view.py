@@ -20,7 +20,7 @@ git_hub_view = create_blue('git_hup_view', url_prefix=url_prefix, auth_required=
 def receive_github_func():
     res = request.json
     request_num = res["number"]
-    if "pull_request" in res:
+    if res["action"] == "closed" and "pull_request" in res:
         pr_info = res["pull_request"]
         request_title = pr_info["title"]
         action_user = pr_info["user"]["login"]
@@ -28,11 +28,11 @@ def receive_github_func():
         base_branch = pr_info["head"]["ref"]
         compare_branch = pr_info["base"]["ref"]
         merged = pr_info["merged"]
-    repository = res["repository"]["name"]
-    info = dict(request_num=request_num, request_title=request_title, action_user=action_user,
-                request_body=request_body, base_branch=base_branch, compare_branch=compare_branch, merged=merged,
-                repository=repository)
-    control.add_pull_request(**info)
-    print(info)
+        repository = res["repository"]["name"]
+        info = dict(request_num=request_num, request_title=request_title, action_user=action_user,
+                    request_body=request_body, base_branch=base_branch, compare_branch=compare_branch, merged=merged,
+                    repository=repository)
+        control.add_pull_request(**info)
+        print(info)
     print(request.data)
     return jsonify({"status": True, "data": "success"})

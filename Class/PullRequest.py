@@ -19,7 +19,8 @@ class PullRequestManager:
         self.t_git_hub = "github_pull_request"
 
     def add_pull_request(self, request_num, action_user, request_title, request_body, base_branch, compare_branch, merged, repository):
+        action_no = int(time())
         info = dict(request_num=request_num, request_title=request_title, action_user=action_user,
                     request_body=request_body, base_branch=base_branch, compare_branch=compare_branch, merged=merged,
-                    repository=repository)
+                    repository=repository, action_no=action_no)
         self.db.execute_insert(self.t_git_hub, args=info)
