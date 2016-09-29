@@ -20,6 +20,7 @@ from Log import LogManager
 from IP import IPManager
 from Release import ReleaseManager
 from ParamFormat import ParamFormatManager
+from PullRequest import PullRequestManager
 from Class import DATE_FORMAT_STR, release_dir
 
 __author__ = 'ZhouHeng'
@@ -53,6 +54,7 @@ class ControlManager:
         self.ip = IPManager()
         self.relase_man = ReleaseManager(release_dir)
         self.param_man = ParamFormatManager()
+        self.pull_request_man = PullRequestManager()
         self.manger_email = ["budechao@ict.ac.cn", "biozy@ict.ac.cn"]
         self.jy_log = LogManager()
 
@@ -787,3 +789,7 @@ class ControlManager:
 
     def get_params_info(self, user_name, user_role):
         return self.param_man.select_param_format()
+
+    # 针对pull request
+    def add_pull_request(self, **kwargs):
+        return self.pull_request_man.add_pull_request(**kwargs)
