@@ -12,7 +12,7 @@ from Web import ip, dms_scheduler, user_blacklist, cookie_domain, dms_job
 
 __author__ = 'zhouheng'
 
-accept_agent = "(firefox|chrome|safari|window)"
+accept_agent = "(firefox|chrome|safari|window|GitHub)"
 trust_proxy = ["127.0.0.1", "10.25.244.32", "10.44.147.192"]
 
 
