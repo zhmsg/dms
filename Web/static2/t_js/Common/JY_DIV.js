@@ -13,6 +13,9 @@ function set_div_show(btn_id, is_show){
     else{
         $("." + div_class).hide();
     }
+    if(is_show == true) {
+        localStorage.setItem(location.href, btn_id);
+    }
 }
 
 
@@ -31,5 +34,12 @@ $(function(){
             }
         }
     });
-    $("div[class^='div_jy_']:first").show();
+    var select_btn = localStorage.getItem(location.href);
+    if(select_btn != null){
+        console.info("read from local " + select_btn);
+        set_div_show(select_btn, true);
+    }
+    else{
+        $("div[class^='div_jy_']:first").show();
+    }
 });
