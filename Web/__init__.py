@@ -68,6 +68,7 @@ data_url_prefix = "/data"
 log_url_prefix = "/log"
 tools_url_prefix = "/tools"
 release_url_prefix = "/dev/release"
+github_url_prefix = "/github"
 
 data_dir = "/ossdata/dmsdata"
 
