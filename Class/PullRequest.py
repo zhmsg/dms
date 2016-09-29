@@ -25,3 +25,6 @@ class PullRequestManager:
                     repository=repository, action_no=action_no)
         self.db.execute_insert(self.t_git_hub, args=info)
         return True
+
+    def select_pull_request(self):
+        cols = ["action_no"]
