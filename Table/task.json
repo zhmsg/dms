@@ -41,7 +41,7 @@
         "table_cols": [
             {
                 "pri_key": true,
-                "col_comment": "任务类型",
+                "col_comment": "任务类型 1代表每日日志 2代表服务器登录日志 3代表重启ih API 4代表重启ih WEB",
                 "col_name": "task_type",
                 "col_type": "int(11)"
             },

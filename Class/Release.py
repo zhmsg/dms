@@ -8,6 +8,7 @@ from time import time
 sys.path.append("..")
 from Tools.Mysql_db import DB
 from Class.WeiXin import WeiXinManager
+from Class.Task import TaskManager
 from Class import TIME_FORMAT, wx_service, release_host, release_host_port
 
 __author__ = 'ZhouHeng'
@@ -38,6 +39,8 @@ class ReleaseManager:
         self.latest_branch = "master"
         self.api_work_dir = release_dir + "/ih_GATCAPI"
         self.web_work_dir = release_dir + "/ih_GATCWeb"
+        self.api_task = TaskManager(3)
+        self.web_task = TaskManager(4)
         self.wx = WeiXinManager(wx_service)
 
     def new_release_task(self, user_name, reason, restart_service, reason_desc):
@@ -101,6 +104,7 @@ class ReleaseManager:
             run('ssh service "sh /home/msg/GATCAPI/restart_service.sh"', quiet=True)
             run('nohup gunicorn -b 0.0.0.0:8100 -t 3600 -w 5 -k "gevent" --backlog 2048 -p "/tmp/api_gunicorn_test.pid" --chdir API run:app 1>> API.log 2>> API.log & sleep 3')
             run('cat /tmp/api_gunicorn_test.pid >> service.pid')
+        self.api_task.update_scheduler_status(int(time()), "system", "restart ih api")
 
     def _restart_web(self):
         _pull_code(self.web_work_dir, self.latest_branch)
@@ -109,6 +113,7 @@ class ReleaseManager:
             run("sh stop.sh")
             run('nohup gunicorn -b 0.0.0.0:9101 -t 3600 -w 5 -k "gevent" --backlog 2048 -p "/tmp/web_gunicorn_test.pid" --chdir Web2 Webstart:app 1>> WEB.log 2>> WEB.log & sleep 3')
             run('cat /tmp/web_gunicorn_test.pid >> service.pid')
+        self.web_task.update_scheduler_status(int(time()), "system", "restart ih web")
 
     def _release_api(self, user_name, release_no, reason, reason_desc):
         reason_desc = u"%s 重启API测试环境 %s\n%s" % (user_name, reason, reason_desc)
