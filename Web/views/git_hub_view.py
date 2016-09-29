@@ -33,6 +33,4 @@ def receive_github_func():
                     request_body=request_body, base_branch=base_branch, compare_branch=compare_branch, merged=merged,
                     repository=repository)
         control.add_pull_request(**info)
-        print(info)
-    print(request.data)
     return jsonify({"status": True, "data": "success"})
