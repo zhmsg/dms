@@ -38,6 +38,11 @@
                 "col_type": "varchar(50)"
             },
             {
+                "col_comment": "是否合并",
+                "col_name": "merged",
+                "col_type": "bit(1)"
+            },
+            {
                 "col_comment": "仓库名称",
                 "col_name": "repository",
                 "col_type": "varchar(50)"
