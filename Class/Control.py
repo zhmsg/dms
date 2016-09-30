@@ -769,7 +769,6 @@ class ControlManager:
             return False, u"您没有权限"
         if restart_service == 0:
             result, web_pull_requests = self.relase_man.select_web_pull_request()
-            print(web_pull_requests)
             if len(web_pull_requests) <= 0:
                 return False, u"WEB无更新不可提交"
             result, api_pull_requests = self.relase_man.select_api_pull_request()
