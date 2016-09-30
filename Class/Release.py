@@ -146,7 +146,7 @@ class ReleaseManager:
         print("start push")
         _push_code(self.api_work_dir, reason_desc)
         self.update_release_task(release_no, True)
-        self.send_wx_msg(reason_desc)
+        self.send_wx_msg(wx_msg)
         return True, "success"
 
     def _release_web(self, user_name, release_no, reason, reason_desc):
