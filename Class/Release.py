@@ -128,7 +128,7 @@ class ReleaseManager:
         self.web_task.update_scheduler_status(int(time()), "system", "restart ih web")
 
     def _release_api(self, user_name, release_no, reason, reason_desc):
-        reason_desc = u"%s 重启API测试环境 %s\n%s" % (user_name, reason, reason_desc)
+        reason_desc = u"%s 重启API测试环境 %s\n%s\n" % (user_name, reason, reason_desc)
         wx_msg = reason_desc
         # 获得提交的pull request信息
         result, pull_requests = self.select_api_pull_request()
@@ -137,7 +137,7 @@ class ReleaseManager:
         else:
             wx_msg += u"API更新如下:\n"
             for i in range(len(pull_requests) - 1, -1, -1):
-                wx_msg += "%s:%s\n" % (i+1, pull_requests[i]["request_title"])
+                wx_msg += u"%s、%s\n" % (i+1, pull_requests[i]["request_title"])
         print("start restart")
         self._restart_api()
         self.update_release_task(release_no, True)
@@ -150,7 +150,7 @@ class ReleaseManager:
         return True, "success"
 
     def _release_web(self, user_name, release_no, reason, reason_desc):
-        reason_desc = u"%s 重启WEB测试环境 %s\n%s" % (user_name, reason, reason_desc)
+        reason_desc = u"%s 重启WEB测试环境 %s\n%s\n" % (user_name, reason, reason_desc)
         wx_msg = reason_desc
         # 获得提交的pull request信息
         result, pull_requests = self.select_web_pull_request()
@@ -159,14 +159,7 @@ class ReleaseManager:
         else:
             wx_msg += u"WEB更新如下:\n"
             for i in range(len(pull_requests) - 1, -1, -1):
-                wx_msg += "%s:%s\n" % (i+1, pull_requests[i]["request_title"])
-        result, pull_requests = self.select_api_pull_request()
-        if len(pull_requests) <= 0:
-            return False, u"API无更新"
-        else:
-            wx_msg += u"API更新如下:\n"
-            for i in range(len(pull_requests) - 1, -1, -1):
-                wx_msg += "%s:%s\n" % (i+1, pull_requests[i]["request_title"])
+                wx_msg += u"%s、%s\n" % (i+1, pull_requests[i]["request_title"])
         print("start restart")
         self._restart_web()
         self.update_release_task(release_no, True)
@@ -179,7 +172,7 @@ class ReleaseManager:
         return True, "success"
 
     def _release_ih(self, user_name, release_no, reason, reason_desc):
-        reason_desc = u"%s 重启API&WEB测试环境 %s\n%s" % (user_name, reason, reason_desc)
+        reason_desc = u"%s 重启API&WEB测试环境 %s\n%s\n" % (user_name, reason, reason_desc)
         wx_msg = reason_desc
         # 获得提交的pull request信息
         result, pull_requests = self.select_web_pull_request()
@@ -188,7 +181,14 @@ class ReleaseManager:
         else:
             wx_msg += u"WEB更新如下:\n"
             for i in range(len(pull_requests) - 1, -1, -1):
-                wx_msg += "%s:%s\n" % (i+1, pull_requests[i]["request_title"])
+                wx_msg += u"%s、%s\n" % (i+1, pull_requests[i]["request_title"])
+        result, pull_requests = self.select_api_pull_request()
+        if len(pull_requests) <= 0:
+            return False, u"API无更新"
+        else:
+            wx_msg += u"API更新如下:\n"
+            for i in range(len(pull_requests) - 1, -1, -1):
+                wx_msg += u"%s、%s\n" % (i+1, pull_requests[i]["request_title"])
         print("start restart")
         self._restart_api()
         self._restart_web()
