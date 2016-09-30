@@ -38,9 +38,8 @@ class DB(object):
         try:
             handled_item = self.cursor.execute(sql_query, args=args)
         except MySQLdb.Error as error:
-            print(error)
-            if freq >= 5:
-                raise Exception(error)
+            if freq >= 3 or error.args[0] != 2013:
+                raise MySQLdb.Error(error)
             self.connect()
             return self.execute(sql_query=sql_query, args=args, freq=freq+1)
         return handled_item

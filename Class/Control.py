@@ -767,6 +767,22 @@ class ControlManager:
             return False, u"您没有权限"
         if user_role & self.role_value["release_ih_V"] <= 0 and user_name != "system" and restart_service == 0:
             return False, u"您没有权限"
+        if restart_service == 0:
+            result, web_pull_requests = self.relase_man.select_web_pull_request()
+            print(web_pull_requests)
+            if len(web_pull_requests) <= 0:
+                return False, u"WEB无更新不可提交"
+            result, api_pull_requests = self.relase_man.select_api_pull_request()
+            if len(api_pull_requests) <= 0:
+                return False, u"API无更新不可提交"
+        elif restart_service == 1:
+            result, api_pull_requests = self.relase_man.select_api_pull_request()
+            if len(api_pull_requests) <= 0:
+                return False, u"API无更新不可提交"
+        elif restart_service == 2:
+            result, web_pull_requests = self.relase_man.select_web_pull_request()
+            if len(web_pull_requests) <= 0:
+                return False, u"WEB无更新不可提交"
         result, info = self.relase_man.select_release_task(user_name=user_name)
         if result is False:
             return False, info

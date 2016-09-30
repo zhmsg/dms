@@ -29,11 +29,19 @@ class PullRequestManager:
         self.db.execute_insert(self.t_git_hub, args=request_info)
         return True
 
-    def select_pull_request(self):
+    def select_pull_request(self, action_no=None, **kwargs):
         cols = ["action_no", "request_num", "action_user", "request_title", "request_body", "base_branch",
                 "compare_branch", "merged", "repository"]
-        select_sql = "SELECT %s FROM %s;" % (",".join(cols), self.t_git_hub)
-        self.db.execute(select_sql)
+        select_sql = "SELECT %s FROM %s" % (",".join(cols), self.t_git_hub)
+        where_con = []
+        if action_no is not None:
+            where_con.append("action_no>=%s" % action_no)
+        for key in kwargs:
+            where_con.append("{0}=%({0})s".format(key))
+        if len(where_con) > 0:
+            select_sql += " WHERE " + " AND ".join(where_con)
+        select_sql += ";"
+        self.db.execute(select_sql, args=kwargs)
         db_r = self.db.fetchall()
         pull_requests = []
         for item in db_r:

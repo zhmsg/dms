@@ -25,8 +25,8 @@ def receive_github_func():
         request_title = pr_info["title"]
         action_user = pr_info["user"]["login"]
         request_body = pr_info["body"]
-        base_branch = pr_info["head"]["ref"]
-        compare_branch = pr_info["base"]["ref"]
+        base_branch = pr_info["base"]["ref"]
+        compare_branch = pr_info["head"]["ref"]
         merged = pr_info["merged"]
         repository = res["repository"]["name"]
         info = dict(request_num=request_num, request_title=request_title, action_user=action_user,

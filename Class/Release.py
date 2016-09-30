@@ -9,6 +9,7 @@ sys.path.append("..")
 from Tools.Mysql_db import DB
 from Class.WeiXin import WeiXinManager
 from Class.Task import TaskManager
+from Class.PullRequest import PullRequestManager
 from Class import TIME_FORMAT, wx_service, release_host, release_host_port
 
 __author__ = 'ZhouHeng'
@@ -41,6 +42,7 @@ class ReleaseManager:
         self.web_work_dir = release_dir + "/ih_GATCWeb"
         self.api_task = TaskManager(3)
         self.web_task = TaskManager(4)
+        self.pull_request_man = PullRequestManager()
         self.wx = WeiXinManager(wx_service)
 
     def new_release_task(self, user_name, reason, restart_service, reason_desc):
@@ -96,6 +98,16 @@ class ReleaseManager:
                 self.wx.send_status(u"产品设计", user_info["openid"], "Test", msg)
         return True, "success"
 
+    def select_api_pull_request(self):
+        result, scheduler_info = self.api_task.select_scheduler_status()
+        task_status = scheduler_info["task_status"]
+        return self.pull_request_man.select_pull_request(action_no=task_status, repository="GATCAPI", merged=True, base_branch="master")
+
+    def select_web_pull_request(self):
+        result, scheduler_info = self.web_task.select_scheduler_status()
+        task_status = scheduler_info["task_status"]
+        return self.pull_request_man.select_pull_request(action_no=task_status, repository="GATCWeb", merged=True, base_branch="master")
+
     def _restart_api(self):
         _pull_code(self.api_work_dir, self.latest_branch)
         with cd(self.api_work_dir):
@@ -117,6 +129,10 @@ class ReleaseManager:
 
     def _release_api(self, user_name, release_no, reason, reason_desc):
         reason_desc = u"%s 重启API测试环境 %s\n%s" % (user_name, reason, reason_desc)
+        # 获得提交的pull request信息
+        pull_requests = self.select_api_pull_request()
+        if len(pull_requests) <= 0:
+            return False, u"无更新"
         print("start restart")
         self._restart_api()
         self.update_release_task(release_no, True)
