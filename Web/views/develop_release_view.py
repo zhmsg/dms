@@ -56,15 +56,17 @@ def run_task(release_no):
 def system_auto_release():
     if env != "Production":
         return
-    result, info = control.new_task("system", 0, u"自动发布", 0, u"系统周一到周五每天12：10，18：10左右自动重新发布晶云测试环境")
-    if result is True:
-        release_no = info["release_no"]
-        wait_seconds = random.randint(20, 60)
-        run_date = datetime.now() + timedelta(seconds=wait_seconds)
-        dms_scheduler.add_job(id="run_release_%s" % release_no, func=run_task, args=[release_no], trigger="date",
-                              run_date=run_date)
-    else:
-        print(info)
+    for restart_service in [0, 1, 2]:
+        result, info = control.new_task("system", 0, u"自动发布", restart_service, u"系统周一到周五每天12：10，18：10左右自动重新发布晶云测试环境")
+        if result is True:
+            release_no = info["release_no"]
+            wait_seconds = random.randint(20, 60)
+            run_date = datetime.now() + timedelta(seconds=wait_seconds)
+            dms_scheduler.add_job(id="run_release_%s" % release_no, func=run_task, args=[release_no], trigger="date",
+                                  run_date=run_date)
+            break
+        else:
+            print(info)
 
 
 @develop_release_view.route("/task/", methods=["POST"])
