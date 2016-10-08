@@ -51,7 +51,6 @@ class MyEmailManager:
             msg.attach(MIMEText(self.encoded(content, encoding), "html", encoding))
             smtp.sendmail(user, to, msg.as_string())
             smtp.quit()
-            print("send success")
             return True
         except Exception, e:
             error_message = "MyEmailManager send_mail error %s" % str(e.args)
