@@ -62,6 +62,6 @@
     </table>
   </div>
   <input id="status_url_prefix" value="{{ status_url_prefix }}" style="display: none">
-<script type="text/javascript" src="{{ 't_js/Common/my_ip.js' | make_static_url }}"></script>
-<script type="text/javascript" src="{{ 't_js/LOG/show_log.js' | make_static_url }}"></script>
+{{ 't_js/Common/my_ip.js' | make_static_html | safe }}
+{{ 't_js/LOG/show_log.js' | make_static_html | safe }}
 {% endblock %}
