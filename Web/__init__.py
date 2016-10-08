@@ -157,7 +157,7 @@ def make_static_url(filename):
 
 
 def make_default_static_url(filename):
-    return static_prefix_url + "/" + filename
+    return "/static/" + filename
 
 
 def make_static_html(filename):
