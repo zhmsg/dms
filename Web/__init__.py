@@ -154,3 +154,7 @@ def ip_str(ip_v):
 
 def make_static_url(filename):
     return static_prefix_url + "/" + filename
+
+
+def make_default_static_url(filename):
+    return static_prefix_url + "/" + filename
