@@ -158,3 +158,10 @@ def make_static_url(filename):
 
 def make_default_static_url(filename):
     return static_prefix_url + "/" + filename
+
+
+def make_script_html(filename):
+    script_src = make_static_url(filename)
+    default_src= make_default_static_url(filename)
+    html_s = "<script type=\"text/javascript\" src=\"%s\" onerror=\"this.src='%s'\"></script>" % (script_src, default_src)
+    return html_s
