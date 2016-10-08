@@ -12,10 +12,10 @@
 <link rel="stylesheet" href="{{ 't_css/main.css' | make_static_url }}">
 
 <!-- jQuery文件。务必在bootstrap.min.t_js 之前引入 -->
-<script type="text/javascript" src="{{ 't_js/jquery.min.js' | make_static_url }}"></script>
+{{ 't_js/jquery.min.js' | make_script_html | safe }}
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-<script type="text/javascript" src="{{ 't_js/bootstrap.min.js' | make_static_url }}"></script>
-<script type="text/javascript" src="{{ 't_js/info.js' | make_static_url }}"></script>
+{{ 't_js/bootstrap.min.js' | make_script_html | safe }}
+{{ 't_js/info.js' | make_script_html | safe }}
 </head>
 
 <body>

@@ -13,5 +13,5 @@
     {% if g.user_role | bit_and(g.role_value["release_ytj_N"]) >= g.role_value["release_ytj_N"] %}
         {% include "Release/Release_ytj.html" %}
     {% endif %}
-    <script type="text/javascript" src="{{ 't_js/Common/JY_DIV.js' | make_static_url }}"></script>
+    {{ 't_js/Common/JY_DIV.js' | make_script_html | safe }}
 {% endblock %}

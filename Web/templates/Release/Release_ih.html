@@ -71,9 +71,9 @@
     </div>
 </div>
 {% if g.ihVIP %}
-    <script type="text/javascript" src="{{ 't_js/Release/Release_Data_V.js' | make_static_url }}"></script>
+    {{ 't_js/Release/Release_Data_V.js' | make_script_html | safe }}
 {% else %}
-    <script type="text/javascript" src="{{ 't_js/Release/Release_Data_N.js' | make_static_url }}"></script>
+    {{ 't_js/Release/Release_Data_N.js' | make_script_html | safe }}
 {% endif %}
-<script type="text/javascript" src="{{ 't_js/Release/Release_Data.js' | make_static_url }}"></script>
-<script type="text/javascript" src="{{ 't_js/Release/Release_Dom.js' | make_static_url }}"></script>
+{{ 't_js/Release/Release_Data.js' | make_script_html | safe }}
+{{ 't_js/Release/Release_Dom.js' | make_script_html | safe }}

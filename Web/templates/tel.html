@@ -17,6 +17,6 @@
     </div>
 
   </div>
-<script type="text/javascript" src="{{ 't_js/bind_tel.js' | make_static_url }}"></script>
+{{ 't_js/bind_tel.js' | make_script_html | safe }}
 </div>
 {% endblock %}

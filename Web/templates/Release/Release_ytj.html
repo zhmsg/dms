@@ -40,5 +40,5 @@
         </iframe>
     </div>
 </div>
-<script type="text/javascript" src="{{ 't_js/Common/my_ip.js' | make_static_url }}"></script>
-<script type="text/javascript" src="{{ 't_js/Release/Release_ytj_Data.js' | make_static_url }}"></script>
+{{ 't_js/Common/my_ip.js' | make_script_html | safe }}
+{{ 't_js/Release/Release_ytj_Data.js' | make_script_html | safe }}

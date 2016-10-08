@@ -11,6 +11,6 @@
                 {% endfor %}
             </div>
         {% endfor %}
-    <script type="text/javascript" src="{{ 't_js/Common/add_node.js' | make_static_url }}"></script>
-    <script type="text/javascript" src="{{ 't_js/API_HELP/list_api.js' | make_static_url }}"></script>
+    {{ 't_js/Common/add_node.js' | make_script_html | safe }}
+    {{ 't_js/API_HELP/list_api.js' | make_script_html | safe }}
 {% endblock %}
