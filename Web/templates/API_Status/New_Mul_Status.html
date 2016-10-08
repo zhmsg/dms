@@ -59,6 +59,6 @@
     <input id="fun_info_url" value="{{ fun_info_url }}" style="display: none">
     <input id="error_type_url" value="{{ error_type_url }}" style="display: none">
     <input id="del_status_code_url" value="{{ del_status_code_url }}" style="display: none">
-    {{ 't_js/Common/my_requests.js' | make_script_html | safe }}
-    {{ 't_js/API_Status/status_mul_new.js' | make_script_html | safe }}
+    <script type="text/javascript" src="{{ 't_js/Common/my_requests.js' | make_static_url }}"></script>
+    <script type="text/javascript" src="{{ 't_js/API_Status/status_mul_new.js' | make_static_url }}"></script>
 {% endblock %}

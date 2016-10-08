@@ -18,5 +18,5 @@
   </div>
 
 </div>
-{{ 't_js/register.js' | make_script_html | safe }}
+<script type="text/javascript" src="{{ 't_js/register.js' | make_static_url }}"></script>
 {% endblock %}

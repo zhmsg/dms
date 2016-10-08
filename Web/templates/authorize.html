@@ -22,6 +22,6 @@
     </form>
   </div>
 </div>
-{{ 't_js/bootstrap.min.js' | make_script_html | safe }}
-{{ 't_js/authorize.js' | make_script_html | safe }}
+<script type="text/javascript" src="{{ 't_js/bootstrap.min.js' | make_static_url }}"></script>
+<script type="text/javascript" src="{{ 't_js/authorize.js' | make_static_url }}"></script>
 {% endblock %}

@@ -19,10 +19,10 @@
     <input id="api_info_url" value="{{ api_info_url }}" style="display: none">
     <input id="env_info_url" value="{{ env_info_url }}" style="display: none">
     <input id="module_api_url" value="{{ module_api_url }}" style="display: none">
-    {{ 't_js/Common/base64.js' | make_script_html | safe }}
-    {{ 't_js/Common/download_json.js' | make_script_html | safe }}
-    {{ 't_js/Common/url_tool.js' | make_script_html | safe }}
-    {{ 't_js/API_Test/batch_test_api_dom.js' | make_script_html | safe }}
-    {{ 't_js/API_Test/batch_test_api.js' | make_script_html | safe }}
+    <script type="text/javascript" src="{{ 't_js/Common/base64.js' | make_static_url }}"></script>
+    <script type="text/javascript" src="{{ 't_js/Common/download_json.js' | make_static_url }}"></script>
+    <script type="text/javascript" src="{{ 't_js/Common/url_tool.js' | make_static_url }}"></script>
+    <script type="text/javascript" src="{{ 't_js/API_Test/batch_test_api_dom.js' | make_static_url }}"></script>
+    <script type="text/javascript" src="{{ 't_js/API_Test/batch_test_api.js' | make_static_url }}"></script>
 {% endblock %}
 
