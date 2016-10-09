@@ -89,4 +89,4 @@ def list_task():
     result, info = control.get_task(g.user_name, g.user_role)
     return jsonify({"status": result, "data": info})
 
-dms_job.append({"func": "%s:system_auto_release" % __name__, "trigger": "cron", "id": "release_ih_daily", "day_of_week": "0-6", "hour": "12,18，19", "minute": "10,18"})
+dms_job.append({"func": "%s:system_auto_release" % __name__, "trigger": "cron", "id": "release_ih_daily", "day_of_week": "0-6", "hour": "12,18,19", "minute": "10,18"})
