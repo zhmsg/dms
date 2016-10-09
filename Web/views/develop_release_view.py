@@ -65,7 +65,7 @@ def system_auto_release():
             run_task(release_no)
             break
         else:
-            print(info)
+            print(info.encode("utf-8"))
 
 
 @develop_release_view.route("/task/", methods=["POST"])
