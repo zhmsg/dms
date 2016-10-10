@@ -68,7 +68,14 @@ function Add_Task_Info(task_info)
     }
     var h_user_name = $("<h4></h4>").text(task_info.user_name);
     var h_reason = $("<p></p>").text(task_info.reason);
-    var div_left = $('<div class="pull-left number"></div>');
+    var top_color = "#ff991d";
+    if(task_info["restart_service"] == 1){
+        top_color = "#aa772c"
+    }
+    else if(task_info["restart_service"] == 2){
+        top_color = "#66553b"
+    }
+    var div_left = $('<div class="pull-left number" style="border-top: 5px solid ' + top_color + '"></div>');
     div_left.append(h_user_name);
     div_left.append(h_reason);
     $("#div_task_list").append(div_left);
