@@ -69,6 +69,7 @@ log_url_prefix = "/log"
 tools_url_prefix = "/tools"
 release_url_prefix = "/dev/release"
 github_url_prefix = "/github"
+chat_url_prefix = "/chat"
 
 data_dir = "/ossdata/dmsdata"
 

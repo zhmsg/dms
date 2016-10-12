@@ -1,0 +1,11 @@
+{% extends "base_menu.html" %}
+
+{% block title %}交流{% endblock %}
+
+{% block center_content %}
+    <table id='message'></table>
+    <input id='chat'>
+    <button onclick='send()'>Send</button>
+
+    {{ 't_js/Chat/Chat.js' | make_static_html | safe }}
+{% endblock %}
