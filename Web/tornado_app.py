@@ -40,6 +40,6 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
 
 
 if __name__ == "__main__":
-    ado_app = tornado.web.Application([('/ado/socket', SocketHandler),])
+    ado_app = tornado.web.Application([('/chat/msg/', SocketHandler),])
     ado_app.listen(port=2300, address="0.0.0.0")
     tornado.ioloop.IOLoop.instance().start()

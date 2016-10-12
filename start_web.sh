@@ -9,3 +9,4 @@ fi
 
 cd ../Web
 nohup gunicorn -c gunicorn.conf msg_web:msg_web 1>>msg_web.log 2>>msg_web.log &
+nohup python tornado_app.py 1>>tornado_app.log 2>>tornado_app.log &

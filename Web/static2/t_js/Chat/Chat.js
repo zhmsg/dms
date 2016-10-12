@@ -2,11 +2,13 @@
  * Created by msg on 10/12/16.
  */
 var ws_service = location.host;
-    var ws = new WebSocket('ws://' + ws_service + '/ado/socket');
+    var ws = new WebSocket('ws://' + ws_service + '/chat/msg/');
     ws.onmessage = function(event) {
-        var table = document.getElementById('message');
+        var table = document.getElementById('chat_message');
         var msg = JSON.parse(event.data);
-        table.insertRow().insertCell().innerHTML = msg["sender"] + ":  " + msg["msg"];
+        var insert_row = table.insertRow();
+        insert_row.insertCell().innerHTML = msg["sender"];
+        insert_row.insertCell().innerHTML = msg["msg"];
     };
     ws.onopen = function(event) {
         var current_user_name = $("#current_user_name").val();
