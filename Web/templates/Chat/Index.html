@@ -10,8 +10,8 @@
         <th scope="col" width=90%">内容</th>
       </tr>
     </table>
-    <input id='chat' class="box-side width300">
-    <button onclick='send()' class="btn btn-primary" >Send</button>
+    <li><textarea class="box-side width300" rows="3" id="chat"></textarea></li>
+    <li><button onclick='send()' class="btn btn-primary" >发送</button></li>
 
     {{ 't_js/Chat/Chat.js' | make_static_html | safe }}
 {% endblock %}
