@@ -2,7 +2,9 @@
  * Created by msg on 10/12/16.
  */
 var ws_service = location.host;
-    var ws = new WebSocket('ws://' + ws_service + '/chat/msg/');
+
+function Init_WebSocket(ws_service){
+    ws = new WebSocket(ws_service);
     ws.onmessage = function(event) {
         var table = document.getElementById('chat_message');
         var msg = JSON.parse(event.data);
@@ -15,8 +17,23 @@ var ws_service = location.host;
         var login_msg = JSON.stringify({"msg_type": "login", "data": current_user_name});
         ws.send(login_msg);
     };
-    function send() {
-        var msg_info = JSON.stringify({"msg_type": "msg", "data": document.getElementById('chat').value});
-        ws.send(msg_info);
-        document.getElementById('chat').value = '';
+    ws.onclose = function(event) {
+        var table = document.getElementById('chat_message');
+        var insert_row = table.insertRow();
+        insert_row.insertCell().innerHTML = "local";
+        insert_row.insertCell().innerHTML = "连接已断开";
+        ws = Init_WebSocket(ws_service);
+    };
+    ws.onerror = function(event) {
+
+        //ws = new WebSocket('ws://' + ws_service + '/chat/msg/');
+    };
+    return ws;
+}
+ws_service = 'ws://192.168.120.10:2201/chat/msg/';
+var ws = Init_WebSocket(ws_service);
+function send() {
+    var msg_info = JSON.stringify({"msg_type": "msg", "data": document.getElementById('chat').value});
+    ws.send(msg_info);
+    document.getElementById('chat').value = '';
 }
