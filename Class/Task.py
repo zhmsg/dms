@@ -29,7 +29,7 @@ class TaskManager:
 
     def update_register_task(self, task_no, run_result=True):
         status_info = "|%s%s" % (int(time()), 1 if run_result is True else 0)
-        update_sql = "UPDATE %s SET status_info=CONCAT(status_info, '%s') WHERE task_no=%s AND task_type;" \
+        update_sql = "UPDATE %s SET status_info=CONCAT(status_info, '%s') WHERE task_no=%s AND task_type=%s;" \
                      % (self.register_task, status_info, task_no, self.task_type)
         self.db.execute(update_sql)
         return True, "success"
