@@ -66,10 +66,6 @@ def create_app():
     def handle_500(e):
         return str(e)
 
-    msg_web.config['REDIS_HOST'] = 'localhost'
-    msg_web.config['REDIS_PORT'] = 6379
-    msg_web.config['REDIS_DB'] = 0
-
     msg_web.session_interface = RedisSessionInterface()
 
     msg_web.static_folder = "static2"
