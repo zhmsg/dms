@@ -6,9 +6,9 @@ import os
 import re
 from flask import Flask, request, make_response, g, jsonify
 from flask_login import current_user
-
 from Web import login_manager, unix_timestamp, bit_and, current_env, ip_str, make_static_url, make_default_static_url
 from Web import ip, dms_scheduler, user_blacklist, cookie_domain, dms_job, make_static_html
+from redis_session import RedisSessionInterface
 
 __author__ = 'zhouheng'
 
@@ -65,6 +65,12 @@ def create_app():
     @msg_web.errorhandler(500)
     def handle_500(e):
         return str(e)
+
+    msg_web.config['REDIS_HOST'] = 'localhost'
+    msg_web.config['REDIS_PORT'] = 6379
+    msg_web.config['REDIS_DB'] = 0
+
+    msg_web.session_interface = RedisSessionInterface()
 
     msg_web.static_folder = "static2"
     msg_web.session_cookie_name = "jydms"

@@ -86,6 +86,7 @@ else:
 config = ConfigParser.ConfigParser()
 config.read("../config.conf")
 
+redis_host = config.get(env, "redis_host")
 static_prefix_url = config.get(env, "static_prefix_url")
 company_ip_start = config.getint(env, "company_ip_start")
 company_ip_end = config.getint(env, "company_ip_end")
