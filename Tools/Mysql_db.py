@@ -2,6 +2,7 @@
 # !/usr/bin/env python
 
 import MySQLdb
+import json
 from Tools import env
 
 __author__ = 'zhouheng'
@@ -32,13 +33,26 @@ class DB(object):
         self.cursor = self.conn.cursor()
         self.conn.autocommit(True)
 
+    def literal(self, s):
+        if not self.conn:
+            self.connect()
+        if isinstance(s, dict) or isinstance(s, tuple) or isinstance(s, list):
+            s = json.dumps(s)
+        return self.conn.literal(s)
+
     def execute(self, sql_query, args=None, freq=0):
         if self.cursor is None:
             self.connect()
+        if args is not None:
+            if isinstance(args, dict):
+                sql_query = sql_query % dict((key, self.literal(item)) for key, item in args.iteritems())
+            else:
+                sql_query = sql_query % tuple([self.literal(item) for item in args])
         try:
-            handled_item = self.cursor.execute(sql_query, args=args)
+            handled_item = self.cursor.execute(sql_query)
         except MySQLdb.Error as error:
-            if freq >= 3 or error.args[0] not in [2006, 2013]:
+            print(error)
+            if freq >= 3 or error.args[0] in [1054, 1064, 1146]:  # 列不存在 sql错误 表不存在
                 raise MySQLdb.Error(error)
             self.connect()
             return self.execute(sql_query=sql_query, args=args, freq=freq+1)
