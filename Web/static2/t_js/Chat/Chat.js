@@ -1,7 +1,7 @@
 /**
  * Created by msg on 10/12/16.
  */
-var ws_service = location.host;
+var ws_service = "ws://" + location.host + "/chat/msg/";
 
 function Init_WebSocket(ws_service){
     ws = new WebSocket(ws_service);
@@ -30,7 +30,7 @@ function Init_WebSocket(ws_service){
     };
     return ws;
 }
-ws_service = 'ws://192.168.120.10:2201/chat/msg/';
+
 var ws = Init_WebSocket(ws_service);
 function send() {
     var msg_info = JSON.stringify({"msg_type": "msg", "data": document.getElementById('chat').value});
