@@ -12,7 +12,7 @@ from redis_session import RedisSessionInterface
 
 __author__ = 'zhouheng'
 
-accept_agent = "(firefox|chrome|safari|window|GitHub)"
+accept_agent = "(firefox|chrome|safari|window|GitHub|jyrequests)"
 trust_proxy = ["127.0.0.1", "10.25.244.32", "10.44.147.192"]
 
 

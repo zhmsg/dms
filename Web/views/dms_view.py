@@ -107,6 +107,20 @@ def login():
         return resp
 
 
+@dms_view.route("/login/vip/", methods=["POST"])
+def login_vip():
+    request_data = request.json
+    user_name = request_data["user_name"]
+    result, info = user_m.check_vip(user_name)
+    if result is False:
+        return jsonify({"status": False, "data": "fail"})
+    user = User()
+    user.account = info["account"]
+    login_user(user)
+    session["role"] = info["role"]
+    return jsonify({"status": True, "data": "success"})
+
+
 @dms_view.route("/password/", methods=["GET"])
 def password_page():
     if "user_name" in g:

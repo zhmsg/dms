@@ -19,10 +19,9 @@ develop_param_view = create_blue('develop_param_view', url_prefix=url_prefix)
 
 @develop_param_view.route("/", methods=["GET"])
 def show_param_info_func():
-    if "X-Requested-With" in request.headers:
-        if request.headers["X-Requested-With"] == "XMLHttpRequest":
-            result, info = control.get_params_info(g.user_name, g.user_role)
-            return jsonify({"status": result, "data": info})
+    if "X-Requested-With" in request.headers or "X-JY-FROM" in request.headers:
+        result, info = control.get_params_info(g.user_name, g.user_role)
+        return jsonify({"status": result, "data": info})
     if g.user_role & g.role_value["param_new"] <= 0:
         g.role_level = 0
     elif g.user_role & g.role_value["param_update"] <= 0:

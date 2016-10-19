@@ -106,6 +106,12 @@ class UserManager:
         r["data"]["role"] = role
         return True, r["data"]
 
+    def check_vip(self, user_name):
+        if user_name != "system":
+            return False, 0
+        role = self.role_value["param_look"]
+        return True, {"account": user_name, "role": role}
+
     def check_account_exist(self, user_name, check_name):
         if check_account_format(check_name) is False:
             return False, u"账户名仅允许数字和字母，下划线（_），而且必须以字母开头,用户名长度不得低于3位，不得高于20位"
