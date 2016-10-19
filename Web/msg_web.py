@@ -87,9 +87,9 @@ def create_app():
             msg_web.register_blueprint(value[0])
 
     env = msg_web.jinja_env
+    env.globals = {"current_env": current_env("")}
     env.filters['unix_timestamp'] = unix_timestamp
     env.filters['bit_and'] = bit_and
-    env.filters['current_env'] = current_env
     env.filters['ip_str'] = ip_str
     env.filters['make_static_url'] = make_static_url
     env.filters['make_default_static_url'] = make_default_static_url

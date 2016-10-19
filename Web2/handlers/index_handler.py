@@ -11,7 +11,7 @@ url_prefix = ado_prefix + dms_url_prefix
 class IndexHandler(tornado.web.RequestHandler):
 
     def get(self):
-        self.render("login.html")
+        self.render("login.html", url_prefix=url_prefix, next_url="")
 
 
 http_handlers.append((url_prefix + "/", IndexHandler))
