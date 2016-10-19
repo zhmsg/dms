@@ -3,9 +3,14 @@
 __author__ = 'ZhouHeng'
 
 import json
+import os
+import sys
+sys.path.append("..")
 import tornado.web
 import tornado.ioloop
 import tornado.websocket
+
+from Web import http_handlers
 
 
 clients = dict()
@@ -38,8 +43,14 @@ class SocketHandler(tornado.websocket.WebSocketHandler):
     def on_close(self):
         del clients[str(id(self))]
 
+http_handlers.append(('/chat/msg/', SocketHandler))
+handler_files = os.listdir("./handlers")
+for handler_f in handler_files:
+    if handler_f.endswith("_handler.py"):
+        __import__("Web.handlers.%s" % handler_f[:-3])
+
 
 if __name__ == "__main__":
-    ado_app = tornado.web.Application([('/chat/msg/', SocketHandler),])
-    ado_app.listen(port=2300, address="0.0.0.0")
+    ado_app = tornado.web.Application(http_handlers, template_path="templates")
+    ado_app.listen(port=2300, address="127.0.0.1")
     tornado.ioloop.IOLoop.instance().start()

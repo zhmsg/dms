@@ -56,6 +56,8 @@ def load_user(account):
 
 login_manager.login_view = "dms_view.index"
 
+ado_prefix = "/ado"
+
 api_url_prefix = "/dev/api"
 status_url_prefix = "/dev/api/status"
 test_url_prefix = "/dev/api/test"
@@ -109,6 +111,7 @@ def company_ip_required(f):
 
 
 blues = {}
+http_handlers = []
 user_blacklist = []
 dms_job = []
 
