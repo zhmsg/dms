@@ -3,10 +3,9 @@
 
 
 import sys
-import random
 from datetime import datetime, timedelta
 from flask import render_template, request, jsonify, g
-from Web import release_url_prefix as url_prefix, create_blue, user_blacklist, dms_scheduler, env, dms_job
+from Web import release_url_prefix as url_prefix, create_blue, user_blacklist, dms_scheduler, current_env, dms_job
 from Web.views import control
 
 
@@ -55,7 +54,7 @@ def run_task(release_no):
 
 def system_auto_release():
     print("auto release")
-    if env != "Production":
+    if current_env != "Production":
         print("Not Production")
         return
     for restart_service in [0, 1, 2]:

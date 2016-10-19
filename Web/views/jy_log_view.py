@@ -7,7 +7,7 @@ from flask import render_template, request, jsonify, g
 from flask_login import login_required, current_user
 
 from Web import log_url_prefix as url_prefix, ip, my_email, company_ip_required, create_blue, status_url_prefix
-from Web import unix_timestamp, ip_str, dms_scheduler, env, dms_job
+from Web import unix_timestamp, ip_str, dms_scheduler, current_env, dms_job
 from Web.views import control
 
 sys.path.append('..')
@@ -75,7 +75,7 @@ def record_login():
 
 # 发送每日日志
 def send_log_func():
-    if env != "Production" and env != "Development":
+    if current_env != "Production" and current_env != "Development":
         return
     result, info = control.register_log_task()
     if result is False:
@@ -121,7 +121,7 @@ def send_log_func():
 
 # 每小时发送登录信息
 def send_login_info_func():
-    if env != "Production" and env != "Development":
+    if current_env != "Production" and current_env != "Development":
         return
     result, info = control.register_login_task()
     if result is False:
@@ -150,7 +150,7 @@ def send_login_info_func():
     print("send success")
 
 
-if env == "Production" or env == "Development":
+if current_env == "Production" or current_env == "Development":
     dms_job.append({"func": "%s:send_log_func" % __name__, "trigger": "cron", "id": "send_daily_log", "hour": 8, "minute": "30"})
     dms_job.append({"func": "%s:send_login_info_func" % __name__, "trigger": "cron", "id": "send_login_info", "hour": "9-17", "minute": "5"})
 

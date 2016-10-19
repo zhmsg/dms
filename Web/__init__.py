@@ -75,22 +75,22 @@ data_dir = "/ossdata/dmsdata"
 import os
 
 if os.path.exists("../env.conf") is False:
-    env = "Development"
+    current_env = "Development"
 
 else:
     with open("../env.conf") as r_env:
-        env = r_env.read().strip()
+        current_env = r_env.read().strip()
 
 # read config
 config = ConfigParser.ConfigParser()
 config.read("../config.conf")
 
-redis_host = config.get(env, "redis_host")
-static_prefix_url = config.get(env, "static_prefix_url")
-company_ip_start = config.getint(env, "company_ip_start")
-company_ip_end = config.getint(env, "company_ip_end")
+redis_host = config.get(current_env, "redis_host")
+static_prefix_url = config.get(current_env, "static_prefix_url")
+company_ip_start = config.getint(current_env, "company_ip_start")
+company_ip_end = config.getint(current_env, "company_ip_end")
 company_ips = [company_ip_start, company_ip_end]
-cookie_domain = config.get(env, "cookie_domain")
+cookie_domain = config.get(current_env, "cookie_domain")
 
 if os.path.isdir(data_dir) is False:
     os.mkdir(data_dir)
@@ -141,10 +141,6 @@ def unix_timestamp(t, style="time"):
 
 def bit_and(num1, num2):
     return num1 & num2
-
-
-def current_env(s):
-    return env
 
 
 def ip_str(ip_v):
