@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}内部管理系统-绑定手机{% endblock %}
+
+{% block content %}
+
+<div class="container">
+  <div class="loginMode">
+    <div class="form-signin">
+      <h4 class="form-signin-heading">您的账户尚未绑定手机号，绑定手机号账户更安全</h4>
+      <input type="text" name="user_name" class="form-control" value="{{ user_name }}" required disabled>
+      <input name="bind_token" class="form-control" value="{{ bind_token }}" style="display: none">
+      <input id="tel" class="form-control" placeholder="手机号" required>
+      <button id="send_code" disabled>获取验证码</button>
+      <input id="code" class="form-control" placeholder="验证码" required>
+      <button class="btn btn-lg btn-primary btn-block" name="btn_bind">绑定</button>
+    </div>
+
+  </div>
+{{ 't_js/bind_tel.js' | make_static_html | safe }}
+</div>
+{% endblock %}

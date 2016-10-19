@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}内部管理系统-用户授权{% endblock %}
+
+{% block content %}
+
+<label style="display: none" id="role_desc">{{ role_desc | tojson | safe }}</label>
+<div class="container">
+  <div class="loginMode">
+    <a role="button" class="btn btn-success pull-right" href="{{ url_for('dms_view.select_portal') }}">主菜单</a>
+    <form class="clear amendPrivilege" action="{{ url_prefix }}/authorize/user/" method="post">
+      <h4 class="form-signin-heading">修改用户权限 按照用户修改</h4>
+      <select class="form-control bug-input" id="perm_user" onchange="user_select_change();" name="perm_user">
+          {% for user in my_user %}
+              {% if user["user_name"] != g.user_name %}
+                <option role="{{ user["role"] }}" value="{{ user["user_name"] }}">{{ user["nick_name"] }}({{ user["user_name"] }})</option>
+              {% endif %}
+          {% endfor %}
+      </select>
+      {% include "perm_conent.html" %}
+      <button class="btn btn-lg btn-primary amendBtn" type="submit">修改</button>
+    </form>
+  </div>
+</div>
+{{ 't_js/bootstrap.min.js' | make_static_html | safe }}
+{{ 't_js/authorize.js' | make_static_html | safe }}
+{% endblock %}

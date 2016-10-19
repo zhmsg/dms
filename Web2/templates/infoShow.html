@@ -1,0 +1,225 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>内部管理系统-信息展示页</title>
+<!-- 新 Bootstrap 核心 CSS 文件 -->
+{{ 't_css/bootstrap.min.css' | make_static_html | safe }}
+<!-- 可选的Bootstrap主题文件（一般不用引入） -->
+{{ 't_css/bootstrap-theme.min.css' | make_static_html | safe }}
+<!--自定义的页面样式 -->
+{{ 't_css/main.css' | make_static_html | safe }}
+
+<!-- jQuery文件。务必在bootstrap.min.t_js 之前引入 -->
+{{ 't_js/jquery.min.js' | make_static_html | safe }}
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+{{ 't_js/bootstrap.min.js' | make_static_html | safe }}
+{{ 't_js/info.js' | make_static_html | safe }}
+</head>
+
+<body>
+<!-- 模态框 start-->
+<!-- 市场Mode start-->
+<div class="modal fade" id="marketModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">市场</h4>
+      </div>
+      <form action="{{ url_prefix }}/market/", method="post">
+        <div class="modal-body list-body">
+          <!-- 模态框内的提示语 start -->
+          <div class="toolTip redColor">温馨提醒：在此填写的内容一律不可修改，请谨慎操作每一步。</div>
+          <!-- 模态框内的提示语 end -->
+          <ul>
+            <li>
+              <label>数据编号</label>
+              <input name="data_no" id="market_data_no" type="text" class="form-control pull-right" readonly>
+            </li>
+            {% for info in market_attribute %}
+            <li>
+              <label>{{ market_attribute_ch[loop.index - 1] }}</label>
+              {% if info == "person" %}
+              <input name="{{ info }}" type="text" class="form-control pull-right" value="{{ user_name }}" readonly>
+              {% elif info == "panel" %}
+              <select name="{{ info }}" class="form-control pull-right panelInput">
+                {% for item in market_target %}
+                <option value="{{ item }}">{{ item }}</option>
+                {% endfor %}
+              </select>
+              {% elif info == "arrivetime" or info == "deadline" %}
+              <input name="{{ info }}" type="date" class="form-control pull-right">
+              {% else %}
+              <input name="{{ info }}" type="text" class="form-control pull-right">
+              {% endif %}
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">保存</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- 市场Mode end-->
+
+<!-- 上传Mode start-->
+<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">上传</h4>
+      </div>
+      <form action="{{ url_prefix }}/upload/" method="post">
+        <div class="modal-body list-body">
+          <!-- 模态框内的提示语 start -->
+          <div class="toolTip redColor">温馨提醒：在此填写的内容一律不可修改，请谨慎操作每一步。</div>
+          <!-- 模态框内的提示语 end -->
+          <ul>
+            <li>
+              <label>数据编号</label>
+              <input name="data_no" id="upload_data_no" type="text" class="form-control pull-right" readonly>
+            </li>
+            {% for info in upload_attribute %}
+            <li>
+              <label>{{ upload_attribute_ch[loop.index - 1] }}</label>
+              <input name="{{ info }}" type="text" class="form-control pull-right">
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">保存</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- 上传Mode end-->
+
+<!-- 计算Mode start-->
+<div class="modal fade" id="countModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">计算</h4>
+      </div>
+      <form action="{{ url_prefix }}/calc/" method="post">
+        <div class="modal-body list-body">
+          <!-- 模态框内的提示语 start -->
+          <div class="toolTip redColor">温馨提醒：在此填写的内容一律不可修改，请谨慎操作每一步。</div>
+          <!-- 模态框内的提示语 end -->
+          <ul>
+            <li>
+              <label>数据编号</label>
+              <input name="data_no" id="calc_data_no" type="text" class="form-control pull-right" readonly>
+            </li>
+            {% for info in calc_attribute %}
+            <li>
+              <label>{{ calc_attribute_ch[loop.index - 1] }}</label>
+              <input name="{{ info }}" type="text" class="form-control pull-right">
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">保存</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- 计算Mode end-->
+<!-- 模态框 end-->
+
+<div class="container">
+  <!--系统备注及说明模块 start-->
+  <div class="declare">
+      <p class="redColor"> 进入系统需知：</p>
+      <p>【1】每次进行添加数据时，编号是系统自动生成的。</p>
+      <p>【2】所有登陆系统进行相关操作的人员，所操作的内容一律不可修改，请慎重操作每一步。</p>
+      <p>【3】各部门只允许查看本部门所录入的数据，无权查看其它部门的数据（例如：市场部人员只有查看市场部数据的权限）。</p>
+      <p>【4】所有的操作流程都需要安装步骤123依次进行。即市场部数据完成之后，上传和计算才能依次进行，本系统不提供跳步骤操作的功能。</p>
+      <p>【5】当每个部门完成一个步骤之后，相应的步骤图标也会由灰色变为蓝色，但若操作失败，则没有相关提示信息出现。</p>
+      <p>【6】如果需要查看已经上传完成的数据，可点击蓝色的图标，则页面底部会出现所需查看的相关数据信息。</p>
+      <p>【7】请认真的阅读本系统的使用说明书，谨慎操作每一步。</p>
+      <p>【8】如果操作完成，请关闭浏览器即可。</p>
+  </div>
+  <!--系统备注及说明模块 end-->
+
+  <!-- 填写信息模块 start -->
+  <div class="infoShow">
+    <!-- 新建start -->
+    {% if market_role %}
+    <form class="newBtn" action="{{ url_prefix }}/data/" method="post">
+      <button type="submit" class="btn btn-primary pull-right">添加数据</button>
+    </form>
+  {% endif %}
+  <input id="data_url_prefix" value="{{ url_prefix }}" style="display: none"/>
+    <!-- 新建end -->
+    {% for data in data_info  %}
+    <!-- 编号start -->
+    <div class="pull-left number">
+      <form>
+        <h4>编号</h4>
+        <p>{{ data["data_no"] }}</p>
+      </form>
+    </div>
+    <!-- 编号 end -->
+
+    <!-- 步骤模块 start -->
+    <div class="step">
+
+      <!-- 市场 start -->
+      <div class="pull-left market"> <a onclick={% if data['status'] >0  and market_role  %}"get_info('market',{{ data["data_no"] }});"{% else %}"$('#market_data_no').val({{data["data_no"]}});"{% endif %} title="市场" data-toggle="modal" {% if market_role and data["status"] == 0 %}data-target="#marketModal"{% endif %}> <img src="/static/t_images/one_{% if data['status'] >0 %}success{% else %}gray{% endif %}.png" alt="" border="0" usemap="#Map{{ data["data_no"] }}1">
+        <map name="Map1" id="Map{{ data["data_no"] }}1">
+          <area shape="circle" coords="78,24,21" href="javascript:void(0);" />
+        </map>
+        </a>
+        <p>市场</p>
+      </div>
+      <!-- 市场 end -->
+
+      <!-- 上传 start -->
+      <div class="pull-left upload"> <a onclick={% if data['status'] >1  and upload_role %}"get_info('upload',{{ data["data_no"] }});"{% else %}"$('#upload_data_no').val({{data["data_no"]}});"{% endif %} title="上传" data-toggle="modal" {% if data['status'] == 1 and upload_role %}data-target="#uploadModal"{% endif %}> <img src="/static/t_images/two_{% if data['status'] >1 %}success{% else %}gray{% endif %}.png" alt="" border="0" usemap="#Map{{ data["data_no"] }}2" >
+        <map name="Map2" id="Map{{ data["data_no"] }}2">
+          <area shape="circle" coords="78,24,21" href="javascript:void(0);" />
+        </map>
+        </a>
+        <p>上传</p>
+      </div>
+      <!-- 上传 end -->
+
+      <!-- 计算 start -->
+      <div class="pull-left count"> <a onclick={% if data['status'] >2  and calc_role %}"get_info('calc',{{ data["data_no"] }});"{% else %}"$('#calc_data_no').val({{data["data_no"]}});"{% endif %} title="计算" data-toggle="modal" {% if data['status'] ==2  and calc_role%}data-target="#countModal"{% endif %}> <img src="/static/t_images/end_{% if data['status'] >2 %}success{% else %}gray{% endif %}.png" alt="" border="0" usemap="#Map{{ data["data_no"] }}3" >
+        <map name="Map3" id="Map{{ data["data_no"] }}3">
+          <area shape="circle" coords="78,24,21" href="javascript:void(0);" />
+        </map>
+        </a>
+        <p>计算</p>
+      </div>
+      <!-- 计算 end -->
+      <div class="clear"></div>
+    </div>
+    {% endfor %}
+    <!-- 步骤模块 end -->
+
+  </div>
+  <!-- 填写信息模块 end -->
+
+  <!--信息展示模块 start-->
+  <table class="table table-bordered table-hover infoShowMode" id="info"></table>
+  <!--信息展示模块 end-->
+
+</div>
+</body>
+</html>

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}选择功能模块{% endblock %}
+
+{% block content %}
+<div class="apiMode api-help-mode">
+{#    {% if g.user_role | bit_and(role_desc["data"]["role_list"]["market"]["role_value"]) >  0 or g.user_role | bit_and(role_desc["data"]["role_list"]["upload"]["role_value"]) >  0 or g.user_role | bit_and(role_desc["data"]["role_list"]["calc"]["role_value"]) >  0%}#}
+{#        <a href="{{ data_url_prefix }}/records/">数据管理</a>#}
+{#    {% endif %}#}
+    {% if g.user_role | bit_and(role_desc["api"]["role_list"]["api_look"]["role_value"]) >  0 %}
+        <a href="{{ api_url_prefix }}/">API文档</a>
+    {% endif %}
+    {% if g.user_role | bit_and(role_desc["status_code"]["role_list"]["status_code_look"]["role_value"]) >  0 %}
+        <a href="{{ api_url_prefix }}/status/">API状态码</a>
+    {% endif %}
+    {% if g.user_role | bit_and(role_desc["table"]["role_list"]["table_look"]["role_value"]) >  0 %}
+        <a href="{{ dev_url_prefix }}/data/table/">数据表设计</a>
+    {% endif %}
+    {% if g.user_role | bit_and(role_desc["right"]["role_list"]["right_look"]["role_value"]) >  0 %}
+        <a href="{{ right_url_prefix }}/">晶云平台操作权限</a>
+    {% endif %}
+    {% if g.user_role | bit_and(role_value["param_look"]) == role_value["param_look"] %}
+    <a href="{{ param_url_prefix }}/">晶云公共参数</a>
+    {% endif %}
+    {% if g.user_role | bit_and(role_value["log_look"]) >  0 %}
+        <a href="{{ log_url_prefix }}/">晶云平台日志</a>
+    {% endif %}
+    {% if g.user_role | bit_and(role_value["release_ih_N"]) > 0 or g.user_role | bit_and(role_value["release_ytj_N"]) > 0 %}
+        <a href="{{ release_url_prefix }}">重启晶云服务</a>
+    {% endif %}
+    {% if g.user_role | bit_and(role_desc["bug"]["role_list"]["bug_look"]["role_value"]) >  0 %}
+        <a href="{{ bug_url_prefix }}/">BUG</a>
+    {% endif %}
+    {% if g.user_role | bit_and(role_desc["user"]["role_list"]["user_new"]["role_value"]) >  0 %}
+        <a href="{{ dms_url_prefix }}/register/">新建用户</a>
+        <a href="{{ dms_url_prefix }}/authorize/">用户授权</a>
+    {% endif %}
+    <a href="{{ dms_url_prefix }}/password/">修改密码</a>
+    <a href="{{ dms_url_prefix }}/login/">退出</a>
+</div>
+{% endblock %}

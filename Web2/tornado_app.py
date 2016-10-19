@@ -10,7 +10,9 @@ import tornado.web
 import tornado.ioloop
 import tornado.websocket
 
-from Web import http_handlers
+from Web2 import http_handlers
+import ui_methods
+import ui_modules
 
 
 clients = dict()
@@ -47,10 +49,10 @@ http_handlers.append(('/chat/msg/', SocketHandler))
 handler_files = os.listdir("./handlers")
 for handler_f in handler_files:
     if handler_f.endswith("_handler.py"):
-        __import__("Web.handlers.%s" % handler_f[:-3])
+        __import__("Web2.handlers.%s" % handler_f[:-3])
 
 
 if __name__ == "__main__":
-    ado_app = tornado.web.Application(http_handlers, template_path="templates")
+    ado_app = tornado.web.Application(http_handlers, template_path="templates", ui_modules=ui_modules, ui_methods=ui_methods)
     ado_app.listen(port=2300, address="127.0.0.1")
     tornado.ioloop.IOLoop.instance().start()

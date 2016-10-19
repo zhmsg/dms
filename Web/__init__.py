@@ -7,7 +7,6 @@ from functools import wraps
 from flask import session, g, make_response, Blueprint, jsonify, request
 from flask_login import LoginManager, UserMixin, login_required
 from apscheduler.schedulers.background import BackgroundScheduler
-from apscheduler.jobstores.sqlalchemy import SQLAlchemyJobStore
 from Tools.Mysql_db import DB
 from Tools.MyIP import IPManager
 from Tools.MyEmail import MyEmailManager
@@ -55,8 +54,6 @@ def load_user(account):
 
 
 login_manager.login_view = "dms_view.index"
-
-ado_prefix = "/ado"
 
 api_url_prefix = "/dev/api"
 status_url_prefix = "/dev/api/status"
@@ -111,7 +108,6 @@ def company_ip_required(f):
 
 
 blues = {}
-http_handlers = []
 user_blacklist = []
 dms_job = []
 

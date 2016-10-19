@@ -1,0 +1,22 @@
+{% extends "base_menu.html" %}
+
+{% block title %}内部管理系统-注册用户{% endblock %}
+
+{% block center_content %}
+
+<div class="container">
+  <div class="loginMode">
+    <form class="clear amendPrivilege" action="{{ url_prefix }}/register/" method="post">
+      <h4 class="form-signin-heading">请填写注册信息</h4>
+      <input type="text" id="user_name" name="user_name" class="form-control" placeholder="用户名" required autofocus onblur="check_user_name();"> <span class="block bottom10" id="check_result"></span>
+      <input id="check_url" value="{{ check_url }}" style="display: none"/>
+      <input type="text" id="inputName" name="nick_name" class="form-control" placeholder="真实姓名" required>
+      {% include "perm_conent.html" %}
+      <button class="btn btn-lg btn-primary amendBtn" type="submit">注册</button>
+    </form>
+{#    <p>注意：新建账户密码默认为gene.ac,用户首次登录必须修改密码才能继续操作</p>#}
+  </div>
+
+</div>
+{{ 't_js/register.js' | make_static_html | safe }}
+{% endblock %}
