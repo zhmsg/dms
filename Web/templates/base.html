@@ -17,7 +17,7 @@
 </head>
 <body>
 <div class="container font16">
-    {% if g and g.user_name %}
+    {% if g.user_name %}
         <input id="current_user_name" value="{{ g.user_name }}" style="display: none">
     {% endif %}
     {% block content %} {% endblock %}
