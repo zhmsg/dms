@@ -31,7 +31,7 @@
     {% if g.user_role | bit_and(role_value["bug_look"]) >  0 %}
         <a href="{{ bug_url_prefix }}/">BUG</a>
     {% endif %}
-    {% if g.user_role | bit_and(role_desc["user"]["role_list"]["user_new"]["role_value"]) >  0 %}
+    {% if g.user_role | bit_and(role_value["user_new"]) >  0 %}
         <a href="{{ dms_url_prefix }}/register/">新建用户</a>
         <a href="{{ dms_url_prefix }}/authorize/">用户授权</a>
     {% endif %}
