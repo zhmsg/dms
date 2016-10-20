@@ -1,5 +1,3 @@
-# python c_file.py
-
 cd Table
 python develop_table.py
 

@@ -11,7 +11,7 @@ def make_default_static_url(filename):
     return "/static/" + filename
 
 
-def make_static_html(filename):
+def make_static_html(handler, filename):
     src = make_static_url(filename)
     default_src= make_default_static_url(filename)
     if filename.endswith(".js"):
