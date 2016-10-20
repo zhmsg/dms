@@ -4,9 +4,9 @@
 
 {% block content %}
 <div class="apiMode api-help-mode">
-    {% if g.user_role | bit_and(role_value["market"]) >  0 or g.user_role | bit_and(role_value["upload"]) >  0 or g.user_role | bit_and(role_value["calc"]) >  0%}
-        <a href="{{ data_url_prefix }}/records/">数据管理</a>
-    {% endif %}
+{#    {% if g.user_role | bit_and(role_value["market"]) >  0 or g.user_role | bit_and(role_value["upload"]) >  0 or g.user_role | bit_and(role_value["calc"]) >  0%}#}
+{#        <a href="{{ data_url_prefix }}/records/">数据管理</a>#}
+{#    {% endif %}#}
     {% if g.user_role | bit_and(role_value["api_look"]) >  0 %}
         <a href="{{ api_url_prefix }}/">API文档</a>
     {% endif %}
