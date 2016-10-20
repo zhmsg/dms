@@ -50,4 +50,7 @@ class GlobalInfo(object):
 
 
 class BaseHandler(tornado.web.RequestHandler):
-    kwargs = {"current_env": "Tornado", "g": GlobalInfo()}
+
+    def __init__(self, application, request, **kwargs):
+        super(BaseHandler, self).__init__(application, request, **kwargs)
+        self.kwargs = {"current_env": "Tornado", "g": GlobalInfo()}

@@ -8,12 +8,11 @@ url_prefix = ado_prefix + dms_url_prefix
 
 
 class IndexHandler(BaseHandler):
-    kwargs = BaseHandler.kwargs
-    kwargs["url_prefix"] = url_prefix
 
     def get(self):
+        self.kwargs["url_prefix"] = url_prefix
         self.kwargs["next_url"] = ""
-        self.render("login.html", **IndexHandler.kwargs)
+        self.render("login.html", **self.kwargs)
 
 
 http_handlers.append((url_prefix + "/", IndexHandler))
