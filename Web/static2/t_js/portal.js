@@ -33,7 +33,7 @@ $(function(){
             exist_index++;
         }
     }
-    $("#div_main_menu").append('<a href="' + $("#password_url_refix").val() + '/">' + '修改密码' + '</a>');
-    $("#div_main_menu").append('<a href="' + $("#exit_url_refix").val() + '/">' + '退出' + '</a>');
+    $("#div_main_menu").append('<a href="' + $("#password_url_prefix").val() + '/">' + '修改密码' + '</a>');
+    $("#div_main_menu").append('<a href="' + $("#exit_url_prefix").val() + '/">' + '退出' + '</a>');
 
 });
