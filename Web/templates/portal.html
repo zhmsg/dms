@@ -4,19 +4,19 @@
 
 {% block content %}
 <div class="apiMode api-help-mode">
-{#    {% if g.user_role | bit_and(role_desc["data"]["role_list"]["market"]["role_value"]) >  0 or g.user_role | bit_and(role_desc["data"]["role_list"]["upload"]["role_value"]) >  0 or g.user_role | bit_and(role_desc["data"]["role_list"]["calc"]["role_value"]) >  0%}#}
-{#        <a href="{{ data_url_prefix }}/records/">数据管理</a>#}
-{#    {% endif %}#}
-    {% if g.user_role | bit_and(role_desc["api"]["role_list"]["api_look"]["role_value"]) >  0 %}
+    {% if g.user_role | bit_and(role_value["market"]) >  0 or g.user_role | bit_and(role_value["upload"]) >  0 or g.user_role | bit_and(role_value["calc"]) >  0%}
+        <a href="{{ data_url_prefix }}/records/">数据管理</a>
+    {% endif %}
+    {% if g.user_role | bit_and(role_value["api_look"]) >  0 %}
         <a href="{{ api_url_prefix }}/">API文档</a>
     {% endif %}
-    {% if g.user_role | bit_and(role_desc["status_code"]["role_list"]["status_code_look"]["role_value"]) >  0 %}
+    {% if g.user_role | bit_and(role_value["status_code_look"]) >  0 %}
         <a href="{{ api_url_prefix }}/status/">API状态码</a>
     {% endif %}
-    {% if g.user_role | bit_and(role_desc["table"]["role_list"]["table_look"]["role_value"]) >  0 %}
+    {% if g.user_role | bit_and(role_value["table_look"]) >  0 %}
         <a href="{{ dev_url_prefix }}/data/table/">数据表设计</a>
     {% endif %}
-    {% if g.user_role | bit_and(role_desc["right"]["role_list"]["right_look"]["role_value"]) >  0 %}
+    {% if g.user_role | bit_and(role_value["right_look"]) >  0 %}
         <a href="{{ right_url_prefix }}/">晶云平台操作权限</a>
     {% endif %}
     {% if g.user_role | bit_and(role_value["param_look"]) == role_value["param_look"] %}
@@ -28,7 +28,7 @@
     {% if g.user_role | bit_and(role_value["release_ih_N"]) > 0 or g.user_role | bit_and(role_value["release_ytj_N"]) > 0 %}
         <a href="{{ release_url_prefix }}">重启晶云服务</a>
     {% endif %}
-    {% if g.user_role | bit_and(role_desc["bug"]["role_list"]["bug_look"]["role_value"]) >  0 %}
+    {% if g.user_role | bit_and(role_value["bug_look"]) >  0 %}
         <a href="{{ bug_url_prefix }}/">BUG</a>
     {% endif %}
     {% if g.user_role | bit_and(role_desc["user"]["role_list"]["user_new"]["role_value"]) >  0 %}
