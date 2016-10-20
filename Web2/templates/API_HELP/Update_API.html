@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}更新API解释{% endblock %}
+{% block title %}更新API解释{% end %}
 
 {% block content %}
     <br>
@@ -34,8 +34,8 @@
             <td>{{ item["param"] }}</td>
             <td>
                 <select class="form-control" disabled>
-                    <option value="1" {% if item["necessary"] %}selected="selected"{% endif %}>是</option>
-                    <option value="0" {% if not item["necessary"] %}selected="selected"{% endif %}>否</option>
+                    <option value="1" {% if item["necessary"] %}selected="selected"{% end %}>是</option>
+                    <option value="0" {% if not item["necessary"] %}selected="selected"{% end %}>否</option>
                 </select>
             </td>
             <td>{{ item["param_desc"] }}</td>
@@ -44,7 +44,7 @@
                 <button class="btn btn-danger" onclick="delete_header_param('{{ item["api_no"] }}','{{ item["param"] }}')">删除</button>
             </td>
         </tr>
-        {% endfor %}
+        {% end %}
             <td><input class="form-control" id="header_param_name"/></td>
             <td>
                 <select class="form-control" id="header_param_necessary">
@@ -61,8 +61,8 @@
             <button id="pp_{{ item }}" class="btn btn-danger" onclick="handle_predefine_param(this.id, 'header');" title="{{ api_info["predefine_header"][item]["param_desc"] }}" value="{{ item }}">不需要{{ item }}</button>
         {% else %}
             <button id="pp_{{ item }}" class="btn btn-info" onclick="handle_predefine_param(this.id, 'header');" title="{{ api_info["predefine_header"][item]["param_desc"] }}" value="{{ item }}">需要{{ item }}</button>
-        {% endif %}
-    {% endfor %}
+        {% end %}
+    {% end %}
     <table class="table table-bordered api-list-table" id="api_body_param">
         <caption>请求主体参数</caption>
         <tr>
@@ -75,7 +75,7 @@
         {% for item in api_info["body_info"] %}
         <tr id="trb_{{ item["api_no"] }}{{ item["param"] }}">
             <td>{{ item["param"] }}</td>
-            <td>{% if item["necessary"] %}是{% else %}否{% endif %}</td>
+            <td>{% if item["necessary"] %}是{% else %}否{% end %}</td>
             <td>{{ item["type"] }}</td>
             <td>{{ item["param_desc"] }}</td>
             <td>
@@ -83,7 +83,7 @@
                <button class="btn btn-danger" onclick="delete_body_param('{{ item["api_no"] }}','{{ item["param"] }}')">删除</button>
             </td>
         </tr>
-        {% endfor %}
+        {% end %}
         <td><input class="form-control" id="body_param_name"/></td>
         <td>
             <select class="form-control" id="body_param_necessary">
@@ -108,8 +108,8 @@
             <button id="pp_{{ item }}" class="btn btn-danger" onclick="handle_predefine_param(this.id, 'body');" title="{{ api_info["predefine_body"][item]["param_desc"] }}" value="{{ item }}">不需要{{ item }}</button>
         {% else %}
             <button id="pp_{{ item }}" class="btn btn-info" onclick="handle_predefine_param(this.id, 'body');" title="{{ api_info["predefine_body"][item]["param_desc"] }}" value="{{ item }}">需要{{ item }}</button>
-        {% endif %}
-    {% endfor %}
+        {% end %}
+    {% end %}
     <br>
     <div class="bottom20 api-example">
         <b>请求示例</b>
@@ -121,7 +121,7 @@
                <p><button class="btn btn-success">更新</button>
                <button class="btn btn-danger" onclick="delete_input_param('{{ item["input_no"] }}')">删除</button></p>
             </div>
-            {% endfor %}
+            {% end %}
         </div>
         <p><input class="form-control" id="input_param_desc" placeholder="请求示例描述"  /></p>
         <p><textarea class="form-control input_example" id="input_param_example" onchange="format_input(this.id);" onkeyup="format_input(this.id);" placeholder="请求示例，写成符合json格式。解释示例，请在描述中解释"></textarea></p>
@@ -139,7 +139,7 @@
                    <p><button class="btn btn-success">更新</button>
                    <button class="btn btn-danger" onclick="delete_output_param('{{ item["output_no"] }}')">删除</button></p>
                </div>
-            {% endfor %}
+            {% end %}
         </div>
         <p><input class="form-control" id="output_param_desc" placeholder="返回示例描述" /></p>
         <p><textarea class="form-control input_example" id="output_param_example" onchange="format_input(this.id);" onkeyup="format_input(this.id);" placeholder="返回示例，写成符合json格式。解释示例，请在描述中解释。所有完成后请将API状态置为完成"></textarea></p>
@@ -147,6 +147,6 @@
 
     </div>
     <input id="url_prefix" value="{{ url_prefix }}" style="display: none">
-    {{ 't_js/bootstrap.min.js' | make_static_html | safe }}
-    {{ 't_js/API_HELP/update_api.js' | make_static_html | safe }}
-{% endblock %}
+    {% module StaticModule('t_js/bootstrap.min.js') %}
+    {% module StaticModule('t_js/API_HELP/update_api.js') %}
+{% end %}

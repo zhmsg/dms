@@ -2,6 +2,7 @@
 # !/usr/bin/python
 
 __author__ = 'zhouheng'
+import tornado.web
 
 http_handlers = []
 
@@ -41,3 +42,12 @@ def make_static_html(filename):
     return html_s
 
 
+class GlobalInfo(object):
+
+    def __init__(self):
+        self.user_name = None
+        self.user_role = 0
+
+
+class BaseHandler(tornado.web.RequestHandler):
+    kwargs = {"current_env": "Tornado", "g": GlobalInfo()}

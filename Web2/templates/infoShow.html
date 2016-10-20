@@ -5,17 +5,17 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>内部管理系统-信息展示页</title>
 <!-- 新 Bootstrap 核心 CSS 文件 -->
-{{ 't_css/bootstrap.min.css' | make_static_html | safe }}
+{% module StaticModule('t_css/bootstrap.min.css') %}
 <!-- 可选的Bootstrap主题文件（一般不用引入） -->
-{{ 't_css/bootstrap-theme.min.css' | make_static_html | safe }}
+{% module StaticModule('t_css/bootstrap-theme.min.css') %}
 <!--自定义的页面样式 -->
-{{ 't_css/main.css' | make_static_html | safe }}
+{% module StaticModule('t_css/main.css') %}
 
 <!-- jQuery文件。务必在bootstrap.min.t_js 之前引入 -->
-{{ 't_js/jquery.min.js' | make_static_html | safe }}
+{% module StaticModule('t_js/jquery.min.js') %}
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-{{ 't_js/bootstrap.min.js' | make_static_html | safe }}
-{{ 't_js/info.js' | make_static_html | safe }}
+{% module StaticModule('t_js/bootstrap.min.js') %}
+{% module StaticModule('t_js/info.js') %}
 </head>
 
 <body>
@@ -47,15 +47,15 @@
               <select name="{{ info }}" class="form-control pull-right panelInput">
                 {% for item in market_target %}
                 <option value="{{ item }}">{{ item }}</option>
-                {% endfor %}
+                {% end %}
               </select>
               {% elif info == "arrivetime" or info == "deadline" %}
               <input name="{{ info }}" type="date" class="form-control pull-right">
               {% else %}
               <input name="{{ info }}" type="text" class="form-control pull-right">
-              {% endif %}
+              {% end %}
             </li>
-            {% endfor %}
+            {% end %}
           </ul>
         </div>
         <div class="modal-footer">
@@ -91,7 +91,7 @@
               <label>{{ upload_attribute_ch[loop.index - 1] }}</label>
               <input name="{{ info }}" type="text" class="form-control pull-right">
             </li>
-            {% endfor %}
+            {% end %}
           </ul>
         </div>
         <div class="modal-footer">
@@ -127,7 +127,7 @@
               <label>{{ calc_attribute_ch[loop.index - 1] }}</label>
               <input name="{{ info }}" type="text" class="form-control pull-right">
             </li>
-            {% endfor %}
+            {% end %}
           </ul>
         </div>
         <div class="modal-footer">
@@ -163,7 +163,7 @@
     <form class="newBtn" action="{{ url_prefix }}/data/" method="post">
       <button type="submit" class="btn btn-primary pull-right">添加数据</button>
     </form>
-  {% endif %}
+  {% end %}
   <input id="data_url_prefix" value="{{ url_prefix }}" style="display: none"/>
     <!-- 新建end -->
     {% for data in data_info  %}
@@ -180,7 +180,7 @@
     <div class="step">
 
       <!-- 市场 start -->
-      <div class="pull-left market"> <a onclick={% if data['status'] >0  and market_role  %}"get_info('market',{{ data["data_no"] }});"{% else %}"$('#market_data_no').val({{data["data_no"]}});"{% endif %} title="市场" data-toggle="modal" {% if market_role and data["status"] == 0 %}data-target="#marketModal"{% endif %}> <img src="/static/t_images/one_{% if data['status'] >0 %}success{% else %}gray{% endif %}.png" alt="" border="0" usemap="#Map{{ data["data_no"] }}1">
+      <div class="pull-left market"> <a onclick={% if data['status'] >0  and market_role  %}"get_info('market',{{ data["data_no"] }});"{% else %}"$('#market_data_no').val({{data["data_no"]}});"{% end %} title="市场" data-toggle="modal" {% if market_role and data["status"] == 0 %}data-target="#marketModal"{% end %}> <img src="/static/t_images/one_{% if data['status'] >0 %}success{% else %}gray{% end %}.png" alt="" border="0" usemap="#Map{{ data["data_no"] }}1">
         <map name="Map1" id="Map{{ data["data_no"] }}1">
           <area shape="circle" coords="78,24,21" href="javascript:void(0);" />
         </map>
@@ -190,7 +190,7 @@
       <!-- 市场 end -->
 
       <!-- 上传 start -->
-      <div class="pull-left upload"> <a onclick={% if data['status'] >1  and upload_role %}"get_info('upload',{{ data["data_no"] }});"{% else %}"$('#upload_data_no').val({{data["data_no"]}});"{% endif %} title="上传" data-toggle="modal" {% if data['status'] == 1 and upload_role %}data-target="#uploadModal"{% endif %}> <img src="/static/t_images/two_{% if data['status'] >1 %}success{% else %}gray{% endif %}.png" alt="" border="0" usemap="#Map{{ data["data_no"] }}2" >
+      <div class="pull-left upload"> <a onclick={% if data['status'] >1  and upload_role %}"get_info('upload',{{ data["data_no"] }});"{% else %}"$('#upload_data_no').val({{data["data_no"]}});"{% end %} title="上传" data-toggle="modal" {% if data['status'] == 1 and upload_role %}data-target="#uploadModal"{% end %}> <img src="/static/t_images/two_{% if data['status'] >1 %}success{% else %}gray{% end %}.png" alt="" border="0" usemap="#Map{{ data["data_no"] }}2" >
         <map name="Map2" id="Map{{ data["data_no"] }}2">
           <area shape="circle" coords="78,24,21" href="javascript:void(0);" />
         </map>
@@ -200,7 +200,7 @@
       <!-- 上传 end -->
 
       <!-- 计算 start -->
-      <div class="pull-left count"> <a onclick={% if data['status'] >2  and calc_role %}"get_info('calc',{{ data["data_no"] }});"{% else %}"$('#calc_data_no').val({{data["data_no"]}});"{% endif %} title="计算" data-toggle="modal" {% if data['status'] ==2  and calc_role%}data-target="#countModal"{% endif %}> <img src="/static/t_images/end_{% if data['status'] >2 %}success{% else %}gray{% endif %}.png" alt="" border="0" usemap="#Map{{ data["data_no"] }}3" >
+      <div class="pull-left count"> <a onclick={% if data['status'] >2  and calc_role %}"get_info('calc',{{ data["data_no"] }});"{% else %}"$('#calc_data_no').val({{data["data_no"]}});"{% end %} title="计算" data-toggle="modal" {% if data['status'] ==2  and calc_role%}data-target="#countModal"{% end %}> <img src="/static/t_images/end_{% if data['status'] >2 %}success{% else %}gray{% end %}.png" alt="" border="0" usemap="#Map{{ data["data_no"] }}3" >
         <map name="Map3" id="Map{{ data["data_no"] }}3">
           <area shape="circle" coords="78,24,21" href="javascript:void(0);" />
         </map>
@@ -210,7 +210,7 @@
       <!-- 计算 end -->
       <div class="clear"></div>
     </div>
-    {% endfor %}
+    {% end %}
     <!-- 步骤模块 end -->
 
   </div>

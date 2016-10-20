@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}添加API{% endblock %}
+{% block title %}添加API{% end %}
 
 {% block content %}
 <div class="container apiMode">
@@ -8,7 +8,7 @@
         <a class="btn btn-primary pull-right" href="{{ return_url }}" title="">查看API</a>
     {% else %}
         <a class="btn btn-primary pull-right" href="{{ url_prefix }}/" title="">API列表</a>
-    {% endif %}
+    {% end %}
   <div class="form-group">
      <label for="">API所属模块：</label>
      <select class="box-side" id="api_module" onchange="select_change()" >
@@ -18,9 +18,9 @@
                     <option about="{{ module["module_desc"] }}" value="{{ module["module_no"] }}" title="{{ module["module_prefix"] }}" selected="selected">{{ module["module_name"] }}</option>
                 {% else %}
                     <option about="{{ module["module_desc"] }}" value="{{ module["module_no"] }}" title="{{ module["module_prefix"] }}">{{ module["module_name"] }}</option>
-                {% endif %}
-            {% endfor %}
-        {% endfor %}
+                {% end %}
+            {% end %}
+        {% end %}
      </select>
   </div>
 {% if api_info %}
@@ -59,8 +59,8 @@
           <label for="">API请求方式：</label>
           <select class="box-side width300" name="api_method">
           {% for http_method in ["GET", "POST", "PUT", "DELETE"] %}
-            <option {% if api_info["basic_info"]["api_method"] == http_method %} selected="selected" {% endif %}>{{ http_method }}</option>
-          {% endfor %}
+            <option {% if api_info["basic_info"]["api_method"] == http_method %} selected="selected" {% end %}>{{ http_method }}</option>
+          {% end %}
           </select>
         </li>
         <li>
@@ -122,8 +122,8 @@
     <button type="submit" class="btn btn-success btn-down api-newBtn">新建</button>
   </form>
 
-{% endif %}
-{{ 't_js/API_HELP/new_api.js' | make_static_html | safe }}
+{% end %}
+{% module StaticModule('t_js/API_HELP/new_api.js') %}
 </div>
-{% endblock %}
+{% end %}
 

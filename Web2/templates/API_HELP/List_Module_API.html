@@ -11,7 +11,7 @@
         <a href="{{ url_prefix }}/?module_no={{ current_module["module_no"] }}&update=true" class="margin10">更新模块信息</a>
         <a href="{{ url_prefix }}/?module_no={{ current_module["module_no"] }}" class="margin10">删除模块</a>
         <a href="{{ test_module_url }}?module_no={{ current_module["module_no"] }}" class="margin10">测试模块</a>
-    {% endif %}
+    {% end %}
     <table class="table table-bordered table-hover api-list-table">
         <caption>API列表</caption>
         <tr>
@@ -29,7 +29,7 @@
             <td>{{ item["status"] }}</td>
             <td class="text-center"><a href="{{ url_prefix }}/info/?api_no={{ item["api_no"] }}">查看</a> | <a href="{{ url_prefix }}/test/?api_no={{ item["api_no"] }}">测试</a></td>
         </tr>
-        {% endfor %}
+        {% end %}
     </table>
     <a class="btn btn-primary pull-right" href="{{ url_prefix }}/new/?module_no={{ current_module["module_no"] }}" title="">添加API</a><br/><br/>
     <div class="care">
@@ -38,15 +38,15 @@
            <button class="btn btn-primary pull-right" onclick="change_care({{current_module["module_no"]}});" id="make_care">取消关注</button>
         {% else %}
             <button class="btn btn-primary pull-right" onclick="change_care({{current_module["module_no"]}});" id="make_care">关注</button>
-        {% endif %}
+        {% end %}
         <p><b>已关注的人(如果您使用到该API模块，请关注，以便模块增加或删除API，能尽快通知您。)</b></p>
         <div id="module_care_user">
             {% if my_care %}
                 <span id="mine_care">我</span>
-            {% endif %}
+            {% end %}
             {% for item in care_info %}
                 <span>{{ item["nick_name"] }}</span>
-            {% endfor %}
+            {% end %}
         </div>
     </div>
-{% endblock %}
+{% end %}

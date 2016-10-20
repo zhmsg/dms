@@ -1,6 +1,6 @@
 {% extends "base_menu.html" %}
 
-{% block title %}API帮助文档{% endblock %}
+{% block title %}API帮助文档{% end %}
 
 {% block center_content %}
         {% for part in part_module %}
@@ -8,9 +8,9 @@
                 <div style="margin-bottom: 10px"><b>【{{ part["part_desc"] }}】</b><br /></div>
                 {% for module_info in part["module_list"] %}
                     <a href="{{ url_prefix }}/?module_no={{ module_info["module_no"] }}">{{ module_info["module_name"] }}</a>
-                {% endfor %}
+                {% end %}
             </div>
-        {% endfor %}
-    {{ 't_js/Common/add_node.js' | make_static_html | safe }}
-    {{ 't_js/API_HELP/list_api.js' | make_static_html | safe }}
-{% endblock %}
+        {% end %}
+    {% module StaticModule('t_js/Common/add_node.js') %}
+    {% module StaticModule('t_js/API_HELP/list_api.js') %}
+{% end %}

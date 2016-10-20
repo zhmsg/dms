@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}内部管理系统-绑定手机{% endblock %}
+{% block title %}内部管理系统-绑定手机{% end %}
 
 {% block content %}
 
@@ -17,6 +17,6 @@
     </div>
 
   </div>
-{{ 't_js/bind_tel.js' | make_static_html | safe }}
+{% module StaticModule('t_js/bind_tel.js') %}
 </div>
-{% endblock %}
+{% end %}

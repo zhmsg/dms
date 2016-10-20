@@ -21,8 +21,8 @@
           <label class="api-describe" for="">所属分类：</label>
           <select class="box-side" id="module_part" >
               {% for part in part_module %}
-                  <option value="{{ part["part_no"] }}" {% if current_module["part_no"] == part["part_no"] %} selected {% endif %}>{{ part["part_name"] }}</option>
-              {% endfor %}
+                  <option value="{{ part["part_no"] }}" {% if current_module["part_no"] == part["part_no"] %} selected {% end %}>{{ part["part_name"] }}</option>
+              {% end %}
           </select>
         </li>
       <li>
@@ -30,16 +30,16 @@
           <select class="box-side" id="s_add_env">
               {% for item in test_env %}
                   <option value="{{ item["env_no"] }}" title="{{ item["env_address"] }}">{{ item["env_name"] }}</option>
-              {% endfor %}
+              {% end %}
           </select>
           <span class="symbol" onclick="add_test_env();">+</span>
           <div class="tag" id="div_add_env">
               {% for env in module_env_info %}
                   <span about="{{ env["env_name"] }}" value="{{ env["env_no"] }}" title="{{ env["env_address"] }}" >{{ env["env_name"] }}<b>X</b></span>
-              {% endfor %}
+              {% end %}
           </div>
       </li>
       </ul>
       <button id="btn_op_module" class="btn btn-success btn-down api-newBtn">更新模块</button>
     </div>
-{% endblock %}
+{% end %}

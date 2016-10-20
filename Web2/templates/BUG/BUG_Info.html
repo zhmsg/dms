@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}BUG信息{% endblock %}
+{% block title %}BUG信息{% end %}
 
 {% block content %}
     <br />
@@ -20,7 +20,7 @@
                 <b class="pull-right hand handCurrent">X</b>
                     {{ bug_info["link_user"]["ys"][user_name]["nick_name"] }}
                 </span>
-            {% endfor %}
+            {% end %}
         {#如果当前状态为 已有BUG拥有者 显示拥有者#}
         {% elif bug_info["basic_info"]["bug_status"] == 2 or bug_info["basic_info"]["bug_status"] == 3%}
             BUG拥有者：
@@ -29,11 +29,11 @@
                     <b class="pull-right hand handCurrent opacity">X</b>
                     {{ bug_info["link_user"]["owner"][user_name]["nick_name"] }}
                 </span>
-            {% endfor %}
+            {% end %}
         {#如果当前状态为 BUG已修复 显示信息#}
 {#       {% elif bug_info["basic_info"]["bug_status"] == 3 %}#}
 {#            BUG已被修复#}
-        {% endif %}
+        {% end %}
     </p>
 </div>
 <div class="bugInfoDepict">
@@ -43,8 +43,8 @@
         <p>{{ item["content"] }}</p>
     {% else %}
         <img src="{{ url_prefix }}/{{ bug_info["basic_info"]["submitter"] }}/{{ item['content']}}" width="100%">
-    {% endif %}
-{% endfor %}
+    {% end %}
+{% end %}
 </div>
 {# 提交关于BUG的描述 只有BUG提交者才可以提交 并且要在BUG的状态小于3即BUG处于未修复状态下才可以 #}
 <div class="clear bottom20 bugUpload">
@@ -60,7 +60,7 @@
         <input class="pull-left" type="file" accept="image/jpeg, image/png, image/gif" name="bug_img_example">
         <button class="btn btn-primary" type="submit" value="上传">上传</button>
     </form>
-{% endif %}
+{% end %}
 {#添加疑似BUG拥有者#}
 {% if bug_info["basic_info"]["bug_status"] < 2 %}
     <form action="{{ url_prefix }}/{{ bug_no }}/ys/" method="post">
@@ -69,12 +69,12 @@
             {% for user in user_list %}
                 {% if not user["user_name"] in bug_info["link_user"]["ys"] %}
                 <option value="{{ user["user_name"] }}">{{ user["nick_name"] }}</option>
-                {% endif %}
-            {% endfor %}
+                {% end %}
+            {% end %}
         </select>
         <button class="btn btn-primary" type="submit">添加</button>
     </form>
-{% endif %}
+{% end %}
 {#添加BUG拥有者#}
 {% if bug_info["basic_info"]["bug_status"] < 3 %}
     {% if bug_info["basic_info"]["submitter"] == current_user %}
@@ -84,19 +84,19 @@
             {% for user in user_list %}
                 {% if not user["user_name"] in bug_info["link_user"]["owner"] %}
                 <option value="{{ user["user_name"] }}">{{ user["nick_name"] }}</option>
-                {% endif %}
-            {% endfor %}
+                {% end %}
+            {% end %}
         </select>
         <button class="btn btn-primary" type="submit">添加</button>
     </form>
-    {% endif %}
+    {% end %}
     {% if current_user not in bug_info["link_user"]["owner"] %}
     <form action="{{ url_prefix }}/{{ bug_no }}/owner/"  method="post">
         <input name="owner" value="{{ current_user }}" style="display: none"/>
         <button class="btn btn-primary" type="submit">标记为我的BUG</button>
     </form>
-    {% endif %}
-{% endif %}
+    {% end %}
+{% end %}
 
 {#完成BUG#}
 {% if bug_info["basic_info"]["bug_status"] < 3 %}
@@ -104,16 +104,16 @@
     <form action="{{ url_prefix }}/{{ bug_no }}/fix/"  method="post">
         <button class="btn btn-primary" type="submit">BUG已修复</button>
     </form>
-    {% endif %}
-{% endif %}
+    {% end %}
+{% end %}
 {#取消BUG#}
 {% if bug_info["basic_info"]["bug_status"] < 3 %}
     {% if bug_info["basic_info"]["submitter"] == current_user %}
     <form action="{{ url_prefix }}/{{ bug_no }}/cancel/" method="post">
         <button class="btn btn-primary" type="submit">取消BUG</button>
     </form>
-    {% endif %}
-{% endif %}
+    {% end %}
+{% end %}
 
 {#不过属于BUG 设计如此#}
 {% if bug_info["basic_info"]["bug_status"] < 3 %}
@@ -121,8 +121,8 @@
     <form action="{{ url_prefix }}/{{ bug_no }}/design/", method="post">
         <button class="btn btn-primary" type="submit">不是BUG，就是这么设计的</button>
     </form>
-    {% endif %}
-{% endif %}
+    {% end %}
+{% end %}
 
 </div>
-{% endblock %}
+{% end %}

@@ -1,6 +1,6 @@
 {% extends "base_menu.html" %}
 
-{% block title %}内部管理系统-注册用户{% endblock %}
+{% block title %}内部管理系统-注册用户{% end %}
 
 {% block center_content %}
 
@@ -18,5 +18,5 @@
   </div>
 
 </div>
-{{ 't_js/register.js' | make_static_html | safe }}
-{% endblock %}
+{% module StaticModule('t_js/register.js') %}
+{% end %}

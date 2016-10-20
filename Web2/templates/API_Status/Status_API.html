@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}API返回状态码{% endblock %}
+{% block title %}API返回状态码{% end %}
 
 {% block content %}
     <a class="btn btn-primary pull-right margin20" href="{{ return_url }}" title="">返回API解释</a>
@@ -14,7 +14,7 @@
         <th scope="col" width=85%">解释</th>
         {% if del_power %}
             <th scope="col" width=5%">操作</th>
-        {% endif %}
+        {% end %}
       </tr>
       {% for item in status_info %}
           <tr id="s_{{ item["status_code"] }}">
@@ -22,9 +22,9 @@
              <td>{{ item["code_desc"] }}</td>
              {% if del_power %}
                  <td><a href="{{ del_status_code_url }}?status_code={{ item["status_code"] }}" title="">删除</a></td>
-             {% endif %}
+             {% end %}
           </tr>
-      {% endfor %}
+      {% end %}
     </table>
     <div class="status_out" id="status_code_info">ni</div>
     <ul class="pagination" id="pagination">
@@ -55,13 +55,13 @@
         </form>
         {% if new_module_power %}
         <a href="module/">添加状态码模块</a>
-        {% endif %}
+        {% end %}
         </div>
         <a href="mul/"><button type="button" class="btn btn-primary margin20" id="mul_new_btn">批量新建</button></a>
-        {% endif %}
+        {% end %}
     <input id="fun_info_url" value="{{ fun_info_url }}" style="display: none">
     <input id="error_type_url" value="{{ error_type_url }}" style="display: none">
-    {{ 't_js/Common/my_requests.js' | make_static_html | safe }}
-    {{ 't_js/Common/add_node.js' | make_static_html | safe }}
-    {{ 't_js/API_Status/status_api.js' | make_static_html | safe }}
-{% endblock %}
+    {% module StaticModule('t_js/Common/my_requests.js') %}
+    {% module StaticModule('t_js/Common/add_node.js') %}
+    {% module StaticModule('t_js/API_Status/status_api.js') %}
+{% end %}

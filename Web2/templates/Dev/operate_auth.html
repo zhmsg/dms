@@ -1,6 +1,6 @@
 {% extends "base_menu.html" %}
 
-{% block title %}晶云平台遗传频道权限描述{% endblock %}
+{% block title %}晶云平台遗传频道权限描述{% end %}
 {% block center_content %}
     <br />
     <table class="table table-bordered table-hover privilegeTable" cellspacing="0" cellpadding="0">
@@ -15,9 +15,9 @@
             <td>{{ item["operate"] }}</td>
             <td>{{ item["role"] }} {{ item["description"] }}</td>
         </tr>
-        {% endfor %}
+        {% end %}
     </table>
     <form method="get" action="{{ url_prefix }}/operate/auth/download">
         <button class="btn btn-success btn-down" type="submit">下载</button>
     </form>
-{% endblock %}
+{% end %}

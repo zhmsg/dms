@@ -23,7 +23,7 @@
               <select class="box-side" id="module_part" required>
                   {% for part in part_module %}
                      <option value="{{ part["part_no"] }}">{{ part["part_name"] }}</option>
-                  {% endfor %}
+                  {% end %}
               </select>
             </li>
           <li>
@@ -31,7 +31,7 @@
               <select class="box-side" id="s_add_env">
                   {% for item in test_env %}
                       <option value="{{ item["env_no"] }}" title="{{ item["env_address"] }}">{{ item["env_name"] }}</option>
-                  {% endfor %}
+                  {% end %}
               </select>
               <span class="symbol" onclick="add_test_env();">+</span>
               <div class="tag" id="div_add_env">
@@ -47,5 +47,5 @@
           </ul>
           <button id="btn_op_module" class="btn btn-success btn-down api-newBtn">新建模块</button>
         </div>
-    {% endif %}
-{% endblock %}
+    {% end %}
+{% end %}

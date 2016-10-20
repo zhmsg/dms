@@ -32,7 +32,7 @@
         <p>【7】周一到周五，每天的12:10、18:10系统会自动预约发布。</p>
         {% if g.ihVIP %}
             <p>【8】VIP用户不受第【2】条限制</p>
-        {% endif %}
+        {% end %}
     </div>
     <!--系统备注及说明模块 end-->
     <div class="infoShow">
@@ -44,7 +44,7 @@
                         <option value="">选择服务</option>
                         {% if g.ihVIP %}
                             <option value="0">API&WEB 测试环境</option>
-                        {% endif %}
+                        {% end %}
                         <option value="1">API 测试环境</option>
                         <option value="2">WEB 测试环境</option>
                     </select>
@@ -63,7 +63,7 @@
             </ul>
             <button id="btn_add_task" class="btn btn-success btn-down api-newBtn" disabled>
                 {% if not g.release_period %}
-                    非预约时段{% else %}预约{% endif %}</button>
+                    非预约时段{% else %}预约{% end %}</button>
         </div>
     </div>
     <div id="div_task_list">
@@ -71,9 +71,9 @@
     </div>
 </div>
 {% if g.ihVIP %}
-    {{ 't_js/Release/Release_Data_V.js' | make_static_html | safe }}
+    {% module StaticModule('t_js/Release/Release_Data_V.js') %}
 {% else %}
-    {{ 't_js/Release/Release_Data_N.js' | make_static_html | safe }}
-{% endif %}
-{{ 't_js/Release/Release_Data.js' | make_static_html | safe }}
-{{ 't_js/Release/Release_Dom.js' | make_static_html | safe }}
+    {% module StaticModule('t_js/Release/Release_Data_N.js') %}
+{% end %}
+{% module StaticModule('t_js/Release/Release_Data.js') %}
+{% module StaticModule('t_js/Release/Release_Dom.js') %}

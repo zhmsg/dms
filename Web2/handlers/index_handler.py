@@ -2,16 +2,18 @@
 # coding: utf-8
 __author__ = 'ZhouHeng'
 
-import tornado.web
-from Web2 import http_handlers, ado_prefix, dms_url_prefix
+from Web2 import BaseHandler, http_handlers, ado_prefix, dms_url_prefix
 
 url_prefix = ado_prefix + dms_url_prefix
 
 
-class IndexHandler(tornado.web.RequestHandler):
+class IndexHandler(BaseHandler):
+    kwargs = BaseHandler.kwargs
+    kwargs["url_prefix"] = url_prefix
 
     def get(self):
-        self.render("login.html", url_prefix=url_prefix, next_url="")
+        self.kwargs["next_url"] = ""
+        self.render("login.html", **IndexHandler.kwargs)
 
 
 http_handlers.append((url_prefix + "/", IndexHandler))
