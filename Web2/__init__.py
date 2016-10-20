@@ -4,8 +4,13 @@
 __author__ = 'zhouheng'
 import tornado.web
 
+from Class.Control import ControlManager
+from Class.User import UserManager
+
 http_handlers = []
 
+control = ControlManager()
+user_m = UserManager()
 ado_prefix = "/ado"
 
 api_url_prefix = "/dev/api"
@@ -54,3 +59,8 @@ class BaseHandler(tornado.web.RequestHandler):
     def __init__(self, application, request, **kwargs):
         super(BaseHandler, self).__init__(application, request, **kwargs)
         self.kwargs = {"current_env": "Tornado", "g": GlobalInfo()}
+
+    def render(self, template_name, **kwargs):
+        for key, value in kwargs.items():
+            self.kwargs[key] = value
+        super(BaseHandler, self).render(template_name, **self.kwargs)
