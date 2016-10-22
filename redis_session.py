@@ -26,11 +26,11 @@ class RedisSessionInterface(SessionInterface):
     serializer = pickle
     session_class = RedisSession
 
-    def __init__(self, redis=None, prefix='dmssession:'):
+    def __init__(self, redis=None, prefix='dmssession'):
         if redis is None:
             redis = Redis(host=redis_host)
         self.redis = redis
-        self.prefix = prefix
+        self.prefix = prefix + ":"
 
     def generate_sid(self):
         return str(uuid4())

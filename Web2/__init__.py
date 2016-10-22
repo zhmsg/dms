@@ -58,9 +58,14 @@ class BaseHandler(tornado.web.RequestHandler):
 
     def __init__(self, application, request, **kwargs):
         super(BaseHandler, self).__init__(application, request, **kwargs)
-        self.kwargs = {"current_env": "Tornado", "g": GlobalInfo()}
+        self.kwargs = {"current_env": "Tornado", "g": GlobalInfo(), "role_value": user_m.role_value}
 
     def render(self, template_name, **kwargs):
         for key, value in kwargs.items():
             self.kwargs[key] = value
         super(BaseHandler, self).render(template_name, **self.kwargs)
+
+    def get_current_user(self):
+        session_id = self.get_cookie("jydms")
+
+

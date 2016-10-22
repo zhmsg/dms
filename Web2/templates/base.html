@@ -20,6 +20,9 @@
     {% if g.user_name %}
         <input id="current_user_name" value="{{ g.user_name }}" style="display: none">
     {% end %}
+    {% if g.user_role %}
+        <input id="current_user_role" value="{{ g.user_role }}" style="display: none">
+    {% end %}
     {% block content %} {% end %}
 </div>
 <div style="position: fixed;bottom: 15px;left: 20px;cursor: pointer;">

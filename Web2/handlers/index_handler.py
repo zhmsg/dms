@@ -3,7 +3,7 @@
 __author__ = 'ZhouHeng'
 
 from Web2 import BaseHandler, http_handlers, ado_prefix, user_m
-from Web2 import dms_url_prefix, dev_url_prefix, api_url_prefix, bug_url_prefix, data_url_prefix, right_url_prefix
+from Web2 import dms_url_prefix, dev_url_prefix, api_url_prefix, bug_url_prefix, status_url_prefix, right_url_prefix
 from Web2 import log_url_prefix, param_url_prefix, release_url_prefix, control
 
 url_prefix = ado_prefix + dms_url_prefix
@@ -27,7 +27,6 @@ class LoginHandler(BaseHandler):
         self.render("login.html")
 
     def post(self):
-        print(self.get_body_argument("user_name"))
         user_name = self.get_body_argument("user_name")
         password = self.get_body_argument("password")
         result, info = user_m.check(user_name, password)
@@ -43,9 +42,9 @@ class PortalHandler(BaseHandler):
     def get(self):
         self.kwargs["url_prefix"] = url_prefix
         self.kwargs["next_url"] = ""
-        self.render("portal.html", data_url_prefix=data_url_prefix,
-                           api_url_prefix=api_url_prefix, dev_url_prefix=dev_url_prefix, bug_url_prefix=bug_url_prefix,
-                           dms_url_prefix=dms_url_prefix, right_url_prefix=right_url_prefix, log_url_prefix=log_url_prefix,
-                           role_desc=control.user_role_desc, param_url_prefix=param_url_prefix, release_url_prefix=release_url_prefix)
+        self.render("portal.html", api_url_prefix=api_url_prefix, dev_url_prefix=dev_url_prefix, bug_url_prefix=bug_url_prefix,
+                           dms_url_prefix=dms_url_prefix, right_url_prefix=right_url_prefix,
+                           log_url_prefix=log_url_prefix, param_url_prefix=param_url_prefix,
+                           release_url_prefix=release_url_prefix, status_url_prefix=status_url_prefix)
 
 http_handlers.append((url_prefix + "/portal/", PortalHandler))

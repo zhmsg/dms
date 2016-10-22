@@ -7,7 +7,7 @@ import re
 from flask import Flask, request, make_response, g, jsonify
 from flask_login import current_user
 from Web import login_manager, unix_timestamp, bit_and, current_env, ip_str, make_static_url, make_default_static_url
-from Web import ip, dms_scheduler, user_blacklist, cookie_domain, dms_job, make_static_html, control
+from Web import ip, dms_scheduler, user_blacklist, cookie_domain, dms_job, make_static_html, control, session_id_prefix
 from redis_session import RedisSessionInterface
 
 __author__ = 'zhouheng'
@@ -66,7 +66,7 @@ def create_app():
     def handle_500(e):
         return str(e)
 
-    msg_web.session_interface = RedisSessionInterface()
+    msg_web.session_interface = RedisSessionInterface(prefix=session_id_prefix)
 
     msg_web.static_folder = "static2"
     msg_web.session_cookie_name = "jydms"

@@ -19,21 +19,22 @@ var menu_list = [["api_look", "api_url_prefix", "API文档"], ["status_code_look
 
 $(function(){
     var current_user_role = parseInt($("#current_user_role").val());
-    var role_value = JSON.parse($("#role_value").text());
-    var exist_menu = new Array();
-    var exist_index = 0;
-    for(var i=0;i<menu_list.length;i++){
-        var menu_item = menu_list[i];
-        if(exist_menu.indexOf(menu_item[2]) >= 0){
-            continue;
+    if(current_user_role > 0) {
+        var role_value = JSON.parse($("#role_value").text());
+        var exist_menu = new Array();
+        var exist_index = 0;
+        for (var i = 0; i < menu_list.length; i++) {
+            var menu_item = menu_list[i];
+            if (exist_menu.indexOf(menu_item[2]) >= 0) {
+                continue;
+            }
+            if (bit_and(current_user_role, role_value[menu_item[0]])) {
+                $("#div_main_menu").append('<a href="' + $("#" + menu_item[1]).val() + '/">' + menu_item[2] + '</a>');
+                exist_menu[exist_index] = menu_item[2];
+                exist_index++;
+            }
         }
-        if(bit_and(current_user_role, role_value[menu_item[0]])){
-            $("#div_main_menu").append('<a href="' + $("#" + menu_item[1]).val() + '/">' + menu_item[2] + '</a>');
-            exist_menu[exist_index] = menu_item[2];
-            exist_index++;
-        }
+        $("#div_main_menu").append('<a href="' + $("#password_url_prefix").val() + '/">' + '修改密码' + '</a>');
+        $("#div_main_menu").append('<a href="' + $("#exit_url_prefix").val() + '/">' + '退出' + '</a>');
     }
-    $("#div_main_menu").append('<a href="' + $("#password_url_prefix").val() + '/">' + '修改密码' + '</a>');
-    $("#div_main_menu").append('<a href="' + $("#exit_url_prefix").val() + '/">' + '退出' + '</a>');
-
 });
