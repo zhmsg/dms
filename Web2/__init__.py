@@ -2,8 +2,9 @@
 # !/usr/bin/python
 
 __author__ = 'zhouheng'
+import ConfigParser
 import tornado.web
-
+from Web2.redis_session import RedisSessionInterface
 from Class.Control import ControlManager
 from Class.User import UserManager
 
@@ -28,6 +29,27 @@ release_url_prefix = "/dev/release"
 github_url_prefix = "/github"
 chat_url_prefix = "/chat"
 
+import os
+
+if os.path.exists("../env.conf") is False:
+    current_env = "Development"
+
+else:
+    with open("../env.conf") as r_env:
+        current_env = r_env.read().strip()
+
+# read config
+config = ConfigParser.ConfigParser()
+config.read("../config.conf")
+
+redis_host = config.get(current_env, "redis_host")
+static_prefix_url = config.get(current_env, "static_prefix_url")
+company_ip_start = config.getint(current_env, "company_ip_start")
+company_ip_end = config.getint(current_env, "company_ip_end")
+company_ips = [company_ip_start, company_ip_end]
+cookie_domain = config.get(current_env, "cookie_domain")
+session_id_prefix = config.get(current_env, "session_id_prefix")
+session_cookie_name = config.get(current_env, "session_cookie_name")
 
 def make_static_url(filename):
     return "/static" + "/" + filename
@@ -54,11 +76,22 @@ class GlobalInfo(object):
         self.user_role = 0
 
 
+session_interface = RedisSessionInterface(redis_host, session_id_prefix, cookie_domain, session_cookie_name)
+
+
 class BaseHandler(tornado.web.RequestHandler):
 
     def __init__(self, application, request, **kwargs):
         super(BaseHandler, self).__init__(application, request, **kwargs)
         self.kwargs = {"current_env": "Tornado", "g": GlobalInfo(), "role_value": user_m.role_value}
+        self.session = session_interface.open_session(self)
+        if "user_role" in self.session:
+            self.kwargs["g"].user_role = self.session["user_role"]
+        if "user_name" in self.session:
+            self.kwargs["g"].user_name = self.session["user_name"]
+
+    def prepare(self):
+        pass
 
     def render(self, template_name, **kwargs):
         for key, value in kwargs.items():
@@ -68,4 +101,21 @@ class BaseHandler(tornado.web.RequestHandler):
     def get_current_user(self):
         session_id = self.get_cookie("jydms")
 
+    def save_session(self):
+        session_interface.save_session(self)
 
+    def on_finish(self):
+        pass
+
+    def finish(self, chunk=None):
+        session_interface.save_session(self)
+        super(BaseHandler, self).finish(chunk)
+
+
+class BaseAuthHandler(BaseHandler):
+
+    def prepare(self):
+        super(BaseAuthHandler, self).prepare()
+        # self.session = self.session_interface.open_session(self)
+        # print(self.session)
+        # print("before request")
