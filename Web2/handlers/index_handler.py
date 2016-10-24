@@ -51,8 +51,6 @@ class PortalHandler(BaseAuthHandler):
     route_url = dms_url_prefix + "/portal/"
 
     def get(self):
-        self.kwargs["url_prefix"] = url_prefix
-        self.kwargs["next_url"] = ""
         self.render("portal.html", api_url_prefix=api_url_prefix, dev_url_prefix=dev_url_prefix, bug_url_prefix=bug_url_prefix,
                            dms_url_prefix=dms_url_prefix, right_url_prefix=right_url_prefix,
                            log_url_prefix=log_url_prefix, param_url_prefix=param_url_prefix,

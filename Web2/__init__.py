@@ -125,7 +125,7 @@ class BaseAuthHandler(BaseHandler):
     def prepare(self):
         super(BaseAuthHandler, self).prepare()
         if "user_name" not in self.session or "user_role" not in self.session:
-            self.redirect(dms_url_prefix + "/login/")
+            self.redirect(dms_url_prefix + "/login/?next=" + self.request.path)
 
 
 class ErrorHandler(tornado.web.RequestHandler):
