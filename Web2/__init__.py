@@ -51,8 +51,9 @@ cookie_domain = config.get(current_env, "cookie_domain")
 session_id_prefix = config.get(current_env, "session_id_prefix")
 session_cookie_name = config.get(current_env, "session_cookie_name")
 
+
 def make_static_url(filename):
-    return "/static" + "/" + filename
+    return static_prefix_url + "/" + filename
 
 
 def make_default_static_url(filename):
@@ -138,5 +139,3 @@ class ErrorHandler(tornado.web.RequestHandler):
             else:
                 self.write("Not Found")
             return
-
-
