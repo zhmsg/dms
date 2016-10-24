@@ -98,18 +98,6 @@ class BaseHandler(tornado.web.RequestHandler):
         if "user_name" in self.session and "user_role" in self.session:
             return self.session["user_name"]
 
-    @tornado.web.addslash
-    def get(self):
-        self.write_error(404)
-
-    @tornado.web.addslash
-    def post(self):
-        self.get()
-
-    @tornado.web.addslash
-    def delete(self):
-        self.get()
-
     def render(self, template_name, **kwargs):
         for key, value in kwargs.items():
             self.kwargs[key] = value
@@ -142,6 +130,7 @@ class ErrorHandler(tornado.web.RequestHandler):
     def initialize(self, status_code):
         self.set_status(status_code)
 
+    @tornado.web.addslash
     def prepare(self):
         if self._status_code == 404:
             if self.request.uri.startswith(ado_prefix):
