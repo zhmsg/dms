@@ -10,6 +10,7 @@ url_prefix = dms_url_prefix
 
 
 class IndexHandler(BaseHandler):
+    route_url = dms_url_prefix
 
     def get(self):
         if "user_name" in self.session and "user_role" in self.session:
@@ -23,6 +24,7 @@ http_handlers.append((url_prefix + "/", IndexHandler))
 
 
 class LoginHandler(BaseHandler):
+    route_url = dms_url_prefix + "/login/"
 
     def get(self):
         if "user_name" in self.session:
@@ -46,6 +48,7 @@ http_handlers.append((url_prefix + "/login/", LoginHandler))
 
 
 class PortalHandler(BaseAuthHandler):
+    route_url = dms_url_prefix + "/portal/"
 
     def get(self):
         self.kwargs["url_prefix"] = url_prefix

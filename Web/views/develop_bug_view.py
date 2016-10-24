@@ -10,7 +10,7 @@ from flask_login import current_user
 from werkzeug.utils import secure_filename
 
 from Web import bug_url_prefix, data_dir, create_blue
-from Web.views import control
+from Web import control
 from Class import TIME_FORMAT_STR
 
 sys.path.append('..')

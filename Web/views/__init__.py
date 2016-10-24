@@ -1,10 +1,6 @@
 # encoding: utf-8
 # !/usr/bin/python
 
+_author__ = 'zhouheng'
 
-from Class.Control import ControlManager
-
-__author__ = 'zhouheng'
-
-control = ControlManager()
 

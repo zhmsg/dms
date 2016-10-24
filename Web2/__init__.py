@@ -80,6 +80,7 @@ session_interface = RedisSessionInterface(redis_host, session_id_prefix, cookie_
 
 
 class BaseHandler(tornado.web.RequestHandler):
+    route_url = ado_prefix
 
     def __init__(self, application, request, **kwargs):
         super(BaseHandler, self).__init__(application, request, **kwargs)
@@ -134,6 +135,7 @@ class BaseHandler(tornado.web.RequestHandler):
 
 
 class BaseAuthHandler(BaseHandler):
+    route_url = BaseHandler.route_url
 
     def prepare(self):
         super(BaseAuthHandler, self).prepare()

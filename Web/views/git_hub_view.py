@@ -6,7 +6,7 @@ import sys
 from flask import request, jsonify
 
 from Web import github_url_prefix as url_prefix, create_blue
-from Web.views import control
+from Web import control
 
 sys.path.append('..')
 

@@ -9,7 +9,7 @@ import re
 from functools import wraps
 from flask import render_template, request, jsonify, g
 from Web import test_url_prefix, api_url_prefix, status_url_prefix, data_dir, create_blue
-from Web.views import control
+from Web import control
 
 
 sys.path.append('..')

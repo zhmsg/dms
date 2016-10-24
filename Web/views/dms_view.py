@@ -12,7 +12,7 @@ from Web import User
 
 from Web import dms_url_prefix, dev_url_prefix, api_url_prefix, bug_url_prefix, right_url_prefix
 from Web import log_url_prefix, create_blue, param_url_prefix, release_url_prefix, status_url_prefix
-from Web.views import control
+from Web import control
 
 sys.path.append('..')
 

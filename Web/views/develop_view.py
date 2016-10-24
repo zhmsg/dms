@@ -7,7 +7,7 @@ from flask import render_template, request
 from flask_login import current_user
 
 from Web import dev_url_prefix, create_blue
-from Web.views import control
+from Web import control
 
 sys.path.append('..')
 

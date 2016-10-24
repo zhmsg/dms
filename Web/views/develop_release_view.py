@@ -6,7 +6,7 @@ import sys
 from datetime import datetime, timedelta
 from flask import render_template, request, jsonify, g
 from Web import release_url_prefix as url_prefix, create_blue, user_blacklist, dms_scheduler, current_env, dms_job
-from Web.views import control
+from Web import control
 
 
 sys.path.append('..')

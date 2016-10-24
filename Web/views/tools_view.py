@@ -6,7 +6,7 @@ import sys
 from flask import jsonify, render_template, g
 
 from Web import tools_url_prefix as url_prefix, create_blue
-from Web.views import control
+from Web import control
 
 sys.path.append('..')
 
