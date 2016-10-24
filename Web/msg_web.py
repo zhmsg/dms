@@ -9,7 +9,7 @@ from flask_login import current_user
 from Web import login_manager, unix_timestamp, bit_and, current_env, ip_str, make_static_url, make_default_static_url
 from Web import ip, dms_scheduler, user_blacklist, cookie_domain, dms_job, make_static_html, control, session_id_prefix
 from Web import session_cookie_name
-from redis_session import RedisSessionInterface
+from Web.redis_session import RedisSessionInterface
 
 __author__ = 'zhouheng'
 
