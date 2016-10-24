@@ -91,16 +91,22 @@ class BaseHandler(tornado.web.RequestHandler):
         if "user_name" in self.session:
             self.kwargs["g"].user_name = self.session["user_name"]
 
+    def data_received(self, chunk):
+        pass
+
     def current_user(self):
         if "user_name" in self.session and "user_role" in self.session:
             return self.session["user_name"]
 
+    @tornado.web.addslash
     def get(self):
         self.write_error(404)
 
+    @tornado.web.addslash
     def post(self):
         self.get()
 
+    @tornado.web.addslash
     def delete(self):
         self.get()
 
@@ -124,9 +130,7 @@ class BaseHandler(tornado.web.RequestHandler):
 
     def write_error(self, status_code, **kwargs):
         if status_code == 404:
-            if not self.request.uri.endswith("/"):
-                self.redirect(self.request.uri + "/")
-            elif self.request.uri.startswith(ado_prefix):
+            if self.request.uri.startswith(ado_prefix):
                 self.redirect(self.request.uri[len(ado_prefix):])
             else:
                 self.write("Not Found")
