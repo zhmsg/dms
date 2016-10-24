@@ -128,15 +128,6 @@ class BaseHandler(tornado.web.RequestHandler):
         session_interface.save_session(self)
         super(BaseHandler, self).finish(chunk)
 
-    def write_error(self, status_code, **kwargs):
-        if status_code == 404:
-            if self.request.uri.startswith(ado_prefix):
-                self.redirect(self.request.uri[len(ado_prefix):])
-            else:
-                self.write("Not Found")
-            return
-        super(BaseHandler, self).write_error(status_code, **kwargs)
-
 
 class BaseAuthHandler(BaseHandler):
     route_url = BaseHandler.route_url
@@ -145,4 +136,18 @@ class BaseAuthHandler(BaseHandler):
         super(BaseAuthHandler, self).prepare()
         if "user_name" not in self.session or "user_role" not in self.session:
             self.redirect(dms_url_prefix + "/login/")
+
+
+class ErrorHandler(tornado.web.RequestHandler):
+    def initialize(self, status_code):
+        self.set_status(status_code)
+
+    def prepare(self):
+        if self._status_code == 404:
+            if self.request.uri.startswith(ado_prefix):
+                self.redirect(self.request.uri[len(ado_prefix):])
+            else:
+                self.write("Not Found")
+            return
+
 
