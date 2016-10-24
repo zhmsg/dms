@@ -91,7 +91,7 @@ class BaseHandler(tornado.web.RequestHandler):
             self.g.user_role = self.session["user_role"]
         if "user_name" in self.session:
             self.g.user_name = self.session["user_name"]
-        self.kwargs = {"current_env": "Tornado " + current_env, "g": GlobalInfo(), "role_value": user_m.role_value}
+        self.kwargs = {"current_env": "Tornado " + current_env, "g": self.g, "role_value": user_m.role_value}
 
     def data_received(self, chunk):
         pass
