@@ -10,7 +10,7 @@ from werkzeug.security import gen_salt
 from Class.User import UserManager
 from Web import User
 
-from Web import dms_url_prefix, dev_url_prefix, api_url_prefix, bug_url_prefix, data_url_prefix, right_url_prefix
+from Web import dms_url_prefix, dev_url_prefix, api_url_prefix, bug_url_prefix, right_url_prefix
 from Web import log_url_prefix, create_blue, param_url_prefix, release_url_prefix, status_url_prefix
 from Web.views import control
 
@@ -26,24 +26,6 @@ dms_view = create_blue('dms_view', url_prefix=url_prefix, auth_required=False)
 user_m = UserManager()
 
 
-def calc_redirect(role):
-    if role >= 1 and role <= 7:
-        url_for_fun = "transport_view.show"
-    elif role == 8 or role == 16 or role == 24:
-        url_for_fun = "develop_api_view.list_api"
-    elif role == 32:
-        url_for_fun = "develop_view.show_data_table"
-    elif role == 64:
-        url_for_fun = "develop_view.operate_auth_show"
-    elif role == 128:
-        url_for_fun = "dms_view.register_page"
-    elif role == 256 or role == 256 + 512:
-        url_for_fun = "develop_bug_view.show_bug_list"
-    else:
-        url_for_fun = "dms_view.select_portal"
-    return url_for_fun
-
-
 @dms_view.route("/", methods=["GET"])
 def index():
     next_url = ""
@@ -51,7 +33,7 @@ def index():
         if current_user.role == 0:
             return u"您还没有任何权限，请联系管理员授权"
         else:
-            return redirect(url_for(calc_redirect(current_user.role)))
+            return redirect(url_prefix + "/portal/")
     if "X-Requested-With" in request.headers:
         if request.headers["X-Requested-With"] == "XMLHttpRequest":
             return make_response("登录状态已过期，需要重新登录", 302)
@@ -103,7 +85,7 @@ def login():
     if session["role"] == 0:
             return u"您还没有任何权限，请联系管理员授权"
     else:
-        resp = redirect(url_for(calc_redirect(session["role"])))
+        resp = redirect(url_prefix + "/portal/")
         return resp
 
 

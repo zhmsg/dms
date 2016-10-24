@@ -12,7 +12,7 @@ http_handlers = []
 
 control = ControlManager()
 user_m = UserManager()
-ado_prefix = "/ado"
+ado_prefix = "/tornado"
 
 api_url_prefix = ado_prefix + "/dev/api"
 status_url_prefix = ado_prefix + "/dev/api/status"
@@ -83,7 +83,7 @@ class BaseHandler(tornado.web.RequestHandler):
 
     def __init__(self, application, request, **kwargs):
         super(BaseHandler, self).__init__(application, request, **kwargs)
-        self.kwargs = {"current_env": "Tornado", "g": GlobalInfo(), "role_value": user_m.role_value}
+        self.kwargs = {"current_env": "Tornado " + current_env, "g": GlobalInfo(), "role_value": user_m.role_value}
         self.session = session_interface.open_session(self)
         if "user_role" in self.session:
             self.kwargs["g"].user_role = self.session["user_role"]
