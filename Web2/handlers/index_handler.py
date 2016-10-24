@@ -6,7 +6,7 @@ from Web2 import BaseHandler, http_handlers, ado_prefix, user_m, BaseAuthHandler
 from Web2 import dms_url_prefix, dev_url_prefix, api_url_prefix, bug_url_prefix, status_url_prefix, right_url_prefix
 from Web2 import log_url_prefix, param_url_prefix, release_url_prefix, control
 
-url_prefix = ado_prefix + dms_url_prefix
+url_prefix = dms_url_prefix
 
 
 class IndexHandler(BaseHandler):

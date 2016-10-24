@@ -51,7 +51,6 @@ class RedisSessionInterface:
     def save_session(self, handler):
         domain = self.cookie_domain
         if not handler.session:
-            print("not")
             self.redis.delete(self.prefix + handler.session.sid)
             if handler.session.modified:
                 handler.clear_cookie(self.cookie_name, domain=domain)

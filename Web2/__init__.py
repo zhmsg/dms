@@ -14,20 +14,20 @@ control = ControlManager()
 user_m = UserManager()
 ado_prefix = "/ado"
 
-api_url_prefix = "/dev/api"
-status_url_prefix = "/dev/api/status"
-test_url_prefix = "/dev/api/test"
-bug_url_prefix = "/dev/bug"
-right_url_prefix = "/dev/right"
-param_url_prefix = "/dev/param"
-dev_url_prefix = "/dev"
-dms_url_prefix = ""
-data_url_prefix = "/data"
-log_url_prefix = "/log"
-tools_url_prefix = "/tools"
-release_url_prefix = "/dev/release"
-github_url_prefix = "/github"
-chat_url_prefix = "/chat"
+api_url_prefix = ado_prefix + "/dev/api"
+status_url_prefix = ado_prefix + "/dev/api/status"
+test_url_prefix = ado_prefix + "/dev/api/test"
+bug_url_prefix = ado_prefix + "/dev/bug"
+right_url_prefix = ado_prefix + "/dev/right"
+param_url_prefix = ado_prefix + "/dev/param"
+dev_url_prefix = ado_prefix + "/dev"
+dms_url_prefix = ado_prefix + ""
+data_url_prefix = ado_prefix + "/data"
+log_url_prefix = ado_prefix + "/log"
+tools_url_prefix = ado_prefix + "/tools"
+release_url_prefix = ado_prefix + "/dev/release"
+github_url_prefix = ado_prefix + "/github"
+chat_url_prefix = ado_prefix + "/chat"
 
 import os
 
@@ -93,6 +93,16 @@ class BaseHandler(tornado.web.RequestHandler):
     def prepare(self):
         pass
 
+    def current_user(self):
+        if "user_name" in self.session and "user_role" in self.session:
+            return self.session["user_name"]
+
+    def get(self):
+        self.write_error(404)
+
+    def post(self):
+        self.get()
+
     def render(self, template_name, **kwargs):
         for key, value in kwargs.items():
             self.kwargs[key] = value
@@ -111,9 +121,21 @@ class BaseHandler(tornado.web.RequestHandler):
         session_interface.save_session(self)
         super(BaseHandler, self).finish(chunk)
 
+    def write_error(self, status_code, **kwargs):
+        if status_code == 404:
+            if not self.request.uri.endswith("/"):
+                self.redirect(self.request.uri + "/")
+            elif self.request.uri.startswith(ado_prefix):
+                self.redirect(self.request.uri[len(ado_prefix):])
+            else:
+                self.write("Not Found")
+            return
+        super(BaseHandler, self).write_error(status_code, **kwargs)
+
 
 class BaseAuthHandler(BaseHandler):
 
+    @tornado.web.authenticated
     def prepare(self):
         super(BaseAuthHandler, self).prepare()
         # self.session = self.session_interface.open_session(self)
