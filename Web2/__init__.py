@@ -90,9 +90,6 @@ class BaseHandler(tornado.web.RequestHandler):
         if "user_name" in self.session:
             self.kwargs["g"].user_name = self.session["user_name"]
 
-    def prepare(self):
-        pass
-
     def current_user(self):
         if "user_name" in self.session and "user_role" in self.session:
             return self.session["user_name"]
@@ -101,6 +98,9 @@ class BaseHandler(tornado.web.RequestHandler):
         self.write_error(404)
 
     def post(self):
+        self.get()
+
+    def delete(self):
         self.get()
 
     def render(self, template_name, **kwargs):
