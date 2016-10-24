@@ -135,9 +135,8 @@ class BaseHandler(tornado.web.RequestHandler):
 
 class BaseAuthHandler(BaseHandler):
 
-    @tornado.web.authenticated
     def prepare(self):
         super(BaseAuthHandler, self).prepare()
-        # self.session = self.session_interface.open_session(self)
-        # print(self.session)
-        # print("before request")
+        if "user_name" not in self.session or "user_role" not in self.session:
+            self.redirect(dms_url_prefix + "/login/")
+
