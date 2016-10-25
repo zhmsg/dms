@@ -2,14 +2,12 @@
 # !/usr/bin/python
 
 __author__ = 'zhouheng'
-import ConfigParser
 import json
 import tornado.web
 from jinja2 import Environment, FileSystemLoader, TemplateNotFound
 from Web2.redis_session import RedisSessionInterface
 from Class.Control import ControlManager
 from Class.User import UserManager
-from Config.Config import *
 from Function.Common import *
 
 http_handlers = []
@@ -41,9 +39,6 @@ class GlobalInfo(object):
 
 
 class TemplateRendering(object):
-    """
-    A simple class to hold methods for rendering templates.
-    """
 
     def render_template(self, template_name, **kwargs):
         template_dirs = []
