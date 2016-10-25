@@ -76,10 +76,17 @@ class BaseHandler(tornado.web.RequestHandler, TemplateRendering):
         self.session = session_interface.open_session(self)
         self.kwargs = {"g": self.g}
         self.request.args = {}
+        self.request.form = {}
+        self.request.json = {}
 
     def prepare(self):
-        for key, value in dict(self.request.arguments).items():
+        for key, value in dict(self.request.query_arguments).items():
             self.request.args[key] = value[0]
+        for key, value in dict(self.request.body_arguments).items():
+            self.request.form[key] = value[0]
+        content_type = self.request.headers.get("Content-Type")
+        if content_type == "application/json":
+            self.request.json = json.loads(self.request.body)
 
     def get_session_id(self):
         user_agent = self.request.headers.get('User-Agent')
@@ -164,7 +171,7 @@ class ErrorHandler(tornado.web.RequestHandler):
     def prepare(self):
         if self._status_code == 404:
             if self.request.uri.startswith(ado_prefix):
-                self.redirect(self.request.uri[len(ado_prefix):])
+                return self.redirect(self.request.uri[len(ado_prefix):])
             else:
-                self.write("Not Found")
-            return
+                return self.write("Not Found")
+        return
