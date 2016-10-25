@@ -60,12 +60,6 @@ def login():
     result, info = user_m.check(user_name, password)
     if result is False:
         return info
-    if info["role"] == -1:
-        session["user_name"] = info["account"]
-        session["change_token"] = gen_salt(57)
-        session["expires_in"] = datetime.now() + timedelta(seconds=300)
-        session["password"] = password
-        return redirect(url_for("dms_view.password_page"))
     if info["tel"] is None:
         session["user_name"] = info["account"]
         session["bind_token"] = gen_salt(57)

@@ -72,10 +72,11 @@ class BaseHandler(tornado.web.RequestHandler, TemplateRendering):
         super(BaseHandler, self).__init__(application, request, **kwargs)
         self.g = GlobalInfo()
         self.session = session_interface.open_session(self)
-        if "user_role" in self.session:
-            self.g.user_role = self.session["user_role"]
-        if "user_name" in self.session:
-            self.g.user_name = self.session["user_name"]
+        if "role" in self.session:
+            self.g.user_role = self.session["role"]
+        if "user_id" in self.session:
+            self.g.user_name = self.session["user_id"]
+        print(self.session)
         menu_url = dms_url_prefix + "/portal/"
         self.kwargs = {"current_env": "Tornado " + current_env, "g": self.g, "role_value": user_m.role_value,
                        "menu_url": menu_url}
@@ -85,10 +86,6 @@ class BaseHandler(tornado.web.RequestHandler, TemplateRendering):
 
     def data_received(self, chunk):
         pass
-
-    def current_user(self):
-        if "user_name" in self.session and "user_role" in self.session:
-            return self.session["user_name"]
 
     def render(self, template_name, **kwargs):
         for key, value in kwargs.items():
@@ -109,7 +106,9 @@ class BaseHandler(tornado.web.RequestHandler, TemplateRendering):
         self.write(content)
 
     def get_current_user(self):
-        pass
+        if "user_id" in self.session and "user_role" in self.session:
+            return self.session["user_id"]
+        return None
 
     def save_session(self):
         session_interface.save_session(self)
@@ -127,7 +126,7 @@ class BaseAuthHandler(BaseHandler):
 
     def prepare(self):
         super(BaseAuthHandler, self).prepare()
-        if "user_name" not in self.session or "user_role" not in self.session:
+        if "user_id" not in self.session or "role" not in self.session:
             self.redirect(dms_url_prefix + "/login/?next=" + self.request.path)
 
 
