@@ -4,6 +4,7 @@
 __author__ = 'zhouheng'
 import ConfigParser
 import tornado.web
+from jinja2 import Environment, FileSystemLoader, TemplateNotFound
 from Web2.redis_session import RedisSessionInterface
 from Class.Control import ControlManager
 from Class.User import UserManager
@@ -52,6 +53,26 @@ session_id_prefix = config.get(current_env, "session_id_prefix")
 session_cookie_name = config.get(current_env, "session_cookie_name")
 
 
+def unix_timestamp(t, style="time"):
+    if type(t) == int or type(t) == long:
+        x = time.localtime(t)
+        if style == "time":
+            return time.strftime('%H:%M:%S', x)
+        else:
+            return time.strftime("%Y-%m-%d %H:%M:%S", x)
+    return t
+
+
+def bit_and(num1, num2):
+    return num1 & num2
+
+
+def ip_str(ip_v):
+    if type(ip_v) == int or type(ip_v) == long:
+        return ip.ip_value_str(ip_value=ip_v)
+    return ip_v
+
+
 def make_static_url(filename):
     return static_prefix_url + "/" + filename
 
@@ -62,7 +83,7 @@ def make_default_static_url(filename):
 
 def make_static_html(filename):
     src = make_static_url(filename)
-    default_src= make_default_static_url(filename)
+    default_src = make_default_static_url(filename)
     if filename.endswith(".js"):
         html_s = "<script type=\"text/javascript\" src=\"%s\" onerror=\"this.src='%s'\"></script>" % (src, default_src)
     else:
@@ -71,16 +92,41 @@ def make_static_html(filename):
 
 
 class GlobalInfo(object):
-
     def __init__(self):
         self.user_name = None
         self.user_role = 0
 
 
+class TemplateRendering(object):
+    """
+    A simple class to hold methods for rendering templates.
+    """
+
+    def render_template(self, template_name, **kwargs):
+        template_dirs = []
+        if self.settings.get('template_path', ''):
+            template_dirs.append(self.settings['template_path'])
+        env = Environment(loader=FileSystemLoader(template_dirs))
+        env.globals["current_env"] = current_env
+        env.globals["role_value"] = control.role_value
+        env.filters['unix_timestamp'] = unix_timestamp
+        env.filters['bit_and'] = bit_and
+        env.filters['ip_str'] = ip_str
+        env.filters['make_static_url'] = make_static_url
+        env.filters['make_default_static_url'] = make_default_static_url
+        env.filters['make_static_html'] = make_static_html
+        try:
+            template = env.get_template(template_name)
+        except TemplateNotFound:
+            raise TemplateNotFound(template_name)
+        content = template.render(kwargs)
+        return content
+
+
 session_interface = RedisSessionInterface(redis_host, session_id_prefix, cookie_domain, session_cookie_name)
 
 
-class BaseHandler(tornado.web.RequestHandler):
+class BaseHandler(tornado.web.RequestHandler, TemplateRendering):
     route_url = ado_prefix
 
     def __init__(self, application, request, **kwargs):
@@ -104,6 +150,20 @@ class BaseHandler(tornado.web.RequestHandler):
         for key, value in kwargs.items():
             self.kwargs[key] = value
         super(BaseHandler, self).render(template_name, **self.kwargs)
+
+    def render_html(self, template_name, **kwargs):
+        for key, value in kwargs.items():
+            self.kwargs[key] = value
+        self.kwargs.update({
+            'settings': self.settings,
+            'STATIC_URL': self.settings.get('static_url_prefix', '/static/'),
+            'request': self.request,
+            'current_user': self.current_user,
+            'xsrf_token': self.xsrf_token,
+            'xsrf_form_html': self.xsrf_form_html,
+        })
+        content = self.render_template(template_name, **self.kwargs)
+        self.write(content)
 
     def get_current_user(self):
         session_id = self.get_cookie("jydms")
