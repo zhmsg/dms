@@ -8,7 +8,7 @@ from flask import Flask, request, make_response, g, jsonify
 from flask_login import current_user
 from Web import login_manager, unix_timestamp, bit_and, current_env, ip_str, make_static_url, make_default_static_url
 from Web import ip, dms_scheduler, user_blacklist, cookie_domain, dms_job, make_static_html, control, session_id_prefix
-from Web import session_cookie_name
+from Web import session_cookie_name, dms_url_prefix
 from Web.redis_session import RedisSessionInterface
 
 __author__ = 'zhouheng'
@@ -90,6 +90,7 @@ def create_app():
     env = msg_web.jinja_env
     env.globals["current_env"] = current_env
     env.globals["role_value"] = control.role_value
+    env.globals["menu_url"] = dms_url_prefix + "/portal/"
     env.filters['unix_timestamp'] = unix_timestamp
     env.filters['bit_and'] = bit_and
     env.filters['ip_str'] = ip_str

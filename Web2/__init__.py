@@ -139,7 +139,9 @@ class BaseHandler(tornado.web.RequestHandler, TemplateRendering):
             self.g.user_role = self.session["user_role"]
         if "user_name" in self.session:
             self.g.user_name = self.session["user_name"]
-        self.kwargs = {"current_env": "Tornado " + current_env, "g": self.g, "role_value": user_m.role_value}
+        menu_url = dms_url_prefix + "/portal/"
+        self.kwargs = {"current_env": "Tornado " + current_env, "g": self.g, "role_value": user_m.role_value,
+                       "menu_url": menu_url}
 
     def data_received(self, chunk):
         pass
