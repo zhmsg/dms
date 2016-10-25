@@ -27,7 +27,7 @@ class LoginHandler(BaseHandler):
     route_url = dms_url_prefix + "/login/"
 
     def get(self):
-        if "user_name" in self.session:
+        if "user_id" in self.session:
             del self.session["user_id"]
         self.kwargs["url_prefix"] = url_prefix
         self.kwargs["next_url"] = ""
