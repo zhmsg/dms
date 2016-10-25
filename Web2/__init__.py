@@ -109,7 +109,7 @@ class BaseHandler(tornado.web.RequestHandler, TemplateRendering):
         self.write(content)
 
     def get_current_user(self):
-        session_id = self.get_cookie("jydms")
+        pass
 
     def save_session(self):
         session_interface.save_session(self)
