@@ -3,6 +3,7 @@
 
 __author__ = 'zhouheng'
 import json
+from hashlib import sha512
 import tornado.web
 from jinja2 import Environment, FileSystemLoader, TemplateNotFound
 from Web2.redis_session import RedisSessionInterface
@@ -76,7 +77,6 @@ class BaseHandler(tornado.web.RequestHandler, TemplateRendering):
             self.g.user_role = self.session["role"]
         if "user_id" in self.session:
             self.g.user_name = self.session["user_id"]
-        print(self.session)
         menu_url = dms_url_prefix + "/portal/"
         self.kwargs = {"current_env": "Tornado " + current_env, "g": self.g, "role_value": user_m.role_value,
                        "menu_url": menu_url}
@@ -105,6 +105,28 @@ class BaseHandler(tornado.web.RequestHandler, TemplateRendering):
         content = super(BaseHandler, self).render_template(template_name, **self.kwargs)
         self.write(content)
 
+    def get_session_id(self):
+        user_agent = self.request.headers.get('User-Agent')
+        if "User-Agent" in self.request.headers:
+            user_agent = user_agent.encode('utf-8')
+        address = self.request.headers.get('X-Forwarded-For', self.request.remote_ip)
+        if address is not None:
+            address = address.encode('utf-8').split(b',')[0].strip()
+        base = '{0}|{1}'.format(address, user_agent)
+        if str is bytes:
+            base = unicode(base, 'utf-8', errors='replace')
+        h = sha512()
+        h.update(base.encode('utf8'))
+        return h.hexdigest()
+
+    @property
+    def is_authenticated(self):
+        if "user_id" not in self.session or "role" not in self.session or "_id" not in self.session:
+            return False
+        if self.session["_id"] != self.get_session_id():
+            return False
+        return True
+
     def get_current_user(self):
         if "user_id" in self.session and "user_role" in self.session:
             return self.session["user_id"]
@@ -126,7 +148,7 @@ class BaseAuthHandler(BaseHandler):
 
     def prepare(self):
         super(BaseAuthHandler, self).prepare()
-        if "user_id" not in self.session or "role" not in self.session:
+        if not self.is_authenticated:
             self.redirect(dms_url_prefix + "/login/?next=" + self.request.path)
 
 

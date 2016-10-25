@@ -13,9 +13,8 @@ class IndexHandler(BaseHandler):
     route_url = dms_url_prefix
 
     def get(self):
-        if "user_id" in self.session and "role" in self.session:
-            self.redirect(url_prefix + "/portal/")
-            return
+        if self.is_authenticated:
+            return self.redirect(url_prefix + "/portal/")
         self.kwargs["url_prefix"] = url_prefix
         self.kwargs["next_url"] = ""
         self.render_template("login.html")
@@ -42,6 +41,7 @@ class LoginHandler(BaseHandler):
         else:
             self.session["user_id"] = info["account"]
             self.session["role"] = info["role"]
+            self.session["_id"] = self.get_session_id()
             self.redirect(url_prefix + "/portal/")
 
 http_handlers.append((url_prefix + "/login/", LoginHandler))
