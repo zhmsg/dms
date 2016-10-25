@@ -119,6 +119,17 @@ class BaseHandler(tornado.web.RequestHandler, TemplateRendering):
         h.update(base.encode('utf8'))
         return h.hexdigest()
 
+    def login_user(self, user_name, user_role):
+        self.session["user_id"] = user_name
+        self.session["role"] = user_role
+        self.session["_id"] = self.get_session_id()
+
+    def logout_user(self):
+        if 'user_id' in self.session:
+            self.session.pop('user_id')
+        if '_fresh' in self.session:
+            self.session.pop('_fresh')
+
     @property
     def is_authenticated(self):
         if "user_id" not in self.session or "role" not in self.session or "_id" not in self.session:
