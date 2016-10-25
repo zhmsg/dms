@@ -1,23 +1,20 @@
 # encoding: utf-8
 # !/usr/bin/python
 
-import time
-import ConfigParser
 from functools import wraps
 from flask import session, g, make_response, Blueprint, jsonify, request
 from flask_login import LoginManager, UserMixin, login_required
 from apscheduler.schedulers.background import BackgroundScheduler
 from Tools.Mysql_db import DB
-from Tools.MyIP import IPManager
 from Tools.MyEmail import MyEmailManager
 from Class.Control import ControlManager
+from Function.Common import *
 
 
 __author__ = 'zhouheng'
 
 db = DB()
 control = ControlManager()
-ip = IPManager()
 my_email = MyEmailManager("/home/msg/conf/")
 dms_scheduler = BackgroundScheduler()
 # job_store = SQLAlchemyJobStore(url=db.url)
@@ -73,27 +70,6 @@ chat_url_prefix = "/chat"
 data_dir = "/ossdata/dmsdata"
 
 import os
-
-if os.path.exists("../env.conf") is False:
-    current_env = "Development"
-
-else:
-    with open("../env.conf") as r_env:
-        current_env = r_env.read().strip()
-
-# read config
-config = ConfigParser.ConfigParser()
-config.read("../config.conf")
-
-redis_host = config.get(current_env, "redis_host")
-static_prefix_url = config.get(current_env, "static_prefix_url")
-company_ip_start = config.getint(current_env, "company_ip_start")
-company_ip_end = config.getint(current_env, "company_ip_end")
-company_ips = [company_ip_start, company_ip_end]
-cookie_domain = config.get(current_env, "cookie_domain")
-session_id_prefix = config.get(current_env, "session_id_prefix")
-session_cookie_name = config.get(current_env, "session_cookie_name")
-
 if os.path.isdir(data_dir) is False:
     os.mkdir(data_dir)
 
@@ -129,41 +105,3 @@ def create_blue(blue_name, url_prefix="/", auth_required=True):
     if blue_name not in blues:
         blues[blue_name] = [add_blue, url_prefix]
     return add_blue
-
-
-def unix_timestamp(t, style="time"):
-    if type(t) == int or type(t) == long:
-        x = time.localtime(t)
-        if style == "time":
-            return time.strftime('%H:%M:%S', x)
-        else:
-            return time.strftime("%Y-%m-%d %H:%M:%S", x)
-    return t
-
-
-def bit_and(num1, num2):
-    return num1 & num2
-
-
-def ip_str(ip_v):
-    if type(ip_v) == int or type(ip_v) == long:
-        return ip.ip_value_str(ip_value=ip_v)
-    return ip_v
-
-
-def make_static_url(filename):
-    return static_prefix_url + "/" + filename
-
-
-def make_default_static_url(filename):
-    return "/static/" + filename
-
-
-def make_static_html(filename):
-    src = make_static_url(filename)
-    default_src= make_default_static_url(filename)
-    if filename.endswith(".js"):
-        html_s = "<script type=\"text/javascript\" src=\"%s\" onerror=\"this.src='%s'\"></script>" % (src, default_src)
-    else:
-        html_s = "<link rel=\"stylesheet\" href=\"%s\" onerror=\"this.href='%s'\">" % (src, default_src)
-    return html_s

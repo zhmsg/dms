@@ -10,7 +10,6 @@ html_dir = "API_HELP"
 class APIIndexHandler(BaseAuthHandler):
 
     def get(self):
-        self.request.args = self.request.arguments
         result, part_module = control.get_part_api(self.g.user_name, self.g.user_role)
         if result is False:
             return part_module
@@ -47,7 +46,7 @@ class APIIndexHandler(BaseAuthHandler):
                         if "%s" % env["env_no"] in module_env_s:
                             module_env_info.append(env)
                             test_env.remove(env)
-                return self.render("%s/Update_API_Module.html" % html_dir, part_module=part_module, api_list=module_data["api_list"],
+                return self.render_template("%s/Update_API_Module.html" % html_dir, part_module=part_module, api_list=module_data["api_list"],
                                        current_module=current_module, url_prefix=url_prefix, test_env=test_env,
                                        module_env_info=module_env_info)
             my_care = None
@@ -57,10 +56,9 @@ class APIIndexHandler(BaseAuthHandler):
                     module_data["care_info"].remove(item)
                     break
             test_module_url = test_url_prefix + "/batch/"
-            return self.render("%s/List_Module_API.html" % html_dir, part_module=part_module, api_list=module_data["api_list"],
+            return self.render_template("%s/List_Module_API.html" % html_dir, part_module=part_module, api_list=module_data["api_list"],
                                    current_module=current_module, url_prefix=url_prefix, new_power=new_power,
                                    my_care=my_care, care_info=module_data["care_info"], test_module_url=test_module_url)
-        print("%s/New_API_Module.html" % html_dir)
         return self.render_template("%s/New_API_Module.html" % html_dir, part_module=part_module, url_prefix=url_prefix,
                                new_power=new_power, test_env=test_env)
 

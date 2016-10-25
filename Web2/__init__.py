@@ -9,6 +9,8 @@ from jinja2 import Environment, FileSystemLoader, TemplateNotFound
 from Web2.redis_session import RedisSessionInterface
 from Class.Control import ControlManager
 from Class.User import UserManager
+from Config.Config import *
+from Function.Common import *
 
 http_handlers = []
 
@@ -30,66 +32,6 @@ tools_url_prefix = ado_prefix + "/tools"
 release_url_prefix = ado_prefix + "/dev/release"
 github_url_prefix = ado_prefix + "/github"
 chat_url_prefix = ado_prefix + "/chat"
-
-import os
-
-if os.path.exists("../env.conf") is False:
-    current_env = "Development"
-
-else:
-    with open("../env.conf") as r_env:
-        current_env = r_env.read().strip()
-
-# read config
-config = ConfigParser.ConfigParser()
-config.read("../config.conf")
-
-redis_host = config.get(current_env, "redis_host")
-static_prefix_url = config.get(current_env, "static_prefix_url")
-company_ip_start = config.getint(current_env, "company_ip_start")
-company_ip_end = config.getint(current_env, "company_ip_end")
-company_ips = [company_ip_start, company_ip_end]
-cookie_domain = config.get(current_env, "cookie_domain")
-session_id_prefix = config.get(current_env, "session_id_prefix")
-session_cookie_name = config.get(current_env, "session_cookie_name")
-
-
-def unix_timestamp(t, style="time"):
-    if type(t) == int or type(t) == long:
-        x = time.localtime(t)
-        if style == "time":
-            return time.strftime('%H:%M:%S', x)
-        else:
-            return time.strftime("%Y-%m-%d %H:%M:%S", x)
-    return t
-
-
-def bit_and(num1, num2):
-    return num1 & num2
-
-
-def ip_str(ip_v):
-    if type(ip_v) == int or type(ip_v) == long:
-        return ip.ip_value_str(ip_value=ip_v)
-    return ip_v
-
-
-def make_static_url(filename):
-    return static_prefix_url + "/" + filename
-
-
-def make_default_static_url(filename):
-    return "/static/" + filename
-
-
-def make_static_html(filename):
-    src = make_static_url(filename)
-    default_src = make_default_static_url(filename)
-    if filename.endswith(".js"):
-        html_s = "<script type=\"text/javascript\" src=\"%s\" onerror=\"this.src='%s'\"></script>" % (src, default_src)
-    else:
-        html_s = "<link rel=\"stylesheet\" href=\"%s\" onerror=\"this.href='%s'\">" % (src, default_src)
-    return html_s
 
 
 class GlobalInfo(object):
@@ -142,6 +84,9 @@ class BaseHandler(tornado.web.RequestHandler, TemplateRendering):
         menu_url = dms_url_prefix + "/portal/"
         self.kwargs = {"current_env": "Tornado " + current_env, "g": self.g, "role_value": user_m.role_value,
                        "menu_url": menu_url}
+        self.request.args = {}
+        for key, value in dict(self.request.arguments).items():
+            self.request.args[key] = value[0]
 
     def data_received(self, chunk):
         pass
