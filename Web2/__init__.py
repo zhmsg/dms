@@ -4,6 +4,7 @@
 __author__ = 'zhouheng'
 import json
 from hashlib import sha512
+from urllib import urlencode
 import tornado.web
 from jinja2 import Environment, FileSystemLoader, TemplateNotFound
 from Web2.redis_session import RedisSessionInterface
@@ -158,7 +159,10 @@ class BaseAuthHandler(BaseHandler):
     def prepare(self):
         super(BaseAuthHandler, self).prepare()
         if not self.is_authenticated:
-            return self.redirect(dms_url_prefix + "/login/?next=" + self.request.path)
+            next_url = self.request.uri
+            login_url = dms_url_prefix + "/login/?"
+            login_url += urlencode(dict(next=next_url))
+            return self.redirect(login_url)
         self.g.user_role = self.session["role"]
         self.g.user_name = self.session["user_id"]
 

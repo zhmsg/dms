@@ -28,19 +28,20 @@ class LoginHandler(BaseHandler):
     def get(self):
         self.logout_user()
         self.kwargs["url_prefix"] = url_prefix
-        self.kwargs["next_url"] = ""
+        self.kwargs["next_url"] = self.request.args["next"] if "next" in self.request.args else ""
         self.render_template("login.html")
 
     def post(self):
-        user_name = self.get_body_argument("user_name")
-        password = self.get_body_argument("password")
+        request_data = self.request.form
+        user_name = request_data["user_name"]
+        password = request_data["password"]
         result, info = user_m.check(user_name, password)
         if result is False:
             return self.write(info)
         self.login_user(info["account"], info["role"])
-        # if "next" in request_data and request_data["next"] != "":
-        #     return self.redirect(request_data["next"])
-        self.redirect(url_prefix + "/portal/")
+        if "next" in request_data and request_data["next"] != "":
+            return self.redirect(request_data["next"])
+        return self.redirect(url_prefix + "/portal/")
 
 http_handlers.append((url_prefix + "/login/", LoginHandler))
 
