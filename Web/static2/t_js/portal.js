@@ -38,10 +38,10 @@ $(function(){
         $("#div_main_menu").append('<a href="' + $("#exit_url_prefix").val() + '/">' + '退出' + '</a>');
         var current_href = location.href.substr((location.protocol + "//" + location.host).length);
         if(current_href.indexOf("/tornado") == 0){
-            $("#div_main_menu").append('<a href="' + current_href.substr(8) + '">' + '还用旧版' + '</a>');
+            $("#div_main_menu").append('<a href="' + current_href.substr(8) + '">' + '还用Flask' + '</a>');
         }
         else{
-            $("#div_main_menu").append('<a href="/tornado' + current_href + '">' + '体验新版' + '</a>');
+            $("#div_main_menu").append('<a href="/tornado' + current_href + '">' + '体验Tornado' + '</a>');
         }
     }
 });
