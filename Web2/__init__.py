@@ -87,7 +87,8 @@ class BaseHandler(tornado.web.RequestHandler, TemplateRendering):
             self.request.form[key] = value[0]
         content_type = self.request.headers.get("Content-Type")
         if content_type == "application/json":
-            self.request.json = json.loads(self.request.body)
+            if len(self.request.body) > 0:
+                self.request.json = json.loads(self.request.body)
 
     def get_session_id(self):
         user_agent = self.request.headers.get('User-Agent')
