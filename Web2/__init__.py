@@ -145,6 +145,16 @@ class BaseHandler(tornado.web.RequestHandler, TemplateRendering):
         content = super(BaseHandler, self).render_template(template_name, **self.kwargs)
         self.write(content)
 
+    def write_error(self, status_code, **kwargs):
+        res = status_code
+        if status_code == 500:
+            res = "Error"
+            if "exc_info" in kwargs:
+                exc_info = kwargs["exc_info"]
+                if len(exc_info) > 2:
+                    res = str(exc_info[1])
+        return self.write(res)
+
     def finish(self, chunk=None):
         session_interface.save_session(self)
         super(BaseHandler, self).finish(chunk)
