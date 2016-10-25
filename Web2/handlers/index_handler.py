@@ -36,10 +36,11 @@ class LoginHandler(BaseHandler):
         password = self.get_body_argument("password")
         result, info = user_m.check(user_name, password)
         if result is False:
-            self.write(info)
-        else:
-            self.login_user(info["account"], info["role"])
-            self.redirect(url_prefix + "/portal/")
+            return self.write(info)
+        self.login_user(info["account"], info["role"])
+        # if "next" in request_data and request_data["next"] != "":
+        #     return self.redirect(request_data["next"])
+        self.redirect(url_prefix + "/portal/")
 
 http_handlers.append((url_prefix + "/login/", LoginHandler))
 

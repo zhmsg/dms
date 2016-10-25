@@ -46,8 +46,9 @@ class TemplateRendering(object):
         if self.settings.get('template_path', ''):
             template_dirs.append(self.settings['template_path'])
         env = Environment(loader=FileSystemLoader(template_dirs))
-        env.globals["current_env"] = current_env
+        env.globals["current_env"] = "Tornado " + current_env
         env.globals["role_value"] = control.role_value
+        env.globals["menu_url"] = dms_url_prefix + "/portal/"
         env.filters['unix_timestamp'] = unix_timestamp
         env.filters['bit_and'] = bit_and
         env.filters['ip_str'] = ip_str
@@ -73,13 +74,7 @@ class BaseHandler(tornado.web.RequestHandler, TemplateRendering):
         super(BaseHandler, self).__init__(application, request, **kwargs)
         self.g = GlobalInfo()
         self.session = session_interface.open_session(self)
-        if "role" in self.session:
-            self.g.user_role = self.session["role"]
-        if "user_id" in self.session:
-            self.g.user_name = self.session["user_id"]
-        menu_url = dms_url_prefix + "/portal/"
-        self.kwargs = {"current_env": "Tornado " + current_env, "g": self.g, "role_value": user_m.role_value,
-                       "menu_url": menu_url}
+        self.kwargs = {"g": self.g}
         self.request.args = {}
         for key, value in dict(self.request.arguments).items():
             self.request.args[key] = value[0]
@@ -160,7 +155,9 @@ class BaseAuthHandler(BaseHandler):
     def prepare(self):
         super(BaseAuthHandler, self).prepare()
         if not self.is_authenticated:
-            self.redirect(dms_url_prefix + "/login/?next=" + self.request.path)
+            return self.redirect(dms_url_prefix + "/login/?next=" + self.request.path)
+        self.g.user_role = self.session["role"]
+        self.g.user_name = self.session["user_id"]
 
 
 class ErrorHandler(tornado.web.RequestHandler):

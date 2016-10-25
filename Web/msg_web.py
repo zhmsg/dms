@@ -53,9 +53,9 @@ def create_app():
                 pro = request.headers["X-Request-Protocol"]
                 if "Location" in res.headers:
                     location = res.headers["location"]
-                    if location.startswith("http"):
-                        res.headers["Location"] = res.headers["Location"].replace("http", pro)
-                    else:
+                    if location.startswith("http:"):
+                        res.headers["Location"] = pro + ":" + res.headers["Location"][5:]
+                    elif location.startswith("/"):
                         res.headers["Location"] = "%s://%s%s" % (pro, request.headers["Host"], location)
         res.headers["Server"] = "JingYun Server"
         return res
