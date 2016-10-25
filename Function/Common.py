@@ -3,7 +3,7 @@
 __author__ = 'ZhouHeng'
 
 import time
-from Class.IP import IPManager
+from Tools.MyIP import IPManager
 from Config.Config import *
 
 ip = IPManager()

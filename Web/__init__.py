@@ -14,6 +14,7 @@ from Function.Common import *
 __author__ = 'zhouheng'
 
 db = DB()
+ip = IPManager()
 control = ControlManager()
 my_email = MyEmailManager("/home/msg/conf/")
 dms_scheduler = BackgroundScheduler()
