@@ -82,6 +82,44 @@ class BaseHandler(tornado.web.RequestHandler, TemplateRendering):
     def data_received(self, chunk):
         pass
 
+    def get_session_id(self):
+        user_agent = self.request.headers.get('User-Agent')
+        if "User-Agent" in self.request.headers:
+            user_agent = user_agent.encode('utf-8')
+        address = self.request.headers.get('X-Forwarded-For', self.request.remote_ip)
+        if address is not None:
+            address = address.encode('utf-8').split(b',')[0].strip()
+        base = '{0}|{1}'.format(address, user_agent)
+        if str is bytes:
+            base = unicode(base, 'utf-8', errors='replace')
+        h = sha512()
+        h.update(base.encode('utf8'))
+        return h.hexdigest()
+
+    @property
+    def is_authenticated(self):
+        if "user_id" not in self.session or "role" not in self.session or "_id" not in self.session:
+            return False
+        if self.session["_id"] != self.get_session_id():
+            return False
+        return True
+
+    def get_current_user(self):
+        if "user_id" in self.session and "user_role" in self.session:
+            return self.session["user_id"]
+        return None
+
+    def login_user(self, user_name, user_role):
+        self.session["user_id"] = user_name
+        self.session["role"] = user_role
+        self.session["_id"] = self.get_session_id()
+
+    def logout_user(self):
+        if 'user_id' in self.session:
+            self.session.pop('user_id')
+        if '_fresh' in self.session:
+            self.session.pop('_fresh')
+
     def render(self, template_name, **kwargs):
         for key, value in kwargs.items():
             self.kwargs[key] = value
@@ -100,53 +138,12 @@ class BaseHandler(tornado.web.RequestHandler, TemplateRendering):
         content = super(BaseHandler, self).render_template(template_name, **self.kwargs)
         self.write(content)
 
-    def get_session_id(self):
-        user_agent = self.request.headers.get('User-Agent')
-        if "User-Agent" in self.request.headers:
-            user_agent = user_agent.encode('utf-8')
-        address = self.request.headers.get('X-Forwarded-For', self.request.remote_ip)
-        if address is not None:
-            address = address.encode('utf-8').split(b',')[0].strip()
-        base = '{0}|{1}'.format(address, user_agent)
-        if str is bytes:
-            base = unicode(base, 'utf-8', errors='replace')
-        h = sha512()
-        h.update(base.encode('utf8'))
-        return h.hexdigest()
-
-    def login_user(self, user_name, user_role):
-        self.session["user_id"] = user_name
-        self.session["role"] = user_role
-        self.session["_id"] = self.get_session_id()
-
-    def logout_user(self):
-        if 'user_id' in self.session:
-            self.session.pop('user_id')
-        if '_fresh' in self.session:
-            self.session.pop('_fresh')
-
-    @property
-    def is_authenticated(self):
-        if "user_id" not in self.session or "role" not in self.session or "_id" not in self.session:
-            return False
-        if self.session["_id"] != self.get_session_id():
-            return False
-        return True
-
-    def get_current_user(self):
-        if "user_id" in self.session and "user_role" in self.session:
-            return self.session["user_id"]
-        return None
-
-    def save_session(self):
-        session_interface.save_session(self)
-
-    def on_finish(self):
-        pass
-
     def finish(self, chunk=None):
         session_interface.save_session(self)
         super(BaseHandler, self).finish(chunk)
+
+    def on_finish(self):
+        pass
 
 
 class BaseAuthHandler(BaseHandler):
