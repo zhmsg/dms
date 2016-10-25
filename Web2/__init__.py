@@ -76,11 +76,10 @@ class BaseHandler(tornado.web.RequestHandler, TemplateRendering):
         self.session = session_interface.open_session(self)
         self.kwargs = {"g": self.g}
         self.request.args = {}
+
+    def prepare(self):
         for key, value in dict(self.request.arguments).items():
             self.request.args[key] = value[0]
-
-    def data_received(self, chunk):
-        pass
 
     def get_session_id(self):
         user_agent = self.request.headers.get('User-Agent')
