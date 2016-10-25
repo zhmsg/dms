@@ -61,7 +61,7 @@ class APIIndexHandler(BaseAuthHandler):
                                    current_module=current_module, url_prefix=url_prefix, new_power=new_power,
                                    my_care=my_care, care_info=module_data["care_info"], test_module_url=test_module_url)
         print("%s/New_API_Module.html" % html_dir)
-        return self.render_html("%s/New_API_Module.html" % html_dir, part_module=part_module, url_prefix=url_prefix,
+        return self.render_template("%s/New_API_Module.html" % html_dir, part_module=part_module, url_prefix=url_prefix,
                                new_power=new_power, test_env=test_env)
 
 http_handlers.append((url_prefix + "/", APIIndexHandler))

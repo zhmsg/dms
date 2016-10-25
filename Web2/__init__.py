@@ -3,6 +3,7 @@
 
 __author__ = 'zhouheng'
 import ConfigParser
+import json
 import tornado.web
 from jinja2 import Environment, FileSystemLoader, TemplateNotFound
 from Web2.redis_session import RedisSessionInterface
@@ -115,6 +116,7 @@ class TemplateRendering(object):
         env.filters['make_static_url'] = make_static_url
         env.filters['make_default_static_url'] = make_default_static_url
         env.filters['make_static_html'] = make_static_html
+        env.filters['tojson'] = json.dumps
         try:
             template = env.get_template(template_name)
         except TemplateNotFound:
@@ -151,18 +153,17 @@ class BaseHandler(tornado.web.RequestHandler, TemplateRendering):
             self.kwargs[key] = value
         super(BaseHandler, self).render(template_name, **self.kwargs)
 
-    def render_html(self, template_name, **kwargs):
+    def render_template(self, template_name, **kwargs):
         for key, value in kwargs.items():
             self.kwargs[key] = value
         self.kwargs.update({
             'settings': self.settings,
-            'STATIC_URL': self.settings.get('static_url_prefix', '/static/'),
             'request': self.request,
             'current_user': self.current_user,
             'xsrf_token': self.xsrf_token,
-            'xsrf_form_html': self.xsrf_form_html,
+            'xsrf_form_html': self.xsrf_form_html
         })
-        content = self.render_template(template_name, **self.kwargs)
+        content = super(BaseHandler, self).render_template(template_name, **self.kwargs)
         self.write(content)
 
     def get_current_user(self):

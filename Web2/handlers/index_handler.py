@@ -18,7 +18,7 @@ class IndexHandler(BaseHandler):
             return
         self.kwargs["url_prefix"] = url_prefix
         self.kwargs["next_url"] = ""
-        self.render("login.html")
+        self.render_template("login.html")
 
 http_handlers.append((url_prefix + "/", IndexHandler))
 
@@ -31,7 +31,7 @@ class LoginHandler(BaseHandler):
             del self.session["user_name"]
         self.kwargs["url_prefix"] = url_prefix
         self.kwargs["next_url"] = ""
-        self.render("login.html")
+        self.render_template("login.html")
 
     def post(self):
         user_name = self.get_body_argument("user_name")
@@ -51,7 +51,7 @@ class PortalHandler(BaseAuthHandler):
     route_url = dms_url_prefix + "/portal/"
 
     def get(self):
-        self.render("portal.html", api_url_prefix=api_url_prefix, dev_url_prefix=dev_url_prefix, bug_url_prefix=bug_url_prefix,
+        self.render_template("portal.html", api_url_prefix=api_url_prefix, dev_url_prefix=dev_url_prefix, bug_url_prefix=bug_url_prefix,
                            dms_url_prefix=dms_url_prefix, right_url_prefix=right_url_prefix,
                            log_url_prefix=log_url_prefix, param_url_prefix=param_url_prefix,
                            release_url_prefix=release_url_prefix, status_url_prefix=status_url_prefix)
