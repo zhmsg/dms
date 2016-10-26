@@ -18,10 +18,6 @@ class APIIndexHandler(_BaseHandler):
         result, part_module = control.get_part_api(self.g.user_name, self.g.user_role)
         if result is False:
             return part_module
-        if self.g.user_role & control.role_value["api_module_new"] == control.role_value["api_module_new"]:
-            new_power = True
-        else:
-            new_power = False
         result, test_env = control.get_test_env(self.g.user_role)
         if result is False:
             return test_env
@@ -41,7 +37,7 @@ class APIIndexHandler(_BaseHandler):
             if current_module is None:
                 return "Error"
             module_env_info = []
-            if "update" in self.request.args and self.request.args["update"] == "true" and new_power is True:
+            if "update" in self.request.args and self.request.args["update"] == "true":
                 module_env = current_module["module_env"]
                 if module_env is not None:
                     module_env_s = module_env.split("|")
@@ -62,10 +58,9 @@ class APIIndexHandler(_BaseHandler):
                     break
             test_module_url = test_url_prefix + "/batch/"
             return self.render_template("%s/List_Module_API.html" % html_dir, part_module=part_module, api_list=module_data["api_list"],
-                                   current_module=current_module, new_power=new_power,
-                                   my_care=my_care, care_info=module_data["care_info"], test_module_url=test_module_url)
-        return self.render_template("%s/New_API_Module.html" % html_dir, part_module=part_module, new_power=new_power,
-                                    test_env=test_env)
+                                   current_module=current_module, my_care=my_care, care_info=module_data["care_info"],
+                                        test_module_url=test_module_url)
+        return self.render_template("%s/New_API_Module.html" % html_dir, part_module=part_module, test_env=test_env)
 
     def post(self, *args, **kwargs):
         request_form = self.request.form

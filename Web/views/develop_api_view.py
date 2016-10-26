@@ -43,10 +43,6 @@ def list_api():
     result, part_module = control.get_part_api(g.user_name, g.user_role)
     if result is False:
         return part_module
-    if g.user_role & control.role_value["api_module_new"] == control.role_value["api_module_new"]:
-        new_power = True
-    else:
-        new_power = False
     result, test_env = control.get_test_env(g.user_role)
     if result is False:
         return test_env
@@ -66,7 +62,7 @@ def list_api():
         if current_module is None:
             return "Error"
         module_env_info = []
-        if "update" in request.args and request.args["update"] == "true" and new_power is True:
+        if "update" in request.args and request.args["update"] == "true":
             module_env = current_module["module_env"]
             if module_env is not None:
                 module_env_s = module_env.split("|")
@@ -87,10 +83,10 @@ def list_api():
                 break
         test_module_url = test_url_prefix + "/batch/"
         return render_template("%s/List_Module_API.html" % html_dir, part_module=part_module, api_list=module_data["api_list"],
-                               current_module=current_module, url_prefix=url_prefix, new_power=new_power,
-                               my_care=my_care, care_info=module_data["care_info"], test_module_url=test_module_url)
+                               current_module=current_module, url_prefix=url_prefix, my_care=my_care,
+                               care_info=module_data["care_info"], test_module_url=test_module_url)
     return render_template("%s/New_API_Module.html" % html_dir, part_module=part_module, url_prefix=url_prefix,
-                           new_power=new_power, test_env=test_env)
+                           test_env=test_env)
 
 
 @develop_api_view.route("/", methods=["POST"])

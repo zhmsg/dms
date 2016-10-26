@@ -2,7 +2,7 @@
 
 {% block content %}
     {{  super() }}
-    {% if new_power %}
+    <div style="display: none" id="div_api_new_add">
         <input value="{{ url_prefix }}/module/" id="module_url" style="display: none"/>
         <div class="form-group apiContentLine">
           <ul style="margin-bottom: 1em">
@@ -37,15 +37,8 @@
               <div class="tag" id="div_add_env">
               </div>
           </li>
-{#          <li id="li_env" style="display: none">#}
-{#              <div name="div_add_env" style="margin-top: 1em">#}
-{#                  <input class="box-side width20" name="env_name" type="text" placeholder="调用环境名称" />#}
-{#                  <input class="box-side width300" name="env_address" type="text" placeholder="调用环境地址 例如http://ih.gene.ac" />#}
-{#                  <span class="symbol" onclick="add_env();">+</span>#}
-{#              </div>#}
-{#            </li>#}
           </ul>
           <button id="btn_op_module" class="btn btn-success btn-down api-newBtn">新建模块</button>
         </div>
-    {% endif %}
+    </div>
 {% endblock %}

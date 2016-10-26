@@ -7,11 +7,11 @@
     <p>模块名称：{{ current_module["module_name"] }}</p>
     <p>模块URL前缀：{{ current_module["module_prefix"] }}</p>
     <p>模块描述：{{ current_module["module_desc"] }}</p>
-    {% if new_power %}
+    <div id="div_api_new_op_module" style="display: none">
         <a href="{{ url_prefix }}/?module_no={{ current_module["module_no"] }}&update=true" class="margin10">更新模块信息</a>
         <a href="{{ url_prefix }}/?module_no={{ current_module["module_no"] }}" class="margin10">删除模块</a>
         <a href="{{ test_module_url }}?module_no={{ current_module["module_no"] }}" class="margin10">测试模块</a>
-    {% endif %}
+    </div>
     <table class="table table-bordered table-hover api-list-table">
         <caption>API列表</caption>
         <tr>

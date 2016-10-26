@@ -144,6 +144,14 @@ function new_module_success(data){
     }
 }
 
+function bit_and(role1, role2){
+    var v = role1 & role2;
+    if(v < role1 && v < role2)
+        return false;
+    else
+        return true;
+}
+
 $(function(){
     $("#btn_op_module").click(function(){
         var body_param = new Object();
@@ -168,4 +176,9 @@ $(function(){
         console.info(body_param);
     });
     $("#div_add_env").find("span").click(remove_test_env);
+    var current_user_role = parseInt($("#current_user_role").val());
+    var role_value = JSON.parse($("#role_value").text());
+    if(bit_and(current_user_role, role_value["api_new"])){
+        $("div[id^='div_api_new_']").show();
+    }
 });
