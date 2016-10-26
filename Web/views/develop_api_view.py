@@ -118,7 +118,6 @@ def new_api_module():
     return jsonify({"status": result, "data": message})
 
 
-
 @develop_api_view.route("/module/care/", methods=["POST", "DELETE"])
 def add_module_care():
     request_data = request.json
