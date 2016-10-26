@@ -48,9 +48,6 @@ def list_api():
         return test_env
     if "module_no" in request.args:
         module_no = int(request.args["module_no"])
-        result, module_data = control.get_api_list(module_no, g.user_role)
-        if result is False:
-            return module_data
         current_module = None
         for part in part_module:
             for module_info in part["module_list"]:
@@ -62,18 +59,11 @@ def list_api():
         if current_module is None:
             return "Error"
         if "update" in request.args and request.args["update"] == "true":
-            return render_template("%s/New_API_Module.html" % html_dir, part_module=part_module, api_list=module_data["api_list"],
+            return render_template("%s/New_API_Module.html" % html_dir, part_module=part_module,
                                    current_module=current_module, url_prefix=url_prefix, test_env=test_env)
-        my_care = None
-        for item in module_data["care_info"]:
-            if item["user_name"] == g.user_name:
-                my_care = item
-                module_data["care_info"].remove(item)
-                break
         test_module_url = test_url_prefix + "/batch/"
-        return render_template("%s/List_Module_API.html" % html_dir, part_module=part_module, api_list=module_data["api_list"],
-                               current_module=current_module, url_prefix=url_prefix, my_care=my_care,
-                               care_info=module_data["care_info"], test_module_url=test_module_url)
+        return render_template("%s/List_Module_API.html" % html_dir, part_module=part_module,
+                               current_module=current_module, url_prefix=url_prefix, test_module_url=test_module_url)
     return render_template("%s/New_API_Module.html" % html_dir, part_module=part_module, url_prefix=url_prefix,
                            test_env=test_env)
 

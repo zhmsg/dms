@@ -23,9 +23,7 @@ class APIIndexHandler(_BaseHandler):
             return test_env
         if "module_no" in self.request.args:
             module_no = int(self.request.args["module_no"])
-            result, module_data = control.get_api_list(module_no, self.g.user_role)
-            if result is False:
-                return module_data
+
             current_module = None
             for part in part_module:
                 for module_info in part["module_list"]:
@@ -38,17 +36,10 @@ class APIIndexHandler(_BaseHandler):
                 return "Error"
             if "update" in self.request.args and self.request.args["update"] == "true":
                 return self.render_template("%s/New_API_Module.html" % html_dir, part_module=part_module,
-                                            api_list=module_data["api_list"], current_module=current_module, test_env=test_env)
-            my_care = None
-            for item in module_data["care_info"]:
-                if item["user_name"] == self.g.user_name:
-                    my_care = item
-                    module_data["care_info"].remove(item)
-                    break
+                                            current_module=current_module, test_env=test_env)
             test_module_url = test_url_prefix + "/batch/"
-            return self.render_template("%s/List_Module_API.html" % html_dir, part_module=part_module, api_list=module_data["api_list"],
-                                   current_module=current_module, my_care=my_care, care_info=module_data["care_info"],
-                                        test_module_url=test_module_url)
+            return self.render_template("%s/List_Module_API.html" % html_dir, part_module=part_module,
+                                        current_module=current_module,  test_module_url=test_module_url)
         return self.render_template("%s/New_API_Module.html" % html_dir, part_module=part_module, test_env=test_env)
 
     def post(self, *args, **kwargs):

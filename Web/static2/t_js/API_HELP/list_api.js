@@ -152,6 +152,66 @@ function bit_and(role1, role2){
         return true;
 }
 
+function New_TD(key, obj){
+    var td = $("<td></td>");
+    if(key in obj){
+        td.append(obj[key]);
+    }
+    return td;
+}
+
+function Get_API_List_Success(data)
+{
+    if(data.status == true)
+    {
+        var api_list = data.data.api_list;
+        var url_prefix = $("#url_prefix").val();
+        var module_prefix = $("#current_module_prefix").val();
+        if(module_prefix[module_prefix.length - 1] == "/"){
+            module_prefix = module_prefix.substr(0, module_prefix.length - 1);
+        }
+        for(var i=0;i<api_list.length;i++){
+            var api_info = api_list[i];
+            var t = $("#t_api_list");
+            var tr_id = 'tr_' + api_info["api_no"];
+            var exist_tr = $("#" + tr_id);
+            if(exist_tr.length == 1){
+                exist_tr.html("");
+                var add_tr = exist_tr;
+            }
+            else {
+                var add_tr = $("<tr id='" + tr_id + "'></tr>");
+            }
+            t.append(add_tr);
+            api_info["api_url"] = module_prefix + api_info["api_path"];
+            var keys = ["api_title", "api_url", "api_method", "status"];
+            for(var j=0;j<keys.length;j++){
+                var key = keys[j];
+                add_tr.append(New_TD(key, api_info));
+            }
+            add_tr.append('<td class="text-center"><a href="' + url_prefix + '/info/?api_no=' + api_info["api_no"] + '">查看</a> | <a href="' + url_prefix + '/test/?api_no=' + api_info["api_no"] + '">测试</a></td>');
+        }
+        var care_info = data.data.care_info;
+        var current_user_name = $("#current_user_name").val();
+        for(var i=0;i<care_info.length;i++){
+            if(care_info[i]["user_name"] == current_user_name){
+                $("#module_care_user").append('<span id="mine_care">我</span>');
+                $("#make_care").text("取消关注");
+            }
+            else {
+                $("#module_care_user").append('<span>' + care_info[i]["nick_name"] + '</span>');
+            }
+        }
+        console.info(care_info);
+    }
+}
+
+function Get_API_List(module_no)
+{
+    var request_url = "/dev/api/module/?module_no=" + module_no;
+    my_async_request(request_url, "GET", null, Get_API_List_Success);
+}
+
 $(function(){
     $("#btn_op_module").click(function(){
         var body_param = new Object();
@@ -191,6 +251,14 @@ $(function(){
         for(var i=0;i<test_envs.length;i++){
             $("#s_add_env").val(test_envs[i]);
             add_test_env();
+        }
+    }
+    var module_no = UrlArgsValue(window.location.toString(), "module_no");
+    if(module_no != null){
+        var update = UrlArgsValue(window.location.toString(), "update");
+        if(update == null){
+            console.info("get api list");
+            Get_API_List(module_no);
         }
     }
 });
