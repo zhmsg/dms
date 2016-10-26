@@ -3,6 +3,7 @@
 __author__ = 'ZhouHeng'
 
 import time
+import re
 from Tools.MyIP import IPManager
 from Config.Config import *
 
@@ -45,3 +46,23 @@ def make_static_html(filename):
     else:
         html_s = "<link rel=\"stylesheet\" href=\"%s\" onerror=\"this.href='%s'\">" % (src, default_src)
     return html_s
+
+trust_proxy = ["127.0.0.1", "10.25.244.32", "10.44.147.192"]
+accept_agent = "(firefox|chrome|safari|window|GitHub|jyrequests)"
+
+
+def normal_request_detection(request_headers, remote_ip):
+    x_forwarded_for = request_headers.get("X-Forwarded-For")
+    real_ip_s = remote_ip
+    if x_forwarded_for is not None:
+        if remote_ip in trust_proxy:
+            real_ip_s = x_forwarded_for.split(",")[0]
+    real_ip = ip.ip_value_str(ip_str=real_ip_s)
+    if real_ip <= 0:
+        return False, u"IP受限"
+    if "User-Agent" not in request_headers:
+        return False, u"请使用浏览器访问"
+    user_agent = request_headers["User-Agent"]
+    if re.search(accept_agent, user_agent, re.I) is None:
+        return False, u"浏览器版本过低"
+    return True, [real_ip_s, real_ip]

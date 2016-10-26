@@ -2,16 +2,12 @@
 # coding: utf-8
 import sys
 sys.path.append("..")
-import re
 from flask import Flask, request, make_response, g, jsonify
 from flask_login import current_user
 from Web import *
 from Web.redis_session import RedisSessionInterface
 
 __author__ = 'zhouheng'
-
-accept_agent = "(firefox|chrome|safari|window|GitHub|jyrequests)"
-trust_proxy = ["127.0.0.1", "10.25.244.32", "10.44.147.192"]
 
 
 def create_app():
@@ -21,20 +17,10 @@ def create_app():
 
     @msg_web.before_request
     def before_request():
-        request_ip = request.remote_addr
-        if "X-Forwarded-For" in request.headers:
-            if request.remote_addr in trust_proxy:
-                request_ip = request.headers["X-Forwarded-For"].split(",")[0]
-        g.request_IP_s = request_ip
-        g.request_IP = ip.ip_value_str(ip_str=request_ip)
-        if g.request_IP == 0:
-            return make_response(u"IP受限", 403)
-        if "User-Agent" not in request.headers:
-            print("No User-Agent")
-            return make_response(u"请使用浏览器访问", 403)
-        user_agent = request.headers["User-Agent"]
-        if re.search(accept_agent, user_agent, re.I) is None:
-            return make_response(u"浏览器版本过低", 403)
+        test_r, info = normal_request_detection(request.headers, request.remote_addr)
+        if test_r is False:
+            return make_response(info, 403)
+        g.request_IP_s, g.request_IP = info
         if current_user.is_authenticated:
             g.user_role = current_user.role
             g.user_name = current_user.account
