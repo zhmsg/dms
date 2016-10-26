@@ -4,6 +4,10 @@
     {{  super() }}
     <div style="display: none" id="div_api_new_add">
         <input value="{{ url_prefix }}/module/" id="module_url" style="display: none"/>
+        {% if current_module %}
+            <label style="display: none" id="lab_current_module">{{ current_module | tojson | safe }}</label>
+            <input value="" id="module_no" style="display: none"/>
+        {% endif %}
         <div class="form-group apiContentLine">
           <ul style="margin-bottom: 1em">
             <li>

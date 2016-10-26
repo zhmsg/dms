@@ -61,20 +61,9 @@ def list_api():
                     break
         if current_module is None:
             return "Error"
-        module_env_info = []
         if "update" in request.args and request.args["update"] == "true":
-            module_env = current_module["module_env"]
-            if module_env is not None:
-                module_env_s = module_env.split("|")
-                env_len = len(test_env)
-                for i in range(env_len-1, -1, -1):
-                    env = test_env[i]
-                    if "%s" % env["env_no"] in module_env_s:
-                        module_env_info.append(env)
-                        test_env.remove(env)
-            return render_template("%s/Update_API_Module.html" % html_dir, part_module=part_module, api_list=module_data["api_list"],
-                                   current_module=current_module, url_prefix=url_prefix, test_env=test_env,
-                                   module_env_info=module_env_info)
+            return render_template("%s/New_API_Module.html" % html_dir, part_module=part_module, api_list=module_data["api_list"],
+                                   current_module=current_module, url_prefix=url_prefix, test_env=test_env)
         my_care = None
         for item in module_data["care_info"]:
             if item["user_name"] == g.user_name:

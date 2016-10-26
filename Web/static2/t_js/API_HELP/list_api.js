@@ -171,14 +171,26 @@ $(function(){
             body_param["module_env"][i] = parseInt($(all_span_env[i]).attr("value"));
         }
         var request_url = $("#module_url").val();
-        console.info(request_url);
         my_request(request_url, method, body_param, new_module_success);
-        console.info(body_param);
     });
     $("#div_add_env").find("span").click(remove_test_env);
     var current_user_role = parseInt($("#current_user_role").val());
     var role_value = JSON.parse($("#role_value").text());
     if(bit_and(current_user_role, role_value["api_new"])){
         $("div[id^='div_api_new_']").show();
+    }
+    if($("#lab_current_module").length > 0){
+        var current_module = JSON.parse($("#lab_current_module").text());
+        $("#module_no").val(current_module["module_no"]);
+        $("#module_name").val(current_module["module_name"]);
+        $("#module_prefix").val(current_module["module_prefix"]);
+        $("#module_desc").text(current_module["module_desc"]);
+        $("#module_part").val(current_module["part_no"]);
+        $("#btn_op_module").text("更新模块");
+        var test_envs = current_module["module_env"].split("|");
+        for(var i=0;i<test_envs.length;i++){
+            $("#s_add_env").val(test_envs[i]);
+            add_test_env();
+        }
     }
 });
