@@ -10,7 +10,7 @@ url_prefix = dms_url_prefix
 
 
 class IndexHandler(BaseHandler):
-    route_url = dms_url_prefix
+    route_url = dms_url_prefix + "/"
 
     def get(self):
         if self.is_authenticated:
@@ -19,15 +19,12 @@ class IndexHandler(BaseHandler):
         self.kwargs["next_url"] = ""
         self.render_template("login.html")
 
-http_handlers.append((url_prefix + "/", IndexHandler))
-
 
 class LoginHandler(BaseHandler):
     route_url = dms_url_prefix + "/login/"
 
     def get(self):
         self.logout_user()
-        self.kwargs["url_prefix"] = url_prefix
         self.kwargs["next_url"] = self.request.args["next"] if "next" in self.request.args else ""
         self.render_template("login.html")
 
@@ -43,8 +40,6 @@ class LoginHandler(BaseHandler):
             return self.redirect(request_data["next"])
         return self.redirect(url_prefix + "/portal/")
 
-http_handlers.append((url_prefix + "/login/", LoginHandler))
-
 
 class PortalHandler(BaseAuthHandler):
     route_url = dms_url_prefix + "/portal/"
@@ -55,4 +50,4 @@ class PortalHandler(BaseAuthHandler):
                            log_url_prefix=log_url_prefix, param_url_prefix=param_url_prefix,
                            release_url_prefix=release_url_prefix, status_url_prefix=status_url_prefix)
 
-http_handlers.append((url_prefix + "/portal/", PortalHandler))
+http_handlers.extend([IndexHandler, LoginHandler, PortalHandler])

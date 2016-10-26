@@ -8,6 +8,7 @@ html_dir = "API_HELP"
 
 
 class APIIndexHandler(BaseAuthHandler):
+    route_url = url_prefix + "/"
 
     def get(self):
         result, part_module = control.get_part_api(self.g.user_name, self.g.user_role)
@@ -62,4 +63,4 @@ class APIIndexHandler(BaseAuthHandler):
         return self.render_template("%s/New_API_Module.html" % html_dir, part_module=part_module, url_prefix=url_prefix,
                                new_power=new_power, test_env=test_env)
 
-http_handlers.append((url_prefix + "/", APIIndexHandler))
+http_handlers.extend([APIIndexHandler])

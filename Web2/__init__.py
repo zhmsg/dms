@@ -69,13 +69,14 @@ session_interface = RedisSessionInterface(redis_host, session_id_prefix, cookie_
 
 
 class BaseHandler(tornado.web.RequestHandler, TemplateRendering):
-    route_url = ado_prefix
+    url_prefix = ado_prefix
+    route_url = ado_prefix + "/"
 
     def __init__(self, application, request, **kwargs):
         super(BaseHandler, self).__init__(application, request, **kwargs)
         self.g = GlobalInfo()
         self.session = session_interface.open_session(self)
-        self.kwargs = {"g": self.g}
+        self.kwargs = {"g": self.g, "url_prefix": self.url_prefix}
         self.request.args = {}
         self.request.form = {}
         self.request.json = {}
