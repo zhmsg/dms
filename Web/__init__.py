@@ -87,7 +87,6 @@ def company_ip_required(f):
 
 
 blues = {}
-user_blacklist = []
 dms_job = []
 
 
