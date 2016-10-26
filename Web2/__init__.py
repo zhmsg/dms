@@ -82,6 +82,9 @@ class BaseHandler(tornado.web.RequestHandler, TemplateRendering):
         self.request.form = {}
         self.request.json = {}
 
+    def data_received(self, chunk):
+        pass
+
     def prepare(self):
         test_r, info = normal_request_detection(self.request.headers, self.request.remote_ip)
         if test_r is False:
