@@ -94,7 +94,7 @@ class BaseHandler(tornado.web.RequestHandler, TemplateRendering):
         for key, value in dict(self.request.query_arguments).items():
             self.request.args[key] = value[0]
         for key, value in dict(self.request.body_arguments).items():
-            self.request.form[key] = value[0]
+            self.request.form[key] = value[0].decode("utf-8")
         content_type = self.request.headers.get("Content-Type")
         if content_type == "application/json":
             if len(self.request.body) > 0:
