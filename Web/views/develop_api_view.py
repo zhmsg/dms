@@ -160,17 +160,11 @@ def show_api():
         update_url = url_prefix + "/update/info/?api_no=%s" % api_no
         batch_test_url = url_prefix + "/test/batch/?api_no=%s" % api_no
     status_url = url_prefix + "/status/"
-    my_care = None
-    for item in api_info["care_info"]:
-        if item["user_name"] == g.user_name:
-            my_care = item
-            api_info["care_info"].remove(item)
-            break
     if "X-Requested-With" in request.headers:
         if request.headers["X-Requested-With"] == "XMLHttpRequest":
             return jsonify({"status": True, "data": {"api_info": api_info}})
     return render_template("%s/Show_API.html" % html_dir, api_info=api_info, api_no=api_no, return_url=return_url,
-                           update_url=update_url, my_care=my_care, test_url=test_url, url_prefix=url_prefix,
+                           update_url=update_url, test_url=test_url, url_prefix=url_prefix,
                            status_url=status_url, batch_test_url=batch_test_url)
 
 

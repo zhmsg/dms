@@ -131,26 +131,17 @@
 
 <div class="care">
     <input id="care_url" value='{{ url_prefix }}/care/' style="display: none"/>
-    {% if my_care %}
-       <button class="btn btn-primary pull-right" onclick="change_care();" id="make_care">取消关注</button>
-    {% else %}
         <button class="btn btn-primary pull-right" onclick="change_care();" id="make_care">关注</button>
-    {% endif %}
     <p><b>已关注的人(如果您使用到该API，请关注，以便API一旦发生更改，能尽快通知您。)</b></p>
+    <label style="display: none" id="lab_care_info">{{ api_info["care_info"] | tojson | safe }}</label>
     <div id="api_care_user">
-        {% if my_care %}
-            <span id="mine_care">我</span>
-        {% endif %}
-        {% for item in api_info["care_info"] %}
-        <span>{{ item["nick_name"] }}</span>
-        {% endfor %}
     </div>
 </div>
-{% if my_care and my_care["level"] == 0 %}
+
 <form action="{{ url_prefix }}/delete/{{ api_no }}/" method="get">
-    <button class="btn btn-primary pull-right" >删除API</button>
+    <button id="btn_del_api" class="btn btn-primary pull-right" style="display: none">删除API</button>
 </form>
-{% endif %}
+
 <br>
 <a  href="{{ status_url }}?api_no={{ api_no }}" title="">查看返回状态码解释</a>
 {{ 't_js/API_HELP/show_api.js' | make_static_html | safe }}

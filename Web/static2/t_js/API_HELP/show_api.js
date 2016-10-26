@@ -36,3 +36,23 @@ function remove_care(remove_url){
     var api_no = $("#api_no").val();
     my_async_request(remove_url, "DELETE", {api_no: api_no}, change_care_success);
 }
+
+$(function() {
+    var current_user_name = $("#current_user_name").val();
+    var care_info = JSON.parse($("#lab_care_info").text());
+    for(var i=0;i<care_info.length;i++){
+        if(care_info[i]["user_name"] == current_user_name){
+            $("#api_care_user").append('<span id="mine_care">我</span>');
+            if(care_info[i]["level"] == 0){ // 关注level为0 为API创建者不可取消关注
+                $("#make_care").hide();
+                $("#btn_del_api").show();
+            }
+            else {
+                $("#make_care").text("取消关注");
+            }
+        }
+        else {
+            $("#api_care_user").append('<span>' + care_info[i]["nick_name"] + '</span>');
+        }
+    }
+});
