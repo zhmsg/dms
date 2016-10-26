@@ -71,6 +71,13 @@ class APIIndexHandler(_BaseHandler):
 class APIModuleHandler(_BaseHandler):
     route_url = _BaseHandler.route_url + "/module/"
 
+    def get(self):
+        if "module_no" not in self.request.args:
+            return self.jsonify({"status": False, "data": "Need module_no"})
+        module_no = int(self.request.args["module_no"])
+        result, module_data = control.get_api_list(module_no, g.user_role)
+        return self.jsonify({"status": result, "data": module_data})
+
     def post(self):
         request_data = self.request.json
         module_name = request_data["module_name"]
@@ -87,4 +94,20 @@ class APIModuleHandler(_BaseHandler):
 
     put = post
 
-http_handlers.extend([APIIndexHandler, APIModuleHandler])
+
+class APIModuleCareHandler(_BaseHandler):
+    route_url = _BaseHandler.route_url + "/module/care/"
+
+    def post(self, *args, **kwargs):
+        request_data = self.request.json
+        module_no = request_data["module_no"]
+        if self.request.method == "POST":
+            result, care_info = control.add_module_care(self.g.user_name, self.g.user_role, module_no)
+        else:
+            result, care_info = control.delete_module_care(self.g.user_name, module_no)
+        return self.jsonify({"status": result, "data": care_info})
+
+    delete = post
+
+
+http_handlers.extend([APIIndexHandler, APIModuleHandler, APIModuleCareHandler])
