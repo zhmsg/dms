@@ -71,15 +71,20 @@ class APIIndexHandler(_BaseHandler):
 class APIModuleHandler(_BaseHandler):
     route_url = _BaseHandler.route_url + "/module/"
 
-    def put(self, *args, **kwargs):
+    def post(self):
         request_data = self.request.json
         module_name = request_data["module_name"]
         module_prefix = request_data["module_prefix"]
         module_desc = request_data["module_desc"]
         module_part = request_data["module_part"]
         module_env = request_data["module_env"]
-        module_no = request_data["module_no"]
-        result, message = control.update_api_module(self.g.user_role, module_no, module_name, module_prefix, module_desc, module_part, module_env)
+        if self.request.method == "POST":
+            result, message = control.new_api_module(self.g.user_role, module_name, module_prefix, module_desc, module_part, module_env)
+        else:
+            module_no = request_data["module_no"]
+            result, message = control.update_api_module(self.g.user_role, module_no, module_name, module_prefix, module_desc, module_part, module_env)
         return self.jsonify({"status": result, "data": message})
+
+    put = post
 
 http_handlers.extend([APIIndexHandler, APIModuleHandler])
