@@ -81,6 +81,11 @@ class BaseHandler(tornado.web.RequestHandler, TemplateRendering):
         self.request.json = {}
 
     def prepare(self):
+        test_r, info = normal_request_detection(self.request.headers, self.request.remote_ip)
+        if test_r is False:
+            self.set_status(403, reason=info)
+            self.write(info)
+            return self.finish()
         for key, value in dict(self.request.query_arguments).items():
             self.request.args[key] = value[0]
         for key, value in dict(self.request.body_arguments).items():
