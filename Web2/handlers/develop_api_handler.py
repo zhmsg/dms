@@ -78,7 +78,7 @@ class APIModuleHandler(_BaseHandler):
         module_desc = request_data["module_desc"]
         module_part = request_data["module_part"]
         module_env = request_data["module_env"]
-        module_no = self.path_kwargs["module_no"]
+        module_no = kwargs["module_no"]
         result, message = control.update_api_module(self.g.user_role, module_no, module_name, module_prefix, module_desc, module_part, module_env)
         return self.jsonify({"status": result, "data": message})
 
