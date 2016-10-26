@@ -149,7 +149,7 @@ class HelpManager:
     def set_api_status(self, api_no, status):
         if len(api_no) != 32:
             return False, "Bad api_no"
-        if status <= 0 or status > 4:
+        if status <= 0 or status > 5:
             return False, "Bad status"
         update_time = datetime.now().strftime(TIME_FORMAT)
         update_sql = "UPDATE %s SET update_time='%s',status=%s WHERE api_no='%s';" \
@@ -560,12 +560,10 @@ class HelpManager:
         result = self.db.execute(select_sql)
         if result <= 0:
             return False, "user can not delete this api"
-        delete_sql = "DELETE FROM %s WHERE api_no='%s';" % (self.api_info, api_no)
+        self.set_api_status(api_no, 5)
         update_sql = "UPDATE %s SET level=3 WHERE api_no='%s' AND user_name='%s';" \
                      % (self.api_care, api_no, user_name)
-        result = self.db.execute(delete_sql)
         self.db.execute(update_sql)
-        self.del_api_other_info(api_no)
         return True, result
 
     def del_api_other_info(self, api_no):
