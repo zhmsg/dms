@@ -183,6 +183,20 @@ def new_api_page():
     result, part_module = control.get_part_api(g.user_name, g.user_role)
     if result is False:
         return part_module
+    if "api_no" in request.args:
+        api_no = request.args["api_no"]
+        if len(api_no) != 32:
+            return "Bad api_no"
+        result, part_module = control.get_part_api(g.user_name, g.user_role)
+        if result is False:
+            return part_module
+        result, api_info = control.get_api_info(api_no, g.user_role)
+        return_url = url_prefix + "/info/?api_no=%s" % api_no
+        if result is False:
+            return api_info
+        module_no = api_info["basic_info"]["module_no"]
+        return render_template("%s/New_API.html" % html_dir, part_module=part_module, url_prefix=url_prefix,
+                               module_no=module_no, api_info=api_info, return_url=return_url)
     module_no = 1
     if "module_no" in request.args:
         module_no = int(request.args["module_no"])
@@ -190,26 +204,7 @@ def new_api_page():
                            module_no=module_no)
 
 
-@develop_api_view.route("/update/", methods=["GET"])
-def update_api_info_page():
-    if "api_no" not in request.args:
-        return "Need api_no"
-    api_no = request.args["api_no"]
-    if len(api_no) != 32:
-        return "Bad api_no"
-    result, part_module = control.get_part_api(g.user_name, g.user_role)
-    if result is False:
-        return part_module
-    result, api_info = control.get_api_info(api_no, g.user_role)
-    return_url = url_prefix + "/info/?api_no=%s" % api_no
-    if result is False:
-        return api_info
-    module_no = api_info["basic_info"]["module_no"]
-    return render_template("%s/New_API.html" % html_dir, part_module=part_module, url_prefix=url_prefix,
-                           module_no=module_no, api_info=api_info, return_url=return_url)
-
-
-@develop_api_view.route("/update/", methods=["POST"])
+@develop_api_view.route("/basic/", methods=["POST"])
 def update_api_info():
     request_form = request.form
     api_module = request_form["api_module"]

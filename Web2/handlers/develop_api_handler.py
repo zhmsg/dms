@@ -138,4 +138,5 @@ class APIBasicHandler(_BaseHandler):
         return self.render_template("%s/New_API.html" % html_dir, part_module=part_module, url_prefix=url_prefix,
                                module_no=module_no)
 
+
 http_handlers.extend([APIIndexHandler, APIModuleHandler, APIModuleCareHandler, APIBasicHandler])
