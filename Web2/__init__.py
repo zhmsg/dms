@@ -154,6 +154,7 @@ class BaseHandler(tornado.web.RequestHandler, TemplateRendering):
         self.write(content)
 
     def jsonify(self, return_obj):
+        self.set_header("Content-Type", "application/json")
         self.write(tornado.escape.json_encode(return_obj))
 
     def write_error(self, status_code, **kwargs):
