@@ -147,6 +147,11 @@ function new_module_success(data){
 $(function(){
     $("#btn_op_module").click(function(){
         var body_param = new Object();
+        var method = "POST";
+        if($("#module_no").length > 0) {
+            body_param["module_no"] = $("#module_no").val();
+            method = "PUT";
+        }
         body_param["module_name"] = $("#module_name").val();
         body_param["module_prefix"] = $("#module_prefix").val();
         body_param["module_desc"] = $("#module_desc").val();
@@ -159,7 +164,7 @@ $(function(){
         }
         var request_url = $("#module_url").val();
         console.info(request_url);
-        my_request(request_url, "POST", body_param, new_module_success);
+        my_request(request_url, method, body_param, new_module_success);
         console.info(body_param);
     });
     $("#div_add_env").find("span").click(remove_test_env);

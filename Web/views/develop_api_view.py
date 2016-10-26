@@ -102,7 +102,7 @@ def get_module_api():
     return jsonify({"status": result, "data": module_data})
 
 
-@develop_api_view.route("/module/", methods=["POST"])
+@develop_api_view.route("/module/", methods=["POST", "PUT"])
 def new_api_module():
     request_data = request.json
     module_name = request_data["module_name"]
@@ -110,20 +110,13 @@ def new_api_module():
     module_desc = request_data["module_desc"]
     module_part = request_data["module_part"]
     module_env = request_data["module_env"]
-    result, message = control.new_api_module(g.user_role, module_name, module_prefix, module_desc, module_part, module_env)
+    if request.method == "POST":
+        result, message = control.new_api_module(g.user_role, module_name, module_prefix, module_desc, module_part, module_env)
+    else:
+        module_no = request_data["module_no"]
+        result, message = control.update_api_module(g.user_role, module_no, module_name, module_prefix, module_desc, module_part, module_env)
     return jsonify({"status": result, "data": message})
 
-
-@develop_api_view.route("/module/<int:module_no>/", methods=["POST"])
-def update_api_module(module_no):
-    request_data = request.json
-    module_name = request_data["module_name"]
-    module_prefix = request_data["module_prefix"]
-    module_desc = request_data["module_desc"]
-    module_part = request_data["module_part"]
-    module_env = request_data["module_env"]
-    result, message = control.update_api_module(g.user_role, module_no, module_name, module_prefix, module_desc, module_part, module_env)
-    return jsonify({"status": result, "data": message})
 
 
 @develop_api_view.route("/module/care/", methods=["POST", "DELETE"])
