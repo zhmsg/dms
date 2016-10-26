@@ -93,6 +93,23 @@ def list_api():
                            new_power=new_power, test_env=test_env)
 
 
+@develop_api_view.route("/", methods=["POST"])
+def new_api_info():
+    request_form = request.form
+    api_module = request_form["api_module"]
+    if api_module == "":
+        return "请选择API所属模块"
+    desc = request_form["api_desc"]
+    url = request_form["api_url"]
+    title = request_form["api_title"]
+    method = request_form["api_method"]
+    module_no = int(api_module)
+    result, api_info = control.new_api_info(module_no, title, url, method, desc, g.user_name, g.user_role)
+    if result is False:
+        return api_info
+    return redirect(url_prefix + "/update/info/?api_no=%s" % api_info["api_no"])
+
+
 @develop_api_view.route("/module/", methods=["GET"])
 def get_module_api():
     if "module_no" not in request.args:
@@ -161,7 +178,7 @@ def show_api():
                            status_url=status_url, batch_test_url=batch_test_url)
 
 
-@develop_api_view.route("/new/", methods=["GET"])
+@develop_api_view.route("/basic/", methods=["GET"])
 def new_api_page():
     result, part_module = control.get_part_api(g.user_name, g.user_role)
     if result is False:
@@ -171,23 +188,6 @@ def new_api_page():
         module_no = int(request.args["module_no"])
     return render_template("%s/New_API.html" % html_dir, part_module=part_module, url_prefix=url_prefix,
                            module_no=module_no)
-
-
-@develop_api_view.route("/new/", methods=["POST"])
-def new_api_info():
-    request_form = request.form
-    api_module = request_form["api_module"]
-    if api_module == "":
-        return "请选择API所属模块"
-    desc = request_form["api_desc"]
-    url = request_form["api_url"]
-    title = request_form["api_title"]
-    method = request_form["api_method"]
-    module_no = int(api_module)
-    result, api_info = control.new_api_info(module_no, title, url, method, desc, g.user_name, g.user_role)
-    if result is False:
-        return api_info
-    return redirect(url_prefix + "/update/info/?api_no=%s" % api_info["api_no"])
 
 
 @develop_api_view.route("/update/", methods=["GET"])

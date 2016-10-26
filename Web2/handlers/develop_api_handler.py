@@ -67,6 +67,21 @@ class APIIndexHandler(_BaseHandler):
         return self.render_template("%s/New_API_Module.html" % html_dir, part_module=part_module, new_power=new_power,
                                     test_env=test_env)
 
+    def post(self, *args, **kwargs):
+        request_form = self.request.form
+        api_module = request_form["api_module"]
+        if api_module == "":
+            return "请选择API所属模块"
+        desc = request_form["api_desc"]
+        url = request_form["api_url"]
+        title = request_form["api_title"]
+        method = request_form["api_method"]
+        module_no = int(api_module)
+        result, api_info = control.new_api_info(module_no, title, url, method, desc, self.g.user_name, self.g.user_role)
+        if result is False:
+            return api_info
+        return self.redirect(url_prefix + "/update/info/?api_no=%s" % api_info["api_no"])
+
 
 class APIModuleHandler(_BaseHandler):
     route_url = _BaseHandler.route_url + "/module/"
@@ -110,4 +125,17 @@ class APIModuleCareHandler(_BaseHandler):
     delete = post
 
 
-http_handlers.extend([APIIndexHandler, APIModuleHandler, APIModuleCareHandler])
+class APIBasicHandler(_BaseHandler):
+    route_url = _BaseHandler.route_url + "/basic/"
+
+    def get(self, *args, **kwargs):
+        result, part_module = control.get_part_api(self.g.user_name, self.g.user_role)
+        if result is False:
+            return self.write(part_module)
+        module_no = 1
+        if "module_no" in self.request.args:
+            module_no = int(self.request.args["module_no"])
+        return self.render_template("%s/New_API.html" % html_dir, part_module=part_module, url_prefix=url_prefix,
+                               module_no=module_no)
+
+http_handlers.extend([APIIndexHandler, APIModuleHandler, APIModuleCareHandler, APIBasicHandler])

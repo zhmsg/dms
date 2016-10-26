@@ -31,7 +31,7 @@
         </tr>
         {% endfor %}
     </table>
-    <a class="btn btn-primary pull-right" href="{{ url_prefix }}/new/?module_no={{ current_module["module_no"] }}" title="">添加API</a><br/><br/>
+    <a class="btn btn-primary pull-right" href="{{ url_prefix }}/basic/?module_no={{ current_module["module_no"] }}" title="">添加API</a><br/><br/>
     <div class="care">
          <input id="care_url" value='{{ url_prefix }}/module/care/' style="display: none"/>
         {% if my_care %}
