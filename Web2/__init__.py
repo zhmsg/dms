@@ -83,7 +83,7 @@ class BaseHandler(tornado.web.RequestHandler, TemplateRendering):
     def prepare(self):
         test_r, info = normal_request_detection(self.request.headers, self.request.remote_ip)
         if test_r is False:
-            self.set_status(403, reason=info)
+            self.set_status(403)
             self.write(info)
             return self.finish()
         for key, value in dict(self.request.query_arguments).items():
