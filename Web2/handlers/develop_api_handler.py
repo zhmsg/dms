@@ -6,8 +6,12 @@ from Web2 import control, BaseAuthHandler, test_url_prefix, api_url_prefix as ur
 
 html_dir = "API_HELP"
 
+class _BaseHandler(BaseAuthHandler):
+    url_prefix = url_prefix
+    route_url = url_prefix
 
-class APIIndexHandler(BaseAuthHandler):
+
+class APIIndexHandler(_BaseHandler):
     route_url = url_prefix + "/"
 
     def get(self):
@@ -48,7 +52,7 @@ class APIIndexHandler(BaseAuthHandler):
                             module_env_info.append(env)
                             test_env.remove(env)
                 return self.render_template("%s/Update_API_Module.html" % html_dir, part_module=part_module, api_list=module_data["api_list"],
-                                       current_module=current_module, url_prefix=url_prefix, test_env=test_env,
+                                       current_module=current_module, test_env=test_env,
                                        module_env_info=module_env_info)
             my_care = None
             for item in module_data["care_info"]:
@@ -58,9 +62,24 @@ class APIIndexHandler(BaseAuthHandler):
                     break
             test_module_url = test_url_prefix + "/batch/"
             return self.render_template("%s/List_Module_API.html" % html_dir, part_module=part_module, api_list=module_data["api_list"],
-                                   current_module=current_module, url_prefix=url_prefix, new_power=new_power,
+                                   current_module=current_module, new_power=new_power,
                                    my_care=my_care, care_info=module_data["care_info"], test_module_url=test_module_url)
-        return self.render_template("%s/New_API_Module.html" % html_dir, part_module=part_module, url_prefix=url_prefix,
-                               new_power=new_power, test_env=test_env)
+        return self.render_template("%s/New_API_Module.html" % html_dir, part_module=part_module, new_power=new_power,
+                                    test_env=test_env)
 
-http_handlers.extend([APIIndexHandler])
+
+class APIModuleHandler(_BaseHandler):
+    route_url = _BaseHandler.route_url + "/module/(?P<module_no>\d+)/"
+
+    def post(self, *args, **kwargs):
+        request_data = self.request.json
+        module_name = request_data["module_name"]
+        module_prefix = request_data["module_prefix"]
+        module_desc = request_data["module_desc"]
+        module_part = request_data["module_part"]
+        module_env = request_data["module_env"]
+        module_no = self.path_kwargs["module_no"]
+        result, message = control.update_api_module(self.g.user_role, module_no, module_name, module_prefix, module_desc, module_part, module_env)
+        return self.jsonify({"status": result, "data": message})
+
+http_handlers.extend([APIIndexHandler, APIModuleHandler])

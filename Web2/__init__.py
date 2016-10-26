@@ -2,10 +2,11 @@
 # !/usr/bin/python
 
 __author__ = 'zhouheng'
-import json
+
 from hashlib import sha512
 from urllib import urlencode
 import tornado.web
+import tornado.escape
 from jinja2 import Environment, FileSystemLoader, TemplateNotFound
 from Web2.redis_session import RedisSessionInterface
 from Class.Control import ControlManager
@@ -56,7 +57,7 @@ class TemplateRendering(object):
         env.filters['make_static_url'] = make_static_url
         env.filters['make_default_static_url'] = make_default_static_url
         env.filters['make_static_html'] = make_static_html
-        env.filters['tojson'] = json.dumps
+        env.filters['tojson'] = tornado.escape.json_encode
         try:
             template = env.get_template(template_name)
         except TemplateNotFound:
@@ -94,7 +95,7 @@ class BaseHandler(tornado.web.RequestHandler, TemplateRendering):
         content_type = self.request.headers.get("Content-Type")
         if content_type == "application/json":
             if len(self.request.body) > 0:
-                self.request.json = json.loads(self.request.body)
+                self.request.json = tornado.escape.json_decode(self.request.body)
 
     def get_session_id(self):
         user_agent = self.request.headers.get('User-Agent')
@@ -151,6 +152,9 @@ class BaseHandler(tornado.web.RequestHandler, TemplateRendering):
         })
         content = super(BaseHandler, self).render_template(template_name, **self.kwargs)
         self.write(content)
+
+    def jsonify(self, return_obj):
+        self.write(tornado.escape.json_encode(return_obj))
 
     def write_error(self, status_code, **kwargs):
         res = status_code
