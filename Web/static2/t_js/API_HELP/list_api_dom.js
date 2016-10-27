@@ -16,7 +16,7 @@ function Load_API_Module(data)
         for(var j=0;j<part_info["module_list"].length;j++)
         {
             var module_info = part_info["module_list"][j];
-            add_part_div.append('<a href="javascript:void(0)" onclick=Get_API_List(' + module_info["module_no"] +')>' + module_info["module_name"] + '</a>');
+            add_part_div.append('<a id="a_module_' + module_info["module_no"] + '" href="javascript:void(0)" onclick=Get_API_List(' + module_info["module_no"] +')>' + module_info["module_name"] + '</a>');
         }
         $("#div_module_list").append(add_part_div);
         add_option("module_part", part_info["part_no"], part_info["part_name"]);

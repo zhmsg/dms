@@ -182,3 +182,7 @@ body, td, th {
     font-family: "微软雅黑";
     font-size: 14px;
 }
+
+.selected {
+    background: #81ccee;
+}

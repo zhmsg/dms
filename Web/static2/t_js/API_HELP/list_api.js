@@ -112,6 +112,8 @@ function Get_API_List_Success(data)
 
 function Get_API_List(module_no)
 {
+    $("a[id^='a_module_']").removeClass();
+    $("#a_module_" + module_no).addClass("selected");
     var request_url = "/dev/api/module/?module_no=" + module_no;
     my_async_request(request_url, "GET", null, Get_API_List_Success);
 }
