@@ -3,12 +3,12 @@
  */
 
 function check_user_name_success(data){
-    if(data.status == true){
+    if(data.data.result == true){
         $("#check_result").text("可以添加注册");
-        $("#user_name").val(data.message);
+        $("#user_name").val(data.data.message);
     }
     else{
-        $("#check_result").text(data.message);
+        $("#check_result").text(data.data.message);
     }
 }
 

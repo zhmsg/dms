@@ -87,9 +87,6 @@ function save_test_case(){
 }
 
 function get_test_case_success(data){
-    if(data.status != true){
-        update_res(JSON.stringify(data, null, 4));
-    }
     $("input[id$='_value']").val("");
     var case_info = data.data;
     if("header" in case_info){
@@ -147,9 +144,6 @@ function add_case_node(case_name)
 }
 
 function get_test_case_list_success(data){
-    if(data.status != true){
-        update_res(JSON.stringify(data, null, 4));
-    }
     var div_test_case = $("#div_test_case");
     var case_list = data.data.case;
     for(var index in case_list){

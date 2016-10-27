@@ -50,10 +50,6 @@ function Run_API(api_url, api_method, case_info, id)
 }
 
 function Get_Case_Info_Success(data){
-    if(data.status == false)
-    {
-        return;
-    }
     var case_info = data.data;
     var case_name = case_info.case_name;
     var api_no = case_info.api_no;
@@ -98,33 +94,27 @@ function Test_One_API(api_no)
 }
 
 function Get_Case_List_Success(data){
-    if(data.status != true){
-        update_res(JSON.stringify(data, null, 4));
-    }
     var api_no = data.data.api_no;
     API_Info[api_no]["test_case"] = data.data.case;
     Test_One_API(api_no);
 }
 
 function Get_API_Info_Success(data) {
-    if(data.status == true)
+    var api_no = data.data.api_info.basic_info.api_no;
+    var env_str = data.data.api_info.basic_info.module_env;
+    var env_sp = env_str.split("|");
+    API_Info[api_no] = data.data.api_info;
+    API_Info[api_no]["env_info"] = new Array();
+    var i = 0;
+    for(var index in env_sp)
     {
-        var api_no = data.data.api_info.basic_info.api_no;
-        var env_str = data.data.api_info.basic_info.module_env;
-        var env_sp = env_str.split("|");
-        API_Info[api_no] = data.data.api_info;
-        API_Info[api_no]["env_info"] = new Array();
-        var i = 0;
-        for(var index in env_sp)
-        {
-            if(env_sp[index] in Env_Info){
-                API_Info[api_no]["env_info"][i] = Env_Info[env_sp[index]];
-                i++;
-            }
+        if(env_sp[index] in Env_Info){
+            API_Info[api_no]["env_info"][i] = Env_Info[env_sp[index]];
+            i++;
         }
-        var test_case_url = $("#test_case_url").val() + "?api_no=" + api_no;
-        my_async_request(test_case_url, "GET", null, Get_Case_List_Success);
     }
+    var test_case_url = $("#test_case_url").val() + "?api_no=" + api_no;
+    my_async_request(test_case_url, "GET", null, Get_Case_List_Success);
 }
 
 
@@ -138,12 +128,9 @@ function Get_API_Info(api_no)
 
 function Get_Env_Info_Success(data)
 {
-    if(data.status == true)
+    for(var i=0;i<data.data.length;i++)
     {
-        for(var i=0;i<data.data.length;i++)
-        {
-            Env_Info["" + data.data[i].env_no] = data.data[i];
-        }
+        Env_Info["" + data.data[i].env_no] = data.data[i];
     }
 }
 
@@ -155,12 +142,9 @@ function Get_Env_Info()
 
 function Get_API_List_Success(data)
 {
-    if(data.status == true)
-    {
-        var api_list = data.data.api_list;
-        for(var i=0;i<api_list.length;i++){
-            Get_API_Info(api_list[i].api_no);
-        }
+    var api_list = data.data.api_list;
+    for(var i=0;i<api_list.length;i++){
+        Get_API_Info(api_list[i].api_no);
     }
 }
 

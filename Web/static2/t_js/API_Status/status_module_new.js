@@ -126,24 +126,13 @@ $(function(){
 });
 
 function new_module_success(data){
-    if(data["status"] == true) {
-        var new_data = new Array(new Array(data["data"]["service_id"], data["data"]["service_title"], data["data"]["service_desc"], "<a href='#'>删除</a>"));
-        add_table_row("tb_main_module", new_data);
-    }
-    else{
-        alert(data["data"]);
-    }
+    var new_data = new Array(new Array(data["data"]["service_id"], data["data"]["service_title"], data["data"]["service_desc"], "<a href='#'>删除</a>"));
+    add_table_row("tb_main_module", new_data);
 }
 
 function new_sub_module_success(data){
-    if(data["status"] == true) {
-        var new_data = new Array(new Array(data["data"]["function_id"], data["data"]["function_title"], data["data"]["function_desc"], "<a href='#'>删除</a>"));
-        add_table_row("tb_sub_module", new_data);
-    }
-    else{
-        alert(data["data"]);
-    }
-    alert("success");
+    var new_data = new Array(new Array(data["data"]["function_id"], data["data"]["function_title"], data["data"]["function_desc"], "<a href='#'>删除</a>"));
+    add_table_row("tb_sub_module", new_data);
 }
 
 $(function(){

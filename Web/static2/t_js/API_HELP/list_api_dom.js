@@ -4,9 +4,6 @@
 
 function Load_API_Module(data)
 {
-    if(data.status == false){
-        return false;
-    }
     module_data = data.data;
     var url_prefix = $("#url_prefix").val();
     for(var i=0;i<module_data.length;i++){
@@ -21,7 +18,6 @@ function Load_API_Module(data)
         $("#div_module_list").append(add_part_div);
         add_option("module_part", part_info["part_no"], part_info["part_name"]);
     }
-
 }
 
 function Load_Module_Info(load_type){
@@ -96,11 +92,9 @@ function Load_Care_Info(care_info){
 
 
 function Load_Test_Env(data){
-    if(data.status == true){
-        var env_list = data.data;
-        for(var i=0;i<env_list.length;i++){
-            var one_env = env_list[i];
-            add_option("s_add_env", one_env["env_no"], one_env["env_name"], one_env["env_address"]);
-        }
+    var env_list = data.data;
+    for(var i=0;i<env_list.length;i++){
+        var one_env = env_list[i];
+        add_option("s_add_env", one_env["env_no"], one_env["env_name"], one_env["env_address"]);
     }
 }

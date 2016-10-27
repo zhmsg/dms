@@ -37,9 +37,6 @@ function save_task()
 
 function request_task_list_success(data)
 {
-    if(data.status == false){
-        sweetAlert(data.data);
-    }
     var today_task_list = data.data;
     Add_Task_Info();
     book_num = 0;
@@ -78,14 +75,8 @@ function request_task_list_success(data)
 
 function request_task_list(data)
 {
-    if(data==null || data.status==true) {
-        var url_task_list = $("#url_task_list").val();
-        my_async_request(url_task_list, "GET", null, request_task_list_success)
-    }
-    else
-    {
-        sweetAlert(data.data);
-    }
+    var url_task_list = $("#url_task_list").val();
+    my_async_request(url_task_list, "GET", null, request_task_list_success);
 }
 
 

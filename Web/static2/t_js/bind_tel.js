@@ -49,16 +49,10 @@ function set_wait_time(){
 }
 
 function send_code_success(data){
-    if(data.status == true){
-        send_freq++;
-        localStorage.setItem(now_d, "" + send_freq);
-        allow_check = false;
-        send_tel = data.data.tel;
-    }
-    else{
-        sweetAlert(data.data);
-        allow_check = true;
-    }
+    send_freq++;
+    localStorage.setItem(now_d, "" + send_freq);
+    allow_check = false;
+    send_tel = data.data.tel;
 }
 
 function send_code(){
@@ -85,12 +79,7 @@ function send_code(){
 }
 
 function bind_tel_success(data){
-    if(data.status == true){
-        location.href = "/";
-    }
-    else{
-        sweetAlert(data.data);
-    }
+    location.href = "/";
 }
 
 function bind_tel(){

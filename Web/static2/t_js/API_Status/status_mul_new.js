@@ -6,22 +6,20 @@ var module_info = new Object();
 var error_type = new Object();
 
 function get_module_success(data){
-    if (data.status == true){
-        module_info = data.data;
-        var module_row = new Array();
-        var i = 0;
-        for(var key in module_info){
-            var data = new Array();
-            data[0] = key;
-            data[1] = module_info[key].title;
-            data[2] = module_info[key].desc;
-            data[3] = "<a href='#'>删除</a>";
-            module_row[i] = data;
-            i++;
-        }
-        add_table_row("tb_main_module", module_row);
-        set_service_id();
+    module_info = data.data;
+    var module_row = new Array();
+    var i = 0;
+    for(var key in module_info){
+        var data = new Array();
+        data[0] = key;
+        data[1] = module_info[key].title;
+        data[2] = module_info[key].desc;
+        data[3] = "<a href='#'>删除</a>";
+        module_row[i] = data;
+        i++;
     }
+    add_table_row("tb_main_module", module_row);
+    set_service_id();
 }
 
 function get_module_info() {
@@ -39,26 +37,24 @@ function new_checkbox(id, chang_func, lab_text){
 }
 
 function get_error_type_success(data){
-    if (data.status == true){
-        error_type = data.data;
-        var error_row = new Array();
-        var i = 0;
-        for(var key in error_type)
-        {
+    error_type = data.data;
+    var error_row = new Array();
+    var i = 0;
+    for(var key in error_type)
+    {
 
-            var data = new Array();
-            data[0] = key;
-            data[1] = error_type[key].title;
-            data[2] = error_type[key].desc;
-            error_row[i] = data;
-            i++;
-            if(error_type[key].title.indexOf("参数") >= 0) {
-                var new_cb = new_checkbox("error_type_" + key, "preview_status_code", error_type[key].title);
-                $("#p_status_prefix").append(new_cb);
-            }
+        var data = new Array();
+        data[0] = key;
+        data[1] = error_type[key].title;
+        data[2] = error_type[key].desc;
+        error_row[i] = data;
+        i++;
+        if(error_type[key].title.indexOf("参数") >= 0) {
+            var new_cb = new_checkbox("error_type_" + key, "preview_status_code", error_type[key].title);
+            $("#p_status_prefix").append(new_cb);
         }
-        add_table_row("tb_error_type", error_row, false);
     }
+    add_table_row("tb_error_type", error_row, false);
 }
 
 function get_error_type() {
@@ -128,29 +124,24 @@ function preview_status_code(){
 }
 
 function del_status_code_success(data){
-    if(data["status"] == true) {
-        $("#a_del_" + data.data).parent().parent().remove();
-    }
+    $("#a_del_" + data.data).parent().parent().remove();
 }
 
-function new_mul_status_code_success(data)
-{
-    if(data["status"] == true){
-        var add_rows = new Array();
+function new_mul_status_code_success(data){
+    var add_rows = new Array();
 
-        for(var i=0;i<data.data.length;i++){
-            var del_code_a = '<a id="a_del_' + data.data[i].status_code + '" href="javascript:void(0)" title="">删除</a>';
-            add_rows[i] =new Array(data.data[i].status_code, data.data[i].error_desc, del_code_a);
-        }
-        add_table_row("tb_preview_code", add_rows, true);
-        $("a[id^=a_del_]").click(function(){
-            var status_code = this.id.substring(6);
-            var del_url = $("#del_status_code_url").val();
-            var body_param = new Object();
-            body_param["status_code"] = status_code;
-            my_request(del_url, "DELETE", body_param, del_status_code_success);
-        });
+    for(var i=0;i<data.data.length;i++){
+        var del_code_a = '<a id="a_del_' + data.data[i].status_code + '" href="javascript:void(0)" title="">删除</a>';
+        add_rows[i] =new Array(data.data[i].status_code, data.data[i].error_desc, del_code_a);
     }
+    add_table_row("tb_preview_code", add_rows, true);
+    $("a[id^=a_del_]").click(function(){
+        var status_code = this.id.substring(6);
+        var del_url = $("#del_status_code_url").val();
+        var body_param = new Object();
+        body_param["status_code"] = status_code;
+        my_request(del_url, "DELETE", body_param, del_status_code_success);
+    });
 }
 
 function new_mul_status_code()

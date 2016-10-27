@@ -241,7 +241,7 @@ def register_check():
     result, message = control.check_user_name_exist(current_user.account, current_user.role, check_name)
     if result is True:
         session["register_name"] = message
-    return jsonify({"status": result, "message": message})
+    return jsonify({"status": True, "data": {"result": result, "message": message}})
 
 
 @dms_view.route("/authorize/", methods=["GET"])

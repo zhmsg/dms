@@ -70,13 +70,8 @@ function str_2_ip(ip_str){
 
 var ip_info;
 
-function get_ip_info_success(data){
-    if(data.status == true){
-        ip_info = data.data;
-    }
-    else{
-        ip_info = null;
-    }
+function get_ip_info_success(data) {
+    ip_info = data.data;
 }
 
 function get_ip_info(ip_value){

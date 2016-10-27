@@ -16,9 +16,7 @@ function get_module_info() {
 }
 
 function get_error_type_success(data){
-    if (data.status == true){
-        error_type = data.data;
-    }
+    error_type = data.data;
 }
 function get_error_type() {
     var request_url = $("#error_type_url").val();

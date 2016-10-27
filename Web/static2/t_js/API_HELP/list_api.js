@@ -15,21 +15,15 @@ function change_care(module_no){
 }
 
 function change_care_success(data){
-    if (data.status == true){
-        if ($("#make_care").text() == "关注")
-        {
-            $("#make_care").text("取消关注");
-            $("#module_care_user").append('<span id="mine_care">我</span>');
-        }
-        else if($("#make_care").text() == "取消关注")
-        {
-            $("#make_care").text("关注");
-            $("#mine_care").remove();
-        }
-
+    if ($("#make_care").text() == "关注")
+    {
+        $("#make_care").text("取消关注");
+        $("#module_care_user").append('<span id="mine_care">我</span>');
     }
-    else{
-        sweetAlert(data.data);
+    else if($("#make_care").text() == "取消关注")
+    {
+        $("#make_care").text("关注");
+        $("#mine_care").remove();
     }
 }
 
@@ -69,9 +63,7 @@ function remove_test_env(){
 
 
 function new_module_success(data){
-    if(data.status == true) {
-        location.reload();
-    }
+    location.reload();
 }
 
 var module_data = null;
@@ -80,34 +72,31 @@ var current_module = null;
 
 function Get_API_List_Success(data)
 {
-    if(data.status == true)
-    {
-        $("#div_api_list").show();
-        $("#div_api_new_add").hide();
-        var module_no = data.data.module_info.module_no;
-        for(var i=0;i<module_data.length;i++){
-            var part_info = module_data[i];
-            for(var j=0;j<part_info["module_list"].length;j++)
+    $("#div_api_list").show();
+    $("#div_api_new_add").hide();
+    var module_no = data.data.module_info.module_no;
+    for(var i=0;i<module_data.length;i++){
+        var part_info = module_data[i];
+        for(var j=0;j<part_info["module_list"].length;j++)
+        {
+            if(module_no == part_info["module_list"][j]["module_no"])
             {
-                if(module_no == part_info["module_list"][j]["module_no"])
-                {
-                    current_module = part_info["module_list"][j]
-                }
+                current_module = part_info["module_list"][j]
             }
         }
-        if(current_module == null){
-            return false;
-        }
-        Load_Module_Info("info");
-        var api_list = data.data.api_list;
-        var module_prefix = current_module["module_prefix"];
-        Load_API_List(api_list, module_prefix);
-        var care_info = data.data.care_info;
-        Load_Care_Info(care_info);
-        $("#a_add_api").attr("href", $("#a_add_api").attr("href_prefix") + module_no);
-        $("#a_del_module").attr("href", $("#a_del_module").attr("href_prefix") + module_no);
-        $("#a_test_module").attr("href", $("#a_test_module").attr("href_prefix") + module_no);
     }
+    if(current_module == null){
+        return false;
+    }
+    Load_Module_Info("info");
+    var api_list = data.data.api_list;
+    var module_prefix = current_module["module_prefix"];
+    Load_API_List(api_list, module_prefix);
+    var care_info = data.data.care_info;
+    Load_Care_Info(care_info);
+    $("#a_add_api").attr("href", $("#a_add_api").attr("href_prefix") + module_no);
+    $("#a_del_module").attr("href", $("#a_del_module").attr("href_prefix") + module_no);
+    $("#a_test_module").attr("href", $("#a_test_module").attr("href_prefix") + module_no);
 }
 
 function Get_API_List(module_no)
