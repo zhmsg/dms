@@ -110,20 +110,19 @@ def show_api():
     result, api_info = control.get_api_info(api_no, g.user_role)
     if result is False:
         return api_info
-    return_url = url_prefix + "/?module_no=%s" % api_info["basic_info"]["module_no"]
-    update_url = None
-    test_url = url_prefix + "/test/?api_no=%s" % api_no
-    batch_test_url = None
-    if g.user_role & control.role_value["api_new"] == control.role_value["api_new"]:
-        update_url = url_prefix + "/update/info/?api_no=%s" % api_no
-        batch_test_url = url_prefix + "/test/batch/?api_no=%s" % api_no
-    status_url = url_prefix + "/status/"
     if "X-Requested-With" in request.headers:
         if request.headers["X-Requested-With"] == "XMLHttpRequest":
             return jsonify({"status": True, "data": {"api_info": api_info}})
+    return_url = url_prefix + "/?module_no=%s" % api_info["basic_info"]["module_no"]
+    if "update" in request.args:
+        return render_template("%s/Update_API.html" % html_dir, api_info=api_info, api_no=api_no, return_url=return_url,
+                           url_prefix=url_prefix)
+    test_url = url_prefix + "/test/?api_no=%s" % api_no
+    batch_test_url = url_prefix + "/test/batch/?api_no=%s" % api_no
+    status_url = url_prefix + "/status/"
     return render_template("%s/Show_API.html" % html_dir, api_info=api_info, api_no=api_no, return_url=return_url,
-                           update_url=update_url, test_url=test_url, url_prefix=url_prefix,
-                           status_url=status_url, batch_test_url=batch_test_url)
+                           test_url=test_url, url_prefix=url_prefix, status_url=status_url,
+                           batch_test_url=batch_test_url)
 
 
 @develop_api_view.route("/basic/", methods=["GET"])
@@ -164,21 +163,6 @@ def update_api_info():
     if result is False:
         return message
     return redirect("%s/info/?api_no=%s" % (url_prefix, api_no))
-
-
-@develop_api_view.route("/update/info/", methods=["GET"])
-def update_api_other_info():
-    if "api_no" not in request.args:
-        return "Need api_no"
-    api_no = request.args["api_no"]
-    if len(api_no) != 32:
-        return "Bad api_no"
-    result, api_info = control.get_api_info(api_no, g.user_role)
-    return_url = url_prefix + "/info/?api_no=%s" % api_no
-    if result is False:
-        return api_info
-    return render_template("%s/Update_API.html" % html_dir, api_info=api_info, api_no=api_no, return_url=return_url,
-                           url_prefix=url_prefix)
 
 
 @develop_api_view.route("/status/<int:api_status>/", methods=["GET"])

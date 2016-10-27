@@ -12,7 +12,7 @@ class _BaseHandler(BaseAuthHandler):
 
 
 class APIIndexHandler(_BaseHandler):
-    route_url = url_prefix + "/"
+    route_url = _BaseHandler.route_url + "/"
 
     def get(self):
         test_module_url = test_url_prefix + "/batch/"
@@ -34,6 +34,32 @@ class APIIndexHandler(_BaseHandler):
         if result is False:
             return api_info
         return self.redirect(url_prefix + "/update/info/?api_no=%s" % api_info["api_no"])
+
+
+class APIInfoHandler(_BaseHandler):
+    route_url = _BaseHandler.route_url + "/info/"
+
+    def get(self):
+        if "api_no" not in self.request.args:
+            return "Need api_no"
+        api_no = self.request.args["api_no"]
+        if len(api_no) != 32:
+            return "Bad api_no"
+        result, api_info = control.get_api_info(api_no, self.g.user_role)
+        if result is False:
+            return api_info
+        if "X-Requested-With" in self.request.headers:
+            if self.request.headers["X-Requested-With"] == "XMLHttpRequest":
+                return self.jsonify({"status": True, "data": {"api_info": api_info}})
+        return_url = url_prefix + "/?module_no=%s" % api_info["basic_info"]["module_no"]
+        if "update" in self.request.args:
+            return self.render_template("Update_API.html", api_info=api_info, api_no=api_no, return_url=return_url)
+        test_url = url_prefix + "/test/?api_no=%s" % api_no
+        batch_test_url = url_prefix + "/test/batch/?api_no=%s" % api_no
+        status_url = url_prefix + "/status/"
+
+        return self.render_template("Show_API.html", api_info=api_info, api_no=api_no, return_url=return_url,
+                                    test_url=test_url, status_url=status_url, batch_test_url=batch_test_url)
 
 
 class APIModuleHandler(_BaseHandler):
@@ -91,5 +117,21 @@ class APIBasicHandler(_BaseHandler):
         return self.render_template("New_API.html", part_module=part_module, url_prefix=url_prefix,
                                module_no=module_no)
 
+    def post(self):
+        request_form = self.request.form
+        print(request_form)
+        api_module = request_form["api_module"]
+        api_no = request_form["api_no"]
+        desc = request_form["api_desc"]
+        url = request_form["api_url"]
+        title = request_form["api_title"]
+        method = request_form["api_method"]
+        module_no = int(api_module)
+        result, message = control.update_api_info(role=self.g.user_role, api_no=api_no, desc=desc, method=method,
+                                                  path=url, module_no=module_no, title=title)
+        if result is False:
+            return message
+        return self.redirect("%s/info/?api_no=%s" % (url_prefix, api_no))
 
-http_handlers.extend([APIIndexHandler, APIModuleHandler, APIModuleCareHandler, APIBasicHandler])
+
+http_handlers.extend([APIIndexHandler, APIInfoHandler, APIModuleHandler, APIModuleCareHandler, APIBasicHandler])
