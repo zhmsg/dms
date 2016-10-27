@@ -119,7 +119,7 @@ class APIBasicHandler(_BaseHandler):
         if self.request.method == "PUT":
             api_no = request_data["api_no"]
             r, m = control.update_api_info(role=self.g.user_role, api_no=api_no, desc=desc, method=method, path=url,
-                                    module_no=module_no, title=title)
+                                           module_no=module_no, title=title)
             if r is False:
                 return self.jsonify({"status": False, "data": m})
         else:
