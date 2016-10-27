@@ -74,13 +74,6 @@ function new_module_success(data){
     }
 }
 
-function bit_and(role1, role2){
-    var v = role1 & role2;
-    if(v < role1 && v < role2)
-        return false;
-    else
-        return true;
-}
 
 function New_TD(key, obj){
     var td = $("<td></td>");
@@ -117,7 +110,6 @@ function Load_Module_Info(load_type){
             add_test_env();
         }
     }
-    console.info("success");
 }
 
 function Load_API_List(api_list, module_prefix)
@@ -140,7 +132,7 @@ function Load_API_List(api_list, module_prefix)
             var add_tr = $("<tr id='" + tr_id + "'></tr>");
         }
         t.append(add_tr);
-        api_info["api_url"] = module_prefix + api_info["api_path"];
+        api_info["api_url"] = escape(module_prefix + api_info["api_path"]);
         var keys = ["api_title", "api_url", "api_method", "status"];
         for(var j=0;j<keys.length;j++){
             var key = keys[j];

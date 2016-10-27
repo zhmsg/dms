@@ -9,5 +9,6 @@
     <label style="display: none" id="role_value">{{ role_value | tojson | safe }}</label>
     {{ 't_js/Common/add_node.js' | make_static_html | safe }}
     {{ 't_js/Common/url_tool.js' | make_static_html | safe }}
+    {{ 't_js/Common/handler_data.js' | make_static_html | safe }}
     {{ 't_js/API_HELP/list_api.js' | make_static_html | safe }}
 {% endblock %}
