@@ -3,6 +3,7 @@
 __author__ = 'ZhouHeng'
 
 from Web2 import control, BaseAuthHandler, api_url_prefix as url_prefix, http_handlers, test_url_prefix
+from Web2 import status_url_prefix
 
 
 class _BaseHandler(BaseAuthHandler):
@@ -53,10 +54,12 @@ class APIInfoHandler(_BaseHandler):
                 return self.jsonify({"status": True, "data": {"api_info": api_info}})
         return_url = url_prefix + "/?module_no=%s" % api_info["basic_info"]["module_no"]
         if "update" in self.request.args:
-            return self.render_template("Update_API.html", api_info=api_info, api_no=api_no, return_url=return_url)
+            update_stage_url = url_prefix + "/stage/"
+            return self.render_template("Update_API.html", api_info=api_info, api_no=api_no, return_url=return_url,
+                                        update_stage_url=update_stage_url)
         test_url = url_prefix + "/test/?api_no=%s" % api_no
         batch_test_url = url_prefix + "/test/batch/?api_no=%s" % api_no
-        status_url = url_prefix + "/status/"
+        status_url = status_url_prefix
 
         return self.render_template("Show_API.html", api_info=api_info, api_no=api_no, return_url=return_url,
                                     test_url=test_url, status_url=status_url, batch_test_url=batch_test_url)

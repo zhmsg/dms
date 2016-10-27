@@ -6,13 +6,13 @@
     <br>
     <a class="btn btn-primary pull-right" href="{{ return_url }}" title="">返回</a>
     <input id="api_no" value="{{ api_no }}" style="display:none;"/>
-    <input id="api_status" value="{{ api_info["basic_info"]["status"] }}" style="display: none">
+    <input id="api_stage" value="{{ api_info["basic_info"]["stage"] }}" style="display: none">
     <p>API标题: {{ api_info["basic_info"]["api_title"] }}</p>
     <p>API URL: {{ api_info["basic_info"]["api_url"] }}</p>
     <p>API 请求方式: {{ api_info["basic_info"]["api_method"] }}</p>
-    <p>API 状态: {{ api_info["basic_info"]["status"] }}</p>
+    <p>API 状态: {{ api_info["basic_info"]["stage"] }}</p>
     <a href="{{ url_prefix }}/basic/?api_no={{ api_info["basic_info"]["api_no"] }}">更新API信息</a>
-    <span class="margin10" id="span_modify_status">
+    <span class="margin10" id="span_modify_stage">
 
     </span>
 
@@ -147,6 +147,7 @@
 
     </div>
     <input id="url_prefix" value="{{ url_prefix }}" style="display: none">
+    <input id="update_stage_url" value="{{ update_stage_url }}" style="display: none">
     {{ 't_js/bootstrap.min.js' | make_static_html | safe }}
     {{ 't_js/API_HELP/update_api.js' | make_static_html | safe }}
 {% endblock %}

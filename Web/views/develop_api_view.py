@@ -6,7 +6,7 @@ import sys
 import re
 from functools import wraps
 from flask import render_template, request, redirect, url_for, jsonify, g
-from Web import api_url_prefix, create_blue, test_url_prefix
+from Web import api_url_prefix, create_blue, test_url_prefix, status_url_prefix
 from Web import control
 
 
@@ -115,11 +115,12 @@ def show_api():
             return jsonify({"status": True, "data": {"api_info": api_info}})
     return_url = url_prefix + "/?module_no=%s" % api_info["basic_info"]["module_no"]
     if "update" in request.args:
+        update_stage_url = url_prefix + "/stage/"
         return render_template("%s/Update_API.html" % html_dir, api_info=api_info, api_no=api_no, return_url=return_url,
-                           url_prefix=url_prefix)
+                               url_prefix=url_prefix, update_stage_url=update_stage_url)
     test_url = url_prefix + "/test/?api_no=%s" % api_no
     batch_test_url = url_prefix + "/test/batch/?api_no=%s" % api_no
-    status_url = url_prefix + "/status/"
+    status_url = status_url_prefix
     return render_template("%s/Show_API.html" % html_dir, api_info=api_info, api_no=api_no, return_url=return_url,
                            test_url=test_url, url_prefix=url_prefix, status_url=status_url,
                            batch_test_url=batch_test_url)
@@ -165,11 +166,11 @@ def update_api_info():
     return redirect("%s/info/?api_no=%s" % (url_prefix, api_no))
 
 
-@develop_api_view.route("/status/<int:api_status>/", methods=["GET"])
+@develop_api_view.route("/stage/<int:api_stage>/", methods=["GET"])
 @referer_api_no
-def update_api_status_func(api_status):
+def update_api_status_func(api_stage):
     api_no = g.api_no
-    result, info = control.set_api_status(g.user_name, g.user_role, api_no, api_status)
+    result, info = control.set_api_status(g.user_name, g.user_role, api_no, api_stage)
     if result is False:
         return info
     return redirect(g.ref_url)

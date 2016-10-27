@@ -146,7 +146,7 @@
             {
                 "default_value": "0",
                 "col_comment": "api状态0代表新建完成1代表修改中2代表已完成3待废弃4已废弃5已删除",
-                "col_name": "status",
+                "col_name": "stage",
                 "col_type": "tinyint(4)"
             }
         ],

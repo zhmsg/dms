@@ -292,7 +292,7 @@ class ControlManager:
             return False, u"您没有权限"
         result, api_info = self.api_help.get_api_info(api_no)
         if result is True:
-            if role & self.role_value["api_new"] <= 0 and api_info["basic_info"]["status"] == u'新建':
+            if role & self.role_value["api_new"] <= 0 and api_info["basic_info"]["stage"] == u'新建':
                 return False, u"您没有权限"
         return result, api_info
 
@@ -354,7 +354,7 @@ class ControlManager:
             len_api = len(api_list["api_list"])
             for i in range(len_api - 1, -1, -1):
                 api_item = api_list["api_list"][i]
-                if api_item["status"] == u'新建':
+                if api_item["stage"] == u'新建':
                     api_list["api_list"].remove(api_item)
         return result, api_list
 
@@ -392,15 +392,15 @@ class ControlManager:
     def delete_api(self, api_no, user_name):
         return self.api_help.del_api_info(api_no, user_name)
 
-    def set_api_status(self, user_name, role, api_no, status):
+    def set_api_status(self, user_name, role, api_no, stage):
         if role & self.role_value["api_new"] <= 0:
             return False, u"您没有权限"
-        if status == 2:
+        if stage == 2:
             # 必须至少一个返回示例
             output_info = self.api_help.get_api_output(api_no)
             if len(output_info) <= 0:
                 return False, u"请至少提交一个返回示例"
-        result, info = self.api_help.set_api_status(api_no, status)
+        result, info = self.api_help.set_api_stage(api_no, stage)
         return result, info
 
     # 针对API状态码的应用
@@ -656,7 +656,7 @@ class ControlManager:
         if result is False:
             return False
         # 判断添加api是否已完成
-        if api_info["status"] != 2:
+        if api_info["stage"] != 2:
             return False
         care_info = self.api_help.get_api_care_info(api_no)
         rec_user = []

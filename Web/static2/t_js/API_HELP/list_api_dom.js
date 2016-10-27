@@ -71,7 +71,7 @@ function Load_API_List(api_list, module_prefix)
         }
         t.append(add_tr);
         api_info["api_url"] = escape(module_prefix + api_info["api_path"]);
-        var keys = ["api_title", "api_url", "api_method", "status"];
+        var keys = ["api_title", "api_url", "api_method", "stage"];
         for(var j=0;j<keys.length;j++){
             var key = keys[j];
             add_tr.append(new_td(key, api_info));

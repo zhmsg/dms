@@ -34,7 +34,7 @@ class HelpManager:
         self.module_care = "module_care"
         self.send_message = "send_message"
         self.test_env = "test_env"
-        self.api_status_desc = [u"新建", u"修改中", u"已完成", u"待废弃", u"已废弃", u"已删除"]
+        self.api_stage_desc = [u"新建", u"修改中", u"已完成", u"待废弃", u"已废弃", u"已删除"]
         self.user = "sys_user"
 
     def new_api_module(self, module_name, module_prefix, module_desc, module_part, module_env):
@@ -146,14 +146,14 @@ class HelpManager:
         self.db.execute(update_sql)
         return True
 
-    def set_api_status(self, api_no, status):
+    def set_api_stage(self, api_no, stage):
         if len(api_no) != 32:
             return False, "Bad api_no"
-        if status <= 0 or status > 5:
-            return False, "Bad status"
+        if stage <= 0 or stage > 5:
+            return False, "Bad stage"
         update_time = datetime.now().strftime(TIME_FORMAT)
-        update_sql = "UPDATE %s SET update_time='%s',status=%s WHERE api_no='%s';" \
-                     % (self.api_info, update_time, status, api_no)
+        update_sql = "UPDATE %s SET update_time='%s',stage=%s WHERE api_no='%s';" \
+                     % (self.api_info, update_time, stage, api_no)
         self.db.execute(update_sql)
         return True, "success"
 
@@ -384,7 +384,7 @@ class HelpManager:
     def get_api_basic_info(self, api_no):
         # get basic info
         basic_info_col = ("module_no", "api_no", "api_title", "api_path", "api_method", "api_desc", "add_time",
-                          "update_time", "module_name", "module_prefix", "module_desc", "module_env", "status")
+                          "update_time", "module_name", "module_prefix", "module_desc", "module_env", "stage")
         select_sql = "SELECT m.%s FROM %s AS i, api_module AS m WHERE i.module_no=m.module_no AND api_no='%s';" \
                      % (",".join(basic_info_col), self.api_info, api_no)
         result = self.db.execute(select_sql)
@@ -394,9 +394,9 @@ class HelpManager:
         basic_info = {}
         for i in range(len(db_info)):
             basic_info[basic_info_col[i]] = db_info[i]
-        if basic_info["status"] >= len(self.api_status_desc) or basic_info["status"] < 0:
+        if basic_info["stage"] >= len(self.api_stage_desc) or basic_info["stage"] < 0:
             return False, "Not Exist api_no"
-        basic_info["status"] = self.api_status_desc[basic_info["status"]]
+        basic_info["stage"] = self.api_stage_desc[basic_info["stage"]]
         basic_info["api_url"] = basic_info["module_prefix"].rstrip("/") + "/" + basic_info["api_path"].lstrip("/")
         basic_info["add_time"] = basic_info["add_time"].strftime(TIME_FORMAT) if basic_info["add_time"] is not None else ""
         basic_info["update_time"] = basic_info["update_time"].strftime(TIME_FORMAT) if basic_info["update_time"] is not None else ""
@@ -488,16 +488,16 @@ class HelpManager:
     def get_api_list(self, module_no):
         if type(module_no) != int:
             return False, "Bad module_no"
-        select_sql = "SELECT api_no,module_no,api_title,api_path,api_method,api_desc,status FROM %s " \
-                     "WHERE module_no=%s AND status<4 ORDER BY status, api_path;" % (self.api_info, module_no)
+        select_sql = "SELECT api_no,module_no,api_title,api_path,api_method,api_desc,stage FROM %s " \
+                     "WHERE module_no=%s AND stage<4 ORDER BY stage, api_path;" % (self.api_info, module_no)
         self.db.execute(select_sql)
         api_list = []
         for item in self.db.fetchall():
-            if item[6] >= len(self.api_status_desc) or item[6] < 0:
+            if item[6] >= len(self.api_stage_desc) or item[6] < 0:
                 continue
-            api_status = self.api_status_desc[item[6]]
+            api_stage = self.api_stage_desc[item[6]]
             api_list.append({"api_no": item[0], "module_no": item[1], "api_title": item[2], "api_path": item[3],
-                             "api_method": item[4], "api_desc": item[5], "status": api_status})
+                             "api_method": item[4], "api_desc": item[5], "stage": api_stage})
         care_info = self.get_module_care_list(module_no)
         return True, {"api_list": api_list, "care_info": care_info, "module_info": {"module_no": module_no}}
 
@@ -560,7 +560,7 @@ class HelpManager:
         result = self.db.execute(select_sql)
         if result <= 0:
             return False, "user can not delete this api"
-        self.set_api_status(api_no, 5)
+        self.set_api_stage(api_no, 5)
         update_sql = "UPDATE %s SET level=3 WHERE api_no='%s' AND user_name='%s';" \
                      % (self.api_care, api_no, user_name)
         self.db.execute(update_sql)
