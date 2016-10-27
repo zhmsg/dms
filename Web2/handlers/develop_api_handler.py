@@ -4,11 +4,11 @@ __author__ = 'ZhouHeng'
 
 from Web2 import control, BaseAuthHandler, api_url_prefix as url_prefix, http_handlers, test_url_prefix
 
-html_dir = "API_HELP"
 
 class _BaseHandler(BaseAuthHandler):
     url_prefix = url_prefix
     route_url = url_prefix
+    html_dir = "API_HELP"
 
 
 class APIIndexHandler(_BaseHandler):
@@ -17,7 +17,7 @@ class APIIndexHandler(_BaseHandler):
     def get(self):
         test_module_url = test_url_prefix + "/batch/"
         test_env_url = test_url_prefix + "/env/"
-        return self.render_template("%s/List_API.html" % html_dir, test_module_url=test_module_url,
+        return self.render_template("List_API.html", test_module_url=test_module_url,
                                     test_env_url=test_env_url)
 
     def post(self, *args, **kwargs):
@@ -43,7 +43,7 @@ class APIModuleHandler(_BaseHandler):
         if "module_no" not in self.request.args:
             return self.jsonify({"status": False, "data": "Need module_no"})
         module_no = int(self.request.args["module_no"])
-        result, module_data = control.get_api_list(module_no, g.user_role)
+        result, module_data = control.get_api_list(module_no, self.g.user_role)
         return self.jsonify({"status": result, "data": module_data})
 
     def post(self):
@@ -88,7 +88,7 @@ class APIBasicHandler(_BaseHandler):
         module_no = 1
         if "module_no" in self.request.args:
             module_no = int(self.request.args["module_no"])
-        return self.render_template("%s/New_API.html" % html_dir, part_module=part_module, url_prefix=url_prefix,
+        return self.render_template("New_API.html", part_module=part_module, url_prefix=url_prefix,
                                module_no=module_no)
 
 

@@ -72,6 +72,7 @@ session_interface = RedisSessionInterface(redis_host, session_id_prefix, cookie_
 class BaseHandler(tornado.web.RequestHandler, TemplateRendering):
     url_prefix = ado_prefix
     route_url = ado_prefix + "/"
+    html_dir = ""
 
     def __init__(self, application, request, **kwargs):
         super(BaseHandler, self).__init__(application, request, **kwargs)
@@ -153,6 +154,8 @@ class BaseHandler(tornado.web.RequestHandler, TemplateRendering):
             'xsrf_token': self.xsrf_token,
             'xsrf_form_html': self.xsrf_form_html
         })
+        if self.html_dir != "":
+            template_name = "%s/%s" % (self.html_dir, template_name)
         content = super(BaseHandler, self).render_template(template_name, **self.kwargs)
         self.write(content)
 
