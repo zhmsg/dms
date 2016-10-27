@@ -74,43 +74,10 @@ function new_module_success(data){
     }
 }
 
-
-function New_TD(key, obj){
-    var td = $("<td></td>");
-    if(key in obj){
-        td.append(obj[key]);
-    }
-    return td;
-}
-
 var module_data = null;
 var current_module = null;
 
-function Load_Module_Info(load_type){
-    if(load_type == "info") {
-        $("#span_module_no").text(current_module["module_no"]);
-        $("#span_module_name").text(current_module["module_name"]);
-        $("#span_module_prefix").text(current_module["module_prefix"]);
-        $("#span_module_desc").text(current_module["module_desc"]);
-    }
-    else{
-        $("#div_api_list").hide();
-        $("#div_api_new_add").show();
-        $("#module_no").val(current_module["module_no"]);
-        $("#module_name").val(current_module["module_name"]);
-        $("#module_prefix").val(current_module["module_prefix"]);
-        $("#module_desc").text(current_module["module_desc"]);
-        console.info(current_module);
-        $("#module_part").val(current_module["module_part"]);
-        $("#btn_op_module").text("更新模块");
-        $("#div_add_env span").click();
-        var test_envs = current_module["module_env"].split("|");
-        for(var i=0;i<test_envs.length;i++){
-            $("#s_add_env").val(test_envs[i]);
-            add_test_env();
-        }
-    }
-}
+
 
 function Load_API_List(api_list, module_prefix)
 {
@@ -136,7 +103,7 @@ function Load_API_List(api_list, module_prefix)
         var keys = ["api_title", "api_url", "api_method", "status"];
         for(var j=0;j<keys.length;j++){
             var key = keys[j];
-            add_tr.append(New_TD(key, api_info));
+            add_tr.append(new_td(key, api_info));
         }
         add_tr.append('<td class="text-center"><a href="' + url_prefix + '/info/?api_no=' + api_info["api_no"] + '">查看</a> | <a href="' + url_prefix + '/test/?api_no=' + api_info["api_no"] + '">测试</a></td>');
     }
@@ -204,7 +171,7 @@ function Load_API_Module(data)
             add_part_div.append('<a href="javascript:void(0)" onclick=Get_API_List(' + module_info["module_no"] +')>' + module_info["module_name"] + '</a>');
         }
         $("#div_module_list").append(add_part_div);
-        $("#module_part").append('<option value="' + part_info["part_no"] + '">' + part_info["part_name"] + '</option>');
+        add_option("module_part", part_info["part_no"], part_info["part_name"]);
     }
 
 }
