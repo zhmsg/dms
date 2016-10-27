@@ -135,35 +135,34 @@ def new_api_page():
         api_no = request.args["api_no"]
         if len(api_no) != 32:
             return "Bad api_no"
-        result, api_info = control.get_api_info(api_no, g.user_role)
         return_url = url_prefix + "/info/?api_no=%s" % api_no
-        if result is False:
-            return api_info
-        module_no = api_info["basic_info"]["module_no"]
         return render_template("%s/New_API.html" % html_dir, part_module=part_module, url_prefix=url_prefix,
-                               module_no=module_no, api_info=api_info, return_url=return_url)
-    module_no = 1
-    if "module_no" in request.args:
-        module_no = int(request.args["module_no"])
-    return render_template("%s/New_API.html" % html_dir, part_module=part_module, url_prefix=url_prefix,
-                           module_no=module_no)
+                               return_url=return_url)
+
+    return render_template("%s/New_API.html" % html_dir, part_module=part_module, url_prefix=url_prefix)
 
 
-@develop_api_view.route("/basic/", methods=["POST"])
-def update_api_info():
-    request_form = request.form
-    api_module = request_form["api_module"]
-    api_no = request_form["api_no"]
-    desc = request_form["api_desc"]
-    url = request_form["api_url"]
-    title = request_form["api_title"]
-    method = request_form["api_method"]
+@develop_api_view.route("/basic/", methods=["POST", "PUT"])
+def new_update_api_info():
+    request_data = request.json
+    api_module = request_data["api_module"]
+    desc = request_data["api_desc"]
+    url = request_data["api_path"]
+    title = request_data["api_title"]
+    method = request_data["api_method"]
     module_no = int(api_module)
-    result, message = control.update_api_info(role=g.user_role, api_no=api_no, desc=desc, method=method,
-                                              path=url, module_no=module_no, title=title)
-    if result is False:
-        return message
-    return redirect("%s/info/?api_no=%s" % (url_prefix, api_no))
+    if request.method == "PUT":
+        api_no = request_data["api_no"]
+        r, m = control.update_api_info(role=g.user_role, api_no=api_no, desc=desc, method=method, path=url,
+                                       module_no=module_no, title=title)
+        if r is False:
+            return jsonify({"status": False, "data": m})
+    else:
+        r, api_info = control.new_api_info(module_no, title, url, method, desc, g.user_name, g.user_role)
+        if r is False:
+            return jsonify({"status": False, "data": api_info})
+        api_no = api_info["api_no"]
+    return jsonify({"status": True, "location": "%s/info/?api_no=%s" % (url_prefix, api_no), "data": "success"})
 
 
 @develop_api_view.route("/stage/<int:api_stage>/", methods=["GET"])

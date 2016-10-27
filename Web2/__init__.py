@@ -164,7 +164,7 @@ class BaseHandler(tornado.web.RequestHandler, TemplateRendering):
         self.write(tornado.escape.json_encode(return_obj))
 
     def write_error(self, status_code, **kwargs):
-        res = status_code
+        res = str(status_code)
         if status_code == 500:
             res = "Error"
             if "exc_info" in kwargs:

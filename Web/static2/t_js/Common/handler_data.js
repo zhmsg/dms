@@ -13,3 +13,22 @@ function bit_and(role1, role2){
 function escape(s) {
  return s.replace(/[<>&"]/g,function(c){return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c];});
 }
+
+function rTrim(str, c){
+    var s_len = str.length;
+    for(var i=s_len-1;i>=0;i--){
+        if(str[i] != c){
+            return str.substr(0, i+1);
+        }
+    }
+    return "";
+}
+function lTrim(str, c){
+    var s_len = str.length;
+    for(var i=0;i<s_len;i++){
+        if(str[i] != c){
+            return str.substr(i, s_len-i);
+        }
+    }
+    return "";
+}

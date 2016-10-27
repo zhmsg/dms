@@ -21,21 +21,6 @@ class APIIndexHandler(_BaseHandler):
         return self.render_template("List_API.html", test_module_url=test_module_url,
                                     test_env_url=test_env_url)
 
-    def post(self, *args, **kwargs):
-        request_form = self.request.form
-        api_module = request_form["api_module"]
-        if api_module == "":
-            return "请选择API所属模块"
-        desc = request_form["api_desc"]
-        url = request_form["api_url"]
-        title = request_form["api_title"]
-        method = request_form["api_method"]
-        module_no = int(api_module)
-        result, api_info = control.new_api_info(module_no, title, url, method, desc, self.g.user_name, self.g.user_role)
-        if result is False:
-            return api_info
-        return self.redirect(url_prefix + "/update/info/?api_no=%s" % api_info["api_no"])
-
 
 class APIInfoHandler(_BaseHandler):
     route_url = _BaseHandler.route_url + "/info/"
@@ -118,34 +103,33 @@ class APIBasicHandler(_BaseHandler):
             api_no = self.request.args["api_no"]
             if len(api_no) != 32:
                 return "Bad api_no"
-            result, api_info = control.get_api_info(api_no, self.g.user_role)
             return_url = url_prefix + "/info/?api_no=%s" % api_no
-            if result is False:
-                return api_info
-            module_no = api_info["basic_info"]["module_no"]
-            return self.render_template("New_API.html", part_module=part_module, module_no=module_no,
-                                        api_info=api_info, return_url=return_url)
-        module_no = 1
-        if "module_no" in self.request.args:
-            module_no = int(self.request.args["module_no"])
-        return self.render_template("New_API.html", part_module=part_module, url_prefix=url_prefix,
-                               module_no=module_no)
+            return self.render_template("New_API.html", part_module=part_module, return_url=return_url)
+        return self.render_template("New_API.html", part_module=part_module)
 
     def post(self):
-        request_form = self.request.form
-        print(request_form)
-        api_module = request_form["api_module"]
-        api_no = request_form["api_no"]
-        desc = request_form["api_desc"]
-        url = request_form["api_url"]
-        title = request_form["api_title"]
-        method = request_form["api_method"]
+        request_data = self.request.json
+        api_module = request_data["api_module"]
+
+        desc = request_data["api_desc"]
+        url = request_data["api_path"]
+        title = request_data["api_title"]
+        method = request_data["api_method"]
         module_no = int(api_module)
-        result, message = control.update_api_info(role=self.g.user_role, api_no=api_no, desc=desc, method=method,
-                                                  path=url, module_no=module_no, title=title)
-        if result is False:
-            return message
-        return self.redirect("%s/info/?api_no=%s" % (url_prefix, api_no))
+        if self.request.method == "PUT":
+            api_no = request_data["api_no"]
+            r, m = control.update_api_info(role=self.g.user_role, api_no=api_no, desc=desc, method=method, path=url,
+                                    module_no=module_no, title=title)
+            if r is False:
+                return self.jsonify({"status": False, "data": m})
+        else:
+            r, api_info = control.new_api_info(module_no, title, url, method, desc, self.g.user_name, self.g.user_role)
+            if r is False:
+                return self.jsonify({"status": False, "data": api_info})
+            api_no = api_info["api_no"]
+        return self.jsonify({"status": True, "location": "%s/info/?api_no=%s" % (url_prefix, api_no), "data": "success"})
+
+    put = post
 
 
 http_handlers.extend([APIIndexHandler, APIInfoHandler, APIModuleHandler, APIModuleCareHandler, APIBasicHandler])
