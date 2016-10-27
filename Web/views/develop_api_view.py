@@ -43,7 +43,7 @@ def list_api():
     result, test_env = control.get_test_env(g.user_role)
     if result is False:
         return test_env
-    return render_template("%s/New_API_Module.html" % html_dir, url_prefix=url_prefix, test_env=test_env)
+    return render_template("%s/List_API.html" % html_dir, url_prefix=url_prefix, test_env=test_env)
 
 
 @develop_api_view.route("/", methods=["POST"])

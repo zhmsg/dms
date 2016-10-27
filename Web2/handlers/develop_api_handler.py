@@ -18,7 +18,7 @@ class APIIndexHandler(_BaseHandler):
         result, test_env = control.get_test_env(self.g.user_role)
         if result is False:
             return test_env
-        return self.render_template("%s/New_API_Module.html" % html_dir, test_env=test_env)
+        return self.render_template("%s/List_API.html" % html_dir, test_env=test_env)
 
     def post(self, *args, **kwargs):
         request_form = self.request.form
