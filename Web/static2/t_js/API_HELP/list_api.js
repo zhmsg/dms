@@ -107,7 +107,10 @@ function Load_API_List(api_list, module_prefix)
         }
         add_tr.append('<td class="text-center"><a href="' + url_prefix + '/info/?api_no=' + api_info["api_no"] + '">查看</a> | <a href="' + url_prefix + '/test/?api_no=' + api_info["api_no"] + '">测试</a></td>');
     }
-    var care_info = data.data.care_info;
+    console.info("success");
+}
+
+function Load_Care_Info(care_info){
     var current_user_name = $("#current_user_name").val();
     $("#module_care_user").empty();
     for(var i=0;i<care_info.length;i++){
@@ -145,6 +148,11 @@ function Get_API_List_Success(data)
         var api_list = data.data.api_list;
         var module_prefix = current_module["module_prefix"];
         Load_API_List(api_list, module_prefix);
+        var care_info = data.data.care_info;
+        Load_Care_Info(care_info);
+        $("#a_add_api").attr("href", $("#a_add_api").attr("href_prefix") + module_no);
+        $("#a_del_module").attr("href", $("#a_del_module").attr("href_prefix") + module_no);
+        $("#a_test_module").attr("href", $("#a_test_module").attr("href_prefix") + module_no);
     }
 }
 
@@ -176,6 +184,16 @@ function Load_API_Module(data)
 
 }
 
+function Load_Test_Env(data){
+    if(data.status == true){
+        var env_list = data.data;
+        for(var i=0;i<env_list.length;i++){
+            var one_env = env_list[i];
+            add_option("s_add_env", one_env["env_no"], one_env["env_name"], one_env["env_address"]);
+        }
+    }
+}
+
 $(function(){
     $("#btn_op_module").click(function(){
         var body_param = new Object();
@@ -198,10 +216,13 @@ $(function(){
         my_request(request_url, method, body_param, new_module_success);
     });
     $("#div_add_env").find("span").click(remove_test_env);
+
     var current_user_role = parseInt($("#current_user_role").val());
     var role_value = JSON.parse($("#role_value").text());
     if(bit_and(current_user_role, role_value["api_new"])){
         $("div[id^='div_api_new_']").show();
+        var test_env_url = $("#test_env_url").val();
+        my_async_request(test_env_url, "GET", null, Load_Test_Env)
     }
 
     var request_url = "/dev/api/module/";
@@ -210,7 +231,6 @@ $(function(){
     if(module_no != null) {
         var update = UrlArgsValue(window.location.toString(), "update");
         if (update == null) {
-            console.info("get api list");
             Get_API_List(module_no);
         }
     }

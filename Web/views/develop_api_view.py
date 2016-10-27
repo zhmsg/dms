@@ -40,10 +40,10 @@ def referer_api_no(f):
 
 @develop_api_view.route("/", methods=["GET"])
 def list_api():
-    result, test_env = control.get_test_env(g.user_role)
-    if result is False:
-        return test_env
-    return render_template("%s/List_API.html" % html_dir, url_prefix=url_prefix, test_env=test_env)
+    test_module_url = test_url_prefix + "/batch/"
+    test_env_url = test_url_prefix + "/env/"
+    return render_template("%s/List_API.html" % html_dir, url_prefix=url_prefix, test_module_url=test_module_url,
+                           test_env_url=test_env_url)
 
 
 @develop_api_view.route("/", methods=["POST"])

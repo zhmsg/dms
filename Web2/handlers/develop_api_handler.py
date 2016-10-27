@@ -2,7 +2,7 @@
 # coding: utf-8
 __author__ = 'ZhouHeng'
 
-from Web2 import control, BaseAuthHandler, api_url_prefix as url_prefix, http_handlers
+from Web2 import control, BaseAuthHandler, api_url_prefix as url_prefix, http_handlers, test_url_prefix
 
 html_dir = "API_HELP"
 
@@ -15,10 +15,10 @@ class APIIndexHandler(_BaseHandler):
     route_url = url_prefix + "/"
 
     def get(self):
-        result, test_env = control.get_test_env(self.g.user_role)
-        if result is False:
-            return test_env
-        return self.render_template("%s/List_API.html" % html_dir, test_env=test_env)
+        test_module_url = test_url_prefix + "/batch/"
+        test_env_url = test_url_prefix + "/env/"
+        return self.render_template("%s/List_API.html" % html_dir, test_module_url=test_module_url,
+                                    test_env_url=test_env_url)
 
     def post(self, *args, **kwargs):
         request_form = self.request.form
