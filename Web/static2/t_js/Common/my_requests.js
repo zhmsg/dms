@@ -31,10 +31,6 @@ function request_error(xhr){
     }
 }
 
-function _request_success(data)
-{
-
-}
 
 function my_request(request_url, request_method, body_param, request_success){
     if(request_method != "GET"){
