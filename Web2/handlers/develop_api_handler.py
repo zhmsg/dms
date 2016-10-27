@@ -114,6 +114,17 @@ class APIBasicHandler(_BaseHandler):
         result, part_module = control.get_part_api(self.g.user_name, self.g.user_role)
         if result is False:
             return self.write(part_module)
+        if "api_no" in self.request.args:
+            api_no = self.request.args["api_no"]
+            if len(api_no) != 32:
+                return "Bad api_no"
+            result, api_info = control.get_api_info(api_no, self.g.user_role)
+            return_url = url_prefix + "/info/?api_no=%s" % api_no
+            if result is False:
+                return api_info
+            module_no = api_info["basic_info"]["module_no"]
+            return self.render_template("New_API.html", part_module=part_module, module_no=module_no,
+                                        api_info=api_info, return_url=return_url)
         module_no = 1
         if "module_no" in self.request.args:
             module_no = int(self.request.args["module_no"])
