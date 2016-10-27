@@ -46,23 +46,6 @@ def list_api():
                            test_env_url=test_env_url)
 
 
-@develop_api_view.route("/", methods=["POST"])
-def new_api_info():
-    request_form = request.form
-    api_module = request_form["api_module"]
-    if api_module == "":
-        return "请选择API所属模块"
-    desc = request_form["api_desc"]
-    url = request_form["api_url"]
-    title = request_form["api_title"]
-    method = request_form["api_method"]
-    module_no = int(api_module)
-    result, api_info = control.new_api_info(module_no, title, url, method, desc, g.user_name, g.user_role)
-    if result is False:
-        return api_info
-    return redirect(url_prefix + "/update/info/?api_no=%s" % api_info["api_no"])
-
-
 @develop_api_view.route("/module/", methods=["GET"])
 def get_module_api():
     if "module_no" not in request.args:
