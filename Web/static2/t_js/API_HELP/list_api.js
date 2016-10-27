@@ -67,76 +67,6 @@ function remove_test_env(){
     add_option("s_add_env", env_no, env_name, env_address);
 }
 
-function add_env(){
-    var div_env = $("div[name='div_add_env']:eq(0)");
-    console.info(div_env);
-    div_env.find("span").remove();
-    var new_div = div_env.clone(true);
-    new_div.find("input").val("");
-
-    $("#li_env").append(new_div);
-
-    var all_div_env = $("div[name='div_add_env']");
-    var div_len = all_div_env.length;
-    for(var i=0;i<div_len;i++){
-        var one_div = all_div_env[i];
-        var div_nodes = one_div.childNodes;
-        var node_len = div_nodes.length;
-        for(var j= node_len - 1;j>=0;j--){
-            var one_node = div_nodes[j];
-            if(one_node.nodeName == "SPAN"){
-                one_node.remove();
-            }
-        }
-        var new_span = $('<span class="symbol" onclick="del_env(this);">-</span>');
-        new_span.appendTo(one_div);
-        if(i == div_len - 1 && i < 4){
-            var new_plus_span = $('<span class="symbol" onclick="add_env();">+</span>');
-            new_plus_span.appendTo(one_div);
-        }
-    }
-
-}
-
-function del_env(el)
-{
-    el.parentNode.remove();
-    var all_div_env = $("div[name='div_add_env']");
-    var div_len = all_div_env.length;
-    if(div_len == 1){
-        var one_div = all_div_env[0];
-        var div_nodes = one_div.childNodes;
-        var node_len = div_nodes.length;
-        for(var j=node_len - 1;j>=0;j--){
-            var one_node = div_nodes[j];
-            if(one_node.nodeName == "SPAN"){
-                one_node.remove();
-            }
-        }
-        var new_plus_span = $('<span class="symbol" onclick="add_env();">+</span>');
-        new_plus_span.appendTo(one_div);
-    }
-    else
-    {
-        for(var i=0;i<div_len;i++){
-            var one_div = all_div_env[i];
-            var div_nodes = one_div.childNodes;
-            var node_len = div_nodes.length;
-            for(var j=node_len - 1;j>=0;j--){
-                var one_node = div_nodes[j];
-                if(one_node.nodeName == "SPAN"){
-                    one_node.remove();
-                }
-            }
-            var new_span = $('<span class="symbol" onclick="del_env(this);">-</span>');
-            new_span.appendTo(one_div);
-            if(i == div_len - 1 && i < 4){
-                var new_plus_span = $('<span class="symbol" onclick="add_env();">+</span>');
-                new_plus_span.appendTo(one_div);
-            }
-        }
-    }
-}
 
 function new_module_success(data){
     if(data.status == true) {
@@ -160,49 +90,102 @@ function New_TD(key, obj){
     return td;
 }
 
+var module_data = null;
+var current_module = null;
+
+function Load_Module_Info(load_type){
+    if(load_type == "info") {
+        $("#span_module_no").text(current_module["module_no"]);
+        $("#span_module_name").text(current_module["module_name"]);
+        $("#span_module_prefix").text(current_module["module_prefix"]);
+        $("#span_module_desc").text(current_module["module_desc"]);
+    }
+    else{
+        $("#div_api_list").hide();
+        $("#div_api_new_add").show();
+        $("#module_no").val(current_module["module_no"]);
+        $("#module_name").val(current_module["module_name"]);
+        $("#module_prefix").val(current_module["module_prefix"]);
+        $("#module_desc").text(current_module["module_desc"]);
+        console.info(current_module);
+        $("#module_part").val(current_module["module_part"]);
+        $("#btn_op_module").text("更新模块");
+        $("#div_add_env span").click();
+        var test_envs = current_module["module_env"].split("|");
+        for(var i=0;i<test_envs.length;i++){
+            $("#s_add_env").val(test_envs[i]);
+            add_test_env();
+        }
+    }
+    console.info("success");
+}
+
+function Load_API_List(api_list, module_prefix)
+{
+    var url_prefix = $("#url_prefix").val();
+    if(module_prefix[module_prefix.length - 1] == "/"){
+        module_prefix = module_prefix.substr(0, module_prefix.length - 1);
+    }
+    $("#t_api_list tr").not(":first").remove();
+    var t = $("#t_api_list");
+    for(var i=0;i<api_list.length;i++){
+        var api_info = api_list[i];
+        var tr_id = 'tr_' + api_info["api_no"];
+        var exist_tr = $("#" + tr_id);
+        if(exist_tr.length == 1){
+            exist_tr.html("");
+            var add_tr = exist_tr;
+        }
+        else {
+            var add_tr = $("<tr id='" + tr_id + "'></tr>");
+        }
+        t.append(add_tr);
+        api_info["api_url"] = module_prefix + api_info["api_path"];
+        var keys = ["api_title", "api_url", "api_method", "status"];
+        for(var j=0;j<keys.length;j++){
+            var key = keys[j];
+            add_tr.append(New_TD(key, api_info));
+        }
+        add_tr.append('<td class="text-center"><a href="' + url_prefix + '/info/?api_no=' + api_info["api_no"] + '">查看</a> | <a href="' + url_prefix + '/test/?api_no=' + api_info["api_no"] + '">测试</a></td>');
+    }
+    var care_info = data.data.care_info;
+    var current_user_name = $("#current_user_name").val();
+    $("#module_care_user").empty();
+    for(var i=0;i<care_info.length;i++){
+        if(care_info[i]["user_name"] == current_user_name){
+            $("#module_care_user").append('<span id="mine_care">我</span>');
+            $("#make_care").text("取消关注");
+        }
+        else {
+            $("#module_care_user").append('<span>' + care_info[i]["nick_name"] + '</span>');
+        }
+    }
+}
+
 function Get_API_List_Success(data)
 {
     if(data.status == true)
     {
+        $("#div_api_list").show();
+        $("#div_api_new_add").hide();
+        var module_no = data.data.module_info.module_no;
+        for(var i=0;i<module_data.length;i++){
+            var part_info = module_data[i];
+            for(var j=0;j<part_info["module_list"].length;j++)
+            {
+                if(module_no == part_info["module_list"][j]["module_no"])
+                {
+                    current_module = part_info["module_list"][j]
+                }
+            }
+        }
+        if(current_module == null){
+            return false;
+        }
+        Load_Module_Info("info");
         var api_list = data.data.api_list;
-        var url_prefix = $("#url_prefix").val();
-        var module_prefix = $("#current_module_prefix").val();
-        if(module_prefix[module_prefix.length - 1] == "/"){
-            module_prefix = module_prefix.substr(0, module_prefix.length - 1);
-        }
-        for(var i=0;i<api_list.length;i++){
-            var api_info = api_list[i];
-            var t = $("#t_api_list");
-            var tr_id = 'tr_' + api_info["api_no"];
-            var exist_tr = $("#" + tr_id);
-            if(exist_tr.length == 1){
-                exist_tr.html("");
-                var add_tr = exist_tr;
-            }
-            else {
-                var add_tr = $("<tr id='" + tr_id + "'></tr>");
-            }
-            t.append(add_tr);
-            api_info["api_url"] = module_prefix + api_info["api_path"];
-            var keys = ["api_title", "api_url", "api_method", "status"];
-            for(var j=0;j<keys.length;j++){
-                var key = keys[j];
-                add_tr.append(New_TD(key, api_info));
-            }
-            add_tr.append('<td class="text-center"><a href="' + url_prefix + '/info/?api_no=' + api_info["api_no"] + '">查看</a> | <a href="' + url_prefix + '/test/?api_no=' + api_info["api_no"] + '">测试</a></td>');
-        }
-        var care_info = data.data.care_info;
-        var current_user_name = $("#current_user_name").val();
-        for(var i=0;i<care_info.length;i++){
-            if(care_info[i]["user_name"] == current_user_name){
-                $("#module_care_user").append('<span id="mine_care">我</span>');
-                $("#make_care").text("取消关注");
-            }
-            else {
-                $("#module_care_user").append('<span>' + care_info[i]["nick_name"] + '</span>');
-            }
-        }
-        console.info(care_info);
+        var module_prefix = current_module["module_prefix"];
+        Load_API_List(api_list, module_prefix);
     }
 }
 
@@ -212,12 +195,34 @@ function Get_API_List(module_no)
     my_async_request(request_url, "GET", null, Get_API_List_Success);
 }
 
+function Load_API_Module(data)
+{
+    if(data.status == false){
+        return false;
+    }
+    module_data = data.data;
+    var url_prefix = $("#url_prefix").val();
+    for(var i=0;i<module_data.length;i++){
+        var part_info = module_data[i];
+        var add_part_div = $('<div class="apiMode api-help-mode"></div>');
+        add_part_div.append('<div style="margin-bottom: 10px"><b>【' + part_info["part_desc"] + '】</b><br /></div>');
+        for(var j=0;j<part_info["module_list"].length;j++)
+        {
+            var module_info = part_info["module_list"][j];
+            add_part_div.append('<a href="javascript:void(0)" onclick=Get_API_List(' + module_info["module_no"] +')>' + module_info["module_name"] + '</a>');
+        }
+        $("#div_module_list").append(add_part_div);
+        $("#module_part").append('<option value="' + part_info["part_no"] + '">' + part_info["part_name"] + '</option>');
+    }
+
+}
+
 $(function(){
     $("#btn_op_module").click(function(){
         var body_param = new Object();
         var method = "POST";
-        if($("#module_no").length > 0) {
-            body_param["module_no"] = $("#module_no").val();
+        if(current_module != null) {
+            body_param["module_no"] = current_module["module_no"];
             method = "PUT";
         }
         body_param["module_name"] = $("#module_name").val();
@@ -239,26 +244,16 @@ $(function(){
     if(bit_and(current_user_role, role_value["api_new"])){
         $("div[id^='div_api_new_']").show();
     }
-    if($("#lab_current_module").length > 0){
-        var current_module = JSON.parse($("#lab_current_module").text());
-        $("#module_no").val(current_module["module_no"]);
-        $("#module_name").val(current_module["module_name"]);
-        $("#module_prefix").val(current_module["module_prefix"]);
-        $("#module_desc").text(current_module["module_desc"]);
-        $("#module_part").val(current_module["part_no"]);
-        $("#btn_op_module").text("更新模块");
-        var test_envs = current_module["module_env"].split("|");
-        for(var i=0;i<test_envs.length;i++){
-            $("#s_add_env").val(test_envs[i]);
-            add_test_env();
-        }
-    }
+
+    var request_url = "/dev/api/module/";
+    my_request(request_url, "GET", null, Load_API_Module);
     var module_no = UrlArgsValue(window.location.toString(), "module_no");
-    if(module_no != null){
+    if(module_no != null) {
         var update = UrlArgsValue(window.location.toString(), "update");
-        if(update == null){
+        if (update == null) {
             console.info("get api list");
             Get_API_List(module_no);
         }
     }
+
 });

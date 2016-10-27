@@ -3,14 +3,8 @@
 {% block title %}API帮助文档{% endblock %}
 
 {% block center_content %}
-    {% for part in part_module %}
-        <div class="apiMode api-help-mode">
-            <div style="margin-bottom: 10px"><b>【{{ part["part_desc"] }}】</b><br /></div>
-            {% for module_info in part["module_list"] %}
-                <a href="{{ url_prefix }}/?module_no={{ module_info["module_no"] }}">{{ module_info["module_name"] }}</a>
-            {% endfor %}
-        </div>
-    {% endfor %}
+    <div id="div_module_list">
+    </div>
     <input style="display: none" value="{{ url_prefix }}" id="url_prefix">
     <label style="display: none" id="role_value">{{ role_value | tojson | safe }}</label>
     {{ 't_js/Common/add_node.js' | make_static_html | safe }}

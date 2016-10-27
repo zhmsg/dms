@@ -40,32 +40,10 @@ def referer_api_no(f):
 
 @develop_api_view.route("/", methods=["GET"])
 def list_api():
-    result, part_module = control.get_part_api(g.user_name, g.user_role)
-    if result is False:
-        return part_module
     result, test_env = control.get_test_env(g.user_role)
     if result is False:
         return test_env
-    if "module_no" in request.args:
-        module_no = int(request.args["module_no"])
-        current_module = None
-        for part in part_module:
-            for module_info in part["module_list"]:
-                if module_info["module_no"] == module_no:
-                    current_module = module_info
-                    current_module["part_no"] = part["part_no"]
-                    current_module["part_name"] = part["part_name"]
-                    break
-        if current_module is None:
-            return "Error"
-        if "update" in request.args and request.args["update"] == "true":
-            return render_template("%s/New_API_Module.html" % html_dir, part_module=part_module,
-                                   current_module=current_module, url_prefix=url_prefix, test_env=test_env)
-        test_module_url = test_url_prefix + "/batch/"
-        return render_template("%s/List_Module_API.html" % html_dir, part_module=part_module,
-                               current_module=current_module, url_prefix=url_prefix, test_module_url=test_module_url)
-    return render_template("%s/New_API_Module.html" % html_dir, part_module=part_module, url_prefix=url_prefix,
-                           test_env=test_env)
+    return render_template("%s/New_API_Module.html" % html_dir, url_prefix=url_prefix, test_env=test_env)
 
 
 @develop_api_view.route("/", methods=["POST"])
@@ -88,7 +66,8 @@ def new_api_info():
 @develop_api_view.route("/module/", methods=["GET"])
 def get_module_api():
     if "module_no" not in request.args:
-        return jsonify({"status": False, "data": "Need module_no"})
+        result, part_module = control.get_part_api(g.user_name, g.user_role)
+        return jsonify({"status": result, "data": part_module})
     module_no = int(request.args["module_no"])
     result, module_data = control.get_api_list(module_no, g.user_role)
     return jsonify({"status": result, "data": module_data})
@@ -156,9 +135,6 @@ def new_api_page():
         api_no = request.args["api_no"]
         if len(api_no) != 32:
             return "Bad api_no"
-        result, part_module = control.get_part_api(g.user_name, g.user_role)
-        if result is False:
-            return part_module
         result, api_info = control.get_api_info(api_no, g.user_role)
         return_url = url_prefix + "/info/?api_no=%s" % api_no
         if result is False:

@@ -499,7 +499,7 @@ class HelpManager:
             api_list.append({"api_no": item[0], "module_no": item[1], "api_title": item[2], "api_path": item[3],
                              "api_method": item[4], "api_desc": item[5], "status": api_status})
         care_info = self.get_module_care_list(module_no)
-        return True, {"api_list": api_list, "care_info": care_info}
+        return True, {"api_list": api_list, "care_info": care_info, "module_info": {"module_no": module_no}}
 
     def del_api_header(self, api_no, param):
         if len(api_no) != 32:

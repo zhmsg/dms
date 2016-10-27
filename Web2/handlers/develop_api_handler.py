@@ -2,7 +2,7 @@
 # coding: utf-8
 __author__ = 'ZhouHeng'
 
-from Web2 import control, BaseAuthHandler, test_url_prefix, api_url_prefix as url_prefix, http_handlers
+from Web2 import control, BaseAuthHandler, api_url_prefix as url_prefix, http_handlers
 
 html_dir = "API_HELP"
 
@@ -15,32 +15,10 @@ class APIIndexHandler(_BaseHandler):
     route_url = url_prefix + "/"
 
     def get(self):
-        result, part_module = control.get_part_api(self.g.user_name, self.g.user_role)
-        if result is False:
-            return part_module
         result, test_env = control.get_test_env(self.g.user_role)
         if result is False:
             return test_env
-        if "module_no" in self.request.args:
-            module_no = int(self.request.args["module_no"])
-
-            current_module = None
-            for part in part_module:
-                for module_info in part["module_list"]:
-                    if module_info["module_no"] == module_no:
-                        current_module = module_info
-                        current_module["part_no"] = part["part_no"]
-                        current_module["part_name"] = part["part_name"]
-                        break
-            if current_module is None:
-                return "Error"
-            if "update" in self.request.args and self.request.args["update"] == "true":
-                return self.render_template("%s/New_API_Module.html" % html_dir, part_module=part_module,
-                                            current_module=current_module, test_env=test_env)
-            test_module_url = test_url_prefix + "/batch/"
-            return self.render_template("%s/List_Module_API.html" % html_dir, part_module=part_module,
-                                        current_module=current_module,  test_module_url=test_module_url)
-        return self.render_template("%s/New_API_Module.html" % html_dir, part_module=part_module, test_env=test_env)
+        return self.render_template("%s/New_API_Module.html" % html_dir, test_env=test_env)
 
     def post(self, *args, **kwargs):
         request_form = self.request.form
