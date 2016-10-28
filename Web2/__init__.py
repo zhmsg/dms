@@ -207,3 +207,12 @@ class ErrorHandler(tornado.web.RequestHandler):
             else:
                 return self.write("Not Found")
         return
+
+
+class PingHandler(BaseHandler):
+    route_url = BaseHandler.route_url + "ping/"
+
+    def get(self):
+        return self.jsonify({"status": True, "data": "ping %s success" % self.request.path})
+
+http_handlers.append(PingHandler)
