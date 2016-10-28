@@ -245,5 +245,20 @@ class APIBodyHandler(_BaseHandler):
             return self.jsonify({"status": result, "data": data})
         return self.jsonify({"status": False, "data": "need api_no and param"})
 
+
+class APICareHandler(_BaseHandler):
+    route_url = _BaseHandler.route_url + "/care/"
+
+    def post(self):
+        request_data = self.request.json
+        api_no = request_data["api_no"]
+        if self.request.method == "POST":
+            result, care_info = control.add_care(api_no, self.g.user_name, self.g.user_role)
+        else:
+            result, care_info = control.delete_care(api_no, self.g.user_name)
+        return self.jsonify({"status": result, "data": care_info})
+
+    delete = post
+
 http_handlers.extend([APIIndexHandler, APIInfoHandler, APIModuleHandler, APIModuleCareHandler, APIBasicHandler])
-http_handlers.extend([APIStageHandler, APIHeaderHandler, APIBodyHandler])
+http_handlers.extend([APIStageHandler, APIHeaderHandler, APIBodyHandler, APICareHandler])
