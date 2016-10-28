@@ -124,7 +124,7 @@ class BaseHandler(tornado.web.RequestHandler, TemplateRendering):
         return True
 
     def get_current_user(self):
-        if "user_id" in self.session and "user_role" in self.session:
+        if self.is_authenticated is True:
             return self.session["user_id"]
         return None
 

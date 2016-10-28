@@ -16,7 +16,7 @@
     <p>API URL: {{ api_info["basic_info"]["api_url"] }}</p>
     <p>API 请求方式: {{ api_info["basic_info"]["api_method"] }}</p>
     <p>API 描述: {{ api_info["basic_info"]["api_desc"] }}</p>
-    <p>API 状态: {{ api_info["basic_info"]["status"] }}</p>
+    <p>API 状态: {{ api_info["basic_info"]["stage"] }}</p>
     <p>添加时间: {{ api_info["basic_info"]["add_time"] }}</p>
     <p>最近更新时间: {{ api_info["basic_info"]["update_time"] }}</p>
     {% if api_info["header_info"] | length > 0 or api_info["predefine_param"]["header"] | length > 0 %}

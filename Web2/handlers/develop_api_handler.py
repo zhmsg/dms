@@ -260,5 +260,6 @@ class APICareHandler(_BaseHandler):
 
     delete = post
 
+
 http_handlers.extend([APIIndexHandler, APIInfoHandler, APIModuleHandler, APIModuleCareHandler, APIBasicHandler])
 http_handlers.extend([APIStageHandler, APIHeaderHandler, APIBodyHandler, APICareHandler])
