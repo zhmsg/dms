@@ -45,11 +45,14 @@ function my_request(request_url, request_method, body_param, request_success){
         async:false,
         success:function(data){
             console.info(data);
-            if(data.status == false || request_success == null){
+            if(data.status == false){
                 sweetAlert(data.data);
             }
             else if("location" in data){
                 location.href = data.location;
+            }
+            else if(request_success == null){
+                sweetAlert(data.data);
             }
             else{
                 request_success(data);

@@ -46,6 +46,7 @@ $(function() {
             if(care_info[i]["level"] == 0){ // 关注level为0 为API创建者不可取消关注
                 $("#make_care").hide();
                 $("#btn_del_api").show();
+                $("#btn_del_api").click(function(){my_request($("#del_api_url").val(), "DELETE")});
             }
             else {
                 $("#make_care").text("取消关注");

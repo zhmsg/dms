@@ -138,9 +138,8 @@
         </div>
     </div>
 
-    <form action="{{ url_prefix }}/delete/{{ api_no }}/" method="get">
-        <button id="btn_del_api" class="btn btn-primary pull-right" style="display: none">删除API</button>
-    </form>
+    <input id="del_api_url" value="{{ url_prefix }}/basic/" style="display: none" />
+    <button id="btn_del_api" class="btn btn-primary pull-right" style="display: none">删除API</button>
 
     <br>
     <a href="{{ status_url }}?api_no={{ api_no }}" title="">查看返回状态码解释</a>

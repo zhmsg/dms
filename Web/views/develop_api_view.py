@@ -149,6 +149,15 @@ def new_update_api_info():
     return jsonify({"status": True, "location": "%s/info/?api_no=%s" % (url_prefix, api_no), "data": "success"})
 
 
+@develop_api_view.route("/basic/", methods=["DELETE"])
+@referer_api_no
+def delete_api():
+    result, data = control.delete_api(g.api_no, g.user_name)
+    if result is False:
+        return jsonify({"status": False, "data": data})
+    return jsonify({"status": True, "location": url_prefix + "/", "data": "success"})
+
+
 @develop_api_view.route("/stage/<int:api_stage>/", methods=["GET"])
 @referer_api_no
 def update_api_status_func(api_stage):
@@ -221,14 +230,6 @@ def add_care():
     else:
         result, care_info = control.delete_care(api_no, g.user_name)
     return jsonify({"status": result, "data": care_info})
-
-
-@develop_api_view.route("/delete/<api_no>/", methods=["GET"])
-def delete_api(api_no):
-    result, data = control.delete_api(api_no, g.user_name)
-    if result is False:
-        return data
-    return redirect(url_for("develop_api_view.list_api"))
 
 
 @develop_api_view.route("/header/", methods=["DELETE"])
