@@ -2,8 +2,27 @@
 # coding: utf-8
 __author__ = 'ZhouHeng'
 
+import re
+from functools import wraps
 from Web2 import control, BaseAuthHandler, api_url_prefix as url_prefix, http_handlers, test_url_prefix
 from Web2 import status_url_prefix
+
+
+def referer_api_no(f):
+    @wraps(f)
+    def decorated_function(self, *args, **kwargs):
+        if "Referer" not in self.request.headers:
+            return self.jsonify({"status": False, "data": "Bad Request"})
+        self.g.ref_url = self.request.headers["Referer"]
+        find_result = re.findall("api_no=([a-z\d]{32})", self.g.ref_url)
+        if len(find_result) > 0:
+            self.g.api_no = find_result[0]
+        elif "api_no" in self.request.args:
+            self.g.api_no = self.request.args["api_no"]
+        else:
+            return self.jsonify({"status": False, "data": "Bad Request."})
+        return f(self, *args, **kwargs)
+    return decorated_function
 
 
 class _BaseHandler(BaseAuthHandler):
@@ -132,6 +151,13 @@ class APIBasicHandler(_BaseHandler):
         return self.jsonify({"status": True, "location": "%s/info/?api_no=%s" % (url_prefix, api_no), "data": "success"})
 
     put = post
+
+    @referer_api_no
+    def delete(self):
+        result, data = control.delete_api(self.g.api_no, self.g.user_name)
+        if result is False:
+            return self.jsonify({"status": False, "data": data})
+        return self.jsonify({"status": True, "location": url_prefix + "/", "data": "success"})
 
 
 http_handlers.extend([APIIndexHandler, APIInfoHandler, APIModuleHandler, APIModuleCareHandler, APIBasicHandler])
