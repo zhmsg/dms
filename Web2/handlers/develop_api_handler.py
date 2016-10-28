@@ -160,4 +160,17 @@ class APIBasicHandler(_BaseHandler):
         return self.jsonify({"status": True, "location": url_prefix + "/", "data": "success"})
 
 
-http_handlers.extend([APIIndexHandler, APIInfoHandler, APIModuleHandler, APIModuleCareHandler, APIBasicHandler])
+class APIStageHandler(_BaseHandler):
+    route_url = _BaseHandler.route_url + "/stage/"
+
+    @referer_api_no
+    def put(self):
+        api_no = self.g.api_no
+        stage = self.request.json["stage"]
+        result, info = control.set_api_status(self.g.user_name, self.g.user_role, api_no, stage)
+        if result is False:
+            return self.jsonify({"status": False, "data": info})
+        return self.jsonify({"status": True, "location": self.g.ref_url, "data": "success"})
+
+
+http_handlers.extend([APIIndexHandler, APIInfoHandler, APIModuleHandler, APIModuleCareHandler, APIBasicHandler, APIStageHandler])
