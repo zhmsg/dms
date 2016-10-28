@@ -185,43 +185,35 @@ function format_input(input_id){
     $("#" + input_id).val(json_content);
 }
 
-function handle_predefine_param(btn_id, param_type){
-    var update_url = $("#update_header_url").val();
+function handler_success(data){
+    var btn_id = "pp_" + data.data["param"];
     var btn = $("#" + btn_id);
-    console.info(btn);
     var inner_value = btn.text();
-    console.info(inner_value);
-    var param = btn.val();
-    console.info(param);
     if(inner_value.indexOf("不需要") == 0){
         var class_name = "btn btn-info";
         var inner_value = inner_value.replace("不", "");
-        var update_type = "delete";
     }
     else{
         var class_name = "btn btn-danger";
         var inner_value = inner_value.replace("需要", "不需要");
+    }
+    btn.text(inner_value);
+    btn.removeClass();
+    btn.addClass(class_name);
+}
+
+function handle_predefine_param(btn_id, param_type){
+    var update_url = $("#update_header_url").val();
+    var btn = $("#" + btn_id);
+    var inner_value = btn.text();
+    var param = btn.val();
+    if(inner_value.indexOf("不需要") == 0){
+        var update_type = "delete";
+    }
+    else{
         var update_type = "new";
     }
-    $.ajax({
-        url: update_url,
-        method: "PUT",
-        data: {param: param, update_type: update_type, param_type: param_type},
-        success:function(data){
-            if (data.status == true){
-                btn.text(inner_value);
-                btn.removeClass();
-                btn.addClass(class_name);
-            }
-            else{
-                alert(data);
-            }
-        },
-        error:function(xhr){
-            alert(xhr.statusText);
-        }
-    });
-
+    my_async_request(update_url, "PUT", {param: param, update_type: update_type, param_type: param_type}, handler_success);
 }
 
 function send_message()

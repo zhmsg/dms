@@ -228,11 +228,10 @@ class HelpManager:
             return False, "Bad param_type"
         if add_time is None:
             add_time = datetime.now().strftime(TIME_FORMAT)
-        insert_sql = "INSERT INTO %s (api_no,param,param_type,add_time) VALUES ('%s','%s','%s','%s') " \
-                     "ON DUPLICATE KEY UPDATE add_time=VALUES(add_time);" \
-                     % (self.predefine_param, api_no, param, param_type, add_time)
-        self.db.execute(insert_sql)
-        return True, "Success"
+        r_data = {"api_no": api_no, "param": param, "param_type": param_type, "add_time": add_time}
+        result = self.db.execute_insert(self.predefine_param, r_data, ignore=True)
+        r_data["result"] = result
+        return True, r_data
 
     def new_api_input(self, api_no, input_examples):
         if len(api_no) != 32:
@@ -519,9 +518,10 @@ class HelpManager:
     def del_predefine_param(self, api_no, param):
         if len(api_no) != 32:
             return False, "Bad api_no"
-        delete_sql = "DELETE FROM %s WHERE api_no='%s' AND param='%s';" % (self.predefine_param, api_no, param)
-        result = self.db.execute(delete_sql)
-        return True, result
+        where_value = {"api_no": api_no, "param": param}
+        result = self.db.execute_delete(self.predefine_param, where_value)
+        where_value["result"] = result
+        return True, where_value
 
     def del_api_input(self, input_no):
         if len(input_no) != 32:

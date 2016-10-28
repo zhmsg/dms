@@ -172,13 +172,39 @@ def update_api_status_func():
 @develop_api_view.route("/header/", methods=["POST"])
 @referer_api_no
 def add_header_param():
-    request_form = request.json
-    param = request_form["name"]
+    request_data = request.json
+    param = request_data["name"]
     api_no = g.api_no
-    desc = request_form["desc"]
-    necessary = int(request_form["necessary"])
+    desc = request_data["desc"]
+    necessary = int(request_data["necessary"])
     result, param_info = control.add_header_param(g.user_name, api_no, param, necessary, desc, g.user_role)
     return jsonify({"status": result, "data": param_info})
+
+
+@develop_api_view.route("/header/", methods=["PUT"])
+@referer_api_no
+def update_api_predefine_header():
+    api_no = g.api_no
+    request_data = request.json
+    param = request_data["param"]
+    update_type = request_data["update_type"]
+    param_type = request_data["param_type"]
+    if update_type == "delete":
+        result, message = control.delete_predefine_param(g.user_role, api_no, param)
+    else:
+        result, message = control.add_predefine_header(g.user_name, api_no, param, param_type, g.user_role)
+    return jsonify({"status": result, "data": message})
+
+
+@develop_api_view.route("/header/", methods=["DELETE"])
+@referer_api_no
+def delete_header():
+    request_data = request.json
+    api_no = g.api_no
+    if "param" in request_data:
+        result, data = control.delete_header(g.user_role, api_no, request_data["param"])
+        return jsonify({"status": result, "data": data})
+    return jsonify({"status": False, "data": "need api_no and param"})
 
 
 @develop_api_view.route("/body/", methods=["POST"])
@@ -233,15 +259,6 @@ def add_care():
     return jsonify({"status": result, "data": care_info})
 
 
-@develop_api_view.route("/header/", methods=["DELETE"])
-def delete_header():
-    request_data = request.json
-    if "api_no" in request_data and "param" in request_data:
-        result, data = control.delete_header(g.user_role, request_data["api_no"], request_data["param"])
-        return jsonify({"status": result, "data": data})
-    return jsonify({"status": False, "data": "need api_no and param"})
-
-
 @develop_api_view.route("/body/", methods=["DELETE"])
 def delete_body():
     request_data = request.json
@@ -262,16 +279,3 @@ def delete_output(output_no):
     result, data = control.delete_ouput(output_no, g.user_role)
     return jsonify({"status": result, "data": data})
 
-
-@develop_api_view.route("/update/header/", methods=["PUT"])
-@referer_api_no
-def update_api_predefine_header():
-    api_no = g.api_no
-    param = request.form["param"]
-    update_type = request.form["update_type"]
-    param_type = request.form["param_type"]
-    if update_type == "delete":
-        result, message = control.delete_predefine_param(g.user_role, api_no, param)
-    else:
-        result, message = control.add_predefine_header(g.user_name, api_no, param, param_type, g.user_role)
-    return jsonify({"status": result, "data": message})
