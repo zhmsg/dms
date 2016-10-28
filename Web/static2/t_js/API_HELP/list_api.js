@@ -103,7 +103,7 @@ function Get_API_List(module_no)
 {
     $("a[id^='a_module_']").removeClass();
     $("#a_module_" + module_no).addClass("selected");
-    var request_url = "/dev/api/module/?module_no=" + module_no;
+    var request_url = $("#module_url").val() + "?module_no=" + module_no;
     my_async_request(request_url, "GET", null, Get_API_List_Success);
 }
 
@@ -139,7 +139,7 @@ $(function(){
         my_async_request(test_env_url, "GET", null, Load_Test_Env)
     }
 
-    var request_url = "/dev/api/module/";
+    var request_url = $("#module_url").val();
     my_request(request_url, "GET", null, Load_API_Module);
     var module_no = UrlArgsValue(window.location.toString(), "module_no");
     if(module_no != null) {

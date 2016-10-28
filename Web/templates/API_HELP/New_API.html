@@ -4,8 +4,9 @@
 
 {% block content %}
     <div class="container apiMode">
-        {% if return_url %}
-            <a class="btn btn-primary pull-right" href="{{ return_url }}" title="">查看API</a>
+        {% if api_info_url %}
+            <input id="api_info_url" value="{{ api_info_url }}" style="display: none">
+            <a class="btn btn-primary pull-right" href="{{ api_info_url }}" title="">查看API</a>
         {% else %}
             <a class="btn btn-primary pull-right" href="{{ url_prefix }}/" title="">API列表</a>
         {% endif %}

@@ -39,7 +39,7 @@ $(function(){
     select_change();
     var api_no = UrlArgsValue(window.location.toString(), "api_no");
     if(api_no != null) {
-        var request_url = "/dev/api/info/?api_no=" + api_no;
+        var request_url = $("#api_info_url").val();
         my_async_request(request_url, "GET", null, load_api_info);
     }
     $("#btn_new_api").click(function() {

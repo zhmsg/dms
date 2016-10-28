@@ -89,6 +89,7 @@
     </div>
     <input style="display: none" value="{{ url_prefix }}" id="url_prefix">
     <input style="display: none" value="{{ test_env_url }}" id="test_env_url">
+    <input style="display: none" value="{{ module_url }}" id="module_url">
     <label style="display: none" id="role_value">{{ role_value | tojson | safe }}</label>
     {{ 't_js/Common/add_node.js' | make_static_html | safe }}
     {{ 't_js/Common/url_tool.js' | make_static_html | safe }}

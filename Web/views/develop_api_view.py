@@ -42,8 +42,9 @@ def referer_api_no(f):
 def list_api():
     test_module_url = test_url_prefix + "/batch/"
     test_env_url = test_url_prefix + "/env/"
+    module_url = url_prefix + "/module/"
     return render_template("%s/List_API.html" % html_dir, url_prefix=url_prefix, test_module_url=test_module_url,
-                           test_env_url=test_env_url)
+                           test_env_url=test_env_url, module_url=module_url)
 
 
 @develop_api_view.route("/module/", methods=["GET"])
@@ -118,9 +119,9 @@ def new_api_page():
         api_no = request.args["api_no"]
         if len(api_no) != 32:
             return "Bad api_no"
-        return_url = url_prefix + "/info/?api_no=%s" % api_no
+        api_info_url = url_prefix + "/info/?api_no=%s" % api_no
         return render_template("%s/New_API.html" % html_dir, part_module=part_module, url_prefix=url_prefix,
-                               return_url=return_url)
+                               api_info_url=api_info_url)
 
     return render_template("%s/New_API.html" % html_dir, part_module=part_module, url_prefix=url_prefix)
 

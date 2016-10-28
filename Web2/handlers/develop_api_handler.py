@@ -18,7 +18,8 @@ class APIIndexHandler(_BaseHandler):
     def get(self):
         test_module_url = test_url_prefix + "/batch/"
         test_env_url = test_url_prefix + "/env/"
-        return self.render_template("List_API.html", test_module_url=test_module_url,
+        module_url = url_prefix + "/module/"
+        return self.render_template("List_API.html", test_module_url=test_module_url, module_url=module_url,
                                     test_env_url=test_env_url)
 
 
@@ -55,7 +56,8 @@ class APIModuleHandler(_BaseHandler):
 
     def get(self):
         if "module_no" not in self.request.args:
-            return self.jsonify({"status": False, "data": "Need module_no"})
+            result, part_module = control.get_part_api(self.g.user_name, self.g.user_role)
+            return self.jsonify({"status": result, "data": part_module})
         module_no = int(self.request.args["module_no"])
         result, module_data = control.get_api_list(module_no, self.g.user_role)
         return self.jsonify({"status": result, "data": module_data})
@@ -103,8 +105,8 @@ class APIBasicHandler(_BaseHandler):
             api_no = self.request.args["api_no"]
             if len(api_no) != 32:
                 return "Bad api_no"
-            return_url = url_prefix + "/info/?api_no=%s" % api_no
-            return self.render_template("New_API.html", part_module=part_module, return_url=return_url)
+            api_info_url = url_prefix + "/info/?api_no=%s" % api_no
+            return self.render_template("New_API.html", part_module=part_module, api_info_url=api_info_url)
         return self.render_template("New_API.html", part_module=part_module)
 
     def post(self):
