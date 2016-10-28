@@ -74,11 +74,14 @@ function my_async_request(request_url, request_method, body_param, request_succe
         data: body_param,
         success:function(data){
             console.info(data);
-            if(data.status == false || request_success == null){
+            if(data.status == false){
                 sweetAlert(data.data);
             }
             else if("location" in data){
                 location.href = data.location;
+            }
+            else if(request_success == null){
+                sweetAlert(data.data);
             }
             else{
                 request_success(data);
@@ -98,11 +101,14 @@ function my_async_form_request(request_url, request_method, body_param, request_
         data: body_param,
         success:function(data){
             console.info(data);
-            if(data.status == false || request_success == null){
+            if(data.status == false){
                 sweetAlert(data.data);
             }
             else if("location" in data){
                 location.href = data.location;
+            }
+            else if(request_success == null){
+                sweetAlert(data.data);
             }
             else{
                 request_success(data);

@@ -158,14 +158,15 @@ def delete_api():
     return jsonify({"status": True, "location": url_prefix + "/", "data": "success"})
 
 
-@develop_api_view.route("/stage/<int:api_stage>/", methods=["GET"])
+@develop_api_view.route("/stage/", methods=["PUT"])
 @referer_api_no
-def update_api_status_func(api_stage):
+def update_api_status_func():
     api_no = g.api_no
-    result, info = control.set_api_status(g.user_name, g.user_role, api_no, api_stage)
+    stage = request.json["stage"]
+    result, info = control.set_api_status(g.user_name, g.user_role, api_no, stage)
     if result is False:
-        return info
-    return redirect(g.ref_url)
+        return jsonify({"status": False, "data": info})
+    return jsonify({"status": True, "location": g.ref_url, "data": "success"})
 
 
 @develop_api_view.route("/header/", methods=["POST"])
