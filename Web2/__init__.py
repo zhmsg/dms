@@ -58,6 +58,7 @@ class TemplateRendering(object):
         env.filters['make_default_static_url'] = make_default_static_url
         env.filters['make_static_html'] = make_static_html
         env.filters['tojson'] = tornado.escape.json_encode
+        env.autoescape = True
         try:
             template = env.get_template(template_name)
         except TemplateNotFound:
