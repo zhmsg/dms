@@ -188,7 +188,7 @@ def update_api_predefine_header():
     request_data = request.json
     param = request_data["param"]
     update_type = request_data["update_type"]
-    param_type = request_data["param_type"]
+    param_type = "header"
     if update_type == "delete":
         result, message = control.delete_predefine_param(g.user_role, api_no, param)
     else:
@@ -210,16 +210,40 @@ def delete_header():
 @develop_api_view.route("/body/", methods=["POST"])
 @referer_api_no
 def add_body_param():
-    request_form = request.json
-    param = request_form["name"]
+    request_data = request.json
+    param = request_data["name"]
     api_no = g.api_no
-    desc = request_form["desc"]
-    necessary = int(request_form["necessary"])
-    type = request_form["type"]
+    desc = request_data["desc"]
+    necessary = int(request_data["necessary"])
+    type = request_data["type"]
     result, param_info = control.add_body_param(g.user_name, api_no, param, necessary, type, desc, g.user_role)
-    if result is False:
-        return param_info
-    return jsonify({"status": True, "data": param_info})
+    return jsonify({"status": result, "data": param_info})
+
+
+@develop_api_view.route("/body/", methods=["PUT"])
+@referer_api_no
+def update_api_predefine_body():
+    api_no = g.api_no
+    request_data = request.json
+    param = request_data["param"]
+    update_type = request_data["update_type"]
+    param_type = "body"
+    if update_type == "delete":
+        result, message = control.delete_predefine_param(g.user_role, api_no, param)
+    else:
+        result, message = control.add_predefine_header(g.user_name, api_no, param, param_type, g.user_role)
+    return jsonify({"status": result, "data": message})
+
+
+@develop_api_view.route("/body/", methods=["DELETE"])
+@referer_api_no
+def delete_body():
+    request_data = request.json
+    api_no = g.api_no
+    if "api_no" in request_data and "param" in request_data:
+        result, data = control.delete_body(g.user_role, api_no, request_data["param"])
+        return jsonify({"status": result, "data": data})
+    return jsonify({"status": False, "data": "need api_no and param"})
 
 
 @develop_api_view.route("/input/", methods=["POST"])
@@ -257,15 +281,6 @@ def add_care():
     else:
         result, care_info = control.delete_care(api_no, g.user_name)
     return jsonify({"status": result, "data": care_info})
-
-
-@develop_api_view.route("/body/", methods=["DELETE"])
-def delete_body():
-    request_data = request.json
-    if "api_no" in request_data and "param" in request_data:
-        result, data = control.delete_body(g.user_role, request_data["api_no"], request_data["param"])
-        return jsonify({"status": result, "data": data})
-    return jsonify({"status": False, "data": "need api_no and param"})
 
 
 @develop_api_view.route("/input/<input_no>/", methods=["DELETE"])

@@ -203,7 +203,7 @@ function handler_success(data){
 }
 
 function handle_predefine_param(btn_id, param_type){
-    var update_url = $("#update_header_url").val();
+    var update_url = $("#url_prefix").val() + "/" + param_type + "/";
     var btn = $("#" + btn_id);
     var inner_value = btn.text();
     var param = btn.val();

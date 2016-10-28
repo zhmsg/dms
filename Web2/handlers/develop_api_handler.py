@@ -209,5 +209,41 @@ class APIHeaderHandler(_BaseHandler):
         return self.jsonify({"status": False, "data": "need api_no and param"})
 
 
+class APIBodyHandler(_BaseHandler):
+    route_url = _BaseHandler.route_url + "/body/"
+
+    @referer_api_no
+    def post(self):
+        request_data = self.request.json
+        param = request_data["name"]
+        api_no = self.g.api_no
+        desc = request_data["desc"]
+        necessary = int(request_data["necessary"])
+        type = request_data["type"]
+        result, param_info = control.add_body_param(self.g.user_name, api_no, param, necessary, type, desc, self.g.user_role)
+        return self.jsonify({"status": result, "data": param_info})
+
+    @referer_api_no
+    def put(self):
+        api_no = self.g.api_no
+        request_data = self.request.json
+        param = request_data["param"]
+        update_type = request_data["update_type"]
+        param_type = "body"
+        if update_type == "delete":
+            result, message = control.delete_predefine_param(self.g.user_role, api_no, param)
+        else:
+            result, message = control.add_predefine_header(self.g.user_name, api_no, param, param_type, self.g.user_role)
+        return self.jsonify({"status": result, "data": message})
+
+    @referer_api_no
+    def delete(self):
+        request_data = self.request.json
+        api_no = self.g.api_no
+        if "api_no" in request_data and "param" in request_data:
+            result, data = control.delete_body(self.g.user_role, api_no, request_data["param"])
+            return self.jsonify({"status": result, "data": data})
+        return self.jsonify({"status": False, "data": "need api_no and param"})
+
 http_handlers.extend([APIIndexHandler, APIInfoHandler, APIModuleHandler, APIModuleCareHandler, APIBasicHandler])
-http_handlers.extend([APIStageHandler, APIHeaderHandler])
+http_handlers.extend([APIStageHandler, APIHeaderHandler, APIBodyHandler])
