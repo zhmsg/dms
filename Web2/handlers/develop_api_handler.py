@@ -173,4 +173,41 @@ class APIStageHandler(_BaseHandler):
         return self.jsonify({"status": True, "location": self.g.ref_url, "data": "success"})
 
 
-http_handlers.extend([APIIndexHandler, APIInfoHandler, APIModuleHandler, APIModuleCareHandler, APIBasicHandler, APIStageHandler])
+class APIHeaderHandler(_BaseHandler):
+    route_url = _BaseHandler.route_url + "/header/"
+
+    @referer_api_no
+    def post(self):
+        request_data = self.request.json
+        param = request_data["name"]
+        api_no = self.g.api_no
+        desc = request_data["desc"]
+        necessary = int(request_data["necessary"])
+        result, param_info = control.add_header_param(self.g.user_name, api_no, param, necessary, desc, self.g.user_role)
+        return self.jsonify({"status": result, "data": param_info})
+
+    @referer_api_no
+    def put(self):
+        api_no = self.g.api_no
+        request_data = self.request.json
+        param = request_data["param"]
+        update_type = request_data["update_type"]
+        param_type = request_data["param_type"]
+        if update_type == "delete":
+            result, message = control.delete_predefine_param(self.g.user_role, api_no, param)
+        else:
+            result, message = control.add_predefine_header(self.g.user_name, api_no, param, param_type, self.g.user_role)
+        return self.jsonify({"status": result, "data": message})
+
+    @referer_api_no
+    def delete(self):
+        request_data = self.request.json
+        api_no = self.g.api_no
+        if "param" in request_data:
+            result, data = control.delete_header(self.g.user_role, api_no, request_data["param"])
+            return self.jsonify({"status": result, "data": data})
+        return self.jsonify({"status": False, "data": "need api_no and param"})
+
+
+http_handlers.extend([APIIndexHandler, APIInfoHandler, APIModuleHandler, APIModuleCareHandler, APIBasicHandler])
+http_handlers.extend([APIStageHandler, APIHeaderHandler])
