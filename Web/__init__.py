@@ -1,10 +1,12 @@
 # encoding: utf-8
 # !/usr/bin/python
 
+from datetime import datetime
 from functools import wraps
 from flask import session, g, make_response, Blueprint, jsonify, request
 from flask_login import LoginManager, UserMixin, login_required
 from apscheduler.schedulers.background import BackgroundScheduler
+import apscheduler.events
 from Tools.Mysql_db import DB
 from Tools.MyEmail import MyEmailManager
 from Class.Control import ControlManager
@@ -13,6 +15,8 @@ from Function.Common import *
 
 __author__ = 'zhouheng'
 
+TIME_FORMAT = "%Y-%m-%d %H:%M:%S"
+
 db = DB()
 ip = IPManager()
 control = ControlManager()
@@ -20,6 +24,36 @@ my_email = MyEmailManager("/home/msg/conf/")
 dms_scheduler = BackgroundScheduler()
 # job_store = SQLAlchemyJobStore(url=db.url)
 # dms_scheduler.add_jobstore(job_store)
+
+
+def err_listener(ev):
+    with open("dms_task.log", "a") as wr:
+        wr.write("----------%s----------\n" % datetime.now().strftime(TIME_FORMAT))
+        if isinstance(ev, apscheduler.events.JobSubmissionEvent):
+            wr.write("Job Submission Event\n")
+            wr.write("code: %s\n" % ev.code)
+            wr.write("job_id: %s\n" % ev.job_id)
+            wr.write("scheduled_run_times: %s\n" % ev.scheduled_run_times)
+        elif isinstance(ev, apscheduler.events.JobExecutionEvent):
+            wr.write("Job Execution Event\n")
+            wr.write("code: %s\n" % ev.code)
+            wr.write("job_id: %s\n" % ev.job_id)
+            wr.write("scheduled_run_time: %s\n" % ev.scheduled_run_time)
+            print(ev.scheduled_run_time)
+            wr.write("retval: %s\n" % ev.retval)
+            wr.write("exception: %s\n" % ev.exception)
+            wr.write("traceback: %s\n" % ev.traceback)
+        elif isinstance(ev, apscheduler.events.JobEvent):
+            wr.write("Job Event\n")
+            wr.write("code: %s\n" % ev.code)
+            wr.write("job_id: %s\n" % ev.job_id)
+        elif isinstance(ev, apscheduler.events.SchedulerEvent):
+            wr.write("Scheduler Event\n")
+            wr.write("code: %s\n" % ev.code)
+            wr.write("alias: %s\n" % ev.alias)
+        wr.write("----------end----------\n")
+
+dms_scheduler.add_listener(err_listener)
 
 
 class User(UserMixin):
