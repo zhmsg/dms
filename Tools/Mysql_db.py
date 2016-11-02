@@ -55,7 +55,7 @@ class DB(object):
             if freq >= 3 or error.args[0] in [1054, 1064, 1146]:  # 列不存在 sql错误 表不存在
                 raise MySQLdb.Error(error)
             self.connect()
-            return self.execute(sql_query=sql_query, args=args, freq=freq+1)
+            return self.execute(sql_query=sql_query, freq=freq+1)
         return handled_item
 
     def execute_select(self, table_name, where_value={"1": 1}, cols=None):
