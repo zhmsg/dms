@@ -49,9 +49,6 @@ function Load_Module_Info(load_type){
 function Load_API_List(api_list, module_prefix)
 {
     var url_prefix = $("#url_prefix").val();
-    if(module_prefix[module_prefix.length - 1] == "/"){
-        module_prefix = module_prefix.substr(0, module_prefix.length - 1);
-    }
     $("#t_api_list tr").not(":first").remove();
     var t = $("#t_api_list");
     for(var i=0;i<api_list.length;i++){
@@ -66,7 +63,7 @@ function Load_API_List(api_list, module_prefix)
             var add_tr = $("<tr id='" + tr_id + "'></tr>");
         }
         t.append(add_tr);
-        api_info["api_url"] = escape(module_prefix + api_info["api_path"]);
+        api_info["api_url"] = escape(rTrim(module_prefix, "/") + "/" + lTrim(api_info["api_path"], "/"));
         var keys = ["api_title", "api_url", "api_method", "stage"];
         for(var j=0;j<keys.length;j++){
             var key = keys[j];
