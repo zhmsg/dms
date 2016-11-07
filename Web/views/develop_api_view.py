@@ -240,7 +240,7 @@ def update_api_predefine_body():
 def delete_body():
     request_data = request.json
     api_no = g.api_no
-    if "api_no" in request_data and "param" in request_data:
+    if "param" in request_data:
         result, data = control.delete_body(g.user_role, api_no, request_data["param"])
         return jsonify({"status": result, "data": data})
     return jsonify({"status": False, "data": "need api_no and param"})
