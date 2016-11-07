@@ -5,6 +5,7 @@
 function test_api(){
     update_res("正在请求...");
     $("#btn_save_result").hide();
+    $("#btn_save_output").hide();
     var test_env = $("#test_env").val();
     var api_url = $("#api_url").val();
     var api_method = $("#api_method").val();
@@ -42,19 +43,17 @@ function test_api(){
         method: api_method,
         contentType: "application/json",
         headers: header_param,
-        //processData: false,
         data: body_param,
         success:function(data){
-            console.info(data);
             if(typeof(data) == "string")
             {
-                console.info("return json string");
                 data = JSON.parse(data);
             }
             update_res(JSON.stringify(data, null, 4));
             $("#expect_status").val(data.status);
             update_status_url(data.status);
             $("#btn_save_result").show();
+            $("#btn_save_output").show();
             $("#btn_save_result").text($("#btn_save_result").val());
             $("#save_name").hide();
         },
@@ -62,7 +61,6 @@ function test_api(){
             var res = "状态码：" + xhr.status + "\n";
             res += "返回值：" + xhr.statusText + "";
             update_res(res);
-            console.info(xhr);
         }
     });
 }

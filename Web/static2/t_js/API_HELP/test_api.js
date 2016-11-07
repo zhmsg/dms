@@ -48,7 +48,6 @@ function get_param_value(){
                 }
             }
             else if(type == "object" || type == "list"){
-                console.info(param_value);
                 try {
                     param_value = JSON.parse(param_value);
                 }
@@ -56,7 +55,6 @@ function get_param_value(){
                     update_res("无效的" + param_key);
                     return false
                 }
-                console.info(param_value);
             }
             else if (type == "bool"){
                 if(param_value == "true"){
@@ -119,7 +117,6 @@ function update_request_url(){
 function update_status_url(status_code){
     status_code = fill_zero(status_code, 8);
     var look_status = $("#look_status");
-    console.info(look_status);
     var title = look_status.attr('title');
     $("#look_status").attr("href", title + "&status=" + status_code);
 }
@@ -130,7 +127,6 @@ function set_default_type()
     for(var i=0;i<type_select.length;i++){
         var one_select = type_select[i];
         var default_type = one_select.name.split("_")[3];
-        console.info(default_type);
         one_select.value = default_type;
     }
 }
@@ -189,6 +185,19 @@ $(function(){
             DownloadJson(file_name + ".json", $("#res_text").text());
             $("#save_name").val("");
             $("#btn_save_result").hide();
+        }
+    });
+    $("#btn_save_output").click(function(){
+        var btn_t = this.innerHTML;
+        var btn_v = this.value;
+        if(btn_t == btn_v){
+            this.innerHTML = btn_v.substr(0, 2);
+            $("#output_desc").show();
+        }
+        else{
+            this.innerHTML = btn_v;
+            $("#btn_save_output").hide();
+            $("#output_desc").hide();
         }
     });
     update_request_url();
