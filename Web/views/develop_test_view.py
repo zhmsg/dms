@@ -122,10 +122,12 @@ def add_test_case():
     user_case_dir = "%s/%s" % (case_dir, g.user_name)
     if os.path.isdir(user_case_dir) is False:
         os.mkdir(user_case_dir)
+        os.chmod(user_case_dir, 0o777)
     case_file = "%s_%s" % (api_no, case_name)
     case_path = "%s/%s.case" % (user_case_dir, case_file)
     with open(case_path, "w") as cw:
         cw.write(json.dumps(r_data, indent=2))
+    os.chmod(case_path, 0o666)
     return jsonify({"status": True, "data": "success"})
 
 
