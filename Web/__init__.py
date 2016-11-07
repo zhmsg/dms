@@ -130,10 +130,13 @@ def create_blue(blue_name, url_prefix="/", auth_required=True):
         @add_blue.before_request
         @login_required
         def before_request():
+
             g.role_value = control.role_value
 
     @add_blue.route("/ping/", methods=["GET"])
     def ping():
+        from time import sleep
+        sleep(5)
         return jsonify({"status": True, "message": "ping %s success" % request.path})
 
     if blue_name not in blues:

@@ -6,6 +6,7 @@ __author__ = 'zhouheng'
 from hashlib import sha512
 from urllib import urlencode
 import tornado.web
+import tornado.gen
 import tornado.escape
 from jinja2 import Environment, FileSystemLoader, TemplateNotFound
 from Web2.redis_session import RedisSessionInterface
@@ -141,8 +142,7 @@ class BaseHandler(tornado.web.RequestHandler, TemplateRendering):
             self.session.pop('_fresh')
 
     def render(self, template_name, **kwargs):
-        for key, value in kwargs.items():
-            self.kwargs[key] = value
+        self.kwargs.update(kwargs)
         super(BaseHandler, self).render(template_name, **self.kwargs)
 
     def render_template(self, template_name, **kwargs):
@@ -209,11 +209,58 @@ class ErrorHandler(tornado.web.RequestHandler):
                 return self.write("Not Found")
         return
 
+from tornado import ioloop
+from tornado.concurrent import TracebackFuture
+
+def async(task, *args, **kwargs):
+    future = TracebackFuture()
+    callback = kwargs.pop("callback", None)
+    if callback:
+        ioloop.IOLoop.instance().add_future(future, lambda future: callback(future.result()))
+    result = task(*args, **kwargs)
+    ioloop.IOLoop.instance().add_callback(_on_result, result, future)
+    return future
+
+def _on_result(result, future):
+    if result:
+        future.set_result(result)
+    else:
+        ioloop.IOLoop.instance().add_callback(_on_result, result, future)
+
+from tornado.concurrent import run_on_executor, Future
+from concurrent.futures import ThreadPoolExecutor
+from tornado.httpclient import AsyncHTTPClient
+import requests
 
 class PingHandler(BaseHandler):
     route_url = BaseHandler.route_url + "ping/"
+    executor = ThreadPoolExecutor(15)
 
+    @run_on_executor
+    def sleep2(self, seconds):
+        print("start")
+        from tornado.concurrent import Future
+
+        from tornado import ioloop
+        from time import sleep
+
+        sleep(seconds)
+        return "success"
+
+    def requests(self, *args, **kwargs):
+        http_cli = AsyncHTTPClient()
+        return http_cli.fetch(*args, **kwargs)
+        res = requests.get("http://127.0.0.1:2200/ping/", headers={"User-Agent": "jyrequests"})
+        return res.text
+
+    @tornado.web.asynchronous
+    @tornado.gen.coroutine
     def get(self):
-        return self.jsonify({"status": True, "data": "ping %s success" % self.request.path})
+        http_cli = AsyncHTTPClient()
+        # res = yield http_cli.fetch("http://127.0.0.1:2200/ping/", headers={"User-Agent": "jyrequests"})
+        res = yield self.requests("http://127.0.0.1:2200/ping/", headers={"User-Agent": "jyrequests"})
+        print(res.body)
+        self.jsonify({"status": True, "data": "ping %s success" % self.request.path})
+        self.finish()
 
 http_handlers.append(PingHandler)
