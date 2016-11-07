@@ -53,7 +53,9 @@ function test_api(){
             $("#expect_status").val(data.status);
             update_status_url(data.status);
             $("#btn_save_result").show();
-            $("#btn_save_output").show();
+            if(new_right == true) {
+                $("#btn_save_output").show();
+            }
             $("#btn_save_result").text($("#btn_save_result").val());
             $("#save_name").hide();
         },
@@ -82,6 +84,14 @@ function save_test_case(){
     test_case_info["expect_status"] = parseInt(expect_status);
     my_async_request(test_case_url, "POST", test_case_info, save_test_case_success);
     add_case_node(case_name);
+}
+
+function save_output_example(){
+    var request_url = $("#api_output_url").val();
+    var output_desc = $("#output_desc").val();
+    var output_example = $("#res_text").val();
+    console.info(output_example);
+    my_async_request(request_url, "POST", {"desc": output_desc, "example": output_example}, null);
 }
 
 function get_test_case_success(data){

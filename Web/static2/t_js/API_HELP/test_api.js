@@ -196,6 +196,7 @@ $(function(){
         }
         else{
             this.innerHTML = btn_v;
+            save_output_example();
             $("#btn_save_output").hide();
             $("#output_desc").hide();
         }

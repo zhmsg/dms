@@ -141,17 +141,17 @@
         <textarea class="form-control font16" rows="20" cols="120" id="res_text" readonly></textarea>
 
     </div>
-
-    <input class="box-side width300" id="save_name" type="text" placeholder="请输入保存的名称" style="display: none"/>
-    <button class="btn btn-primary" id="btn_save_result" value="保存结果" style="display: none">保存结果</button>
-    <div class="apiContentLine top6">
+    <div class="apiContentLine bottom10">
         <textarea class="box-side" id="output_desc" placeholder="返回示例描述" rows="3" style="display: none"></textarea>
         <button class="btn btn-primary" id="btn_save_output" value="保存成返回示例" style="display: none">保存成返回示例</button>
     </div>
+    <input class="box-side width300" id="save_name" type="text" placeholder="请输入保存的名称" style="display: none"/>
+    <button class="btn btn-primary" id="btn_save_result" value="保存结果" style="display: none">保存结果</button>
     <div class="top6">
         <a id="look_status" href="{{ status_url }}?api_no={{ api_no }}" title="{{ status_url }}?api_no={{ api_no }}">查看返回状态码解释</a>
     </div>
     <input id="test_case_url" value="{{ test_case_url }}" style="display: none">
+    <input id="api_output_url" value="{{ api_output_url }}" style="display: none">
     <input id="new_right" value="{{ new_right }}" style="display: none">
     </div>
     {{ 't_js/Common/base64.js' | make_static_html | safe }}
