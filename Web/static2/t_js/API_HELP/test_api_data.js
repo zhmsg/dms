@@ -67,9 +67,6 @@ function test_api(){
     });
 }
 
-function save_test_case_success(data){
-    update_res(JSON.stringify(data, null, 4));
-}
 
 function save_test_case(){
     var case_name = $("#test_case_name").val();
@@ -78,11 +75,10 @@ function save_test_case(){
     if(test_case_info == false) {
         return;
     }
-    update_res(JSON.stringify(test_case_info, null, 4));
     var test_case_url = $("#test_case_url").val();
     test_case_info["case_name"] = case_name;
     test_case_info["expect_status"] = parseInt(expect_status);
-    my_async_request(test_case_url, "POST", test_case_info, save_test_case_success);
+    my_async_request(test_case_url, "POST", test_case_info);
     add_case_node(case_name);
 }
 
@@ -90,7 +86,6 @@ function save_output_example(){
     var request_url = $("#api_output_url").val();
     var output_desc = $("#output_desc").val();
     var output_example = $("#res_text").val();
-    console.info(output_example);
     my_async_request(request_url, "POST", {"desc": output_desc, "example": output_example}, null);
 }
 
@@ -143,6 +138,9 @@ function add_case_node(case_name)
 {
     var div_test_case = $("#div_test_case");
     var id = "a_case_" + case_name;
+    if($("#" + id).length > 0){
+        return;
+    }
     div_test_case.append('<a href="javascript:void(0)" id="' + id + '" class="test_case margin10">' + case_name + '</a>');
     $("a[id='"+ id +"']").click(function(){
         var case_name = this.innerHTML;
