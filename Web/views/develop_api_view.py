@@ -146,7 +146,7 @@ def new_update_api_info():
         if r is False:
             return jsonify({"status": False, "data": api_info})
         api_no = api_info["api_no"]
-    return jsonify({"status": True, "location": "%s/info/?api_no=%s" % (url_prefix, api_no), "data": "success"})
+    return jsonify({"status": True, "location": "%s/info/?api_no=%s&update=" % (url_prefix, api_no), "data": "success"})
 
 
 @develop_api_view.route("/basic/", methods=["DELETE"])

@@ -148,7 +148,8 @@ class APIBasicHandler(_BaseHandler):
             if r is False:
                 return self.jsonify({"status": False, "data": api_info})
             api_no = api_info["api_no"]
-        return self.jsonify({"status": True, "location": "%s/info/?api_no=%s" % (url_prefix, api_no), "data": "success"})
+        return self.jsonify({"status": True, "location": "%s/info/?api_no=%s&update=" % (url_prefix, api_no),
+                             "data": "success"})
 
     put = post
 
