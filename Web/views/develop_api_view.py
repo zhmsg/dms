@@ -5,7 +5,8 @@
 import sys
 import re
 from functools import wraps
-from flask import render_template, request, redirect, url_for, jsonify, g
+from flask import request, jsonify, g
+from Tools.RenderTemplate import RenderTemplate
 from Web import api_url_prefix, create_blue, test_url_prefix, status_url_prefix
 from Web import control
 
@@ -15,7 +16,8 @@ sys.path.append('..')
 __author__ = 'Zhouheng'
 
 url_prefix = api_url_prefix
-html_dir = "/API_HELP"
+
+rt = RenderTemplate("API_HELP", url_prefix=url_prefix)
 
 
 develop_api_view = create_blue('develop_api_view', url_prefix=url_prefix)
@@ -43,8 +45,8 @@ def list_api():
     test_module_url = test_url_prefix + "/batch/"
     test_env_url = test_url_prefix + "/env/"
     module_url = url_prefix + "/module/"
-    return render_template("%s/List_API.html" % html_dir, url_prefix=url_prefix, test_module_url=test_module_url,
-                           test_env_url=test_env_url, module_url=module_url)
+    return rt.render("List_API.html", test_module_url=test_module_url, test_env_url=test_env_url,
+                     module_url=module_url)
 
 
 @develop_api_view.route("/module/", methods=["GET"])
@@ -100,14 +102,13 @@ def show_api():
     return_url = url_prefix + "/?module_no=%s" % api_info["basic_info"]["module_no"]
     if "update" in request.args:
         update_stage_url = url_prefix + "/stage/"
-        return render_template("%s/Update_API.html" % html_dir, api_info=api_info, api_no=api_no, return_url=return_url,
-                               url_prefix=url_prefix, update_stage_url=update_stage_url)
+        return rt.render("Update_API.html", api_info=api_info, api_no=api_no, return_url=return_url,
+                         update_stage_url=update_stage_url)
     test_url = url_prefix + "/test/?api_no=%s" % api_no
     batch_test_url = url_prefix + "/test/batch/?api_no=%s" % api_no
     status_url = status_url_prefix
-    return render_template("%s/Show_API.html" % html_dir, api_info=api_info, api_no=api_no, return_url=return_url,
-                           test_url=test_url, url_prefix=url_prefix, status_url=status_url,
-                           batch_test_url=batch_test_url)
+    return rt.render("Show_API.html", api_info=api_info, api_no=api_no, return_url=return_url, test_url=test_url,
+                     status_url=status_url, batch_test_url=batch_test_url)
 
 
 @develop_api_view.route("/basic/", methods=["GET"])
@@ -120,10 +121,9 @@ def new_api_page():
         if len(api_no) != 32:
             return "Bad api_no"
         api_info_url = url_prefix + "/info/?api_no=%s" % api_no
-        return render_template("%s/New_API.html" % html_dir, part_module=part_module, url_prefix=url_prefix,
-                               api_info_url=api_info_url)
+        return rt.render("New_API.html", part_module=part_module, api_info_url=api_info_url)
 
-    return render_template("%s/New_API.html" % html_dir, part_module=part_module, url_prefix=url_prefix)
+    return rt.render("New_API.html", part_module=part_module)
 
 
 @develop_api_view.route("/basic/", methods=["POST", "PUT"])
