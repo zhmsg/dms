@@ -33,7 +33,7 @@ def show():
             calc_role = True
         if market_role is False and upload_role is False and calc_role is False:
             return u"您没有权限查看"
-        return render_template("infoShow.html", data_info=data_info, user_name=current_user.account,
+        return render_template("infoShow.html", data_info=data_info, user_name=current_user.user_name,
                                market_role=market_role, upload_role=upload_role, calc_role=calc_role,
                                market_target=control.market_target, market_attribute=control.market_attribute,
                                market_attribute_ch=control.market_attribute_ch, upload_attribute=control.upload_attribute,
@@ -47,7 +47,7 @@ def show():
 @transport_view.route("/data/", methods=["POST"])
 def new_data():
     try:
-        result, message = control.new_data(current_user.role, current_user.account)
+        result, message = control.new_data(current_user.role, current_user.user_name)
         if result is False:
             return message
         return redirect(url_for("transport_view.show"))
@@ -64,7 +64,7 @@ def new_market():
         market_info = {}
         for att in control.market_attribute:
             market_info[att] = request_data[att]
-        result, message = control.new_market(data_no, market_info, current_user.account, current_user.role)
+        result, message = control.new_market(data_no, market_info, current_user.user_name, current_user.role)
         if result is False:
             return message
         return redirect(url_for("transport_view.show"))
@@ -94,7 +94,7 @@ def new_upload():
         upload_info = {}
         for att in control.upload_attribute:
             upload_info[att] = request_data[att]
-        result, message = control.new_upload(data_no, upload_info, current_user.account, current_user.role)
+        result, message = control.new_upload(data_no, upload_info, current_user.user_name, current_user.role)
         if result is False:
             return message
         return redirect(url_for("transport_view.show"))
@@ -125,7 +125,7 @@ def new_calc():
         calc_info = {}
         for att in control.calc_attribute:
             calc_info[att] = request_data[att]
-        result, message = control.new_calc(data_no, calc_info, current_user.account, current_user.role)
+        result, message = control.new_calc(data_no, calc_info, current_user.user_name, current_user.role)
         if result is False:
             return message
         return redirect(url_for("transport_view.show"))

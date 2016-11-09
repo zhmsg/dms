@@ -57,23 +57,23 @@ dms_scheduler.add_listener(err_listener)
 
 
 class User(UserMixin):
-    account = ""
+    user_name = ""
 
     def get_id(self):
-        return self.account
+        return self.user_name
 
 login_manager = LoginManager()
 login_manager.session_protection = 'strong'
 
 
 @login_manager.user_loader
-def load_user(account):
+def load_user(user_name):
     user = User()
-    user.account = account
+    user.user_name = user_name
     if "role" in session:
         user.role = session["role"]
     else:
-        select_sql = "SELECT role FROM sys_user WHERE user_name='%s';" % account
+        select_sql = "SELECT role FROM sys_user WHERE user_name='%s';" % user_name
         print(select_sql)
         result = db.execute(select_sql)
         if result > 0:

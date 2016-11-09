@@ -40,7 +40,7 @@ def show_module_list():
             new_right = False
         return render_template("%s/right_module.html" % html_dir, module_list=info, url_prefix=url_prefix,
                                module_role_info=module_role_info, action_list=action_list, new_right=new_right,
-                               user_name=current_user.account, module_role_dict=module_role_dict)
+                               user_name=current_user.user_name, module_role_dict=module_role_dict)
     return render_template("%s/right_module.html" % html_dir, module_list=info, url_prefix=url_prefix)
 
 
@@ -55,7 +55,7 @@ def new_action_role():
     module_no = int(find_module[0])
     action_desc = request.form["action_desc"]
     min_role = request.form["min_role"]
-    result, info = control.new_right_action(current_user.account, current_user.role, module_no, action_desc, min_role)
+    result, info = control.new_right_action(current_user.user_name, current_user.role, module_no, action_desc, min_role)
     if result is False:
         return info
     return redirect(ref_url)
@@ -66,7 +66,7 @@ def del_action_role(action_no):
     if "Referer" not in request.headers:
         return "Bad Request"
     ref_url = request.headers["Referer"]
-    result, info = control.delete_right_action(current_user.account, current_user.role, action_no)
+    result, info = control.delete_right_action(current_user.user_name, current_user.role, action_no)
     if result is False:
         return info
     return redirect(ref_url)

@@ -57,7 +57,7 @@ def new_module():
     request_data = request.json
     module_title = request_data["module_title"]
     module_desc = request_data["module_desc"]
-    result, info = control.new_service_module(current_user.account, current_user.role, module_title, module_desc)
+    result, info = control.new_service_module(current_user.user_name, current_user.role, module_title, module_desc)
 
     return jsonify({"status": result, "data": info})
 
@@ -74,7 +74,7 @@ def new_fun_info():
     service_id = request_data["service_id"]
     sub_module_title = request_data["sub_module_title"]
     sub_module_desc = request_data["sub_module_desc"]
-    result, info = control.new_function_module(current_user.account, current_user.role, service_id,
+    result, info = control.new_function_module(current_user.user_name, current_user.role, service_id,
                                                sub_module_title, sub_module_desc)
     return jsonify({"status": result, "data": info})
 
@@ -93,7 +93,7 @@ def new_status():
     type_id = int(request_data["type_id"])
     error_id = int(request_data["error_id"])
     error_desc = request_data["error_desc"]
-    result, new_info = control.new_api_status(current_user.account, current_user.role, service_id, fun_id, type_id,
+    result, new_info = control.new_api_status(current_user.user_name, current_user.role, service_id, fun_id, type_id,
                                               error_id, error_desc)
     if result is False:
         return new_info
@@ -110,7 +110,7 @@ def new_status():
 @develop_status_view.route("/remove/", methods=["GET"])
 def remove_status_code():
     status_code = int(request.args["status_code"])
-    result, info = control.delete_api_status(current_user.account, current_user.role, status_code)
+    result, info = control.delete_api_status(current_user.user_name, current_user.role, status_code)
     if result is False:
         return info
     return redirect("%s/?status=%s" % (url_prefix, status_code))
@@ -119,7 +119,7 @@ def remove_status_code():
 @develop_status_view.route("/remove/", methods=["DELETE"])
 def remove_status_code_d():
     status_code = int(request.json["status_code"])
-    result, info = control.delete_api_status(current_user.account, current_user.role, status_code)
+    result, info = control.delete_api_status(current_user.user_name, current_user.role, status_code)
     if result is False:
         return info
     return jsonify({"status": True, "data": request.json["status_code"]})
@@ -142,5 +142,5 @@ def new_mul_status():
     fun_id = int(request_data["fun_id"])
     error_info = request_data["error_info"]
     print(error_info)
-    result, info = control.new_mul_api_status(current_user.account, current_user.role, service_id, fun_id, error_info)
+    result, info = control.new_mul_api_status(current_user.user_name, current_user.role, service_id, fun_id, error_info)
     return jsonify({"status": result, "data": info})

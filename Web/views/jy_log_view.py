@@ -43,7 +43,7 @@ def show_log_list():
         search_account = request.args["account"]
     else:
         search_account = ""
-    result, info = control.look_jy_log(current_user.account, current_user.role, start_time, end_time, level=level,
+    result, info = control.look_jy_log(g.user_name, current_user.role, start_time, end_time, level=level,
                                        search_url=search_url, search_account=search_account)
     if result is False:
         return info
