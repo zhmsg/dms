@@ -3,9 +3,9 @@
 
 
 import sys
-from flask import render_template, request, jsonify, g
+from flask import request, jsonify, g
 from flask_login import login_required, current_user
-
+from Tools.RenderTemplate import RenderTemplate
 from Web import log_url_prefix as url_prefix, ip, my_email, company_ip_required, create_blue, status_url_prefix
 from Web import unix_timestamp, ip_str, current_env, dms_job
 from Web import control
@@ -14,8 +14,7 @@ sys.path.append('..')
 
 __author__ = 'Zhouheng'
 
-html_dir = "/LOG"
-
+rt = RenderTemplate("LOG", url_prefix=url_prefix)
 jy_log_view = create_blue('jy_log_view', url_prefix=url_prefix, auth_required=False)
 
 
@@ -49,9 +48,9 @@ def show_log_list():
     if result is False:
         return info
     log_records = info["log_records"]
-    return render_template("%s/Show_Log.html" % html_dir, log_list=log_records, url_prefix=url_prefix,
-                           log_level=control.jy_log.log_level, current_level=level, search_url=search_url,
-                           search_account=search_account, require=info["require"], status_url_prefix=status_url_prefix)
+    return rt.render("Show_Log.html", log_list=log_records, log_level=control.jy_log.log_level, current_level=level,
+                     search_url=search_url, search_account=search_account, require=info["require"],
+                     status_url_prefix=status_url_prefix)
 
 
 @jy_log_view.route("/login/", methods=["POST", "GET"])

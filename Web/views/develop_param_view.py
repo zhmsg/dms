@@ -3,9 +3,9 @@
 
 import re
 import sys
-from flask import render_template, request, redirect, jsonify, g
+from flask import request, jsonify, g
 from flask_login import current_user
-
+from Tools.RenderTemplate import RenderTemplate
 from Web import param_url_prefix as url_prefix, create_blue, control
 
 sys.path.append('..')
@@ -13,7 +13,7 @@ sys.path.append('..')
 __author__ = 'Zhouheng'
 
 html_dir = "/Param"
-
+rt = RenderTemplate("Param", url_prefix=url_prefix)
 develop_param_view = create_blue('develop_param_view', url_prefix=url_prefix)
 
 
@@ -30,7 +30,7 @@ def show_param_info_func():
         g.role_level = 2
     else:
         g.role_level = 3
-    return render_template("%s/Param_Info.html" % html_dir)
+    return rt.render("Param_Info.html")
 
 
 @develop_param_view.route("/", methods=["POST", "PUT"])

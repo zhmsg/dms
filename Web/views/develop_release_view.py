@@ -4,7 +4,8 @@
 
 import sys
 from datetime import datetime, timedelta
-from flask import render_template, request, jsonify, g
+from flask import request, jsonify, g
+from Tools.RenderTemplate import RenderTemplate
 from Web import release_url_prefix as url_prefix, create_blue, user_blacklist, dms_scheduler, current_env, dms_job
 from Web import control
 
@@ -13,9 +14,8 @@ sys.path.append('..')
 
 __author__ = 'Zhouheng'
 
-html_dir = "/Release"
 
-
+rt = RenderTemplate("Release", url_prefix=url_prefix)
 develop_release_view = create_blue('develop_release_view', url_prefix=url_prefix)
 
 
@@ -42,7 +42,7 @@ def before_request():
 @develop_release_view.route("/", methods=["GET"])
 def index_func():
     context = {"url_task_list": url_prefix + "/task/"}
-    return render_template("%s/Release_Main.html" % html_dir, **context)
+    return rt.render("Release_Main.html", **context)
 
 
 def run_task(release_no):

@@ -7,7 +7,8 @@ import os
 import json
 import re
 from functools import wraps
-from flask import render_template, request, jsonify, g
+from flask import request, jsonify, g
+from Tools.RenderTemplate import RenderTemplate
 from Web import test_url_prefix, api_url_prefix, status_url_prefix, data_dir, create_blue
 from Web import control
 
@@ -22,7 +23,7 @@ case_dir = "%s/test_case" % data_dir
 if os.path.isdir(case_dir) is False:
     os.mkdir(case_dir)
 
-
+rt = RenderTemplate("API_HELP", url_prefix=url_prefix)
 develop_test_view = create_blue('develop_test_view', url_prefix=url_prefix)
 
 
@@ -79,9 +80,9 @@ def test_api_page():
             url_param_info.append({"param_type": param_sp[0], "param_name": param_sp[1], "origin_param": "<%s>" % param})
         else:
             url_param_info.append({"param_type": "string", "param_name": param_sp[0], "origin_param": "<%s>" % param})
-    return render_template("%s/Test_API.html" % html_dir, api_info=api_info, api_no=api_no, status_url=status_url,
-                           url_param_info=url_param_info, module_test_env=module_test_env, test_case_url=test_case_url,
-                           api_info_url=api_info_url, new_right=new_right, api_output_url=api_output_url)
+    return rt.render("%Test_API.html", api_info=api_info, api_no=api_no, status_url=status_url,
+                     url_param_info=url_param_info, module_test_env=module_test_env, test_case_url=test_case_url,
+                     api_info_url=api_info_url, new_right=new_right, api_output_url=api_output_url)
 
 
 @develop_test_view.route("/batch/", methods=["GET"])
@@ -102,10 +103,9 @@ def batch_test_api_page():
     test_url = url_prefix + "/"
     env_info_url = url_prefix + "/env/"
     module_api_url = api_url_prefix + "/module/"
-    return render_template("%s/Batch_Test_API.html" % html_dir, api_no=api_no, status_url=status_url,
-                           test_case_url=test_case_url, test_url=test_url, api_info_url=api_info_url,
-                           env_info_url=env_info_url, module_api_url=module_api_url, module_no=module_no,
-                           api_url_prefix=api_url_prefix)
+    return rt.render("Batch_Test_API.html", api_no=api_no, status_url=status_url, test_case_url=test_case_url,
+                     test_url=test_url, api_info_url=api_info_url, env_info_url=env_info_url,
+                     module_api_url=module_api_url, module_no=module_no, api_url_prefix=api_url_prefix)
 
 
 @develop_test_view.route("/env/", methods=["GET"])
