@@ -80,7 +80,7 @@ def test_api_page():
             url_param_info.append({"param_type": param_sp[0], "param_name": param_sp[1], "origin_param": "<%s>" % param})
         else:
             url_param_info.append({"param_type": "string", "param_name": param_sp[0], "origin_param": "<%s>" % param})
-    return rt.render("%Test_API.html", api_info=api_info, api_no=api_no, status_url=status_url,
+    return rt.render("Test_API.html", api_info=api_info, api_no=api_no, status_url=status_url,
                      url_param_info=url_param_info, module_test_env=module_test_env, test_case_url=test_case_url,
                      api_info_url=api_info_url, new_right=new_right, api_output_url=api_output_url)
 
