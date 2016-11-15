@@ -3,11 +3,14 @@
  */
 
 function init_ticket_signature(){
-    var ticket_url = "https://gene.ac/wx/ticket/signature/";
-    var request_data = {"ref_url": location.href}
+    var ticket_url = "http://wx.gene.ac/wx/ticket/signature/";
+    var request_data = {"ref_url": location.href};
     my_async_request(ticket_url, "POST", request_data, init_wx)
 }
 
+function pay(){
+    wx.startRecord();
+}
 
 function init_wx(data){
     if(data.status % 1000 !=  1){
@@ -23,9 +26,14 @@ function init_wx(data){
         nonceStr: sign_info.nonceStr,
         signature: sign_info.signature
     });
+    wx.ready(function(){
+        alert("success");
+    });
+    wx.error(function(res){
+       alert(res);
+    });
 }
 
 $(function(){
     init_ticket_signature();
-   alert("success");
 });
