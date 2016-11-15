@@ -11,7 +11,7 @@ __author__ = 'Zhouheng'
 
 
 rt = RenderTemplate("Pay", url_prefix=url_prefix)
-pay_view = create_blue('pay_view', url_prefix=url_prefix)
+pay_view = create_blue('pay_view', url_prefix=url_prefix, auth_required=False)
 
 
 @pay_view.route("/", methods=["GET"])
