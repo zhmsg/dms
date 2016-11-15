@@ -24,7 +24,8 @@ function init_wx(data){
         appId:sign_info.app_id,
         timestamp: sign_info.timestamp,
         nonceStr: sign_info.nonceStr,
-        signature: sign_info.signature
+        signature: sign_info.signature,
+        jsApiList:['startRecord', 'getNetworkType', 'chooseWXPay']
     });
     wx.ready(function(){
         alert("success");
