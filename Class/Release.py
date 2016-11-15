@@ -88,8 +88,8 @@ class ReleaseManager:
         if result is False:
             return False, user_list
         for user_info in user_list:
-            self.wx.send_status(u"后台开发", "ochiws2EiR0cq3qzXYjQkw0m9jdE", "Test", msg)
-            break
+            # self.wx.send_status(u"后台开发", "ochiws2EiR0cq3qzXYjQkw0m9jdE", "Test", msg)
+            # break
             if user_info["groupid"] == 100:
                 self.wx.send_status(u"后台开发", user_info["openid"], "Test", msg)
             elif user_info["groupid"] == 101:
