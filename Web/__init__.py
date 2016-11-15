@@ -101,6 +101,7 @@ tools_url_prefix = "/tools"
 release_url_prefix = "/dev/release"
 github_url_prefix = "/github"
 chat_url_prefix = "/chat"
+pay_url_prefix = "/wx/pay"
 
 data_dir = "/ossdata/dmsdata"
 

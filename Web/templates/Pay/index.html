@@ -1,0 +1,9 @@
+{% extends "base_menu.html" %}
+
+{% block title %}微信支付{% endblock %}
+
+{% block center_content %}
+    <li><button onclick='send()' class="btn btn-primary" >付款</button></li>
+
+    {{ 'http://res.wx.qq.com/open/js/jweixin-1.0.0.js' | make_static_html | safe }}
+{% endblock %}

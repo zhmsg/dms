@@ -39,8 +39,12 @@ def make_default_static_url(filename):
 
 
 def make_static_html(filename):
-    src = make_static_url(filename)
-    default_src = make_default_static_url(filename)
+    if filename.startswith("http"):
+        src = filename
+        default_src = filename
+    else:
+        src = make_static_url(filename)
+        default_src = make_default_static_url(filename)
     if filename.endswith(".js"):
         html_s = "<script type=\"text/javascript\" src=\"%s\" onerror=\"this.src='%s'\"></script>" % (src, default_src)
     else:
