@@ -2,9 +2,10 @@
  * Created by msg on 11/15/16.
  */
 
-function init_ticket(){
-    var ticket_url = "https://gene.ac/wx/ticket/";
-    my_async_request(ticket_url, "GET", null, init_wx)
+function init_ticket_signature(){
+    var ticket_url = "https://gene.ac/wx/ticket/signature/";
+    var request_data = {"ref_url": location.href}
+    my_async_request(ticket_url, "POST", request_data, init_wx)
 }
 
 
@@ -13,20 +14,18 @@ function init_wx(data){
         console.info(data);
         return false;
     }
-    var ticket = data.data;
-    console.info(ticket);
-    var timestamp = Date.parse(new Date()) / 1000;
-    var nonceStr = "oiwefsdsrkljalwr23wrfs";
-    console.info(timestamp);
+    var sign_info = data.data;
+    console.info(sign_info);
     wx.config({
         debug:true,
-        appId:"wx6b30be0bc9149832",
-        timestamp: timestamp,
-        nonceStr: nonceStr
+        appId:sign_info.app_id,
+        timestamp: sign_info.timestamp,
+        nonceStr: sign_info.nonceStr,
+        signature: sign_info.signature
     });
 }
 
 $(function(){
-    init_ticket();
+    init_ticket_signature();
    alert("success");
 });
