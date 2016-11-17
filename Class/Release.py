@@ -46,7 +46,7 @@ class ReleaseManager:
         self.wx = WeiXinManager(wx_service)
 
     def new_release_task(self, user_name, reason, restart_service, reason_desc):
-        return False, "领导禁止重启"
+        # return False, "领导禁止重启"
         release_time = datetime.now() - self.basic_time
         release_no = release_time.seconds / 3600 + release_time.days * 24
         status_info = "%s1" % int(time())
