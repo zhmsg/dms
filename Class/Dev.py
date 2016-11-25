@@ -21,8 +21,10 @@ class DevManager:
         self.db = DB()
         if env == "Development":
             service_mysql = "192.168.120.2"
+            self.data_db_name = "clinic_basic"
         else:
             service_mysql = "rdsikqm8sr3rugdu1muh3.mysql.rds.aliyuncs.com"
+            self.data_db_name = "clinic"
         self.service_db = DB(host=service_mysql, mysql_user="gener", mysql_password="gene_ac252", mysql_db="information_schema")
         self.auth_role = "auth_role"
         self.operate_role = "operate_role"
@@ -45,8 +47,8 @@ class DevManager:
             return False, error_message
 
     def list_table(self):
-        sql = "SELECT TABLE_NAME, CREATE_TIME,TABLE_COMMENT FROM TABLES WHERE TABLE_SCHEMA='clinic' AND TABLE_TYPE='BASE TABLE';"
-        self.service_db.execute(sql)
+        sql = "SELECT TABLE_NAME, CREATE_TIME,TABLE_COMMENT FROM TABLES WHERE TABLE_SCHEMA=%s AND TABLE_TYPE='BASE TABLE';"
+        self.service_db.execute(sql, args=[self.data_db_name])
         table_list = []
         for item in self.service_db.fetchall():
             table_list.append({"table_name": item[0], "create_time": item[1], "table_comment": item[2]})
