@@ -56,8 +56,8 @@ class DevManager:
 
     def get_table_info(self, table_name):
         sql = "SELECT COLUMN_NAME, COLUMN_TYPE,COLUMN_KEY,COLUMN_DEFAULT,EXTRA,COLUMN_COMMENT,IS_NULLABLE " \
-              "FROM columns WHERE TABLE_NAME='%s';" % table_name
-        self.service_db.execute(sql)
+              "FROM columns WHERE TABLE_NAME=%s AND TABLE_SCHEMA=%s;"
+        self.service_db.execute(sql, args=[table_name, self.data_db_name])
         column_info = []
         for item in self.service_db.fetchall():
             column_info.append({"column_name": item[0], "column_type": item[1], "column_key": item[2],

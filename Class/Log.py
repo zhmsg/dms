@@ -18,9 +18,11 @@ class LogManager:
     def __init__(self):
         if env == "Development":
             service_mysql = "192.168.120.2"
+            self.data_db_name = "clinic_basic"
         else:
             service_mysql = "rdsikqm8sr3rugdu1muh3.mysql.rds.aliyuncs.com"
-        self.db = DB(host=service_mysql, mysql_user="gener", mysql_password="gene_ac252", mysql_db="clinic")
+            self.data_db_name = "clinic"
+        self.db = DB(host=service_mysql, mysql_user="gener", mysql_password="gene_ac252", mysql_db=self.data_db_name)
         self.local_db = DB()
         self.api_log = "api_log"
         self.login_server = "login_server"
