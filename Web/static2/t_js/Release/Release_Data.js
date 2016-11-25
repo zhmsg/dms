@@ -25,11 +25,9 @@ function save_task()
 {
     $("#btn_add_task").attr("disabled", "disabled");
     var reason = $("#request_reaseon").val();
-    var reason_desc = $("#request_reaseon_desc").val();
     var restart_service = $("#request_service").val();
     var request_data = new Object();
     request_data["reason"] = reason;
-    request_data["reason_desc"] = reason_desc;
     request_data["restart_service"] = restart_service;
     var url_task = $("#url_task_list").val();
     my_async_request(url_task, "POST", request_data, request_task_list);

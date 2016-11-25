@@ -128,8 +128,8 @@ class ReleaseManager:
             run('cat /tmp/web_gunicorn_test.pid >> service.pid')
         self.web_task.update_scheduler_status(int(time()), "system", "restart ih web")
 
-    def _release_api(self, user_name, release_no, reason, reason_desc):
-        reason_desc = u"%s 重启API测试环境 %s\n%s\n" % (user_name, reason, reason_desc)
+    def _release_api(self, user_name, release_no, reason):
+        reason_desc = u"%s 重启API测试环境 %s\n" % (user_name, reason)
         wx_msg = reason_desc
         # 获得提交的pull request信息
         result, pull_requests = self.select_api_pull_request()
@@ -150,8 +150,8 @@ class ReleaseManager:
         self.send_wx_msg(wx_msg)
         return True, "success"
 
-    def _release_web(self, user_name, release_no, reason, reason_desc):
-        reason_desc = u"%s 重启WEB测试环境 %s\n%s\n" % (user_name, reason, reason_desc)
+    def _release_web(self, user_name, release_no, reason):
+        reason_desc = u"%s 重启WEB测试环境 %s\n" % (user_name, reason)
         wx_msg = reason_desc
         # 获得提交的pull request信息
         result, pull_requests = self.select_web_pull_request()
@@ -172,8 +172,8 @@ class ReleaseManager:
         self.send_wx_msg(wx_msg)
         return True, "success"
 
-    def _release_ih(self, user_name, release_no, reason, reason_desc):
-        reason_desc = u"%s 重启API&WEB测试环境 %s\n%s\n" % (user_name, reason, reason_desc)
+    def _release_ih(self, user_name, release_no, reason):
+        reason_desc = u"%s 重启API&WEB测试环境 %s\n" % (user_name, reason)
         wx_msg = reason_desc
         # 获得提交的pull request信息
         result, pull_requests = self.select_web_pull_request()
@@ -217,16 +217,15 @@ class ReleaseManager:
         restart_service = info[0]["restart_service"]
         user_name = info[0]["user_name"]
         reason = info[0]["reason"]
-        reason_desc = info[0]["reason_desc"]
         print("start run release %s" % release_no)
         self.update_release_task(release_no, True)
 
         if restart_service == 0:
-            return self._release_ih(user_name, release_no, reason, reason_desc)
+            return self._release_ih(user_name, release_no, reason)
         elif restart_service == 1:
-            return self._release_api(user_name, release_no, reason, reason_desc)
+            return self._release_api(user_name, release_no, reason)
         elif restart_service == 2:
-            return self._release_web(user_name, release_no, reason, reason_desc)
+            return self._release_web(user_name, release_no, reason)
         else:
             return False, "invalid restart service code"
 

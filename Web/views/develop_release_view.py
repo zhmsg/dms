@@ -71,7 +71,7 @@ def system_auto_release():
 def new_task():
     request_data = request.json
     reason = request_data["reason"]
-    reason_desc = request_data["reason_desc"]
+    reason_desc = ""
     restart_service = int(request_data["restart_service"])
     result, info = control.new_task(g.user_name, g.user_role, u"修复BUG", restart_service, reason_desc)
     if result is True:
