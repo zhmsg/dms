@@ -125,6 +125,11 @@ function table_add_col()
     $("#sign").val("2");
 }
 
+function backup_table(){
+    var table_name = $("#p_table_name").text().substr(3);
+    console.info(table_name);
+    my_async_request("/dev/data/table/backup/", "POST", {"t_name": table_name});
+}
 
 $(function() {
     $("#btn_produce_sql").click(produce_alter_sql);

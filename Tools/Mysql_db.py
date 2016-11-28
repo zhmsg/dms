@@ -3,6 +3,8 @@
 
 import MySQLdb
 import json
+
+import os
 from Tools import env
 
 __author__ = 'zhouheng'
@@ -101,6 +103,14 @@ class DB(object):
     def fetchall(self):
         all_item = self.cursor.fetchall()
         return all_item
+
+    def backup_table(self, t_name, sql_path, db=None):
+        if db is None:
+            db = self.db
+        backup_cmd = "mysqldump -h%s -u%s -p%s --skip-lock-tables %s %s >> %s" % (self.host, self.mysql_user,
+                                                                                  self.mysql_password, db, t_name,
+                                                                                  sql_path)
+        os.system(backup_cmd)
 
     def close(self):
         if self.cursor:

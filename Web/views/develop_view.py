@@ -3,17 +3,18 @@
 
 
 import sys
-from flask import render_template, request
+from flask import render_template, request, g, jsonify
 from flask_login import current_user
 
 from Web import dev_url_prefix, create_blue
-from Web import control
+from Web import control, data_dir
 
 sys.path.append('..')
 
 __author__ = 'Zhouheng'
 
 html_dir = "/Dev"
+backup_dir = "%s/back_table" % data_dir
 url_prefix = dev_url_prefix
 
 develop_view = create_blue('develop_view', url_prefix=url_prefix)
@@ -47,3 +48,11 @@ def show_data_table():
         query_str = request.args["query"]
     return render_template("%s/data_table.html" % html_dir, table_list=table_list, column_info=column_info,
                            select_table=select_table, query_str=query_str, url_prefix=url_prefix)
+
+
+@develop_view.route("/data/table/backup/", methods=["POST"])
+def backup_table_func():
+    t_name = request.json["t_name"]
+    sql_path = "%s/%s.sql.backup" % (backup_dir, t_name)
+    result, info = control.backup_table(g.user_name, g.user_role, t_name, sql_path)
+    return jsonify({"status": result, "data": info})

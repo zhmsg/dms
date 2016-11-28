@@ -229,6 +229,9 @@ class ControlManager:
         result, info = self.dev.del_right_action(user_name, action_no)
         return result, info
 
+    def backup_table(self, user_name, role, t_name, sql_path):
+        return self.dev.backup_table(t_name, sql_path)
+
     def send_email(self, sub, data_no, info, attribute, attribute_ch):
         print("strart send email to %s" % self.manger_email)
         content = sub + "<br>"

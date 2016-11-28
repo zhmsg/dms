@@ -120,3 +120,7 @@ class DevManager:
                      % (self.right_action_role, del_time, action_no, adder)
         self.db.execute(delete_sql)
         return True, "success"
+
+    def backup_table(self, t_name, sql_path):
+        self.service_db.backup_table(t_name, sql_path, self.data_db_name)
+        return True, "success"
