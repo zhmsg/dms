@@ -126,3 +126,9 @@ class DevManager:
     def backup_table(self, t_name, sql_path):
         self.service_db.backup_table(t_name, sql_path, self.data_db_name)
         return True, sql_path
+
+    def register_backup_task(self):
+        user_name = "system"
+        reason = "备份线上数据表"
+        reason_desc = "每天0：30，备份线上数据表。"
+        return self.backup_task.register_new_task(user_name=user_name, reason=reason, reason_desc=reason_desc)

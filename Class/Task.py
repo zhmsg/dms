@@ -13,7 +13,7 @@ __author__ = 'ZhouHeng'
 TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 
 
-class TaskManager:
+class TaskManager(object):
 
     def __init__(self, task_type):
         self.db = DB()

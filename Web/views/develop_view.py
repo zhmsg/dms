@@ -7,7 +7,7 @@ from flask import render_template, request, g, jsonify
 from flask_login import current_user
 
 from Web import dev_url_prefix, create_blue
-from Web import control, data_dir
+from Web import control, data_dir, dms_job
 
 sys.path.append('..')
 
@@ -56,3 +56,16 @@ def backup_table_func():
     sql_path = "%s/%s.sql.backup" % (backup_dir, t_name)
     result, info = control.backup_table(g.user_name, g.user_role, t_name, sql_path)
     return jsonify({"status": result, "data": info})
+
+
+# 每天0：30，备份线上数据表。
+def backup_func():
+    result, info = control.register_backup_task()
+    if result is False:
+        print("register login task fail")
+        return
+    print("start run login task %s" % info["task_no"])
+
+    print("backup success")
+
+dms_job.append({"func": "%s:backup_func" % __name__, "trigger": "cron", "id": "backup_table", "hour": 0, "minute": "30"})
