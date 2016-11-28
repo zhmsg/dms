@@ -123,4 +123,4 @@ class DevManager:
 
     def backup_table(self, t_name, sql_path):
         self.service_db.backup_table(t_name, sql_path, self.data_db_name)
-        return True, "success"
+        return True, sql_path
