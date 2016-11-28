@@ -62,10 +62,19 @@ def backup_table_func():
 def backup_func():
     result, info = control.register_backup_task()
     if result is False:
-        print("register login task fail")
+        print("register backup fail")
         return
-    print("start run login task %s" % info["task_no"])
-
+    print("start run backup table task %s" % info["task_no"])
+    allow_t = ["collect_variant", "health_examination_result", "health_examination_result_v3", "health_gift_result",
+               "health_gift_result_v3", "health_report_survey", "health_survey_report", "health_survey_result",
+               "log_project", "patient_info", "patient_test", "project_user_right", "sample_group", "sample_info",
+               "sample_phenotype", "sample_report", "sample_user_right", "sys_patients", "sys_project_sample",
+               "sys_projects", "sys_samples", "sys_users", "target_ratio_detail", "task_collect_variant", "test_value",
+               "user_config", "user_geneset", "user_info", "user_task_list", "user_template", "variant_data_nums",
+               "variant_data_pic", "variant_md5", "variant_remark"]
+    for t_name in allow_t:
+        sql_path = "%s/%s.sql.backup" % (backup_dir, t_name)
+        control.backup_table("system", 0, t_name, sql_path)
     print("backup success")
 
-dms_job.append({"func": "%s:backup_func" % __name__, "trigger": "cron", "id": "backup_table", "hour": 0, "minute": "30"})
+dms_job.append({"func": "%s:backup_func" % __name__, "trigger": "cron", "id": "backup_table", "day_of_week": "0-4", "hour": 0, "minute": 10})
