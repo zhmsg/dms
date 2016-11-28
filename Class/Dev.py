@@ -9,6 +9,7 @@ from Tools.Mysql_db import DB
 from Check import check_sql_character
 from time import time
 from Class import env
+from Task import DayTaskManager
 
 temp_dir = tempfile.gettempdir()
 
@@ -31,6 +32,7 @@ class DevManager:
         self.right_module = "right_module"
         self.right_module_role = "right_module_role"
         self.right_action_role = "right_action_role"
+        self.backup_task = DayTaskManager(5)
 
     def get_operate_auth(self):
         try:

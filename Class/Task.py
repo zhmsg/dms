@@ -2,12 +2,15 @@
 # coding: utf-8
 
 import sys
+from datetime import datetime, timedelta
 from time import time
 sys.path.append("..")
 from Tools.Mysql_db import DB
 
 
 __author__ = 'ZhouHeng'
+
+TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
 
 
 class TaskManager:
@@ -81,3 +84,25 @@ class TaskManager:
         for i in range(len(cols)):
             info[cols[i]] = db_r[i]
         return True, info
+
+
+class DayTaskManager(TaskManager):
+
+    basic_time = datetime.strptime("2016-11-27 00:00:00", TIME_FORMAT)
+
+    def __init__(self, task_type):
+        super(DayTaskManager, self).__init__(task_type)
+        pass
+
+    @staticmethod
+    def current_task_no():
+        pass_time = datetime.now() - DayTaskManager.basic_time
+        pass_days = int(pass_time.total_seconds() / 86400)
+        return pass_days
+
+    @staticmethod
+    def task_no_2_str(task_no):
+        return (DayTaskManager.basic_time + timedelta(hours=task_no)).strftime(TIME_FORMAT)
+
+    def register_new_task(self, user_name, reason, reason_desc):
+        return super(DayTaskManager, self).register_new_task(self.current_task_no(), user_name, reason, reason_desc)
