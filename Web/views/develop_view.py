@@ -7,7 +7,7 @@ from flask import render_template, request, g, jsonify
 from flask_login import current_user
 
 from Web import dev_url_prefix, create_blue
-from Web import control, data_dir, dms_job
+from Web import control, data_dir, dms_job, current_env
 
 sys.path.append('..')
 
@@ -60,6 +60,9 @@ def backup_table_func():
 
 # 每天0：30，备份线上数据表。
 def backup_func():
+    if current_env != "Production":
+        print("Not Production")
+        return
     result, info = control.register_backup_task()
     if result is False:
         print("register backup fail")
@@ -73,8 +76,8 @@ def backup_func():
                "user_config", "user_geneset", "user_info", "user_task_list", "user_template", "variant_data_nums",
                "variant_data_pic", "variant_md5", "variant_remark"]
     for t_name in allow_t:
-        sql_path = "%s/%s.sql.backup" % (backup_dir, t_name)
+        sql_path = "%s/%s_%s.sql.backup" % (backup_dir, current_env, t_name)
         control.backup_table("system", 0, t_name, sql_path)
     print("backup success")
 
-dms_job.append({"func": "%s:backup_func" % __name__, "trigger": "cron", "id": "backup_table", "day_of_week": "0-4", "hour": 0, "minute": 10})
+dms_job.append({"func": "%s:backup_func" % __name__, "trigger": "cron", "id": "backup_table", "day_of_week": "0-4", "hour": 8, "minute": 40})
