@@ -46,7 +46,6 @@
                 "col_type": "int(11)"
             },
             {
-                "pri_key": true,
                 "col_comment": "任务最新状态",
                 "col_name": "task_status",
                 "col_type": "bigint(20)"

@@ -82,7 +82,7 @@ class LogManager:
             require = {"start_time": run_begin, "end_time": run_end}
             where_sql = "log_no >= %s AND log_no <= %s AND level <> 'info'" % (run_begin, run_end)
         else:
-            log_no = int(info["task_status"])
+            log_no = long(info["task_status"])
             require = {"log_no": log_no}
             where_sql = "log_no > %s AND level <> 'info'" % log_no
         result, log_records = self._select_log(where_sql)
