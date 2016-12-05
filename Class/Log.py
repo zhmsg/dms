@@ -24,7 +24,7 @@ class LogManager:
             self.data_db_name = "clinic"
         self.db = DB(host=service_mysql, mysql_user="gener", mysql_password="gene_ac252", mysql_db=self.data_db_name)
         self.local_db = DB()
-        self.api_log = "api_log"
+        self.api_log = "api_log_2"
         self.login_server = "login_server"
         self.log_cols = ["log_no", "run_begin", "host", "url", "method", "account", "ip", "level", "info", "run_time"]
         self.login_cols = ["login_no", "server_ip", "server_name", "user_ip", "user_name", "login_time"]
@@ -55,7 +55,7 @@ class LogManager:
         if end_time is not None and end_time < run_end:
             run_end = end_time
             require["end_time"] = end_time
-        where_sql_list = ["run_begin>=%s " % run_begin, "run_begin<=%s " % run_end]
+        where_sql_list = ["log_no>=%s " % long(run_begin * 10000), "log_no<=%s " % long(run_end * 10000)]
         if level is not None:
             if level not in self.log_level:
                 return False, "Bad level"
@@ -77,10 +77,10 @@ class LogManager:
         if result is False:
             return False, info
         if info["task_status"] is None:
-            run_end = time()
-            run_begin = run_end - timedelta(days=1).total_seconds()
+            run_end = long(time() * 10000)
+            run_begin = long(run_end - timedelta(days=1).total_seconds() * 10000)
             require = {"start_time": run_begin, "end_time": run_end}
-            where_sql = "run_begin >= %s AND run_begin <= %s AND level <> 'info'" % (run_begin, run_end)
+            where_sql = "log_no >= %s AND log_no <= %s AND level <> 'info'" % (run_begin, run_end)
         else:
             log_no = int(info["task_status"])
             require = {"log_no": log_no}

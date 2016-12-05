@@ -49,7 +49,7 @@
                 "pri_key": true,
                 "col_comment": "任务最新状态",
                 "col_name": "task_status",
-                "col_type": "int(11)"
+                "col_type": "bigint(20)"
             },
             {
                 "col_comment": "更新最新状态帐号",
