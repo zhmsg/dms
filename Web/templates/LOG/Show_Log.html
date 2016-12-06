@@ -20,6 +20,7 @@
         <input class="box-side width300" id="url_prefix" onkeyup="update_search_url(0);" value="{{ search_url }}" placeholder="调用url"/>
         <input class="box-side width100" id="account" onkeyup="update_search_url(0);" value="{{ search_account }}" placeholder="调用账户"/>
         <a id="start_search"><button class="btn btn-primary" id="btn_new">搜索</button></a>
+        <a href="{{ query_url }}"><button class="btn btn-primary">精确搜索</button></a>
     </div>
     <div style="position: relative">
     <table class="table table-bordered table-hover api-list-table">
