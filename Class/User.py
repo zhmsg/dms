@@ -50,7 +50,7 @@ class UserManager:
             "status_code_del": {"role_desc": u"删除", "role_value": 131072},
             "status_code_module": {"role_desc": u"新建模块", "role_value": 524288} } }
         self._log_role_desc = {"module_desc": u"晶云平台日志", "role_list":
-            {"log_query": {"role_desc": u"查看", "role_value": 268435456},
+            {"log_query": {"role_desc": u"查找", "role_value": 268435456},
              "log_look": {"role_desc": u"查看", "role_value": 262144},
              "log_receive": {"role_desc": u"接收", "role_value": 1048576} } }
         self._release_role_desc = {"module_desc": u"重新发布环境", "role_list":

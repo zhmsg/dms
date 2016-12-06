@@ -3,7 +3,7 @@
 
 
 import sys
-from flask import request, jsonify, g
+from flask import request, jsonify, g, redirect
 from flask_login import login_required, current_user
 from Tools.RenderTemplate import RenderTemplate
 from Web import log_url_prefix as url_prefix, ip, my_email, company_ip_required, create_blue, status_url_prefix
@@ -22,6 +22,8 @@ jy_log_view = create_blue('jy_log_view', url_prefix=url_prefix, auth_required=Fa
 @login_required
 @company_ip_required
 def show_log_list():
+    if g.user_role & control.role_value["log_look"] <= 0:
+        return redirect(url_prefix + "/query/")
     if "start_time" in request.args and request.args["start_time"] != "0":
         start_time = int(request.args["start_time"])
     else:
