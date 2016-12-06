@@ -45,6 +45,10 @@ class LogManager:
             log_records.append(log_item)
         return True, log_records
 
+    def select_log(self, log_no):
+        where_sql = "log_no=%s" % long(log_no)
+        return self._select_log(where_sql, limit_num=1)
+
     def show_log(self, start_time=None, end_time=None, level=None, search_url="", search_account=""):
         run_end = time()
         run_begin = run_end - timedelta(hours=1).total_seconds()

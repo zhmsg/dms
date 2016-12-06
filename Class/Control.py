@@ -748,6 +748,12 @@ class ControlManager:
     def get_daily_log(self):
         return self.jy_log.select_daily_log()
 
+    def get_one_log(self, user_name, role, log_no):
+        if role & self.role_value["log_look"] <=0:
+            return False, u"您没有权限"
+        result, info = self.jy_log.select_log(log_no)
+        return result, info
+
     def send_daily_log(self, template_html):
         result, user_list = self.user.get_role_user(self.role_value["log_receive"])
         subject = u"%s运行日志" % datetime.now().strftime(DATE_FORMAT_STR)
