@@ -53,6 +53,13 @@ def show_log_list():
                      status_url_prefix=status_url_prefix)
 
 
+@jy_log_view.route("/query/", methods=["GET"])
+@login_required
+@company_ip_required
+def query_one_log_page():
+    return rt.render("One_Log.html")
+
+
 @jy_log_view.route("/", methods=["POST"])
 @login_required
 @company_ip_required

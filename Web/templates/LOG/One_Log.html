@@ -1,0 +1,64 @@
+{% extends "base_menu.html" %}
+
+{% block title %}日志查询{% endblock %}
+
+
+{% block center_content %}
+    <br>
+    <div class="margin20 apiTest">
+        <div class="clear bottom20">
+            <span class="pull-left text-right width150">搜索日志编号：</span>
+            <input class="box-side width366" id="query_log_no"/>
+            <a id="start_search"><button class="btn btn-primary" id="btn_new">搜索</button></a>
+        </div>
+        <p>
+            <span class="pull-left text-right width150">日志编号：</span>
+            <input class="form-control bug-input" id="log_no" readonly/>
+        </p>
+
+        <p>
+            <span class="pull-left text-right width150">调用时间：</span>
+            <input class="form-control bug-input" id="run_begin" readonly/>
+        </p>
+
+        <p>
+            <span class="pull-left text-right width150">调用地址：</span>
+            <input class="form-control bug-input" id="request_url" readonly/>
+        </p>
+
+        <p>
+            <span class="pull-left text-right width150">调用账户：</span>
+            <input class="form-control bug-input" id="request_url" readonly/>
+        </p>
+
+        <p>
+            <span class="pull-left text-right width150">日志级别：</span>
+            <input class="form-control bug-input" id="request_url" readonly/>
+        </p>
+
+        <p>
+            <span class="pull-left text-right width150">运行时间：</span>
+            <input class="form-control bug-input" id="request_url" readonly/>
+        </p>
+
+        <p>
+            <span class="pull-left text-right width150">访问IP：</span>
+            <input class="form-control bug-input" id="request_url" readonly/>
+        </p>
+
+        <p>
+            <span class="pull-left text-right width150">请求信息：</span>
+            <textarea class="box-side bug-input" rows="12" id="module_desc" required></textarea>
+        </p>
+
+        <p>
+            <span class="pull-left text-right width150">错误信息：</span>
+            <textarea class="box-side bug-input" rows="5" id="module_desc" required></textarea>
+        </p>
+    </div>
+{% endblock %}
+
+{% block js_content %}
+    {{ 't_js/LOG/query_log.js' | make_static_html | safe }}
+{% endblock %}
+
