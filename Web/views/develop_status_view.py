@@ -22,7 +22,12 @@ develop_status_view = create_blue('develop_status_view', url_prefix=url_prefix)
 
 @develop_status_view.route("/", methods=["GET"])
 def show_status_info():
-    result, status_info = control.get_status(current_user.role)
+    if "log_no" in request.args:
+        result, status_info = control.get_status(current_user.role, log_no=request.args["log_no"])
+    else:
+        result, status_info = control.get_status(current_user.role)
+    if request.is_xhr:
+        return jsonify({"status": result, "data": status_info})
     if result is False:
         return status_info
     del_status_code_url = url_prefix + "/remove/"

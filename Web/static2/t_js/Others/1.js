@@ -34,7 +34,7 @@ $(document).ready(function () {
         var zhishu = 0.15939858 * calc_data["max_shibihoudu"] - 0.00294271 * calc_data["max_shibihoudu"] * calc_data["max_shibihoudu"] + 0.0259082 * calc_data["zuofangneijing"] + 0.00446131 * calc_data["yalijiecha"] + 0.4583082 * calc_data["cusijiazushi"] + 0.82639195 * calc_data["nsvt"] + 0.71650361 * calc_data["hunjue"] - 0.01799934 * calc_data["age"];
         calc_data["zhishu"] = zhishu;
         $("#zhishu").text(zhishu);
-        var kenengxing = 1 - Math.pow(0.998, zhishu);
+        var kenengxing = 1 - Math.pow(0.998, Math.pow(Math.E, zhishu));
         calc_data["kenengxing"] = kenengxing;
         $("#kenengxing").text(kenengxing);
         my_async_request2(location.href, "POST", calc_data, calc_result);
