@@ -730,7 +730,7 @@ class ControlManager:
 
     # 针对查看晶云平台运行日志
     def look_jy_log(self, user_name, role, start_time=None, end_time=None, level=None, search_url=None, search_account=None):
-        if role & self.role_value["log_look"] <=0:
+        if role & self.role_value["log_look"] <= 0:
             return False, u"您没有权限"
         result, info = self.jy_log.show_log(start_time=start_time, end_time=end_time, level=level,
                                             search_url=search_url, search_account=search_account)
@@ -749,8 +749,8 @@ class ControlManager:
         return self.jy_log.select_daily_log()
 
     def get_one_log(self, user_name, role, log_no):
-        if role & self.role_value["log_look"] <=0:
-            return False, u"您没有权限"
+        if role & self.role_value["log_query"] <= 0:
+            return False, "您没有权限"
         result, info = self.jy_log.select_log(log_no)
         return result, info
 
