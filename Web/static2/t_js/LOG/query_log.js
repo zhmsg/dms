@@ -51,4 +51,9 @@ $(document).ready(function(){
         var request_url = $("#url_prefix").val() + "/";
         my_async_request2(request_url, "POST", {"log_no": query_log_no}, load_log_info)
     });
+    var log_no = UrlArgsValue(location.href, "log_no");
+    if(log_no != null){
+        $("#query_log_no").val(log_no);
+        $("#btn_query_log").click();
+    }
 });

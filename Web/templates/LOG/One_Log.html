@@ -61,6 +61,7 @@
 
 {% block js_content %}
     {{ 't_js/LOG/query_log.js' | make_static_html | safe }}
+    {{ 't_js/Common/url_tool.js' | make_static_html | safe }}
     {{ 't_js/Common/my_ip.js' | make_static_html | safe }}
     {{ 't_js/Common/handler_data.js' | make_static_html | safe }}
 {% endblock %}
