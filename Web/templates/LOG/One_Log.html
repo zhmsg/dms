@@ -6,10 +6,11 @@
 {% block center_content %}
     <br>
     <div class="margin20 apiTest">
+        <input style="display: none" value="{{ url_prefix }}" id="url_prefix"/>
         <div class="clear bottom20">
             <span class="pull-left text-right width150">搜索日志编号：</span>
-            <input class="box-side width366" id="query_log_no"/>
-            <a id="start_search"><button class="btn btn-primary" id="btn_new">搜索</button></a>
+            <input class="box-side width366" id="query_log_no" placeholder="例如14809877400468" value="14809877400468"/>
+            <a id="start_search"><button class="btn btn-primary" id="btn_query_log">搜索</button></a>
         </div>
         <p>
             <span class="pull-left text-right width150">日志编号：</span>
@@ -28,32 +29,32 @@
 
         <p>
             <span class="pull-left text-right width150">调用账户：</span>
-            <input class="form-control bug-input" id="request_url" readonly/>
+            <input class="form-control bug-input" id="account" readonly/>
         </p>
 
         <p>
             <span class="pull-left text-right width150">日志级别：</span>
-            <input class="form-control bug-input" id="request_url" readonly/>
+            <input class="form-control bug-input" id="level" readonly/>
         </p>
 
         <p>
             <span class="pull-left text-right width150">运行时间：</span>
-            <input class="form-control bug-input" id="request_url" readonly/>
+            <input class="form-control bug-input" id="run_time" readonly/>
         </p>
 
         <p>
             <span class="pull-left text-right width150">访问IP：</span>
-            <input class="form-control bug-input" id="request_url" readonly/>
+            <input class="form-control bug-input" id="ip" readonly/>
         </p>
 
         <p>
             <span class="pull-left text-right width150">请求信息：</span>
-            <textarea class="box-side bug-input" rows="12" id="module_desc" required></textarea>
+            <textarea class="box-side bug-input" rows="12" id="request_info" required></textarea>
         </p>
 
         <p>
             <span class="pull-left text-right width150">错误信息：</span>
-            <textarea class="box-side bug-input" rows="5" id="module_desc" required></textarea>
+            <textarea class="box-side bug-input" rows="5" id="error_info" required></textarea>
         </p>
     </div>
 {% endblock %}
