@@ -18,3 +18,10 @@ class OthersManager(object):
         l = self.db.execute_insert(self.t_others_r, args=kwargs)
         return True, l
 
+    def select_others_info(self, other_type):
+        where_value = {"other_type": other_type}
+        cols = ["result_no", "other_type", "result_info", "insert_time"]
+        db_items = self.db.execute_select(self.t_others_r, where_value=where_value, cols=cols, package=True)
+        return True, db_items
+
+

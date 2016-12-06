@@ -43,6 +43,11 @@ def create_app():
                         res.headers["Location"] = pro + ":" + res.headers["Location"][5:]
                     elif location.startswith("/"):
                         res.headers["Location"] = "%s://%s%s" % (pro, request.headers["Host"], location)
+        if "download_file" in g:
+            try:
+                os.system("rm -rf %s" % g.download_file)
+            except Exception as e:
+                print(e)
         res.headers["Server"] = "JingYun Server"
         return res
 
