@@ -1,0 +1,30 @@
+[
+    {
+        "table_cols": [
+            {
+                "pri_key": true,
+                "auto_increment": true,
+                "col_comment": "主键 自增 无实际含义",
+                "col_name": "result_no",
+                "col_type": "int(11)"
+            },
+            {
+                "col_comment": "",
+                "col_name": "other_type",
+                "col_type": "int(11)"
+            },
+            {
+                "col_comment": "结果信息",
+                "col_name": "result_info",
+                "col_type": "text"
+            },
+            {
+                "col_comment": "插入时间",
+                "col_name": "insert_time",
+                "col_type": "int(11)"
+            }
+        ],
+        "table_comment": "保存一些结果信息",
+        "table_name": "others_result"
+    }
+]
