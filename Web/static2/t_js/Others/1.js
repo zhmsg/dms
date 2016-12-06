@@ -9,6 +9,8 @@ function calc_result(data){
 $(document).ready(function () {
     $("#reset").click(function () {
         $("input").val("");
+        $("#zhishu").text("");
+        $("#kenengxing").text("");
     });
     $("input").keyup(function () {
         var v = this.value;
