@@ -48,9 +48,10 @@ def show_log_list():
     if result is False:
         return info
     log_records = info["log_records"]
+    query_url = url_prefix + "/query/"
     return rt.render("Show_Log.html", log_list=log_records, log_level=control.jy_log.log_level, current_level=level,
                      search_url=search_url, search_account=search_account, require=info["require"],
-                     status_url_prefix=status_url_prefix)
+                     status_url_prefix=status_url_prefix, query_url=query_url)
 
 
 @jy_log_view.route("/query/", methods=["GET"])

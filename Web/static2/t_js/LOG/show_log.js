@@ -123,14 +123,18 @@ $(function(){
         update_search_url(0);
     });
     $("td[class$='Bg']").click(function() {
-        var info = this.parentNode.title;
-        var result = info.match(/"status": (\d+)/i);
-        if(result != null)
-        {
-            var status = result[1];
-            var status_url = $("#status_url_prefix").val() + "/?status=" + status;
-            window.open(status_url);
-        }
+        var log_no = this.parentNode.id.substr(4);
+        var query_url = $("#query_url").val() + "?log_no=" + log_no;
+        window.open(query_url);
+        //var info = this.parentNode.title;
+        //console.info(this.parentNode.id);
+        //var result = info.match(/"status": (\d+)/i);
+        //if(result != null)
+        //{
+        //    var status = result[1];
+        //    var status_url = $("#status_url_prefix").val() + "/?status=" + status;
+        //    window.open(status_url);
+        //}
 
     });
     $("td[class$='Bg']").addClass("status_move");

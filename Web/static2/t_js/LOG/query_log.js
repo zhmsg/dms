@@ -27,7 +27,9 @@ function load_log_info(data){
         var index = log_info.info.indexOf("\n");
         if(index >= 0) {
             $("#request_info").val(format_json_str(log_info.info.substr(0, index)));
-            $("#error_info").val(format_json_str(log_info.info.substring(index + 1, log_info.info.length)));
+            var left_info = log_info.info.substring(index + 1, log_info.info.length);
+            $("#error_info").val(format_json_str(left_info));
+
         }
         else{
             $("#error_info").val(log_info.info);

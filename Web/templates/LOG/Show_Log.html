@@ -33,7 +33,7 @@
         <th scope="col" width=10%">访问IP</th>
       </tr>
       {% for item in log_list %}
-        <tr title="info: {{ item["info"] }}&#10;host: {{ item["host"] }}">
+        <tr title="info: {{ item["info"] }}&#10;host: {{ item["host"] }}" id="log_{{ item["log_no"] }}">
             <td name="run_begin" class="status_move">{{ item["run_begin"] | unix_timestamp }}</td>
             <td name="request_url" class="status_move">{{ item["url"] }}</td>
             <td>{{ item["method"] }}</td>
@@ -62,6 +62,7 @@
     </table>
   </div>
   <input id="status_url_prefix" value="{{ status_url_prefix }}" style="display: none">
+  <input id="query_url" value="{{ query_url }}" style="display: none">
 {{ 't_js/Common/my_ip.js' | make_static_html | safe }}
 {{ 't_js/LOG/show_log.js' | make_static_html | safe }}
 {% endblock %}
