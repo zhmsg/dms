@@ -9,7 +9,7 @@
         <input style="display: none" value="{{ url_prefix }}" id="url_prefix"/>
         <div class="clear bottom20">
             <span class="pull-left text-right width150">搜索日志编号：</span>
-            <input class="box-side width366" id="query_log_no" placeholder="例如14809877400468" value="14809877400468"/>
+            <input class="box-side width366" id="query_log_no" placeholder="例如14809877400468" value="14809908688857"/>
             <a id="start_search"><button class="btn btn-primary" id="btn_query_log">搜索</button></a>
         </div>
         <p>
@@ -49,17 +49,19 @@
 
         <p>
             <span class="pull-left text-right width150">请求信息：</span>
-            <textarea class="box-side bug-input" rows="12" id="request_info" required></textarea>
+            <textarea class="box-side bug-input" rows="12" id="request_info" readonly></textarea>
         </p>
 
         <p>
             <span class="pull-left text-right width150">错误信息：</span>
-            <textarea class="box-side bug-input" rows="5" id="error_info" required></textarea>
+            <textarea class="box-side bug-input" rows="5" id="error_info" readonly></textarea>
         </p>
     </div>
 {% endblock %}
 
 {% block js_content %}
     {{ 't_js/LOG/query_log.js' | make_static_html | safe }}
+    {{ 't_js/Common/my_ip.js' | make_static_html | safe }}
+    {{ 't_js/Common/handler_data.js' | make_static_html | safe }}
 {% endblock %}
 
