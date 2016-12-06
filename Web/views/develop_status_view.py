@@ -30,7 +30,7 @@ def show_status_info():
     error_type_url = url_prefix + "/type/"
     return_url = api_url_prefix + ("/" if "api_no" not in request.args else "/info/?api_no=%s" % request.args["api_no"])
     search_status = "" if "status" not in request.args else request.args["status"]
-    new_power = del_power = new_module_power=  False
+    new_power = del_power = new_module_power = False
     if current_user.role & control.role_value["status_code_new"] > 0:
         new_power = True
     if current_user.role & control.role_value["status_code_del"] > 0:

@@ -114,9 +114,14 @@ class StatusManager:
                 success_new.append({"status_code": fill_zero(error_code, 8), "error_desc": error_desc})
         return True, success_new
 
-    def get_status_code(self):
-        select_sql = "SELECT status_code,code_desc,add_time,adder FROM %s;" % self.status_code
-        self.db.execute(select_sql)
+    def get_status_code(self, status_code=None):
+        select_sql = "SELECT status_code,code_desc,add_time,adder FROM %s" % self.status_code
+        args = []
+        if status_code is not None:
+            select_sql += " WHERE status_code=%s"
+            args.append(status_code)
+        select_sql += ";"
+        self.db.execute(select_sql, args=args)
         status_info = []
         for item in self.db.fetchall():
             status_info.append({"status_code": fill_zero(item[0], 8), "code_desc": item[1],

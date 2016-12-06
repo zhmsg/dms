@@ -415,10 +415,10 @@ class ControlManager:
             return False, u"您没有权限"
         return self.api_status.get_function_info()
 
-    def get_status(self, role):
+    def get_status(self, role, *args, **kwargs):
         if role & self.role_value["status_code_look"] <= 0:
             return False, u"您没有权限"
-        return self.api_status.get_status_code()
+        return self.api_status.get_status_code(*args, **kwargs)
 
     def get_error_type(self, role):
         if role & self.role_value["status_code_look"] <= 0:
