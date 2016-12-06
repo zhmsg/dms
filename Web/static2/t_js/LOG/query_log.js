@@ -18,7 +18,21 @@ function load_log_info(data){
     $("#account").val(log_info.account);
     $("#level").val(log_info.level);
     $("#run_time").val(log_info.run_time);
-    $("#ip").val(ip_2_str(log_info.ip));
+
+    var ip_str = ip_2_str(log_info.ip);
+    var local_ip = localStorage.getItem(log_info.ip);
+    var ip_info = null;
+    if(local_ip != null){
+        ip_info = JSON.parse(local_ip);
+    }
+    else {
+        ip_info = get_ip_info(log_info.ip);
+    }
+    if(ip_info != null){
+        ip_str += " " + ip_info["info1"];
+    }
+    $("#ip").val(ip_str);
+
     if(log_info.level == "info"){
         $("#request_info").val("调用正常，不记录请求信息。");
         $("#error_info").val("调用正常，无错误信息。");
