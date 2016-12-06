@@ -53,6 +53,16 @@ def show_log_list():
                      status_url_prefix=status_url_prefix)
 
 
+@jy_log_view.route("/", methods=["POST"])
+@login_required
+@company_ip_required
+def get_one_log():
+    request_data = request.json
+    log_no = request_data["log_no"]
+    result, info = control.get_one_log(g.user_name, g.user_role, log_no)
+    return jsonify({"status": result, "data": info})
+
+
 @jy_log_view.route("/login/", methods=["POST", "GET"])
 def record_login():
     request_data = request.json
