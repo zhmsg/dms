@@ -6,11 +6,17 @@ import xlwt
 import os
 
 
-def write_excel(save_path, array_a, titles=[]):
+def write_excel(save_path, array_a, titles=None, sheet_name=None, cols_width=None):
     try:
         (dir, file_name) = os.path.split(save_path)
-        file = xlwt.Workbook()
-        table = file.add_sheet(file_name.strip(".xls"), cell_overwrite_ok=True)
+        file = xlwt.Workbook(encoding="utf-8")
+        if sheet_name is None:
+            sheet_name = file_name.split(".")[0]
+        # sheet_name = "sheet1"
+        table = file.add_sheet(sheet_name, cell_overwrite_ok=True)
+        if cols_width is not None:
+            for index in range(len(cols_width)):
+                table.col(index).width = int(cols_width[index] * 256)
         offset = 0
         if (type(titles) == list or type(titles) == tuple) and len(titles) > 0:
             for index in range(len(titles)):
@@ -20,11 +26,11 @@ def write_excel(save_path, array_a, titles=[]):
             arr = array_a[index]
             for i in range(len(arr)):
                 value = arr[i]
-                table.write(index + offset, i, value)
+                table.write(index + offset, i, format(value))
         file.save(save_path)
         return True, save_path
     except Exception as e:
-        error_message = "write excel error:%s" % str(e.args)
+        error_message = "write excel error:%s" % str(e)
         return False, error_message
 """
 # Example
