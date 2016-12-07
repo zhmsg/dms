@@ -32,7 +32,8 @@ def others_1_page():
         titles = ["患者姓名", "患者联系电话", "最大室壁厚度(mm)", "左房内径(mm)",
                   "最大（静息/Valsalva动作）左心室流出道压力阶差(mmHg)", "心源性猝死家族史", "NSVT", "不能解释晕厥",
                   "临床评估年龄（岁）", "5年心源性猝死可能性", "计算时间"]
-        keys = ["extra_name", "extra_tel", "max_shibihoudu", "zuofangneijing", "yalijiecha", "cusijiazushi", "nsvt", "hunjue", "age", "kenengxing"]
+        keys = ["extra_name", "extra_tel", "max_shibihoudu", "zuofangneijing", "yalijiecha", "cusijiazushi", "nsvt",
+                "hunjue", "age", "kenengxing"]
         array_a = []
         for item in info:
             item_a = []
