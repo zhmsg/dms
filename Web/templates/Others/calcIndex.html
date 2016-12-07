@@ -1,61 +1,71 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta content="width=device-width,user-scalable=no" name="viewport">
-<title>猝死风险预测方程-计算器</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta content="width=device-width,user-scalable=no" name="viewport">
+    <title>猝死风险预测方程-计算器</title>
 </head>
 
 <body>
 <div class="container calcContent">
-	<h1 class="text-center">猝死风险预测方程-计算器</h1>
-	<div class="container-fluid calcBox">
-         <ul>
-         	<li>
-         		<span>最大室壁厚度(mm)：</span>
-         		<input type="text" id="max_shibihoudu" required />
-         	</li>
-         	<li>
-         		<span>左房内径(mm)：</span>
-         		<input type="text" id="zuofangneijing" required />
-         	</li>
-         	<li>
-         		<span>最大（静息/Valsalva动作）<br />左心室流出道压力阶差(mmHg)：</span>
-         		<input class="mTop" type="text" id="yalijiecha" required>
-         	</li>
-         	<li>
-         		<span>心源性猝死家族史：</span>
-         		<input type="text" id="cusijiazushi" required>
-         	</li>
-         	<li>
-         		<span>NSVT：</span>
-         		<input type="text" id="nsvt" required>
-         	</li>
-         	<li>
-         		<span>不能解释晕厥：</span>
-         		<input type="text" id="hunjue" required>
-         	</li>
-         	<li>
-         		<span>临床评估年龄（岁）：</span>
-         		<input type="text" id="age" required>
-         	</li>
-         	<li class="septalLine">点击提交后，计算结果显示如下:</li>
-         	<li>
-         		<span>预后指数：</span>
-         		<strong id="zhishu"></strong>
-         	</li>       	
-         	<li>
-         		<span>5年心源性猝死可能性：</span>
-         		<strong id="kenengxing"></strong>
-         	</li>         	
-         </ul>
+    <h1 class="text-center">猝死风险预测方程-计算器</h1>
 
-         <div class="clear btnGroup">
-			  <button type="button" class="btn btn-success" id="calc">提交</button>
-{#			  <button type="button" class="btn btn-primary">保存</button>   	#}
-			  <button type="button" class="btn btn-default" id="reset">重置</button>
-         </div>
-	</div>
+    <div class="container-fluid calcBox">
+        <ul>
+            <li>
+                <span>最大室壁厚度(mm)：</span>
+                <input type="text" id="max_shibihoudu" required/>
+            </li>
+            <li>
+                <span>左房内径(mm)：</span>
+                <input type="text" id="zuofangneijing" required/>
+            </li>
+            <li>
+                <span>最大（静息/Valsalva动作）<br/>左心室流出道压力阶差(mmHg)：</span>
+                <input class="mTop" type="text" id="yalijiecha" required>
+            </li>
+            <li>
+                <span>心源性猝死家族史：</span>
+                <input type="text" id="cusijiazushi" required>
+            </li>
+            <li>
+                <span>NSVT：</span>
+                <input type="text" id="nsvt" required>
+            </li>
+            <li>
+                <span>不能解释晕厥：</span>
+                <input type="text" id="hunjue" required>
+            </li>
+            <li>
+                <span>临床评估年龄（岁）：</span>
+                <input type="text" id="age" required>
+            </li>
+            <li>
+                <span>患者姓名：</span>
+                <input type="text" id="extra_name">
+            </li>
+            <li>
+                <span>患者联系电话：</span>
+                <input type="text" id="extra_tel">
+            </li>
+            <li class="septalLine">点击提交后，计算结果显示如下:</li>
+            <li>
+                <span>预后指数：</span>
+                <strong id="zhishu"></strong>
+            </li>
+            <li>
+                <span>5年心源性猝死可能性：</span>
+                <strong id="kenengxing"></strong>
+            </li>
+        </ul>
+
+        <div class="clear btnGroup">
+            <button type="button" class="btn btn-success" id="calc">提交</button>
+            {#			  <button type="button" class="btn btn-primary">保存</button>   	#}
+            <button type="button" class="btn btn-default" id="reset">重置</button>
+        </div>
+    </div>
 </div>
 
 {{ 't_css/bootstrap.min.css' | make_static_html | safe }}

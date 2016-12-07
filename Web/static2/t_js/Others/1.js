@@ -12,7 +12,7 @@ $(document).ready(function () {
         $("#zhishu").text("");
         $("#kenengxing").text("");
     });
-    $("input").keyup(function () {
+    $("input:not([id^='extra'])").keyup(function () {
         var v = this.value;
         v = v.replace(/([^\d\.]*)/g, "");
         this.value = v;
@@ -20,7 +20,7 @@ $(document).ready(function () {
     $("#calc").click(function () {
         $("#zhishu").text("");
         $("#kenengxing").text("");
-        var mul_input = $("input");
+        var mul_input = $("input:not([id^='extra'])");
         var calc_data = new Object();
         for (var i = 0; i < mul_input.length; i++) {
             var input_item = $(mul_input[i]);
@@ -39,6 +39,12 @@ $(document).ready(function () {
         var kenengxing = 1 - Math.pow(0.998, Math.pow(Math.E, zhishu));
         calc_data["kenengxing"] = kenengxing;
         $("#kenengxing").text(kenengxing);
+        var extra_mul_input = $("input[id^='extra']");
+        for (var i = 0; i < extra_mul_input.length; i++) {
+            var input_item = $(extra_mul_input[i]);
+            var item_id = input_item.attr("id");
+            calc_data[item_id] = input_item.val();
+        }
         my_async_request2(location.href, "POST", calc_data, calc_result);
     });
 });
