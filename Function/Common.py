@@ -52,7 +52,7 @@ def make_static_html(filename):
     return html_s
 
 trust_proxy = ["127.0.0.1", "10.25.244.32", "10.44.147.192"]
-accept_agent = "(firefox|chrome|safari|window|GitHub|jyrequests)"
+accept_agent = "(firefox|chrome|safari|window|GitHub|jyrequests|micro)"
 
 
 def normal_request_detection(request_headers, remote_ip):
