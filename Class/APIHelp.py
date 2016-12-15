@@ -488,7 +488,7 @@ class HelpManager:
         if type(module_no) != int:
             return False, "Bad module_no"
         select_sql = "SELECT api_no,module_no,api_title,api_path,api_method,api_desc,stage FROM %s " \
-                     "WHERE module_no=%s AND stage<4 ORDER BY stage, api_path;" % (self.api_info, module_no)
+                     "WHERE module_no=%s AND stage<4 ORDER BY stage, api_path, api_method;" % (self.api_info, module_no)
         self.db.execute(select_sql)
         api_list = []
         for item in self.db.fetchall():
