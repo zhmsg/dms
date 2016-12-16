@@ -10,7 +10,7 @@ function fill_zero(num, for_len) {
         for_len -= 1;
         num /= 10;
         if (num >= 1) {
-            continue
+            continue;
         }
         else{
             num_str = "0" + num_str;
