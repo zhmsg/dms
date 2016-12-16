@@ -71,6 +71,12 @@ function Load_API_List(api_list, module_prefix)
         }
         add_tr.append('<td class="text-center"><a href="' + url_prefix + '/info/?api_no=' + api_info["api_no"] + '">查看</a> | <a href="' + url_prefix + '/test/?api_no=' + api_info["api_no"] + '">测试</a></td>');
     }
+    if(api_list.length > 10){
+        $("#a_query_list").show();
+    }
+    else{
+        $("#a_query_list").hide();
+    }
 }
 
 function Load_Care_Info(care_info){
