@@ -38,7 +38,7 @@ class RedisSessionInterface(SessionInterface):
     def get_redis_expiration_time(self, app, session):
         if session.permanent:
             return app.permanent_session_lifetime
-        return timedelta(seconds=300)
+        return timedelta(seconds=900)
 
     def open_session(self, app, request):
         sid = request.cookies.get(app.session_cookie_name)
