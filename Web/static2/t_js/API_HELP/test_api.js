@@ -206,7 +206,8 @@ $(function(){
     if($("#new_right").val() == "True"){
         new_right = true;
     }
-    $("#authorization_value").parent().after('<li><input type="checkbox" id="skip_auth"> Skip Auth</li>')
+    $("#authorization_value").parent().after('<li><input type="checkbox" id="skip_auth"> Skip Auth</li>');
+    $("#Content-Type_value").val("application/json");
 });
 
 
