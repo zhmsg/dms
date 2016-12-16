@@ -148,5 +148,23 @@ $(function(){
             Get_API_List(module_no);
         }
     }
+    $("#a_query_list").click(function(){
+        var current_stage = $("#a_query_list").text();
+        if(current_stage == "搜索列表"){
+            $("#a_query_list").text("隐藏搜索");
+            $("#search_api_list").show();
+            $("#search_api_list").keyup(function(){
+                var query_key = $("#search_api_list").val();
+                query_table("t_api_list", query_key);
+            });
+        }
+        else{
+            $("#a_query_list").text("搜索列表");
+            $("#search_api_list").hide();
+            $("#search_api_list").unbind('keyup');
+            $("#search_api_list").val("");
+            query_table("t_api_list", "");
+        }
+    });
 
 });

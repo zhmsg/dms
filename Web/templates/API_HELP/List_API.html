@@ -2,6 +2,13 @@
 
 {% block title %}API帮助文档{% endblock %}
 
+{% block js_content %}
+    {{ 't_js/Common/add_node.js' | make_static_html | safe }}
+    {{ 't_js/Common/url_tool.js' | make_static_html | safe }}
+    {{ 't_js/API_HELP/list_api_dom.js' | make_static_html | safe }}
+    {{ 't_js/API_HELP/list_api.js' | make_static_html | safe }}
+{% endblock %}
+
 {% block center_content %}
     <!--
     API模块列表 开始
@@ -64,8 +71,11 @@
             <a href="javascript:void(0)" onclick="Load_Module_Info('update')" class="margin10">更新模块信息</a>
             <a href_prefix="{{ url_prefix }}/?module_no=" class="margin10" id="a_del_module">删除模块</a>
             <a href_prefix="{{ test_module_url }}?module_no=" class="margin10" id="a_test_module">测试模块</a>
+            <input class="box-side width300" id="search_api_list" type="text" style="display: none" />
+            <a href="javascript:void(0)" class="margin10" id="a_query_list">搜索列表</a>
         </div>
         <table class="table table-bordered table-hover api-list-table" id="t_api_list">
+
             <caption>API列表</caption>
             <tr>
                 <th scope="col" width="32%">API标题</th>
@@ -91,8 +101,5 @@
     <input style="display: none" value="{{ test_env_url }}" id="test_env_url">
     <input style="display: none" value="{{ module_url }}" id="module_url">
     <label style="display: none" id="role_value">{{ role_value | tojson | safe }}</label>
-    {{ 't_js/Common/add_node.js' | make_static_html | safe }}
-    {{ 't_js/Common/url_tool.js' | make_static_html | safe }}
-    {{ 't_js/API_HELP/list_api_dom.js' | make_static_html | safe }}
-    {{ 't_js/API_HELP/list_api.js' | make_static_html | safe }}
+
 {% endblock %}
