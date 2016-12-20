@@ -74,7 +74,7 @@ def backup_func():
                "sample_phenotype", "sample_report", "sample_user_right", "sys_patients", "sys_project_sample",
                "sys_projects", "sys_samples", "sys_users", "target_ratio_detail", "task_collect_variant", "test_value",
                "user_config", "user_geneset", "user_info", "user_task_list", "user_template", "variant_data_nums",
-               "variant_data_pic", "variant_md5", "variant_remark"]
+               "variant_data_pic", "variant_md5", "variant_remark", "health_records_result", "health_report_result"]
     for t_name in allow_t:
         sql_path = "%s/%s_%s.sql.backup" % (backup_dir, current_env, t_name)
         control.backup_table("system", 0, t_name, sql_path)
