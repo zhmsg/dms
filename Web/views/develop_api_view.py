@@ -99,7 +99,7 @@ def show_api():
     if "X-Requested-With" in request.headers:
         if request.headers["X-Requested-With"] == "XMLHttpRequest":
             return jsonify({"status": True, "data": {"api_info": api_info}})
-    return_url = url_prefix + "/?module_no=%s" % api_info["basic_info"]["module_no"]
+    return_url = url_prefix + "/info/?api_no=%s" % api_no
     if "update" in request.args:
         update_stage_url = url_prefix + "/stage/"
         return rt.render("Update_API.html", api_info=api_info, api_no=api_no, return_url=return_url,
@@ -107,6 +107,7 @@ def show_api():
     test_url = url_prefix + "/test/?api_no=%s" % api_no
     batch_test_url = url_prefix + "/test/batch/?api_no=%s" % api_no
     status_url = status_url_prefix
+    return_url = url_prefix + "/?module_no=%s" % api_info["basic_info"]["module_no"]
     return rt.render("Show_API.html", api_info=api_info, api_no=api_no, return_url=return_url, test_url=test_url,
                      status_url=status_url, batch_test_url=batch_test_url)
 

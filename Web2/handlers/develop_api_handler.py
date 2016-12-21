@@ -57,7 +57,7 @@ class APIInfoHandler(_BaseHandler):
         if "X-Requested-With" in self.request.headers:
             if self.request.headers["X-Requested-With"] == "XMLHttpRequest":
                 return self.jsonify({"status": True, "data": {"api_info": api_info}})
-        return_url = url_prefix + "/?module_no=%s" % api_info["basic_info"]["module_no"]
+        return_url = self.route_url + "?api_no=%s" % api_no
         if "update" in self.request.args:
             update_stage_url = url_prefix + "/stage/"
             return self.render_template("Update_API.html", api_info=api_info, api_no=api_no, return_url=return_url,
@@ -65,7 +65,7 @@ class APIInfoHandler(_BaseHandler):
         test_url = url_prefix + "/test/?api_no=%s" % api_no
         batch_test_url = url_prefix + "/test/batch/?api_no=%s" % api_no
         status_url = status_url_prefix
-
+        return_url = url_prefix + "/?module_no=%s" % api_info["basic_info"]["module_no"]
         return self.render_template("Show_API.html", api_info=api_info, api_no=api_no, return_url=return_url,
                                     test_url=test_url, status_url=status_url, batch_test_url=batch_test_url)
 
