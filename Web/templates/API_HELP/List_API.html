@@ -67,10 +67,12 @@
 
         <p>模块描述：<span id="span_module_desc"></span></p>
 
-        <div id="div_api_new_op_module" style="display: none">
+        <div id="div_api_new_op_module" class="left" style="display: none">
             <a href="javascript:void(0)" onclick="Load_Module_Info('update')" class="margin10">更新模块信息</a>
             <a href_prefix="{{ url_prefix }}/?module_no=" class="margin10" id="a_del_module">删除模块</a>
             <a href_prefix="{{ test_module_url }}?module_no=" class="margin10" id="a_test_module">测试模块</a>
+        </div>
+        <div class="left">
             <input class="box-side width300" id="search_api_list" type="text" style="display: none" />
             <a href="javascript:void(0)" class="margin10" id="a_query_list">搜索列表</a>
         </div>
