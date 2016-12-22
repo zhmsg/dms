@@ -117,6 +117,7 @@ class DB(object):
     def backup_table(self, t_name, sql_path, db=None):
         if db is None:
             db = self.db
+        os.system("rm -rf %s" % sql_path)
         backup_cmd = "mysqldump -h%s -u%s -p%s --skip-lock-tables %s %s >> %s" % (self.host, self.mysql_user,
                                                                                   self.mysql_password, db, t_name,
                                                                                   sql_path)
