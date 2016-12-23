@@ -52,7 +52,6 @@ $(function(){
         my_request2(info_url, "GET", null, target_api_info);
     }
     get_api_list($("#source_api_module").val());
-    api_no += "dd";
     query_option("target_api_title", api_no, "value").attr("selected", true);
     $("#target_api_title").attr("disabled", "disabled");
     query_option("source_api_title", api_no, "value").hide();

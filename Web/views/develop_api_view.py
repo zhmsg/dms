@@ -212,7 +212,7 @@ def delete_header():
 @referer_api_no
 def update_api_body_page():
     api_no = g.api_no
-    return rt.render("Update_API_Param.html")
+    return rt.render("Update_API_Param.html", api_no=api_no)
 
 
 @develop_api_view.route("/body/", methods=["POST"])

@@ -10,7 +10,7 @@
 
 {% block content %}
     <div class="container apiMode">
-        <a class="btn btn-primary pull-right" href="" title="">查看API</a>
+        <a class="btn btn-primary pull-right" href="{{ url_prefix }}/info/?api_no={{ api_no }}" title="">查看API</a>
         <div class="form-group">
             <label for="">目标API所属模块：</label>
             <select class="box-side" id="target_api_module">
