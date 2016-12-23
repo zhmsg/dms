@@ -2,6 +2,12 @@
 
 {% block title %}添加多个状态码{% endblock %}
 
+{% block js_content %}
+    {{ 't_js/Common/add_node.js' | make_static_html | safe }}
+    {{ 't_js/Common/my_requests.js' | make_static_html | safe }}
+    {{ 't_js/API_Status/status_mul_new.js' | make_static_html | safe }}
+{% endblock %}
+
 {% block content %}
     <a class="btn btn-primary pull-right margin20" href="{{ return_url }}/">查看状态码</a>
     <button type="button" class="btn btn-primary margin20" id="btn_new_sub" value="新建参数类状态码">新建参数类状态码</button>
@@ -59,6 +65,4 @@
     <input id="fun_info_url" value="{{ fun_info_url }}" style="display: none">
     <input id="error_type_url" value="{{ error_type_url }}" style="display: none">
     <input id="del_status_code_url" value="{{ del_status_code_url }}" style="display: none">
-    {{ 't_js/Common/my_requests.js' | make_static_html | safe }}
-    {{ 't_js/API_Status/status_mul_new.js' | make_static_html | safe }}
 {% endblock %}

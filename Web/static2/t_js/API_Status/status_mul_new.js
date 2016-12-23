@@ -62,17 +62,12 @@ function get_error_type() {
     my_request(request_url, "GET", null, get_error_type_success);
 }
 
-function add_option(select_obj, value, text){
-    var option = "<option value='{value}'>{text}</option>";
-    var option_item = option.replace("{value}", value).replace("{text}", text);
-    select_obj.append(option_item);
-}
 
 function set_service_id(){
     var select_obj = $("#service_id");
     select_obj.empty();
     for(var key in module_info){
-        add_option(select_obj, key, module_info[key].title);
+        add_option("service_id", key, module_info[key].title, module_info[key].title);
     }
     set_fun_id();
 }
@@ -84,7 +79,7 @@ function set_fun_id(){
     var service_id = $("#service_id").val();
     var fun_list = module_info[service_id]["fun_info"];
     for(var key in fun_list){
-        add_option(select_obj, key, fun_list[key].title);
+        add_option("fun_id", key, fun_list[key].title, fun_list[key].title);
     }
     preview_status_code();
 }
