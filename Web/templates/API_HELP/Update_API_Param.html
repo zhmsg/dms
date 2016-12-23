@@ -21,7 +21,7 @@
             <select class="box-side" id="target_api_title">
             </select>
         </div>
-        <div class="form-group">
+        <div class="form-group" id="div_source_api_module">
             <label for="">源API所属模块：</label>
             <select class="box-side" id="source_api_module">
             </select>
@@ -60,5 +60,6 @@
         <button class="btn btn-success btn-down api-newBtn" id="btn_new_api">新建</button>
     </div>
     <input value="{{ url_prefix }}/module/" id="module_url" style="display: none"/>
+    <input value="{{ url_prefix }}/info/" id="info_url" style="display: none"/>
 {% endblock %}
 
