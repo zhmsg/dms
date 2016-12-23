@@ -11,6 +11,7 @@
 {% block content %}
     <div class="container apiMode">
         <a class="btn btn-primary pull-right" href="{{ url_prefix }}/info/?api_no={{ api_no }}" title="">查看API</a>
+
         <div class="form-group">
             <label for="">目标API所属模块：</label>
             <select class="box-side" id="target_api_module">
@@ -31,33 +32,17 @@
             <select class="box-side" id="source_api_title">
             </select>
         </div>
-        <div class="form-group apiContentLine">
-            <ul>
-                <li>
-                    <label for="">API标题：</label>
-                    <input class="box-side width300" id="api_title" type="text"/>
-                </li>
-                <li>
-                    <label for="">API访问路径：</label>
-                    <input class="box-side width300" id="api_path" type="text" onkeyup="show_comp_url();"/>
-                    <label id="api_comp_url"></label>
-                </li>
-                <li>
-                    <label for="">API请求方式：</label>
-                    <select class="box-side width300" id="api_method">
-                        <option>GET</option>
-                        <option>POST</option>
-                        <option>PUT</option>
-                        <option>DELETE</option>
-                    </select>
-                </li>
-                <li>
-                    <label class="api-describe" for="">API描述：</label>
-                    <textarea class="box-side" rows="3" id="api_desc"></textarea>
-                </li>
-            </ul>
-        </div>
-        <button class="btn btn-success btn-down api-newBtn" id="btn_new_api">新建</button>
+        <table class="table table-bordered api-list-table" id="t_source_api_param">
+            <caption>请求主体参数</caption>
+            <tr>
+                <th scope="col" width="25%">参数名称</th>
+                <th scope="col" width="8%">是否必须</th>
+                <th scope="col" width="10%">参数类型</th>
+                <th scope="col" width="45%">参数描述</th>
+                <th scope="col" width="11%">操作</th>
+            </tr>
+        </table>
+        <button class="btn btn-success btn-down api-newBtn" id="btn_new_api">复制全部</button>
     </div>
     <input value="{{ url_prefix }}/module/" id="module_url" style="display: none"/>
     <input value="{{ url_prefix }}/info/" id="info_url" style="display: none"/>

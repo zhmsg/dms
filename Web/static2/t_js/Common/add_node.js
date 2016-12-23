@@ -36,9 +36,13 @@ function query_option(select_id, v, query_t){
 function new_td(key, obj){
     var td = $("<td></td>");
     if(key in obj){
-        td.append(obj[key]);
+        td.append(obj[key] + "");
     }
     return td;
+}
+
+function clear_table(table_id){
+    $("#" + table_id + " tr").not(":first").remove();
 }
 
 function query_table(t_id, key){
