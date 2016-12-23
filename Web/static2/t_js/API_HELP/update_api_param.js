@@ -53,9 +53,15 @@ function source_api_info(data, api_no)
         var add_tr = $("<tr></tr>");
         for(var j=0;j<4;j++)
             add_tr.append(new_td(keys[j], param_item));
-        add_tr.append('<td><button class="btn btn-success">复制</button></td>');
+        add_tr.append('<td><button class="btn btn-success copy_param">复制</button></td>');
         t_params.append(add_tr);
     }
+    $(".copy_param").click(function(){
+        $(this).attr("disabled", "disabled");
+        var td_info = $(this.parentNode.parentNode).find("td");
+    //  后续接着处理
+
+    });
 }
 
 function Get_API_List_Success(data)
