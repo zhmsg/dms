@@ -208,6 +208,8 @@ $(function(){
             $(".newMode").show();
             $("#conBtn").html("隐藏新建");
             search_type = "start";
+
+            load_location_status();
         }
         if(conBtnValue == "隐藏新建"){
             $(".newMode").hide();
@@ -217,12 +219,42 @@ $(function(){
     });
 });
 
+// 存储当前选中的服务模块与 功能模块
+function save_location_status(){
+    var current_select = $("#service_id").val() + "," + $("#fun_id").val();
+    localStorage.setItem("dms_api_status_add", current_select);
+}
+
+function load_location_status(){
+    var current_select = localStorage.getItem("dms_api_status_add");
+    if(current_select == null){
+        return false;
+    }
+    var select_ids = current_select.split(",");
+    if(select_ids.length >= 2) {
+        var service_id = select_ids[0];
+        var select_options = query_option("service_id", service_id, "value");
+        if(select_options.length > 0){
+            select_options.attr("selected", true)
+        }
+        set_fun_id();
+        var fun_id = select_ids[1];
+        var select_options = query_option("fun_id", fun_id, "value");
+        if(select_options.length > 0){
+            select_options.attr("selected", true)
+        }
+        update_info();
+    }
+
+}
+
 $(function(){
     search_code(1);
     if($("#new_info_show").length > 0){
         get_module_info();
         get_error_type();
         $("#service_id").change(set_fun_id);
+        $("#fun_id").change(save_location_status);
         $(".updateinfo").change(update_info);
         $("input[id^='error_']").keyup(update_info);
     }
