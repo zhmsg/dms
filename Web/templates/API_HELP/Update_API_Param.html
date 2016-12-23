@@ -5,6 +5,7 @@
 {% block js_content %}
     {{ 't_js/Common/add_node.js' | make_static_html | safe }}
     {{ 't_js/Common/url_tool.js' | make_static_html | safe }}
+    {{ 't_js/API_HELP/update_api_param.js' | make_static_html | safe }}
 {% endblock %}
 
 {% block content %}
@@ -58,5 +59,6 @@
         </div>
         <button class="btn btn-success btn-down api-newBtn" id="btn_new_api">新建</button>
     </div>
+    <input value="{{ url_prefix }}/module/" id="module_url" style="display: none"/>
 {% endblock %}
 
