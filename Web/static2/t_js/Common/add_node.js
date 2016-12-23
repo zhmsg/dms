@@ -15,20 +15,19 @@ function query_option(select_id, v, query_t){
     if(query_t == null){
         query_t = "value";
     }
-    if(query_t == "text"){
+    if (query_t != "text") {
+        var query_option = $("#" + select_id).find("[" + query_t + "='" + v + "']");
+    } else {
         var each_option = $("#" + select_id).find("option");
-        var query_option = new Array();
+        var query_option = [];
         var fix_count = 0;
-        for(var i=0;i<each_option.length;i++){
+        for (var i = 0; i < each_option.length; i++) {
             var current_option = $(each_option[i]);
-            if(current_option.text() == v){
+            if (current_option.text() == v) {
                 query_option[fix_count] = current_option;
                 fix_count++;
             }
         }
-    }
-    else{
-        var query_option = $("#" + select_id).find("[" + query_t + "='" + v + "']");
     }
     return query_option;
 }
