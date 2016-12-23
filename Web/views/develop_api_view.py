@@ -208,6 +208,13 @@ def delete_header():
     return jsonify({"status": False, "data": "need api_no and param"})
 
 
+@develop_api_view.route("/body/", methods=["GET"])
+@referer_api_no
+def update_api_body_page():
+    api_no = g.api_no
+    return rt.render("Update_API_Param.html")
+
+
 @develop_api_view.route("/body/", methods=["POST"])
 @referer_api_no
 def add_body_param():

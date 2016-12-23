@@ -109,8 +109,9 @@
             <button id="pp_{{ item }}" class="btn btn-info" onclick="handle_predefine_param(this.id, 'body');" title="{{ api_info["predefine_body"][item]["param_desc"] }}" value="{{ item }}">需要{{ item }}</button>
         {% endif %}
     {% endfor %}
+    <a href="{{ url_prefix }}/body/?api_no={{ api_info["basic_info"]["api_no"] }}">从其他API复制</a>
     <br>
-    <div class="bottom20 api-example">
+    <div class="bottom20 top6 api-example">
         <b>请求示例</b>
         <div id="api_input_exist">
             {% for item in api_info["input_info"] %}
