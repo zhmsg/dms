@@ -24,5 +24,6 @@ company_ips = [company_ip_start, company_ip_end]
 cookie_domain = config.get(current_env, "cookie_domain")
 session_id_prefix = config.get(current_env, "session_id_prefix")
 session_cookie_name = config.get(current_env, "session_cookie_name")
+web_prefix_url = config.get(current_env, "web_prefix_url")
 
 user_blacklist = []
