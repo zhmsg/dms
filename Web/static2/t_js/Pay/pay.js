@@ -19,34 +19,34 @@ function pay_success(res) {
 }
 
 function start_pay(data) {
-    console.info(data);
-    alert("start pay");
-    var pay_info = data;
-    pay_info["success"] = pay_success;
-    wx.chooseWXPay(pay_info);
-    //function onBridgeReady() {
-    //    WeixinJSBridge.invoke(
-    //        'getBrandWCPayRequest', data,
-    //        function (res) {
-    //            alert(res.err_msg);
-    //            if (res.err_msg == "get_brand_wcpay_request：ok") {
-    //            }     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
-    //            console.info(res);
-    //            alert(res);
-    //        }
-    //    );
-    //}
-    //
-    //if (typeof WeixinJSBridge == "undefined") {
-    //    if (document.addEventListener) {
-    //        document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
-    //    } else if (document.attachEvent) {
-    //        document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
-    //        document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
-    //    }
-    //} else {
-    //    onBridgeReady();
-    //}
+    //console.info(data);
+    //alert("start pay");
+    //var pay_info = data;
+    //pay_info["success"] = pay_success;
+    //wx.chooseWXPay(pay_info);
+    function onBridgeReady() {
+        WeixinJSBridge.invoke(
+            'getBrandWCPayRequest', data,
+            function (res) {
+                alert(res.err_msg);
+                if (res.err_msg == "get_brand_wcpay_request：ok") {
+                }     // 使用以上方式判断前端返回,微信团队郑重提示：res.err_msg将在用户支付成功后返回    ok，但并不保证它绝对可靠。
+                console.info(res);
+                alert(res);
+            }
+        );
+    }
+
+    if (typeof WeixinJSBridge == "undefined") {
+        if (document.addEventListener) {
+            document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+        } else if (document.attachEvent) {
+            document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+            document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+        }
+    } else {
+        onBridgeReady();
+    }
 }
 
 function init_wx(data) {
