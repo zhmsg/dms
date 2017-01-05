@@ -58,7 +58,8 @@ def create_app():
     msg_web.session_interface = RedisSessionInterface(prefix=session_id_prefix)
 
     msg_web.static_folder = "static2"
-    msg_web.add_url_rule("/static2" + '/<path:filename>', endpoint='static2', view_func=msg_web.send_static_file)
+    if static_prefix_url.startswith("/"):
+        msg_web.add_url_rule(static_prefix_url + '/<path:filename>', endpoint='static2', view_func=msg_web.send_static_file)
     msg_web.session_cookie_name = session_cookie_name
     if cookie_domain != "":
         msg_web.config.update(SESSION_COOKIE_DOMAIN=cookie_domain)
