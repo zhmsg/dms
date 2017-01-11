@@ -75,7 +75,9 @@ function Load_API_List(api_list, module_prefix)
         }
         add_tr.append('<td class="text-center"><a href="' + url_prefix + '/info/?api_no=' + api_info["api_no"] + '">查看</a> | <a href="' + url_prefix + '/test/?api_no=' + api_info["api_no"] + '">测试</a></td>');
         if(api_info["update_recent"] == true) {
-            add_tr.find("td:first").addClass("zongheBg");
+            var title_td = add_tr.find("td:first");
+            title_td.text(title_td.text() + "【最近更新】");
+            title_td.addClass("zongheBg");
         }
     }
     if(api_list.length > 10){
