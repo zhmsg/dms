@@ -120,6 +120,8 @@ ul,ol,li{list-style: none;margin: 0;padding: 0;}
 .orange{background: #e24414;color: #fff;}
 .opacity{opacity: 0;}
 
+.midyellowBg{width: 100px;background: #eaeaae;}
+
 .redBg{background:#e40203;}
 .orgBg{background:#ff8b00;}
 .yellowBg{background:#feed01;}

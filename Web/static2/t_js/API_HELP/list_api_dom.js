@@ -67,6 +67,9 @@ function Load_API_List(api_list, module_prefix)
         }
         else
             t.append(add_tr);
+        if(api_info["update_recent"] == true) {
+            add_tr.addClass("midyellowBg");
+        }
         api_info["api_url"] = escape(rTrim(module_prefix, "/") + "/" + lTrim(api_info["api_path"], "/"));
         var keys = ["api_title", "api_url", "api_method", "stage"];
         for(var j=0;j<keys.length;j++){

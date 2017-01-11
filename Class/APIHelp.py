@@ -230,6 +230,7 @@ class HelpManager:
             add_time = datetime.now().strftime(TIME_FORMAT)
         r_data = {"api_no": api_no, "param": param, "param_type": param_type, "add_time": add_time}
         result = self.db.execute_insert(self.predefine_param, r_data, ignore=True)
+        self.set_api_update(api_no)
         r_data["result"] = result
         return True, r_data
 
@@ -487,16 +488,26 @@ class HelpManager:
     def get_api_list(self, module_no):
         if type(module_no) != int:
             return False, "Bad module_no"
-        select_sql = "SELECT api_no,module_no,api_title,api_path,api_method,api_desc,stage FROM %s " \
-                     "WHERE module_no=%s AND stage<4 ORDER BY stage, api_path, api_method;" % (self.api_info, module_no)
+        select_sql = "SELECT api_no,module_no,api_title,api_path,api_method,api_desc,stage,add_time,update_time FROM %s" \
+                     " WHERE module_no=%s AND stage<4 ORDER BY stage, api_path, api_method;" % (self.api_info, module_no)
         self.db.execute(select_sql)
         api_list = []
+        now_time = datetime.now()
+        recent_seconds = 7 * 24 * 60 * 60
         for item in self.db.fetchall():
             if item[6] >= len(self.api_stage_desc) or item[6] < 0:
                 continue
+            update_recent = False
             api_stage = self.api_stage_desc[item[6]]
+            if (now_time - item[7]).total_seconds() < recent_seconds:
+                update_recent = True
+            add_time = item[7].strftime(TIME_FORMAT)
+            if item[8] is not None and (now_time - item[8]).total_seconds() < recent_seconds:
+                update_recent = True
+            update_time = item[8].strftime(TIME_FORMAT) if item[8] is not None else ""
             api_list.append({"api_no": item[0], "module_no": item[1], "api_title": item[2], "api_path": item[3],
-                             "api_method": item[4], "api_desc": item[5], "stage": api_stage})
+                             "api_method": item[4], "api_desc": item[5], "stage": api_stage, "add_time": add_time,
+                             "update_time": update_time, "update_recent": update_recent})
         care_info = self.get_module_care_list(module_no)
         return True, {"api_list": api_list, "care_info": care_info, "module_info": {"module_no": module_no}}
 
@@ -520,6 +531,7 @@ class HelpManager:
             return False, "Bad api_no"
         where_value = {"api_no": api_no, "param": param}
         result = self.db.execute_delete(self.predefine_param, where_value)
+        self.set_api_update(api_no)
         where_value["result"] = result
         return True, where_value
 
