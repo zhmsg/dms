@@ -90,7 +90,7 @@ def add_module_care():
 def show_api():
     if "api_no" not in request.args:
         return "Need api_no"
-    api_no = request.args["api_no"]
+    api_no = request.args["api_no"][:32]
     if len(api_no) != 32:
         return "Bad api_no"
     result, api_info = control.get_api_info(api_no, g.user_role)
