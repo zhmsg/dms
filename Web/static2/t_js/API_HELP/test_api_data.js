@@ -26,7 +26,7 @@ function test_api(){
         var param_value = header_param[param_key];
         if (param_key == "authorization") {
             if($("#skip_auth").is(':checked')){
-                header_param["X-Skip-Auth"] = param_value
+                header_param["X-Skip-Auth"] = param_value.split(":")[0]
             }
             else {
                 header_param[param_key] = "Basic " + base64encode(param_value);
