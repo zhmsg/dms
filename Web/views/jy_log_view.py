@@ -98,7 +98,9 @@ def send_log_func():
     result, info = control.get_daily_log()
     table_content = ""
     for item in info["log_records"]:
-        tr_content = '<tr title="info: %s&#10;host: %s">' % (item["info"].replace(">", "&gt;").replace('"', "&quot;"), item["host"])
+        tr_content = '<tr title="info: %s&#10;host: %s">' % (item["info"].replace(">", "&gt;").replace('"', "&quot;"),
+                                                             item["host"])
+        tr_content += '<td>%s</td>\n' % item["log_no"]
         tr_content += '<td name="run_begin" class="status_move">%s</td>\n' % unix_timestamp(item["run_begin"])
         tr_content += '<td name="request_url">%s</td>\n' % item["url"]
         tr_content += '<td>%s</td>' % item["method"]
@@ -148,7 +150,7 @@ def send_login_info_func():
         return
     for item in info["login_records"]:
         tr_content = '<tr>'
-        tr_content += '<td>%s</td>\n' % ip_str(item["server_ip"]) # unix_timestamp(item["run_begin"])
+        tr_content += '<td>%s</td>\n' % ip_str(item["server_ip"])  # unix_timestamp(item["run_begin"])
         tr_content += '<td>%s</td>\n' % item["server_name"]
         tr_content += '<td>%s</td>' % ip_str(item["user_ip"])
         tr_content += '<td>%s</td>\n' % item["user_name"]
