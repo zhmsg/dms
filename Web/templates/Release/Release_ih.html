@@ -10,8 +10,7 @@
         <input id="url_end_gray" value="{{ 't_images/end_gray.png' | make_static_url }}" style="display: none">
         <input id="url_middle_gray" value="{{ 't_images/two_gray.png' | make_static_url }}" style="display: none">
         <input id="url_start_gray" value="{{ 't_images/one_gray.png' | make_static_url }}" style="display: none">
-        <input style="display: none">
-        <input style="display: none">
+
     </div>
     <!--系统备注及说明模块 start-->
     <div class="declare">
@@ -55,11 +54,7 @@
                         <option>修复BUG</option>
                     </select>
                 </li>
-                <li>
-                    <label class="api-describe" for="">具体描述：</label>
-                        <textarea class="box-side" rows="3" id="request_reaseon_desc" placeholder="不用填写啦"
-                                  disabled></textarea>
-                </li>
+
             </ul>
             <button id="btn_add_task" class="btn btn-success btn-down api-newBtn" disabled>
                 {% if not g.release_period %}
