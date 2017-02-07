@@ -71,17 +71,19 @@ function str_2_ip(ip_str){
 var ip_info;
 
 function get_ip_info_success(data) {
-    ip_info = data.data;
+    ip_info = data;
 }
 
 function get_ip_info(ip_value){
-    var local_ip = localStorage.getItem(ip_value);
+    var storage_prefix = "ip_info";
+    var item_key = storage_prefix + ip_value;
+    var local_ip = localStorage.getItem(item_key);
     if(local_ip != null && local_ip != "undefined"){
         console.info("from local get " + local_ip);
         return JSON.parse(local_ip);
     }
     var request_url = "/tools/ip/" + ip_value + "/";
-    my_request(request_url, "GET", null, get_ip_info_success);
-    localStorage.setItem(ip_value, JSON.stringify(ip_info));
+    my_request2(request_url, "GET", null, get_ip_info_success);
+    localStorage.setItem(item_key, JSON.stringify(ip_info));
     return ip_info;
 }

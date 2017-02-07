@@ -10,7 +10,7 @@ $(function(){
         var j_td_ip = $(td_ip);
         var ip_value = j_td_ip.text();
         j_td_ip.text(ip_2_str(ip_value));
-        var local_ip = localStorage.getItem(ip_value);
+        var local_ip = localStorage.getItem("ip_info" + ip_value);
         var ip_info = null;
         if(local_ip != null && local_ip != "undefined"){
             console.info("from local storage " + local_ip);
