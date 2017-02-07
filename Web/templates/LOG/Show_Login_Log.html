@@ -15,13 +15,6 @@
         <input class="box-side width150" id="end_time" placeholder="暂无法使用"/>
         <select class="box-side width150 margin10">
             <option value="all">all</option>
-            {% for item in log_level %}
-                {% if item == current_level %}
-                    <option value="{{ item }}" selected>{{ item }}</option>
-                {% else %}
-                    <option value="{{ item }}">{{ item }}</option>
-                {% endif %}
-            {% endfor %}
         </select>
         <a id="start_search">
             <button class="btn btn-primary" id="btn_new" disabled>搜索</button>
@@ -30,20 +23,22 @@
     <div style="position: relative">
         <table class="table table-bordered table-hover api-list-table">
             <tr>
-                <th scope="col" width="6%">服务器IP</th>
-                <th scope="col" width=5%">服务器名</th>
-                <th scope="col" width=6%">登录者IP</th>
-                <th scope="col" width=7%">登录者IP信息</th>
-                <th scope="col" width=7%">登录账户</th>
-                <th scope="col" width=7%">登录时间</th>
+                <th scope="col" width="8%">登录编号</th>
+                <th scope="col" width="10%">服务器IP</th>
+                <th scope="col" width=10%">服务器名</th>
+                <th scope="col" width=10%">登录账户</th>
+                <th scope="col" width=12%">登录者IP</th>
+                <th scope="col" width=24%">登录者IP信息</th>
+                <th scope="col" width=16%">登录时间</th>
             </tr>
             {% for item in login_records %}
                 <tr id="login_no_{{ item["login_no"] }}">
+                    <td name="login_no">{{ item["login_no"] }}</td>
                     <td name="server_ip">{{ item["server_ip"] }}</td>
                     <td name="server_name">{{ item["server_name"] }}</td>
+                    <td name="user_name" class="status_move">{{ item["user_name"] }}</td>
                     <td name="user_ip">{{ item["user_ip"] }}</td>
                     <td name="user_ip_info"></td>
-                    <td name="user_name" class="status_move">{{ item["user_name"] }}</td>
                     <td name="login_time">{{ item["login_time"] }}</td>
                 </tr>
             {% endfor %}

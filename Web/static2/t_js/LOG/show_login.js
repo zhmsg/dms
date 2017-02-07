@@ -21,11 +21,28 @@ $(function(){
             td_ip.className = "redBg";
         }
         if(ip_info != null){
-            td_ip.title = ip_info["info1"];
+            if(ip_info["info1"] == ip_info["info2"]) {
+                j_td_ip.attr("title", ip_info["info1"]);
+            }
+            else{
+                j_td_ip.attr("title", ip_info["info1"] + " | " + ip_info["info2"]);
+            }
         }
         var td_name = j_td_ip.attr("name");
         if(td_name == "user_ip"){
-            $(td_ip).next().text(j_td_ip.attr("title"));
+            var td_ip_info = $(td_ip).next();
+            td_ip_info.text(j_td_ip.attr("title"));
+            var normal = false;
+            var normal_attr = new Array("洛阳", "北京", "本地");
+            for(var j=0;j<normal_attr.length;j++){
+                if(td_ip_info.text().indexOf(normal_attr[j]) >= 0){
+                    normal = true;
+                    break;
+                }
+            }
+            if(normal == false){
+                td_ip_info.addClass("redBg");
+            }
         }
     }
 
