@@ -76,7 +76,7 @@ function get_ip_info_success(data) {
 
 function get_ip_info(ip_value){
     var local_ip = localStorage.getItem(ip_value);
-    if(local_ip != null){
+    if(local_ip != null && local_ip != "undefined"){
         console.info("from local get " + local_ip);
         return JSON.parse(local_ip);
     }

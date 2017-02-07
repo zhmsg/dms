@@ -12,8 +12,8 @@ $(function(){
         j_td_ip.text(ip_2_str(ip_value));
         var local_ip = localStorage.getItem(ip_value);
         var ip_info = null;
-        if(local_ip != null){
-            console.info("from local get " + local_ip);
+        if(local_ip != null && local_ip != "undefined"){
+            console.info("from local storage " + local_ip);
             ip_info = JSON.parse(local_ip);
         }
         else {
