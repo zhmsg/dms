@@ -21,28 +21,51 @@ function test_api(){
     if(test_case_info == false){
         return;
     }
+    var python_cmd = "";
+    python_cmd += "import requests\n";
+    var cmd_request_options = new Array();
+    var cmd_request_headers = new Object();
+    var cmd_request_data = new Object();
     var header_param = test_case_info.header;
     for(var param_key in header_param) {
         var param_value = header_param[param_key];
         if (param_key == "authorization") {
             if($("#skip_auth").is(':checked')){
-                header_param["X-Skip-Auth"] = param_value.split(":")[0]
+                header_param["X-Skip-Auth"] = param_value.split(":")[0];
+                cmd_request_headers["X-Skip-Auth"] = header_param["X-Skip-Auth"];
+
             }
             else {
+                var auth_split = param_value.split(":");
+                if(auth_split.length != 2){
+                    update_res("请输入正确的authorization,例如zh_test:123456");
+                    return false;
+                }
                 header_param[param_key] = "Basic " + base64encode(param_value);
+                cmd_request_options[cmd_request_options.length] = "auth=(\"" + auth_split.join("\", \"") + "\")";
             }
         }
         else if (param_key == "X-Authorization") {
             header_param[param_key] = "OAuth2 " + param_value;
+            cmd_request_headers[param_key] = header_param[param_key];
         }
         else {
             header_param[param_key] = param_value;
+            cmd_request_headers[param_key] = header_param[param_key];
         }
     }
     var body_param = test_case_info.body;
     if(api_method != "GET"){
-        body_param = JSON.stringify(body_param)
+        python_cmd += "request_args = dict()\n";
+        for(var key in body_param){
+            python_cmd += "request_args[\"" + key + "\"] = \"" + body_param[key] + "\"";
+        }
+        body_param = JSON.stringify(body_param);
     }
+
+    python_cmd += "response = requests.request()";
+    console.info(python_cmd);
+    console.info(cmd_request_options);
     $.ajax({
         url: request_url + "?geneacdms=test",
         method: api_method,

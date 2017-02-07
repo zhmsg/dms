@@ -103,9 +103,13 @@ class LogManager:
         task_no = (int(time()) - self.basic_time) / 86400
         return self.log_task.register_new_task(task_no, user_name=user_name, reason=reason, reason_desc=reason_desc)
 
-    def _select_login(self, where_sql, limit_num=250):
-        select_sql = "SELECT %s FROM %s WHERE %s ORDER BY login_no DESC LIMIT %s;" \
-                     % (",".join(self.login_cols), self.login_server, where_sql, limit_num)
+    def _select_login(self, where_sql=None, limit_num=250):
+        if where_sql is not None:
+            select_sql = "SELECT %s FROM %s WHERE %s ORDER BY login_no DESC LIMIT %s;" \
+                         % (",".join(self.login_cols), self.login_server, where_sql, limit_num)
+        else:
+            select_sql = "SELECT %s FROM %s ORDER BY login_no DESC LIMIT %s;" \
+                             % (",".join(self.login_cols), self.login_server, limit_num)
         self.local_db.execute(select_sql)
         login_records = []
         for item in self.local_db.fetchall():
@@ -146,6 +150,12 @@ class LogManager:
             return False, login_records
         if len(login_records) > 0:
             self.login_task.update_scheduler_status(login_records[0]["login_no"], "system", "")
+        return True, {"login_records": login_records}
+
+    def query_login_log(self, limit_num=20):
+        result, login_records = self._select_login(limit_num=limit_num)
+        if result is False:
+            return False, login_records
         return True, {"login_records": login_records}
 
     def register_login_task(self):

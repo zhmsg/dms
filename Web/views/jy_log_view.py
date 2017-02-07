@@ -73,7 +73,15 @@ def get_one_log():
     return jsonify({"status": result, "data": info})
 
 
-@jy_log_view.route("/login/", methods=["POST", "GET"])
+@jy_log_view.route("/login/", methods=["GET"])
+def show_login_page():
+    result, login_records = control.query_login_info(20)
+    if result is False:
+        return login_records
+    return rt.render("Show_Login_Log.html", login_records=login_records["login_records"])
+
+
+@jy_log_view.route("/login/", methods=["POST"])
 def record_login():
     request_data = request.json
     server_ip = g.request_IP

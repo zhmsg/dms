@@ -742,6 +742,9 @@ class ControlManager:
     def get_login_info(self):
         return self.jy_log.select_login_log()
 
+    def query_login_info(self, limit_num=20):
+        return self.jy_log.query_login_log(limit_num)
+
     def register_log_task(self):
         return self.jy_log.register_daily_task()
 
