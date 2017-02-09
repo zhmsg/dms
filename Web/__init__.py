@@ -103,6 +103,7 @@ github_url_prefix = web_prefix + "/github"
 chat_url_prefix = web_prefix + "/chat"
 others_url_prefix = web_prefix + "/others"
 pay_url_prefix = web_prefix + "/wx/pay"
+jingdu_url_prefix = web_prefix + "/jd"
 
 data_dir = "/ossdata/dmsdata"
 

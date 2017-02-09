@@ -1,0 +1,14 @@
+{% extends "base_menu.html" %}
+
+{% block title %}晶读平台数据{% endblock %}
+
+{% block js_content %}
+    {{ 't_js/Common/JY_DIV.js' | make_static_html | safe }}
+{% endblock %}
+
+{% block center_content %}
+    <button type="button" class="btn btn-primary margin20" id="btn_jy_about_project" value="晶云测试环境">项目相关</button>
+    <button type="button" class="btn btn-primary margin20" id="btn_jy_about_sample" value="晶云一体机">样本相关</button>
+    {% include "JingDu/About_Project.html" %}
+    {% include "JingDu/About_Sample.html" %}
+{% endblock %}
