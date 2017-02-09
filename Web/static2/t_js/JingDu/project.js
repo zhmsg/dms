@@ -8,7 +8,7 @@ function show_project_info(project_data){
     var pro_len = project_data.length;
     var t_project = $("#t_project_info");
     var keys = ["project_no", "project_name", "description", "date_created", "display_level", "completed", "lastModify"];
-    var v_len = [null, 10, 10, 12, null, null, 12, null];
+    var v_len = [null, 10, 10, 20, null, null, 12, null];
     for(var i=0;i<pro_len;i++){
         var add_tr = $("<tr></tr>");
         for(var j=0;j<keys.length;j++){
