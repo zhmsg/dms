@@ -136,7 +136,7 @@ def create_blue(blue_name, url_prefix="/", auth_required=True, special_protocol=
             if special_protocol is True:
                 r_protocol = request.headers.get("X-Request-Protocol", "http")
                 if r_protocol not in request_special_protocol:
-                    redirect_url = "%s://%s%s" % (request_special_protocol.pop(), request.host, request.full_path)
+                    redirect_url = "%s://%s%s" % (request_special_protocol[0], request.host, request.full_path)
                     return redirect(redirect_url)
 
             g.role_value = control.role_value
