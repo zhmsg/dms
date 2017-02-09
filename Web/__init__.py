@@ -126,13 +126,16 @@ blues = {}
 dms_job = []
 
 
-def create_blue(blue_name, url_prefix="/", auth_required=True):
+def create_blue(blue_name, url_prefix="/", auth_required=True, special_protocol=False):
     add_blue = Blueprint(blue_name, __name__)
     if auth_required:
         @add_blue.before_request
         @login_required
         def before_request():
-
+            if special_protocol is True:
+                r_protocol = request.headers.get("X-Request-Protocol", "http")
+                if r_protocol not in request_special_protocol:
+                    print(request.host)
             g.role_value = control.role_value
 
     @add_blue.route("/ping/", methods=["GET"])
