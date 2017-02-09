@@ -32,10 +32,17 @@ function query_option(select_id, v, query_t){
     return query_option;
 }
 
-function new_td(key, obj){
+function new_td(key, obj, max_len){
     var td = $("<td></td>");
     if(key in obj){
-        td.append(obj[key] + "");
+        var td_text = obj[key] + "";
+        if(max_len != null){
+            if(td_text.length > max_len){
+                td.attr("title", td_text);
+                td_text = td_text.substr(0, max_len - 2) + ".."
+            }
+        }
+        td.append(td_text);
     }
     return td;
 }

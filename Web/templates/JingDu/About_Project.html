@@ -1,23 +1,44 @@
 <div class="div_jy_about_project" style="display: none">
-    <div class="clear bottom20">
-        <input class="box-side width150" id="start_time" placeholder="项目编号"/>
-        <a id="start_search">
-            <button class="btn btn-primary" id="btn_new" disabled>显示最近创建</button>
-        </a>
+    <div>
+        <div class="clear bottom20">
+            <input class="box-side width150" id="start_time" placeholder="项目编号"/>
+            <a id="start_search">
+                <button class="btn btn-primary" id="btn_last_project">显示最近创建</button>
+            </a>
+        </div>
+        <div style="position: relative">
+            <table class="table table-bordered table-hover api-list-table" id="t_project_info">
+                <tr>
+                    <th scope="col" width="6%">项目编号</th>
+                    <th scope="col" width="10%">项目名称</th>
+                    <th scope="col" width=10%">项目描述</th>
+                    <th scope="col" width=10%">创建时间</th>
+                    <th scope="col" width=6%">显示级别</th>
+                    <th scope="col" width=8%">是否完成</th>
+                    <th scope="col" width=16%">最近更新</th>
+                    <th scope="col" width=6%">所属频道</th>
+                    <th scope="col" width=8%">操作</th>
+                </tr>
+            </table>
+        </div>
     </div>
-    <div style="position: relative">
-        <table class="table table-bordered table-hover api-list-table">
-            <tr>
-                <th scope="col" width="8%">项目编号</th>
-                <th scope="col" width="10%">项目名称</th>
-                <th scope="col" width=10%">项目描述</th>
-                <th scope="col" width=10%">创建时间</th>
-                <th scope="col" width=8%">显示级别</th>
-                <th scope="col" width=8%">是否完成</th>
-                <th scope="col" width=16%">最近更新</th>
-                <th scope="col" width=16%">所属频道</th>
-                <th scope="col" width=8%">操作</th>
-            </tr>
-        </table>
+    <div>
+        <div class="clear bottom20">
+            <input class="box-side width250" id="start_time" placeholder="项目编号或者账户名"/>
+            <a id="start_search">
+                <button class="btn btn-primary" id="btn_new" disabled>显示最近创建</button>
+            </a>
+        </div>
+        <div style="position: relative">
+            <table class="table table-bordered table-hover api-list-table">
+                <tr>
+                    <th scope="col" width="8%">项目编号</th>
+                    <th scope="col" width="10%">成员帐号</th>
+                    <th scope="col" width=10%">成员类型</th>
+                    <th scope="col" width=10%">加入时间</th>
+                    <th scope="col" width=8%">操作</th>
+                </tr>
+            </table>
+        </div>
     </div>
 </div>

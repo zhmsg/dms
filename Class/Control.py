@@ -21,14 +21,15 @@ from IP import IPManager
 from Release import ReleaseManager
 from ParamFormat import ParamFormatManager
 from PullRequest import PullRequestManager
-from Class import DATE_FORMAT_STR, release_dir
+from JingDuData import JingDuDataManager
+from Class import DATE_FORMAT_STR, release_dir, jd_mysql_host, jd_mysql_db
 
 __author__ = 'ZhouHeng'
 
 my_email = MyEmailManager("/home/msg/conf/")
 
 
-class ControlManager:
+class ControlManager(object):
 
     def __init__(self):
         self.db = DB()
@@ -55,6 +56,7 @@ class ControlManager:
         self.release_man = ReleaseManager(release_dir)
         self.param_man = ParamFormatManager()
         self.pull_request_man = PullRequestManager()
+        self.jd_man = JingDuDataManager(jd_mysql_host, jd_mysql_db)
         self.manger_email = ["budechao@ict.ac.cn", "biozy@ict.ac.cn"]
         self.jy_log = LogManager()
 
@@ -728,7 +730,7 @@ class ControlManager:
         my_email.send_mail_thread(user_info["email"], u"晶云文档系统测试发送与接收邮件", content)
         return True, user_info["email"]
 
-    # 针对查看晶云平台运行日志
+    # 针对查看晶读平台运行日志
     def look_jy_log(self, user_name, role, start_time=None, end_time=None, level=None, search_url=None, search_account=None):
         if role & self.role_value["log_look"] <= 0:
             return False, u"您没有权限"
@@ -766,6 +768,11 @@ class ControlManager:
 
     def register_login_task(self):
         return self.jy_log.register_login_task()
+
+    # 查看晶读平台产生数据
+    def get_project_info(self, user_name, user_role, project_no=None):
+        # 判断角色值
+        return self.jd_man.select_project(project_no)
 
     # 针对工具
     def get_ip_info(self, ip_value):

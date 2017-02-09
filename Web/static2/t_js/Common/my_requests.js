@@ -90,7 +90,7 @@ function my_async_request(request_url, request_method, body_param, request_succe
     });
 }
 
-function my_async_request2(request_url, request_method, body_param, request_success){
+function my_async_request2(request_url, request_method, body_param, request_success, exec_obj){
     if(request_method != "GET"){
         body_param = JSON.stringify(body_param)
     }
@@ -101,6 +101,15 @@ function my_async_request2(request_url, request_method, body_param, request_succ
         dataType: "json",
         data: body_param,
         success:function(data){
+            if("exec_r" in exec_obj){
+                exec_obj.exec_r = true;
+            }
+            if("exec_completed" in exec_obj){
+                exec_obj.exec_completed = true;
+            }
+            if("exec_ing" in exec_obj){
+                exec_obj.exec_ing = false;
+            }
             if(data.status == false){
                 sweetAlert(data.data);
             }
@@ -114,7 +123,18 @@ function my_async_request2(request_url, request_method, body_param, request_succ
                 request_success(data.data);
             }
         },
-        error:request_error
+        error:function(xhr){
+            if("exec_r" in exec_obj){
+                exec_obj.exec_r = false;
+            }
+            if("exec_completed" in exec_obj){
+                exec_obj.exec_completed = true;
+            }
+            if("exec_ing" in exec_obj){
+                exec_obj.exec_ing = false;
+            }
+            request_error(xhr);
+        }
     });
 }
 

@@ -13,7 +13,7 @@ from Check import check_int, check_sql_character
 __author__ = 'ZhouHeng'
 
 
-class LogManager:
+class LogManager(object):
 
     def __init__(self):
         if env == "Development":

@@ -4,6 +4,8 @@
 
 {% block js_content %}
     {{ 't_js/Common/JY_DIV.js' | make_static_html | safe }}
+    {{ 't_js/Common/add_node.js' | make_static_html | safe }}
+    {{ 't_js/JingDu/project.js' | make_static_html | safe }}
 {% endblock %}
 
 {% block center_content %}

@@ -3,14 +3,17 @@
 
 import MySQLdb
 import json
-
+from datetime import date, datetime
 import os
 from Tools import env
+
 
 __author__ = 'zhouheng'
 
 
 class DB(object):
+    TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
+    DATE_FORMAT = '%Y-%m-%d'
     conn = None
     cursor = None
     _sock_file = ''
@@ -42,6 +45,23 @@ class DB(object):
             s = json.dumps(s)
         return self.conn.literal(s)
 
+    @staticmethod
+    def merge_where(where_value=None, where_is_none=None, where_cond=None):
+        args = []
+        if where_cond is None:
+            where_cond = list()
+        else:
+            where_cond = list(where_cond)
+        if where_value is not None:
+            where_args = dict(where_value).values()
+            args.extend(where_args)
+            for key in dict(where_value).keys():
+                where_cond.append("%s=%%s" % key)
+        if where_is_none is not None and len(where_is_none) > 0:
+            for key in where_is_none:
+                where_cond.append("%s is NULL" % key)
+        return where_cond, args
+
     def execute(self, sql_query, args=None, freq=0):
         if self.cursor is None:
             self.connect()
@@ -60,16 +80,27 @@ class DB(object):
             return self.execute(sql_query=sql_query, freq=freq+1)
         return handled_item
 
-    def execute_select(self, table_name, where_value={"1": 1}, cols=None, package=False):
-        args = dict(where_value).values()
-        if len(args) <= 0:
-            return 0
+    def execute_select(self, table_name, where_value={"1": 1}, where_cond=None, cols=None, package=False, **kwargs):
+        where_is_none = kwargs.pop("where_is_none", None)
+        where_cond, args = self.merge_where(where_value=where_value, where_cond=where_cond, where_is_none=where_is_none)
         if cols is None:
             select_item = "*"
         else:
             select_item = ",".join(tuple(cols))
-        sql_query = "SELECT %s FROM %s WHERE %s=%%s;" \
-                    % (select_item, table_name, "=%s AND ".join(dict(where_value).keys()))
+        if len(where_cond) > 0:
+            sql_query = "SELECT %s FROM %s WHERE %s" % (select_item, table_name, " AND ".join(where_cond))
+        else:
+            sql_query = "SELECT %s FROM %s" % (select_item, table_name)
+        order_by = kwargs.pop("order_by", None)
+        order_desc = kwargs.pop("order_desc", False)
+        limit = kwargs.pop("limit", None)
+        if order_by is not None and (isinstance(order_by, list) or isinstance(order_by, tuple)):
+            sql_query += " ORDER BY %s" % ",".join(order_by)
+            if order_desc is True:
+                sql_query += " DESC"
+        if isinstance(limit, int):
+            sql_query += " LIMIT %s" % limit
+        sql_query += ";"
         exec_result = self.execute(sql_query, args)
         if cols is not None and package is True:
             db_items = self.fetchall()
@@ -77,7 +108,19 @@ class DB(object):
             for db_item in db_items:
                 r_item = dict()
                 for i in range(len(cols)):
-                    r_item[cols[i]] = db_item[i]
+                    c_v = db_item[i]
+                    if isinstance(c_v, datetime):
+                        c_v = c_v.strftime(self.TIME_FORMAT)
+                    elif isinstance(c_v, date):
+                        c_v = c_v.strftime(self.DATE_FORMAT)
+                    elif isinstance(c_v, str):
+                        if c_v == "\x00":
+                            c_v = False
+                        elif c_v == "\x01":
+                            c_v = True
+                        else:
+                            print(c_v)
+                    r_item[cols[i]] = c_v
                 select_items.append(r_item)
             return select_items
         return exec_result
