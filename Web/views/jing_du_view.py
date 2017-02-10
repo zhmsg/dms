@@ -28,3 +28,16 @@ def get_project_info():
         project_no = None
     exec_r, mul_p_info = control.get_project_info(g.user_name, g.user_role, project_no)
     return jsonify({"status": exec_r, "data": mul_p_info})
+
+
+@jing_du_view.route("/project/user/", methods=["GET"])
+def get_project_user():
+    project_no = account = None
+    if "project_no" in request.args:
+        project_no = int(request.args["project_no"])
+    elif "account" in request.args:
+        account = request.args["account"]
+    else:
+        return jsonify({"status": False, "data": "无效的请求"})
+    exec_r, mul_pu_info = control.get_project_user(g.user_name, g.user_role, project_no, account)
+    return jsonify({"status": exec_r, "data": mul_pu_info})

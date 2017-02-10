@@ -774,6 +774,10 @@ class ControlManager(object):
         # 判断角色值
         return self.jd_man.select_project(project_no)
 
+    def get_project_user(self, user_name, user_role, project_no=None, account=None):
+        # 判断角色值
+        return self.jd_man.select_project_user(project_no, account)
+
     # 针对工具
     def get_ip_info(self, ip_value):
         return self.ip.select_info_info(ip_value)
