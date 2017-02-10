@@ -80,7 +80,7 @@ class DB(object):
             return self.execute(sql_query=sql_query, freq=freq+1)
         return handled_item
 
-    def execute_select(self, table_name, where_value={"1": 1}, where_cond=None, cols=None, package=False, **kwargs):
+    def execute_select(self, table_name, where_value={"1": 1}, where_cond=None, cols=None, package=True, **kwargs):
         where_is_none = kwargs.pop("where_is_none", None)
         where_cond, args = self.merge_where(where_value=where_value, where_cond=where_cond, where_is_none=where_is_none)
         if cols is None:

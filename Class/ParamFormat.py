@@ -37,12 +37,5 @@ class ParamFormatManager:
 
     def select_param_format(self):
         cols = ["param", "param_type", "min_len", "max_len", "not_allow", "match_str", "param_desc"]
-        self.db.execute_select(self.t_param_format, cols=cols)
-        db_r = self.db.fetchall()
-        params_info = []
-        for item in db_r:
-            param_item = {}
-            for i in range(len(cols)):
-                param_item[cols[i]] = item[i]
-            params_info.append(param_item)
+        params_info = self.db.execute_select(self.t_param_format, cols=cols, package=True)
         return True, params_info
