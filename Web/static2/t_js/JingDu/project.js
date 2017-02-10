@@ -101,6 +101,11 @@ function show_project_user(pu_data){
         }
         current_td.text(role_desc);
     });
+    $("a[name='td_look_partner']").each(function(){
+        var current_td = $(this);
+        current_td.unbind("click");
+        current_td.click(click_look_partner);
+    });
 }
 
 function query_project_user(){
