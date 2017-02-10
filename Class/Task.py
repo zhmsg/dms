@@ -74,16 +74,13 @@ class TaskManager(object):
 
     def select_scheduler_status(self):
         cols = ["task_status", "user_name", "reason_desc", "update_time"]
-        result = self.db.execute_select(self.scheduler_status, {"task_type": self.task_type}, cols)
-        info = {}
-        if result <= 0:
+        db_items = self.db.execute_select(self.scheduler_status, {"task_type": self.task_type}, cols=cols, package=True)
+        if len(db_items) <= 0:
+            info = {}
             for col in cols:
                 info[col] = None
             return True, info
-        db_r = self.db.fetchone()
-        for i in range(len(cols)):
-            info[cols[i]] = db_r[i]
-        return True, info
+        return True, db_items[0]
 
 
 class DayTaskManager(TaskManager):
