@@ -2,7 +2,7 @@
     <div>
         <div class="clear bottom20">
             <input class="box-side width150" id="start_time" placeholder="项目编号"/>
-            <a id="start_search">
+            <a>
                 <button class="btn btn-primary" id="btn_last_project">显示最近创建</button>
             </a>
         </div>
@@ -23,13 +23,14 @@
     </div>
     <div>
         <div class="clear bottom20">
-            <input class="box-side width250" id="start_time" placeholder="项目编号或者账户名"/>
-            <a id="start_search">
-                <button class="btn btn-primary" id="btn_new" disabled>显示最近创建</button>
+            <input class="box-side width250" id="pu_no_name" placeholder="项目编号或者账户名"/>
+            <a>
+                <button class="btn btn-primary" id="btn_project_user">查看</button>
             </a>
+            <label id="lab_pu_error_key" class="hand error_result" style="display: none">输入的项目编号或账户名无效，请检查后重新输入</label>
         </div>
         <div style="position: relative">
-            <table class="table table-bordered table-hover api-list-table">
+            <table class="table table-bordered table-hover api-list-table" id="t_project_user">
                 <tr>
                     <th scope="col" width="8%">项目编号</th>
                     <th scope="col" width="10%">成员帐号</th>

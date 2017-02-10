@@ -42,6 +42,7 @@ function new_td(key, obj, max_len){
                 td_text = td_text.substr(0, max_len - 2) + ".."
             }
         }
+        td.attr("name", "td_" + key);
         td.append(td_text);
     }
     return td;

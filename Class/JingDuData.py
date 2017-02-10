@@ -30,3 +30,20 @@ class JingDuDataManager(object):
             where_value = dict(project_no=project_no)
         return self._select_project(where_value)
 
+    def _select_project_user(self, where_value=None, limit_num=20):
+        cols = ["project_no", "account", "role", "date_added"]
+        mul_pu_info = self.db.execute_select(self.t_project_user, cols=cols, package=True, order_by=["sys_no"],
+                                             order_desc=True, where_value=where_value, limit=limit_num)
+        return True, mul_pu_info
+
+    def select_project_user(self, project_no=None, account=None):
+        where_value = dict()
+        if project_no is not None:
+            if not isinstance(project_no, int):
+                return False, "错误的项目编号"
+            where_value.update(dict(project_no=project_no))
+        elif account is not None:
+            where_value.update(dict(account=account))
+        else:
+            return False, "必须传入项目号或者账户名"
+        return self._select_project_user(where_value)
