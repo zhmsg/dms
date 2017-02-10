@@ -9,8 +9,22 @@ function click_look_partner(){
     var current_a = $(this);
     var td_parent = current_a.parent().parent();
     var td_project_no = td_parent.find("td[name='td_project_no']");
+    if(td_project_no.text() == $("#pu_no_name").val()){
+        return;
+    }
     $("#pu_no_name").val(td_project_no.text());
     $("#btn_project_user").click();
+}
+
+function click_look_project(){
+    var current_a = $(this);
+    var td_parent = current_a.parent().parent();
+    var td_project_no = td_parent.find("td[name='td_project_no']");
+    if(td_project_no.text() == $("#p_no").val()){
+        return;
+    }
+    $("#p_no").val(td_project_no.text());
+    $("#btn_last_project").click();
 }
 
 function show_project_info(project_data){
@@ -60,7 +74,13 @@ function query_project_info(){
     }
     query_project_ing.exec_ing = true;
     query_project_ing.exec_completed = false;
+    var input_key = $("#p_no").val();
+    $("#lab_p_error_key").hide();
+    var m_project_no = input_key.match("^\\d{1,10}$");
     var request_url = "project/";
+    if(m_project_no != null){
+        request_url += "?project_no=" + m_project_no[0];
+    }
     my_async_request2(request_url, "GET", null, show_project_info, query_project_ing);
 }
 
@@ -105,6 +125,11 @@ function show_project_user(pu_data){
         var current_td = $(this);
         current_td.unbind("click");
         current_td.click(click_look_partner);
+    });
+    $("a[name='td_look_project']").each(function(){
+        var current_td = $(this);
+        current_td.unbind("click");
+        current_td.click(click_look_project);
     });
 }
 
