@@ -12,6 +12,7 @@ from Web import User
 
 from Web import dms_url_prefix, dev_url_prefix, api_url_prefix, bug_url_prefix, right_url_prefix
 from Web import log_url_prefix, create_blue, param_url_prefix, release_url_prefix, status_url_prefix
+from Web import jingdu_url_prefix
 from Web import control
 
 sys.path.append('..')
@@ -277,4 +278,5 @@ def select_portal():
     return render_template("portal.html", api_url_prefix=api_url_prefix, dev_url_prefix=dev_url_prefix, bug_url_prefix=bug_url_prefix,
                            dms_url_prefix=dms_url_prefix, right_url_prefix=right_url_prefix,
                            log_url_prefix=log_url_prefix, param_url_prefix=param_url_prefix,
-                           release_url_prefix=release_url_prefix, status_url_prefix=status_url_prefix)
+                           release_url_prefix=release_url_prefix, status_url_prefix=status_url_prefix,
+                           jd_url_prefix=jingdu_url_prefix)
