@@ -788,6 +788,18 @@ class ControlManager(object):
             return False, "您没有权限"
         return self.jd_man.select_project_user(project_no, account)
 
+    def get_sys_sample(self, user_name, user_role, sample_no=None):
+        # 判断角色值
+        if self.judge_role(user_role, self.role_value["jd_basic"]) is False:
+            return False, "您没有权限"
+        return self.jd_man.select_sample(sample_no)
+
+    def get_sample_user(self, user_name, user_role, account=None):
+        # 判断角色值
+        if self.judge_role(user_role, self.role_value["jd_basic"]) is False:
+            return False, "您没有权限"
+        return self.jd_man.select_sample_user(account)
+
     # 针对工具
     def get_ip_info(self, ip_value):
         return self.ip.select_info_info(ip_value)

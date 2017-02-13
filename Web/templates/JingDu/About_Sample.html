@@ -1,7 +1,45 @@
 <div class="div_jy_about_sample" style="display: none">
-    <!--系统备注及说明模块 start-->
-    <div class="declare">
-        <p class="redColor">开发中：</p>
-
+    <div>
+        <div class="clear bottom20">
+            <input class="box-side width150" id="s_no" placeholder="样本编号"/>
+            <a>
+                <button class="btn btn-primary" id="btn_last_sample">显示最近创建</button>
+            </a>
+            <label id="lab_s_error_key" class="hand error_result" style="display: none">输入的样本编号无效，请检查后重新输入</label>
+        </div>
+        <div style="position: relative">
+            <table class="table table-bordered table-hover api-list-table" id="t_sys_sample">
+                <tr>
+                    <th scope="col" width="6%">样本编号</th>
+                    <th scope="col" width="10%">样本名称</th>
+                    <th scope="col" width=10%">病人编号</th>
+                    <th scope="col" width=15%">创建时间</th>
+                    <th scope="col" width=6%">显示级别</th>
+                    <th scope="col" width=8%">频道</th>
+                    <th scope="col" width=8%">状态</th>
+                    <th scope="col" width=8%">操作</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div>
+        <div class="clear bottom20">
+            <input class="box-side width250" id="su_no_name" placeholder="账户名"/>
+            <a>
+                <button class="btn btn-primary" id="btn_sample_user">查看</button>
+            </a>
+            <label id="lab_su_error_key" class="hand error_result" style="display: none">输入的账户名无效，请检查后重新输入</label>
+        </div>
+        <div style="position: relative">
+            <table class="table table-bordered table-hover api-list-table" id="t_sample_user">
+                <tr>
+                    <th scope="col" width="8%">样本编号</th>
+                    <th scope="col" width="10%">所属帐号</th>
+                    <th scope="col" width=10%">成员类型</th>
+                    <th scope="col" width=10%">加入时间</th>
+                    <th scope="col" width=8%">操作</th>
+                </tr>
+            </table>
+        </div>
     </div>
 </div>

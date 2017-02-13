@@ -41,3 +41,24 @@ def get_project_user():
         return jsonify({"status": False, "data": "无效的请求"})
     exec_r, mul_pu_info = control.get_project_user(g.user_name, g.user_role, project_no, account)
     return jsonify({"status": exec_r, "data": mul_pu_info})
+
+
+@jing_du_view.route("/sample/", methods=["GET"])
+def get_sys_sample():
+    if "sample_no" in request.args:
+        sample_no = int(request.args["sample_no"])
+    else:
+        sample_no = None
+    exec_r, mul_s_info = control.get_sys_sample(g.user_name, g.user_role, sample_no)
+    return jsonify({"status": exec_r, "data": mul_s_info})
+
+
+@jing_du_view.route("/sample/user/", methods=["GET"])
+def get_sample_user():
+    account = None
+    if "account" in request.args:
+        account = request.args["account"]
+    else:
+        return jsonify({"status": False, "data": "无效的请求"})
+    exec_r, mul_su_info = control.get_sample_user(g.user_name, g.user_role, account)
+    return jsonify({"status": exec_r, "data": mul_su_info})
