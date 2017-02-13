@@ -10,8 +10,10 @@
 {% endblock %}
 
 {% block center_content %}
-    <button type="button" class="btn btn-primary margin20" id="btn_jy_about_project" value="晶云测试环境">项目相关</button>
-    <button type="button" class="btn btn-primary margin20" id="btn_jy_about_sample" value="晶云一体机">样本相关</button>
+    <button type="button" class="btn btn-primary margin20" id="btn_jy_about_project" >项目相关</button>
+    <button type="button" class="btn btn-primary margin20" id="btn_jy_about_sample" >样本相关</button>
+    <button type="button" class="btn btn-primary margin20" id="btn_jy_about_task">任务相关</button>
     {% include "JingDu/About_Project.html" %}
     {% include "JingDu/About_Sample.html" %}
+    {% include "JingDu/About_Task.html" %}
 {% endblock %}
