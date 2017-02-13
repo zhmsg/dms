@@ -119,7 +119,7 @@ function show_project_user(pu_data){
             default:
                 role_desc = "已退出";
         }
-        current_td.text(role_desc);
+        current_td.text(current_td.text() + "|" + role_desc);
     });
     $("a[name='td_look_partner']").each(function(){
         var current_td = $(this);
