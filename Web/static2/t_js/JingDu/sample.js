@@ -18,7 +18,6 @@ function click_look_owner(){
 }
 
 function click_look_sample(){
-    console.info("edded");
     var current_a = $(this);
     var tr_parent = current_a.parent().parent();
     var td_sample_no = tr_parent.find("td[name='td_sample_no']");
