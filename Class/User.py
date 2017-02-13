@@ -62,10 +62,12 @@ class UserManager:
              "param_new": {"role_desc": u"新建", "role_value": 33554432},
              "param_update": {"role_desc": u"更新", "role_value": 67108864},
              "param_del": {"role_desc": u"删除", "role_value": 134217728}}}
+        self._jd_role_desc = {"module_desc": u"晶读数据", "role_list":
+            {"jd_basic": {"role_desc": u"基础数据", "role_value": 536870912}}}
         self.role_desc = {"data": self._data_role_desc, "api": self._api_role_desc, "table": self._table_role_desc,
                           "right": self._right_role_desc, "user": self._user_role_desc, "bug": self._bug_role_desc,
                           "status_code": self._status_code_role_desc, "log": self._log_role_desc,
-                          "release": self._release_role_desc, "param": self._param_role_desc}
+                          "release": self._release_role_desc, "param": self._param_role_desc, "jd": self._jd_role_desc}
         self.__init_role__()
 
     def __init_role__(self):

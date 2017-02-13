@@ -31,6 +31,12 @@ my_email = MyEmailManager("/home/msg/conf/")
 
 class ControlManager(object):
 
+    @staticmethod
+    def judge_role(user_role, need_role):
+        if user_role & need_role < need_role:
+            return False
+        return True
+
     def __init__(self):
         self.db = DB()
         self.sys_user = "sys_user"
@@ -772,10 +778,14 @@ class ControlManager(object):
     # 查看晶读平台产生数据
     def get_project_info(self, user_name, user_role, project_no=None):
         # 判断角色值
+        if self.judge_role(user_role, self.role_value["jd_basic"]) is False:
+            return False, "您没有权限"
         return self.jd_man.select_project(project_no)
 
     def get_project_user(self, user_name, user_role, project_no=None, account=None):
         # 判断角色值
+        if self.judge_role(user_role, self.role_value["jd_basic"]) is False:
+            return False, "您没有权限"
         return self.jd_man.select_project_user(project_no, account)
 
     # 针对工具
