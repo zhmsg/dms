@@ -16,6 +16,7 @@ class JingDuDataManager(object):
         self.t_project_user = "project_user_right"
         self.t_sys_samples = "sys_samples"
         self.t_sample_user = "sample_user_right"
+        self.t_sample_info = "sample_info"
         self.t_project_sample = "sys_project_sample"
 
     def _select_project(self, where_value=None, limit_num=20):
@@ -54,26 +55,43 @@ class JingDuDataManager(object):
     def _select_sample(self, where_value=None, limit_num=20):
         cols = ["sample_no", "sample_id", "patient_no", "date_created", "display_level", "portal"]
         mul_s_info = self.db.execute_select(self.t_sys_samples, cols=cols, package=True, order_by=["sample_no"],
-                                             order_desc=True, where_value=where_value, limit=limit_num)
+                                            order_desc=True, where_value=where_value, limit=limit_num)
         return True, mul_s_info
 
     def select_sample(self, sample_no=None):
         where_value = None
         if sample_no is not None:
             if not isinstance(sample_no, int):
-                return False, "错误的项目编号"
+                return False, "错误的样本编号"
             where_value = dict(sample_no=sample_no)
         return self._select_sample(where_value)
 
+    def _select_sample_info(self, where_value=None, limit_num=20):
+        cols = ["sample_no", "stage", "completed_time_1", "completed_time_2", "completed_time_3", "completed_time_4",
+                "diagnosis", "sample_type", "seq_type", "seq_files"]
+        mul_si_info = self.db.execute_select(self.t_sample_info, cols=cols, package=True, order_by=["sample_no"],
+                                             order_desc=True, where_value=where_value, limit=limit_num)
+        return True, mul_si_info
+
+    def select_sample_info(self, sample_no):
+        if not isinstance(sample_no, int):
+            return False, "错误的样本编号"
+        where_value = dict(sample_no=sample_no)
+        return self._select_sample_info(where_value)
+
     def _select_sample_user(self, where_value=None, limit_num=20):
         cols = ["sys_no", "sample_no", "account", "role"]
-        mul_su_info = self.db.execute_select(self.t_project_user, cols=cols, package=True, order_by=["sys_no"],
+        mul_su_info = self.db.execute_select(self.t_sample_user, cols=cols, package=True, order_by=["sys_no"],
                                              order_desc=True, where_value=where_value, limit=limit_num)
         return True, mul_su_info
 
-    def select_sample_user(self, account=None):
+    def select_sample_user(self, sample_no=None, account=None):
         where_value = dict()
-        if account is not None:
+        if sample_no is not None:
+            if not isinstance(sample_no, int):
+                return False, "错误的样本编号"
+            where_value.update(dict(sample_no=sample_no))
+        elif account is not None:
             where_value.update(dict(account=account))
         else:
             return False, "必须传入账户名"

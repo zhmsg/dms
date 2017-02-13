@@ -53,12 +53,25 @@ def get_sys_sample():
     return jsonify({"status": exec_r, "data": mul_s_info})
 
 
+@jing_du_view.route("/sample/info/", methods=["GET"])
+def get_sample_info():
+    sample_no = None
+    if "sample_no" in request.args:
+        sample_no = int(request.args["sample_no"])
+    else:
+        return jsonify({"status": False, "data": "无效的请求"})
+    exec_r, mul_si_info = control.get_sample_info(g.user_name, g.user_role, sample_no)
+    return jsonify({"status": exec_r, "data": mul_si_info})
+
+
 @jing_du_view.route("/sample/user/", methods=["GET"])
 def get_sample_user():
-    account = None
-    if "account" in request.args:
+    sample_no = account = None
+    if "sample_no" in request.args:
+        sample_no = int(request.args["sample_no"])
+    elif "account" in request.args:
         account = request.args["account"]
     else:
         return jsonify({"status": False, "data": "无效的请求"})
-    exec_r, mul_su_info = control.get_sample_user(g.user_name, g.user_role, account)
+    exec_r, mul_su_info = control.get_sample_user(g.user_name, g.user_role, sample_no, account)
     return jsonify({"status": exec_r, "data": mul_su_info})

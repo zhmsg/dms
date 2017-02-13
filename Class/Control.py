@@ -794,11 +794,17 @@ class ControlManager(object):
             return False, "您没有权限"
         return self.jd_man.select_sample(sample_no)
 
-    def get_sample_user(self, user_name, user_role, account=None):
+    def get_sample_info(self, user_name, user_role, sample_no):
         # 判断角色值
         if self.judge_role(user_role, self.role_value["jd_basic"]) is False:
             return False, "您没有权限"
-        return self.jd_man.select_sample_user(account)
+        return self.jd_man.select_sample_info(sample_no)
+
+    def get_sample_user(self, user_name, user_role, sample_no=None, account=None):
+        # 判断角色值
+        if self.judge_role(user_role, self.role_value["jd_basic"]) is False:
+            return False, "您没有权限"
+        return self.jd_man.select_sample_user(sample_no, account)
 
     # 针对工具
     def get_ip_info(self, ip_value):
