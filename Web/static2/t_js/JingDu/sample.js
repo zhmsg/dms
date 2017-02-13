@@ -49,6 +49,16 @@ function show_stage(sample_info){
         var info_item = sample_info[i];
         var sample_no = info_item.sample_no;
         var td_stage = $("#tr_sample_" + sample_no).find("td[name='td_look_stage']");
+        var stage_text = "";
+        console.info(info_item.stage);
+        switch(info_item.stage)
+        {
+            case 3:
+                stage_text = "<a>检查突变</a>";
+                break;
+            default:
+                stage_text = info_item.stage;
+        }
         td_stage.text(info_item.stage);
     }
 }
