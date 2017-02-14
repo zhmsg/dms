@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import sys
+import requests
 from flask import render_template, g, request, jsonify
 
-from Web import jingdu_url_prefix as url_prefix, create_blue, control
+from Web import jingdu_url_prefix as url_prefix, create_blue, control, sx_variant, check_variant
 
 sys.path.append('..')
 
@@ -75,3 +76,34 @@ def get_sample_user():
         return jsonify({"status": False, "data": "无效的请求"})
     exec_r, mul_su_info = control.get_sample_user(g.user_name, g.user_role, sample_no, account)
     return jsonify({"status": exec_r, "data": mul_su_info})
+
+
+@jing_du_view.route("/sample/variant/", methods=["GET"])
+def check_sample_variant():
+    if "sample_no" in request.args:
+        sample_no = int(request.args["sample_no"])
+    else:
+        return jsonify({"status": False, "data": "无效的请求"})
+    r_data = dict(sample_no=sample_no)
+    if check_variant[0] is True:
+        r_data["message"] = "正忙"
+        return jsonify({"status": True, "data": r_data})
+    check_variant[0] = True
+    try:
+        resp = requests.get("%s/head/%s/" % (sx_variant, sample_no))
+        if resp.status_code != 200:
+            r_data["message"] = "请求%s" % resp.status_code
+        else:
+            res = resp.json()
+            if "status" not in res:
+                r_data["message"] = "生信格式不正确"
+            if res["status"].lower() != "success":
+                r_data["message"] = "生信格式不正确"
+            if "vars" not in res:
+                r_data["message"] = "生信格式不正确"
+            r_data["message"] = "正常"
+    except Exception as ce:
+        print(ce)
+        r_data["message"] = "请求失败"
+    check_variant[0] = False
+    return jsonify({"status": True, "data": r_data})

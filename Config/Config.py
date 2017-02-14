@@ -27,4 +27,7 @@ session_cookie_name = config.get(current_env, "session_cookie_name")
 web_prefix_url = config.get(current_env, "web_prefix_url")
 request_special_protocol = config.get(current_env, "request_special_protocol").split(",")
 
+sx_variant = config.get(current_env, "sx_variant")
+check_variant = [False]
+
 user_blacklist = []

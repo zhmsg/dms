@@ -46,6 +46,17 @@ function click_look_top3_stage(){
     }
 }
 
+function click_check_variant()
+{
+    var current_a = $(this);
+    current_a.text("查询中");
+    var tr_parent = current_a.parent().parent();
+    var td_sample_no = tr_parent.find("td[name='td_sample_no']");
+    tr_parent.attr("id", "tr_sample_" + td_sample_no.text());
+    var request_url = "sample/variant/?sample_no=" + td_sample_no.text();
+    my_async_request2(request_url, "GET", null, show_variant)
+}
+
 function show_stage(sample_info){
     var si_len = sample_info.length;
     for(var i=0;i<si_len;i++){
@@ -66,8 +77,16 @@ function show_stage(sample_info){
         td_stage.html(stage_text);
     }
     $("a[name='link_check_variant']").each(function(){
-
+        var current_td = $(this);
+        current_td.unbind("click");
+        current_td.click(click_check_variant);
     });
+}
+
+function show_variant(variant_info){
+    var sample_no = variant_info.sample_no;
+    var td_stage = $("#tr_sample_" + sample_no).find("td[name='td_look_stage']");
+    td_stage.html(variant_info.message);
 }
 
 function show_sample_info(sample_data){
