@@ -3,7 +3,6 @@
  */
 
 var query_sample_ing = new Object({"exec_r": null, "exec_completed": false, "exec_ing": false});
-var query_si_ing = new Object({"exec_r": null, "exec_completed": false, "exec_ing": false});
 var query_su_ing = new Object({"exec_r": null, "exec_completed": false, "exec_ing": false});
 
 function click_look_owner(){
@@ -29,18 +28,22 @@ function click_look_sample(){
 }
 
 function click_look_stage(){
-    if(query_si_ing.exec_ing == true){
-        return;
-    }
-    query_si_ing.exec_ing = true;
-    query_si_ing.exec_completed = false;
     var current_a = $(this);
     current_a.text("查询中");
     var tr_parent = current_a.parent().parent();
     var td_sample_no = tr_parent.find("td[name='td_sample_no']");
     tr_parent.attr("id", "tr_sample_" + td_sample_no.text());
     var request_url = "sample/info/?sample_no=" + td_sample_no.text();
-    my_async_request2(request_url, "GET", null, show_stage, query_si_ing)
+    my_async_request2(request_url, "GET", null, show_stage)
+}
+
+function click_look_top3_stage(){
+    var t_id = "t_sys_sample";
+    var link_els = $("#" + t_id).find("a[name='link_look_stage']");
+    var link_len = link_els.length;
+    for(var i=0;i<3&&i<link_len;i++){
+        $(link_els[i]).click();
+    }
 }
 
 function show_stage(sample_info){
@@ -54,13 +57,17 @@ function show_stage(sample_info){
         switch(info_item.stage)
         {
             case 3:
-                stage_text = "<a>检查突变</a>";
+                stage_text = '<a name=link_check_variant class="status_move">检查突变</a>';
+                console.info("e");
                 break;
             default:
                 stage_text = info_item.stage;
         }
-        td_stage.text(info_item.stage);
+        td_stage.html(stage_text);
     }
+    $("a[name='link_check_variant']").each(function(){
+
+    });
 }
 
 function show_sample_info(sample_data){
@@ -183,4 +190,5 @@ function query_sample_user(){
 $(document).ready(function () {
     $("#btn_last_sample").click(query_sys_sample);
     $("#btn_sample_user").click(query_sample_user);
+    $("#link_top3_stage").click(click_look_top3_stage);
 });
