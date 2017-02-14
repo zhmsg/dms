@@ -93,17 +93,22 @@ def check_sample_variant():
         resp = requests.get("%s/head/%s/" % (sx_variant, sample_no))
         if resp.status_code != 200:
             r_data["message"] = "请求%s" % resp.status_code
+            r_data["detail"] = resp.status_code
         else:
+            r_data["detail"] = resp.text
             res = resp.json()
             if "status" not in res:
                 r_data["message"] = "生信格式不正确"
-            if res["status"].lower() != "success":
+            elif res["status"].lower() != "success":
                 r_data["message"] = "生信格式不正确"
-            if "vars" not in res:
+            elif "vars" not in res:
                 r_data["message"] = "生信格式不正确"
-            r_data["message"] = "正常"
+            else:
+                r_data["message"] = "正常"
+                r_data["detail"] = "检测通过"
     except Exception as ce:
         print(ce)
         r_data["message"] = "请求失败"
+        r_data["detail"] = str(ce)
     check_variant[0] = False
     return jsonify({"status": True, "data": r_data})

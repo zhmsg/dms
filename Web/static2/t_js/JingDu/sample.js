@@ -87,6 +87,7 @@ function show_variant(variant_info){
     var sample_no = variant_info.sample_no;
     var td_stage = $("#tr_sample_" + sample_no).find("td[name='td_look_stage']");
     td_stage.html(variant_info.message);
+    td_stage.attr("title", variant_info.detail);
 }
 
 function show_sample_info(sample_data){
