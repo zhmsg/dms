@@ -143,7 +143,9 @@ $(function(){
         var td_ip = request_ips[i];
         var ip_value = td_ip.innerHTML;
         td_ip.innerHTML = ip_2_str(ip_value);
-        var local_ip = localStorage.getItem(ip_value);
+        var storage_prefix = "ip_info";
+        var item_key = storage_prefix + ip_value;
+        var local_ip = localStorage.getItem(item_key);
         var ip_info = null;
         if(local_ip != null){
             console.info("from local get " + local_ip);
