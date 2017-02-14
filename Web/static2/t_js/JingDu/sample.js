@@ -3,6 +3,7 @@
  */
 
 var query_sample_ing = new Object({"exec_r": null, "exec_completed": false, "exec_ing": false});
+var query_sv_ing = new Object({"exec_r": null, "exec_completed": false, "exec_ing": false});
 var query_su_ing = new Object({"exec_r": null, "exec_completed": false, "exec_ing": false});
 
 function click_look_owner(){
@@ -48,13 +49,19 @@ function click_look_top3_stage(){
 
 function click_check_variant()
 {
+    if(query_sv_ing.exec_ing == true){
+        console.info("查询中");
+        return;
+    }
+    query_sv_ing.exec_ing = true;
+    query_sv_ing.exec_completed = false;
     var current_a = $(this);
     current_a.text("查询中");
     var tr_parent = current_a.parent().parent();
     var td_sample_no = tr_parent.find("td[name='td_sample_no']");
     tr_parent.attr("id", "tr_sample_" + td_sample_no.text());
     var request_url = "sample/variant/?sample_no=" + td_sample_no.text();
-    my_async_request2(request_url, "GET", null, show_variant)
+    my_async_request2(request_url, "GET", null, show_variant, query_sv_ing)
 }
 
 function show_stage(sample_info){
@@ -64,7 +71,6 @@ function show_stage(sample_info){
         var sample_no = info_item.sample_no;
         var td_stage = $("#tr_sample_" + sample_no).find("td[name='td_look_stage']");
         var stage_text = "";
-        console.info(info_item.stage);
         switch(info_item.stage)
         {
             case 3:
@@ -109,12 +115,14 @@ function show_sample_info(sample_data){
     }
     $("td[name='td_display_level']:visible").each(function(){
         var current_td = $(this);
+        var current_text = "";
         if(current_td.text() == "0"){
-            current_td.text("公开");
+            current_text = "公开";
         }
         else{
-            current_td.text("私有");
+            current_text = "私有";
         }
+        current_td.text(current_td.text() + "|" + current_text);
     });
     $("a[name='link_look_stage']:visible").each(function(){
        var current_td = $(this);
