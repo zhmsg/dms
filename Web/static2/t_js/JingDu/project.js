@@ -46,10 +46,10 @@ function show_project_info(project_data){
     $("td[name='td_display_level']:visible").each(function(){
         var current_td = $(this);
         if(current_td.text() == "0"){
-            current_td.text("公开");
+            current_td.text(current_td.text() + "|公开");
         }
         else{
-            current_td.text("私有");
+            current_td.text(current_td.text() + "|私有");
         }
     });
     $("td[name='td_completed']:visible").each(function(){

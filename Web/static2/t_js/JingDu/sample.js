@@ -66,21 +66,42 @@ function click_check_variant()
 
 function show_stage(sample_info){
     var si_len = sample_info.length;
+    var now_ts = get_timestamp() / 1000;
     for(var i=0;i<si_len;i++){
         var info_item = sample_info[i];
         var sample_no = info_item.sample_no;
         var td_stage = $("#tr_sample_" + sample_no).find("td[name='td_look_stage']");
         var stage_text = "";
+        var stage_title = null;
         switch(info_item.stage)
         {
             case 3:
                 stage_text = '<a name=link_check_variant class="status_move">检查突变</a>';
-                console.info("e");
+                break;
+            case 0:
+                var upload_time = info_item.completed_time_1;
+                if(upload_time == null){
+                    stage_text = "0|未上传";
+                }
+                else {
+                    var upload_stamp = datetime_2_timestamp(upload_time);
+                    if(now_ts - upload_stamp > 3600){
+                        stage_text = "0|长时间未分析完成";
+                        stage_title = "超过2小时为完成\n开始时间:" + upload_time + "\n测序文件:" + info_item.seq_files;
+                    }
+                    else{
+                        stage_text = "0|分析进行中";
+                        stage_title = "开始时间:" + upload_time + "\n测序文件:" + info_item.seq_files;
+                    }
+                }
                 break;
             default:
                 stage_text = info_item.stage;
         }
         td_stage.html(stage_text);
+        if(stage_title != null){
+            td_stage.attr("title", stage_title);
+        }
     }
     $("a[name='link_check_variant']").each(function(){
         var current_td = $(this);

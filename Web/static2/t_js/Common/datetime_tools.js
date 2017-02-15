@@ -8,3 +8,12 @@ function timestamp_2_datetime(ts){
     dt_str += dt.toTimeString().substr(0, 8);
     return dt_str;
 }
+
+function get_timestamp(){
+    return (new Date()).valueOf();
+}
+
+function datetime_2_timestamp(dt_str){
+    var ts = Date.parse(dt_str);
+    return ts / 1000;
+}
