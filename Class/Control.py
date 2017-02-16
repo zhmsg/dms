@@ -472,10 +472,16 @@ class ControlManager(object):
         return self.api_status.del_status_code(status_code)
 
     # 针对BUG的应用
-    def get_bug_list(self, role):
-        if role & self.role_value["bug_look"] <= 0:
+    def get_bug_list(self, user_name, user_role):
+        if self.judge_role(user_role, self.role_value["bug_look"]) is False:
             return False, u"您没有权限"
-        return self.bug.get_bug_list()
+        exec_r, bug_list = self.bug.get_bug_list()
+        if exec_r is True:
+            bug_count = len(bug_list)
+            for i in range(bug_count - 1, -1, -1):
+                if bug_list[i]["bug_level"] == 0 and bug_list[i]["submitter"] != user_name:
+                    bug_list.remove(bug_list[i])
+        return exec_r, bug_list
 
     def get_bug_statistic(self, role):
         if role & self.role_value["bug_look"] <= 0:

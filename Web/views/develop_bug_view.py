@@ -27,7 +27,7 @@ bug_status_desc = [u"等待BUG确认", u"已有BUG疑似拥有者", u"已确认B
 
 @develop_bug_view.route("/", methods=["GET"])
 def show_bug_list():
-    result, bug_list = control.get_bug_list(current_user.role)
+    result, bug_list = control.get_bug_list(current_user.user_name, current_user.role)
     if result is False:
         return bug_list
     return render_template("%s/Show_BUG.html" % html_dir, bug_list=bug_list, bug_status_desc=bug_status_desc,

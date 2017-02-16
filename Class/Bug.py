@@ -39,6 +39,8 @@ class BugManager(object):
         result = self.db.execute_insert(self.bug, args=kwargs)
         if result != 1:
             return False, "sql execute result is %s " % result
+        if bug_level == 0:
+            self.new_bug_link(bug_no, submitter, 2, submitter)
         return True, kwargs
 
     def new_bug_link(self, bug_no, user_name, link_type, adder):
@@ -164,7 +166,7 @@ class BugManager(object):
             all_data.append({"user_name": item[0], "nick_name": item[1], "bug_num": item[2]})
         # 获得最近一个月的统计信息
         after_time = (datetime.now() - timedelta(days=30)).strftime(TIME_FORMAT)
-        select_sql = "SELECT u.user_name,nick_name,count(bug_no) AS bug_num FROM %s as u LEFT JOIN %s as b " \
+        select_sql = "SELECT u.user_name,nick_name,count(bug_no) AS bug_num FROM %s AS u LEFT JOIN %s AS b " \
                      "on u.user_name=b.user_name AND type=2 AND link_time>'%s' " \
                      "WHERE role & %s = %s GROUP BY u.user_name ORDER BY bug_num DESC;" \
                      % (self.user, self.bug_owner, after_time, bug_role, bug_role)
