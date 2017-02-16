@@ -182,7 +182,7 @@ $(function(){
             }
             this.innerHTML = btn_v;
             $("#save_name").hide();
-            DownloadJson(file_name + ".json", $("#res_text").text());
+            DownloadFile(file_name + ".json", $("#res_text").text());
             $("#save_name").val("");
             $("#btn_save_result").hide();
         }
@@ -207,7 +207,11 @@ $(function(){
         new_right = true;
     }
     $("#authorization_value").parent().after('<li><input type="checkbox" id="skip_auth"> Skip Auth</li>');
+    $("#authorization_value").val("fuyoulonghui:fuyoulonghui");
+    $("#filter_str_value").val("( SiftClass in ['D',''] or PolyPhen2hdivClass in ['D','P',''] or MutationTasteClass in ['A','D',''] or MetasvmClass in ['D',''] ) and ExonicEffect in ['nonsynonymous SNV','stopgain','stoploss','frameshift insertion','frameshift deletion','frameshift block substitution','nonframeshift insertion','nonframeshift deletion','nonframeshift block substitution','unknown',''] and Region in ['exonic','exonic;splicing','splicing'] and ( ( PopAllFreq <= 0.01 or PopAllFreq == '' ) and ( PopEasFreq <= 0.01 or PopEasFreq == '' ) and ( Esp6500Freq <= 0.01 or Esp6500Freq == '' ) and ( ExacAllFreq <= 0.01 or ExacAllFreq == '' ) and ( ExacEasFreq <= 0.01 or ExacEasFreq == '' ) )");
+    $("#sample_no_value").val("4714");
     $("#Content-Type_value").val("application/json");
 });
+
 
 
