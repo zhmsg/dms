@@ -108,7 +108,7 @@
     {% endif %}
 {% endif %}
 {#取消BUG#}
-{% if bug_info["basic_info"]["bug_status"] < 3 %}
+{% if bug_info["basic_info"]["bug_status"] < 3 and bug_info["basic_info"]["bug_level"] > 0 %}
     {% if bug_info["basic_info"]["submitter"] == current_user %}
     <form action="{{ url_prefix }}/{{ bug_no }}/cancel/" method="post">
         <button class="btn btn-primary" type="submit">取消BUG</button>
@@ -117,7 +117,7 @@
 {% endif %}
 
 {#不过属于BUG 设计如此#}
-{% if bug_info["basic_info"]["bug_status"] < 3 %}
+{% if bug_info["basic_info"]["bug_status"] < 3 and bug_info["basic_info"]["bug_level"] > 0 %}
     {% if user_role | bit_and(role_desc["bug_cancel"]) == role_desc["bug_cancel"] %}
     <form action="{{ url_prefix }}/{{ bug_no }}/design/", method="post">
         <button class="btn btn-primary" type="submit">不是BUG，就是这么设计的</button>
