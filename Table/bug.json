@@ -44,9 +44,14 @@
                 "col_type": "varchar(15)"
             },
             {
-                "col_comment": "关注的时间",
+                "col_comment": "提交的时间",
                 "col_name": "submit_time",
                 "col_type": "datetime"
+            },
+            {
+                "col_comment": "BUG的级别 1本地自己人发现 2本地用户发现 3测试环境自己人发现 3测试环境开发人员发现 4 测试环境领导发现 5测试环境其他领导发现 6生产环境自己人发现 7生产环境开发人员发现 8生产环境领导发现 9生产环境其他领导发现 10生产环境客户发现 11忍无可忍",
+                "col_name": "bug_level",
+                "col_type": "tinyint(4)"
             },
             {
                 "default_value": "0",
