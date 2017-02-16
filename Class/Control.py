@@ -487,10 +487,10 @@ class ControlManager(object):
             return False, u"您没有权限"
         return self.bug.get_bug_info(bug_no)
 
-    def new_bug(self, user_name, role, bug_title):
+    def new_bug(self, user_name, role, bug_title, bug_level):
         if role & self.role_value["bug_new"] <= 0:
             return False, u"您没有权限"
-        return self.bug.new_bug_info(bug_title, user_name)
+        return self.bug.new_bug_info(bug_title, user_name, bug_level)
 
     def add_bug_str_example(self, user_name, role, bug_no, content):
         if role & self.role_value["bug_new"] <= 0:

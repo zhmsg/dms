@@ -59,7 +59,8 @@ def bug_info():
 @develop_bug_view.route("/new/", methods=["POST"])
 def new_bug():
     bug_title = request.form["bug_title"]
-    result, bug_info = control.new_bug(current_user.user_name, current_user.role, bug_title)
+    bug_level = int(request.form["bug_level"])
+    result, bug_info = control.new_bug(current_user.user_name, current_user.role, bug_title, bug_level)
     if result is False:
         return bug_info
     bug_no = bug_info["bug_no"]

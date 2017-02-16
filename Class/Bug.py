@@ -15,7 +15,11 @@ temp_dir = tempfile.gettempdir()
 __author__ = 'ZhouHeng'
 
 
-class BugManager:
+class BugManager(object):
+
+    level_desc = ["自己发现", "本地自己人发现", "本地开发人员发现", "测试环境自己人发现", "测试环境开发人员发现",
+                  "测试环境领导发现", "测试环境其他领导发现", "生产环境自己人发现", "生产环境开发人员发现",
+                  "生产环境领导发现", "生产环境其他领导发现", "生产环境客户发现", "忍无可忍"]
 
     def __init__(self):
         self.db = DB()
@@ -24,18 +28,18 @@ class BugManager:
         self.bug_example = "bug_example"
         self.user = "sys_user"
 
-    def new_bug_info(self, bug_title, submitter):
+    def new_bug_info(self, bug_title, submitter, bug_level):
         submit_time = datetime.now().strftime(TIME_FORMAT)
         bug_no = uuid.uuid1().hex
         if len(bug_title) < 5:
             return False, "Bad bug_title"
         bug_title = check_sql_character(bug_title)[:50]
-        insert_sql = "INSERT INTO %s (bug_no,bug_title,submitter,submit_time) VALUES ('%s','%s','%s','%s');" \
-                     % (self.bug, bug_no, bug_title, submitter, submit_time)
-        result = self.db.execute(insert_sql)
+        kwargs = {"bug_no": bug_no, "bug_title": bug_title, "submitter": submitter, "submit_time": submit_time,
+                  "bug_level": bug_level}
+        result = self.db.execute_insert(self.bug, args=kwargs)
         if result != 1:
             return False, "sql execute result is %s " % result
-        return True, {"bug_no": bug_no, "bug_title": bug_title, "submitter": submitter, "submit_time": submit_time}
+        return True, kwargs
 
     def new_bug_link(self, bug_no, user_name, link_type, adder):
         if len(bug_no) != 32:
@@ -86,28 +90,39 @@ class BugManager:
     def get_bug_list(self, offset=0, num=20):
         if type(offset) != int or type(num) != int:
             return False, "Bad offset or num"
-        select_sql = "SELECT bug_no,bug_title,submitter,submit_time,bug_status FROM %s WHERE bug_status<4 " \
+        select_sql = "SELECT bug_no,bug_title,submitter,submit_time,bug_status,bug_level FROM %s WHERE bug_status<4 " \
                      "ORDER BY bug_status,submit_time DESC LIMIT %s, %s;" % (self.bug, offset, num)
         self.db.execute(select_sql)
         bug_list = []
         for item in self.db.fetchall():
+            bug_level = item[5]
+            if bug_level < 0 or bug_level >= len(self.level_desc):
+                continue
+            bug_level_desc = self.level_desc[bug_level].decode("utf8")
             bug_list.append({"bug_no": item[0], "bug_title": item[1], "submitter": item[2],
-                             "submit_time": item[3].strftime(TIME_FORMAT), "bug_status": item[4]})
+                             "submit_time": item[3].strftime(TIME_FORMAT), "bug_status": item[4],
+                             "bug_level": bug_level, "bug_level_desc": bug_level_desc})
         return True, bug_list
 
     def get_bug_info(self, bug_no):
         if len(bug_no) != 32:
             return False, "Bad bug_no"
         # 获取基本信息
-        select_sql = "SELECT bug_no,bug_title,submitter,submit_time,bug_status,nick_name FROM %s AS i,%s AS u " \
+        select_sql = "SELECT bug_no,bug_title,submitter,submit_time,bug_status,bug_level,nick_name FROM %s AS i,%s AS u " \
                      "WHERE bug_no='%s' AND i.submitter=u.user_name;" \
                      % (self.bug, self.user, bug_no)
         result = self.db.execute(select_sql)
         if result != 1:
             return False, "Bad bug_no."
         info = self.db.fetchone()
+        bug_level = info[5]
+        if bug_level < 0 or bug_level >= len(self.level_desc):
+            bug_level_desc = ""
+        else:
+            bug_level_desc = self.level_desc[bug_level].decode("utf8")
         basic_info = {"bug_no": info[0], "bug_title": info[1], "submitter": info[2],
-                      "submit_time": info[3].strftime(TIME_FORMAT), "bug_status": info[4], "submit_name": info[5]}
+                      "submit_time": info[3].strftime(TIME_FORMAT), "bug_status": info[4], "bug_level": bug_level,
+                      "submit_name": info[6], "bug_level_desc": bug_level_desc}
         # 获取示例信息
         select_sql = "SELECT type,content,add_time FROM %s WHERE bug_no='%s' ORDER BY add_time;" % (self.bug_example, bug_no)
         self.db.execute(select_sql)
