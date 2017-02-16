@@ -77,7 +77,7 @@
     </form>
 {% endif %}
 {#添加BUG拥有者#}
-{% if bug_info["basic_info"]["bug_status"] < 3 %}
+{% if bug_info["basic_info"]["bug_status"] < 3 and bug_info["basic_info"]["bug_level"] > 0 %}
     {% if bug_info["basic_info"]["submitter"] == current_user %}
     <form action="{{ url_prefix }}/{{ bug_no }}/owner/"  method="post">
         <span class="pull-left">添加BUG拥有者：</span>
