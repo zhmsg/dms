@@ -40,9 +40,8 @@ function click_look_stage(){
 }
 
 function click_look_top_stage(){
-    var after_les = $(this).nextAll();
-    console.info(after_les);
-    var t_id = "t_sys_sample";
+    var t_id = $(this).attr("link_table");
+    console.info(t_id);
     var top_count = 6;
     var link_els = $("#" + t_id).find("a[name='link_look_stage']");
     var link_len = link_els.length;
@@ -79,9 +78,9 @@ function click_look_top_variant(){
     for(var i=0;i<top_count&&i<link_len;i++){
         $(link_els[i]).parent().text("等待查询");
     }
-    if(top_count > link_len){
-        $("#link_top_variant").hide();
-    }
+    //if(top_count > link_len){
+    //    $("#link_top_variant").hide();
+    //}
 }
 
 function show_stage(sample_info){
