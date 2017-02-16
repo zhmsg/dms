@@ -86,7 +86,7 @@ class BugManager:
     def get_bug_list(self, offset=0, num=20):
         if type(offset) != int or type(num) != int:
             return False, "Bad offset or num"
-        select_sql = "SELECT bug_no,bug_title,submitter,submit_time,bug_status FROM %s " \
+        select_sql = "SELECT bug_no,bug_title,submitter,submit_time,bug_status FROM %s WHERE bug_status<4 " \
                      "ORDER BY bug_status,submit_time DESC LIMIT %s, %s;" % (self.bug, offset, num)
         self.db.execute(select_sql)
         bug_list = []

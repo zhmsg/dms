@@ -5,6 +5,7 @@
 var query_sample_ing = new Object({"exec_r": null, "exec_completed": false, "exec_ing": false});
 var query_sv_ing = new Object({"exec_r": null, "exec_completed": false, "exec_ing": false});
 var query_su_ing = new Object({"exec_r": null, "exec_completed": false, "exec_ing": false});
+var query_variant = {"ing": false, "pending_array": new Array()};
 
 function click_look_owner(){
     var current_a = $(this);
@@ -38,12 +39,16 @@ function click_look_stage(){
     my_async_request2(request_url, "GET", null, show_stage)
 }
 
-function click_look_top3_stage(){
+function click_look_top_stage(){
     var t_id = "t_sys_sample";
+    var top_count = 6;
     var link_els = $("#" + t_id).find("a[name='link_look_stage']");
     var link_len = link_els.length;
-    for(var i=0;i<3&&i<link_len;i++){
+    for(var i=0;i<top_count&&i<link_len;i++){
         $(link_els[i]).click();
+    }
+    if(top_count > link_len){
+        $("#link_top_stage").hide();
     }
 }
 
@@ -62,6 +67,19 @@ function click_check_variant()
     tr_parent.attr("id", "tr_sample_" + td_sample_no.text());
     var request_url = "sample/variant/?sample_no=" + td_sample_no.text();
     my_async_request2(request_url, "GET", null, show_variant, query_sv_ing)
+}
+
+function click_look_top_variant(){
+    var t_id = "t_sys_sample";
+    var top_count = 6;
+    var link_els = $("#" + t_id).find("a[name='link_check_variant']");
+    var link_len = link_els.length;
+    for(var i=0;i<top_count&&i<link_len;i++){
+        $(link_els[i]).parent().text("等待查询");
+    }
+    if(top_count > link_len){
+        $("#link_top_variant").hide();
+    }
 }
 
 function show_stage(sample_info){
@@ -108,6 +126,9 @@ function show_stage(sample_info){
         current_td.unbind("click");
         current_td.click(click_check_variant);
     });
+    if($("a[name='link_check_variant']").length > 0){
+        $("#link_top_variant").show();
+    }
 }
 
 function show_variant(variant_info){
@@ -155,6 +176,9 @@ function show_sample_info(sample_data){
         current_td.unbind("click");
         current_td.click(click_look_owner);
     });
+    if(sam_len > 0){
+        $("#link_top_stage").show();
+    }
 }
 
 function query_sys_sample(){
@@ -239,5 +263,6 @@ function query_sample_user(){
 $(document).ready(function () {
     $("#btn_last_sample").click(query_sys_sample);
     $("#btn_sample_user").click(query_sample_user);
-    $("#link_top3_stage").click(click_look_top3_stage);
+    $("#link_top_stage").click(click_look_top_stage);
+    $("#link_top_variant").click(click_look_top_variant);
 });
