@@ -90,7 +90,6 @@
                 "col_type": "datetime"
             },
             {
-                "pri_key": true,
                 "col_comment": "添加关联者账户名",
                 "col_name": "adder",
                 "col_type": "varchar(15)"
@@ -98,5 +97,33 @@
         ],
         "table_comment": "",
         "table_name": "bug_owner"
+    },
+    {
+        "table_cols": [
+            {
+                "pri_key": true,
+                "col_comment": "BUG系统编号",
+                "col_name": "bug_no",
+                "col_type": "char(32)"
+            },
+            {
+                "pri_key": true,
+                "col_comment": "原因添加者 用户账户名",
+                "col_name": "user_name",
+                "col_type": "varchar(15)"
+            },
+            {
+                "col_comment": "bug产生的原因",
+                "col_name": "reason",
+                "col_type": "varchar(300)"
+            },
+            {
+                "col_comment": "关联的时间",
+                "col_name": "add_time",
+                "col_type": "int(11)"
+            }
+        ],
+        "table_comment": "记录bug产生原因",
+        "table_name": "bug_reason"
     }
 ]
