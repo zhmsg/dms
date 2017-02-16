@@ -109,7 +109,7 @@
             {
                 "pri_key": true,
                 "col_comment": "原因添加者 用户账户名",
-                "col_name": "user_name",
+                "col_name": "submitter",
                 "col_type": "varchar(15)"
             },
             {

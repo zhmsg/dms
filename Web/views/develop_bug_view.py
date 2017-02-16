@@ -31,7 +31,10 @@ def ref_bug_no(f):
     def decorated_function(*args, **kwargs):
         ref_key = "bug_no"
         if "Referer" not in request.headers:
-            return jsonify({"status": False, "data": "Bad Request"})
+            if request.is_xhr is True:
+                return jsonify({"status": False, "data": "Bad Request."})
+            else:
+                return "Bad Request"
         g.ref_url = request.headers["Referer"]
         find_result = re.findall(ref_key + "=([a-z\d]{32})", g.ref_url)
         if len(find_result) > 0:
@@ -39,7 +42,10 @@ def ref_bug_no(f):
         elif ref_key in request.args:
             g.bug_no = request.args[ref_key]
         else:
-            return jsonify({"status": False, "data": "Bad Request."})
+            if request.is_xhr is True:
+                return jsonify({"status": False, "data": "Bad Request."})
+            else:
+                return "Bad Request"
         return f(*args, **kwargs)
     return decorated_function
 
@@ -60,21 +66,32 @@ def get_statistic():
 
 
 @develop_bug_view.route("/info/", methods=["GET"])
-def bug_info():
-    if "bug_no" not in request.args:
-        return u"请求错误"
+@ref_bug_no
+def get_bug_info_func():
     bug_no = request.args["bug_no"]
     result, bug_info = control.get_bug_info(current_user.role, bug_no)
+    if request.is_xhr is True:
+        return jsonify({"status": result, "data": bug_info})
     if result is False:
         return bug_info
     result, user_list = control.get_role_user(control.role_value["bug_link"])
     if result is False:
         return user_list
+    url_link_user = url_prefix + "/link/"
+    url_bug_reason = url_prefix + "/reason/"
     return render_template("%s/BUG_Info.html" % html_dir, bug_info=bug_info, bug_status_desc=bug_status_desc,
                            bug_no=bug_no,
                            user_role=current_user.role, current_user=current_user.user_name,
                            role_desc=control.role_value,
-                           user_list=user_list, url_prefix=url_prefix)
+                           user_list=user_list, url_prefix=url_prefix, url_link_user=url_link_user,
+                           url_bug_reason=url_bug_reason)
+
+
+@develop_bug_view.route("/link/", methods=["GET"])
+@ref_bug_no
+def get_bug_link_func():
+    exec_r, bug_links = control.get_bug_link(g.user_name, g.user_role, g.bug_no)
+    return jsonify({"status": exec_r, "data": bug_links})
 
 
 @develop_bug_view.route("/new/", methods=["POST"])
@@ -186,3 +203,23 @@ def del_own_user(bug_no):
 def get_bug_img(user_name, img_path):
     dir = "%s%s" % (bug_img_dir, user_name)
     return send_from_directory(directory=dir, filename=img_path)
+
+
+@develop_bug_view.route("/reason/", methods=["GET"])
+@ref_bug_no
+def get_bug_reason():
+    bug_no = g.bug_no
+    exec_r, bug_reasons = control.get_bug_reason(g.user_name, g.user_role, bug_no)
+    return jsonify({"status": exec_r, "data": bug_reasons})
+
+
+@develop_bug_view.route("/reason/", methods=["POST", "PUT"])
+@ref_bug_no
+def add_bug_reason():
+    bug_no = g.bug_no
+    bug_reason = request.json["bug_reason"]
+    if request.method == "POST":
+        exec_r, bug_reasons = control.add_bug_reason(g.user_name, g.user_role, bug_no, bug_reason)
+    else:
+        exec_r, bug_reasons = control.update_bug_reason(g.user_name, g.user_role, bug_no, bug_reason)
+    return jsonify({"status": exec_r, "data": [bug_reasons]})

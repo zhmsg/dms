@@ -493,6 +493,11 @@ class ControlManager(object):
             return False, u"您没有权限"
         return self.bug.get_bug_info(bug_no)
 
+    def get_bug_link(self, user_name, user_role, bug_no):
+        if self.judge_role(user_role, self.role_value["bug_look"]) is False:
+            return False, u"您没有权限"
+        return self.bug.select_bug_link(bug_no)
+
     def new_bug(self, user_name, role, bug_title, bug_level):
         if role & self.role_value["bug_new"] <= 0:
             return False, u"您没有权限"
@@ -528,17 +533,20 @@ class ControlManager(object):
             return False, u"BUG 已不能修改"
         return self.bug.new_bug_example(bug_no, 2, path)
 
+    def get_bug_reason(self, user_name, user_role, bug_no, submitter=None):
+        if self.judge_role(user_role, self.role_value["bug_look"]) is False:
+            return False, u"您没有权限"
+        return self.bug.select_bug_reason(bug_no, submitter)
+
     def add_bug_reason(self, user_name, user_role, bug_no, bug_reason):
         if self.judge_role(user_role, self.role_value["bug_link"]) is False:
             return False, u"您没有权限"
-        l = self.bug.insert_bug_reason(user_name=user_name, reason=bug_reason, bug_no=bug_no)
-        return True, l
+        return self.bug.insert_bug_reason(submitter=user_name, reason=bug_reason, bug_no=bug_no)
 
     def update_bug_reason(self, user_name, user_role, bug_no, bug_reason):
         if self.judge_role(user_role, self.role_value["bug_link"]) is False:
             return False, u"您没有权限"
-        l = self.bug.update_bug_reason(user_name=user_name, reason=bug_reason, bug_no=bug_no)
-        return True, l
+        return self.bug.update_bug_reason(submitter=user_name, reason=bug_reason, bug_no=bug_no)
 
     def _wx_send_bug(self, bug_no, user_name, type, link_desc):
         select_sql = "SELECT nick_name,wx_id,bug_title FROM %s as u,%s as b, %s as o " \

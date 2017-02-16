@@ -155,6 +155,11 @@ class BugManager(object):
                 pass
         return True, {"basic_info": basic_info, "example_info": example_info, "link_user": link_user}
 
+    def select_bug_link(self, bug_no):
+        link_cols = ["user_name", "type", "link_time", "adder"]
+        db_items = self.db.execute_select(self.bug_owner, where_value=dict(bug_no=bug_no), cols=link_cols)
+        return True, db_items
+
     def get_statistic(self):
         # 获得所有的统计信息
         bug_role = 1024
@@ -181,11 +186,22 @@ class BugManager(object):
     def insert_bug_reason(self, **kwargs):
         kwargs.update(dict(add_time=int(time())))
         l = self.db.execute_insert(self.t_reason, args=kwargs, ignore=True)
-        return l
+        return True, kwargs
 
-    def update_bug_reason(self, bug_no, user_name, reason):
+    def update_bug_reason(self, bug_no, submitter, reason):
         update_value = dict(reason=reason, add_time=int(time()))
-        l = self.db.execute_update(self.t_reason, where_value=dict(bug_no=bug_no, user_name=user_name),
-                                   update_value=update_value)
-        return l
+        where_value = dict(bug_no=bug_no, submitter=submitter)
+        l = self.db.execute_update(self.t_reason, where_value=where_value, update_value=update_value)
+        update_value.update(where_value)
+        return True, update_value
+
+    def select_bug_reason(self, bug_no, submitter=None):
+        where_value = dict(bug_no=bug_no)
+        if submitter is not None:
+            where_value["submitter"] = submitter
+        reason_cols = ["bug_no", "submitter", "reason", "add_time"]
+        db_items = self.db.execute_select(self.t_reason, where_value=where_value, cols=reason_cols)
+        return True, db_items
+
+
 
