@@ -43,6 +43,21 @@
     {% if user_role | bit_and(role_desc["bug_new"]) == role_desc["bug_new"]  %}
         <form action="{{ url_prefix }}/new/" method="post">
             <input class="form-control pull-left bug-input" name="bug_title" >
+            <select name="bug_level" class="box-side">
+                <option value="0">自己发现</option>
+                <option value="1">本地环境自己人发现</option>
+                <option value="2">本地环境开发人员发现</option>
+                <option value="3">测试环境自己人发现</option>
+                <option value="4">测试环境开发人员发现</option>
+                <option value="5">测试环境领导发现</option>
+                <option value="6">测试环境其他领导发现</option>
+                <option value="7">生产环境自己人发现</option>
+                <option value="8">生产环境开发人员发现</option>
+                <option value="9">生产环境领导发现</option>
+                <option value="10">生产环境其他领导发现</option>
+                <option value="11">生产环境客户发现</option>
+                <option value="12">忍无可忍</option>
+            </select>
             <button class="btn btn-primary" type="submit">新建BUG</button>
         </form>
     {% endif %}
