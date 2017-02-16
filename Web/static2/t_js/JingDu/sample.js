@@ -34,7 +34,7 @@ function click_look_stage(){
     current_a.text("查询中");
     var tr_parent = current_a.parent().parent();
     var td_sample_no = tr_parent.find("td[name='td_sample_no']");
-    tr_parent.attr("id", "tr_sample_" + td_sample_no.text());
+    tr_parent.attr("name", "tr_sample_" + td_sample_no.text());
     var request_url = "sample/info/?sample_no=" + td_sample_no.text();
     my_async_request2(request_url, "GET", null, show_stage)
 }
@@ -88,7 +88,7 @@ function show_stage(sample_info){
     for(var i=0;i<si_len;i++){
         var info_item = sample_info[i];
         var sample_no = info_item.sample_no;
-        var td_stage = $("#tr_sample_" + sample_no).find("td[name='td_look_stage']");
+        var td_stage = $("tr[name='tr_sample_" + sample_no + "']").find("td[name='td_look_stage']");
         var stage_text = "";
         var stage_title = null;
         switch(info_item.stage)
@@ -208,6 +208,8 @@ function show_sample_user(su_data){
             var one_td = new_td(keys[j], su_data[i]);
             add_tr.append(one_td);
         }
+        var stage_td = $('<td name="td_look_stage"><a name="link_look_stage" href="javascript:void(0)">查看状态</a></td>');
+        add_tr.append(stage_td);
         var op_td = $('<td><a name="link_look_sample" href="javascript:void(0)">样本信息</a>');
         add_tr.append(op_td);
         t_sample.append(add_tr);
@@ -225,6 +227,11 @@ function show_sample_user(su_data){
                 role_desc = "无效数据";
         }
         current_td.text(current_td.text() + "|" + role_desc);
+    });
+    $("a[name='link_look_stage']:visible").each(function(){
+       var current_td = $(this);
+        current_td.unbind("click");
+        current_td.click(click_look_stage);
     });
     $("a[name='link_look_sample']:visible").each(function(){
         var current_td = $(this);

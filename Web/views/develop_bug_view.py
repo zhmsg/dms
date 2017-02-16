@@ -1,11 +1,12 @@
 #!/user/bin/env python
 # -*- coding: utf-8 -*-
 
-
 import sys
 import os
+import re
 from datetime import datetime
-from flask import render_template, request, redirect,jsonify, send_from_directory
+from functools import wraps
+from flask import render_template, request, redirect, jsonify, send_from_directory, g
 from flask_login import current_user
 from werkzeug.utils import secure_filename
 
@@ -23,6 +24,24 @@ html_dir = "/BUG"
 develop_bug_view = create_blue('develop_bug_view', url_prefix=url_prefix)
 
 bug_status_desc = [u"等待BUG确认", u"已有BUG疑似拥有者", u"已确认BUG拥有者", u"BUG已被修复", u"BUG被取消", u"BUG现象正常"]
+
+
+def ref_bug_no(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        ref_key = "bug_no"
+        if "Referer" not in request.headers:
+            return jsonify({"status": False, "data": "Bad Request"})
+        g.ref_url = request.headers["Referer"]
+        find_result = re.findall(ref_key + "=([a-z\d]{32})", g.ref_url)
+        if len(find_result) > 0:
+            g.bug_no = find_result[0]
+        elif ref_key in request.args:
+            g.bug_no = request.args[ref_key]
+        else:
+            return jsonify({"status": False, "data": "Bad Request."})
+        return f(*args, **kwargs)
+    return decorated_function
 
 
 @develop_bug_view.route("/", methods=["GET"])
@@ -51,8 +70,10 @@ def bug_info():
     result, user_list = control.get_role_user(control.role_value["bug_link"])
     if result is False:
         return user_list
-    return render_template("%s/BUG_Info.html" % html_dir, bug_info=bug_info, bug_status_desc=bug_status_desc, bug_no=bug_no,
-                           user_role=current_user.role, current_user=current_user.user_name, role_desc=control.role_value,
+    return render_template("%s/BUG_Info.html" % html_dir, bug_info=bug_info, bug_status_desc=bug_status_desc,
+                           bug_no=bug_no,
+                           user_role=current_user.role, current_user=current_user.user_name,
+                           role_desc=control.role_value,
                            user_list=user_list, url_prefix=url_prefix)
 
 
@@ -118,7 +139,8 @@ def add_own_user(bug_no):
 
 @develop_bug_view.route("/<bug_no>/fix/", methods=["POST"])
 def add_fix_user(bug_no):
-    result, link_info = control.add_bug_link(bug_no, current_user.user_name, current_user.role, current_user.user_name, "fix")
+    result, link_info = control.add_bug_link(bug_no, current_user.user_name, current_user.role, current_user.user_name,
+                                             "fix")
     if result is False:
         return link_info
     return redirect(url_prefix + "/info?bug_no=%s" % bug_no)
@@ -126,7 +148,8 @@ def add_fix_user(bug_no):
 
 @develop_bug_view.route("/<bug_no>/cancel/", methods=["POST"])
 def add_cancel_user(bug_no):
-    result, link_info = control.add_bug_link(bug_no, current_user.user_name, current_user.role, current_user.user_name, "cancel")
+    result, link_info = control.add_bug_link(bug_no, current_user.user_name, current_user.role, current_user.user_name,
+                                             "cancel")
     if result is False:
         return link_info
     return redirect(url_prefix + "/info?bug_no=%s" % bug_no)
@@ -134,7 +157,8 @@ def add_cancel_user(bug_no):
 
 @develop_bug_view.route("/<bug_no>/design/", methods=["POST"])
 def add_design_user(bug_no):
-    result, link_info = control.add_bug_link(bug_no, current_user.user_name, current_user.role, current_user.user_name, "design")
+    result, link_info = control.add_bug_link(bug_no, current_user.user_name, current_user.role, current_user.user_name,
+                                             "design")
     if result is False:
         return link_info
     return redirect(url_prefix + "/info?bug_no=%s" % bug_no)
@@ -162,5 +186,3 @@ def del_own_user(bug_no):
 def get_bug_img(user_name, img_path):
     dir = "%s%s" % (bug_img_dir, user_name)
     return send_from_directory(directory=dir, filename=img_path)
-
-

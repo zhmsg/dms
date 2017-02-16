@@ -6,6 +6,7 @@ import tempfile
 import uuid
 sys.path.append("..")
 from datetime import datetime, timedelta
+from time import time
 from Tools.Mysql_db import DB
 from Class import TIME_FORMAT
 from Check import check_sql_character
@@ -26,6 +27,7 @@ class BugManager(object):
         self.bug = "bug_info"
         self.bug_owner = "bug_owner"
         self.bug_example = "bug_example"
+        self.t_reason = "bug_reason"
         self.user = "sys_user"
 
     def new_bug_info(self, bug_title, submitter, bug_level):
@@ -175,3 +177,15 @@ class BugManager(object):
         for item in self.db.fetchall():
             month_data.append({"user_name": item[0], "nick_name": item[1], "bug_num": item[2]})
         return True, {"month": month_data, "all": all_data}
+
+    def insert_bug_reason(self, **kwargs):
+        kwargs.update(dict(add_time=int(time())))
+        l = self.db.execute_insert(self.t_reason, args=kwargs, ignore=True)
+        return l
+
+    def update_bug_reason(self, bug_no, user_name, reason):
+        update_value = dict(reason=reason, add_time=int(time()))
+        l = self.db.execute_update(self.t_reason, where_value=dict(bug_no=bug_no, user_name=user_name),
+                                   update_value=update_value)
+        return l
+
