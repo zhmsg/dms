@@ -58,6 +58,8 @@
             {% endif %}
         {% endfor %}
     </div>
+    <div id="div_bug_reason">
+    </div>
     {# 提交关于BUG的描述 只有BUG提交者才可以提交 并且要在BUG的状态小于3即BUG处于未修复状态下才可以 #}
     <div class="clear bottom20 bugUpload">
         {% if bug_info["basic_info"]["submitter"] == current_user and bug_info["basic_info"]["bug_status"] < 3 %}

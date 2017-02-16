@@ -18,16 +18,24 @@ function submit_bug_reason(){
 
 
 function handle_bug_reason(bug_reasons){
-    console.info(bug_reasons);
     var br_len = bug_reasons.length;
     if(br_len > 0){
         for(var i=0;i<br_len;i++){
             var reason_item = bug_reasons[i];
-            console.info(reason_item);
             if(reason_item["submitter"] == $("#current_user_name").val()){
                 $("#div_add_reason").find("textarea").val(reason_item["reason"]);
                 $("#div_add_reason").find("button").text("更新");
-                break;
+            }
+            var show_item_id = "p_reason_" + reason_item["submitter"];
+            var show_reason_items = $("#" + show_item_id);
+            if(show_reason_items.length > 0){
+                show_reason_items.text(reason_item["reason"]);
+            }
+            else{
+                var p_reason_item = $("<p></p>");
+                p_reason_item.attr("id", show_item_id);
+                p_reason_item.text(reason_item["reason"]);
+                $("#div_bug_reason").append(p_reason_item);
             }
         }
     }
