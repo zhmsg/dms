@@ -106,7 +106,7 @@ function show_stage(sample_info){
                     var upload_stamp = datetime_2_timestamp(upload_time);
                     if(now_ts - upload_stamp > 3600){
                         stage_text = "0|长时间未分析完成";
-                        stage_title = "超过2小时为完成\n开始时间:" + upload_time + "\n测序文件:" + info_item.seq_files;
+                        stage_title = "超过2小时未完成\n开始时间:" + upload_time + "\n测序文件:" + info_item.seq_files;
                     }
                     else{
                         stage_text = "0|分析进行中";
