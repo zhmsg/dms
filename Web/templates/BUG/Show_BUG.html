@@ -3,10 +3,16 @@
 {% block title %}晶云平台BUG列表{% endblock %}
 
 {% block center_content %}
+    <div class="declare">
+        <p class="redColor">使用 BUG系统 须知：</p>
+
+        <p>【1】BUG系统只显示自己新建的BUG和属于自己的BUG。</p>
+
+    </div>
     {#BUG列表#}
     {% if bug_list %}
         <table  class="table table-bordered table-hover api-list-table">
-            <caption>BUG列表</caption>
+            <caption>提交的BUG列表</caption>
             <tr>
                 <th scope="col" width="38%">BUG标题</th>
                 <th scope="col" width="12%">BUG状态</th>

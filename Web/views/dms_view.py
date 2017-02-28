@@ -55,18 +55,18 @@ def login_page():
 
 @dms_view.route("/login/", methods=["POST"])
 def login():
-    request_data = request.form
+    request_data = request.json
     user_name = request_data["user_name"]
     password = request_data["password"]
     result, info = user_m.check(user_name, password)
     if result is False:
-        return info
+        return jsonify({"status": False, "data": info})
     if info["tel"] is None:
         session["user_name"] = info["account"]
         session["bind_token"] = gen_salt(57)
         session["expires_in"] = datetime.now() + timedelta(seconds=300)
         session["password"] = password
-        return redirect("%s/tel/" % url_prefix)
+        return jsonify({"status": True, "data": {"location": "%s/tel/" % url_prefix, "user_name": info["account"]}})
     if "remember" in request_data and request_data["remember"] == "on":
         remember = True
     else:
@@ -76,12 +76,11 @@ def login():
     login_user(user, remember=remember)
     session["role"] = info["role"]
     if "next" in request_data and request_data["next"] != "":
-        return redirect(request_data["next"])
+        return jsonify({"status": True, "data": {"location": request_data["next"], "user_name": user.user_name}})
     if session["role"] == 0:
-            return u"您还没有任何权限，请联系管理员授权"
+        return jsonify({"status": False, "data": "您还没有任何权限，请联系管理员授权"})
     else:
-        resp = redirect(url_prefix + "/portal/")
-        return resp
+        return jsonify({"status": True, "data": {"location": url_prefix + "/portal/", "user_name": user.user_name}})
 
 
 @dms_view.route("/login/vip/", methods=["POST"])
