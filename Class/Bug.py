@@ -116,7 +116,8 @@ class BugManager(object):
         where_value = dict(user_name=user_name, type=2)
         where_cond = ["bug_status<=3", "bug_status>=2"]
         bug_list = self.db.execute_select_left(self.bug, self.bug_owner, "bug_no", b_cols=b_cols, j_cols=j_cols,
-                                               where_value=where_value, where_cond=where_cond)
+                                               where_value=where_value, where_cond=where_cond, order_by=["submit_time"],
+                                               order_desc=True)
         return True, bug_list
 
     def get_bug_basic(self, bug_no):
