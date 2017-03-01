@@ -21,6 +21,7 @@ class BugManager(object):
     level_desc = ["自己发现", "本地自己人发现", "本地开发人员发现", "测试环境自己人发现", "测试环境开发人员发现",
                   "测试环境领导发现", "测试环境其他领导发现", "生产环境自己人发现", "生产环境开发人员发现",
                   "生产环境领导发现", "生产环境其他领导发现", "生产环境客户发现", "忍无可忍"]
+    status_desc = ["等待问题确认", "已有问题疑似拥有者", "已确认问题拥有者", "问题已被修复", "问题被取消", "现象正常"]
 
     def __init__(self):
         self.db = DB()
@@ -94,7 +95,7 @@ class BugManager(object):
     def get_bug_list(self, offset=0, num=20):
         if type(offset) != int or type(num) != int:
             return False, "Bad offset or num"
-        select_sql = "SELECT bug_no,bug_title,submitter,submit_time,bug_status,bug_level FROM %s WHERE bug_status<4 " \
+        select_sql = "SELECT bug_no,bug_title,submitter,submit_time,bug_status,bug_level FROM %s WHERE bug_status<3 " \
                      "ORDER BY bug_status,submit_time DESC LIMIT %s, %s;" % (self.bug, offset, num)
         self.db.execute(select_sql)
         bug_list = []
@@ -106,6 +107,15 @@ class BugManager(object):
             bug_list.append({"bug_no": item[0], "bug_title": item[1], "submitter": item[2],
                              "submit_time": item[3].strftime(TIME_FORMAT), "bug_status": item[4],
                              "bug_level": bug_level, "bug_level_desc": bug_level_desc})
+        return True, bug_list
+
+    def get_my_bug_list(self, user_name):
+        b_cols = ["bug_no", "bug_title", "submitter", "submit_time", "bug_level", "bug_status"]
+        j_cols = ["user_name", "type", "link_time"]
+        where_value = dict(user_name=user_name, type=2)
+        where_cond = ["bug_status<=3", "bug_status>=2"]
+        bug_list = self.db.execute_select_left(self.bug, self.bug_owner, "bug_no", b_cols=b_cols, j_cols=j_cols,
+                                               where_value=where_value, where_cond=where_cond)
         return True, bug_list
 
     def get_bug_info(self, bug_no):

@@ -2,69 +2,27 @@
 
 {% block title %}晶云平台BUG列表{% endblock %}
 
+{% block js_content %}
+    {{ 't_js/Common/JY_DIV.js' | make_static_html | safe }}
+    {{ 't_js/Common/add_node.js' | make_static_html | safe }}
+    {{ 't_js/BUG/show_bug.js' | make_static_html | safe }}
+{% endblock %}
+
 {% block center_content %}
     <div class="declare">
-        <p class="redColor">使用 BUG系统 须知：</p>
+        <p class="redColor">使用 问题总结系统 须知：</p>
 
-        <p>【1】BUG系统只显示自己新建的BUG和属于自己的BUG。</p>
+        <p>【1】问题总结系统只显示自己发现的问题和属于自己的问题。</p>
 
     </div>
-    {#BUG列表#}
-    {% if bug_list %}
-        <table  class="table table-bordered table-hover api-list-table">
-            <caption>提交的BUG列表</caption>
-            <tr>
-                <th scope="col" width="38%">BUG标题</th>
-                <th scope="col" width="12%">BUG状态</th>
-                <th scope="col" width="8%">BUG提交者</th>
-                <th scope="col" width="14%">BUG提交时间</th>
-                <th scope="col" width="14%">BUG级别</th>
-                <th class="text-center" scope="col" width="4%">操作</th>
-            </tr>
-            {% for item in bug_list %}
-                <tr>
-                    <td>{{ item["bug_title"] }}</td>
-                    {% if item["bug_status"] == 0 %}
-                    <td class="redBg">{{ bug_status_desc[item["bug_status"]] }}</td>
-                    {% elif item["bug_status"] == 1%}
-                    <td class="orgBg">{{ bug_status_desc[item["bug_status"]] }}</td>
-                    {% elif item["bug_status"] == 2%}
-                    <td class="yellowBg">{{ bug_status_desc[item["bug_status"]] }}</td>
-                    {% elif item["bug_status"] == 3%}
-                    <td class="greenBg">{{ bug_status_desc[item["bug_status"]] }}</td>
-                    {% elif item["bug_status"] == 4%}
-                    <td class="blueBg">{{ bug_status_desc[item["bug_status"]] }}</td>
-                    {% elif item["bug_status"] == 5%}
-                    <td class="purpleBg">{{ bug_status_desc[item["bug_status"]] }}</td>
-                    {% else %}
-                    <td>{{ bug_status_desc[item["bug_status"]] }}</td>
-                    {% endif %}
-                    <td>{{ item["submitter"] }}</td>
-                    <td>{{ item["submit_time"] }}</td>
-                    <td>{{ item["bug_level_desc"] }}</td>
-                    <td class="text-center"><a href="{{ url_prefix }}/info/?bug_no={{ item["bug_no"] }}">查看</a></td>
-                </tr>
-            {% endfor %}
-        </table>
-    {% endif %}
-    {# 新建BUG #}
+    <button type="button" class="btn btn-primary margin20" id="btn_jy_wait_solve" >待解决问题</button>
+    <button type="button" class="btn btn-primary margin20" id="btn_jy_mine" >我的问题</button>
+    {% include "BUG/Wait_Solve.html" %}
+    {% include "BUG/my_problem.html" %}
     {% if user_role | bit_and(role_desc["bug_new"]) == role_desc["bug_new"]  %}
         <form action="{{ url_prefix }}/new/" method="post">
             <input class="form-control pull-left bug-input" name="bug_title" >
-            <select name="bug_level" class="box-side">
-                <option value="0">自己发现</option>
-                <option value="1">本地环境自己人发现</option>
-                <option value="2">本地环境开发人员发现</option>
-                <option value="3">测试环境自己人发现</option>
-                <option value="4">测试环境开发人员发现</option>
-                <option value="5">测试环境领导发现</option>
-                <option value="6">测试环境其他领导发现</option>
-                <option value="7">生产环境自己人发现</option>
-                <option value="8">生产环境开发人员发现</option>
-                <option value="9">生产环境领导发现</option>
-                <option value="10">生产环境其他领导发现</option>
-                <option value="11">生产环境客户发现</option>
-                <option value="12">忍无可忍</option>
+            <select name="bug_level" class="box-side" id="select_bug_level">
             </select>
             <button class="btn btn-primary" type="submit">新建BUG</button>
         </form>
@@ -82,4 +40,7 @@
             </td>
         </tr>
     </table>
+    <input id="my_bug_url" value="{{ my_bug_url }}" class="display_none">
+    <label id="bug_status_desc" class="display_none">{{ bug_status_desc | tojson | safe }}</label>
+    <label id="bug_level_desc" class="display_none">{{ bug_level_desc | tojson | safe }}</label>
 {% endblock %}

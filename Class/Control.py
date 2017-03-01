@@ -31,6 +31,9 @@ my_email = MyEmailManager("/home/msg/conf/")
 
 class ControlManager(object):
 
+    bug_status_desc = BugManager.status_desc
+    bug_level_desc = BugManager.level_desc
+
     @staticmethod
     def judge_role(user_role, need_role):
         if user_role & need_role < need_role:
@@ -481,6 +484,12 @@ class ControlManager(object):
             for i in range(bug_count - 1, -1, -1):
                 if bug_list[i]["bug_level"] == 0 and bug_list[i]["submitter"] != user_name:
                     bug_list.remove(bug_list[i])
+        return exec_r, bug_list
+
+    def get_my_bug_list(self, user_name, user_role):
+        if self.judge_role(user_role, self.role_value["bug_look"]) is False:
+            return False, u"您没有权限"
+        exec_r, bug_list = self.bug.get_my_bug_list(user_name)
         return exec_r, bug_list
 
     def get_bug_statistic(self, role):

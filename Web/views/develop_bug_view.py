@@ -23,7 +23,7 @@ html_dir = "/BUG"
 
 develop_bug_view = create_blue('develop_bug_view', url_prefix=url_prefix)
 
-bug_status_desc = [u"等待BUG确认", u"已有BUG疑似拥有者", u"已确认BUG拥有者", u"BUG已被修复", u"BUG被取消", u"BUG现象正常"]
+bug_status_desc = [u"等待问题确认", u"已有问题疑似拥有者", u"已确认问题拥有者", u"问题已被修复", u"问题被取消", u"现象正常"]
 
 
 def ref_bug_no(f):
@@ -52,11 +52,20 @@ def ref_bug_no(f):
 
 @develop_bug_view.route("/", methods=["GET"])
 def show_bug_list():
-    result, bug_list = control.get_bug_list(current_user.user_name, current_user.role)
-    if result is False:
-        return bug_list
-    return render_template("%s/Show_BUG.html" % html_dir, bug_list=bug_list, bug_status_desc=bug_status_desc,
-                           user_role=current_user.role, role_desc=control.role_value, url_prefix=url_prefix)
+    if request.is_xhr is True:
+        result, bug_list = control.get_bug_list(current_user.user_name, current_user.role)
+        return jsonify({"status": result, "data": bug_list})
+    my_bug_url = url_prefix + "/mine/"
+    print(control.bug_status_desc)
+    return render_template("%s/Show_BUG.html" % html_dir, bug_status_desc=control.bug_status_desc,
+                           user_role=current_user.role, role_desc=control.role_value, url_prefix=url_prefix,
+                           my_bug_url=my_bug_url, bug_level_desc=control.bug_level_desc)
+
+
+@develop_bug_view.route("/mine/", methods=["GET"])
+def show_my_bug_list():
+    result, bug_list = control.get_my_bug_list(current_user.user_name, current_user.role)
+    return jsonify({"status": result, "data": bug_list})
 
 
 @develop_bug_view.route("/statistic/", methods=["GET"])
