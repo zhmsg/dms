@@ -40,6 +40,12 @@
                 "col_name": "email",
                 "col_type": "varchar(100)",
                 "allow_null": true
+            },
+            {
+                "col_comment": "手机号",
+                "col_name": "tel",
+                "col_type": "char(11)",
+                "allow_null": true
             }
         ],
         "table_comment": "",

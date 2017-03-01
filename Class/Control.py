@@ -22,6 +22,7 @@ from Release import ReleaseManager
 from ParamFormat import ParamFormatManager
 from PullRequest import PullRequestManager
 from JingDuData import JingDuDataManager
+from DingMsg import DingMsgManager
 from Class import DATE_FORMAT_STR, release_dir, jd_mysql_host, jd_mysql_db
 
 __author__ = 'ZhouHeng'
@@ -643,7 +644,12 @@ class ControlManager(object):
         # 有new bug的权限均可添加疑似bug拥有者
         result, info = self.bug.new_bug_link(bug_no, link_user, 1, user_name)
         if result is True:
-            # 发送微信消息
+            # 获得bug信息
+            exec_r, bug_list = self.bug.get_bug_basic(bug_no)
+            if exec_r is True and len(bug_list) > 0:
+                bug_info = bug_list[0]
+                print(bug_info)
+            # 发送钉钉消息
             pass
         return result, info
 

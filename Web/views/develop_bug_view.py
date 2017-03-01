@@ -56,7 +56,6 @@ def show_bug_list():
         result, bug_list = control.get_bug_list(current_user.user_name, current_user.role)
         return jsonify({"status": result, "data": bug_list})
     my_bug_url = url_prefix + "/mine/"
-    print(control.bug_status_desc)
     return render_template("%s/Show_BUG.html" % html_dir, bug_status_desc=control.bug_status_desc,
                            user_role=current_user.role, role_desc=control.role_value, url_prefix=url_prefix,
                            my_bug_url=my_bug_url, bug_level_desc=control.bug_level_desc)

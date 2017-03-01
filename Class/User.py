@@ -90,6 +90,10 @@ class UserManager:
         self.db.execute(insert_sql)
         return True, user_name
 
+    def _update_user(self, user_name, **kwargs):
+        l = self.db.execute_update(self.user, update_value=kwargs, where_value=dict(user_name=user_name))
+        return l
+
     def check(self, user_name, password):
         check_url = "%s/confirm/" % jy_auth_host
         try:
@@ -99,13 +103,16 @@ class UserManager:
         r = res.json()
         if r["status"] != 1:
             return False, r["message"]
-        select_sql = "SELECT user_name,role FROM %s WHERE user_name='%s';" % (self.user, r["data"]["account"])
+        select_sql = "SELECT user_name,role,tel FROM %s WHERE user_name='%s';" % (self.user, r["data"]["account"])
         result = self.db.execute(select_sql)
         if result <= 0:
             r["data"]["role"] = 0
             return True, r["data"]
         db_r = self.db.fetchone()
         role = db_r[1]
+        dms_tel = db_r[2]
+        if dms_tel != r["data"]["tel"]:
+            self._update_user(user_name, tel=r["data"]["tel"])
         r["data"]["role"] = role
         return True, r["data"]
 
