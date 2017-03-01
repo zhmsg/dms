@@ -107,8 +107,7 @@ function drawBar(data, father_id, bar_name) {
         .text(bar_name);
 }
 
-function jump_detail()
-{
+function jump_detail() {
     var parent_tr = $(this).parent().parent();
     var bug_no = parent_tr.attr("id").substr(3);
     location.href = $("#info_url").val() + "?bug_no=" + bug_no;
@@ -196,6 +195,31 @@ function handle_my_bug(bug_list) {
 }
 
 
+function submit_problem() {
+    var bug_title = $("input[name='bug_title']").val();
+    var bug_level = $("#select_bug_level").val();
+    var bug_level_desc = $("#select_bug_level").find("option:selected").text();
+    var swal_text = "[" + bug_level_desc + "]" + bug_title;
+    swal({
+            title: "确定提交",
+            text: swal_text,
+            type: "info",
+            showCancelButton: true,
+            confirmButtonColor: '#DD6B55',
+            confirmButtonText: '提交',
+            cancelButtonText: "取消",
+            closeOnConfirm: true,
+            closeOnCancel: true
+        },
+        function (isConfirm) {
+            if (isConfirm) {
+                var request_url = location.href;
+                my_async_request2(request_url, "POST", {"bug_title": bug_title, "bug_level": parseInt(bug_level)});
+            }
+        }
+    );
+}
+
 $(function () {
     //var bug_statistic_url = $("#bug_statistic_url").val();
     //$.ajax({
@@ -222,23 +246,25 @@ $(function () {
     var current_user_role = parseInt($("#current_user_role").val());
     var new_link_role = $("#new_link_role").val().split("|");
     var bit_new = current_user_role & parseInt(new_link_role[0]);
-    if(bit_new > 0) {
+    if (bit_new > 0) {
         $("#div_add_problem").show();
         var index = 1;
         var bit_link = current_user_role & parseInt(new_link_role[1]);
-        if(bit_link > 0)
+        if (bit_link > 0)
             index = 0;
         for (; index < bug_level_desc.length; index++) {
             add_option("select_bug_level", index, bug_level_desc[index]);
         }
+        // 自动保存和加载选择的项
+        var storage_key = "dms_select_bug_level";
+        var s_value = localStorage.getItem(storage_key);
+        if (s_value != null) {
+            $("#select_bug_level").val(s_value);
+        }
+        $("#select_bug_level").change(function () {
+            localStorage.setItem(storage_key, $("#select_bug_level").val());
+        });
+        $("#btn_submit_problem").click(submit_problem);
     }
-    // 自动保存和加载选择的项
-    var storage_key = "dms_select_bug_level";
-    var s_value = localStorage.getItem(storage_key);
-    if(s_value != null){
-        $("#select_bug_level").val(s_value);
-    }
-    $("#select_bug_level").change(function(){
-        localStorage.setItem(storage_key, $("#select_bug_level").val());
-    });
+
 });

@@ -60,6 +60,18 @@ def show_bug_list():
                            new_link_role=new_link_role)
 
 
+@develop_bug_view.route("/", methods=["POST"])
+def new_bug():
+    request_data = request.json
+    bug_title = request_data["bug_title"]
+    bug_level = request_data["bug_level"]
+    result, bug_info = control.new_bug(current_user.user_name, current_user.role, bug_title, bug_level)
+    if result is False:
+        return jsonify({"status": False, "data": bug_info})
+    bug_no = bug_info["bug_no"]
+    return jsonify({"status": True, "data": "success", "location": url_prefix + "/info?bug_no=%s" % bug_no})
+
+
 @develop_bug_view.route("/mine/", methods=["GET"])
 def show_my_bug_list():
     result, bug_list = control.get_my_bug_list(current_user.user_name, current_user.role)
@@ -99,17 +111,6 @@ def get_bug_info_func():
 def get_bug_link_func():
     exec_r, bug_links = control.get_bug_link(g.user_name, g.user_role, g.bug_no)
     return jsonify({"status": exec_r, "data": bug_links})
-
-
-@develop_bug_view.route("/new/", methods=["POST"])
-def new_bug():
-    bug_title = request.form["bug_title"]
-    bug_level = int(request.form["bug_level"])
-    result, bug_info = control.new_bug(current_user.user_name, current_user.role, bug_title, bug_level)
-    if result is False:
-        return bug_info
-    bug_no = bug_info["bug_no"]
-    return redirect(url_prefix + "/info?bug_no=%s" % bug_no)
 
 
 @develop_bug_view.route("/<bug_no>/str/example/", methods=["POST"])
