@@ -132,6 +132,14 @@ function handle_bug_list(bug_list) {
     var t_id = "t_wait_solve";
     var t = $("#" + t_id);
     var len_list = bug_list.length;
+    if(len_list == 0){
+        var add_tr = $("<tr></tr>");
+        var add_td = $("<td>暂无未解决的问题</td>");
+        add_td.attr("colSpan", "6");
+        add_td.addClass("redColor");
+        add_tr.append(add_td);
+        t.append(add_tr);
+    }
     var keys = ["bug_title", "bug_status", "submitter", "submit_time", "bug_level"];
     for (var i = 0; i < len_list; i++) {
         var bug_item = bug_list[i];
@@ -180,6 +188,14 @@ function handle_my_bug(bug_list) {
     var t_id = "t_my_bug";
     var t = $("#" + t_id);
     var len_list = bug_list.length;
+    if(len_list == 0){
+        var add_tr = $("<tr></tr>");
+        var add_td = $("<td>还没有属于自己的问题</td>");
+        add_td.attr("colSpan", "5");
+        add_td.addClass("redColor");
+        add_tr.append(add_td);
+        t.append(add_tr);
+    }
     var keys = ["bug_title", "submitter", "submit_time", "bug_level"];
     for (var i = 0; i < len_list; i++) {
         var bug_item = bug_list[i];
@@ -240,16 +256,14 @@ $(function () {
     //});
     var bug_url = location.href;
     my_async_request2(bug_url, "GET", null, handle_bug_list);
-    var my_bug_url = $("#my_bug_url").val();
-    my_async_request2(my_bug_url, "GET", null, handle_my_bug);
     bug_level_desc = JSON.parse($("#bug_level_desc").text());
     var current_user_role = parseInt($("#current_user_role").val());
     var new_link_role = $("#new_link_role").val().split("|");
     var bit_new = current_user_role & parseInt(new_link_role[0]);
+    var bit_link = current_user_role & parseInt(new_link_role[1]);
     if (bit_new > 0) {
         $("#div_add_problem").show();
         var index = 1;
-        var bit_link = current_user_role & parseInt(new_link_role[1]);
         if (bit_link > 0)
             index = 0;
         for (; index < bug_level_desc.length; index++) {
@@ -266,5 +280,12 @@ $(function () {
         });
         $("#btn_submit_problem").click(submit_problem);
     }
-
+    if(bit_link <= 0){
+        $("#btn_jy_mine").hide();
+        $("#btn_jy_wait_solve").click();
+    }
+    else{
+        var my_bug_url = $("#my_bug_url").val();
+        my_async_request2(my_bug_url, "GET", null, handle_my_bug);
+    }
 });
