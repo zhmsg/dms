@@ -19,14 +19,12 @@
     <button type="button" class="btn btn-primary margin20" id="btn_jy_mine" >我的问题</button>
     {% include "BUG/Wait_Solve.html" %}
     {% include "BUG/my_problem.html" %}
-    {% if user_role | bit_and(role_desc["bug_new"]) == role_desc["bug_new"]  %}
-        <form action="{{ url_prefix }}/new/" method="post">
-            <input class="form-control pull-left bug-input" name="bug_title" >
-            <select name="bug_level" class="box-side" id="select_bug_level">
-            </select>
-            <button class="btn btn-primary" type="submit">提交问题</button>
-        </form>
-    {% endif %}
+    <div id="div_add_problem" class="display_none">
+        <input class="form-control pull-left bug-input" name="bug_title" >
+        <select name="bug_level" class="box-side" id="select_bug_level">
+        </select>
+        <button class="btn btn-primary" type="submit">提交问题</button>
+    </div>
     <input id="bug_statistic_url" value="{{ url_prefix }}/statistic/" style="display: none"/>
     <table>
         <tr>
@@ -42,6 +40,7 @@
     </table>
     <input id="my_bug_url" value="{{ my_bug_url }}" class="display_none">
     <input id="info_url" value="{{ info_url }}" class="display_none">
+    <input id="new_link_role" value="{{ new_link_role }}" class="display_none">
     <label id="bug_status_desc" class="display_none">{{ bug_status_desc | tojson | safe }}</label>
     <label id="bug_level_desc" class="display_none">{{ bug_level_desc | tojson | safe }}</label>
 {% endblock %}

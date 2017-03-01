@@ -219,7 +219,26 @@ $(function () {
     var my_bug_url = $("#my_bug_url").val();
     my_async_request2(my_bug_url, "GET", null, handle_my_bug);
     bug_level_desc = JSON.parse($("#bug_level_desc").text());
-    for(var i=0;i<bug_level_desc.length;i++){
-        add_option("select_bug_level", i, bug_level_desc[i]);
+    var current_user_role = parseInt($("#current_user_role").val());
+    var new_link_role = $("#new_link_role").val().split("|");
+    var bit_new = current_user_role & parseInt(new_link_role[0]);
+    if(bit_new > 0) {
+        $("#div_add_problem").show();
+        var index = 1;
+        var bit_link = current_user_role & parseInt(new_link_role[1]);
+        if(bit_link > 0)
+            index = 0;
+        for (; index < bug_level_desc.length; index++) {
+            add_option("select_bug_level", index, bug_level_desc[index]);
+        }
     }
+    // 自动保存和加载选择的项
+    var storage_key = "dms_select_bug_level";
+    var s_value = localStorage.getItem(storage_key);
+    if(s_value != null){
+        $("#select_bug_level").val(s_value);
+    }
+    $("#select_bug_level").change(function(){
+        localStorage.setItem(storage_key, $("#select_bug_level").val());
+    });
 });
