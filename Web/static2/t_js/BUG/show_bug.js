@@ -107,6 +107,13 @@ function drawBar(data, father_id, bar_name) {
         .text(bar_name);
 }
 
+function jump_detail()
+{
+    var parent_tr = $(this).parent().parent();
+    var bug_no = parent_tr.attr("id").substr(3);
+    location.href = $("#info_url").val() + "?bug_no=" + bug_no;
+}
+
 function handler_level() {
     var td_level = $(this);
     var level_val = parseInt(td_level.text());
@@ -121,6 +128,7 @@ function handler_level() {
     td_level.text(td_text);
 }
 
+
 function handle_bug_list(bug_list) {
     var t_id = "t_wait_solve";
     var t = $("#" + t_id);
@@ -128,11 +136,11 @@ function handle_bug_list(bug_list) {
     var keys = ["bug_title", "bug_status", "submitter", "submit_time", "bug_level"];
     for (var i = 0; i < len_list; i++) {
         var bug_item = bug_list[i];
-        var add_tr = $("<tr></tr>");
+        var add_tr = $("<tr id='tr_" + bug_item["bug_no"] + "'></tr>");
         for (var j = 0; j < keys.length; j++) {
             add_tr.append(new_td(keys[j], bug_item));
         }
-        add_tr.append($('<td><a href="javascript:void(0)">查看</a></td>'));
+        add_tr.append($('<td><a name="look_detail1" href="javascript:void(0)">查看</a></td>'));
         t.append(add_tr);
     }
     var bug_status_desc = JSON.parse($("#bug_status_desc").text());
@@ -165,6 +173,7 @@ function handle_bug_list(bug_list) {
         td_status.text(td_text);
     });
     $("td[name='td_bug_level']").each(handler_level);
+    $("a[name='look_detail1']").click(jump_detail);
 }
 
 
@@ -175,15 +184,17 @@ function handle_my_bug(bug_list) {
     var keys = ["bug_title", "submitter", "submit_time", "bug_level"];
     for (var i = 0; i < len_list; i++) {
         var bug_item = bug_list[i];
-        var add_tr = $("<tr></tr>");
+        var add_tr = $("<tr id='tr_" + bug_item["bug_no"] + "'></tr>");
         for (var j = 0; j < keys.length; j++) {
             add_tr.append(new_td(keys[j], bug_item));
         }
-        add_tr.append($('<td><a href="javascript:void(0)">查看</a></td>'));
+        add_tr.append($('<td><a name="look_detail2" href="javascript:void(0)">查看</a></td>'));
         t.append(add_tr);
     }
     $("td[name='td_bug_level']").each(handler_level);
+    $("a[name='look_detail2']").click(jump_detail);
 }
+
 
 $(function () {
     //var bug_statistic_url = $("#bug_statistic_url").val();

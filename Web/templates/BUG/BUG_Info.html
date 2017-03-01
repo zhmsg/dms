@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}BUG信息{% endblock %}
+{% block title %}问题信息{% endblock %}
 
 {% block js_content %}
     {{ 't_js/BUG/bug_info.js' | make_static_html | safe }}
@@ -8,47 +8,47 @@
 
 {% block content %}
     <br/>
-    <a class="btn btn-primary pull-right" href="{{ url_prefix }}" title="">BUG列表</a>
+    <a class="btn btn-primary pull-right" href="{{ url_prefix }}" title="">问题列表</a>
     <div class="bugInfoShow">
-        <p>BUG系统编号：{{ bug_info["basic_info"]["bug_no"] }}</p>
+        <p>问题系统编号：{{ bug_info["basic_info"]["bug_no"] }}</p>
 
-        <p><span class="font-red">BUG标题：</span>{{ bug_info["basic_info"]["bug_title"] }}</p>
+        <p><span class="font-red">问题标题：</span>{{ bug_info["basic_info"]["bug_title"] }}</p>
 
-        <p>BUG提交时间：{{ bug_info["basic_info"]["submit_time"] }}</p>
+        <p>问题提交时间：{{ bug_info["basic_info"]["submit_time"] }}</p>
 
-        <p>BUG提交者：{{ bug_info["basic_info"]["submit_name"] }}</p>
+        <p>问题提交者：{{ bug_info["basic_info"]["submit_name"] }}</p>
 
-        <p>BUG级别：{{ bug_info["basic_info"]["bug_level"] }} {{ bug_info["basic_info"]["bug_level_desc"] }}</p>
+        <p>问题级别：{{ bug_info["basic_info"]["bug_level"] }} {{ bug_info["basic_info"]["bug_level_desc"] }}</p>
 
-        <p><span class="font-red">BUG状态：</span>{{ bug_status_desc[bug_info["basic_info"]["bug_status"]] }}</p>
+        <p><span class="font-red">问题状态：</span>{{ bug_status_desc[bug_info["basic_info"]["bug_status"]] }}</p>
 
         <p>
-            {#如果当前状态为 已有BUG疑似拥有者 显示疑似拥有者#}
+            {#如果当前状态为 已有问题疑似拥有者 显示疑似拥有者#}
             {% if bug_info["basic_info"]["bug_status"] == 1 %}
-                <span class="font-red">BUG疑似拥有者：</span>
+                <span class="font-red">问题疑似拥有者：</span>
                 {% for user_name in bug_info["link_user"]["ys"].keys() %}
                     <span class="bugAuthor gray">
                 <b class="pull-right hand handCurrent">X</b>
                     {{ bug_info["link_user"]["ys"][user_name]["nick_name"] }}
                 </span>
                 {% endfor %}
-                {#如果当前状态为 已有BUG拥有者 显示拥有者#}
+                {#如果当前状态为 已有问题拥有者 显示拥有者#}
             {% elif bug_info["basic_info"]["bug_status"] == 2 or bug_info["basic_info"]["bug_status"] == 3 %}
-                BUG拥有者：
+                问题拥有者：
                 {% for user_name in bug_info["link_user"]["owner"].keys() %}
                     <span class="bugAuthor orange">
                     <b class="pull-right hand handCurrent opacity">X</b>
                     {{ bug_info["link_user"]["owner"][user_name]["nick_name"] }}
                 </span>
                 {% endfor %}
-                {#如果当前状态为 BUG已修复 显示信息#}
+                {#如果当前状态为 问题已修复 显示信息#}
                 {#       {% elif bug_info["basic_info"]["bug_status"] == 3 %}#}
-                {#            BUG已被修复#}
+                {#            问题已被修复#}
             {% endif %}
         </p>
     </div>
     <div class="bugInfoDepict">
-        {#BUG的描述信息#}
+        {#问题的描述信息#}
         {% for item in bug_info["example_info"] %}
             {% if item["example_type"] == 1 %}
                 <p>{{ item["content"] }}</p>
@@ -60,7 +60,7 @@
     </div>
     <div id="div_bug_reason">
     </div>
-    {# 提交关于BUG的描述 只有BUG提交者才可以提交 并且要在BUG的状态小于3即BUG处于未修复状态下才可以 #}
+    {# 提交关于问题的描述 只有问题提交者才可以提交 并且要在问题的状态小于3即问题处于未修复状态下才可以 #}
     <div class="clear bottom20 bugUpload">
         {% if bug_info["basic_info"]["submitter"] == current_user and bug_info["basic_info"]["bug_status"] < 3 %}
             <form class="bugTextMode" action="{{ url_prefix }}/{{ bug_no }}/str/example/" method="post">
@@ -77,14 +77,14 @@
 
         {% endif %}
         <dev class="bugTextMode display_none" id="div_add_reason">
-            <span class="pull-left">产生BUG的原因：</span>
+            <span class="pull-left">产生问题的原因：</span>
             <textarea class="form-control bottom10" rows="5" name="bug_reason"></textarea>
             <button class="btn btn-primary">提交</button>
         </dev>
-        {#添加疑似BUG拥有者#}
+        {#添加疑似问题拥有者#}
         {% if bug_info["basic_info"]["bug_status"] < 2 %}
             <form action="{{ url_prefix }}/{{ bug_no }}/ys/" method="post">
-                <span class="pull-left">添加疑似BUG拥有者：</span>
+                <span class="pull-left">添加疑似问题拥有者：</span>
                 <select class="form-control pull-left bug-input" name="ys_user">
                     {% for user in user_list %}
                         {% if not user["user_name"] in bug_info["link_user"]["ys"] %}
@@ -95,11 +95,11 @@
                 <button class="btn btn-primary" type="submit">添加</button>
             </form>
         {% endif %}
-        {#添加BUG拥有者#}
+        {#添加问题拥有者#}
         {% if bug_info["basic_info"]["bug_status"] < 3 and bug_info["basic_info"]["bug_level"] > 0 %}
             {% if bug_info["basic_info"]["submitter"] == current_user %}
                 <form action="{{ url_prefix }}/{{ bug_no }}/owner/" method="post">
-                    <span class="pull-left">添加BUG拥有者：</span>
+                    <span class="pull-left">添加问题拥有者：</span>
                     <select class="form-control pull-left bug-input" name="owner">
                         {% for user in user_list %}
                             {% if not user["user_name"] in bug_info["link_user"]["owner"] %}
@@ -113,33 +113,33 @@
             {% if current_user not in bug_info["link_user"]["owner"] %}
                 <form action="{{ url_prefix }}/{{ bug_no }}/owner/" method="post">
                     <input name="owner" value="{{ current_user }}" style="display: none"/>
-                    <button class="btn btn-primary" type="submit">标记为我的BUG</button>
+                    <button class="btn btn-primary" type="submit">标记为我的问题</button>
                 </form>
             {% endif %}
         {% endif %}
 
-        {#完成BUG#}
+        {#完成问题#}
         {% if bug_info["basic_info"]["bug_status"] < 3 %}
             {% if bug_info["basic_info"]["submitter"] == current_user %}
                 <form action="{{ url_prefix }}/{{ bug_no }}/fix/" method="post">
-                    <button class="btn btn-primary" type="submit">BUG已修复</button>
+                    <button class="btn btn-primary" type="submit">问题已修复</button>
                 </form>
             {% endif %}
         {% endif %}
-        {#取消BUG#}
+        {#取消问题#}
         {% if bug_info["basic_info"]["bug_status"] < 3 and bug_info["basic_info"]["bug_level"] > 0 %}
             {% if bug_info["basic_info"]["submitter"] == current_user %}
                 <form action="{{ url_prefix }}/{{ bug_no }}/cancel/" method="post">
-                    <button class="btn btn-primary" type="submit">取消BUG</button>
+                    <button class="btn btn-primary" type="submit">取消问题</button>
                 </form>
             {% endif %}
         {% endif %}
 
-        {#不过属于BUG 设计如此#}
+        {#不过属于问题 设计如此#}
         {% if bug_info["basic_info"]["bug_status"] < 3 and bug_info["basic_info"]["bug_level"] > 0 %}
             {% if user_role | bit_and(role_desc["bug_cancel"]) == role_desc["bug_cancel"] %}
                 <form action="{{ url_prefix }}/{{ bug_no }}/design/" , method="post">
-                    <button class="btn btn-primary" type="submit">不是BUG，就是这么设计的</button>
+                    <button class="btn btn-primary" type="submit">不是问题，就是这么设计的</button>
                 </form>
             {% endif %}
         {% endif %}

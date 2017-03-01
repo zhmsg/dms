@@ -24,7 +24,7 @@
             <input class="form-control pull-left bug-input" name="bug_title" >
             <select name="bug_level" class="box-side" id="select_bug_level">
             </select>
-            <button class="btn btn-primary" type="submit">新建BUG</button>
+            <button class="btn btn-primary" type="submit">提交问题</button>
         </form>
     {% endif %}
     <input id="bug_statistic_url" value="{{ url_prefix }}/statistic/" style="display: none"/>
@@ -41,6 +41,7 @@
         </tr>
     </table>
     <input id="my_bug_url" value="{{ my_bug_url }}" class="display_none">
+    <input id="info_url" value="{{ info_url }}" class="display_none">
     <label id="bug_status_desc" class="display_none">{{ bug_status_desc | tojson | safe }}</label>
     <label id="bug_level_desc" class="display_none">{{ bug_level_desc | tojson | safe }}</label>
 {% endblock %}
