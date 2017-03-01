@@ -509,9 +509,12 @@ class ControlManager(object):
             return False, u"您没有权限"
         return self.bug.select_bug_link(bug_no)
 
-    def new_bug(self, user_name, role, bug_title, bug_level):
-        if role & self.role_value["bug_new"] <= 0:
+    def new_bug(self, user_name, user_role, bug_title, bug_level):
+        if self.judge_role(user_role, self.role_value["bug_new"]) is False:
             return False, u"您没有权限"
+        if bug_level == 0:
+            if self.judge_role(user_role, self.role_value["bug_link"]) is False:
+                return False, u"您没有权限"
         return self.bug.new_bug_info(bug_title, user_name, bug_level)
 
     def add_bug_str_example(self, user_name, role, bug_no, content):
