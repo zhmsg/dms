@@ -62,7 +62,6 @@ class RequestsManager(object):
             raise JYRequestsException(self.conn_error_code, url, message=str(ce))
         if resp.status_code != 200:
             raise JYRequestsException(self.http_error_code, url, http_code=resp.status_code)
-
         return resp
 
 

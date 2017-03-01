@@ -30,23 +30,19 @@ def ref_bug_no(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         ref_key = "bug_no"
-        if "Referer" not in request.headers:
-            if request.is_xhr is True:
-                return jsonify({"status": False, "data": "Bad Request."})
-            else:
-                return "Bad Request"
-        g.ref_url = request.headers["Referer"]
-        find_result = re.findall(ref_key + "=([a-z\d]{32})", g.ref_url)
-        if len(find_result) > 0:
-            g.bug_no = find_result[0]
-        elif ref_key in request.args:
+        if ref_key in request.args:
             g.bug_no = request.args[ref_key]
+            return f(*args, **kwargs)
+        elif "Referer" in request.headers:
+            g.ref_url = request.headers["Referer"]
+            find_result = re.findall(ref_key + "=([a-z\d]{32})", g.ref_url)
+            if len(find_result) > 0:
+                g.bug_no = find_result[0]
+                return f(*args, **kwargs)
+        if request.is_xhr is True:
+            return jsonify({"status": False, "data": "Bad Request."})
         else:
-            if request.is_xhr is True:
-                return jsonify({"status": False, "data": "Bad Request."})
-            else:
-                return "Bad Request"
-        return f(*args, **kwargs)
+            return "Bad Request"
     return decorated_function
 
 

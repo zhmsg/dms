@@ -14,7 +14,7 @@ class DingMsgManager(object):
 
     def _send(self, msg, access_token):
         url = "https://oapi.dingtalk.com/robot/send?access_token=%s" % access_token
-        self._request.post(url, json=msg, as_thread=True)
+        self._request.post(url, json=msg, as_thread=True, verify=False)
         return True
 
     def _send_text(self, access_token, content, at_mobiles, at_all):

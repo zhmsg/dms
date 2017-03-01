@@ -69,6 +69,7 @@ class ControlManager(object):
         self.jd_man = JingDuDataManager(jd_mysql_host, jd_mysql_db)
         self.manger_email = ["budechao@ict.ac.cn", "biozy@ict.ac.cn"]
         self.jy_log = LogManager()
+        self.ding_msg = DingMsgManager("a49a7c62e8601123cd417465ff8037cd8410a3572244903fa694e4b7548a917a")
 
     def check_user_name_exist(self, user_name, role, check_user_name):
         if role & self.role_value["user_new"] <= 0:
@@ -588,17 +589,16 @@ class ControlManager(object):
         if bug_status > 2:
             return False, u"BUG 已不能修改"
         # 判断被链接者是否可以被链接
-        select_sql = "SELECT role FROM %s WHERE user_name='%s';" % (self.sys_user, link_user)
-        result = self.db.execute(select_sql)
-        if result == 0:
+        exec_r, user_info = self.user.get_user_info(user_name)
+        if exec_r is False:
             return False, u"添加关联账户不存在"
-        link_role = self.db.fetchone()[0]
+        link_role = user_info["role"]
         if link_role & self.role_value["bug_link"] <= 0:
             return False, u"添加关联账户无效"
         if link_type == "ys":
             if bug_status > 1:
                 return False, u"BUG 状态已不允许添加疑似拥有者"
-            return self._add_ys_link(bug_no, user_name, link_user)
+            return self._add_ys_link(bug_no, user_name, user_info)
         elif link_type == "owner":
             return self._add_owner_link(bug_no, user_name, link_user, submitter)
         elif link_type == "fix":
@@ -640,15 +640,18 @@ class ControlManager(object):
                 return self.bug.del_bug_link(bug_no, link_user, link_type_num, user_name)
         return False, u"您无权限删除"
 
-    def _add_ys_link(self, bug_no, user_name, link_user):
+    def _add_ys_link(self, bug_no, user_name, link_user_info):
         # 有new bug的权限均可添加疑似bug拥有者
-        result, info = self.bug.new_bug_link(bug_no, link_user, 1, user_name)
+        result, info = self.bug.new_bug_link(bug_no, link_user_info["user_name"], 1, user_name)
         if result is True:
             # 获得bug信息
-            exec_r, bug_list = self.bug.get_bug_basic(bug_no)
-            if exec_r is True and len(bug_list) > 0:
-                bug_info = bug_list[0]
-                print(bug_info)
+            exec_r, bug_info = self.bug.get_bug_basic(bug_no)
+            if exec_r is True:
+                content = u"DMS上有人提交问题:\n" + bug_info["bug_title"]
+                at_mobiles = []
+                if link_user_info["tel"] is not None:
+                    at_mobiles.append(link_user_info["tel"])
+                self.ding_msg.send_text(content, at_mobiles)
             # 发送钉钉消息
             pass
         return result, info

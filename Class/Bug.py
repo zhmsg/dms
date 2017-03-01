@@ -122,7 +122,9 @@ class BugManager(object):
         where_value = dict(bug_no=bug_no)
         cols = ["bug_no", "bug_title", "submitter", "submit_time", "bug_level", "bug_status"]
         bug_list = self.db.execute_select(self.bug, where_value=where_value, cols=cols, package=True)
-        return True, bug_list
+        if len(bug_list) <= 0:
+            return False, "Not Exist"
+        return True, bug_list[0]
 
     def get_bug_info(self, bug_no):
         if len(bug_no) != 32:
