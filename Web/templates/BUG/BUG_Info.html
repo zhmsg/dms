@@ -120,7 +120,7 @@
 
         {#完成问题#}
         {% if bug_info["basic_info"]["bug_status"] < 3 %}
-            {% if bug_info["basic_info"]["submitter"] == current_user %}
+            {% if bug_info["basic_info"]["submitter"] == current_user or current_user in bug_info["link_user"]["owner"]%}
                 <form action="{{ url_prefix }}/{{ bug_no }}/fix/" method="post">
                     <button class="btn btn-primary" type="submit">问题已修复</button>
                 </form>
