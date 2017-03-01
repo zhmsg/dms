@@ -44,6 +44,7 @@ class BugManager(object):
             return False, "sql execute result is %s " % result
         if bug_level == 0:
             self.new_bug_link(bug_no, submitter, 2, submitter)
+            self.new_bug_link(bug_no, submitter, 3, submitter)
         return True, kwargs
 
     def new_bug_link(self, bug_no, user_name, link_type, adder):
