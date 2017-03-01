@@ -62,5 +62,9 @@ function handler_bug_links(link_users)
 
 $(document).ready(function () {
     var url_link_user = $("#url_link_user").val();
-    my_async_request2(url_link_user, "GET", null, handler_bug_links)
+    my_async_request2(url_link_user, "GET", null, handler_bug_links);
+    $("#div_bug_example p").each(function(){
+        var current_p = $(this);
+        current_p.html(current_p.text().replace("\n", "<br />"));
+    });
 });
