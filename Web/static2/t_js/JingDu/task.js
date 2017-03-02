@@ -13,7 +13,7 @@ function show_task_info(task_data){
     clear_table(t_name);
     var t_task = $("#" + t_name);
     var keys = ["task_id", "account", "app_id", "input", "output", "status", "started_stamp", "duration"];
-    var now_stamp = get_timestamp();
+    var now_stamp = get_timestamp() / 1000;
     for(var i=0;i<task_len;i++){
         var task_item = task_data[i];
         if(task_item["finished_stamp"] != null){
@@ -22,6 +22,7 @@ function show_task_info(task_data){
         else{
             task_item["duration"] = duration_show(now_stamp - task_item["started_stamp"]);
         }
+        task_item["started_stamp"] = timestamp_2_datetime(task_item["started_stamp"]);
         var add_tr = $("<tr></tr>");
         for(var j=0;j<keys.length;j++){
             var one_td = new_td(keys[j], task_item);
