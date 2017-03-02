@@ -6,13 +6,11 @@ var query_task_ing = new Object({"exec_r": null, "exec_completed": false, "exec_
 
 
 function show_task_info(task_data){
-    console.info(task_data);
-    //
     var task_len = task_data.length;
     var t_name = "t_user_task";
     clear_table(t_name);
     var t_task = $("#" + t_name);
-    var keys = ["task_id", "account", "app_id", "input", "output", "status", "started_stamp", "duration"];
+    var keys = ["task_id", "account", "app_id", "input", "output", "status", "db_status", "started_stamp", "duration"];
     var now_stamp = get_timestamp2();
     for(var i=0;i<task_len;i++){
         var task_item = task_data[i];
@@ -36,21 +34,9 @@ function show_task_info(task_data){
         var show_id = task_id.substr(0, 3) + "***" + task_id.substr(28, 4);
         current_td.text(show_id);
         current_td.attr("title", task_id);
+        current_td.addClass("status_move");
     });
-    //$("td[name='td_completed']:visible").each(function(){
-    //    var current_td = $(this);
-    //    if(current_td.text() == "false"){
-    //        current_td.text("未完成");
-    //    }
-    //    else{
-    //        current_td.text("已完成");
-    //    }
-    //});
-    //$("a[name='td_look_partner']:visible").each(function(){
-    //    var current_td = $(this);
-    //    current_td.unbind("click");
-    //    current_td.click(click_look_partner);
-    //});
+
 }
 
 function query_task(){
@@ -61,7 +47,6 @@ function query_task(){
     query_task_ing.exec_completed = false;
     var request_url = "task/";
     var started_stamp = today_timestamp();
-    console.info(started_stamp);
     my_async_request2(request_url, "GET", {"started_stamp": started_stamp}, show_task_info, query_task_ing);
 }
 
