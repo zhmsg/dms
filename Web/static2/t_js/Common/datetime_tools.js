@@ -13,6 +13,12 @@ function get_timestamp(){
     return (new Date()).valueOf();
 }
 
+
+function get_timestamp2(){
+    return parseInt(get_timestamp() / 1000);
+}
+
+
 function datetime_2_timestamp(dt_str){
     var ts = Date.parse(dt_str);
     return ts / 1000;

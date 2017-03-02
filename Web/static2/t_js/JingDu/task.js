@@ -13,7 +13,7 @@ function show_task_info(task_data){
     clear_table(t_name);
     var t_task = $("#" + t_name);
     var keys = ["task_id", "account", "app_id", "input", "output", "status", "started_stamp", "duration"];
-    var now_stamp = get_timestamp() / 1000;
+    var now_stamp = get_timestamp2();
     for(var i=0;i<task_len;i++){
         var task_item = task_data[i];
         if(task_item["finished_stamp"] != null){
