@@ -853,6 +853,12 @@ class ControlManager(object):
             return False, "您没有权限"
         return self.jd_man.select_sample_user(sample_no, account)
 
+    def query_task(self, user_name, user_role, **kwargs):
+        # 判断角色值
+        if self.judge_role(user_role, self.role_value["jd_basic"]) is False:
+            return False, "您没有权限"
+        return self.jd_man.select_task(**kwargs)
+
     # 针对工具
     def get_ip_info(self, ip_value):
         return self.ip.select_info_info(ip_value)

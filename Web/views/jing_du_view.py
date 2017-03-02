@@ -112,3 +112,12 @@ def check_sample_variant():
         r_data["detail"] = str(ce)
     check_variant[0] = False
     return jsonify({"status": True, "data": r_data})
+
+
+@jing_du_view.route("/task/", methods=["GET"])
+def query_task():
+    kwargs = dict()
+    if "started_stamp" in request.args:
+        kwargs["started_stamp"] = request.args["started_stamp"]
+    exec_r, task_data = control.query_task(g.user_name, g.user_role, **kwargs)
+    return jsonify({"status": exec_r, "data": task_data})

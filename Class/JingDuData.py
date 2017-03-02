@@ -3,7 +3,7 @@
 
 import sys
 sys.path.append("..")
-from Tools.Mysql_db import DB
+from Tools.Mysql_db import DB, DBItem
 
 __author__ = 'ZhouHeng'
 
@@ -18,6 +18,7 @@ class JingDuDataManager(object):
         self.t_sample_user = "sample_user_right"
         self.t_sample_info = "sample_info"
         self.t_project_sample = "sys_project_sample"
+        self.db_user_task = DBItem("user_task_list", db=self.db)
 
     def _select_project(self, where_value=None, limit_num=20):
         cols = ["project_no", "project_name", "description", "date_created", "display_level", "completed", "lastModify",
@@ -96,3 +97,23 @@ class JingDuDataManager(object):
         else:
             return False, "必须传入账户名"
         return self._select_sample_user(where_value)
+
+    def select_task(self, task_id=None, app_id=None, account=None, started_stamp=None, **kwargs):
+        cols = ["task_id", "app_id", "account", "input", "output", "status", "db_status", "started_stamp",
+                "finished_stamp"]
+        where_value = dict()
+        where_cond = []
+        if task_id is not None:
+            where_value["task_id"] = task_id
+        if app_id is not None:
+            where_value["app_id"] = app_id
+        if account is not None:
+            where_value["account"] = account
+        if started_stamp is not None:
+            where_cond.append("started_stamp>=%s" % started_stamp)
+        if kwargs.get("s_status", None) is not None:
+            where_cond.append("status>%s" % kwargs["s_status"])
+        if kwargs.get("e_status", None) is not None:
+            where_cond.append("status>%s" % kwargs["e_status"])
+        db_items = self.db_user_task.execute_select(cols=cols, where_value=where_value, where_cond=where_cond)
+        return True, db_items

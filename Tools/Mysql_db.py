@@ -239,3 +239,23 @@ class DB(object):
         if self.cursor:
             self.cursor.close()
         self.conn.close()
+
+
+class DBItem(object):
+
+    def __init__(self, t_name, **kwargs):
+        self.t_name = t_name
+        super(DBItem, self).__init__()
+        self.db = kwargs.pop("db", None)
+        if self.db is None:
+            self.db = DB(**kwargs)
+
+    def execute_select(self, where_value={"1": 1}, where_cond=None, cols=None, package=True, **kwargs):
+        return self.db.execute_select(self.t_name, where_value=where_value, where_cond=where_cond, cols=cols,
+                                      package=package, **kwargs)
+
+    def fetchone(self):
+        return self.db.fetchone()
+
+    def fetchall(self):
+        return self.db.fetchall()
