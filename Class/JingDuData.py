@@ -19,6 +19,7 @@ class JingDuDataManager(object):
         self.t_sample_info = "sample_info"
         self.t_project_sample = "sys_project_sample"
         self.db_user_task = DBItem("user_task_list", db=self.db)
+        self.db_app = DBItem("app_list", db=self.db)
 
     def _select_project(self, where_value=None, limit_num=20):
         cols = ["project_no", "project_name", "description", "date_created", "display_level", "completed", "lastModify",
@@ -116,4 +117,9 @@ class JingDuDataManager(object):
         if kwargs.get("e_status", None) is not None:
             where_cond.append("status>%s" % kwargs["e_status"])
         db_items = self.db_user_task.execute_select(cols=cols, where_value=where_value, where_cond=where_cond)
+        return True, db_items
+
+    def select_app_list(self):
+        cols = ["app_id", "app_name", "app_desc", "status_desc"]
+        db_items = self.db_app.execute_select(cols=cols)
         return True, db_items

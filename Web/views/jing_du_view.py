@@ -121,3 +121,9 @@ def query_task():
         kwargs["started_stamp"] = request.args["started_stamp"]
     exec_r, task_data = control.query_task(g.user_name, g.user_role, **kwargs)
     return jsonify({"status": exec_r, "data": task_data})
+
+
+@jing_du_view.route("/app/", methods=["GET"])
+def get_app_list():
+    exec_r, app_info = control.get_app_list(g.user_name, g.user_role)
+    return jsonify({"status": exec_r, "data": app_info})

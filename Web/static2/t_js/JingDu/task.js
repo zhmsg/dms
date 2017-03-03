@@ -11,6 +11,8 @@ function click_task_id(){
     copy_text(task_id);
 }
 
+var app_storage_key = "app_list";
+
 function show_task_info(task_data){
     var task_len = task_data.length;
     var t_name = "t_user_task";
@@ -46,7 +48,42 @@ function show_task_info(task_data){
         current_td.addClass("status_move");
         current_td.click(click_task_id);
     });
+    var app_data = sessionStorage.getItem(app_storage_key);
+    if(app_data != null){
+        handler_app(JSON.parse(app_data), true);
+    }
+    else {
+        var request_url = "app/";
+        my_async_request2(request_url, "GET", null, handler_app);
+    }
+}
 
+
+function handler_app(app_data, from_cache){
+    if(from_cache == null) {
+        console.info("save app data to session storage");
+        sessionStorage.setItem(app_storage_key, JSON.stringify(app_data));
+    }
+    var app_len = app_data.length;
+    var app_data_d = new Object();
+    for(var i=0;i<app_len;i++){
+        var app_item = app_data[i];
+        app_item["status_desc"] = app_item["status_desc"].split(",");
+        app_data_d["" + app_item["app_id"]] = app_item;
+    }
+    $("td[name='td_app_id']").each(function(){
+        var current_td = $(this);
+        var app_id = current_td.text();
+        if(app_id in app_data_d){
+            current_td.text(app_data_d[app_id]["app_name"]);
+        }
+        var status_td = current_td.nextAll("[name='td_status']");
+        var status_s = status_td.text();
+        var status = parseInt(status_s);
+        if(app_id.length >=3)
+            status = status - 1;
+        status_td.text(status_s + "-" + app_data_d[app_id]["status_desc"][status]);
+    });
 }
 
 function query_task(){
