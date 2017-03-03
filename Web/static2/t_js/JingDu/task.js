@@ -60,25 +60,4 @@ function query_task(){
 
 $(document).ready(function () {
     $("#link_today_task").click(query_task);
-    window.onresize = function() {
-        reset_bottom();
-    }
-    function reset_bottom()
-    {
-        $("div[name='pop_div']").each(function(){
-            var div_el = $(this);
-            div_el.show();
-            var height = $(window).height();
-            var width = $(window).width();
-            div_el.css({'left': (width / 2 - div_el.width() / 2) + "px", 'top': (height - div_el.height() - 40) + 'px'});
-        });
-        $("div[name='pop_div1']").each(function(){
-            var div_el = $(this);
-            div_el.show();
-            var height = $(window).height();
-            var width = $(window).width();
-            div_el.css({'left': (width / 2 - div_el.width() / 2) + "px", 'top': (height - div_el.height() - 140) + 'px'});
-        });
-    }
-    reset_bottom();
 });

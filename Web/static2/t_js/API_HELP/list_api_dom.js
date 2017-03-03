@@ -86,6 +86,13 @@ function Load_API_List(api_list, module_prefix)
     else{
         $("#a_query_list").hide();
     }
+    $("td[name='td_api_url']").each(function(){
+        $(this).addClass("status_move");
+        $(this).click(function(){
+           var url = $(this).text();
+            copy_text(url);
+        });
+    });
 }
 
 function Load_Care_Info(care_info){

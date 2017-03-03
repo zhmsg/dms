@@ -12,6 +12,7 @@ function copy_text(s)
     document.body.removeChild(aux);
 
     $(".popup_div_1").hide();
+    s = escape(s);
     var pop_div = $('<div class="popup_div_1 display_none" name="pop_div"><div class="popup_content_1">成功复制' + s +'</div></div>');
     $("body").append(pop_div);
     pop_div.show();

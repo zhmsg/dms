@@ -258,7 +258,11 @@ $(function(){
         $(".updateinfo").change(update_info);
         $("input[id^='error_']").keyup(update_info);
     }
-
+    $("td[name='status_code']").click(function(){
+        var current_td = $(this);
+        var code = current_td.text().replace(/[^\d]/g, "");
+        copy_text(code);
+    });
 });
 
 // 分页相关方法
