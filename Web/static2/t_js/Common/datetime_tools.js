@@ -43,7 +43,7 @@ function duration_show(d){
     if(d <= 0){
         return s_duration;
     }
-    r = d % 60;
+    r = d % 24;
     s_duration = r + "小时" + s_duration;
     d = parseInt(d / 60);
     if(d <= 0){

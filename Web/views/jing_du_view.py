@@ -117,10 +117,10 @@ def check_sample_variant():
 @jing_du_view.route("/task/", methods=["GET"])
 def query_task():
     kwargs = dict()
-    if "started_stamp" in request.args:
-        kwargs["started_stamp"] = request.args["started_stamp"]
-    if "app_id" in request.args:
-        kwargs["app_id"] = request.args["app_id"]
+    keys = ["started_stamp", "app_id", "s_status", "e_status"]
+    for k in keys:
+        if k in request.args:
+            kwargs[k] = request.args[k]
     exec_r, task_data = control.query_task(g.user_name, g.user_role, **kwargs)
     return jsonify({"status": exec_r, "data": task_data})
 

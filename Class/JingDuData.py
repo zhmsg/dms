@@ -113,9 +113,9 @@ class JingDuDataManager(object):
         if started_stamp is not None:
             where_cond.append("started_stamp>=%s" % started_stamp)
         if kwargs.get("s_status", None) is not None:
-            where_cond.append("status>%s" % kwargs["s_status"])
+            where_cond.append("status>=%s" % kwargs["s_status"])
         if kwargs.get("e_status", None) is not None:
-            where_cond.append("status>%s" % kwargs["e_status"])
+            where_cond.append("status<=%s" % kwargs["e_status"])
         db_items = self.db_user_task.execute_select(cols=cols, where_value=where_value, where_cond=where_cond)
         return True, db_items
 

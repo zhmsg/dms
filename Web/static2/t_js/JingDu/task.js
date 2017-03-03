@@ -83,10 +83,12 @@ function handler_app(app_data, from_cache){
         var status_desc = "";
         if(status < 0)
             status_desc = "失败";
-        if(app_id.length >=3)
-            status_desc = app_data_d[app_id]["status_desc"][status - 1];
-        else
-            status_desc = app_data_d[app_id]["status_desc"][status];
+        else {
+            if (app_id.length >= 3)
+                status_desc = app_data_d[app_id]["status_desc"][status - 1];
+            else
+                status_desc = app_data_d[app_id]["status_desc"][status];
+        }
         status_td.text(status_s + "-" + status_desc);
     });
 }
@@ -131,6 +133,14 @@ function fill_app_select(app_data, from_cache)
 
 $(document).ready(function () {
     $("#link_today_task").click(query_today_task);
+    $("#link_running_task").click(function(){
+        var request_data = {"s_status": 0, "e_status": 4};
+        request_task(request_data);
+    });
+    $("#link_fail_task").click(function(){
+        var request_data = {"e_status": -1};
+        request_task(request_data);
+    });
     $("#btn_query_task").click(query_task);
     var app_data = sessionStorage.getItem(app_storage_key);
     if(app_data != null){
