@@ -189,3 +189,57 @@ body, td, th {
 .selected {
     background: #81ccee;
 }
+
+/* 从下弹出层 */
+
+@-webkit-keyframes bounceIn {
+    0% {
+        opacity: 0;
+        -webkit-transform: scale(.5);
+        transform: scale(.5)
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform: scale(1);
+        transform: scale(1)
+    }
+}
+
+@keyframes  bounceIn {
+    0% {
+        opacity: 0;
+        -webkit-transform: scale(.5);
+        -ms-transform: scale(.5);
+        transform: scale(.5)
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform: scale(1);
+        -ms-transform: scale(1);
+        transform: scale(1)
+    }
+}
+
+.popup_div_1 {
+    position: fixed;
+    border-radius: 2px;
+    animation-duration: .3s;
+    min-width: 100px;
+    background-color: rgba(0,0,0,.6);
+    color: #ffffff;
+    border: none;
+    animation-name: bounceIn;
+}
+
+.popup_content_1 {
+    padding: 12px 25px;
+    text-align: center;
+    position: relative;
+    line-height: 24px;
+    word-break: break-all;
+    font-size: 14px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    /*box-shadow:none;*/
+    /**/
+}

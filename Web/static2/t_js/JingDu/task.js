@@ -5,6 +5,12 @@
 var query_task_ing = new Object({"exec_r": null, "exec_completed": false, "exec_ing": false});
 
 
+function click_task_id(){
+    var task_id = $(this).attr("title");
+    console.info(task_id);
+    copy_text(task_id);
+}
+
 function show_task_info(task_data){
     var task_len = task_data.length;
     var t_name = "t_user_task";
@@ -35,6 +41,7 @@ function show_task_info(task_data){
         current_td.text(show_id);
         current_td.attr("title", task_id);
         current_td.addClass("status_move");
+        current_td.click(click_task_id);
     });
 
 }
@@ -53,4 +60,25 @@ function query_task(){
 
 $(document).ready(function () {
     $("#link_today_task").click(query_task);
+    window.onresize = function() {
+        reset_bottom();
+    }
+    function reset_bottom()
+    {
+        $("div[name='pop_div']").each(function(){
+            var div_el = $(this);
+            div_el.show();
+            var height = $(window).height();
+            var width = $(window).width();
+            div_el.css({'left': (width / 2 - div_el.width() / 2) + "px", 'top': (height - div_el.height() - 40) + 'px'});
+        });
+        $("div[name='pop_div1']").each(function(){
+            var div_el = $(this);
+            div_el.show();
+            var height = $(window).height();
+            var width = $(window).width();
+            div_el.css({'left': (width / 2 - div_el.width() / 2) + "px", 'top': (height - div_el.height() - 140) + 'px'});
+        });
+    }
+    reset_bottom();
 });
