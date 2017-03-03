@@ -88,6 +88,7 @@ function Load_API_List(api_list, module_prefix)
     }
     $("td[name='td_api_url']").each(function(){
         $(this).addClass("status_move");
+        $(this).attr("title", "点击复制URL");
         $(this).click(function(){
            var url = $(this).text();
             copy_text(url);
