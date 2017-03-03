@@ -119,6 +119,8 @@ def query_task():
     kwargs = dict()
     if "started_stamp" in request.args:
         kwargs["started_stamp"] = request.args["started_stamp"]
+    if "app_id" in request.args:
+        kwargs["app_id"] = request.args["app_id"]
     exec_r, task_data = control.query_task(g.user_name, g.user_role, **kwargs)
     return jsonify({"status": exec_r, "data": task_data})
 

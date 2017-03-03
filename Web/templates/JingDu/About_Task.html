@@ -1,14 +1,13 @@
 <div class="div_jy_about_task" style="display: none">
     <div>
         <div class="clear bottom20">
-            <input class="box-side width150" id="s_no" placeholder=""/>
+            <select class="box-side width150 margin10" id="select_app_id">
+            </select>
             <a>
-                <button class="btn btn-primary" id="btn_query_task" disabled>查询</button>
+                <button class="btn btn-primary" id="btn_query_task">查询</button>
             </a>
             <a id="link_today_task" class="status_move hand">今日任务</a>
             <label id="lab_s_error_key" class="hand error_result" style="display: none">输入的样本编号无效，请检查后重新输入</label>
-            <a name="link_top_stage" class="status_move hand" style="display: none" link_table="t_sys_sample">查看前6状态</a>
-            <a id="link_top_variant" class="status_move hand" style="display: none">检查前6突变</a>
         </div>
         <div style="position: relative">
             <table class="table table-bordered table-hover api-list-table" id="t_user_task">
@@ -18,10 +17,10 @@
                     <th scope="col" width=10%">任务名称</th>
                     <th scope="col" width=5%">任务输入</th>
                     <th scope="col" width=10%">任务输出</th>
-                    <th scope="col" width=10%">状态</th>
+                    <th scope="col" width=8%">状态</th>
                     <th scope="col" width=5%">DB状态</th>
                     <th scope="col" width=10%">开始时间</th>
-                    <th scope="col" width=8%">历时</th>
+                    <th scope="col" width=10%">历时</th>
                 </tr>
             </table>
         </div>

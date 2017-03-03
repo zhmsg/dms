@@ -80,24 +80,64 @@ function handler_app(app_data, from_cache){
         var status_td = current_td.nextAll("[name='td_status']");
         var status_s = status_td.text();
         var status = parseInt(status_s);
+        var status_desc = "";
+        if(status < 0)
+            status_desc = "失败";
         if(app_id.length >=3)
-            status = status - 1;
-        status_td.text(status_s + "-" + app_data_d[app_id]["status_desc"][status]);
+            status_desc = app_data_d[app_id]["status_desc"][status - 1];
+        else
+            status_desc = app_data_d[app_id]["status_desc"][status];
+        status_td.text(status_s + "-" + status_desc);
     });
 }
 
-function query_task(){
+function query_today_task()
+{
+    var started_stamp = today_timestamp();
+    var request_data = {"started_stamp": started_stamp};
+    request_task(request_data);
+}
+
+function request_task(request_data){
     if(query_task_ing.exec_ing == true){
         return;
     }
     query_task_ing.exec_ing = true;
     query_task_ing.exec_completed = false;
     var request_url = "task/";
-    var started_stamp = today_timestamp();
-    my_async_request2(request_url, "GET", {"started_stamp": started_stamp}, show_task_info, query_task_ing);
+    my_async_request2(request_url, "GET", request_data, show_task_info, query_task_ing);
 }
 
+function query_task()
+{
+    var request_data = new Object();
+    var app_id = $("#select_app_id").val();
+    request_data["app_id"] = app_id;
+    request_task(request_data);
+}
+
+function fill_app_select(app_data, from_cache)
+{
+    if(from_cache == null) {
+        console.info("save app data to session storage");
+        sessionStorage.setItem(app_storage_key, JSON.stringify(app_data));
+    }
+    var app_len = app_data.length;
+    for(var i=0;i<app_len;i++){
+        var app_item = app_data[i];
+        add_option("select_app_id", app_item["app_id"], app_item["app_name"]);
+    }
+}
 
 $(document).ready(function () {
-    $("#link_today_task").click(query_task);
+    $("#link_today_task").click(query_today_task);
+    $("#btn_query_task").click(query_task);
+    var app_data = sessionStorage.getItem(app_storage_key);
+    if(app_data != null){
+        fill_app_select(JSON.parse(app_data), true);
+    }
+    else {
+        var request_url = "app/";
+        my_async_request2(request_url, "GET", null, fill_app_select);
+    }
 });
