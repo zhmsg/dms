@@ -187,7 +187,7 @@ $(function(){
     $("tr[id^='s_']").hover(
         function(){
             var code_info = get_info(this.id.substr(2,8));
-            $("#status_code_info").html(code_info);
+            $("#status_code_info").html(code_info + "<br /> <p class='redColor'>点击可复制</p>");
             $(".status_out").show();
             $(".status_out").css('top',(this.offsetHeight + this.offsetTop)+'px')
         },
