@@ -29,10 +29,14 @@ function click_look_project(){
 
 function show_project_info(project_data){
     var pro_len = project_data.length;
-    clear_table("t_project_info");
-    var t_project = $("#t_project_info");
+    var t_name = "t_project_info";
+    clear_table(t_name);
+    var t_project = $("#" + t_name);
     var keys = ["project_no", "project_name", "description", "date_created", "display_level", "completed", "lastModify"];
     var v_len = [null, 10, 20, 12, null, null, 12, null];
+    if(pro_len == 0){
+        add_row_td(t_name, "未查询到");
+    }
     for(var i=0;i<pro_len;i++){
         var add_tr = $("<tr></tr>");
         for(var j=0;j<keys.length;j++){
@@ -86,9 +90,13 @@ function query_project_info(){
 
 function show_project_user(pu_data){
     var pro_len = pu_data.length;
-    clear_table("t_project_user");
-    var t_project = $("#t_project_user");
+    var t_name = "t_project_user";
+    clear_table(t_name);
+    var t_project = $("#" + t_name);
     var keys = ["project_no", "account", "role", "date_added"];
+    if(pro_len == 0){
+        add_row_td(t_name, "未查询到");
+    }
     for(var i=0;i<pro_len;i++){
         var add_tr = $("<tr></tr>");
         for(var j=0;j<keys.length;j++){

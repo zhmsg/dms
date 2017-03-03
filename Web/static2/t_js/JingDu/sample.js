@@ -141,9 +141,13 @@ function show_variant(variant_info){
 
 function show_sample_info(sample_data){
     var sam_len = sample_data.length;
-    clear_table("t_sys_sample");
-    var t_sample = $("#t_sys_sample");
+    var t_name = "t_sys_sample";
+    clear_table(t_name);
+    var t_sample = $("#" + t_name);
     var keys = ["sample_no", "sample_id", "patient_no", "date_created", "display_level", "portal"];
+    if(sam_len == 0){
+        add_row_td(t_name, "未查询到");
+    }
     for(var i=0;i<sam_len;i++){
         var add_tr = $("<tr></tr>");
         for(var j=0;j<keys.length;j++){
@@ -200,9 +204,13 @@ function query_sys_sample(){
 
 function show_sample_user(su_data){
     var su_len = su_data.length;
-    clear_table("t_sample_user");
-    var t_sample = $("#t_sample_user");
+    var t_name = "t_sample_user";
+    clear_table(t_name);
+    var t_sample = $("#" +t_name);
     var keys = ["sample_no", "account", "role"];
+    if(su_len == 0){
+        add_row_td(t_name, "未查询到");
+    }
     for(var i=0;i<su_len;i++){
         var add_tr = $("<tr></tr>");
         for(var j=0;j<keys.length;j++){
@@ -241,6 +249,9 @@ function show_sample_user(su_data){
     });
     if(su_len > 0) {
         $("a[name='link_top_stage']:eq(1)").show();
+    }
+    else{
+        $("a[name='link_top_stage']:eq(1)").hide();
     }
 }
 

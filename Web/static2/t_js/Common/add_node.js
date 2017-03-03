@@ -52,6 +52,25 @@ function clear_table(table_id){
     $("#" + table_id + " tr").not(":first").remove();
 }
 
+function add_row_td(t_id, content, col_len)
+{
+    var t =$("#" + t_id);
+    var add_tr = $("<tr></tr>");
+    var add_td = $("<td></td>");
+    add_td.text(content);
+    if(col_len == null){
+        var th_len = t.find("th").length;
+        if(th_len > 0)
+            col_len = th_len;
+        else
+            col_len = 1;
+    }
+    add_td.css({"text-align": "center"});
+    add_td.attr("colSpan", col_len);
+    add_tr.append(add_td);
+    t.append(add_tr);
+}
+
 function query_table(t_id, key){
     var trs = $("#" + t_id + " tr").not(":first");
     var tr_len = trs.length;

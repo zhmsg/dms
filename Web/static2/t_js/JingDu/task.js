@@ -19,12 +19,7 @@ function show_task_info(task_data){
     var keys = ["task_id", "account", "app_id", "input", "output", "status", "db_status", "started_stamp", "duration"];
     var now_stamp = get_timestamp2();
     if(task_len == 0){
-        var add_tr = $("<tr></tr>");
-        var add_td = $("<td>无任务</td>");
-        add_td.attr("colSpan", "9");
-        add_td.addClass("redColor");
-        add_tr.append(add_td);
-        t_task.append(add_tr);
+        add_row_td(t_name, "无任务");
     }
     for(var i=0;i<task_len;i++){
         var task_item = task_data[i];
