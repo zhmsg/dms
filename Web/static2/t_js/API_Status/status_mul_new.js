@@ -127,7 +127,7 @@ function new_mul_status_code_success(data){
 
     for(var i=0;i<data.data.length;i++){
         var del_code_a = '<a id="a_del_' + data.data[i].status_code + '" href="javascript:void(0)" title="">删除</a>';
-        add_rows[i] =new Array(data.data[i].status_code, data.data[i].error_desc, del_code_a);
+        add_rows[i] = new Array(data.data[i].status_code, data.data[i].error_desc, del_code_a);
     }
     add_table_row("tb_preview_code", add_rows, true);
     $("a[id^=a_del_]").click(function(){
