@@ -119,8 +119,14 @@ class BaseHandler(tornado.web.RequestHandler, TemplateRendering):
 
     @property
     def is_authenticated(self):
-        if "user_id" not in self.session or "role" not in self.session or "_id" not in self.session:
+        if "user_id" not in self.session or "_id" not in self.session:
             return False
+        if "role" not in self.session:
+            exec_r, user_info = user_m.get_user_info(self.session["user_id"])
+            if exec_r is False:
+                self.session["role"] = 0
+            else:
+                self.session["role"] = user_info["role"]
         if self.session["_id"] != self.get_session_id():
             return False
         return True
