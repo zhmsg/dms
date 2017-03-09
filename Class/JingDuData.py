@@ -116,7 +116,7 @@ class JingDuDataManager(object):
             where_cond.append("status>=%s" % kwargs["s_status"])
         if kwargs.get("e_status", None) is not None:
             where_cond.append("status<=%s" % kwargs["e_status"])
-        db_items = self.db_user_task.execute_select(cols=cols, where_value=where_value, where_cond=where_cond)
+        db_items = self.db_user_task.execute_select(cols=cols, where_value=where_value, where_cond=where_cond, **kwargs)
         return True, db_items
 
     def select_app_list(self):

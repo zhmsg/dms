@@ -121,6 +121,8 @@ def query_task():
     for k in keys:
         if k in request.args:
             kwargs[k] = request.args[k]
+    kwargs["order_by"] = ["started_stamp"]
+    kwargs["order_desc"] = True
     exec_r, task_data = control.query_task(g.user_name, g.user_role, **kwargs)
     return jsonify({"status": exec_r, "data": task_data})
 
