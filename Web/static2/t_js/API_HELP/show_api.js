@@ -63,4 +63,8 @@ $(function() {
         $("#a_update_api").attr("href", location.href + "&update=");
         $("div[id^='div_api_new_']").show();
     }
+
+    $("#link_copy_location").click(function(){
+        copy_text(location.href);
+    });
 });
