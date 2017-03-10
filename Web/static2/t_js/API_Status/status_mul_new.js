@@ -123,19 +123,36 @@ function del_status_code_success(data){
 }
 
 function new_mul_status_code_success(data){
-    var add_rows = new Array();
-
+    var t_name = "tb_preview_code";
+    clear_table(t_name);
+    var keys = ["status_code", "error_desc"];
     for(var i=0;i<data.data.length;i++){
+        var add_tr = $("<tr></tr>");
+        for (var j = 0; j < keys.length; j++) {
+            add_tr.append(new_td(keys[j], data.data[i]));
+        }
         var del_code_a = '<a id="a_del_' + data.data[i].status_code + '" href="javascript:void(0)" title="">删除</a>';
-        add_rows[i] = new Array(data.data[i].status_code, data.data[i].error_desc, del_code_a);
+        //add_rows[i] = new Array(data.data[i].status_code, data.data[i].error_desc, del_code_a);
+        var add_td = $("<td>" + del_code_a + "</td>");
+        add_tr.append(add_td);
+        $("#" + t_name).append(add_tr);
     }
-    add_table_row("tb_preview_code", add_rows, true);
+    //add_table_row("tb_preview_code", add_rows, true);
     $("a[id^=a_del_]").click(function(){
         var status_code = this.id.substring(6);
         var del_url = $("#del_status_code_url").val();
         var body_param = new Object();
         body_param["status_code"] = status_code;
         my_request(del_url, "DELETE", body_param, del_status_code_success);
+    });
+    $("td[name='td_status_code']").each(function () {
+        var current_td = $(this);
+        current_td.addClass("status_move");
+        current_td.click(function () {
+            var code = current_td.text().replace(/[^\d]/g, "");
+            copy_text(lTrim(code, '0'));
+        });
+
     });
 }
 

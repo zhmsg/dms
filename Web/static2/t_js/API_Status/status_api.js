@@ -261,7 +261,7 @@ $(function(){
     $("td[name='status_code']").click(function(){
         var current_td = $(this);
         var code = current_td.text().replace(/[^\d]/g, "");
-        copy_text(code);
+        copy_text(lTrim(code, '0'));
     });
 });
 
