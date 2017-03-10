@@ -748,14 +748,16 @@ class ControlManager(object):
         result, api_info = self.api_help.get_api_basic_info(api_no)
         if result is False:
             return False
-        care_info = self.api_help.get_api_care_info(api_no)
+        api_care_info = self.api_help.get_api_care_info(api_no)
+        care_info = self.api_help.get_module_care_list(module_no=api_info["module_no"])
+        care_info.extend(api_care_info)
         rec_user = []
-        rec_email = []
+        rec_email = set()
         for care_user in care_info:
-            if care_user["email"] is None:
+            if care_user["email"] is None or care_user["email"] in rec_email:
                 continue
             rec_user.append("%s|%s" % (care_user["user_name"], care_user["email"]))
-            rec_email.append(care_user["email"])
+            rec_email.add(care_user["email"])
         email_content_lines = []
         email_content_lines.append(u"API文档完成")
         email_content_lines.append(u"API标题：%s" % api_info["api_title"])
