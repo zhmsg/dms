@@ -592,7 +592,7 @@ class ControlManager(object):
         if bug_status > 2:
             return False, u"BUG 已不能修改"
         # 判断被链接者是否可以被链接
-        exec_r, user_info = self.user.get_user_info(user_name)
+        exec_r, user_info = self.user.get_user_info(link_user)
         if exec_r is False:
             return False, u"添加关联账户不存在"
         link_role = user_info["role"]
