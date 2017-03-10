@@ -295,9 +295,6 @@ class ControlManager(object):
         result, data = self.api_help.new_api_info(module_no, title, path, method, desc)
         if result is True:
             self.api_help.new_api_care(data["api_no"], user_name, 0)
-            api_no = data["api_no"]
-            t = Thread(target=self._send_module_message, args=(user_name, module_no, api_no, title, method, desc))
-            t.start()
         return result, data
 
     def update_api_info(self, role, api_no, module_no, title, path, method, desc):
@@ -420,6 +417,8 @@ class ControlManager(object):
             if len(output_info) <= 0:
                 return False, u"请至少提交一个返回示例"
         result, info = self.api_help.set_api_stage(api_no, stage)
+        if result is True and stage == 2:
+            self._send_api_completed_message_thread(user_name, api_no)
         return result, info
 
     # 针对API状态码的应用
