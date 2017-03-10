@@ -89,7 +89,7 @@ function show_stage(sample_info){
     for(var i=0;i<si_len;i++){
         var info_item = sample_info[i];
         var sample_no = info_item.sample_no;
-        var td_stage = $("tr[name='tr_sample_" + sample_no + "']").find("td[name='td_look_stage']");
+        var td_stage = $("tr[name='tr_sample_" + sample_no + "']").find("td[name='td_status_tag']");
         var stage_text = "";
         var stage_title = null;
         switch(info_item.stage)
@@ -134,7 +134,7 @@ function show_stage(sample_info){
 
 function show_variant(variant_info){
     var sample_no = variant_info.sample_no;
-    var td_stage = $("#tr_sample_" + sample_no).find("td[name='td_look_stage']");
+    var td_stage = $("#tr_sample_" + sample_no).find("td[name='td_status_tag']");
     td_stage.html(variant_info.message);
     td_stage.attr("title", variant_info.detail);
 }
@@ -144,7 +144,7 @@ function show_sample_info(sample_data){
     var t_name = "t_sys_sample";
     clear_table(t_name);
     var t_sample = $("#" + t_name);
-    var keys = ["sample_no", "sample_id", "patient_no", "date_created", "display_level", "portal"];
+    var keys = ["sample_no", "sample_id", "patient_no", "date_created", "display_level", "portal", "status_tag"];
     if(sam_len == 0){
         add_row_td(t_name, "未查询到");
     }
@@ -154,8 +154,6 @@ function show_sample_info(sample_data){
             var one_td = new_td(keys[j], sample_data[i]);
             add_tr.append(one_td);
         }
-        var stage_td = $('<td name="td_look_stage"><a name="link_look_stage" href="javascript:void(0)">查看状态</a></td>');
-        add_tr.append(stage_td);
         var op_td = $('<td name="td_look_owner"><a name="link_look_owner" href="javascript:void(0)">拥有者</a></td>');
         add_tr.append(op_td);
         t_sample.append(add_tr);
@@ -171,18 +169,36 @@ function show_sample_info(sample_data){
         }
         current_td.text(current_td.text() + "|" + current_text);
     });
-    $("a[name='link_look_stage']:visible").each(function(){
-       var current_td = $(this);
-        current_td.unbind("click");
-        current_td.click(click_look_stage);
+    $("td[name='td_status_tag']:visible").each(function () {
+        var current_td = $(this);
+        var current_text = "";
+        var status_tag = parseInt(current_td.text());
+        if (isNaN(status_tag)) {
+            return;
+        }
+        if (status_tag & 31 == 31) {
+            current_text = '<a name=link_check_variant class="status_move">检查突变</a>';
+        }
+        else {
+            current_text = "私有";
+        }
+        current_td.html(current_td.text() + "|" + current_text);
     });
     $("a[name='link_look_owner']").each(function(){
         var current_td = $(this);
         current_td.unbind("click");
         current_td.click(click_look_owner);
     });
-    if(sam_len > 0){
-        $("a[name='link_top_stage']:eq(0)").show();
+    //if(sam_len > 0){
+    //    $("a[name='link_top_stage']:eq(0)").show();
+    //}
+    $("a[name='link_check_variant']").each(function () {
+        var current_td = $(this);
+        current_td.unbind("click");
+        current_td.click(click_check_variant);
+    });
+    if ($("a[name='link_check_variant']").length > 0) {
+        //$("#link_top_variant").show();
     }
 }
 
@@ -217,7 +233,7 @@ function show_sample_user(su_data){
             var one_td = new_td(keys[j], su_data[i]);
             add_tr.append(one_td);
         }
-        var stage_td = $('<td name="td_look_stage"><a name="link_look_stage" href="javascript:void(0)">查看状态</a></td>');
+        var stage_td = $('<td name="td_status_tag"><a name="link_look_stage" href="javascript:void(0)">查看状态</a></td>');
         add_tr.append(stage_td);
         var op_td = $('<td><a name="link_look_sample" href="javascript:void(0)">样本信息</a>');
         add_tr.append(op_td);

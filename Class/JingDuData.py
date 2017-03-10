@@ -55,7 +55,8 @@ class JingDuDataManager(object):
         return self._select_project_user(where_value)
 
     def _select_sample(self, where_value=None, limit_num=20):
-        cols = ["sample_no", "sample_id", "patient_no", "date_created", "display_level", "portal"]
+        cols = ["sample_no", "sample_id", "patient_no", "date_created", "display_level", "portal", "status_tag",
+                "ref_sample"]
         mul_s_info = self.db.execute_select(self.t_sys_samples, cols=cols, package=True, order_by=["sample_no"],
                                             order_desc=True, where_value=where_value, limit=limit_num)
         return True, mul_s_info

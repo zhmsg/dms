@@ -84,13 +84,23 @@ def check_sample_variant():
         sample_no = int(request.args["sample_no"])
     else:
         return jsonify({"status": False, "data": "无效的请求"})
+    exec_r, mul_s_info = control.get_sys_sample(g.user_name, g.user_role, sample_no)
+    if exec_r is False:
+        return jsonify({"status": exec_r, "data": mul_s_info})
+    if len(mul_s_info) < 1:
+        return jsonify({"status": exec_r, "data": "样本不存在"})
+    status_tag = mul_s_info[0]["status_tag"]
+    if status_tag & 31 != 31:
+        return jsonify({"status": exec_r, "data": "状态不可检查"})
+    ref_sample = mul_s_info[0]["ref_sample"]
+    variant_sample = ref_sample if ref_sample is not None else sample_no
     r_data = dict(sample_no=sample_no)
     if check_variant[0] is True:
         r_data["message"] = "正忙"
         return jsonify({"status": True, "data": r_data})
     check_variant[0] = True
     try:
-        resp = requests.get("%s/head/%s/" % (sx_variant, sample_no))
+        resp = requests.get("%s/head/%s/" % (sx_variant, variant_sample))
         if resp.status_code != 200:
             r_data["message"] = "请求%s" % resp.status_code
             r_data["detail"] = resp.status_code
@@ -110,6 +120,7 @@ def check_sample_variant():
         print(ce)
         r_data["message"] = "请求失败"
         r_data["detail"] = str(ce)
+    r_data["sample_no"] = sample_no
     check_variant[0] = False
     return jsonify({"status": True, "data": r_data})
 
