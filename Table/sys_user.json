@@ -10,7 +10,7 @@
             {
                 "col_comment": "",
                 "col_name": "role",
-                "col_type": "int(11)"
+              "col_type": "bigint(20)"
             },
             {
                 "col_comment": "",

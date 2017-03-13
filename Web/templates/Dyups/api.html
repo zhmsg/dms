@@ -1,0 +1,32 @@
+<div class="div_jy_api_upstream" style="display: none">
+    <!--系统备注及说明模块 start-->
+
+    <!--系统备注及说明模块 end-->
+    <div class="infoShow">
+        <div class="form-group apiContentLine">
+            <ul style="margin-bottom: 1em">
+                <input name="name" value="api" class="display_none">
+                <li>
+                    <label class="api-describe" for="">节点IP：</label>
+                    <input class="box-side" name="server_ip" value="192.168.120.10"/>
+                </li>
+                <li>
+                    <label for="">端口号：</label>
+                    <input class="box-side" name="server_port" value="80"/>
+                </li>
+            </ul>
+            <button name="btn_add_upstream" class="btn btn-success btn-down api-newBtn">添加</button>
+        </div>
+
+    </div>
+    <div style="position: relative">
+        <table class="table table-bordered table-hover api-list-table" id="t_apicluster">
+            <tr>
+                <th scope="col" width="40%">节点</th>
+                <th scope="col" width="30%">节点IP</th>
+                <th scope="col" width=10%">节点端口</th>
+                <th scope="col" width=20%">操作</th>
+            </tr>
+        </table>
+    </div>
+</div>

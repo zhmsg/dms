@@ -64,10 +64,15 @@ class UserManager:
              "param_del": {"role_desc": u"删除", "role_value": 134217728}}}
         self._jd_role_desc = {"module_desc": u"晶读数据", "role_list":
             {"jd_basic": {"role_desc": u"基础数据", "role_value": 536870912}}}
+        self._dyups_desc = {"module_desc": u"节点管理", "role_list":
+            {"dyups_look": {"role_desc": u"查看", "role_value": 1073741824},
+             "dyups_web": {"role_desc": u"web节点", "role_value": 2147483648},
+              "dyups_api": {"role_desc": u"api节点", "role_value": 4294967296}}}
         self.role_desc = {"data": self._data_role_desc, "api": self._api_role_desc, "table": self._table_role_desc,
                           "right": self._right_role_desc, "user": self._user_role_desc, "bug": self._bug_role_desc,
                           "status_code": self._status_code_role_desc, "log": self._log_role_desc,
-                          "release": self._release_role_desc, "param": self._param_role_desc, "jd": self._jd_role_desc}
+                          "release": self._release_role_desc, "param": self._param_role_desc, "jd": self._jd_role_desc,
+                          "deups": self._dyups_desc}
         self.__init_role__()
 
     def __init_role__(self):
@@ -247,7 +252,7 @@ class UserManager:
         if len(user_names) == 0:
             return True, "no update"
         if len(user_names) == 1:
-            return self.add_role_my_user(role, user_names, my_name)
+            return self._add_role_my_user(role, user_names[0], my_name)
         if type(role) != int:
             return False, "Bad role"
         update_sql = "UPDATE %s SET role=role | %s WHERE creator='%s' AND user_name in ('%s');" \

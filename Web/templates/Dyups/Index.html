@@ -1,0 +1,33 @@
+{% extends "base_menu.html" %}
+
+{% block title %}节点管理{% endblock %}
+
+{% block js_content %}
+    {{ 't_js/Common/JY_DIV.js' | make_static_html | safe }}
+    {{ 't_js/Common/add_node.js' | make_static_html | safe }}
+    {{ 't_js/Dyups/index.js' | make_static_html | safe }}
+{% endblock %}
+
+{% block center_content %}
+    <button type="button" class="btn btn-primary margin20" id="btn_jy_web_upstream" value="">本地WEB</button>
+    <button type="button" class="btn btn-primary margin20" id="btn_jy_api_upstream" value="">本地API</button>
+    <div class="declare">
+        <p class="redColor">预约 晶云测试环境 须知：</p>
+
+        <p>【1】预约需谨慎。</p>
+
+        <p>【2】仅允许在每天的9、10、11、14、15、16、17点的10-20分预约，例如10：10-10：20。</p>
+
+        <p>【3】每个时段仅允许一个用户预约。例如10：10-10：20为一个时段。</p>
+
+        <p>【4】每个帐号每天最多预约2次。</p>
+
+        <p>【5】预约成功后，可通过查看下面的任务进度确定是否发布成功。</p>
+
+        <p>【6】预约成功后，测试环境并不会立即重新发布，本系统会找个合适的时间启动重新发布任务。</p>
+
+        <p>【7】周一到周五，每天的12:10、18:10系统会自动预约发布。</p>
+    </div>
+    {% include "Dyups/web.html" %}
+    {% include "Dyups/api.html" %}
+{% endblock %}

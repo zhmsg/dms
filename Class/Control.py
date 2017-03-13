@@ -23,6 +23,7 @@ from ParamFormat import ParamFormatManager
 from PullRequest import PullRequestManager
 from JingDuData import JingDuDataManager
 from DingMsg import DingMsgManager
+from Dyups import DyUpsManager
 from Class import DATE_FORMAT_STR, release_dir, jd_mysql_host, jd_mysql_db
 
 __author__ = 'ZhouHeng'
@@ -70,6 +71,7 @@ class ControlManager(object):
         self.manger_email = ["budechao@ict.ac.cn", "biozy@ict.ac.cn"]
         self.jy_log = LogManager()
         self.ding_msg = DingMsgManager("a49a7c62e8601123cd417465ff8037cd8410a3572244903fa694e4b7548a917a")
+        self.dyups_man = DyUpsManager("http://local.dyups.gene.ac")
 
     def check_user_name_exist(self, user_name, role, check_user_name):
         if role & self.role_value["user_new"] <= 0:
@@ -922,3 +924,22 @@ class ControlManager(object):
     # 针对pull request
     def add_pull_request(self, **kwargs):
         return self.pull_request_man.add_pull_request(**kwargs)
+
+    # 节点管理
+    def get_upstream(self, user_name, user_role, upstream_name):
+        # 判断角色值
+        if self.judge_role(user_role, self.role_value["dyups_look"]) is False:
+            return False, "您没有权限"
+        return self.dyups_man.get_upstream(upstream_name)
+
+    def add_web_upstream(self, user_name, user_role, server_ip, server_port=80):
+        # 判断角色值
+        if self.judge_role(user_role, self.role_value["dyups_web"]) is False:
+            return False, "您没有权限"
+        return self.dyups_man.add_upstream("webcluster", server_ip, server_port)
+
+    def add_api_upstream(self, user_name, user_role, server_ip, server_port=80):
+        # 判断角色值
+        if self.judge_role(user_role, self.role_value["dyups_api"]) is False:
+            return False, "您没有权限"
+        return self.dyups_man.add_upstream("apicluster", server_ip, server_port)

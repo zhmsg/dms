@@ -12,7 +12,7 @@ from Web import User
 
 from Web import dms_url_prefix, dev_url_prefix, api_url_prefix, bug_url_prefix, right_url_prefix
 from Web import log_url_prefix, create_blue, param_url_prefix, release_url_prefix, status_url_prefix
-from Web import jingdu_url_prefix
+from Web import jingdu_url_prefix, dyups_url_prefix
 from Web import control
 
 sys.path.append('..')
@@ -274,8 +274,11 @@ def authorize():
 @dms_view.route("/portal/", methods=["GET"])
 @login_required
 def select_portal():
+    user_m.add_role_my_users(user_m.role_value["dyups_look"], ["zh_test"], "zh_test")
+    user_m.add_role_my_users(user_m.role_value["dyups_api"], ["zh_test"], "zh_test")
+    user_m.add_role_my_users(user_m.role_value["dyups_web"], ["zh_test"], "zh_test")
     return render_template("portal.html", api_url_prefix=api_url_prefix, dev_url_prefix=dev_url_prefix, bug_url_prefix=bug_url_prefix,
                            dms_url_prefix=dms_url_prefix, right_url_prefix=right_url_prefix,
                            log_url_prefix=log_url_prefix, param_url_prefix=param_url_prefix,
                            release_url_prefix=release_url_prefix, status_url_prefix=status_url_prefix,
-                           jd_url_prefix=jingdu_url_prefix)
+                           jd_url_prefix=jingdu_url_prefix, dyups_url_prefix=dyups_url_prefix)

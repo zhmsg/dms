@@ -15,7 +15,7 @@ var menu_list = [["api_look", "api_url_prefix", "API文档"], ["status_code_look
     ["param_look", "param_url_prefix", "晶云公共参数"], ["log_query", "log_url_prefix", "晶云平台日志"], ["jd_basic", "jd_url_prefix", "晶读平台数据"],
     ["release_ih_N", "release_ih_url_prefix", "重启晶云服务"], ["release_ytj_N", "release_ytj_url_prefix", "重启晶云服务"],
     ["bug_look", "bug_url_prefix", "问题总结"], ["user_new", "register_url_prefix", "新建用户"],
-    ["user_new", "authorize_url_prefix", "用户授权"]];
+    ["user_new", "authorize_url_prefix", "用户授权"], ["dyups_look", "dyups_url_prefix", "节点管理"]];
 
 $(function(){
     var current_user_role = parseInt($("#current_user_role").val());
