@@ -41,7 +41,6 @@ class DyUpsManager(object):
         body = ""
         for item in server_list:
             body += item + ";"
-        print(body)
         resp = requests.post(self.update_url + "/%s" % upstream_name, data=body)
         return True, resp.text
 
