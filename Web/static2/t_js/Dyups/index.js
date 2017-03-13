@@ -31,8 +31,14 @@ function current_upstream(upstream_data) {
     }
     $("a[name='link_delete_upstream']").click(function () {
         var current_td = $(this).parent();
-        var server_item = current_td.parent().find("td:first").text();
+        var parent_tr = current_td.parent();
+        var current_t = parent_tr.parent().parent();
+        var server_item = parent_tr.find("td:first").text();
         console.info(server_item);
+        console.info($(current_t));
+        var t_id = current_t.attr("id");
+        var r_url = location.href + t_id.substr(2, 3) + "/";
+        my_async_request2(r_url, "DELETE", {"server_item": server_item}, update_upstream);
     });
 }
 

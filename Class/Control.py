@@ -943,3 +943,15 @@ class ControlManager(object):
         if self.judge_role(user_role, self.role_value["dyups_api"]) is False:
             return False, "您没有权限"
         return self.dyups_man.add_upstream("apicluster", server_ip, server_port)
+
+    def remove_web_upstream(self, user_name, user_role, server_item):
+        # 判断角色值
+        if self.judge_role(user_role, self.role_value["dyups_web"]) is False:
+            return False, "您没有权限"
+        return self.dyups_man.remove_upstream("webcluster", server_item)
+
+    def remove_api_upstream(self, user_name, user_role, server_item):
+        # 判断角色值
+        if self.judge_role(user_role, self.role_value["dyups_api"]) is False:
+            return False, "您没有权限"
+        return self.dyups_man.remove_upstream("apicluster", server_item)

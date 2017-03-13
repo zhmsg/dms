@@ -38,6 +38,8 @@ class DyUpsManager(object):
         return True, upstream_server
 
     def _update_upstream(self, upstream_name, server_list):
+        if len(server_list) < 1:
+            return False, "请至少保留一个节点"
         body = ""
         for item in server_list:
             body += item + ";"
@@ -53,6 +55,15 @@ class DyUpsManager(object):
             if item == add_item:
                 return False, "已存在"
         server_list.append(add_item)
+        return self._update_upstream(upstream_name, server_list)
+
+    def remove_upstream(self, upstream_name, server_item):
+        exec_r, server_list = self.get_upstream(upstream_name)
+        if exec_r is False:
+            return exec_r, server_list
+        if server_item not in server_list:
+            return False, "不存在"
+        server_list.remove(server_item)
         return self._update_upstream(upstream_name, server_list)
 
 

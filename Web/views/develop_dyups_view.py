@@ -54,3 +54,19 @@ def add_api_upstream():
     server_port = int(request_data.get("server_port", 80))
     exec_r, data = control.add_api_upstream(g.user_name, g.user_role, server_ip, server_port)
     return jsonify({"status": exec_r, "data": data})
+
+
+@develop_dyups_view.route("/web/", methods=["DELETE"])
+def remove_web_upstream():
+    request_data = request.json
+    server_item = request_data["server_item"]
+    exec_r, data = control.remove_web_upstream(g.user_name, g.user_role, server_item)
+    return jsonify({"status": exec_r, "data": data})
+
+
+@develop_dyups_view.route("/api/", methods=["DELETE"])
+def remove_api_upstream():
+    request_data = request.json
+    server_item = request_data["server_item"]
+    exec_r, data = control.remove_api_upstream(g.user_name, g.user_role, server_item)
+    return jsonify({"status": exec_r, "data": data})
