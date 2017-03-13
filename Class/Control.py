@@ -71,7 +71,7 @@ class ControlManager(object):
         self.manger_email = ["budechao@ict.ac.cn", "biozy@ict.ac.cn"]
         self.jy_log = LogManager()
         self.ding_msg = DingMsgManager("a49a7c62e8601123cd417465ff8037cd8410a3572244903fa694e4b7548a917a")
-        self.dyups_man = DyUpsManager("http://local.dyups.gene.ac")
+        self.dyups_man = DyUpsManager("https://local.dyups.gene.ac")
 
     def check_user_name_exist(self, user_name, role, check_user_name):
         if role & self.role_value["user_new"] <= 0:

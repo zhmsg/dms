@@ -26,7 +26,6 @@ class DyUpsManager(object):
 
     def get_upstream(self, upstream_name):
         resp = requests.get(self.get_url + "/%s" % upstream_name)
-        print(upstream_name)
         if resp.status_code == 404:
             return False, "不存在"
         if resp.status_code != 200:
