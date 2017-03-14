@@ -3,6 +3,12 @@
     "table_cols": [
       {
         "pri_key": true,
+        "col_comment": "负载点名称",
+        "col_name": "upstream_name",
+        "col_type": "varchar(30)"
+      },
+      {
+        "pri_key": true,
         "col_comment": "服务器地址，主键",
         "col_name": "server_ip",
         "col_type": "varchar(14)"
@@ -25,6 +31,6 @@
       }
     ],
     "table_comment": "常用server列表",
-    "table_name": "upstream_list"
+    "table_name": "upstream_server_nodes"
   }
 ]

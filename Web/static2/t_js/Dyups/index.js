@@ -12,8 +12,13 @@ function current_upstream(upstream_data) {
     }
     clear_table(t_id);
     var data_len = upstream_data["data"].length;
+    var delete_op = "<a href='javascript:void(0)' name='link_delete_upstream'>删除</a>";
+    var add_op = "<a href='javascript:void(0)' name='link_add_upstream'>添加</a>";
+    var set_save = "<a href='javascript:void(0)' name='link_save_server'>设为常用</a>";
+    var remove_save = "<a href='javascript:void(0)' name='link_remove_server'>移除常用</a>";
     for (var i = 0; i < data_len; i++) {
-        var server_item = upstream_data["data"][i];
+        var server = upstream_data["data"][i];
+        var server_item = server["server_item"];
         var add_tr = $("<tr></tr>");
         var td_1 = $("<td></td>");
         td_1.text(server_item);
@@ -25,9 +30,22 @@ function current_upstream(upstream_data) {
         var td_3 = $("<td></td>");
         td_3.text(ip_port[1]);
         add_tr.append(td_3);
-        var td_4 = $("<td></td>");
-        td_4.append($("<a href='javascript:void(0)' name='link_delete_upstream'>删除</a>"));
-        add_tr.append(td_4);
+        add_tr.append(new_td("status_desc", server));
+        var td_op = $("<td></td>");
+        if (server["status"] == 1) {
+            td_op.append($(delete_op));
+        }
+        else {
+            td_op.append($(add_op));
+        }
+        td_op.append(" | ");
+        if (server.hasOwnProperty("adder")) {
+            td_op.append($(remove_save));
+        }
+        else {
+            td_op.append($(set_save));
+        }
+        add_tr.append(td_op);
         t.append(add_tr);
     }
     if (op_role == "1") {

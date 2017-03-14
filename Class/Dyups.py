@@ -2,7 +2,9 @@
 # coding: utf-8
 __author__ = 'ZhouHeng'
 
+from time import time
 import requests
+from Tools.Mysql_db import DB
 
 
 class DyUpsManager(object):
@@ -13,6 +15,24 @@ class DyUpsManager(object):
         self.get_url = self.address + "/upstream"
         self.update_url = self.address + "/upstream"
         self.delete_url = self.address + "/upstream"
+        self.db = DB()
+        self.t_server = "upstream_server_nodes"
+
+    def select_server_nodes(self, upstream_name):
+        cols = ["upstream_name", "server_ip", "server_port", "adder", "insert_time"]
+        db_items = self.db.execute_select(self.t_server, where_value=dict(upstream_name=upstream_name), cols=cols)
+        return db_items
+
+    def insert_server_nodes(self, upstream_name, server_ip, server_port, adder):
+        kwargs = dict(upstream_name=upstream_name, server_ip=server_ip, server_port=server_port, adder=adder)
+        kwargs["insert_time"] = int(time())
+        l = self.db.execute_insert(self.t_server, kwargs=kwargs, ignore=True)
+        return l
+
+    def delete_server_nodes(self, upstream_name, server_ip, server_port, adder):
+        where_value = dict(upstream_name=upstream_name, server_ip=server_ip, server_port=server_port, adder=adder)
+        l = self.db.execute_delete(self.t_server, where_value=where_value)
+        return l
 
     def detail_upstream(self):
         resp = requests.get(self.detail_url)
@@ -28,14 +48,32 @@ class DyUpsManager(object):
         resp = requests.get(self.get_url + "/%s" % upstream_name)
         if resp.status_code == 404:
             return False, "不存在"
-        if resp.status_code != 200:
-            return True, []
-        r_server = resp.text.split("\n")
+        r_server = []
+        if resp.status_code == 200:
+            r_server.extend(resp.text.split("\n"))
         upstream_server = []
         for item in r_server:
             if item.startswith("server"):
                 upstream_server.append(item)
         return True, upstream_server
+
+    def get_server_list(self, upstream_name):
+        exec_r, upstream_server = self.get_upstream(upstream_name)
+        if exec_r is False:
+            return exec_r, upstream_server
+        server_nodes = self.select_server_nodes(upstream_name)
+        r_list = []
+        for item in upstream_server:
+            r_list.append(dict(server_item=item, status=1, status_desc="服务中"))
+        for item in server_nodes:
+            server_item = "%s:%s" % (item["server_ip"], item["server_port"])
+            index = upstream_server.index(server_item)
+            if index >= 0:
+                r_list[index].update(item)
+            else:
+                item.update(dict(server_item=server_item, status=0, status_desc="未添加"))
+                r_list.append(item)
+        return True, r_list
 
     def _update_upstream(self, upstream_name, server_list):
         if len(server_list) < 1:

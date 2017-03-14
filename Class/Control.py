@@ -926,11 +926,11 @@ class ControlManager(object):
         return self.pull_request_man.add_pull_request(**kwargs)
 
     # 节点管理
-    def get_upstream(self, user_name, user_role, upstream_name):
+    def get_server_list(self, user_name, user_role, upstream_name):
         # 判断角色值
         if self.judge_role(user_role, self.role_value["dyups_look"]) is False:
             return False, "您没有权限"
-        return self.dyups_man.get_upstream(upstream_name)
+        return self.dyups_man.get_server_list(upstream_name)
 
     def add_web_upstream(self, user_name, user_role, server_ip, server_port=80):
         # 判断角色值

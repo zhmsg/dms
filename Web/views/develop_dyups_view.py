@@ -27,7 +27,7 @@ def index_page():
 @develop_dyups_view.route("/webcluster/", methods=["GET"])
 def web_upstream():
     upstream_name = "webcluster"
-    exec_r, data = control.get_upstream(g.user_name, g.user_role, upstream_name)
+    exec_r, data = control.get_server_list(g.user_name, g.user_role, upstream_name)
     r_data = {"name": upstream_name, "data": data}
     return jsonify({"status": exec_r, "data": r_data})
 
@@ -35,7 +35,7 @@ def web_upstream():
 @develop_dyups_view.route("/apicluster/", methods=["GET"])
 def api_upstream():
     upstream_name = "apicluster"
-    exec_r, data = control.get_upstream(g.user_name, g.user_role, upstream_name)
+    exec_r, data = control.get_server_list(g.user_name, g.user_role, upstream_name)
     r_data = {"name": upstream_name, "data": data}
     return jsonify({"status": exec_r, "data": r_data})
 
