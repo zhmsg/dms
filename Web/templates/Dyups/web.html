@@ -1,7 +1,7 @@
 <div class="div_jy_web_upstream" style="display: none">
     <div class="infoShow">
         <div class="form-group apiContentLine" name="div_new_server" id="div_webcluster">
-            <input value="{{ webcluster_role }}" class="display_none">
+            <input value="{{ g.user_role |  bit_and(webcluster_role) }}" class="display_none">
             <ul style="margin-bottom: 1em">
                 <li>
                     <label class="api-describe" for="">节点IP：</label>

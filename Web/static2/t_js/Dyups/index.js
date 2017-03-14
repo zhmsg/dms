@@ -120,11 +120,10 @@ $(document).ready(function () {
         var request_url = location.href + t_id.substr(2) + "/";
         my_async_request2(request_url, "GET", null, current_upstream);
     });
-    var current_user_role = $("#current_user_role").val();
     $("div[name='div_new_server']").each(function () {
         var current_div = $(this);
         var role = current_div.find("input:first").val();
-        if (current_user_role & role < role) {
+        if (role <= 0) {
             current_div.find("button").text("暂无权限");
         }
         else {
