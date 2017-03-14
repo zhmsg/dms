@@ -26,7 +26,7 @@ class DyUpsManager(object):
     def insert_server_nodes(self, upstream_name, server_ip, server_port, adder):
         kwargs = dict(upstream_name=upstream_name, server_ip=server_ip, server_port=server_port, adder=adder)
         kwargs["insert_time"] = int(time())
-        l = self.db.execute_insert(self.t_server, kwargs=kwargs, ignore=True)
+        l = self.db.execute_insert(self.t_server, args=kwargs, ignore=True)
         return l
 
     def delete_server_nodes(self, upstream_name, server_ip, server_port, adder):
@@ -66,13 +66,13 @@ class DyUpsManager(object):
         for item in upstream_server:
             r_list.append(dict(server_item=item, status=1, status_desc="服务中"))
         for item in server_nodes:
-            server_item = "%s:%s" % (item["server_ip"], item["server_port"])
-            index = upstream_server.index(server_item)
-            if index >= 0:
-                r_list[index].update(item)
-            else:
+            server_item = "server %s:%s" % (item["server_ip"], item["server_port"])
+            if server_item not in upstream_server:
                 item.update(dict(server_item=server_item, status=0, status_desc="未添加"))
                 r_list.append(item)
+            else:
+                index = upstream_server.index(server_item)
+                r_list[index].update(item)
         return True, r_list
 
     def _update_upstream(self, upstream_name, server_list):
@@ -95,10 +95,11 @@ class DyUpsManager(object):
         server_list.append(add_item)
         return self._update_upstream(upstream_name, server_list)
 
-    def remove_upstream(self, upstream_name, server_item):
+    def remove_upstream(self, upstream_name, server_ip, server_port):
         exec_r, server_list = self.get_upstream(upstream_name)
         if exec_r is False:
             return exec_r, server_list
+        server_item = "server %s:%s" % (server_ip, server_port)
         if server_item not in server_list:
             return False, "不存在"
         server_list.remove(server_item)

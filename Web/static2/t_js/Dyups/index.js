@@ -12,10 +12,10 @@ function current_upstream(upstream_data) {
     }
     clear_table(t_id);
     var data_len = upstream_data["data"].length;
-    var delete_op = "<a href='javascript:void(0)' name='link_delete_upstream'>删除</a>";
-    var add_op = "<a href='javascript:void(0)' name='link_add_upstream'>添加</a>";
-    var set_save = "<a href='javascript:void(0)' name='link_save_server'>设为常用</a>";
-    var remove_save = "<a href='javascript:void(0)' name='link_remove_server'>移除常用</a>";
+    var delete_op = "<a href='javascript:void(0)' name='link_op_upstream'>删除</a>";
+    var add_op = "<a href='javascript:void(0)' name='link_op_upstream'>添加</a>";
+    var set_save = "<a href='javascript:void(0)' name='link_op_server'>设为常用</a>";
+    var remove_save = "<a href='javascript:void(0)' name='link_op_server'>移除常用</a>";
     for (var i = 0; i < data_len; i++) {
         var server = upstream_data["data"][i];
         var server_item = server["server_item"];
@@ -49,38 +49,27 @@ function current_upstream(upstream_data) {
         t.append(add_tr);
     }
     if (op_role == "1") {
-        t.find("a[name='link_delete_upstream']").click(function () {
+        t.find("a[name^='link_op_']").click(function () {
             var current_td = $(this).parent();
             var parent_tr = current_td.parent();
             var current_t = parent_tr.parent().parent();
-            var server_item = parent_tr.find("td:first").text();
-            var swal_text = server_item;
-            swal({
-                    title: "确定删除",
-                    text: swal_text,
-                    type: "info",
-                    showCancelButton: true,
-                    confirmButtonColor: '#DD6B55',
-                    confirmButtonText: '提交',
-                    cancelButtonText: "取消",
-                    closeOnConfirm: true,
-                    closeOnCancel: true
-                },
-                function (isConfirm) {
-                    if (isConfirm) {
-                        var t_id = current_t.attr("id");
-                        var r_url = location.href + t_id.substr(2) + "/";
-                        my_async_request2(r_url, "DELETE", {"server_item": server_item}, update_upstream);
-                    }
-                }
-            );
+            var upstream_name = current_t.attr("id").substr(2);
+            var server_ip = parent_tr.find("td:eq(1)").text();
+            var server_port = parent_tr.find("td:eq(2)").text();
+            var link_name = $(this).attr("name");
+            var r_url = $("#" + link_name.substr(5) + "_url").val();
+            var r_data = {"upstream_name": upstream_name, "server_ip": server_ip, "server_port": server_port};
+            var r_method = "POST";
+            if ($(this).text() == "移除常用" || $(this).text() == "删除") {
+                r_method = "DELETE";
+            }
+            my_async_request2(r_url, r_method, r_data, update_upstream);
         });
     }
 }
 
 function update_upstream(data) {
     $("button[disabled='disabled']").removeAttr("disabled");
-    console.info($("button"));
     if (data == "success") {
         location.reload();
     }
@@ -100,10 +89,11 @@ function submit_add() {
         var value = current_input.val();
         request_data[name] = value;
     }
+    request_data["upstream_name"] = btn_parent.attr("id").substr(4);
     if (str_2_ip(request_data["server_ip"]) <= 0) {
         return;
     }
-    var r_url = location.href + btn_parent.attr("id").substr(4) + "/";
+    var r_url = $("#op_upstream_url").val();
     if (request_data["server_ip"].match(/^(192\.168\.120\.|127\.0\.0\.)\d{1,3}$/)) {
         my_async_request2(r_url, "POST", request_data, update_upstream);
         current_btn.attr("disabled", "disabled");

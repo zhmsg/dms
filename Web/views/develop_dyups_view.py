@@ -21,7 +21,10 @@ develop_dyups_view = create_blue('develop_dyups_view', url_prefix=url_prefix)
 def index_page():
     webcluster_role = control.role_value["dyups_web"]
     apicluster_role = control.role_value["dyups_api"]
-    return rt.render("Index.html", webcluster_role=webcluster_role, apicluster_role=apicluster_role)
+    op_server_url = url_prefix + "/server/"
+    op_upstream_url = url_prefix + "/upstream/"
+    return rt.render("Index.html", webcluster_role=webcluster_role, apicluster_role=apicluster_role,
+                     op_server_url=op_server_url, op_upstream_url=op_upstream_url)
 
 
 @develop_dyups_view.route("/webcluster/", methods=["GET"])
@@ -40,35 +43,27 @@ def api_upstream():
     return jsonify({"status": exec_r, "data": r_data})
 
 
-@develop_dyups_view.route("/webcluster/", methods=["POST"])
-def add_web_upstream():
+@develop_dyups_view.route("/upstream/", methods=["POST", "DELETE"])
+def remove_upstream():
     request_data = request.json
     server_ip = request_data["server_ip"]
-    server_port = int(request_data.get("server_port", 80))
-    exec_r, data = control.add_web_upstream(g.user_name, g.user_role, server_ip, server_port)
+    server_port = int(request_data["server_port"])
+    upstream_name = request_data["upstream_name"]
+    if request.method == "DELETE":
+        exec_r, data = control.remove_upstream(g.user_name, g.user_role, upstream_name, server_ip, server_port)
+    else:
+        exec_r, data = control.add_upstream(g.user_name, g.user_role, upstream_name, server_ip, server_port)
     return jsonify({"status": exec_r, "data": data})
 
 
-@develop_dyups_view.route("/apicluster/", methods=["POST"])
-def add_api_upstream():
+@develop_dyups_view.route("/server/", methods=["POST", "DELETE"])
+def op_server_nodes():
     request_data = request.json
     server_ip = request_data["server_ip"]
-    server_port = int(request_data.get("server_port", 80))
-    exec_r, data = control.add_api_upstream(g.user_name, g.user_role, server_ip, server_port)
-    return jsonify({"status": exec_r, "data": data})
-
-
-@develop_dyups_view.route("/webcluster/", methods=["DELETE"])
-def remove_web_upstream():
-    request_data = request.json
-    server_item = request_data["server_item"]
-    exec_r, data = control.remove_web_upstream(g.user_name, g.user_role, server_item)
-    return jsonify({"status": exec_r, "data": data})
-
-
-@develop_dyups_view.route("/apicluster/", methods=["DELETE"])
-def remove_api_upstream():
-    request_data = request.json
-    server_item = request_data["server_item"]
-    exec_r, data = control.remove_api_upstream(g.user_name, g.user_role, server_item)
+    server_port = int(request_data["server_port"])
+    upstream_name = request_data["upstream_name"]
+    if request.method == "POST":
+        exec_r, data = control.add_server_node(g.user_name, g.user_role, upstream_name, server_ip, server_port)
+    else:
+        exec_r, data = control.delete_server_node(g.user_name, g.user_role, upstream_name, server_ip, server_port)
     return jsonify({"status": exec_r, "data": data})
