@@ -1,0 +1,30 @@
+[
+  {
+    "table_cols": [
+      {
+        "pri_key": true,
+        "col_comment": "服务器地址，主键",
+        "col_name": "server_ip",
+        "col_type": "varchar(14)"
+      },
+      {
+        "pri_key": true,
+        "col_comment": "服务端口号",
+        "col_name": "server_port",
+        "col_type": "int(11)"
+      },
+      {
+        "col_comment": "添加者",
+        "col_name": "adder",
+        "col_type": "varchar(22)"
+      },
+      {
+        "col_comment": "插入时间",
+        "col_name": "insert_time",
+        "col_type": "int(11)"
+      }
+    ],
+    "table_comment": "常用server列表",
+    "table_name": "upstream_list"
+  }
+]
