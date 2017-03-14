@@ -274,7 +274,7 @@ class UserManager:
         if len(user_names) == 0:
             return True, "no update"
         if len(user_names) == 1:
-            return self.add_role_my_user(role, user_names, my_name)
+            return self._remove_role_my_user(role, user_names[0], my_name)
         if type(role) != int:
             return False, "Bad role"
         update_sql = "UPDATE %s SET role=role & ~%s WHERE creator='%s' AND user_name in ('%s');" \

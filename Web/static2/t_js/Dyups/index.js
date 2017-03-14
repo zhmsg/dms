@@ -40,7 +40,12 @@ function current_upstream(upstream_data) {
         }
         td_op.append(" | ");
         if (server.hasOwnProperty("adder")) {
-            td_op.append($(remove_save));
+            var add_a = $(remove_save);
+            if (server["adder"] != $("#current_user_name").val()) {
+                add_a.css("color", "#CCC");
+                add_a.attr("name", "");
+            }
+            td_op.append(add_a);
         }
         else {
             td_op.append($(set_save));
@@ -64,6 +69,11 @@ function current_upstream(upstream_data) {
                 r_method = "DELETE";
             }
             my_async_request2(r_url, r_method, r_data, update_upstream);
+        });
+    }
+    else {
+        t.find("a[name^='link_op_']").each(function () {
+            $(this).css("color", "#CCC");
         });
     }
 }

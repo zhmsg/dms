@@ -59,6 +59,10 @@ ul,ol,li{list-style: none;margin: 0;padding: 0;}
 /*系统备注及说明模块 start*/
 .declare{padding-top: 20px;padding-bottom:10px;border-bottom: 2px dotted #999;}
 .redColor{color: #f23156;font-size: 16px;}
+
+.grayColor {
+    color: #CCC
+}
 /*系统备注及说明模块 end*/
 .toolTip{line-height: 30px;padding-bottom: 5px;}
 /*晶云平台数据表页的样式美化*/
