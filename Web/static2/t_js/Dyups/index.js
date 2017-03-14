@@ -74,4 +74,7 @@ $(document).ready(function () {
         my_async_request2(r_url, "POST", request_data, update_upstream);
         console.info(request_data);
     });
+    $("input[name='server_ip']").keyup(function () {
+        $(this).val(format_ip($(this).val()));
+    });
 });
