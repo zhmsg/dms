@@ -19,7 +19,9 @@ develop_dyups_view = create_blue('develop_dyups_view', url_prefix=url_prefix)
 
 @develop_dyups_view.route("/", methods=["GET"])
 def index_page():
-    return rt.render("Index.html")
+    webcluster_role = control.role_value["dyups_web"]
+    apicluster_role = control.role_value["dyups_api"]
+    return rt.render("Index.html", webcluster_role=webcluster_role, apicluster_role=apicluster_role)
 
 
 @develop_dyups_view.route("/webcluster/", methods=["GET"])

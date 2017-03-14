@@ -82,8 +82,8 @@ function submit_add() {
     if (str_2_ip(request_data["server_ip"]) <= 0) {
         return;
     }
+    var r_url = location.href + btn_parent.attr("id").substr(4) + "/";
     if (request_data["server_ip"].match(/^(192\.168\.120\.|127\.0\.0\.)\d{1,3}$/)) {
-        var r_url = location.href + request_data["name"] + "/";
         my_async_request2(r_url, "POST", request_data, update_upstream);
         current_btn.attr("disabled", "disabled");
     } else {
@@ -101,7 +101,6 @@ function submit_add() {
             },
             function (isConfirm) {
                 if (isConfirm) {
-                    var r_url = location.href + request_data["name"] + "/";
                     my_async_request2(r_url, "POST", request_data, update_upstream);
                     current_btn.attr("disabled", "disabled");
                 }
@@ -118,7 +117,19 @@ $(document).ready(function () {
         var request_url = location.href + t_id.substr(2) + "/";
         my_async_request2(request_url, "GET", null, current_upstream);
     });
-    $("button[name='btn_add_upstream']").not(":disabled").click(submit_add);
+    var current_user_role = $("#current_user_role").val();
+    $("div[name='div_new_server']").each(function () {
+        var current_div = $(this);
+        var role = current_div.find("input:first").val();
+        if (current_user_role & role < role) {
+            current_div.find("button").text("暂无权限");
+        }
+        else {
+            current_div.find("button").click(submit_add);
+            $("#t_" + current_div.attr("id").substr(4)).attr("op_role", "1");
+        }
+    });
+    //$("button[name='btn_add_upstream']").not(":disabled").click(submit_add);
     $("input[name='server_ip']").keyup(function () {
         $(this).val(format_ip($(this).val()));
     });

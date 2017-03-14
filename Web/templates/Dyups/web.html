@@ -1,8 +1,8 @@
 <div class="div_jy_web_upstream" style="display: none">
     <div class="infoShow">
-        <div class="form-group apiContentLine">
+        <div class="form-group apiContentLine" name="div_new_server" id="div_webcluster">
+            <input value="{{ webcluster_role }}" class="display_none">
             <ul style="margin-bottom: 1em">
-                <input name="name" value="webcluster" class="display_none">
                 <li>
                     <label class="api-describe" for="">节点IP：</label>
                     <input class="box-side" name="server_ip" placeholder="192.168.120.10"/>
@@ -17,8 +17,9 @@
 
     </div>
     <div style="position: relative">
-        <table class="table table-bordered table-hover api-list-table" id="t_webcluster">
+        <table class="table table-bordered table-hover api-list-table" id="t_webcluster" op_role="0">
             <caption>已有WEB节点</caption>
+            <input value="0" class="display_none">
             <tr>
                 <th scope="col" width="40%">节点</th>
                 <th scope="col" width="30%">节点IP</th>
