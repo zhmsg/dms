@@ -31,7 +31,7 @@ function current_upstream(upstream_data) {
         t.append(add_tr);
     }
     if (op_role == "1") {
-        $("a[name='link_delete_upstream']").click(function () {
+        t.find("a[name='link_delete_upstream']").click(function () {
             var current_td = $(this).parent();
             var parent_tr = current_td.parent();
             var current_t = parent_tr.parent().parent();
