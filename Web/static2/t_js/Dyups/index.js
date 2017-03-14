@@ -34,15 +34,32 @@ function current_upstream(upstream_data) {
         var parent_tr = current_td.parent();
         var current_t = parent_tr.parent().parent();
         var server_item = parent_tr.find("td:first").text();
-        console.info(server_item);
-        console.info($(current_t));
-        var t_id = current_t.attr("id");
-        var r_url = location.href + t_id.substr(2, 3) + "/";
-        my_async_request2(r_url, "DELETE", {"server_item": server_item}, update_upstream);
+        var swal_text = server_item;
+        swal({
+                title: "确定删除",
+                text: swal_text,
+                type: "info",
+                showCancelButton: true,
+                confirmButtonColor: '#DD6B55',
+                confirmButtonText: '提交',
+                cancelButtonText: "取消",
+                closeOnConfirm: true,
+                closeOnCancel: true
+            },
+            function (isConfirm) {
+                if (isConfirm) {
+                    var t_id = current_t.attr("id");
+                    var r_url = location.href + t_id.substr(2) + "/";
+                    my_async_request2(r_url, "DELETE", {"server_item": server_item}, update_upstream);
+                }
+            }
+        );
     });
 }
 
 function update_upstream(data) {
+    $("button[disabled='disabled']").removeAttr("disabled");
+    console.info($("button"));
     if (data == "success") {
         location.reload();
     }
@@ -51,29 +68,57 @@ function update_upstream(data) {
     }
 }
 
-$(document).ready(function () {
-    add_row_td("t_webcluster", "查询中");
-    add_row_td("t_apicluster", "查询中");
-    var request_url = location.href + "web/";
-    my_async_request2(request_url, "GET", null, current_upstream);
-    request_url = location.href + "api/";
-    my_async_request2(request_url, "GET", null, current_upstream);
-    $("button[name='btn_add_upstream']").click(function () {
-        var current_btn = $(this);
-        var btn_parent = current_btn.parent();
-        var all_input = btn_parent.find("input");
-        var request_data = new Object();
-        for (var i = 0; i < all_input.length; i++) {
-            var current_input = $(all_input[i]);
-            var name = current_input.attr("name");
-            console.info(name);
-            var value = current_input.val();
-            request_data[name] = value;
-        }
+function submit_add() {
+    var current_btn = $(this);
+    var btn_parent = current_btn.parent();
+    var all_input = btn_parent.find("input");
+    var request_data = new Object();
+    for (var i = 0; i < all_input.length; i++) {
+        var current_input = $(all_input[i]);
+        var name = current_input.attr("name");
+        var value = current_input.val();
+        request_data[name] = value;
+    }
+    if (str_2_ip(request_data["server_ip"]) <= 0) {
+        return;
+    }
+    if (request_data["server_ip"].match(/^(192\.168\.120\.|127\.0\.0\.)\d{1,3}$/)) {
         var r_url = location.href + request_data["name"] + "/";
         my_async_request2(r_url, "POST", request_data, update_upstream);
-        console.info(request_data);
+        current_btn.attr("disabled", "disabled");
+    } else {
+        var swal_text = "确定提交" + request_data["server_ip"] + "\n最好以192.168.120.或者127.0.0.开头";
+        swal({
+                title: "确定提交",
+                text: swal_text,
+                type: "info",
+                showCancelButton: true,
+                confirmButtonColor: '#DD6B55',
+                confirmButtonText: '提交',
+                cancelButtonText: "取消",
+                closeOnConfirm: true,
+                closeOnCancel: true
+            },
+            function (isConfirm) {
+                if (isConfirm) {
+                    var r_url = location.href + request_data["name"] + "/";
+                    my_async_request2(r_url, "POST", request_data, update_upstream);
+                    current_btn.attr("disabled", "disabled");
+                }
+            }
+        );
+    }
+}
+
+$(document).ready(function () {
+    $("table").each(function () {
+        var current_t = $(this);
+        var t_id = current_t.attr("id");
+        add_row_td(t_id, "查询中");
+        var request_url = location.href + t_id.substr(2) + "/";
+        my_async_request2(request_url, "GET", null, current_upstream);
     });
+    $("button[name='btn_add_upstream']").not(":disabled").click(submit_add);
     $("input[name='server_ip']").keyup(function () {
         $(this).val(format_ip($(this).val()));
     });

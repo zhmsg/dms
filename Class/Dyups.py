@@ -53,7 +53,7 @@ class DyUpsManager(object):
         add_item = "server %s:%s" % (server_ip, server_port)
         for item in server_list:
             if item == add_item:
-                return False, "已存在"
+                return True, "已存在"
         server_list.append(add_item)
         return self._update_upstream(upstream_name, server_list)
 

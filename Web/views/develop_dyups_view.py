@@ -22,7 +22,7 @@ def index_page():
     return rt.render("Index.html")
 
 
-@develop_dyups_view.route("/web/", methods=["GET"])
+@develop_dyups_view.route("/webcluster/", methods=["GET"])
 def web_upstream():
     upstream_name = "webcluster"
     exec_r, data = control.get_upstream(g.user_name, g.user_role, upstream_name)
@@ -30,7 +30,7 @@ def web_upstream():
     return jsonify({"status": exec_r, "data": r_data})
 
 
-@develop_dyups_view.route("/api/", methods=["GET"])
+@develop_dyups_view.route("/apicluster/", methods=["GET"])
 def api_upstream():
     upstream_name = "apicluster"
     exec_r, data = control.get_upstream(g.user_name, g.user_role, upstream_name)
@@ -38,7 +38,7 @@ def api_upstream():
     return jsonify({"status": exec_r, "data": r_data})
 
 
-@develop_dyups_view.route("/web/", methods=["POST"])
+@develop_dyups_view.route("/webcluster/", methods=["POST"])
 def add_web_upstream():
     request_data = request.json
     server_ip = request_data["server_ip"]
@@ -47,7 +47,7 @@ def add_web_upstream():
     return jsonify({"status": exec_r, "data": data})
 
 
-@develop_dyups_view.route("/api/", methods=["POST"])
+@develop_dyups_view.route("/apicluster/", methods=["POST"])
 def add_api_upstream():
     request_data = request.json
     server_ip = request_data["server_ip"]
@@ -56,7 +56,7 @@ def add_api_upstream():
     return jsonify({"status": exec_r, "data": data})
 
 
-@develop_dyups_view.route("/web/", methods=["DELETE"])
+@develop_dyups_view.route("/webcluster/", methods=["DELETE"])
 def remove_web_upstream():
     request_data = request.json
     server_item = request_data["server_item"]
@@ -64,7 +64,7 @@ def remove_web_upstream():
     return jsonify({"status": exec_r, "data": data})
 
 
-@develop_dyups_view.route("/api/", methods=["DELETE"])
+@develop_dyups_view.route("/apicluster/", methods=["DELETE"])
 def remove_api_upstream():
     request_data = request.json
     server_item = request_data["server_item"]
