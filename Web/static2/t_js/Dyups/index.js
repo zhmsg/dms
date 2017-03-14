@@ -6,6 +6,7 @@ function current_upstream(upstream_data) {
     var upstream_name = upstream_data.name;
     var t_id = "t_" + upstream_name;
     var t = $("#" + t_id);
+    var op_role = t.attr("op_role");
     if (t.length <= 0) {
         return;
     }
@@ -29,32 +30,34 @@ function current_upstream(upstream_data) {
         add_tr.append(td_4);
         t.append(add_tr);
     }
-    $("a[name='link_delete_upstream']").click(function () {
-        var current_td = $(this).parent();
-        var parent_tr = current_td.parent();
-        var current_t = parent_tr.parent().parent();
-        var server_item = parent_tr.find("td:first").text();
-        var swal_text = server_item;
-        swal({
-                title: "确定删除",
-                text: swal_text,
-                type: "info",
-                showCancelButton: true,
-                confirmButtonColor: '#DD6B55',
-                confirmButtonText: '提交',
-                cancelButtonText: "取消",
-                closeOnConfirm: true,
-                closeOnCancel: true
-            },
-            function (isConfirm) {
-                if (isConfirm) {
-                    var t_id = current_t.attr("id");
-                    var r_url = location.href + t_id.substr(2) + "/";
-                    my_async_request2(r_url, "DELETE", {"server_item": server_item}, update_upstream);
+    if (op_role == "1") {
+        $("a[name='link_delete_upstream']").click(function () {
+            var current_td = $(this).parent();
+            var parent_tr = current_td.parent();
+            var current_t = parent_tr.parent().parent();
+            var server_item = parent_tr.find("td:first").text();
+            var swal_text = server_item;
+            swal({
+                    title: "确定删除",
+                    text: swal_text,
+                    type: "info",
+                    showCancelButton: true,
+                    confirmButtonColor: '#DD6B55',
+                    confirmButtonText: '提交',
+                    cancelButtonText: "取消",
+                    closeOnConfirm: true,
+                    closeOnCancel: true
+                },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        var t_id = current_t.attr("id");
+                        var r_url = location.href + t_id.substr(2) + "/";
+                        my_async_request2(r_url, "DELETE", {"server_item": server_item}, update_upstream);
+                    }
                 }
-            }
-        );
-    });
+            );
+        });
+    }
 }
 
 function update_upstream(data) {
@@ -129,7 +132,6 @@ $(document).ready(function () {
             $("#t_" + current_div.attr("id").substr(4)).attr("op_role", "1");
         }
     });
-    //$("button[name='btn_add_upstream']").not(":disabled").click(submit_add);
     $("input[name='server_ip']").keyup(function () {
         $(this).val(format_ip($(this).val()));
     });
