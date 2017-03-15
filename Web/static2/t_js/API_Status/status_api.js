@@ -267,36 +267,5 @@ $(function(){
 
 // 分页相关方法
 function add_page_num(num, current_page){
-    num = parseInt(num);
-    var u = $("#pagination");
-    u.find("li").remove();
-    var start_num = 1;
-    var end_num = num;
-    if(current_page <= 8){
-        if(num > 15){
-            end_num = 15;
-        }
-    }
-    else if(num - current_page < 7)
-    {
-        if(num > 15){
-            start_num = num - 14;
-        }
-    }
-    else{
-        start_num = current_page - 7;
-        end_num = current_page + 7;
-    }
-    for(var i=start_num;i<=end_num;i++){
-        if(i == current_page){
-            u.append('<li class="active" id=li_page_' + i + '><a href="javascript:void(0)">' + i + '</a></li>');
-        }
-        else {
-            u.append('<li id=li_page_' + i + '><a href="javascript:void(0)">' + i + '</a></li>');
-        }
-    }
-    $("li[id^='li_page_']").click(function(){
-        var page_num = parseInt(this.id.substr(8));
-        search_code(page_num);
-    });
+    force_current_page(num, current_page);
 }
