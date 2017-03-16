@@ -12,6 +12,7 @@
 {% block center_content %}
     <button type="button" class="btn btn-primary margin20" id="btn_jy_web_upstream" value="">本地WEB</button>
     <button type="button" class="btn btn-primary margin20" id="btn_jy_api_upstream" value="">本地API</button>
+    <button type="button" class="btn btn-primary margin20" id="btn_jy_ams_upstream" value="">本地AMS</button>
     <div class="declare">
         <p class="redColor">部署节点 须知：</p>
 
@@ -28,4 +29,5 @@
     <input id="op_upstream_url" value="{{ op_upstream_url }}" class="display_none">
     {% include "Dyups/web.html" %}
     {% include "Dyups/api.html" %}
+    {% include "Dyups/ams.html" %}
 {% endblock %}

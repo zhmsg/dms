@@ -72,6 +72,7 @@ class ControlManager(object):
         self.jy_log = LogManager()
         self.ding_msg = DingMsgManager("a49a7c62e8601123cd417465ff8037cd8410a3572244903fa694e4b7548a917a")
         self.dyups_man = DyUpsManager(dyups_server)
+        self.name_2_role_key = {"apicluster": "dyups_api", "webcluster": "dyups_web", "amscluster": "dyups_web"}
 
     def check_user_name_exist(self, user_name, role, check_user_name):
         if role & self.role_value["user_new"] <= 0:
@@ -933,30 +934,27 @@ class ControlManager(object):
         return self.dyups_man.get_server_list(upstream_name)
 
     def add_upstream(self, user_name, user_role, upstream_name, server_ip, server_port=80):
-        name_2_role_key = {"apicluster": "dyups_api", "webcluster": "dyups_web"}
-        if upstream_name not in name_2_role_key:
+        if upstream_name not in self.name_2_role_key:
             return False, "无效的请求"
-        role_key = name_2_role_key[upstream_name]
+        role_key = self.name_2_role_key[upstream_name]
         # 判断角色值
         if self.judge_role(user_role, self.role_value[role_key]) is False:
             return False, "您没有权限"
         return self.dyups_man.add_upstream(upstream_name, server_ip, server_port)
 
     def remove_upstream(self, user_name, user_role, upstream_name, server_ip, server_port):
-        name_2_role_key = {"apicluster": "dyups_api", "webcluster": "dyups_web"}
-        if upstream_name not in name_2_role_key:
+        if upstream_name not in self.name_2_role_key:
             return False, "无效的请求"
-        role_key = name_2_role_key[upstream_name]
+        role_key = self.name_2_role_key[upstream_name]
         # 判断角色值
         if self.judge_role(user_role, self.role_value[role_key]) is False:
             return False, "您没有权限"
         return self.dyups_man.remove_upstream(upstream_name, server_ip, server_port)
 
     def add_server_node(self, user_name, user_role, upstream_name, server_ip, server_port):
-        name_2_role_key = {"apicluster": "dyups_api", "webcluster": "dyups_web"}
-        if upstream_name not in name_2_role_key:
+        if upstream_name not in self.name_2_role_key:
             return False, "无效的请求"
-        role_key = name_2_role_key[upstream_name]
+        role_key = self.name_2_role_key[upstream_name]
         # 判断角色值
         if self.judge_role(user_role, self.role_value[role_key]) is False:
             return False, "您没有权限"
@@ -966,10 +964,9 @@ class ControlManager(object):
         return False, "已存在"
 
     def delete_server_node(self, user_name, user_role, upstream_name, server_ip, server_port):
-        name_2_role_key = {"apicluster": "dyups_api", "webcluster": "dyups_web"}
-        if upstream_name not in name_2_role_key:
+        if upstream_name not in self.name_2_role_key:
             return False, "无效的请求"
-        role_key = name_2_role_key[upstream_name]
+        role_key = self.name_2_role_key[upstream_name]
         # 判断角色值
         if self.judge_role(user_role, self.role_value[role_key]) is False:
             return False, "您没有权限"
