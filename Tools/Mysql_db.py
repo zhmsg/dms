@@ -81,6 +81,7 @@ class DB(object):
         return handled_item
 
     def execute_select(self, table_name, where_value={"1": 1}, where_cond=None, cols=None, package=True, **kwargs):
+        kwargs = dict(kwargs)
         where_is_none = kwargs.pop("where_is_none", None)
         where_cond, args = self.merge_where(where_value=where_value, where_cond=where_cond, where_is_none=where_is_none)
         if cols is None:
@@ -94,8 +95,11 @@ class DB(object):
         order_by = kwargs.pop("order_by", None)
         order_desc = kwargs.pop("order_desc", False)
         limit = kwargs.pop("limit", None)
-        if order_by is not None and (isinstance(order_by, list) or isinstance(order_by, tuple)):
-            sql_query += " ORDER BY %s" % ",".join(order_by)
+        if order_by is not None:
+            if isinstance(order_by, list) or isinstance(order_by, tuple):
+                sql_query += " ORDER BY %s" % ",".join(order_by)
+            elif isinstance(order_by, unicode) or isinstance(order_by, str):
+                sql_query += " ORDER BY %s" % order_by
             if order_desc is True:
                 sql_query += " DESC"
         if isinstance(limit, int):
