@@ -6,6 +6,7 @@ import requests
 from flask import render_template, g, request, jsonify
 
 from Web import jingdu_url_prefix as url_prefix, create_blue, control, sx_variant, check_variant
+from Web import task_log_url
 
 sys.path.append('..')
 
@@ -18,7 +19,7 @@ jing_du_view = create_blue('jing_du_view', url_prefix=url_prefix, special_protoc
 
 @jing_du_view.route("/", methods=["GET"])
 def index():
-    return render_template("%s/Index.html" % html_dir)
+    return render_template("%s/Index.html" % html_dir, task_log_url=task_log_url)
 
 
 @jing_du_view.route("/project/", methods=["GET"])

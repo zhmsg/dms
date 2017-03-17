@@ -26,6 +26,7 @@ session_id_prefix = config.get(current_env, "session_id_prefix")
 session_cookie_name = config.get(current_env, "session_cookie_name")
 web_prefix_url = config.get(current_env, "web_prefix_url")
 request_special_protocol = config.get(current_env, "request_special_protocol").split(",")
+task_log_url = config.get(current_env, "task_log_url")
 
 sx_variant = config.get(current_env, "sx_variant")
 check_variant = [False]

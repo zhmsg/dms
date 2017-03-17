@@ -37,6 +37,9 @@ function show_task_info(task_data){
             var one_td = new_td(keys[j], task_item);
             add_tr.append(one_td);
         }
+        var add_td = $("<td></td>");
+        add_td.append($("<a name=link_look_log>查看</a>"));
+        add_tr.append(add_td);
         t_task.append(add_tr);
     }
     $("td[name='td_task_id']:visible").each(function(){
@@ -47,6 +50,15 @@ function show_task_info(task_data){
         current_td.attr("title", task_id);
         current_td.addClass("status_move");
         current_td.click(click_task_id);
+    });
+    $("a[name='link_look_log']:visible").each(function () {
+        var current_td = $(this).parent();
+        var current_tr = current_td.parent();
+        var task_id = current_tr.find("td:first").attr("title");
+        current_td.addClass("status_move");
+        $(this).click(function () {
+            window.open($("#task_log_url").val() + "/" + task_id + ".log");
+        });
     });
     var app_data = sessionStorage.getItem(app_storage_key);
     if(app_data != null){

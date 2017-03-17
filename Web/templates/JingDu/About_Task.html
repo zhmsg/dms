@@ -14,17 +14,19 @@
         <div style="position: relative">
             <table class="table table-bordered table-hover api-list-table" id="t_user_task">
                 <tr>
-                    <th scope="col" width="7%">任务编号</th>
-                    <th scope="col" width="10%">帐号</th>
-                    <th scope="col" width=10%">任务名称</th>
-                    <th scope="col" width=5%">任务输入</th>
-                    <th scope="col" width=10%">任务输出</th>
+                    <th scope="col" width="8%">任务编号</th>
+                    <th scope="col" width="7%">帐号</th>
+                    <th scope="col" width=15%">任务名称</th>
+                    <th scope="col" width=10%">任务输入</th>
+                    <th scope="col" width=15%">任务输出</th>
                     <th scope="col" width=8%">状态</th>
-                    <th scope="col" width=5%">DB状态</th>
-                    <th scope="col" width=10%">开始时间</th>
+                    <th scope="col" width=7%">DB状态</th>
+                    <th scope="col" width=14%">开始时间</th>
                     <th scope="col" width=10%">历时</th>
+                    <th scope="col" width=6%">日志</th>
                 </tr>
             </table>
         </div>
     </div>
+    <input id="task_log_url" class="display_none" value="{{ task_log_url }}">
 </div>
