@@ -1,0 +1,22 @@
+{% extends "base_menu.html" %}
+
+{% block title %}节点管理{% endblock %}
+
+{% block js_content %}
+    {{ 't_js/ueditor/ueditor.config.js' | make_static_html | safe }}
+    {{ 't_js/ueditor/ueditor.all.js' | make_static_html | safe }}
+    {#    {{ 't_js/Common/my_ip.js' | make_static_html | safe }}#}
+    {#    {{ 't_js/Dyups/index.js' | make_static_html | safe }}#}
+{% endblock %}
+
+{% block center_content %}
+    <!-- 加载编辑器的容器 -->
+    <script id="container" name="content" type="text/plain">
+        这里写你的初始化内容
+
+    </script>
+    <script type="text/javascript">
+        var ue = UE.getEditor('container');
+        console.info(ue.options);
+    </script>
+{% endblock %}

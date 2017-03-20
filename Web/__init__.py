@@ -105,6 +105,7 @@ chat_url_prefix = web_prefix + "/chat"
 others_url_prefix = web_prefix + "/others"
 pay_url_prefix = web_prefix + "/wx/pay"
 jingdu_url_prefix = web_prefix + "/jd"
+editor_url_prefix = web_prefix + "/editor"
 
 data_dir = "/ossdata/dmsdata"
 
