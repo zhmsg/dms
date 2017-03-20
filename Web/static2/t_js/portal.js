@@ -42,6 +42,7 @@ $(function(){
             $("#div_current_env").append('<a href="/tornado' + current_href + '">' + '体验Tornado' + '</a>');
         }
     }
+    $("#div_main_menu").append('<a href="' + '/editor/">' + 'UEditor' + '</a>');
     $("#div_main_menu").append('<a href="' + $("#password_url_prefix").val() + '/">' + '修改密码' + '</a>');
     $("#div_main_menu").append('<a href="' + $("#exit_url_prefix").val() + '/">' + '退出' + '</a>');
 });
