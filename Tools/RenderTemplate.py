@@ -14,6 +14,6 @@ class RenderTemplate(object):
 
     def render(self, template_name_or_list, **context):
         if self.template_dir != "":
-            template_name_or_list = os.path.join(self.template_dir, template_name_or_list)
+            template_name_or_list = "%s/%s" % (self.template_dir, template_name_or_list)
         self.kwargs.update(context)
         return render_template(template_name_or_list, **self.kwargs)
