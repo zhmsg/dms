@@ -109,9 +109,14 @@ editor_url_prefix = web_prefix + "/editor"
 
 data_dir = "/ossdata/dmsdata"
 
+editor_data_dir = data_dir + "/editor"
+
 import os
 if os.path.isdir(data_dir) is False:
     os.mkdir(data_dir)
+
+if os.path.isdir(editor_data_dir) is False:
+    os.mkdir(editor_data_dir)
 
 
 def company_ip_required(f):

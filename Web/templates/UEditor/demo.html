@@ -5,14 +5,12 @@
 {% block js_content %}
     {{ 't_js/ueditor/ueditor.config.js' | make_static_html | safe }}
     {{ 't_js/ueditor/ueditor.all.js' | make_static_html | safe }}
-    {#    {{ 't_js/Common/my_ip.js' | make_static_html | safe }}#}
-    {#    {{ 't_js/Dyups/index.js' | make_static_html | safe }}#}
 {% endblock %}
 
 {% block center_content %}
     <!-- 加载编辑器的容器 -->
     <script id="container" name="content" type="text/plain">
-        这里写你的初始化内容
+        欢迎
 
     </script>
     <script type="text/javascript">
