@@ -4,6 +4,8 @@
 
 {% block js_content %}
     {{ 't_js/BUG/bug_info.js' | make_static_html | safe }}
+    {{ 't_js/ueditor/ueditor.config.js' | make_static_html | safe }}
+    {{ 't_js/ueditor/ueditor.all.js' | make_static_html | safe }}
 {% endblock %}
 
 {% block content %}
@@ -63,24 +65,19 @@
     {# 提交关于问题的描述 只有问题提交者才可以提交 并且要在问题的状态小于3即问题处于未修复状态下才可以 #}
     <div class="clear bottom20 bugUpload">
         {% if bug_info["basic_info"]["submitter"] == current_user and bug_info["basic_info"]["bug_status"] < 3 %}
-            <form class="bugTextMode" action="{{ url_prefix }}/{{ bug_no }}/str/example/" method="post">
-                <span class="pull-left">请添加问题的相关文字描述：</span>
-                <textarea class="form-control bottom10" rows="5" name="bug_str_example"></textarea>
-                <button class="btn btn-primary" type="submit">提交</button>
-            </form>
-            <form action="{{ url_prefix }}/{{ bug_no }}/img/example/" method="post" enctype="multipart/form-data">
-                <span class="pull-left">请添加问题的相关图片描述：</span>
-                <input class="btn btn-default pull-left bugUploadBtn" type="button" value="请选择文件" name="file">
-                <input class="pull-left" type="file" accept="image/jpeg, image/png, image/gif" name="bug_img_example">
-                <button class="btn btn-primary" type="submit" value="上传">上传</button>
-            </form>
+            <script id="bug_desc_container" name="content" type="text/plain">
+                填写问题描述
+
+            </script>
+            <button class="btn btn-primary" id="btn_save_example">提交</button>
+
 
         {% endif %}
-        <dev class="bugTextMode display_none" id="div_add_reason">
+        <div class="bugTextMode display_none" id="div_add_reason">
             <span class="pull-left">产生问题的原因：</span>
             <textarea class="form-control bottom10" rows="5" name="bug_reason"></textarea>
             <button class="btn btn-primary">提交</button>
-        </dev>
+        </div>
         {#添加疑似问题拥有者#}
         {% if bug_info["basic_info"]["bug_status"] < 2 %}
             <form action="{{ url_prefix }}/{{ bug_no }}/ys/" method="post">
@@ -145,5 +142,6 @@
         {% endif %}
         <input id="url_link_user" class="display_none" value="{{ url_link_user }}">
         <input id="url_bug_reason" class="display_none" value="{{ url_bug_reason }}">
+        <input id="url_example" class="display_none" value="{{ url_example }}">
     </div>
 {% endblock %}

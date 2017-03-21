@@ -2,17 +2,13 @@
     {
         "table_cols": [
             {
+              "pri_key": true,
                 "col_comment": "BUG系统编号",
                 "col_name": "bug_no",
                 "col_type": "char(32)"
             },
             {
-                "col_comment": "1 文字示例 2代表 图片示例",
-                "col_name": "type",
-                "col_type": "tinyint(4)"
-            },
-            {
-                "col_comment": "相应的文字示例或者时图片地址",
+              "col_comment": "相应的文字示例",
                 "col_name": "content",
                 "col_type": "text"
             },

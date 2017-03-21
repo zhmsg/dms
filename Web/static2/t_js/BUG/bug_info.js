@@ -59,6 +59,9 @@ function handler_bug_links(link_users)
     }
 }
 
+function handler_bug_example(data) {
+    $("#div_bug_example").html(data["content"]);
+}
 
 $(document).ready(function () {
     var url_link_user = $("#url_link_user").val();
@@ -66,5 +69,17 @@ $(document).ready(function () {
     $("#div_bug_example p").each(function(){
         var current_p = $(this);
         current_p.html(current_p.text().replace("\n", "<br />"));
+    });
+    if ($("#bug_desc_container").length > 0) {
+        window.UEDITOR_HOME_URL = "/editor";
+        ue = UE.getEditor("bug_desc_container");
+        ue.ready(function () {
+            ue.setContent($("#div_bug_example").html());
+        });
+    }
+    $("#btn_save_example").click(function () {
+        var r_url = $("#url_example").val();
+        var example = ue.getContent();
+        my_async_request2(r_url, "POST", {"example": example}, handler_bug_example);
     });
 });

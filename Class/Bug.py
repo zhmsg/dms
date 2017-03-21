@@ -78,13 +78,14 @@ class BugManager(object):
         add_time = datetime.now().strftime(TIME_FORMAT)
         if len(content) < 5:
             return False, "Bad content"
-        content = check_sql_character(content)
-        insert_sql = "INSERT INTO %s (bug_no,type,content,add_time) VALUES ('%s','%s','%s','%s');" \
-                     % (self.bug_example, bug_no, example_type, content, add_time)
-        result = self.db.execute(insert_sql)
-        if result != 1:
-            return False, "sql execute result is %s " % result
-        return True, {"bug_no": bug_no, "example_type": example_type, "content": content, "add_time": add_time}
+
+        kwargs = {"type": example_type, "content": content, "add_time": add_time}
+        where_value = {"bug_no": bug_no}
+        l = self.db.execute_update(self.bug_example, where_value=where_value, update_value=kwargs)
+        kwargs.update(where_value)
+        if l != 1:
+            self.db.execute_insert(self.bug_example, kwargs, ignore=True)
+        return True, kwargs
 
     def update_bug_status(self, bug_no, status):
         if len(bug_no) != 32:

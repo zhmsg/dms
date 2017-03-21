@@ -98,12 +98,13 @@ def get_bug_info_func():
         return user_list
     url_link_user = url_prefix + "/link/"
     url_bug_reason = url_prefix + "/reason/"
+    url_example = url_prefix + "/example/"
     return render_template("%s/BUG_Info.html" % html_dir, bug_info=bug_info, bug_status_desc=bug_status_desc,
                            bug_no=bug_no,
                            user_role=current_user.role, current_user=current_user.user_name,
                            role_desc=control.role_value,
                            user_list=user_list, url_prefix=url_prefix, url_link_user=url_link_user,
-                           url_bug_reason=url_bug_reason)
+                           url_bug_reason=url_bug_reason, url_example=url_example)
 
 
 @develop_bug_view.route("/link/", methods=["GET"])
@@ -113,13 +114,14 @@ def get_bug_link_func():
     return jsonify({"status": exec_r, "data": bug_links})
 
 
-@develop_bug_view.route("/<bug_no>/str/example/", methods=["POST"])
-def add_str_example(bug_no):
-    str_example = request.form["bug_str_example"]
-    result, example_info = control.add_bug_str_example(current_user.user_name, current_user.role, bug_no, str_example)
+@develop_bug_view.route("/example/", methods=["POST"])
+@ref_bug_no
+def add_str_example():
+    str_example = request.json["example"]
+    result, example_info = control.add_bug_str_example(current_user.user_name, current_user.role, g.bug_no, str_example)
     if result is False:
         return example_info
-    return redirect(url_prefix + "/info?bug_no=%s" % bug_no)
+    return jsonify({"status": result, "data": example_info})
 
 
 bug_img_dir = "%s/bug/" % data_dir
