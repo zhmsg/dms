@@ -8,6 +8,8 @@
 {% block js_content %}
     {{ 't_js/ueditor/ueditor.config.js' | make_static_html | safe }}
     {{ 't_js/ueditor/ueditor.all.js' | make_static_html | safe }}
+    {{ 't_js/ueditor/demo.js' | make_static_html | safe }}
+    {{ 't_js/Common/download_json.js' | make_static_html | safe }}
 {% endblock %}
 
 {% block center_content %}
@@ -17,7 +19,8 @@
         欢迎使用UEditor
     </script>
     </div>
-    <script type="text/javascript">
-        var ue = UE.getEditor('container');
-    </script>
+    <a class="btn btn-primary" href="javascript:void(0)" title="" id="btn_save_all_html">保存All Html</a>
+    <a class="btn btn-primary" href="javascript:void(0)" title="" id="btn_save_content">保存Content</a>
+    <a class="btn btn-primary" href="javascript:void(0)" title="" id="btn_save_content_text">保存Content Text</a>
+    <a class="btn btn-primary" href="javascript:void(0)" title="" id="btn_save_plain_text">保存Plain Text</a>
 {% endblock %}
