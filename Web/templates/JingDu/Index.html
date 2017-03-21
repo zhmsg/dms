@@ -12,10 +12,24 @@
 {% endblock %}
 
 {% block center_content %}
-    <button type="button" class="btn btn-primary margin20" id="btn_jy_about_project" >项目相关</button>
-    <button type="button" class="btn btn-primary margin20" id="btn_jy_about_sample" >样本相关</button>
-    <button type="button" class="btn btn-primary margin20" id="btn_jy_about_task">任务相关</button>
-    {% include "JingDu/About_Project.html" %}
-    {% include "JingDu/About_Sample.html" %}
-    {% include "JingDu/About_Task.html" %}
+    <div>
+        <ul id="myTab" class="nav nav-tabs comTab">
+            <li class="active"><a href="#jdproject" data-toggle="tab" id="btn_jy_about_project">项目相关</a></li>
+            <li><a href="#jdsample" data-toggle="tab" id="btn_jy_about_sample">样本相关</a></li>
+            <li><a href="#jdtask" data-toggle="tab" id="btn_jy_about_task">任务相关</a></li>
+        </ul>
+        <div id="myTabContent" class="tab-content" style="padding-top: 20px;">
+            <div class="tab-pane fade in active" id="jdproject">
+                {% include "JingDu/About_Project.html" %}
+            </div>
+            <div class="tab-pane fade" id="jdsample">
+                {% include "JingDu/About_Sample.html" %}
+            </div>
+            <div class="tab-pane fade" id="jdtask">
+                {% include "JingDu/About_Task.html" %}
+            </div>
+        </div>
+    </div>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static2', filename='t_css/tabControls.css') }}">  <!-- tab选项卡的相关样式 -->
+    <script type="text/javascript" src="{{ url_for('static2',filename='t_js/bootstrap.min.js') }}"></script>  <!-- tab选项卡的相关js -->
 {% endblock %}
