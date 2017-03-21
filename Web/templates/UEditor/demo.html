@@ -1,6 +1,9 @@
 {% extends "base_menu.html" %}
 
-{% block title %}UEditor富文本编辑{% endblock %}
+
+{% block title %}{% if h_title %}{{ h_title }}{% else %}UEditor富文本编辑{% endif %}{% endblock %}
+
+
 
 {% block js_content %}
     {{ 't_js/ueditor/ueditor.config.js' | make_static_html | safe }}
@@ -9,9 +12,11 @@
 
 {% block center_content %}
     <!-- 加载编辑器的容器 -->
+    <div style="padding-top: 50px">
     <script id="container" name="content" type="text/plain">
         欢迎使用UEditor
     </script>
+    </div>
     <script type="text/javascript">
         var ue = UE.getEditor('container');
     </script>

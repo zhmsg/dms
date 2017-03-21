@@ -24,7 +24,10 @@ for key in upload_data_dirs:
 
 @editor_view.route("/")
 def demo_func():
-    return rt.render("demo.html")
+    title = None
+    if "title" in request.args:
+        title = request.args["title"]
+    return rt.render("demo.html", h_title=title)
 
 
 @editor_view.route("/config/", methods=["GET"])
