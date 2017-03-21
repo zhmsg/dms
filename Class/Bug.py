@@ -87,6 +87,13 @@ class BugManager(object):
             self.db.execute_insert(self.bug_example, kwargs, ignore=True)
         return True, kwargs
 
+    def select_bug_example(self, bug_no):
+        cols = ["bug_no", "content", "add_time"]
+        db_items = self.db.execute_select(self.bug_example, cols=cols, where_value=dict(bug_no=bug_no))
+        if len(db_items) > 0:
+            return True, db_items[0]
+        return True, None
+
     def update_bug_status(self, bug_no, status):
         if len(bug_no) != 32:
             return False, "Bad bug_no"
@@ -148,12 +155,6 @@ class BugManager(object):
         basic_info = {"bug_no": info[0], "bug_title": info[1], "submitter": info[2],
                       "submit_time": info[3].strftime(TIME_FORMAT), "bug_status": info[4], "bug_level": bug_level,
                       "submit_name": info[6], "bug_level_desc": bug_level_desc}
-        # 获取示例信息
-        select_sql = "SELECT content,add_time FROM %s WHERE bug_no='%s' ORDER BY add_time;" % (self.bug_example, bug_no)
-        self.db.execute(select_sql)
-        example_info = []
-        for item in self.db.fetchall():
-            example_info.append({"content": item[0], "add_time": item[1].strftime(TIME_FORMAT)})
         # 获取关联的人
         select_sql = "SELECT o.user_name,type,link_time,adder,nick_name FROM %s AS o, %s AS u " \
                      "WHERE bug_no='%s' AND o.user_name=u.user_name;" % (self.bug_owner, self.user, bug_no)
@@ -174,7 +175,7 @@ class BugManager(object):
                 link_user["design"][item[0]] = link_info
             else:
                 pass
-        return True, {"basic_info": basic_info, "example_info": example_info, "link_user": link_user}
+        return True, {"basic_info": basic_info, "link_user": link_user}
 
     def select_bug_link(self, bug_no):
         link_cols = ["user_name", "type", "link_time", "adder"]

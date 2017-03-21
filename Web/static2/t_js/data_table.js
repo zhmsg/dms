@@ -158,5 +158,14 @@ $(function() {
         input.removeAttr("disabled");
     });
     search_table();
-
+    $("a[name='delete_column']").click(function () {
+        var table_name_origin = $("#table_name_origin").val();
+        var col_name_origin = $("#col_name_origin").val();
+        var sql = "ALTER TABLE ";
+        sql += table_name_origin;
+        sql += " DROP COLUMN ";
+        sql += col_name_origin;
+        sql += ";";
+        $("#out_sql").val(sql);
+    });
 });

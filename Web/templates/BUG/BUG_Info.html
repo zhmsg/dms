@@ -49,21 +49,13 @@
             {% endif %}
         </p>
     </div>
-    <div class="bugInfoDepict" id="div_bug_example">
-        {#问题的描述信息#}
-        {% for item in bug_info["example_info"] %}
-            <p>{{ item["content"] }}</p>
-        {% endfor %}
-    </div>
+    <div class="bugInfoDepict" id="div_bug_example"></div>
     <div id="div_bug_reason">
     </div>
     {# 提交关于问题的描述 只有问题提交者才可以提交 并且要在问题的状态小于3即问题处于未修复状态下才可以 #}
     <div class="clear bottom20 bugUpload">
         {% if bug_info["basic_info"]["submitter"] == current_user and bug_info["basic_info"]["bug_status"] < 3 %}
-            <script id="bug_desc_container" name="content" type="text/plain">
-                填写问题描述
-
-            </script>
+            <script id="bug_desc_container" name="content" type="text/plain"></script>
             <button class="btn btn-primary" id="btn_save_example">提交</button>
 
 

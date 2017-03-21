@@ -114,6 +114,15 @@ def get_bug_link_func():
     return jsonify({"status": exec_r, "data": bug_links})
 
 
+@develop_bug_view.route("/example/", methods=["GET"])
+@ref_bug_no
+def get_example():
+    result, example_info = control.get_bug_example(current_user.user_name, current_user.role, g.bug_no)
+    if result is False:
+        return example_info
+    return jsonify({"status": result, "data": example_info})
+
+
 @develop_bug_view.route("/example/", methods=["POST"])
 @ref_bug_no
 def add_example():

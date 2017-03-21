@@ -534,6 +534,11 @@ class ControlManager(object):
             return False, u"BUG 已不能修改"
         return self.bug.new_bug_example(bug_no, content)
 
+    def get_bug_example(self, user_name, user_role, bug_no):
+        if self.judge_role(user_role, self.role_value["bug_look"]) is False:
+            return False, u"您没有权限"
+        return self.bug.select_bug_example(bug_no)
+
     def get_bug_reason(self, user_name, user_role, bug_no, submitter=None):
         if self.judge_role(user_role, self.role_value["bug_look"]) is False:
             return False, u"您没有权限"

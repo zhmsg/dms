@@ -60,7 +60,12 @@ function handler_bug_links(link_users)
 }
 
 function handler_bug_example(data) {
-    $("#div_bug_example").html(data["content"]);
+    if (data != null) {
+        $("#div_bug_example").html(data["content"]);
+        if (ue != undefined) {
+            ue.setContent($("#div_bug_example").html());
+        }
+    }
 }
 
 $(document).ready(function () {
@@ -70,11 +75,17 @@ $(document).ready(function () {
         var current_p = $(this);
         current_p.html(current_p.text().replace("\n", "<br />"));
     });
+    var r_url = $("#url_example").val();
+    my_async_request2(r_url, "GET", null, handler_bug_example);
     if ($("#bug_desc_container").length > 0) {
         window.UEDITOR_HOME_URL = "/editor";
         ue = UE.getEditor("bug_desc_container");
         ue.ready(function () {
-            ue.setContent($("#div_bug_example").html());
+            if (ue.hasContents() == false) {
+                if ($("#div_bug_example").html().length >= 0) {
+                    ue.setContent($("#div_bug_example").html());
+                }
+            }
         });
     }
     $("#btn_save_example").click(function () {
