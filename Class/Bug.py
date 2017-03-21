@@ -72,14 +72,14 @@ class BugManager(object):
         if len(bug_no) != 32:
             return False, "Bad bug_no"
 
-    def new_bug_example(self, bug_no, example_type, content):
+    def new_bug_example(self, bug_no, content):
         if len(bug_no) != 32:
             return False, "Bad bug_no"
         add_time = datetime.now().strftime(TIME_FORMAT)
         if len(content) < 5:
             return False, "Bad content"
 
-        kwargs = {"type": example_type, "content": content, "add_time": add_time}
+        kwargs = {"content": content, "add_time": add_time}
         where_value = {"bug_no": bug_no}
         l = self.db.execute_update(self.bug_example, where_value=where_value, update_value=kwargs)
         kwargs.update(where_value)
@@ -149,11 +149,11 @@ class BugManager(object):
                       "submit_time": info[3].strftime(TIME_FORMAT), "bug_status": info[4], "bug_level": bug_level,
                       "submit_name": info[6], "bug_level_desc": bug_level_desc}
         # 获取示例信息
-        select_sql = "SELECT type,content,add_time FROM %s WHERE bug_no='%s' ORDER BY add_time;" % (self.bug_example, bug_no)
+        select_sql = "SELECT content,add_time FROM %s WHERE bug_no='%s' ORDER BY add_time;" % (self.bug_example, bug_no)
         self.db.execute(select_sql)
         example_info = []
         for item in self.db.fetchall():
-            example_info.append({"example_type": item[0], "content": item[1], "add_time": item[2].strftime(TIME_FORMAT)})
+            example_info.append({"content": item[0], "add_time": item[1].strftime(TIME_FORMAT)})
         # 获取关联的人
         select_sql = "SELECT o.user_name,type,link_time,adder,nick_name FROM %s AS o, %s AS u " \
                      "WHERE bug_no='%s' AND o.user_name=u.user_name;" % (self.bug_owner, self.user, bug_no)

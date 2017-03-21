@@ -519,7 +519,7 @@ class ControlManager(object):
                 return False, u"您没有权限"
         return self.bug.new_bug_info(bug_title, user_name, bug_level)
 
-    def add_bug_str_example(self, user_name, role, bug_no, content):
+    def add_bug_example(self, user_name, role, bug_no, content):
         if role & self.role_value["bug_new"] <= 0:
             return False, u"您没有权限"
         # 判断该bug是否是user_name提交的
@@ -532,22 +532,7 @@ class ControlManager(object):
             return False, u"您不能修改别人的BUG"
         if bug_status > 2:
             return False, u"BUG 已不能修改"
-        return self.bug.new_bug_example(bug_no, 1, content)
-
-    def add_bug_img_example(self, user_name, role, bug_no, path):
-        if role & self.role_value["bug_new"] <= 0:
-            return False, u"您没有权限"
-        # 判断该bug是否是user_name提交的
-        select_sql = "SELECT submitter,bug_status FROM %s WHERE bug_no='%s';" % (self.bug.bug, bug_no)
-        result = self.db.execute(select_sql)
-        if result == 0:
-            return False, u"BUG 不存在"
-        submitter, bug_status = self.db.fetchone()
-        if submitter != user_name:
-            return False, u"您不能修改别人的BUG"
-        if bug_status > 2:
-            return False, u"BUG 已不能修改"
-        return self.bug.new_bug_example(bug_no, 2, path)
+        return self.bug.new_bug_example(bug_no, content)
 
     def get_bug_reason(self, user_name, user_role, bug_no, submitter=None):
         if self.judge_role(user_role, self.role_value["bug_look"]) is False:

@@ -52,12 +52,7 @@
     <div class="bugInfoDepict" id="div_bug_example">
         {#问题的描述信息#}
         {% for item in bug_info["example_info"] %}
-            {% if item["example_type"] == 1 %}
-                <p>{{ item["content"] }}</p>
-            {% else %}
-                <img src="{{ url_prefix }}/{{ bug_info["basic_info"]["submitter"] }}/{{ item['content'] }}"
-                     width="100%">
-            {% endif %}
+            <p>{{ item["content"] }}</p>
         {% endfor %}
     </div>
     <div id="div_bug_reason">

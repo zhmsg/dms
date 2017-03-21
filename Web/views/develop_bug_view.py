@@ -116,34 +116,12 @@ def get_bug_link_func():
 
 @develop_bug_view.route("/example/", methods=["POST"])
 @ref_bug_no
-def add_str_example():
+def add_example():
     str_example = request.json["example"]
-    result, example_info = control.add_bug_str_example(current_user.user_name, current_user.role, g.bug_no, str_example)
+    result, example_info = control.add_bug_example(current_user.user_name, current_user.role, g.bug_no, str_example)
     if result is False:
         return example_info
     return jsonify({"status": result, "data": example_info})
-
-
-bug_img_dir = "%s/bug/" % data_dir
-
-
-@develop_bug_view.route("/<bug_no>/img/example/", methods=["POST"])
-def add_img_example(bug_no):
-    mine_bug_img_dir = bug_img_dir + current_user.user_name
-    if os.path.exists(mine_bug_img_dir) is False:
-        os.makedirs(mine_bug_img_dir)
-    img_file = request.files["bug_img_example"]
-    img_filename = secure_filename(img_file.filename)
-    extend = img_filename.split(".")[-1]
-    if extend not in ["png", "jpeg", "jpg", "gif"]:
-        return u"不支持的图片格式"
-    file_name = "%s_%s.%s" % (bug_no, datetime.now().strftime(TIME_FORMAT_STR), extend)
-    save_path = "%s/%s" % (mine_bug_img_dir, file_name)
-    img_file.save(save_path)
-    result, example_info = control.add_bug_img_example(current_user.user_name, current_user.role, bug_no, file_name)
-    if result is False:
-        return example_info
-    return redirect(url_prefix + "/info?bug_no=%s" % bug_no)
 
 
 @develop_bug_view.route("/<bug_no>/ys/", methods=["POST"])
@@ -207,12 +185,6 @@ def del_own_user(bug_no):
     if result is False:
         return link_info
     return redirect(url_prefix + "/info?bug_no=%s" % bug_no)
-
-
-@develop_bug_view.route("/<user_name>/<img_path>/", methods=["GET"])
-def get_bug_img(user_name, img_path):
-    dir = "%s%s" % (bug_img_dir, user_name)
-    return send_from_directory(directory=dir, filename=img_path)
 
 
 @develop_bug_view.route("/reason/", methods=["GET"])
