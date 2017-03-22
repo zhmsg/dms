@@ -971,3 +971,11 @@ class ControlManager(object):
     def new_article(self, user_name, user_role, title, abstract, content):
         exec_r, data = self.article_man.new_article(user_name, title, abstract, content)
         return exec_r, data
+
+    def update_article(self, user_name, user_role, article_no, title=None, abstract=None, content=None):
+        exec_r, data = self.article_man.update_article(article_no, title, abstract, content)
+        return exec_r, data
+
+    def get_article(self, user_name, user_role, article_no):
+        exec_r, data = self.article_man.get_article(article_no, user_name)
+        return exec_r, data

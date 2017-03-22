@@ -195,7 +195,8 @@ class DB(object):
             sql_query = "INSERT INTO %s (%s) VALUES (%%(%s)s);" % (table_name, ",".join(keys), ")s,%(".join(keys))
         return self.execute(sql_query, args=args)
 
-    def execute_update(self, table_name, update_value, where_value=None, where_is_none=[], where_cond=None, **kwargs):
+    def execute_update(self, table_name, update_value=None, where_value=None, where_is_none=[], where_cond=None,
+                       **kwargs):
         update_value_list = kwargs.pop("update_value_list", None)
         if update_value_list is None:
             update_value_list = list()

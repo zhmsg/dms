@@ -31,6 +31,7 @@ class ArticleManager(object):
 
     def new_article(self, user_name, title, abstract, content):
         article_no = uuid.uuid1().hex
+        print(len(abstract))
         l = self.insert_info(article_no, user_name, title, abstract)
         l += self.insert_content(article_no, content)
         l += self.insert_statistics(article_no)
@@ -53,10 +54,16 @@ class ArticleManager(object):
                                    where_value=dict(article_no=article_no))
         return l
 
-    def update_content(self, article_no, content):
-        l = self._update_content(article_no, content)
+    def update_article(self, article_no, title=None, abstract=None, content=None):
+        if content is not None:
+            self._update_content(article_no, content)
         self._update_statistics(article_no, "update_times")
-        self._update_info(article_no, update_value=dict(update_time=time()))
+        update_value = dict(update_time=time())
+        if title is not None:
+            update_value["title"] = title
+        if abstract is not None:
+            update_value["abstract"] = abstract
+        self._update_info(article_no, update_value=update_value)
         return True, dict(article_no=article_no)
 
     def _select_content(self, article_no):
