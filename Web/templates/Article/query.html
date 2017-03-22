@@ -1,10 +1,5 @@
 {% extends "base_menu.html" %}
-
-
 {% block title %}查询{% endblock %}
-
-
-
 {% block js_content %}
     {#    {{ 't_js/ueditor/ueditor.config.js' | make_static_html | safe }}#}
     {#    {{ 't_js/ueditor/ueditor.all.js' | make_static_html | safe }}#}
@@ -12,8 +7,7 @@
 
 {% block center_content %}
     <!-- 加载编辑器的容器 -->
-
-    <div style="padding-top: 50px">
+    <div class="paddingTop50">
         <div class="form-group apiContentLine">
             <ul>
                 <li>
@@ -22,6 +16,28 @@
                 </li>
             </ul>
         </div>
-
+        <!-- 查询到的列表信息 start -->
+        {% if articles|length>0 %}
+            <div class="articleList">
+                <ul>
+                    {% for item in articles %}
+                        <li>
+                            <p><a href="" target="_blank">{{ item.title }}</a> </p>
+                            <p>{{ item.abstract }}</p>
+                            <p>{{ item.update_time|unix_timestamp }}&nbsp;&nbsp;&nbsp;&nbsp;[ 作者：{{ item.user_name }} ]</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% else %}
+            <div class="paddingTop50 text-center">暂无文章显示</div>
+        {% endif %}
+        <!-- 查询到的列表信息 end -->
     </div>
+    <style>
+        /* 查询文章时，列表的样式 */
+        .paddingTop50{padding-top: 50px;}
+        .articleList li{padding: 20px 10px 10px;border-bottom: 1px dotted #ccc;}
+        .articleList li p:last-child{color: #999;}
+    </style>
 {% endblock %}

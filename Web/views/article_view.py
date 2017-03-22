@@ -52,5 +52,4 @@ def update_article_action():
 @article_view.route("/query/", methods=["GET"])
 def query_func():
     exec_r, articles = control.query_article(g.user_name, g.user_role)
-    print(articles)
-    return rt.render("query.html")
+    return rt.render("query.html", articles=articles)
