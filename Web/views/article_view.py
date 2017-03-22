@@ -15,7 +15,7 @@ rt = RenderTemplate("Article", url_prefix=url_prefix)
 article_view = create_blue('article_view', url_prefix=url_prefix)
 
 
-@article_view.route("/")
+@article_view.route("/", methods=["GET"])
 def add_func():
     article_no = ""
     if "article_no" in request.args:
@@ -24,7 +24,7 @@ def add_func():
         if len(article_no) != 32:
             return jsonify({"status": False, "data": "无效的编号"})
         exec_r, data = control.get_article(g.user_name, g.user_role, article_no)
-        return jsonify({"statuys": exec_r, "data": data})
+        return jsonify({"status": exec_r, "data": data})
     return rt.render("add.html", article_no=article_no)
 
 
@@ -47,3 +47,10 @@ def update_article_action():
     content = request_data["content"]
     exec_r, data = control.update_article(g.user_name, g.user_role, article_no, title, abstract, content)
     return jsonify({"status": exec_r, "data": data})
+
+
+@article_view.route("/query/", methods=["GET"])
+def query_func():
+    exec_r, articles = control.query_article(g.user_name, g.user_role)
+    print(articles)
+    return rt.render("query.html")

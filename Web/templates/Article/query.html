@@ -1,0 +1,27 @@
+{% extends "base_menu.html" %}
+
+
+{% block title %}查询{% endblock %}
+
+
+
+{% block js_content %}
+    {#    {{ 't_js/ueditor/ueditor.config.js' | make_static_html | safe }}#}
+    {#    {{ 't_js/ueditor/ueditor.all.js' | make_static_html | safe }}#}
+{% endblock %}
+
+{% block center_content %}
+    <!-- 加载编辑器的容器 -->
+
+    <div style="padding-top: 50px">
+        <div class="form-group apiContentLine">
+            <ul>
+                <li>
+                    <label for="">标题：</label>
+                    <input class="box-side width800" id="article_title" type="text"/>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+{% endblock %}

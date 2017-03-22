@@ -75,7 +75,10 @@ class ArticleManager(object):
 
     def _select_info(self, article_no):
         cols = ["article_no", "user_name", "title", "abstract", "update_time"]
-        where_value = dict(article_no=article_no)
+        if article_no is not None:
+            where_value = dict(article_no=article_no)
+        else:
+            where_value = None
         db_items = self.db.execute_select(self.t_info, where_value=where_value, cols=cols)
         return db_items
 
@@ -93,3 +96,7 @@ class ArticleManager(object):
         else:
             self._update_statistics(article_no, "self_read_times")
         return True, article_info
+
+    def query_article(self, **kwargs):
+        db_items = self._select_info(None)
+        return True, db_items

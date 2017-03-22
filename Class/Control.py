@@ -979,3 +979,7 @@ class ControlManager(object):
     def get_article(self, user_name, user_role, article_no):
         exec_r, data = self.article_man.get_article(article_no, user_name)
         return exec_r, data
+
+    def query_article(self, user_name, user_role):
+        exec_r, data = self.article_man.query_article()
+        return exec_r, data
