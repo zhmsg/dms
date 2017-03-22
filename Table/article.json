@@ -10,7 +10,7 @@
       {
         "col_comment": "文章内容",
         "col_name": "content",
-        "col_type": "long_text"
+        "col_type": "longtext"
       },
       {
         "col_comment": "插入时间",

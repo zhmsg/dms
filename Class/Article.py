@@ -34,7 +34,7 @@ class ArticleManager(object):
         l = self.insert_info(article_no, user_name, title, abstract)
         l += self.insert_content(article_no, content)
         l += self.insert_statistics(article_no)
-        return True, l
+        return True, dict(article_no=article_no)
 
     def _update_content(self, article_no, content):
         update_value = dict(content=content)

@@ -20,6 +20,14 @@ ul,ol,li{list-style: none;margin: 0;padding: 0;}
 .bugUpload span,.apiTest span{line-height: 34px;}
 .width100{width: 100px;}
 .width366{width:366px;}
+
+.width500 {
+    width: 500px;
+}
+
+.width800 {
+    width: 800px;
+}
 .block{display: block;}
 .display_none{display: none}
 .top6{padding-top: 6px;}

@@ -24,6 +24,7 @@ from PullRequest import PullRequestManager
 from JingDuData import JingDuDataManager
 from DingMsg import DingMsgManager
 from Dyups import DyUpsManager
+from Article import ArticleManager
 from Class import DATE_FORMAT_STR, release_dir, jd_mysql_host, jd_mysql_db, dyups_server
 
 __author__ = 'ZhouHeng'
@@ -72,6 +73,7 @@ class ControlManager(object):
         self.jy_log = LogManager()
         self.ding_msg = DingMsgManager("a49a7c62e8601123cd417465ff8037cd8410a3572244903fa694e4b7548a917a")
         self.dyups_man = DyUpsManager(dyups_server)
+        self.article_man = ArticleManager()
         self.name_2_role_key = {"apicluster": "dyups_api", "webcluster": "dyups_web", "amscluster": "dyups_web"}
 
     def check_user_name_exist(self, user_name, role, check_user_name):
@@ -964,3 +966,8 @@ class ControlManager(object):
         if l == 1:
             return True, "success"
         return False, "不存在"
+
+    # 文章管理
+    def new_article(self, user_name, user_role, title, abstract, content):
+        exec_r, data = self.article_man.new_article(user_name, title, abstract, content)
+        return exec_r, data
