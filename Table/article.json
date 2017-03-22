@@ -72,6 +72,11 @@
         "col_type": "int(11)"
       },
       {
+        "col_comment": "自己阅读次数",
+        "col_name": "self_read_times",
+        "col_type": "int(11)"
+      },
+      {
         "col_comment": "评论数",
         "col_name": "comment_num",
         "col_type": "int(11)"

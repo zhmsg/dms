@@ -195,11 +195,20 @@ class DB(object):
             sql_query = "INSERT INTO %s (%s) VALUES (%%(%s)s);" % (table_name, ",".join(keys), ")s,%(".join(keys))
         return self.execute(sql_query, args=args)
 
-    def execute_update(self, table_name, update_value, where_value=None, where_is_none=[], where_cond=None):
-        args = dict(update_value).values()
-        if len(args) <= 0:
+    def execute_update(self, table_name, update_value, where_value=None, where_is_none=[], where_cond=None, **kwargs):
+        update_value_list = kwargs.pop("update_value_list", None)
+        if update_value_list is None:
+            update_value_list = list()
+        else:
+            update_value_list = list(update_value_list)
+        args = []
+        if update_value is not None and isinstance(update_value, dict):
+            args.extend(update_value.values())
+            for key in update_value.keys():
+                update_value_list.append("{0}=%s".format(key))
+        if len(update_value_list) <= 0:
             return 0
-        sql_query = "UPDATE %s SET %s=%%s WHERE " % (table_name, "=%s,".join(dict(update_value).keys()))
+        sql_query = "UPDATE %s SET %s WHERE " % (table_name, ",".join(update_value_list))
         if isinstance(where_cond, tuple) or isinstance(where_cond, list):
             where_cond = list(where_cond)
         else:
@@ -212,7 +221,7 @@ class DB(object):
         if len(where_is_none) > 0:
             for key in where_is_none:
                 where_cond.append("%s is NULL" % key)
-        sql_query += " AND ".join(where_cond)
+        sql_query += " AND ".join(where_cond) + ";"
         return self.execute(sql_query, args=args)
 
     def execute_delete(self, table_name, where_value):
