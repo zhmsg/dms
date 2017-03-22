@@ -1,0 +1,40 @@
+/**
+ * Created by msg on 3/22/17.
+ */
+
+function handler_query_article(data) {
+    console.info(data);
+    var article_count = data.length;
+    //article_count = 0;
+    if (article_count <= 0) {
+        var no_article_div = $('<div class="paddingTop50 text-center">暂无文章显示 </div>');
+        var add_link = $("<a>添加文章</a>");
+        add_link.attr("href", $("#url_add_article").val());
+        no_article_div.append(add_link);
+        $("#article_container").append(no_article_div);
+    }
+    else {
+        var article_list = $('<div class="articleList"></>');
+        for (var i = 0; i < article_count; i++) {
+            var article_item = data[i];
+            var article_li = $("<li></li>");
+            var title_p = $('<p><a href="javascript:void(0)" target="_blank">' + article_item["title"] + '</a></p>');
+            article_li.append(title_p);
+            var abstract_p = $('<p></p>');
+            abstract_p.text(article_item["abstract"]);
+            article_li.append(abstract_p);
+            var time_p = $('<p></p>');
+            var time_text = timestamp_2_datetime(article_item["update_time"]) + "&nbsp;&nbsp;&nbsp;&nbsp;[ 作者：" + article_item["user_name"] + " ]"
+            time_p.html(time_text);
+            article_li.append(time_p);
+            article_list.append(article_li);
+        }
+        $("#article_container").append(article_list);
+    }
+}
+
+$(document).ready(function () {
+
+    var r_url = location.href;
+    my_async_request2(r_url, "GET", null, handler_query_article)
+});
