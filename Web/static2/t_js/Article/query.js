@@ -24,7 +24,7 @@ function handler_query_article(data) {
             abstract_p.text(article_item["abstract"]);
             article_li.append(abstract_p);
             var time_p = $('<p></p>');
-            var time_text = timestamp_2_datetime(article_item["update_time"]) + "&nbsp;&nbsp;&nbsp;&nbsp;[ 作者：" + article_item["user_name"] + " ]"
+            var time_text = timestamp_2_datetime(article_item["update_time"]) + "&nbsp;&nbsp;&nbsp;&nbsp;[ 作者：" + article_item["user_name"] + " ]";
             time_p.html(time_text);
             article_li.append(time_p);
             article_list.append(article_li);
