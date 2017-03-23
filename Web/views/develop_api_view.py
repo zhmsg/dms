@@ -40,6 +40,24 @@ def referer_api_no(f):
     return decorated_function
 
 
+def referer_module_no(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if "Referer" not in request.headers:
+            return jsonify({"status": False, "data": "Bad Request"})
+        g.ref_url = request.headers["Referer"]
+        find_result = re.findall("module_no=(\d{1,5})", g.ref_url)
+        if len(find_result) > 0:
+            g.module_no = find_result[0]
+        elif "module_no" in request.args:
+            g.module_no = request.args["module_no"]
+        else:
+            return jsonify({"status": False, "data": "Bad Request."})
+        return f(*args, **kwargs)
+
+    return decorated_function
+
+
 @develop_api_view.route("/", methods=["GET"])
 def list_api():
     test_module_url = test_url_prefix + "/batch/"
@@ -76,9 +94,9 @@ def new_api_module():
 
 
 @develop_api_view.route("/module/care/", methods=["POST", "DELETE"])
+@referer_module_no
 def add_module_care():
-    request_data = request.json
-    module_no = request_data["module_no"]
+    module_no = int(g.module_no)
     if request.method == "POST":
         result, care_info = control.add_module_care(g.user_name, g.user_role, module_no)
     else:

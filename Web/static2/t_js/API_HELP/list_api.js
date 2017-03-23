@@ -3,14 +3,14 @@
  */
 
 
-function change_care(module_no){
+function change_care() {
     if ($("#make_care").text() == "关注")
     {
-        new_care(module_no);
+        new_care();
     }
     else if($("#make_care").text() == "取消关注")
     {
-        remove_care(module_no);
+        remove_care();
     }
 }
 
@@ -27,14 +27,14 @@ function change_care_success(data){
     }
 }
 
-function new_care(module_no){
+function new_care() {
     var change_url = $("#care_url").val();
-    my_async_request(change_url, "POST", {module_no:module_no}, change_care_success);
+    my_async_request(change_url, "POST", null, change_care_success);
 }
 
-function remove_care(module_no){
+function remove_care() {
     var change_url = $("#care_url").val();
-    my_async_request(change_url, "DELETE", {module_no:module_no}, change_care_success);
+    my_async_request(change_url, "DELETE", null, change_care_success);
 }
 
 function add_test_env(){
