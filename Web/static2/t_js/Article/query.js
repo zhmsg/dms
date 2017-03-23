@@ -45,5 +45,8 @@ function handler_query_article(data) {
 $(document).ready(function () {
 
     var r_url = location.href;
-    my_async_request2(r_url, "GET", null, handler_query_article)
+    my_async_request2(r_url, "GET", null, handler_query_article);
+    $("#btn_add_article").click(function () {
+        window.open($("#url_add_article").val());
+    });
 });
