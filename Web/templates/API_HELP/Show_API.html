@@ -142,7 +142,7 @@
     <button id="btn_del_api" class="btn btn-primary pull-right" style="display: none">删除API</button>
 
     <br>
-    <a href="{{ status_url }}?api_no={{ api_no }}" title="">查看返回状态码解释</a>
+    <a href="{{ status_url }}?api_no={{ api_no }}" title="">查看所有返回状态码解释</a>
     <label style="display: none" id="role_value">{{ role_value | tojson | safe }}</label>
     {{ 't_js/API_HELP/show_api.js' | make_static_html | safe }}
 {% endblock %}
