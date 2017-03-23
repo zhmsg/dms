@@ -2,12 +2,7 @@
 # coding: utf-8
 __author__ = 'ZhouHeng'
 
-import os
-import base64
-from time import time
-from random import randint
-from datetime import datetime
-from flask import request, send_from_directory, g, jsonify
+from flask import request, g, jsonify
 from Tools.RenderTemplate import RenderTemplate
 from Web import article_url_prefix as url_prefix, create_blue, control
 

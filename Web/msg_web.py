@@ -31,6 +31,10 @@ def create_app():
                 return message
         else:
             g.user_role = 0
+        if "Accept" in request.headers and request.headers["Accept"].find("application/json") >= 0:
+            g.accept_json = True
+        else:
+            g.accept_json = False
 
     @msg_web.after_request
     def after_request(res):
