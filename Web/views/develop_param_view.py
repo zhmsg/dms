@@ -1,10 +1,8 @@
 #!/user/bin/env python
 # -*- coding: utf-8 -*-
 
-import re
 import sys
 from flask import request, jsonify, g
-from flask_login import current_user
 from Tools.RenderTemplate import RenderTemplate
 from Web import param_url_prefix as url_prefix, create_blue, control
 

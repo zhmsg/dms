@@ -70,7 +70,7 @@ def system_auto_release():
 @develop_release_view.route("/task/", methods=["POST"])
 def new_task():
     request_data = request.json
-    reason = request_data["reason"]
+    # reason = request_data["reason"]
     reason_desc = ""
     restart_service = int(request_data["restart_service"])
     result, info = control.new_task(g.user_name, g.user_role, u"修复BUG", restart_service, reason_desc)
@@ -88,4 +88,6 @@ def list_task():
     result, info = control.get_task(g.user_name, g.user_role)
     return jsonify({"status": result, "data": info})
 
-dms_job.append({"func": "%s:system_auto_release" % __name__, "trigger": "cron", "id": "release_ih_daily", "day_of_week": "0-4", "hour": "12,18", "minute": "10"})
+
+dms_job.append({"func": "%s:system_auto_release" % __name__, "trigger": "cron", "id": "release_ih_daily",
+                "day_of_week": "0-4", "hour": "12,18", "minute": "10"})
