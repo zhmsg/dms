@@ -2,6 +2,7 @@
 # !/usr/bin/python
 
 from datetime import datetime
+from redis import Redis
 from functools import wraps
 from flask import session, g, make_response, Blueprint, jsonify, request, redirect
 from flask_login import LoginManager, UserMixin, login_required
@@ -22,6 +23,7 @@ ip = IPManager()
 control = ControlManager()
 my_email = MyEmailManager("/home/msg/conf/")
 dms_scheduler = BackgroundScheduler()
+redis = Redis(host=redis_host)
 # job_store = SQLAlchemyJobStore(url=db.url)
 # dms_scheduler.add_jobstore(job_store)
 

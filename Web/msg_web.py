@@ -2,7 +2,7 @@
 # coding: utf-8
 import sys
 sys.path.append("..")
-from flask import Flask, request, make_response, g, jsonify
+from flask import Flask
 from flask_login import current_user
 from Web import *
 from Web.redis_session import RedisSessionInterface
@@ -59,7 +59,7 @@ def create_app():
     def handle_500(e):
         return str(e)
 
-    msg_web.session_interface = RedisSessionInterface(prefix=session_id_prefix)
+    msg_web.session_interface = RedisSessionInterface(redis=redis, prefix=session_id_prefix)
 
     msg_web.static_folder = "static2"
     if static_prefix_url.startswith("/"):

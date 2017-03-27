@@ -25,6 +25,7 @@ from JingDuData import JingDuDataManager
 from DingMsg import DingMsgManager
 from Dyups import DyUpsManager
 from Article import ArticleManager
+from TopicMessage import MessageManager
 from Class import DATE_FORMAT_STR, release_dir, jd_mysql_host, jd_mysql_db, dyups_server
 
 __author__ = 'ZhouHeng'
@@ -74,6 +75,7 @@ class ControlManager(object):
         self.ding_msg = DingMsgManager("a49a7c62e8601123cd417465ff8037cd8410a3572244903fa694e4b7548a917a")
         self.dyups_man = DyUpsManager(dyups_server)
         self.article_man = ArticleManager()
+        self.message_man = MessageManager()
         self.name_2_role_key = {"apicluster": "dyups_api", "webcluster": "dyups_web", "amscluster": "dyups_web"}
 
     def check_user_name_exist(self, user_name, role, check_user_name):
@@ -983,3 +985,44 @@ class ControlManager(object):
     def query_article(self, user_name, user_role):
         exec_r, data = self.article_man.query_article()
         return exec_r, data
+
+    # 主题消息管理
+    def new_topic_message(self, **kwargs):
+        return self.message_man.insert_topic_message(**kwargs)
+
+    def notification_topic_message(self, message_info):
+        message_tag = message_info.get("message_tag", None)
+        if message_tag is None:
+            self.ding_msg.send_text(message_info["message_content"])
+            return 4, 60
+        tags_setting = self.message_man.select_user_tag(message_tag)
+        if len(tags_setting) != 1:
+            msg_content = "#%s#\n%s" % (message_tag, message_info["message_content"])
+            self.ding_msg.send_text(msg_content)
+            return 4, 60
+        tag_setting = tags_setting[0]
+        notify_mode = tag_setting["notify_mode"]
+        # 获取用户账户信息
+        exec_r, user_info = self.user.get_user_info(tag_setting["user_name"])
+        if exec_r is False:
+            msg_content = "#%s#\n%s" % (message_tag, message_info["message_content"])
+            self.ding_msg.send_text(msg_content)
+            return 4, 60
+        if self.judge_role(notify_mode, 1) is True:
+            if user_info["email"] is None:
+                notify_mode &= ~1
+            else:
+                my_email.send_mail_thread(user_info["email"], message_tag, message_info["message_content"])
+        if self.judge_role(notify_mode, 2) is True:
+            if user_info["wx_id"] is None:
+                notify_mode &= ~2
+            else:
+                print("wx notify")
+        if self.judge_role(notify_mode, 4) is True:
+            if user_info["tel"] is None or tag_setting["access_ding"] is None:
+                notify_mode &= ~4
+            else:
+                msg_content = "#%s#\n%s" % (message_tag, message_info["message_content"])
+                self.ding_msg.send_text(msg_content, at_mobiles=user_info["tel"],
+                                        access_token=tag_setting["access_ding"])
+        return notify_mode, tag_setting["interval_time"]

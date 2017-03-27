@@ -27,12 +27,19 @@
       {
         "col_comment": "消息标签",
         "col_name": "message_tag",
-        "col_type": "varchar(20)"
+        "col_type": "varchar(20)",
+        "allow_null": true
       },
       {
         "col_comment": "消息内容",
         "col_name": "message_content",
         "col_type": "text"
+      },
+      {
+        "col_comment": "通知方式 0未通知 1代表邮件 2代表微信 4代表钉钉",
+        "col_name": "notify_mode",
+        "col_type": "int(11)",
+        "default_value": 0
       },
       {
         "col_comment": "发布时间",
@@ -63,7 +70,7 @@
       },
       {
         "col_comment": "通知方式 1代表邮件 2代表微信 4代表钉钉",
-        "col_name": "notification",
+        "col_name": "notify_mode",
         "col_type": "int(11)"
       },
       {
@@ -71,6 +78,12 @@
         "col_name": "access_ding",
         "col_type": "varchar(400)",
         "allow_null": true
+      },
+      {
+        "col_comment": "相同消息内容间隔多少秒通知 默认值60s",
+        "col_name": "interval_time",
+        "col_type": "int(11)",
+        "default_value": 60
       },
       {
         "col_comment": "添加时间",

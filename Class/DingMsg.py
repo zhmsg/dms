@@ -20,8 +20,13 @@ class DingMsgManager(object):
     def _send_text(self, access_token, content, at_mobiles, at_all):
         msg = dict(msgtype="text")
         msg["text"] = dict(content=content)
-        msg["at"] = dict(atMobiles=at_mobiles, isAtAll=at_all)
+        if at_mobiles is not None:
+            if isinstance(at_mobiles, unicode):
+                at_mobiles = [at_mobiles]
+            msg["at"] = dict(atMobiles=at_mobiles, isAtAll=at_all)
         return self._send(msg, access_token)
 
-    def send_text(self, content, at_mobiles, at_all=False):
-        return self._send_text(self.access_token, content, at_mobiles, at_all)
+    def send_text(self, content, at_mobiles=None, at_all=False, access_token=None):
+        if access_token is None:
+            access_token = self.access_token
+        return self._send_text(access_token, content, at_mobiles, at_all)

@@ -93,7 +93,8 @@ def verify_mns_message(request_method, x_headers, resource):
     content_type = x_headers.get("Content-Type", None).lower()
     request_time = x_headers.get("Date")
     cert_url = base64.b64decode(x_headers["X-Mns-Signing-Cert-Url"])
-    if re.match("https://mnstest.[]^/]+?.aliyuncs.com/", cert_url) is None:
+
+    if re.match("https://mnstest.[^/]+?.aliyuncs.com/", cert_url) is None:
         return 0
     if content_md5 is None:
         content_md5 = ""
