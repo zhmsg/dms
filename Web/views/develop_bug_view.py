@@ -2,17 +2,13 @@
 # -*- coding: utf-8 -*-
 
 import sys
-import os
 import re
-from datetime import datetime
 from functools import wraps
-from flask import render_template, request, redirect, jsonify, send_from_directory, g
+from flask import render_template, request, redirect, jsonify, g
 from flask_login import current_user
-from werkzeug.utils import secure_filename
 
-from Web import bug_url_prefix, data_dir, create_blue
+from Web import bug_url_prefix, create_blue
 from Web import control
-from Class import TIME_FORMAT_STR
 
 sys.path.append('..')
 
