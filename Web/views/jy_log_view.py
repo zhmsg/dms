@@ -136,8 +136,8 @@ def send_log_func():
         tr_content += "\n"
         tr_content += '</tr>\n'
         table_content += tr_content
-    with open("../Web/templates/LOG/Daily_Log.html") as rt:
-        content = rt.read()
+    with open("../Web/templates/LOG/Daily_Log.html") as rt_html:
+        content = rt_html.read()
         content = content.replace("{{ TR }}", table_content.encode("utf-8"))
         control.send_daily_log(content)
 
@@ -165,8 +165,8 @@ def send_login_info_func():
         tr_content += '<td>%s</td>\n' % unix_timestamp(item["login_time"], style="datetime")
         tr_content += '</tr>\n'
         table_content += tr_content
-    with open("../Web/templates/LOG/Login_Log.html") as rt:
-        content = rt.read()
+    with open("../Web/templates/LOG/Login_Log.html") as rt_html:
+        content = rt_html.read()
         content = content.replace("{{ TR }}", table_content.encode("utf-8"))
         subject = u"有用户登录到服务器"
         my_email.send_mail("zhouheng@gene.ac", subject, content)
@@ -174,6 +174,7 @@ def send_login_info_func():
 
 
 if current_env == "Production" or current_env == "Development":
-    dms_job.append({"func": "%s:send_log_func" % __name__, "trigger": "cron", "id": "send_daily_log", "hour": 8, "minute": "30"})
-    dms_job.append({"func": "%s:send_login_info_func" % __name__, "trigger": "cron", "id": "send_login_info", "hour": "9-17", "minute": "5"})
-
+    dms_job.append({"func": "%s:send_log_func" % __name__, "trigger": "cron", "id": "send_daily_log", "hour": 8,
+                    "minute": "30"})
+    dms_job.append({"func": "%s:send_login_info_func" % __name__, "trigger": "cron", "id": "send_login_info",
+                    "hour": "9-17", "minute": "5"})

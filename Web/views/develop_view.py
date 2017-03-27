@@ -81,4 +81,6 @@ def backup_func():
         control.backup_table("system", 0, t_name, sql_path)
     print("backup success")
 
-dms_job.append({"func": "%s:backup_func" % __name__, "trigger": "cron", "id": "backup_table", "day_of_week": "0-4", "hour": 0, "minute": 30})
+
+dms_job.append({"func": "%s:backup_func" % __name__, "trigger": "cron", "id": "backup_table", "day_of_week": "0-4",
+                "hour": 0, "minute": 30})

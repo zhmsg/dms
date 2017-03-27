@@ -57,7 +57,7 @@ def get_sys_sample():
 
 @jing_du_view.route("/sample/info/", methods=["GET"])
 def get_sample_info():
-    sample_no = None
+    # sample_no = None
     if "sample_no" in request.args:
         sample_no = int(request.args["sample_no"])
     else:
