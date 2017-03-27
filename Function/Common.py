@@ -89,10 +89,12 @@ def verify_sign_str(pem_path, sign_str, authorization):
 
 
 def verify_mns_message(request_method, x_headers, resource):
-    content_md5 = headers.get("Content-Md5", None)
-    content_type = headers.get("Content-Type", None).lower()
-    request_time = headers.get("Date")
-    cert_url = base64.b64decode(headers["X-Mns-Signing-Cert-Url"])
+    content_md5 = x_headers.get("Content-Md5", None)
+    content_type = x_headers.get("Content-Type", None).lower()
+    request_time = x_headers.get("Date")
+    cert_url = base64.b64decode(x_headers["X-Mns-Signing-Cert-Url"])
+    if re.match("https://mnstest.[]^/]+?.aliyuncs.com/", cert_url) is None:
+        return 0
     if content_md5 is None:
         content_md5 = ""
     if content_type is None:
@@ -108,7 +110,7 @@ def verify_mns_message(request_method, x_headers, resource):
                     x_headers_s += key.lower() + ":" + x_headers[key] + "\n"
     sign_str = "%s\n%s\n%s\n%s\n%s%s" % (request_method, content_md5, content_type, request_time, x_headers_s, resource)
     sign_str = unicode(sign_str)
-    authorization = base64.b64decode(headers["Authorization"])
+    authorization = base64.b64decode(x_headers["Authorization"])
     verify_r = verify_sign_str(cert_url, sign_str, authorization)
     return verify_r
 

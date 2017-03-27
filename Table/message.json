@@ -1,0 +1,89 @@
+[
+  {
+    "table_cols": [
+      {
+        "pri_key": true,
+        "col_comment": "主题拥有者",
+        "col_name": "topic_owner",
+        "col_type": "varchar(20)"
+      },
+      {
+        "pri_key": true,
+        "col_comment": "主题名称",
+        "col_name": "topic_name",
+        "col_type": "varchar(256)"
+      },
+      {
+        "pri_key": true,
+        "col_comment": "消息id",
+        "col_name": "message_id",
+        "col_type": "char(40)"
+      },
+      {
+        "col_comment": "订阅名称",
+        "col_name": "subscription_name",
+        "col_type": "varchar(256)"
+      },
+      {
+        "col_comment": "消息标签",
+        "col_name": "message_tag",
+        "col_type": "varchar(20)"
+      },
+      {
+        "col_comment": "消息内容",
+        "col_name": "message_content",
+        "col_type": "text"
+      },
+      {
+        "col_comment": "发布时间",
+        "col_name": "publish_time",
+        "col_type": "bigint(20)"
+      },
+      {
+        "col_comment": "插入时间",
+        "col_name": "insert_time",
+        "col_type": "int(11)"
+      }
+    ],
+    "table_comment": "主题消息 消息内容记录",
+    "table_name": "topic_message_content"
+  },
+  {
+    "table_cols": [
+      {
+        "pri_key": true,
+        "col_comment": "消息标签",
+        "col_name": "message_tag",
+        "col_type": "varchar(20)"
+      },
+      {
+        "col_comment": "添加者",
+        "col_name": "user_name",
+        "col_type": "varchar(22)"
+      },
+      {
+        "col_comment": "通知方式 1代表邮件 2代表微信 4代表钉钉",
+        "col_name": "notification",
+        "col_type": "int(11)"
+      },
+      {
+        "col_comment": "钉钉群组的access_token",
+        "col_name": "access_ding",
+        "col_type": "varchar(400)",
+        "allow_null": true
+      },
+      {
+        "col_comment": "添加时间",
+        "col_name": "insert_time",
+        "col_type": "int(11)"
+      },
+      {
+        "col_comment": "更新时间",
+        "col_name": "update_time",
+        "col_type": "int(11)"
+      }
+    ],
+    "table_comment": "用户拥有的标签",
+    "table_name": "user_topic_tag"
+  }
+]

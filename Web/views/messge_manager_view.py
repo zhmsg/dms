@@ -16,11 +16,10 @@ rt = RenderTemplate("message", url_prefix=url_prefix)
 message_view = create_blue('message_view', url_prefix=url_prefix, auth_required=False)
 
 
-@message_view.route("/receive", methods=["POST", "GET"])
+@message_view.route("/receive", methods=["POST"])
 def receive_message_func():
-    # print(request.path)
-    # print(request.json)
-    print(request.headers)
     verify_r = verify_mns_message(request.method, request.headers, request.path)
-    print(verify_r)
+    if verify_r != 1:
+        return jsonify({"success": True, "data": "not save"})
+    print(request.json)
     return jsonify({"success": True, "data": "success"})
