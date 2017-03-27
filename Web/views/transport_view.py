@@ -79,7 +79,8 @@ def get_market():
         data_no = int(request.args["data_no"])
         result, message = control.get_market(data_no, current_user.role)
         if result is True:
-            return jsonify({"status": result, "value": message, "att": control.market_attribute, "ch": control.market_attribute_ch})
+            return jsonify({"status": result, "value": message, "att": control.market_attribute,
+                            "ch": control.market_attribute_ch})
         return jsonify({"status": False, "data": message})
     except Exception as e:
         error_message = u"获得记录失败：%s" % str(e.args)
@@ -109,7 +110,8 @@ def get_upload():
         data_no = int(request.args["data_no"])
         result, message = control.get_upload(data_no, current_user.role)
         if result is True:
-            return jsonify({"status": result, "value": message, "att": control.upload_attribute, "ch": control.upload_attribute_ch})
+            return jsonify({"status": result, "value": message, "att": control.upload_attribute,
+                            "ch": control.upload_attribute_ch})
         return jsonify({"status": False, "data": message})
 
     except Exception as e:
@@ -140,7 +142,8 @@ def get_calc():
         data_no = int(request.args["data_no"])
         result, message = control.get_calc(data_no, current_user.role)
         if result is True:
-            return jsonify({"status": result, "value": message, "att": control.calc_attribute, "ch": control.calc_attribute_ch})
+            return jsonify({"status": result, "value": message, "att": control.calc_attribute,
+                            "ch": control.calc_attribute_ch})
         return jsonify({"status": False, "data": message})
     except Exception as e:
         error_message = u"获得记录失败：%s" % str(e.args)
