@@ -7,3 +7,4 @@ requests
 xlwt
 Flask-APScheduler==1.4.0
 redis>=2.10.5
+m2crypto
