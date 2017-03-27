@@ -146,6 +146,5 @@ def new_mul_status():
     service_id = int(request_data["service_id"])
     fun_id = int(request_data["fun_id"])
     error_info = request_data["error_info"]
-    print(error_info)
     result, info = control.new_mul_api_status(current_user.user_name, current_user.role, service_id, fun_id, error_info)
     return jsonify({"status": result, "data": info})

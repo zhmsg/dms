@@ -77,7 +77,8 @@ def test_api_page():
     for param in url_params:
         param_sp = param.split(":")
         if len(param_sp) > 1:
-            url_param_info.append({"param_type": param_sp[0], "param_name": param_sp[1], "origin_param": "<%s>" % param})
+            url_param_info.append({"param_type": param_sp[0], "param_name": param_sp[1],
+                                   "origin_param": "<%s>" % param})
         else:
             url_param_info.append({"param_type": "string", "param_name": param_sp[0], "origin_param": "<%s>" % param})
     return rt.render("Test_API.html", api_info=api_info, api_no=api_no, status_url=status_url,
@@ -155,7 +156,7 @@ def test_case_content(case_name):
     case_path = "%s/%s_%s.case" % (user_case_dir, api_no, case_name)
     if os.path.isfile(case_path) is False:
         return jsonify({"status": False, "data": "not exist"})
-    case_info = {}
+    # case_info = {}
     with open(case_path, "r") as cr:
         content = cr.read()
         case_info = json.loads(content)
