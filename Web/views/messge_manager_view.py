@@ -36,4 +36,7 @@ def receive_message_func():
     redis.setex(redis_key, "", 60)
     # 通知
     notify_mode, interval_time = control.notification_topic_message(message_info)
+    message_info["notify_mode"] = notify_mode
+    control.new_topic_message(**message_info)
+    redis.setex(redis_key, notify_mode, interval_time)
     return jsonify({"success": True, "data": "success"})

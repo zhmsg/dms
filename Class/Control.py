@@ -1026,3 +1026,7 @@ class ControlManager(object):
                 self.ding_msg.send_text(msg_content, at_mobiles=user_info["tel"],
                                         access_token=tag_setting["access_ding"])
         return notify_mode, tag_setting["interval_time"]
+
+    def new_user_topic_tag(self, user_name, user_role, message_tag, notify_mode, access_ding=None, interval_time=60):
+        return self.message_man.insert_user_tag(message_tag=message_tag, user_name=user_name, access_ding=access_ding,
+                                                interval_time=interval_time, notify_mode=notify_mode)
