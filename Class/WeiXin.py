@@ -5,7 +5,7 @@ __author__ = 'ZhouHeng'
 import requests
 
 
-class WeiXinManager:
+class WeiXinManager(object):
 
     def __init__(self, wx_service):
         self.wx_service = wx_service
@@ -30,3 +30,15 @@ class WeiXinManager:
         if res["status"] % 10000 == 1:
             return True, res["data"]
         return False, res["message"]
+
+    def send_fault(self, title, performance, occur_time, remark, open_id, url):
+        if self.wx_service == "":
+            return False, "Bad Wx Service"
+        send_url = self.wx_service + "/template/fault/"
+        request_data = {"title": title, "open_id": open_id, "performance": performance, "occur_time": occur_time,
+                        "remark": remark, "url": url}
+        response = requests.post(send_url, json=request_data)
+        res = response.json()
+        if res["status"] % 10000 != 2:
+            return False, res["message"]
+        return True, res["message"]

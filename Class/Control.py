@@ -2,6 +2,7 @@
 # coding: utf-8
 
 import sys
+import time
 from threading import Thread
 from datetime import datetime
 sys.path.append("..")
@@ -26,11 +27,13 @@ from DingMsg import DingMsgManager
 from Dyups import DyUpsManager
 from Article import ArticleManager
 from TopicMessage import MessageManager
-from Class import DATE_FORMAT_STR, release_dir, jd_mysql_host, jd_mysql_db, dyups_server
+from WeiXin import WeiXinManager
+from Class import DATE_FORMAT_STR, release_dir, jd_mysql_host, jd_mysql_db, dyups_server, wx_service, TIME_FORMAT
 
 __author__ = 'ZhouHeng'
 
 my_email = MyEmailManager("/home/msg/conf/")
+my_wx = WeiXinManager(wx_service)
 
 
 class ControlManager(object):
@@ -1017,7 +1020,11 @@ class ControlManager(object):
             if user_info["wx_id"] is None:
                 notify_mode &= ~2
             else:
-                print("wx notify")
+                x = time.localtime(long(message_info["publish_time"]) / 1000)
+                occur_time = time.strftime(TIME_FORMAT, x)
+                url = "http://dms.gene.ac"
+                my_wx.send_fault(message_tag, message_info["message_content"], occur_time,
+                                 message_info["message_content"], user_info["wx_id"], url)
         if self.judge_role(notify_mode, 4) is True:
             if user_info["tel"] is None or tag_setting["access_ding"] is None:
                 notify_mode &= ~4
