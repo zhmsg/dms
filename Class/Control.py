@@ -1037,3 +1037,10 @@ class ControlManager(object):
     def new_user_topic_tag(self, user_name, user_role, message_tag, notify_mode, access_ding=None, interval_time=60):
         return self.message_man.insert_user_tag(message_tag=message_tag, user_name=user_name, access_ding=access_ding,
                                                 interval_time=interval_time, notify_mode=notify_mode)
+
+    def get_user_topic_tag(self, user_name, user_role):
+        tags_info = self.message_man.select_user_tag()
+        for item in tags_info:
+            if item["user_name"] != user_name and item["access_ding"] is not None:
+                item["access_ding"] = "***"
+        return tags_info

@@ -28,8 +28,11 @@ class MessageManager(object):
         l = self.db.execute_update(self.t_user_tag, update_value=kwargs, where_value=where_value)
         return l
 
-    def select_user_tag(self, message_tag):
-        where_value = dict(message_tag=message_tag)
+    def select_user_tag(self, message_tag=None):
+        if message_tag is not None:
+            where_value = dict(message_tag=message_tag)
+        else:
+            where_value = None
         cols = ["message_tag", "user_name", "notify_mode", "access_ding", "interval_time", "insert_time", "update_time"]
         db_items = self.db.execute_select(self.t_user_tag, where_value=where_value, cols=cols)
         return db_items

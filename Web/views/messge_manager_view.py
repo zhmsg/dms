@@ -2,13 +2,13 @@
 # coding: utf-8
 
 import base64
-from flask import request, jsonify
+from flask import request, jsonify, g
 from Tools.RenderTemplate import RenderTemplate
-from Web import message_url_prefix as url_prefix, create_blue, verify_mns_message, redis, control
+from Web import message_url_prefix as url_prefix, create_blue, verify_mns_message, redis, control, login_required
 
 __author__ = 'ZhouHeng'
 
-rt = RenderTemplate("message", url_prefix=url_prefix)
+rt = RenderTemplate("Message", url_prefix=url_prefix)
 message_view = create_blue('message_view', url_prefix=url_prefix, auth_required=False)
 
 
@@ -39,3 +39,17 @@ def receive_message_func():
     control.new_topic_message(**message_info)
     redis.setex(redis_key, notify_mode, interval_time)
     return jsonify({"success": True, "data": "success"})
+
+
+@message_view.route("/manager/", methods=["GET"])
+@login_required
+def manager_page():
+    tag_url = url_prefix + "/tag/"
+    return rt.render("Index.html", tag_url=tag_url)
+
+
+@message_view.route("/tag/", methods=["GET"])
+@login_required
+def my_tag_data():
+    tags = control.get_user_topic_tag(g.user_name, g.user_role)
+    return jsonify({"status": True, "data": tags})
