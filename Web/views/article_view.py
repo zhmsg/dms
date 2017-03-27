@@ -1,10 +1,11 @@
 #! /usr/bin/env python
 # coding: utf-8
-__author__ = 'ZhouHeng'
 
 from flask import request, g, jsonify
 from Tools.RenderTemplate import RenderTemplate
 from Web import article_url_prefix as url_prefix, create_blue, control
+
+__author__ = 'ZhouHeng'
 
 rt = RenderTemplate("Article", url_prefix=url_prefix)
 article_view = create_blue('article_view', url_prefix=url_prefix)

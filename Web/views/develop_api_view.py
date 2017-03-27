@@ -86,10 +86,12 @@ def new_api_module():
     module_part = request_data["module_part"]
     module_env = request_data["module_env"]
     if request.method == "POST":
-        result, message = control.new_api_module(g.user_role, module_name, module_prefix, module_desc, module_part, module_env)
+        result, message = control.new_api_module(g.user_role, module_name, module_prefix, module_desc, module_part,
+                                                 module_env)
     else:
         module_no = request_data["module_no"]
-        result, message = control.update_api_module(g.user_role, module_no, module_name, module_prefix, module_desc, module_part, module_env)
+        result, message = control.update_api_module(g.user_role, module_no, module_name, module_prefix, module_desc,
+                                                    module_part, module_env)
     return jsonify({"status": result, "data": message})
 
 
@@ -241,8 +243,8 @@ def add_body_param():
     api_no = g.api_no
     desc = request_data["desc"]
     necessary = int(request_data["necessary"])
-    type = request_data["type"]
-    result, param_info = control.add_body_param(g.user_name, api_no, param, necessary, type, desc, g.user_role)
+    body_type = request_data["type"]
+    result, param_info = control.add_body_param(g.user_name, api_no, param, necessary, body_type, desc, g.user_role)
     return jsonify({"status": result, "data": param_info})
 
 
@@ -319,4 +321,3 @@ def delete_input(input_no):
 def delete_output(output_no):
     result, data = control.delete_ouput(output_no, g.user_role)
     return jsonify({"status": result, "data": data})
-
