@@ -31,7 +31,6 @@ class ArticleManager(object):
 
     def new_article(self, user_name, title, abstract, content):
         article_no = uuid.uuid1().hex
-        print(len(abstract))
         l = self.insert_info(article_no, user_name, title, abstract)
         l += self.insert_content(article_no, content)
         l += self.insert_statistics(article_no)
