@@ -1,6 +1,5 @@
 #! /usr/bin/env python
 # coding: utf-8
-__author__ = 'ZhouHeng'
 
 import os
 import base64
@@ -10,6 +9,9 @@ from datetime import datetime
 from flask import request, send_from_directory, g, jsonify
 from Tools.RenderTemplate import RenderTemplate
 from Web import editor_url_prefix as url_prefix, create_blue, editor_data_dir
+
+__author__ = 'ZhouHeng'
+
 
 rt = RenderTemplate("UEditor", url_prefix=url_prefix)
 editor_view = create_blue('editor_view', url_prefix=url_prefix)
@@ -32,7 +34,7 @@ def demo_func():
 
 @editor_view.route("/config/", methods=["GET"])
 def config_func():
-    action = request.args["action"]
+    # action = request.args["action"]
     return rt.render("config.json")
 
 
