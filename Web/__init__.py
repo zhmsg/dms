@@ -107,6 +107,7 @@ pay_url_prefix = web_prefix + "/wx/pay"
 jingdu_url_prefix = web_prefix + "/jd"
 editor_url_prefix = web_prefix + "/editor"
 article_url_prefix = web_prefix + "/article"
+message_url_prefix = web_prefix + "/message"
 
 data_dir = "/ossdata/dmsdata"
 
