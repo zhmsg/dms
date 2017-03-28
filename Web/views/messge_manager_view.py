@@ -34,7 +34,8 @@ def receive_message_func():
         return jsonify({"success": True, "data": "not notification"})
     redis.setex(redis_key, "", 60)
     # 通知
-    notify_mode, interval_time = control.notification_topic_message(message_info)
+    query_url = "http://" + request.host + url_prefix + "/manager/"
+    notify_mode, interval_time = control.notification_topic_message(message_info, query_url)
     message_info["notify_mode"] = notify_mode
     control.new_topic_message(**message_info)
     redis.setex(redis_key, notify_mode, interval_time)
@@ -42,7 +43,6 @@ def receive_message_func():
 
 
 @message_view.route("/manager/", methods=["GET"])
-@login_required
 def manager_page():
     tag_url = url_prefix + "/tag/"
     query_url = url_prefix + "/query/"

@@ -996,7 +996,7 @@ class ControlManager(object):
     def query_topic_message(self, **kwargs):
         return self.message_man.query_message(**kwargs)
 
-    def notification_topic_message(self, message_info):
+    def notification_topic_message(self, message_info, query_url=None):
         message_tag = message_info.get("message_tag", None)
         if message_tag is None:
             self.ding_msg.send_text(message_info["message_content"])
@@ -1025,7 +1025,12 @@ class ControlManager(object):
             else:
                 x = time.localtime(long(message_info["publish_time"]) / 1000)
                 occur_time = time.strftime(TIME_FORMAT, x)
-                url = "http://dms.gene.ac"
+                if query_url is not None:
+                    url = "%s?message_id=%s&topic_name=%s&topic_owner=%s" % (query_url, message_info["message_id"],
+                                                                             message_info["topic_name"],
+                                                                             message_info["topic_owner"])
+                else:
+                    url = "http://dms.gene.ac"
                 my_wx.send_fault(message_tag, message_info["message_content"], occur_time,
                                  message_info["message_content"], user_info["wx_id"], url)
         if self.judge_role(notify_mode, 4) is True:

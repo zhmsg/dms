@@ -78,6 +78,7 @@ function add_row_td(t_id, content, col_len)
     add_td.attr("colSpan", col_len);
     add_tr.append(add_td);
     t.append(add_tr);
+    return add_td;
 }
 
 function query_table(t_id, key){

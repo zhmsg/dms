@@ -248,11 +248,25 @@ function show_access_ding() {
 }
 
 $(document).ready(function () {
-    var tag_url = $("#tag_url").val();
-    my_async_request2(tag_url, "GET", null, handler_tags);
-    $("#btn_new_tag").click(add_tag);
-    $("#lab_ding_notify").click(show_access_ding);
-    $("#interval_time").keyup(function () {
-        $("#interval_time").val(format_num($("#interval_time").val()));
-    });
+    if ($("#current_user_name").length <= 0) {
+        var t_name = "t_tag";
+        clear_table(t_name);
+        var login_link = $("<a>登录</a>");
+        var login_url = "/?next=" + location.href;
+        login_link.attr("href", login_url);
+        add_row_td(t_name, "未登录").append(login_link);
+        $("#btn_new_tag").text("未登录");
+        $("#btn_new_tag").click(function () {
+            location.href = login_url;
+        });
+    }
+    else {
+        var tag_url = $("#tag_url").val();
+        my_async_request2(tag_url, "GET", null, handler_tags);
+        $("#btn_new_tag").click(add_tag);
+        $("#lab_ding_notify").click(show_access_ding);
+        $("#interval_time").keyup(function () {
+            $("#interval_time").val(format_num($("#interval_time").val()));
+        });
+    }
 });
