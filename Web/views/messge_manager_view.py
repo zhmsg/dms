@@ -65,7 +65,7 @@ def add_tag_data():
     interval_time = request_data["interval_time"]
     l = control.new_user_topic_tag(g.user_name, g.user_role, message_tag, notify_mode, access_ding, interval_time)
     if l == 1:
-        return jsonify({"status": True, "data": message_tag})
+        return jsonify({"status": True, "data": message_tag, "location": url_prefix + "/manager/"})
     else:
         return jsonify({"status": False, "data": "标签可能已存在"})
 
