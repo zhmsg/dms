@@ -78,6 +78,18 @@ def update_tag_data():
     for key in request_data:
         if key not in allow_keys:
             return jsonify({"status": False, "data": "Not Allow %s" % key})
-    l = control.update_user_gopic_tag(g.user_name, g.user_role, **request_data)
+    l = control.update_user_topic_tag(g.user_name, g.user_role, **request_data)
     request_data["exec_r"] = l
+    request_data["op"] = "PUT"
+    return jsonify({"status": True, "data": request_data})
+
+
+@message_view.route("/tag/", methods=["DELETE"])
+@login_required
+def delete_tag_data():
+    request_data = request.json
+    message_tag = request_data["message_tag"]
+    l = control.delete_user_topic_tag(g.user_name, g.user_role, message_tag)
+    request_data["exec_r"] = l
+    request_data["op"] = "DELETE"
     return jsonify({"status": True, "data": request_data})

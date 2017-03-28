@@ -50,10 +50,9 @@ function handler_tags(tags_data) {
 
         add_tr.append(new_td("user_name", data_item));
 
+        var op_td = $("<td></td>");
         if (data_item["user_name"] == $("#current_user_name").val()) {
-            var op_td = $("<td></td>");
-            op_td.append("<a>删除</a>");
-            add_tr.append(op_td);
+            op_td.append("<a href='javascript:void(0)' name='link_delete'>删除</a>");
 
             add_tr.attr("message_tag", data_item["message_tag"]);
             add_tr.attr("notify_mode", data_item["notify_mode"]);
@@ -103,13 +102,39 @@ function handler_tags(tags_data) {
             ;
         }
         else {
-            var op_td = $("<td></td>");
-            add_tr.append(op_td);
             add_tr.find("input").attr("disabled", "disabled");
         }
+        add_tr.append(op_td);
 
         $("#" + t_name).append(add_tr);
     }
+    $("#" + t_name + " a[name=link_delete]").each(function () {
+        var current_link = $(this);
+        var current_tr = current_link.parents("tr");
+        var message_tag = current_tr.attr("message_tag");
+        current_link.click(function () {
+            var show_text = "确定删除消息标签\n" + message_tag;
+            swal({
+                    title: "确定删除",
+                    text: show_text,
+                    type: "info",
+                    showCancelButton: true,
+                    confirmButtonColor: '#DD6B55',
+                    confirmButtonText: '删除',
+                    cancelButtonText: "取消",
+                    closeOnConfirm: true,
+                    closeOnCancel: true
+                },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        var tag_url = $("#tag_url").val();
+                        my_async_request2(tag_url, "DELETE", {"message_tag": message_tag}, update_success);
+                    }
+                }
+            );
+        });
+
+    });
 
 }
 
@@ -155,8 +180,13 @@ function judge_tr_update(tr_el) {
 function update_success(update_data) {
     if (update_data["exec_r"] == 1) {
         var current_tr = $("tr[message_tag='" + update_data["message_tag"] + "']");
-        for (var key in update_data) {
-            current_tr.attr(key, update_data[key]);
+        if (update_data["op"] == "PUT") {
+            for (var key in update_data) {
+                current_tr.attr(key, update_data[key]);
+            }
+        }
+        else {
+            current_tr.remove();
         }
     }
     else {

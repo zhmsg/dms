@@ -1045,5 +1045,8 @@ class ControlManager(object):
                 item["access_ding"] = "***"
         return tags_info
 
-    def update_user_gopic_tag(self, user_name, user_role, message_tag, **kwargs):
+    def update_user_topic_tag(self, user_name, user_role, message_tag, **kwargs):
         return self.message_man.update_user_tag(message_tag, user_name, **kwargs)
+
+    def delete_user_topic_tag(self, user_name, user_role, message_tag):
+        return self.message_man.delete_user_tag(message_tag, user_name)
