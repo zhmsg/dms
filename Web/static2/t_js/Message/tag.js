@@ -40,9 +40,13 @@ function handler_tags(tags_data) {
         add_tr.append(ding_td);
 
         add_tr.append(new_td("interval_time", data_item, null, true));
+
         var time_td = $("<td></td>");
         time_td.text(timestamp_2_datetime(data_item["insert_time"]));
         add_tr.append(time_td);
+
+        add_tr.append(new_td("user_name", data_item));
+
         if (data_item["user_name"] == $("#current_user_name").val()) {
             var op_td = $("<td></td>");
             op_td.append("<a>更新</a>");
@@ -54,6 +58,8 @@ function handler_tags(tags_data) {
             });
         }
         else {
+            var op_td = $("<td></td>");
+            add_tr.append(op_td);
             add_tr.find("input").attr("disabled", "disabled");
         }
 
