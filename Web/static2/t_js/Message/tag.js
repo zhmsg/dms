@@ -80,6 +80,11 @@ function handler_tags(tags_data) {
             });
             add_tr.find("td[name='td_interval_time'] input").change(function () {
                     var parent_tr = $(this).parents("tr");
+                    var match_r = $(this).val().match(/^\d{2,5}$/g);
+                    if (match_r == null) {
+                        $(this).val(parent_tr.attr("interval_time"));
+                        return;
+                    }
                     var message_tag = parent_tr.attr("message_tag");
                     //  判断是否和已有的有变化
                     var update_info = judge_tr_update(parent_tr);
