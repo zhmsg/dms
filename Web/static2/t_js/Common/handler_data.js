@@ -44,3 +44,7 @@ function format_json_str(s) {
     }
     return JSON.stringify(obj, null, 4);
 }
+
+function format_num(s) {
+    return s.replace(/[^\d]/g, "");
+}

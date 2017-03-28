@@ -1044,3 +1044,6 @@ class ControlManager(object):
             if item["user_name"] != user_name and item["access_ding"] is not None:
                 item["access_ding"] = "***"
         return tags_info
+
+    def update_user_gopic_tag(self, user_name, user_role, message_tag, **kwargs):
+        return self.message_man.update_user_tag(message_tag, user_name, **kwargs)

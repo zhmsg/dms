@@ -68,3 +68,16 @@ def add_tag_data():
         return jsonify({"status": True, "data": message_tag})
     else:
         return jsonify({"status": False, "data": "标签可能已存在"})
+
+
+@message_view.route("/tag/", methods=["PUT"])
+@login_required
+def update_tag_data():
+    request_data = request.json
+    allow_keys = ["message_tag", "notify_mode", "access_ding", "interval_time"]
+    for key in request_data:
+        if key not in allow_keys:
+            return jsonify({"status": False, "data": "Not Allow %s" % key})
+    l = control.update_user_gopic_tag(g.user_name, g.user_role, **request_data)
+    request_data["exec_r"] = l
+    return jsonify({"status": True, "data": request_data})

@@ -25,6 +25,7 @@ class MessageManager(object):
 
     def update_user_tag(self, message_tag, user_name, **kwargs):
         where_value = dict(message_tag=message_tag, user_name=user_name)
+        kwargs["update_time"] = time()
         l = self.db.execute_update(self.t_user_tag, update_value=kwargs, where_value=where_value)
         return l
 
