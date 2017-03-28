@@ -1,6 +1,6 @@
 {% extends "base_menu.html" %}
 
-{% block title %}晶读平台数据{% endblock %}
+{% block title %}消息管理{% endblock %}
 
 {% block css_content %}
     {{ 't_css/tabControls.css' | make_static_html | safe }}
@@ -11,12 +11,14 @@
     {{ 't_js/Common/add_node.js' | make_static_html | safe }}
     {{ 't_js/Common/datetime_tools.js' | make_static_html | safe }}
     {{ 't_js/Common/handler_data.js' | make_static_html | safe }}
+    {{ 't_js/Common/url_tool.js' | make_static_html | safe }}
     {{ 't_js/Message/tag.js' | make_static_html | safe }}
+    {{ 't_js/Message/query.js' | make_static_html | safe }}
 {% endblock %}
 
 {% block center_content %}
     <div>
-        <ul id="myTab" class="nav nav-tabs comTab">
+        <ul id="ul_menu" class="nav nav-tabs comTab">
             <li class="active"><a href="#div_tag" data-toggle="tab">消息标签</a></li>
             <li><a href="#div_add_tag" data-toggle="tab">新建标签</a></li>
             <li><a href="#div_query" data-toggle="tab">消息查看</a></li>
@@ -34,4 +36,5 @@
         </div>
     </div>
     <input id="tag_url" value="{{ tag_url }}" class="display_none">
+    <input id="query_url" value="{{ query_url }}" class="display_none">
 {% endblock %}

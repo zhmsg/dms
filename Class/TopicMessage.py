@@ -42,3 +42,9 @@ class MessageManager(object):
         where_value = dict(message_tag=message_tag, user_name=user_name)
         l = self.db.execute_delete(self.t_user_tag, where_value=where_value)
         return l
+
+    def query_message(self, **kwargs):
+        cols = ["topic_owner", "topic_name", "message_id", "subscription_name", "message_tag", "notify_mode",
+                "publish_time", "insert_time", "message_content"]
+        db_items = self.db.execute_select(self.t_msg, where_value=kwargs, cols=cols)
+        return db_items

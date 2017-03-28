@@ -1,1 +1,32 @@
-有待开发
+<div class="margin20 apiTest">
+    <div class="clear bottom20">
+        <span class="pull-left text-right width150">消息编号：</span>
+        <input class="box-side width366 display_none" id="query_topic_owner"/>
+        <input class="box-side width366 display_none" id="query_topic_name"/>
+        <input class="box-side width366" id="query_message_id" placeholder="例如14809877400468" value=""/>
+        <a id="start_search">
+            <button class="btn btn-primary" id="btn_query_message">搜索</button>
+        </a>
+    </div>
+    <div id="div_show_message">
+        <p>
+            <span class="pull-left text-right width150">消息编号：</span>
+            <input class="form-control bug-input" name="message_id" readonly/>
+        </p>
+
+        <p>
+            <span class="pull-left text-right width150">消息标签：</span>
+            <input class="form-control bug-input" name="message_tag" readonly/>
+        </p>
+
+        <p>
+            <span class="pull-left text-right width150">推送时间：</span>
+            <input class="form-control bug-input" name="publish_time" readonly/>
+        </p>
+
+        <p>
+            <span class="pull-left text-right width150">消息内容：</span>
+            <textarea class="box-side bug-input" rows="15" name="message_content" readonly></textarea>
+        </p>
+    </div>
+</div>

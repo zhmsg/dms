@@ -993,6 +993,9 @@ class ControlManager(object):
     def new_topic_message(self, **kwargs):
         return self.message_man.insert_topic_message(**kwargs)
 
+    def query_topic_message(self, **kwargs):
+        return self.message_man.query_message(**kwargs)
+
     def notification_topic_message(self, message_info):
         message_tag = message_info.get("message_tag", None)
         if message_tag is None:

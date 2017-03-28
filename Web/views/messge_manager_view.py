@@ -45,7 +45,8 @@ def receive_message_func():
 @login_required
 def manager_page():
     tag_url = url_prefix + "/tag/"
-    return rt.render("Index.html", tag_url=tag_url)
+    query_url = url_prefix + "/query/"
+    return rt.render("Index.html", tag_url=tag_url, query_url=query_url)
 
 
 @message_view.route("/tag/", methods=["GET"])
@@ -93,3 +94,16 @@ def delete_tag_data():
     request_data["exec_r"] = l
     request_data["op"] = "DELETE"
     return jsonify({"status": True, "data": request_data})
+
+
+@message_view.route("/query/", methods=["GET"])
+def query_message():
+    message_id = request.args["message_id"]
+    topic_owner = "1530531001163833"
+    if "topic_owner" in request.args:
+        topic_owner = request.args["topic_owner"]
+    topic_name = "JYWaring"
+    if "topic_name" in request.args:
+        topic_name = request.args["topic_name"]
+    db_items = control.query_topic_message(topic_owner=topic_owner, topic_name=topic_name, message_id=message_id)
+    return jsonify({"status": True, "data": db_items})

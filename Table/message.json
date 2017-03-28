@@ -15,9 +15,14 @@
       },
       {
         "pri_key": true,
+        "col_comment": "消息编号",
+        "col_name": "message_no",
+        "col_type": "varchar(40)"
+      },
+      {
         "col_comment": "消息id",
         "col_name": "message_id",
-        "col_type": "char(40)"
+        "col_type": "varchar(50)"
       },
       {
         "col_comment": "订阅名称",
