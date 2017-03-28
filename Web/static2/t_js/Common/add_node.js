@@ -32,7 +32,7 @@ function query_option(select_id, v, query_t){
     return query_option;
 }
 
-function new_td(key, obj, max_len){
+function new_td(key, obj, max_len, editable) {
     var td = $("<td></td>");
     if(key in obj){
         var td_text = obj[key] + "";
@@ -43,7 +43,15 @@ function new_td(key, obj, max_len){
             }
         }
         td.attr("name", "td_" + key);
-        td.append(td_text);
+        if (editable != null && editable == true) {
+            var e = $("<input />");
+            e.css("border", 0);
+            e.val(td_text);
+            td.append(e);
+        }
+        else {
+            td.append(td_text);
+        }
     }
     return td;
 }
