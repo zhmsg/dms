@@ -53,3 +53,18 @@ def manager_page():
 def my_tag_data():
     tags = control.get_user_topic_tag(g.user_name, g.user_role)
     return jsonify({"status": True, "data": tags})
+
+
+@message_view.route("/tag/", methods=["POST"])
+@login_required
+def add_tag_data():
+    request_data = request.json
+    message_tag = request_data["message_tag"]
+    notify_mode = request_data["notify_mode"]
+    access_ding = request_data.get("access_ding", None)
+    interval_time = request_data["interval_time"]
+    l = control.new_user_topic_tag(g.user_name, g.user_role, message_tag, notify_mode, access_ding, interval_time)
+    if l == 1:
+        return jsonify({"status": True, "data": message_tag})
+    else:
+        return jsonify({"status": False, "data": "标签可能已存在"})

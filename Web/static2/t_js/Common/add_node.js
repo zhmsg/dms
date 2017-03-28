@@ -46,6 +46,7 @@ function new_td(key, obj, max_len, editable) {
         if (editable != null && editable == true) {
             var e = $("<input />");
             e.css("border", 0);
+            e.css("background-color", "transparent");
             e.val(td_text);
             td.append(e);
         }

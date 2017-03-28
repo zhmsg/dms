@@ -20,6 +20,7 @@ function handler_tags(tags_data) {
         if ((data_item["notify_mode"] & 1) == 1) {
             email_td.find("input").attr("checked", "checked");
         }
+        email_td.attr("name", "td_notify_email");
         add_tr.append(email_td);
 
         var wx_td = $('<td></td>');
@@ -27,6 +28,7 @@ function handler_tags(tags_data) {
         if ((data_item["notify_mode"] & 2) == 2) {
             wx_td.find("input").attr("checked", "checked");
         }
+        wx_td.attr("name", "td_notify_wx");
         add_tr.append(wx_td);
 
         var ding_td = $('<td></td>');
@@ -34,6 +36,7 @@ function handler_tags(tags_data) {
         if ((data_item["notify_mode"] & 4) == 4) {
             ding_td.find("input").attr("checked", "checked");
         }
+        ding_td.attr("name", "td_notify_ding");
         add_tr.append(ding_td);
 
         add_tr.append(new_td("interval_time", data_item, null, true));
@@ -59,7 +62,41 @@ function handler_tags(tags_data) {
 
 }
 
+function add_tag() {
+    var message_tag = $("#message_tag").val();
+    var interval_time = $("#interval_time").val();
+    var notify_mode = 0;
+    var r_data = {"message_tag": message_tag, "interval_time": interval_time};
+    if ($("input[name='email_notify']").is(':checked')) {
+        notify_mode += 1;
+    }
+    if ($("input[name='wx_notify']").is(':checked')) {
+        notify_mode += 2;
+    }
+    if ($("input[name='ding_notify']").is(':checked')) {
+        notify_mode += 4;
+        var access_ding = $("#access_ding").val();
+        r_data["access_ding"] = access_ding;
+    }
+    r_data["notify_mode"] = notify_mode;
+    var tag_url = $("#tag_url").val();
+    my_async_request2(tag_url, "POST", r_data);
+}
+
+
+function show_access_ding() {
+    var current_lab = $(this);
+    if (current_lab.find("input[name='ding_notify']").is(':checked')) {
+        $("#li_access_ding").show();
+    }
+    else {
+        $("#li_access_ding").hide();
+    }
+}
+
 $(document).ready(function () {
     var tag_url = $("#tag_url").val();
     my_async_request2(tag_url, "GET", null, handler_tags);
+    $("#btn_new_tag").click(add_tag);
+    $("#lab_ding_notify").click(show_access_ding);
 });

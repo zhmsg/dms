@@ -695,3 +695,7 @@ body, td, th {
 .articleList li p:last-child {
     color: #999;
 }
+
+.parent_background {
+    background-color: transparent;
+}
