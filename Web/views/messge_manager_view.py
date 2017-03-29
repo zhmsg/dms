@@ -30,6 +30,9 @@ def receive_message_func():
         message_info["message_content"] = base64.b64decode(message_info["message_content"])
     message_md5 = r_data["MessageMD5"]
     message_tag = message_info.get("message_tag", "")
+    for key in message_info:
+        if type(message_info[key]) == str:
+            message_info[key] = message_info[key].decode("utf-8")
     redis_key = "message_%s_%s" % (message_tag, message_md5)
     if redis.get(redis_key) is not None:
         control.new_topic_message(**message_info)
