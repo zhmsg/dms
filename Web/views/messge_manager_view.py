@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 # coding: utf-8
 
+import re
 import base64
 from flask import request, jsonify, g
 from Tools.RenderTemplate import RenderTemplate
@@ -25,7 +26,8 @@ def receive_message_func():
     for key in coverage_keys:
         if key in r_data:
             message_info[coverage_keys[key]] = r_data[key]
-    message_info["message_content"] = base64.b64decode(message_info["message_content"])
+    if re.match("^[a-z\\d/\+]+=*$", message_info["message_content"], re.I) is not None:
+        message_info["message_content"] = base64.b64decode(message_info["message_content"])
     message_md5 = r_data["MessageMD5"]
     message_tag = message_info.get("message_tag", "")
     redis_key = "message_%s_%s" % (message_tag, message_md5)

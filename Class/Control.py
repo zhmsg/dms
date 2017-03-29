@@ -1003,7 +1003,7 @@ class ControlManager(object):
             return 4, 60
         tags_setting = self.message_man.select_user_tag(message_tag)
         if len(tags_setting) != 1:
-            msg_content = "#%s#\n%s" % (message_tag, message_info["message_content"])
+            msg_content = u"#%s#\n%s" % (message_tag, message_info["message_content"])
             self.ding_msg.send_text(msg_content)
             return 4, 60
         tag_setting = tags_setting[0]
