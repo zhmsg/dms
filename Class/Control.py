@@ -1024,7 +1024,8 @@ class ControlManager(object):
             if user_info["email"] is None:
                 notify_mode &= ~1
             else:
-                my_email.send_mail_thread(user_info["email"], message_tag, message_info["message_content"])
+                email_content = message_info["message_content"].replace("\n", "<br />")
+                my_email.send_mail_thread(user_info["email"], message_tag, email_content)
         if self.judge_role(notify_mode, 2) is True:
             if user_info["wx_id"] is None:
                 notify_mode &= ~2
