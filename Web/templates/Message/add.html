@@ -11,10 +11,20 @@
         <label class="checkbox-inline"><input type="checkbox" name="email_notify"/>邮件通知</label>
         <label class="checkbox-inline"><input type="checkbox" name="wx_notify"/>微信通知</label>
         <label class="checkbox-inline" id="lab_ding_notify"><input type="checkbox" name="ding_notify"/>钉钉通知</label>
-        <li class="display_none" id="li_access_ding">
-            <label for="">钉钉Token：</label>
-            <input class="box-side width300" id="access_ding" type="text"/>
-        </li>
+
+        <div class="display_none" id="div_ding">
+            <li>
+                <label for="">钉钉Token：</label>
+                <input class="box-side width300" id="access_ding" type="text"/>
+            </li>
+            <li>
+                <label for="">钉的方式：</label>
+                <select class="box-side width300" id="ding_mode">
+                    <option value="1">文本方式</option>
+                    <option value="2" selected>链接方式</option>
+                </select>
+            </li>
+        </div>
     </ul>
 </div>
 <button class="btn btn-success btn-down api-newBtn" id="btn_new_tag">新建</button>

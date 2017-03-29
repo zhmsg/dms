@@ -27,7 +27,7 @@ dms_view = create_blue('dms_view', url_prefix=url_prefix, auth_required=False)
 user_m = UserManager()
 
 
-@dms_view.route("/", methods=["GET"])
+@dms_view.route("/", methods=["GET", "PUT", "POST", "DELETE"])
 def index():
     next_url = ""
     if current_user.is_authenticated:

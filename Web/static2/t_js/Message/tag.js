@@ -230,7 +230,9 @@ function add_tag() {
     if ($("input[name='ding_notify']").is(':checked')) {
         notify_mode += 4;
         var access_ding = $("#access_ding").val();
+        var ding_mode = $("#ding_mode").val();
         r_data["access_ding"] = access_ding;
+        r_data["ding_mode"] = ding_mode;
     }
     r_data["notify_mode"] = notify_mode;
     var tag_url = $("#tag_url").val();
@@ -240,10 +242,10 @@ function add_tag() {
 function show_access_ding() {
     var current_lab = $(this);
     if (current_lab.find("input[name='ding_notify']").is(':checked')) {
-        $("#li_access_ding").show();
+        $("#div_ding").show();
     }
     else {
-        $("#li_access_ding").hide();
+        $("#div_ding").hide();
     }
 }
 
