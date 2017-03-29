@@ -30,3 +30,15 @@ class DingMsgManager(object):
         if access_token is None:
             access_token = self.access_token
         return self._send_text(access_token, content, at_mobiles, at_all)
+
+    def _send_link(self, access_token, content, title, message_url, pic_url):
+        msg = dict(msgtype="link")
+        msg["link"] = dict(text=content, messageUrl=message_url, title=title)
+        if pic_url is not None:
+            msg["link"]["picUrl"] = pic_url
+        return self._send(msg, access_token)
+
+    def send_link(self, content, title, message_url, pic_url=None, access_token=None):
+        if access_token is None:
+            access_token = self.access_token
+        return self._send_link(access_token, content, title, message_url, pic_url)

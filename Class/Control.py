@@ -1014,6 +1014,12 @@ class ControlManager(object):
             msg_content = "#%s#\n%s" % (message_tag, message_info["message_content"])
             self.ding_msg.send_text(msg_content)
             return 4, 60
+        if query_url is not None:
+            url = "%s?message_id=%s&topic_name=%s&topic_owner=%s" % (query_url, message_info["message_id"],
+                                                                     message_info["topic_name"],
+                                                                     message_info["topic_owner"])
+        else:
+            url = "http://dms.gene.ac"
         if self.judge_role(notify_mode, 1) is True:
             if user_info["email"] is None:
                 notify_mode &= ~1
@@ -1025,20 +1031,13 @@ class ControlManager(object):
             else:
                 x = time.localtime(long(message_info["publish_time"]) / 1000)
                 occur_time = time.strftime(TIME_FORMAT, x)
-                if query_url is not None:
-                    url = "%s?message_id=%s&topic_name=%s&topic_owner=%s" % (query_url, message_info["message_id"],
-                                                                             message_info["topic_name"],
-                                                                             message_info["topic_owner"])
-                else:
-                    url = "http://dms.gene.ac"
                 my_wx.send_fault(message_tag, message_info["message_content"], occur_time,
                                  message_info["message_content"], user_info["wx_id"], url)
         if self.judge_role(notify_mode, 4) is True:
             if user_info["tel"] is None or tag_setting["access_ding"] is None:
                 notify_mode &= ~4
             else:
-                msg_content = "#%s#\n%s" % (message_tag, message_info["message_content"])
-                self.ding_msg.send_text(msg_content, at_mobiles=user_info["tel"],
+                self.ding_msg.send_link(message_info["message_content"], message_tag, url,
                                         access_token=tag_setting["access_ding"])
         return notify_mode, tag_setting["interval_time"]
 
