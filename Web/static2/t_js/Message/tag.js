@@ -184,13 +184,22 @@ function judge_tr_update(tr_el) {
 
 function update_success(update_data) {
     if (update_data["exec_r"] == 1) {
+        $("div[role='alert']").hide();
+        var dialog_div = $('<div class="alert alert-success" role="alert"></div>');
+        $("body").append(dialog_div);
+        register_reset_bottom(dialog_div);
+        setTimeout(function () {
+            dialog_div.remove();
+        }, 2000);
         var current_tr = $("tr[message_tag='" + update_data["message_tag"] + "']");
         if (update_data["op"] == "PUT") {
             for (var key in update_data) {
                 current_tr.attr(key, update_data[key]);
             }
+            dialog_div.text("更新消息标签 " + update_data["message_tag"] + " 成功");
         }
         else {
+            dialog_div.text("删除消息标签 " + update_data["message_tag"] + " 成功");
             current_tr.remove();
         }
     }

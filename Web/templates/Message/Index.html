@@ -12,12 +12,13 @@
     {{ 't_js/Common/datetime_tools.js' | make_static_html | safe }}
     {{ 't_js/Common/handler_data.js' | make_static_html | safe }}
     {{ 't_js/Common/url_tool.js' | make_static_html | safe }}
+    {{ 't_js/Common/position_tools.js' | make_static_html | safe }}
     {{ 't_js/Message/tag.js' | make_static_html | safe }}
     {{ 't_js/Message/query.js' | make_static_html | safe }}
 {% endblock %}
 
 {% block center_content %}
-    <div>
+    <div id="div_content">
         <ul id="ul_menu" class="nav nav-tabs comTab">
             <li class="active"><a href="#div_tag" data-toggle="tab">消息标签</a></li>
             <li><a href="#div_add_tag" data-toggle="tab">新建标签</a></li>

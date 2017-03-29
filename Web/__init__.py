@@ -161,3 +161,9 @@ def create_blue(blue_name, url_prefix="/", auth_required=True, special_protocol=
     if blue_name not in blues:
         blues[blue_name] = [add_blue, url_prefix]
     return add_blue
+
+
+    # @login_manager.unauthorized_callback
+    # def unauthorized_callback_func():
+    #     if request.is_xhr:
+    #         return make_response("登录状态已过期，需要重新登录", 302)
