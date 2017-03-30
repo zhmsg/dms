@@ -78,12 +78,10 @@ function handler_tags(tags_data) {
 
         $("#" + t_name).append(add_tr);
         var row_td = add_row_td(t_name, "");
+        row_td.attr("name", "tr_ding_setting");
         row_td.append('<label for="">钉钉Token：</label><input class="box-side width300 margin10" name="access_ding" type="text"/><label for="">钉的方式：</label><select class="box-side width300" name="ding_mode"><option value="1">文本方式</option><option value="2" selected>链接方式</option></select>');
-        row_td.find("input[name='access_ding']").val(data_item["access_ing"]);
+        row_td.find("input[name='access_ding']").val(data_item["access_ding"]);
         row_td.find("select[name='ding_mode']").val(data_item["ding_mode"]);
-
-        //row_td.hide();
-
     }
     $("#" + t_name + " a[name=link_delete]").each(function () {
         var current_link = $(this);
@@ -153,8 +151,20 @@ function handler_tags(tags_data) {
                 prepare_update(parent_tr);
             }
         );
+        current_tr.next().children().change(function () {
+            var parent_tr = $(this).parents("tr");
+            prepare_update(parent_tr.prev());
+        });
+        current_tr.find("td[name='td_notify_ding']").click(function () {
+                var parent_tr = $(this).parents("tr");
+                $("td[name='tr_ding_setting']").hide();
+                parent_tr.next().find("td").show();
+            }
+        );
         current_tr.find("input").removeAttr("disabled");
+
     });
+    $("td[name='tr_ding_setting']").hide();
 
 }
 
@@ -163,6 +173,8 @@ function judge_tr_update(tr_el) {
     var update_info = {"message_tag": message_tag};
     var notify_mode = parseInt(tr_el.attr("notify_mode"));
     var interval_time = tr_el.attr("interval_time");
+    var access_ding = tr_el.attr("access_ing");
+    var ding_mode = tr_el.attr("ding_mode");
     var has_update = false;
     for (var key in notify_tds) {
         var current_stage = tr_el.find("td[name='" + key + "'] input").is(":checked");
@@ -179,6 +191,21 @@ function judge_tr_update(tr_el) {
     if (interval_time != current_interval_time) {
         has_update = true;
         update_info["interval_time"] = current_interval_time;
+    }
+    var next_tr = tr_el.next();
+    var current_access_ding = next_tr.find("input[name='access_ding']").val();
+    if (current_access_ding.indexOf("access_token=") >= 0) {
+        current_access_ding = current_access_ding.substr(current_access_ding.indexOf("access_token=") + 13);
+        next_tr.find("input[name='access_ding']").val(current_access_ding);
+    }
+    var current_ding_mode = next_tr.find("select[name='ding_mode']").val();
+    if (current_access_ding != access_ding) {
+        has_update = true;
+        update_info["access_ding"] = current_access_ding;
+    }
+    if (current_ding_mode != ding_mode) {
+        has_update = true;
+        update_info["ding_mode"] = current_ding_mode;
     }
     if (has_update == false) {
         return null;
