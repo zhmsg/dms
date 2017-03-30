@@ -82,7 +82,7 @@ def add_tag_data():
 @login_required
 def update_tag_data():
     request_data = request.json
-    allow_keys = ["message_tag", "notify_mode", "access_ding", "interval_time"]
+    allow_keys = ["message_tag", "notify_mode", "access_ding", "ding_mode", "interval_time"]
     for key in request_data:
         if key not in allow_keys:
             return jsonify({"status": False, "data": "Not Allow %s" % key})
