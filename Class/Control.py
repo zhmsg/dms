@@ -1046,7 +1046,8 @@ class ControlManager(object):
         return notify_mode, tag_setting["interval_time"]
 
     def new_user_topic_tag(self, user_name, user_role, message_tag, notify_mode, **kwargs):
-        return self.message_man.insert_user_tag(message_tag=message_tag, user_name=user_name, **kwargs)
+        return self.message_man.insert_user_tag(message_tag=message_tag, user_name=user_name, notify_mode=notify_mode,
+                                                **kwargs)
 
     def get_user_topic_tag(self, user_name, user_role):
         tags_info = self.message_man.select_user_tag()
