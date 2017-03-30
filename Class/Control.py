@@ -1037,14 +1037,16 @@ class ControlManager(object):
         if self.judge_role(notify_mode, 4) is True:
             if user_info["tel"] is None or tag_setting["access_ding"] is None:
                 notify_mode &= ~4
-            else:
+            elif tag_setting["ding_mode"] == 2:
                 self.ding_msg.send_link(message_info["message_content"], message_tag, url,
                                         access_token=tag_setting["access_ding"])
+            else:
+                msg_content = "#%s#\n%s" % (message_tag, message_info["message_content"])
+                self.ding_msg.send_text(msg_content)
         return notify_mode, tag_setting["interval_time"]
 
-    def new_user_topic_tag(self, user_name, user_role, message_tag, notify_mode, access_ding=None, interval_time=60):
-        return self.message_man.insert_user_tag(message_tag=message_tag, user_name=user_name, access_ding=access_ding,
-                                                interval_time=interval_time, notify_mode=notify_mode)
+    def new_user_topic_tag(self, user_name, user_role, message_tag, notify_mode, **kwargs):
+        return self.message_man.insert_user_tag(message_tag=message_tag, user_name=user_name, **kwargs)
 
     def get_user_topic_tag(self, user_name, user_role):
         tags_info = self.message_man.select_user_tag()

@@ -68,8 +68,10 @@ def add_tag_data():
     message_tag = request_data["message_tag"]
     notify_mode = request_data["notify_mode"]
     access_ding = request_data.get("access_ding", None)
+    ding_mode = int(request_data.get("ding_mode", "1"))
     interval_time = request_data["interval_time"]
-    l = control.new_user_topic_tag(g.user_name, g.user_role, message_tag, notify_mode, access_ding, interval_time)
+    l = control.new_user_topic_tag(g.user_name, g.user_role, message_tag, notify_mode, access_ding=access_ding,
+                                   ding_mode=ding_mode, interval_time=interval_time)
     if l == 1:
         return jsonify({"status": True, "data": message_tag, "location": url_prefix + "/manager/"})
     else:

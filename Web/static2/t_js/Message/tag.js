@@ -70,33 +70,11 @@ function handler_tags(tags_data) {
         add_tr.append(time_td);
 
         add_tr.append(new_td("user_name", data_item));
-
-        var op_td = $("<td></td>");
-        if (data_item["user_name"] == $("#current_user_name").val()) {
-            op_td.append("<a href='javascript:void(0)' name='link_delete'>删除</a>");
-
-            tag_info_2_tr(data_item, add_tr);
-
-            add_tr.find("label").children().click(function () {
-                var parent_tr = $(this).parents("tr");
-                prepare_update(parent_tr);
-            });
-            add_tr.find("td[name='td_interval_time'] input").change(function () {
-                    var parent_tr = $(this).parents("tr");
-                    var match_r = $(this).val().match(/^\d{2,5}$/g);
-                    if (match_r == null) {
-                        $(this).val(parent_tr.attr("interval_time"));
-                        return;
-                    }
-                    prepare_update(parent_tr);
-                }
-            )
-            ;
-        }
-        else {
-            add_tr.find("input").attr("disabled", "disabled");
-        }
+        var op_td = $("<td name='td_op'></td>");
         add_tr.append(op_td);
+        add_tr.find("input").attr("disabled", "disabled");
+
+        tag_info_2_tr(data_item, add_tr);
 
         $("#" + t_name).append(add_tr);
         var row_td = add_row_td(t_name, "");
@@ -104,19 +82,8 @@ function handler_tags(tags_data) {
         row_td.find("input[name='access_ding']").val(data_item["access_ing"]);
         row_td.find("select[name='ding_mode']").val(data_item["ding_mode"]);
 
-        row_td.hide();
-        //ding_td.click(function(){
-        //    console.info("ding td click");
-        //    var parent_tr = $(this).parents("tr");
-        //    console.info(parent_tr.find("input").is(":checked"));
-        //    if(parent_tr.find("input").is(":checked")) {
-        //        console.info("checked");
-        //        parent_tr.next().find("td").show();
-        //    }
-        //    else{
-        //        parent_tr.next().find("td").hide();
-        //    }
-        //});
+        //row_td.hide();
+
     }
     $("#" + t_name + " a[name=link_delete]").each(function () {
         var current_link = $(this);
@@ -144,6 +111,49 @@ function handler_tags(tags_data) {
             );
         });
 
+    });
+    $("#" + t_name).find("tr[user_name='" + $("#current_user_name").val() + "']").each(function () {
+        var current_tr = $(this);
+        var link_delete = $("<a href='javascript:void(0)' name='link_delete'>删除</a>");
+        var message_tag = current_tr.attr("message_tag");
+        link_delete.click(function () {
+            var show_text = "确定删除消息标签\n" + message_tag;
+            swal({
+                    title: "确定删除",
+                    text: show_text,
+                    type: "info",
+                    showCancelButton: true,
+                    confirmButtonColor: '#DD6B55',
+                    confirmButtonText: '删除',
+                    cancelButtonText: "取消",
+                    closeOnConfirm: true,
+                    closeOnCancel: true
+                },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        var tag_url = $("#tag_url").val();
+                        my_async_request2(tag_url, "DELETE", {"message_tag": message_tag}, update_success);
+                    }
+                }
+            );
+        });
+        current_tr.find("td[name='td_op']").append(link_delete);
+
+        current_tr.find("label").children().click(function () {
+            var parent_tr = $(this).parents("tr");
+            prepare_update(parent_tr);
+        });
+        current_tr.find("td[name='td_interval_time'] input").change(function () {
+                var parent_tr = $(this).parents("tr");
+                var match_r = $(this).val().match(/^\d{2,5}$/g);
+                if (match_r == null) {
+                    $(this).val(parent_tr.attr("interval_time"));
+                    return;
+                }
+                prepare_update(parent_tr);
+            }
+        );
+        current_tr.find("input").removeAttr("disabled");
     });
 
 }
