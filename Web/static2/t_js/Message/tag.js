@@ -3,6 +3,41 @@
  */
 
 var request_tag_flag = new Object();
+var notify_tds = {"td_notify_email": 1, "td_notify_wx": 2, "td_notify_ding": 4};
+
+function prepare_update(parent_tr) {
+    var message_tag = parent_tr.attr("message_tag");
+    //  判断是否和已有的有变化
+    var update_info = judge_tr_update(parent_tr);
+    if (update_info != null) {
+        if (message_tag in request_tag_flag && request_tag_flag[message_tag] == true) {
+            console.info("wait ...");
+        }
+        else {
+            request_tag_flag[message_tag] = true;
+            window.setTimeout(function () {
+                start_update_tag(message_tag);
+            }, 1500);
+        }
+    }
+    else {
+        console.info("not need start");
+    }
+}
+
+function judge_include_value(base_value, v) {
+    var r = base_value & v;
+    if (r == v)
+        return true;
+    else
+        return false;
+}
+
+function tag_info_2_tr(tag_info, current_tr) {
+    for (var key in tag_info) {
+        current_tr.attr(key, tag_info[key]);
+    }
+}
 
 function handler_tags(tags_data) {
     var data_len = tags_data.length;
@@ -18,29 +53,15 @@ function handler_tags(tags_data) {
 
         add_tr.append(new_td("message_tag", data_item));
 
-        var email_td = $('<td></td>');
-        email_td.append($(lab_text));
-        if ((data_item["notify_mode"] & 1) == 1) {
-            email_td.find("input").attr("checked", "checked");
+        for (var key in notify_tds) {
+            var one_notify_td = $('<td></td>');
+            one_notify_td.append($(lab_text));
+            if (judge_include_value(data_item["notify_mode"], notify_tds[key])) {
+                one_notify_td.find("input").attr("checked", "checked");
+            }
+            one_notify_td.attr("name", key);
+            add_tr.append(one_notify_td);
         }
-        email_td.attr("name", "td_notify_email");
-        add_tr.append(email_td);
-
-        var wx_td = $('<td></td>');
-        wx_td.append($(lab_text));
-        if ((data_item["notify_mode"] & 2) == 2) {
-            wx_td.find("input").attr("checked", "checked");
-        }
-        wx_td.attr("name", "td_notify_wx");
-        add_tr.append(wx_td);
-
-        var ding_td = $('<td></td>');
-        ding_td.append($(lab_text));
-        if ((data_item["notify_mode"] & 4) == 4) {
-            ding_td.find("input").attr("checked", "checked");
-        }
-        ding_td.attr("name", "td_notify_ding");
-        add_tr.append(ding_td);
 
         add_tr.append(new_td("interval_time", data_item, null, true));
 
@@ -54,29 +75,11 @@ function handler_tags(tags_data) {
         if (data_item["user_name"] == $("#current_user_name").val()) {
             op_td.append("<a href='javascript:void(0)' name='link_delete'>删除</a>");
 
-            add_tr.attr("message_tag", data_item["message_tag"]);
-            add_tr.attr("notify_mode", data_item["notify_mode"]);
-            add_tr.attr("interval_time", data_item["interval_time"]);
+            tag_info_2_tr(data_item, add_tr);
 
             add_tr.find("label").children().click(function () {
                 var parent_tr = $(this).parents("tr");
-                var message_tag = parent_tr.attr("message_tag");
-                //  判断是否和已有的有变化
-                var update_info = judge_tr_update(parent_tr);
-                if (update_info != null) {
-                    if (message_tag in request_tag_flag && request_tag_flag[message_tag] == true) {
-                        console.info("wait ...");
-                    }
-                    else {
-                        request_tag_flag[message_tag] = true;
-                        window.setTimeout(function () {
-                            start_update_tag(message_tag);
-                        }, 1500);
-                    }
-                }
-                else {
-                    console.info("not need start");
-                }
+                prepare_update(parent_tr);
             });
             add_tr.find("td[name='td_interval_time'] input").change(function () {
                     var parent_tr = $(this).parents("tr");
@@ -85,23 +88,7 @@ function handler_tags(tags_data) {
                         $(this).val(parent_tr.attr("interval_time"));
                         return;
                     }
-                    var message_tag = parent_tr.attr("message_tag");
-                    //  判断是否和已有的有变化
-                    var update_info = judge_tr_update(parent_tr);
-                    if (update_info != null) {
-                        if (message_tag in request_tag_flag && request_tag_flag[message_tag] == true) {
-                            console.info("wait ...");
-                        }
-                        else {
-                            request_tag_flag[message_tag] = true;
-                            window.setTimeout(function () {
-                                start_update_tag(message_tag);
-                            }, 1500);
-                        }
-                    }
-                    else {
-                        console.info("not need start");
-                    }
+                    prepare_update(parent_tr);
                 }
             )
             ;
@@ -112,6 +99,24 @@ function handler_tags(tags_data) {
         add_tr.append(op_td);
 
         $("#" + t_name).append(add_tr);
+        var row_td = add_row_td(t_name, "");
+        row_td.append('<label for="">钉钉Token：</label><input class="box-side width300 margin10" name="access_ding" type="text"/><label for="">钉的方式：</label><select class="box-side width300" name="ding_mode"><option value="1">文本方式</option><option value="2" selected>链接方式</option></select>');
+        row_td.find("input[name='access_ding']").val(data_item["access_ing"]);
+        row_td.find("select[name='ding_mode']").val(data_item["ding_mode"]);
+
+        row_td.hide();
+        //ding_td.click(function(){
+        //    console.info("ding td click");
+        //    var parent_tr = $(this).parents("tr");
+        //    console.info(parent_tr.find("input").is(":checked"));
+        //    if(parent_tr.find("input").is(":checked")) {
+        //        console.info("checked");
+        //        parent_tr.next().find("td").show();
+        //    }
+        //    else{
+        //        parent_tr.next().find("td").hide();
+        //    }
+        //});
     }
     $("#" + t_name + " a[name=link_delete]").each(function () {
         var current_link = $(this);
@@ -143,16 +148,7 @@ function handler_tags(tags_data) {
 
 }
 
-function judge_include_value(base_value, v) {
-    var r = base_value & v;
-    if (r == v)
-        return true;
-    else
-        return false;
-}
-
 function judge_tr_update(tr_el) {
-    var notify_tds = {"td_notify_email": 1, "td_notify_wx": 2, "td_notify_ding": 4};
     var message_tag = tr_el.attr("message_tag");
     var update_info = {"message_tag": message_tag};
     var notify_mode = parseInt(tr_el.attr("notify_mode"));
@@ -193,9 +189,7 @@ function update_success(update_data) {
         }, 2000);
         var current_tr = $("tr[message_tag='" + update_data["message_tag"] + "']");
         if (update_data["op"] == "PUT") {
-            for (var key in update_data) {
-                current_tr.attr(key, update_data[key]);
-            }
+            tag_info_2_tr(update_data, current_tr);
             dialog_div.text("更新消息标签 " + update_data["message_tag"] + " 成功");
         }
         else {

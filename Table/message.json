@@ -87,8 +87,8 @@
       {
         "col_comment": "ding的方式 1代表纯本文 2代表链接",
         "col_name": "ding_mode",
-        "col_type": "varchar(400)",
-        "allow_null": true
+        "col_type": "tinyint(4)",
+        "default_value": 1
       },
       {
         "col_comment": "相同消息内容间隔多少秒通知 默认值60s",
