@@ -5,6 +5,15 @@
 var request_tag_flag = new Object();
 var notify_tds = {"td_notify_email": 1, "td_notify_wx": 2, "td_notify_ding": 4};
 
+function format_access_ding(el) {
+    var current_access_ding = el.val();
+    if (current_access_ding.indexOf("access_token=") >= 0) {
+        current_access_ding = current_access_ding.substr(current_access_ding.indexOf("access_token=") + 13);
+        el.val(current_access_ding);
+    }
+    return current_access_ding;
+}
+
 function prepare_update(parent_tr) {
     var message_tag = parent_tr.attr("message_tag");
     //  判断是否和已有的有变化
@@ -79,7 +88,7 @@ function handler_tags(tags_data) {
         $("#" + t_name).append(add_tr);
         var row_td = add_row_td(t_name, "");
         row_td.attr("name", "tr_ding_setting");
-        row_td.append('<label for="">钉钉Token：</label><input class="box-side width300 margin10" name="access_ding" type="text"/><label for="">钉的方式：</label><select class="box-side width300" name="ding_mode"><option value="1">文本方式</option><option value="2" selected>链接方式</option></select>');
+        row_td.append('<label for="">钉钉Token：</label><input class="box-side width600 margin10" name="access_ding" type="text"/><label for="">钉的方式：</label><select class="box-side width300" name="ding_mode"><option value="1">文本方式</option><option value="2" selected>链接方式</option></select>');
         row_td.find("input[name='access_ding']").val(data_item["access_ding"]);
         row_td.find("select[name='ding_mode']").val(data_item["ding_mode"]);
     }
@@ -193,11 +202,8 @@ function judge_tr_update(tr_el) {
         update_info["interval_time"] = current_interval_time;
     }
     var next_tr = tr_el.next();
-    var current_access_ding = next_tr.find("input[name='access_ding']").val();
-    if (current_access_ding.indexOf("access_token=") >= 0) {
-        current_access_ding = current_access_ding.substr(current_access_ding.indexOf("access_token=") + 13);
-        next_tr.find("input[name='access_ding']").val(current_access_ding);
-    }
+    var current_access_ding = format_access_ding(next_tr.find("input[name='access_ding']"));
+
     var current_ding_mode = next_tr.find("select[name='ding_mode']").val();
     if (current_access_ding != access_ding) {
         has_update = true;
@@ -258,6 +264,9 @@ function start_update_tag(message_tag) {
 
 function add_tag() {
     var message_tag = $("#message_tag").val();
+    if (message_tag.length <= 0) {
+        return;
+    }
     var interval_time = $("#interval_time").val();
     var notify_mode = 0;
     var r_data = {"message_tag": message_tag, "interval_time": interval_time};
@@ -269,7 +278,7 @@ function add_tag() {
     }
     if ($("input[name='ding_notify']").is(':checked')) {
         notify_mode += 4;
-        var access_ding = $("#access_ding").val();
+        var access_ding = format_access_ding($("#access_ding"));
         var ding_mode = $("#ding_mode").val();
         r_data["access_ding"] = access_ding;
         r_data["ding_mode"] = ding_mode;
@@ -309,6 +318,9 @@ $(document).ready(function () {
         $("#lab_ding_notify").click(show_access_ding);
         $("#interval_time").keyup(function () {
             $("#interval_time").val(format_num($("#interval_time").val()));
+        });
+        $("#access_ding").change(function () {
+            format_access_ding($(this));
         });
     }
 });

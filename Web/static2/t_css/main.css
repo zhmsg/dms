@@ -89,6 +89,10 @@ ul, ol, li {
     width: 500px;
 }
 
+.width600 {
+    width: 600px;
+}
+
 .width800 {
     width: 800px;
 }
