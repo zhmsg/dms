@@ -1042,7 +1042,7 @@ class ControlManager(object):
                                         access_token=tag_setting["access_ding"])
             else:
                 msg_content = "#%s#\n%s" % (message_tag, message_info["message_content"])
-                self.ding_msg.send_text(msg_content)
+                self.ding_msg.send_text(msg_content, access_token=tag_setting["access_ding"])
         return notify_mode, tag_setting["interval_time"]
 
     def new_user_topic_tag(self, user_name, user_role, message_tag, notify_mode, **kwargs):
