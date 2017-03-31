@@ -182,7 +182,7 @@ function judge_tr_update(tr_el) {
     var update_info = {"message_tag": message_tag};
     var notify_mode = parseInt(tr_el.attr("notify_mode"));
     var interval_time = tr_el.attr("interval_time");
-    var access_ding = tr_el.attr("access_ing");
+    var access_ding = tr_el.attr("access_ding");
     var ding_mode = tr_el.attr("ding_mode");
     var has_update = false;
     for (var key in notify_tds) {
@@ -206,6 +206,7 @@ function judge_tr_update(tr_el) {
 
     var current_ding_mode = next_tr.find("select[name='ding_mode']").val();
     if (current_access_ding != access_ding) {
+        console.info(access_ding);
         has_update = true;
         update_info["access_ding"] = current_access_ding;
     }
