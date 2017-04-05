@@ -1032,8 +1032,14 @@ class ControlManager(object):
             else:
                 x = time.localtime(long(message_info["publish_time"]) / 1000)
                 occur_time = time.strftime(TIME_FORMAT, x)
-                my_wx.send_fault(message_tag, message_info["message_content"], occur_time,
-                                 message_info["message_content"], user_info["wx_id"], url)
+                mul_msg_lines = message_info["message_content"].split("\n", 1)
+                if len(mul_msg_lines) == 2:
+                    title = mul_msg_lines[0]
+                    wx_content = mul_msg_lines[1]
+                else:
+                    title = message_info["message_content"]
+                    wx_content = ""
+                my_wx.send_fault(message_tag, title, occur_time, wx_content, user_info["wx_id"], url)
         if self.judge_role(notify_mode, 4) is True:
             if user_info["tel"] is None or tag_setting["access_ding"] is None:
                 notify_mode &= ~4
