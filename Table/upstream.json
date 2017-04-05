@@ -11,7 +11,7 @@
         "pri_key": true,
         "col_comment": "服务器地址，主键",
         "col_name": "server_ip",
-        "col_type": "varchar(14)"
+        "col_type": "varchar(16)"
       },
       {
         "pri_key": true,
