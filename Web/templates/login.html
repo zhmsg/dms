@@ -21,7 +21,8 @@
       <input name="next" value="{{ next_url }}" style="display:none;"/>
       <button class="btn btn-lg btn-primary btn-block" id="btn_login">登录</button>
         {% if domain_user %}
-            <button class="btn btn-lg btn-primary btn-block" id="btn_domain_login">域用户{{ domain_user }}登录</button>
+            <button class="btn btn-lg btn-primary btn-block display_none" id="btn_domain_login">域用户{{ domain_user }}登录
+            </button>
         {% endif %}
     </div>
   </div>

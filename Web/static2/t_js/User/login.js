@@ -51,10 +51,16 @@ $(document).ready(function () {
         $("input[name='user_name']").val(user_names[0]);
     }
     $("#btn_login").click(login);
-    $("#btn_domain_login").click(function () {
+    if ($("#btn_domain_login").length > 0) {
+        $("#btn_login").text("自动登录中...");
         var request_url = "/login/";
         var request_data = {"domain_user": true};
         my_async_request2(request_url, "POST", request_data, login_success);
-    });
+    }
+    //$("#btn_domain_login").click(function () {
+    //    var request_url = "/login/";
+    //    var request_data = {"domain_user": true};
+    //    my_async_request2(request_url, "POST", request_data, login_success);
+    //});
 
 });
