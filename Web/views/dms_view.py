@@ -48,7 +48,6 @@ def index():
     if "next" in request.args:
         next_url = request.args["next"]
     o_session = load_domain_session()
-    print(o_session)
     if "user_id" in o_session and "auth_password" in o_session:
         domain_user = o_session["user_id"]
     else:
