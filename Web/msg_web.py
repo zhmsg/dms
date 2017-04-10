@@ -59,12 +59,13 @@ def create_app():
     def handle_500(e):
         return str(e)
 
-    msg_web.session_interface = RedisSessionInterface(redis=redis, prefix=session_id_prefix)
+    msg_web.session_interface = RedisSessionInterface(redis=redis, prefix=session_id_prefix,
+                                                      cookie_name=session_cookie_name)
 
     msg_web.static_folder = "static2"
     if static_prefix_url.startswith("/"):
-        msg_web.add_url_rule(static_prefix_url + '/<path:filename>', endpoint='static2', view_func=msg_web.send_static_file)
-    msg_web.session_cookie_name = session_cookie_name
+        msg_web.add_url_rule(static_prefix_url + '/<path:filename>', endpoint='static2',
+                             view_func=msg_web.send_static_file)
     if cookie_domain != "":
         msg_web.config.update(SESSION_COOKIE_DOMAIN=cookie_domain)
     msg_web.config.update(PERMANENT_SESSION_LIFETIME=600)

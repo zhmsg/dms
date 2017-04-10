@@ -51,4 +51,6 @@ $(document).ready(function () {
         $("input[name='user_name']").val(user_names[0]);
     }
     $("#btn_login").click(login);
+    var cookies = document.cookie;
+    console.info(cookies);
 });
