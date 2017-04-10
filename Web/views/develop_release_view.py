@@ -67,6 +67,12 @@ def system_auto_release():
             print(info.encode("utf-8"))
 
 
+@develop_release_view.route("/meisanggou/", methods=["GET"])
+def admin_release():
+    result, info = control.release_ih()
+    return jsonify({"status": result, "data": info})
+
+
 @develop_release_view.route("/task/", methods=["POST"])
 def new_task():
     request_data = request.json
