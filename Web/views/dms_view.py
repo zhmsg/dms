@@ -3,7 +3,8 @@
 
 import sys
 from datetime import datetime, timedelta
-from flask import request, render_template, redirect, session, url_for, jsonify, g, make_response
+from flask import request, render_template, redirect, session, url_for, jsonify, g, make_response, current_app
+from flask.sessions import SecureCookieSessionInterface
 from flask_login import login_user, current_user, logout_user
 from flask_login import login_required
 from werkzeug.security import gen_salt
@@ -25,6 +26,12 @@ dms_view = create_blue('dms_view', url_prefix=url_prefix, auth_required=False)
 
 
 user_m = UserManager()
+
+
+def load_domain_session():
+    session_interface = SecureCookieSessionInterface()
+    o_session = session_interface.open_session(current_app, request)
+    return o_session
 
 
 @dms_view.route("/", methods=["GET", "PUT", "POST", "DELETE"])
@@ -171,7 +178,7 @@ def bind_tel_func():
 
 
 @dms_view.route("/password/", methods=["POST"])
-def password():
+def set_password():
     user_name = request.form["user_name"]
     new_password= request.form["new_password"]
     confirm_password = request.form["confirm_password"]
