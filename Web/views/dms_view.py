@@ -47,24 +47,34 @@ def index():
             return make_response("登录状态已过期，需要重新登录", 302)
     if "next" in request.args:
         next_url = request.args["next"]
-    return render_template("login.html", next_url=next_url, url_prefix=url_prefix)
+    o_session = load_domain_session()
+    print(o_session)
+    if "user_id" in o_session and "auth_password" in o_session:
+        domain_user = o_session["user_id"]
+    else:
+        domain_user = None
+    return render_template("login.html", next_url=next_url, url_prefix=url_prefix, domain_user=domain_user)
 
 
 @dms_view.route("/login/", methods=["GET"])
 def login_page():
     if current_user.is_authenticated:
         logout_user()
-    next_url = ""
-    if "next" in request.args:
-        next_url = request.args["next"]
-    return render_template("login.html", next_url=next_url, url_prefix=url_prefix)
+    return index()
 
 
 @dms_view.route("/login/", methods=["POST"])
 def login():
     request_data = request.json
-    user_name = request_data["user_name"]
-    password = request_data["password"]
+    if "domain_user" in request_data:
+        o_session = load_domain_session()
+        if "auth_password" not in o_session or "user_id" not in o_session:
+            return jsonify({"status": False, "data": "登录失败"})
+        user_name = o_session["user_id"]
+        password = o_session["auth_password"]
+    else:
+        user_name = request_data["user_name"]
+        password = request_data["password"]
     result, info = user_m.check(user_name, password)
     if result is False:
         return jsonify({"status": False, "data": info})

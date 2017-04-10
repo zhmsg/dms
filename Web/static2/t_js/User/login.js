@@ -51,6 +51,10 @@ $(document).ready(function () {
         $("input[name='user_name']").val(user_names[0]);
     }
     $("#btn_login").click(login);
-    var cookies = document.cookie;
-    console.info(cookies);
+    $("#btn_domain_login").click(function () {
+        var request_url = "/login/";
+        var request_data = {"domain_user": true};
+        my_async_request2(request_url, "POST", request_data, login_success);
+    });
+
 });
