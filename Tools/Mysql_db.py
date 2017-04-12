@@ -46,12 +46,14 @@ class DB(object):
         return self.conn.literal(s)
 
     @staticmethod
-    def merge_where(where_value=None, where_is_none=None, where_cond=None):
+    def merge_where(where_value=None, where_is_none=None, where_cond=None, where_cond_args=None):
         args = []
         if where_cond is None:
             where_cond = list()
         else:
             where_cond = list(where_cond)
+            if isinstance(where_cond_args, (list, tuple)):
+                args.extend(where_cond_args)
         if where_value is not None:
             where_args = dict(where_value).values()
             args.extend(where_args)
@@ -83,7 +85,9 @@ class DB(object):
     def execute_select(self, table_name, where_value={"1": 1}, where_cond=None, cols=None, package=True, **kwargs):
         kwargs = dict(kwargs)
         where_is_none = kwargs.pop("where_is_none", None)
-        where_cond, args = self.merge_where(where_value=where_value, where_cond=where_cond, where_is_none=where_is_none)
+        where_cond_args = kwargs.pop("where_cond_args", None)
+        where_cond, args = self.merge_where(where_value=where_value, where_cond=where_cond, where_is_none=where_is_none,
+                                            where_cond_args=where_cond_args)
         if cols is None:
             select_item = "*"
         else:

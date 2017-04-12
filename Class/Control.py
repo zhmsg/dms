@@ -788,8 +788,8 @@ class ControlManager(object):
     def look_jy_log(self, user_name, role, start_time=None, end_time=None, level=None, search_url=None, search_account=None):
         if role & self.role_value["log_look"] <= 0:
             return False, u"您没有权限"
-        result, info = self.jy_log.show_log(start_time=start_time, end_time=end_time, level=level,
-                                            search_url=search_url, search_account=search_account)
+        result, info = self.jy_log.show_log2(start_time=start_time, end_time=end_time, level=level,
+                                             search_url=search_url, search_account=search_account)
         return result, info
 
     def new_login_server(self, server_ip, server_name, user_ip, user_name, login_time):

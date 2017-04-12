@@ -4,6 +4,7 @@
 import sys
 sys.path.append("..")
 from Tools.Mysql_db import DB
+from Tools.TimeUUID import TimeStampUUID2
 from datetime import timedelta
 from time import time
 from Class import env
@@ -11,6 +12,8 @@ from Class.Task import TaskManager
 from Check import check_int, check_sql_character
 
 __author__ = 'ZhouHeng'
+
+ts_uuid2 = TimeStampUUID2()
 
 
 class LogManager(object):
@@ -25,8 +28,11 @@ class LogManager(object):
         self.db = DB(host=service_mysql, mysql_user="gener", mysql_password="gene_ac252", mysql_db=self.data_db_name)
         self.local_db = DB()
         self.api_log = "api_log_2"
+        self.api_log_2 = "flask_run_log"
         self.login_server = "login_server"
         self.log_cols = ["log_no", "run_begin", "host", "url", "method", "account", "ip", "level", "info", "run_time"]
+        self.log2_cols = ["log_no", "run_begin", "host", "url", "args", "method", "headers", "account", "resource_id",
+                          "ip", "level", "info", "run_time"]
         self.login_cols = ["login_no", "server_ip", "server_name", "user_ip", "user_name", "login_time"]
         self.log_level = ["error", "base_error", "bad_req", "http_error", "info"]
         self.log_task = TaskManager(1)
@@ -44,6 +50,12 @@ class LogManager(object):
                 log_item[self.log_cols[i]] = item[i]
             log_records.append(log_item)
         return True, log_records
+
+    def _select_log2(self, where_value, where_cond, where_cond_args, limit_num=250):
+        log_records = self.db.execute_select(self.api_log_2, where_value=where_value, where_cond=where_cond,
+                                             where_cond_args=where_cond_args, cols=self.log2_cols, limit=limit_num,
+                                             order_by=["log_no"], order_desc=True)
+        return log_records
 
     def select_log(self, log_no):
         where_sql = "log_no=%s" % long(log_no)
@@ -74,6 +86,34 @@ class LogManager(object):
         result, log_records = self._select_log(where_sql)
         if result is False:
             return False, log_records
+        return True, {"log_records": log_records, "require": require}
+
+    def show_log2(self, start_time=None, end_time=None, level=None, search_url="", search_account=""):
+        run_end = time()
+        run_begin = run_end - timedelta(hours=1).total_seconds()
+        require = {}
+        where_cond = []
+        where_cond_args = []
+        where_value = dict()
+        if start_time is not None and start_time > run_begin:
+            where_cond.append("log_no>=%s")
+            where_cond_args.append(ts_uuid2.min_uuid(start_time))
+            require["start_time"] = start_time
+        if end_time is not None and end_time < run_end:
+            where_cond.append("log_no<=%s")
+            where_cond_args.append(ts_uuid2.max_uuid(end_time))
+            require["end_time"] = end_time
+        if level is not None:
+            if level not in self.log_level:
+                return False, "Bad level"
+            where_value["level"] = level
+        if search_url is not None and search_url != "":
+            search_url = check_sql_character(search_url)
+            where_cond.append("url LIKE %s")
+            where_cond_args.append(search_url)
+        if search_account is not None and search_account != "":
+            where_value["account"] = search_account
+        log_records = self._select_log2(where_value=where_value, where_cond=where_cond, where_cond_args=where_cond_args)
         return True, {"log_records": log_records, "require": require}
 
     def select_daily_log(self):
