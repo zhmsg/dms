@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-import sys
+import re
 from flask import request, jsonify, g, redirect
 from flask_login import login_required, current_user
 from Tools.RenderTemplate import RenderTemplate
@@ -10,7 +10,6 @@ from Web import log_url_prefix as url_prefix, ip, my_email, company_ip_required,
 from Web import unix_timestamp, ip_str, current_env, dms_job
 from Web import control
 
-sys.path.append('..')
 
 __author__ = 'Zhouheng'
 
@@ -50,6 +49,13 @@ def show_log_list():
     if result is False:
         return info
     log_records = info["log_records"]
+    for item in log_records:
+        item["run_time"] = float(item["run_time"]) / 1000000
+        url_params = re.findall("(<(\w+:)?(\w+)>)", item["url"])
+        for param in url_params:
+            param_v = re.findall("(^|&)%s=(.+?)(&|$)" % param[2], item["args"])[0][1]
+            item["url"] = item["url"].replace(param[0], param_v)
+        item["url"] += "?" + item["args"]
     query_url = url_prefix + "/query/"
     return rt.render("Show_Log.html", log_list=log_records, log_level=control.jy_log.log_level, current_level=level,
                      search_url=search_url, search_account=search_account, require=info["require"],
