@@ -61,33 +61,6 @@ class LogManager(object):
         where_sql = "log_no=%s" % long(log_no)
         return self._select_log(where_sql, limit_num=1)
 
-    def show_log(self, start_time=None, end_time=None, level=None, search_url="", search_account=""):
-        run_end = time()
-        run_begin = run_end - timedelta(hours=1).total_seconds()
-        require = {}
-        if start_time is not None and start_time > run_begin:
-            run_begin = start_time
-            require["start_time"] = start_time
-        if end_time is not None and end_time < run_end:
-            run_end = end_time
-            require["end_time"] = end_time
-        where_sql_list = ["log_no>=%s " % long(run_begin * 10000), "log_no<=%s " % long(run_end * 10000)]
-        if level is not None:
-            if level not in self.log_level:
-                return False, "Bad level"
-            where_sql_list.append("level = '%s'" % level)
-        if search_url is not None and search_url != "":
-            search_url = check_sql_character(search_url)
-            where_sql_list.append("url like '%s%%'" % search_url)
-        if search_account is not None and search_account != "":
-            search_account = check_sql_character(search_account)
-            where_sql_list.append("account = '%s'" % search_account)
-        where_sql = " AND ".join(where_sql_list)
-        result, log_records = self._select_log(where_sql)
-        if result is False:
-            return False, log_records
-        return True, {"log_records": log_records, "require": require}
-
     def show_log2(self, start_time=None, end_time=None, level=None, search_url="", search_account=""):
         run_end = time()
         run_begin = run_end - timedelta(hours=1).total_seconds()
