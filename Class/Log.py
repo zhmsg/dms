@@ -51,15 +51,15 @@ class LogManager(object):
             log_records.append(log_item)
         return True, log_records
 
-    def _select_log2(self, where_value, where_cond, where_cond_args, limit_num=250):
+    def _select_log2(self, where_value, where_cond=None, where_cond_args=None, limit_num=250):
         log_records = self.db.execute_select(self.api_log_2, where_value=where_value, where_cond=where_cond,
                                              where_cond_args=where_cond_args, cols=self.log2_cols, limit=limit_num,
                                              order_by=["log_no"], order_desc=True)
         return log_records
 
     def select_log(self, log_no):
-        where_sql = "log_no=%s" % long(log_no)
-        return self._select_log(where_sql, limit_num=1)
+        where_value = dict(log_no=log_no)
+        return True, self._select_log2(where_value=where_value, limit_num=1)
 
     def show_log2(self, start_time=None, end_time=None, level=None, search_url="", search_account=""):
         run_end = time()
