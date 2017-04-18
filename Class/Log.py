@@ -94,20 +94,17 @@ class LogManager(object):
         if result is False:
             return False, info
         if info["task_status"] is None:
-            run_end = long(time() * 10000)
-            run_begin = long(run_end - timedelta(days=1).total_seconds() * 10000)
-            require = {"start_time": run_begin, "end_time": run_end}
-            where_sql = "log_no >= %s AND log_no <= %s AND level <> 'info'" % (run_begin, run_end)
+            end_time = time()
+            start_time = end_time - timedelta(days=1).total_seconds()
         else:
-            log_no = long(info["task_status"])
-            require = {"log_no": log_no}
-            where_sql = "log_no > %s AND level <> 'info'" % log_no
-        result, log_records = self._select_log(where_sql)
+            start_time = info["task_status"]
+            end_time = None
+        result, log_records = self.show_log2(start_time, end_time)
         if result is False:
             return False, log_records
         if len(log_records) > 0:
-            self.log_task.update_scheduler_status(log_records[0]["log_no"], "system", "daily log")
-        return True, {"log_records": log_records, "require": require}
+            self.log_task.update_scheduler_status(log_records[0]["run_begin"], "system", "daily log")
+        return True, {"log_records": log_records}
 
     def register_daily_task(self):
         user_name = "system"
