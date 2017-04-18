@@ -60,7 +60,11 @@
     {% endif %}
     {% if api_info["body_info"] | length > 0 or api_info["predefine_param"]["body"] | length > 0 %}
         <table class="table table-bordered api-list-table" id="api_body_param">
-            <caption>请求主体参数</caption>
+            {% if api_info["basic_info"]["api_method"] == "GET" %}
+                <caption>请求URL参数</caption>
+            {% else %}
+                <caption>请求主体参数</caption>
+            {% endif %}
             <tr>
                 <th scope="col" width="15%">参数名称</th>
                 <th class="text-center" scope="col" width="8%">是否必须</th>
