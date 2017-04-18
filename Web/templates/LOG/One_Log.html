@@ -9,7 +9,7 @@
         <input style="display: none" value="{{ url_prefix }}" id="url_prefix"/>
         <div class="clear bottom20">
             <span class="pull-left text-right width150">搜索日志编号：</span>
-            <input class="box-side width366" id="query_log_no" placeholder="例如14809877400468" value=""/>
+            <input class="box-side width500" id="query_log_no" placeholder="例如14809877400468" value=""/>
             <a id="start_search"><button class="btn btn-primary" id="btn_query_log">搜索</button></a>
         </div>
         <p>
@@ -25,6 +25,11 @@
         <p>
             <span class="pull-left text-right width150">调用地址：</span>
             <input class="form-control bug-input" id="request_url" readonly/>
+        </p>
+
+        <p>
+            <span class="pull-left text-right width150">调用参数：</span>
+            <input class="form-control bug-input" id="request_args" readonly/>
         </p>
 
         <p>
@@ -45,6 +50,11 @@
         <p>
             <span class="pull-left text-right width150">访问IP：</span>
             <input class="form-control bug-input" id="ip" readonly/>
+        </p>
+
+        <p>
+            <span class="pull-left text-right width150">请求头部信息：</span>
+            <textarea class="box-side bug-input" rows="3" id="request_headers" readonly></textarea>
         </p>
 
         <p>

@@ -15,6 +15,7 @@ function load_log_info(data){
     $("#log_no").val(log_info.log_no);
     $("#run_begin").val(new Date(log_info.run_begin * 1000).toLocaleString());
     $("#request_url").val(log_info.host + log_info.url.substr(1));
+    $("#request_args").val(log_info.args);
     $("#account").val(log_info.account);
     $("#level").val(log_info.level);
     $("#run_time").val(log_info.run_time);
@@ -32,7 +33,7 @@ function load_log_info(data){
         ip_str += " " + ip_info["info1"];
     }
     $("#ip").val(ip_str);
-
+    $("#request_headers").val(format_json_str(log_info.headers));
     if(log_info.level == "info"){
         $("#request_info").val("调用正常，不记录请求信息。");
         $("#error_info").val("调用正常，无错误信息。");
