@@ -130,7 +130,7 @@ def send_log_func():
         else:
             level_class = ""
         tr_content += '<td name="log_level" class="%s">%s</td>\n' % (level_class, item["level"])
-
+        item["run_time"] = float(item["run_time"] / 1000000)
         if item["run_time"] >= 1:
             tr_content += '<td class="redBg">%s</td>' % item["run_time"]
         elif item["run_time"] >= 0.5:

@@ -18,7 +18,7 @@ function load_log_info(data){
     $("#request_args").val(log_info.args);
     $("#account").val(log_info.account);
     $("#level").val(log_info.level);
-    $("#run_time").val(log_info.run_time);
+    $("#run_time").val(log_info.run_time / 1000000);
 
     var ip_str = ip_2_str(log_info.ip);
     var local_ip = localStorage.getItem(log_info.ip);
@@ -55,7 +55,7 @@ function load_log_info(data){
 $(document).ready(function(){
     $("#query_log_no").keyup(function(){
         var v = $("#query_log_no").val();
-        v = v.replace(/([^\d]*)/g, "");
+        v = v.replace(/([^\w]*)/g, "");
         $("#query_log_no").val(v);
     });
 	$("#btn_query_log").click(function () {

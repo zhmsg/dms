@@ -61,14 +61,13 @@ class LogManager(object):
         where_value = dict(log_no=log_no)
         return True, self._select_log2(where_value=where_value, limit_num=1)
 
-    def show_log2(self, start_time=None, end_time=None, level=None, search_url="", search_account=""):
+    def show_log2(self, start_time=None, end_time=None, level=None, search_url="", search_account="", not_info=False):
         run_end = time()
-        run_begin = run_end - timedelta(hours=1).total_seconds()
         require = {}
         where_cond = []
         where_cond_args = []
         where_value = dict()
-        if start_time is not None and start_time > run_begin:
+        if start_time is not None:
             where_cond.append("log_no>=%s")
             where_cond_args.append(ts_uuid2.min_uuid(start_time))
             require["start_time"] = start_time
@@ -84,6 +83,8 @@ class LogManager(object):
             search_url = check_sql_character(search_url)
             where_cond.append("url LIKE %s")
             where_cond_args.append(search_url)
+        if not_info is True:
+            where_cond.append("level <> 'info'")
         if search_account is not None and search_account != "":
             where_value["account"] = search_account
         log_records = self._select_log2(where_value=where_value, where_cond=where_cond, where_cond_args=where_cond_args)
@@ -99,12 +100,13 @@ class LogManager(object):
         else:
             start_time = info["task_status"]
             end_time = None
-        result, log_records = self.show_log2(start_time, end_time)
+        result, records_info = self.show_log2(start_time, end_time, not_info=True)
         if result is False:
-            return False, log_records
+            return False, records_info
+        log_records = records_info["log_records"]
         if len(log_records) > 0:
             self.log_task.update_scheduler_status(log_records[0]["run_begin"], "system", "daily log")
-        return True, {"log_records": log_records}
+        return True, records_info
 
     def register_daily_task(self):
         user_name = "system"
