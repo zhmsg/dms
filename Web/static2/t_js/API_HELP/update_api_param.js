@@ -26,6 +26,21 @@ function target_api_info(data){
     $("#div_source_api_module").hide();
 }
 
+function add_param_success(data) {
+    console.info(data);
+    var d_len = data.length;
+    var t_id = "t_source_api_param";
+    var t = $("#" + t_id);
+    for (var i = 0; i < d_len; i++) {
+        var d_item = data[i];
+        var param_name = d_item["param"];
+        console.info(param_name);
+        console.info(t.find("tr[name='tr_" + param_name + "'] td[name='td_op']"));
+        t.find("tr[name='tr_" + param_name + "'] td[name='td_op']").text("复制成功");
+    }
+
+}
+
 function source_api_info(data, api_no)
 {
     if(data == null){
@@ -51,16 +66,28 @@ function source_api_info(data, api_no)
     for(var i=0;i<params_len;i++){
         var param_item = body_params[i];
         var add_tr = $("<tr></tr>");
+        add_tr.attr("name", "tr_" + param_item["param"]);
         for(var j=0;j<4;j++)
             add_tr.append(new_td(keys[j], param_item));
-        add_tr.append('<td><button class="btn btn-success copy_param">复制</button></td>');
+        add_tr.append('<td name=td_op><button class="btn btn-success copy_param">复制</button></td>');
         t_params.append(add_tr);
     }
     $(".copy_param").click(function(){
         $(this).attr("disabled", "disabled");
-        var td_info = $(this.parentNode.parentNode).find("td");
-    //  后续接着处理
-
+        var parent_tr = $(this).parents("tr");
+        var r_data = {};
+        r_data["name"] = parent_tr.find("td[name='td_param']").text();
+        r_data["necessary"] = parent_tr.find("td[name='td_necessary']").text();
+        r_data["type"] = parent_tr.find("td[name='td_type']").text();
+        r_data["desc"] = parent_tr.find("td[name='td_param_desc']").text();
+        if (r_data["necessary"] == "true") {
+            r_data["necessary"] = 1;
+        }
+        else {
+            r_data["necessary"] = 0;
+        }
+        var r_url = $("#body_url").val();
+        my_async_request2(r_url, "POST", r_data, add_param_success);
     });
 }
 
