@@ -7,6 +7,7 @@ from datetime import datetime
 from time import time
 sys.path.append("..")
 from Tools.Mysql_db import DB
+from Class import mns_topic
 from Class.WeiXin import WeiXinManager
 from Class.Task import TaskManager
 from Class.PullRequest import PullRequestManager
@@ -85,18 +86,19 @@ class ReleaseManager:
         return True, task_list
 
     def send_wx_msg(self, msg):
-        result, user_list = self.wx.user_info()
-        if result is False:
-            return False, user_list
-        for user_info in user_list:
-            # self.wx.send_status(u"后台开发", "ochiws2EiR0cq3qzXYjQkw0m9jdE", "Test", msg)
-            # break
-            if user_info["groupid"] == 100:
-                self.wx.send_status(u"后台开发", user_info["openid"], "Test", msg)
-            elif user_info["groupid"] == 101:
-                self.wx.send_status(u"前端开发", user_info["openid"], "Test", msg)
-            elif user_info["groupid"] == 102:
-                self.wx.send_status(u"产品设计", user_info["openid"], "Test", msg)
+        mns_topic.publish_message(msg, "重启IH")
+        # result, user_list = self.wx.user_info()
+        # if result is False:
+        #     return False, user_list
+        # for user_info in user_list:
+        #     # self.wx.send_status(u"后台开发", "ochiws2EiR0cq3qzXYjQkw0m9jdE", "Test", msg)
+        #     # break
+        #     if user_info["groupid"] == 100:
+        #         self.wx.send_status(u"后台开发", user_info["openid"], "Test", msg)
+        #     elif user_info["groupid"] == 101:
+        #         self.wx.send_status(u"前端开发", user_info["openid"], "Test", msg)
+        #     elif user_info["groupid"] == 102:
+        #         self.wx.send_status(u"产品设计", user_info["openid"], "Test", msg)
         return True, "success"
 
     def select_api_pull_request(self):

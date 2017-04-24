@@ -3,6 +3,8 @@
 
 import os
 import ConfigParser
+from JYAliYun.AliYunAccount import RAMAccount
+from JYAliYun.AliYunMNS.AliMNSServer import MNSServerManager
 
 __author__ = 'ZhouHeng'
 
@@ -29,3 +31,10 @@ release_host_port = config.getint(env, "release_host_port")
 jd_mysql_host = config.get(env, "jd_mysql_host")
 jd_mysql_db = config.get(env, "jd_mysql_db")
 dyups_server = config.get(env, "dyups_server")
+conf_dir = config.get(env, "conf_dir")
+
+mns_account = RAMAccount(conf_dir=conf_dir, conf_name="mns.conf")
+mns_server = MNSServerManager(ram_account=mns_account, conf_dir=conf_dir)
+
+topic_name = "JYWaring"
+mns_topic = mns_server.get_topic(topic_name)
