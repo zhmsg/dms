@@ -21,6 +21,9 @@ def add_func():
             return jsonify({"status": False, "data": "无效的编号"})
         exec_r, data = control.get_article(g.user_name, g.user_role, article_no)
         return jsonify({"status": exec_r, "data": data})
+    if "action" in request.args:
+        print("loo")
+        return rt.render("look.html", article_no=article_no)
     return rt.render("add.html", article_no=article_no)
 
 
