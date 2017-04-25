@@ -2,7 +2,6 @@
 # coding: utf-8
 
 import sys
-sys.path.append("..")
 from Tools.Mysql_db import DB, DBItem
 
 __author__ = 'ZhouHeng'

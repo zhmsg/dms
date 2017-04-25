@@ -4,7 +4,6 @@
 import sys
 from datetime import datetime, timedelta
 from time import time
-sys.path.append("..")
 from Tools.Mysql_db import DB
 
 

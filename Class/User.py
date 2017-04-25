@@ -4,7 +4,6 @@
 import sys
 import requests
 from datetime import datetime
-sys.path.append("..")
 from Tools.Mysql_db import DB
 from Check import check_char_num_underline as check_user, check_account_format
 from Class import TIME_FORMAT, env

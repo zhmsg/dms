@@ -4,7 +4,6 @@
 import sys
 import tempfile
 import uuid
-sys.path.append("..")
 from datetime import datetime, timedelta
 from time import time
 from Tools.Mysql_db import DB

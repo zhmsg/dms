@@ -5,7 +5,6 @@ import sys
 from fabric.api import *
 from datetime import datetime
 from time import time
-sys.path.append("..")
 from Tools.Mysql_db import DB
 from Class import mns_topic
 from Class.WeiXin import WeiXinManager

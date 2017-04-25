@@ -5,7 +5,6 @@ import sys
 import time
 from threading import Thread
 from datetime import datetime
-sys.path.append("..")
 from Tools.Mysql_db import DB
 from Tools.MyEmail import MyEmailManager
 from Data import DataManager

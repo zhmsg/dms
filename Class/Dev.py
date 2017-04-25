@@ -4,7 +4,6 @@
 import sys
 import re
 import tempfile
-sys.path.append("..")
 from Tools.Mysql_db import DB
 from Check import check_sql_character
 from time import time

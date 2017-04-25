@@ -6,7 +6,6 @@ import sys
 from fabric.api import *
 from datetime import datetime
 from time import time
-sys.path.append("..")
 from Tools.Mysql_db import DB
 
 
