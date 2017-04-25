@@ -908,6 +908,13 @@ class ControlManager(object):
     def release_ih(self):
         return self.release_man.release_ih()
 
+    def release_online(self, service):
+        if service == "API":
+            self.release_man.release_online_api()
+        elif service == "WEB":
+            self.release_man.release_online_web()
+        return True, "success"
+
     # 针对公共参数格式
     def add_param_format(self, user_name, user_role, param, param_type, **kwargs):
         return self.param_man.new_param_format(user_name, param, param_type, **kwargs)
