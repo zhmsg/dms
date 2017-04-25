@@ -9,7 +9,7 @@ function ensure_right_time()
     var hour = now_time.getHours();
     var minute = now_time.getMinutes();
     $("#btn_add_task").unbind('click');
-    if((9<=hour && hour<=11 || 14<=hour && hour<=17) && 10 <= minute &&　minute<=20){
+    if ((9 <= hour && hour <= 11 || 14 <= hour && hour <= 17) && 10 <= minute && minute < 20) {
         if(hour <= max_hour)
         {
             $("#btn_add_task").attr("disabled", "disabled");
