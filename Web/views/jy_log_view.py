@@ -112,6 +112,12 @@ def send_log_func():
     result, info = control.get_daily_log()
     table_content = ""
     for item in info["log_records"]:
+        item["run_time"] = float(item["run_time"]) / 1000000
+        url_params = re.findall("(<(\w+:)?(\w+)>)", item["url"])
+        for param in url_params:
+            param_v = re.findall("(^|&)%s=(.+?)(&|$)" % param[2], item["args"])[0][1]
+            item["url"] = item["url"].replace(param[0], param_v)
+        item["url"] += "?" + item["args"]
         tr_content = '<tr title="info: %s&#10;host: %s">' % (item["info"].replace(">", "&gt;").replace('"', "&quot;"),
                                                              item["host"])
         tr_content += '<td>%s</td>\n' % item["log_no"]
@@ -130,7 +136,6 @@ def send_log_func():
         else:
             level_class = ""
         tr_content += '<td name="log_level" class="%s">%s</td>\n' % (level_class, item["level"])
-        item["run_time"] = float(item["run_time"] / 1000000)
         if item["run_time"] >= 1:
             tr_content += '<td class="redBg">%s</td>' % item["run_time"]
         elif item["run_time"] >= 0.5:
