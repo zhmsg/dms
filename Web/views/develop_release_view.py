@@ -95,5 +95,12 @@ def list_task():
     return jsonify({"status": result, "data": info})
 
 
+@develop_release_view.route("/online/", methods=["POST"])
+def release_online():
+    request_data = request.json
+    service = request_data["service"]
+    control.release_online(service)
+    return jsonify({"status": True, "data": "success"})
+
 dms_job.append({"func": "%s:system_auto_release" % __name__, "trigger": "cron", "id": "release_ih_daily",
                 "day_of_week": "0-4", "hour": "12", "minute": "10"})
