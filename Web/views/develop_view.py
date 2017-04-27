@@ -58,6 +58,16 @@ def backup_table_func():
     return jsonify({"status": result, "data": info})
 
 
+@develop_view.route("/data/table/backup/", methods=["GET"])
+def backup_table_func():
+    if "t_name" in request.args:
+        t_name = request.args["t_name"]
+        l = control.new_backup_table(g.user_name, g.user_role, t_name)
+        return jsonify({"status": True, "data": l})
+    else:
+        mul_t_info = control.get_backup_table()
+        return jsonify({"status": True, "data": mul_t_info})
+
 # 每天0：30，备份线上数据表。
 def backup_func():
     if current_env != "Production":
