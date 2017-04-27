@@ -257,6 +257,12 @@ class ControlManager(object):
     def register_backup_task(self):
         return self.dev.register_backup_task()
 
+    def get_backup_table(self):
+        return self.dev.select_backup_table()
+
+    def new_backup_table(self, user_name, user_role, t_name):
+        return self.dev.insert_backup_table(t_name, user_name)
+
     def send_email(self, sub, data_no, info, attribute, attribute_ch):
         print("strart send email to %s" % self.manger_email)
         content = sub + "<br>"

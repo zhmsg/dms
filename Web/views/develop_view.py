@@ -86,3 +86,15 @@ def backup_func():
 
 dms_job.append({"func": "%s:backup_func" % __name__, "trigger": "cron", "id": "backup_table", "day_of_week": "0-4",
                 "hour": 0, "minute": 30})
+
+for t in ["collect_variant", "health_examination_result", "health_examination_result_v3", "health_gift_result",
+          "health_gift_result_v3", "health_report_survey", "health_survey_report", "health_survey_result",
+          "log_project", "patient_info", "patient_test", "project_user_right", "sample_group", "sample_info",
+          "sample_phenotype", "sample_report", "sample_user_right", "sys_patients", "sys_project_sample",
+          "sys_projects", "sys_samples", "sys_users", "target_ratio_detail", "task_collect_variant", "test_value",
+          "user_config", "user_geneset", "user_info", "user_task_list", "user_template", "variant_data_nums",
+          "variant_data_pic", "variant_md5", "variant_remark", "health_records_result", "health_report_result",
+          "sample_task_list", "sample_clinic_info", "barcode_info", "sequencing_info", "variant_report_result",
+          "variant_report_remark", "health_medical_extra", "health_medical_result", "health_medical_gene",
+          "seq_files_md5"]:
+    control.new_backup_table("zh_test", 0, t)

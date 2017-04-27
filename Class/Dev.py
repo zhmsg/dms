@@ -31,6 +31,7 @@ class DevManager:
         self.right_module = "right_module"
         self.right_module_role = "right_module_role"
         self.right_action_role = "right_action_role"
+        self.t_backup = "backup_table"
         self.backup_task = DayTaskManager(5)
 
     def get_operate_auth(self):
@@ -48,7 +49,7 @@ class DevManager:
             return False, error_message
 
     def list_table(self):
-        sql = "SELECT TABLE_NAME, CREATE_TIME,TABLE_COMMENT FROM TABLES WHERE TABLE_SCHEMA=%s AND TABLE_TYPE='BASE TABLE';"
+        sql = "SELECT TABLE_NAME,CREATE_TIME,TABLE_COMMENT FROM TABLES WHERE TABLE_SCHEMA=%s AND TABLE_TYPE='BASE TABLE';"
         self.service_db.execute(sql, args=[self.data_db_name])
         table_list = []
         for item in self.service_db.fetchall():
@@ -131,3 +132,14 @@ class DevManager:
         reason = "备份线上数据表"
         reason_desc = "每天0：30，备份线上数据表。"
         return self.backup_task.register_new_task(user_name=user_name, reason=reason, reason_desc=reason_desc)
+
+    def select_backup_table(self):
+        cols = ["t_name", "status", "adder", "insert_time"]
+        db_items = self.db.execute_select(self.t_backup, cols=cols)
+        return db_items
+
+    def insert_backup_table(self, t_name, adder):
+        insert_data = dict(t_name=t_name, adder=adder, status=0)
+        insert_data["insert_time"] = int(time())
+        l = self.db.execute_insert(self.t_backup, args=insert_data, ignore=True)
+        return l

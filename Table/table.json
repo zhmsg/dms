@@ -1,0 +1,29 @@
+[
+  {
+    "table_cols": [
+      {
+        "pri_key": true,
+        "col_comment": "表名",
+        "col_name": "t_name",
+        "col_type": "varchar(50)"
+      },
+      {
+        "col_comment": "备份状态 0正常备份 1暂时不允许备份",
+        "col_name": "status",
+        "col_type": "tinyint(4)"
+      },
+      {
+        "col_comment": "添加者",
+        "col_name": "adder",
+        "col_type": "varchar(22)"
+      },
+      {
+        "col_comment": "插入时间",
+        "col_name": "insert_time",
+        "col_type": "int(11)"
+      }
+    ],
+    "table_comment": "每日备份表列表",
+    "table_name": "backup_table"
+  }
+]
