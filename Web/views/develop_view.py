@@ -59,7 +59,7 @@ def backup_table_func():
 
 
 @develop_view.route("/data/table/backup/", methods=["GET"])
-def backup_table_func():
+def backup_table_info():
     if "t_name" in request.args:
         t_name = request.args["t_name"]
         l = control.new_backup_table(g.user_name, g.user_role, t_name)
@@ -89,4 +89,3 @@ def backup_func():
 dms_job.append({"func": "%s:backup_func" % __name__, "trigger": "cron", "id": "backup_table", "day_of_week": "0-4",
                 "hour": 0, "minute": 30})
 
-backup_func()
