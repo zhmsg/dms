@@ -11,4 +11,4 @@ cd ../Web
 gunicorn -b 0.0.0.0:2200 --backlog 2048 -w 2 -k gevent -t 2 -t 3600 -D --access-logfile msg_web_access.log  --error-logfile msg_web_error.log msg_web:msg_web
 
 cd ../Web2
-gunicorn -b 127.0.0.1:2300 -k tornado -D --access-logfile tornado_app_access.log -error-logfile tornado_app_error.log tornado_app:ado_app
+gunicorn -b 127.0.0.1:2300 -k tornado -D --access-logfile tornado_app_access.log --error-logfile tornado_app_error.log tornado_app:ado_app
