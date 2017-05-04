@@ -26,7 +26,9 @@ handlers = []
 for h in http_handlers:
     handlers.append((h.route_url, h))
 
+ado_app = tornado.web.Application(handlers, template_path="../Web/templates", ui_modules=ui_modules,
+                                  ui_methods=ui_methods)
+
 if __name__ == "__main__":
-    ado_app = tornado.web.Application(handlers, template_path="../Web/templates", ui_modules=ui_modules, ui_methods=ui_methods)
     ado_app.listen(port=2300, address="0.0.0.0")
     tornado.ioloop.IOLoop.instance().start()
