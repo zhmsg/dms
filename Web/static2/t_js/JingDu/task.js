@@ -29,6 +29,10 @@ function show_task_info(task_data){
             task_item["duration"] = duration_show(task_item["finished_stamp"] - task_item["started_stamp"]);
         }
         else{
+            console.info(task_item["task_id"]);
+            console.info(now_stamp);
+            console.info(task_item["started_stamp"]);
+            console.info("---------------------------");
             task_item["duration"] = duration_show(now_stamp - task_item["started_stamp"]);
         }
         task_item["started_stamp"] = timestamp_2_datetime(task_item["started_stamp"]);

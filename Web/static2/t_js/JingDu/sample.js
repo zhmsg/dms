@@ -176,11 +176,11 @@ function show_sample_info(sample_data){
         if (isNaN(status_tag)) {
             return;
         }
-        if (status_tag & 31 == 31) {
+        if ((status_tag & 31) == 31) {
             current_text = '<a name=link_check_variant class="status_move">检查突变</a>';
         }
         else {
-            current_text = "私有";
+            current_text = "";
         }
         current_td.html(current_td.text() + "|" + current_text);
     });

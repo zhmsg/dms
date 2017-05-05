@@ -45,7 +45,7 @@ function duration_show(d){
     }
     r = d % 24;
     s_duration = r + "小时" + s_duration;
-    d = parseInt(d / 60);
+    d = parseInt(d / 24);
     if(d <= 0){
         return s_duration;
     }
