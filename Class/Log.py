@@ -84,7 +84,7 @@ class LogManager(object):
         if search_url is not None and search_url != "":
             search_url = check_sql_character(search_url)
             where_cond.append("url LIKE %s")
-            where_cond_args.append(search_url)
+            where_cond_args.append(search_url + "%")
         if not_info is True:
             where_cond.append("level <> 'info'")
         if search_account is not None and search_account != "":
