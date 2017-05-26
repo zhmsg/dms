@@ -36,10 +36,10 @@ def show_log_list():
     else:
         level = None
 
-    if "url_prefix" in request.args and request.args["url_prefix"] != "":
+    if "url_prefix" in request.args:
         search_url = request.args["url_prefix"]
     else:
-        search_url = ""
+        search_url = "/api/v2/"
     if "account" in request.args and request.args["account"] != "":
         search_account = request.args["account"]
     else:

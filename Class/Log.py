@@ -68,9 +68,11 @@ class LogManager(object):
         where_value = dict()
         if start_time is None:
             start_time = run_end - timedelta(days=1).total_seconds()
+        else:
+            require["start_time"] = start_time
         where_cond.append("log_no>=%s")
         where_cond_args.append(ts_uuid2.min_uuid(start_time))
-        require["start_time"] = start_time
+
         if end_time is not None and end_time < run_end:
             where_cond.append("log_no<=%s")
             where_cond_args.append(ts_uuid2.max_uuid(end_time))
