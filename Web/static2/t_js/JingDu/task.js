@@ -116,6 +116,7 @@ function query_today_task()
     request_task(request_data);
 }
 
+
 function request_task(request_data){
     if(query_task_ing.exec_ing == true){
         return;
@@ -166,4 +167,10 @@ $(document).ready(function () {
         var request_url = "app/";
         my_async_request2(request_url, "GET", null, fill_app_select);
     }
+    $("#link_three_task").click(function () {
+        var started_stamp = today_timestamp() - 2 * 24 * 60 * 60;
+        console.info(started_stamp);
+        var request_data = {"started_stamp": started_stamp};
+        request_task(request_data);
+    });
 });
