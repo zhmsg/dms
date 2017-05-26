@@ -14,7 +14,8 @@ ip = IPManager()
 
 
 def unix_timestamp(t, style="time"):
-    if type(t) == int or type(t) == long:
+    print(t)
+    if isinstance(t, (int, long, float)):
         x = time.localtime(t)
         if style == "time":
             return time.strftime('%H:%M:%S', x)
