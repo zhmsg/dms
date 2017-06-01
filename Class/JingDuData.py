@@ -20,7 +20,7 @@ class JingDuDataManager(object):
         self.db_user_task = DBItem("user_task_list", db=self.db)
         self.db_app = DBItem("app_list", db=self.db)
 
-    def _select_project(self, where_value=None, limit_num=20):
+    def _select_project(self, where_value=None, limit_num=30):
         cols = ["project_no", "project_name", "description", "date_created", "display_level", "completed", "lastModify",
                 "portal"]
         mul_p_info = self.db.execute_select(self.t_sys_projects, cols=cols, package=True, order_by=["project_no"],
@@ -35,7 +35,7 @@ class JingDuDataManager(object):
             where_value = dict(project_no=project_no)
         return self._select_project(where_value)
 
-    def _select_project_user(self, where_value=None, limit_num=20):
+    def _select_project_user(self, where_value=None, limit_num=30):
         cols = ["project_no", "account", "role", "date_added"]
         mul_pu_info = self.db.execute_select(self.t_project_user, cols=cols, package=True, order_by=["sys_no"],
                                              order_desc=True, where_value=where_value, limit=limit_num)
@@ -53,7 +53,7 @@ class JingDuDataManager(object):
             return False, "必须传入项目号或者账户名"
         return self._select_project_user(where_value)
 
-    def _select_sample(self, where_value=None, limit_num=20):
+    def _select_sample(self, where_value=None, limit_num=30):
         cols = ["sample_no", "sample_id", "patient_no", "date_created", "display_level", "portal", "status_tag",
                 "ref_sample"]
         mul_s_info = self.db.execute_select(self.t_sys_samples, cols=cols, package=True, order_by=["sample_no"],
@@ -68,7 +68,7 @@ class JingDuDataManager(object):
             where_value = dict(sample_no=sample_no)
         return self._select_sample(where_value)
 
-    def _select_sample_info(self, where_value=None, limit_num=20):
+    def _select_sample_info(self, where_value=None, limit_num=30):
         cols = ["sample_no", "stage", "completed_time_1", "completed_time_2", "completed_time_3", "completed_time_4",
                 "diagnosis", "sample_type", "seq_type", "seq_files"]
         mul_si_info = self.db.execute_select(self.t_sample_info, cols=cols, package=True, order_by=["sample_no"],
@@ -81,7 +81,7 @@ class JingDuDataManager(object):
         where_value = dict(sample_no=sample_no)
         return self._select_sample_info(where_value)
 
-    def _select_sample_user(self, where_value=None, limit_num=20):
+    def _select_sample_user(self, where_value=None, limit_num=30):
         cols = ["sys_no", "sample_no", "account", "role"]
         mul_su_info = self.db.execute_select(self.t_sample_user, cols=cols, package=True, order_by=["sys_no"],
                                              order_desc=True, where_value=where_value, limit=limit_num)
