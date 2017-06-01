@@ -173,6 +173,8 @@ function show_sample_info(sample_data){
         var current_td = $(this);
         var current_text = "";
         var status_tag = parseInt(current_td.text());
+        var tags = ["已上传", "上传完成", "代表生成质", "突变生成", "报告生成", "已有PGB", "一代测序文件已上传", "已有临床信息", "可以进行测序质量分析", "代表测序质量分析完成", "一代流程已完成"];
+        var title = "";
         if (isNaN(status_tag)) {
             return;
         }
@@ -182,6 +184,14 @@ function show_sample_info(sample_data){
         else {
             current_text = "";
         }
+        var current_tag = 1;
+        for (var i = 0; i < tags.length; i++) {
+            if ((status_tag & current_tag) == current_tag) {
+                title += tags[i] + "\n";
+            }
+            current_tag *= 2;
+        }
+        current_td.attr("title", title);
         current_td.html(current_td.text() + "|" + current_text);
     });
     $("a[name='link_look_owner']").each(function(){
