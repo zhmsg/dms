@@ -2,9 +2,23 @@
  * Created by msg on 11/23/15.
  */
 
+function bit_and(a, b) {
+    var c = 1;
+    var r = 0;
+    while (a > 0 && b > 0) {
+        if (a % 2 == 1 && b % 2 == 1) {
+            r += c;
+        }
+        a = (a - a % 2) / 2;
+        b = (b - b % 2) / 2;
+        c = c * 2;
+    }
+    return r;
+}
 
 function user_select_change(){
     var role_value = JSON.parse($("#role_desc").text());
+    console.info(role_value);
     var selected_user = $("#perm_user option:selected");
     var user_role = parseInt(selected_user.attr("role"));
 
@@ -15,7 +29,7 @@ function user_select_change(){
             if (role_el == null) {
                 continue;
             }
-            if ((role_list[role]["role_value"] & user_role) == role_list[role]["role_value"]) {
+            if (bit_and(role_list[role]["role_value"], user_role) == role_list[role]["role_value"]) {
                 role_el.checked = true;
             }
             else {
