@@ -24,7 +24,7 @@ class DB(object):
         elif env == "Production":
             self.host = "localhost"
         else:
-            self.host = "10.25.244.32"
+            self.host = "10.51.72.158"
         if host != "":
             self.host = host
         self.mysql_user = mysql_user
