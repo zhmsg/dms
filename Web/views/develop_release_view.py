@@ -46,8 +46,6 @@ def index_func():
 
 
 def run_task(release_no):
-    print("Not Allow Release")
-    return
     result, info = control.release_ih()
     if result is False:
         control.update_task(release_no, False)
@@ -55,8 +53,6 @@ def run_task(release_no):
 
 
 def system_auto_release():
-    print("Not Allow Release")
-    return
     print("auto release")
     if current_env != "Production":
         print("Not Production")

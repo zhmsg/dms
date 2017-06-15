@@ -111,7 +111,7 @@ editor_url_prefix = web_prefix + "/editor"
 article_url_prefix = web_prefix + "/article"
 message_url_prefix = web_prefix + "/message"
 
-data_dir = "/ossdata/dmsdata"
+data_dir = "/geneac/dmsdata"
 
 editor_data_dir = data_dir + "/editor"
 
