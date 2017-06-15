@@ -3,7 +3,7 @@ cd Table
 python develop_table.py
 
 if [ -d "/jy-static/dms_static" ];then
-    cp -r ../Web/static2/* /jy_static/dms_static
+    cp -r ../Web/static2/* /jy-static/dms_static
 fi
 
 cd ../Web
