@@ -235,9 +235,12 @@ class UserManager:
     def update_my_user_role(self, role, user_name, my_name):
         if type(role) != int:
             return False, "Bad role"
-        update_sql = "UPDATE %s SET role=%s WHERE user_name='%s' AND creator='%s';" \
-                     % (self.user, role, user_name, my_name)
-        self.db.execute(update_sql)
+        if role == 0:
+            self.db.execute_delete(self.user, where_value=dict(user_name=user_name, creator=my_name))
+        else:
+            update_sql = "UPDATE %s SET role=%s WHERE user_name='%s' AND creator='%s';" \
+                         % (self.user, role, user_name, my_name)
+            self.db.execute(update_sql)
         return True, "success"
 
     def _add_role_my_user(self, role, user_name, my_name):
