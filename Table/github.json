@@ -46,6 +46,16 @@
                 "col_comment": "仓库名称",
                 "col_name": "repository",
                 "col_type": "varchar(50)"
+            },
+          {
+            "col_comment": "pull request的操作者关联的账户名",
+            "col_name": "user_name",
+            "col_type": "varchar(22)"
+          },
+          {
+            "col_comment": "pull request的操作者关联的账户名的真实姓名",
+            "col_name": "real_name",
+            "col_type": "varchar(20)"
             }
         ],
         "table_comment": "关闭或合并pull request记录",
