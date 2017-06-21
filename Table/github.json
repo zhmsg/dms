@@ -60,5 +60,22 @@
         ],
         "table_comment": "关闭或合并pull request记录",
         "table_name": "github_pull_request"
+    },
+  {
+    "table_cols": [
+      {
+        "pri_key": true,
+        "col_comment": "github 账户名",
+        "col_name": "github_user",
+        "col_type": "varchar(50)"
+      },
+      {
+        "col_comment": "关联账户名",
+        "col_name": "user_name",
+        "col_type": "varchar(22)"
+      }
+    ],
+    "table_comment": "github账户对应的系统账户名",
+    "table_name": "github_user"
     }
 ]
