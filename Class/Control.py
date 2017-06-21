@@ -933,6 +933,13 @@ class ControlManager(object):
 
     # 针对pull request
     def add_pull_request(self, **kwargs):
+        action_user = kwargs["action_user"]
+        user_name = self.pull_request_man.select_user(action_user)
+        if user_name is not None:
+            exec_r, user_info = self.user.get_user_info(user_name)
+            if exec_r is True:
+                kwargs["user_name"] = user_info["user_name"]
+                kwargs["real_name"] = user_info["nick_name"]
         return self.pull_request_man.add_pull_request(**kwargs)
 
     # 节点管理

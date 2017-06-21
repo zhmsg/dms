@@ -14,6 +14,14 @@ class PullRequestManager:
     def __init__(self):
         self.db = DB()
         self.t_git_hub = "github_pull_request"
+        self.t_git_hub_user = "github_user"
+
+    def select_user(self, github_user):
+        db_items = self.db.execute_select(self.t_git_hub_user, where_value=dict(github_user=github_user),
+                                          cols=["user_name"])
+        if len(db_items) != 1:
+            return None
+        return db_items[0]["user_name"]
 
     def add_pull_request(self, **kwargs):
         request_info = dict(action_no=int(time()))
@@ -25,12 +33,14 @@ class PullRequestManager:
         request_info["compare_branch"] = kwargs["compare_branch"][:50]
         request_info["merged"] = kwargs["merged"]
         request_info["repository"] = kwargs["repository"][:50]
+        request_info["user_name"] = kwargs.get("user_name")
+        request_info["real_name"] = kwargs.get("real_name")
         self.db.execute_insert(self.t_git_hub, args=request_info)
         return True
 
     def select_pull_request(self, action_no=None, **kwargs):
         cols = ["action_no", "request_num", "action_user", "request_title", "request_body", "base_branch",
-                "compare_branch", "merged", "repository"]
+                "compare_branch", "merged", "repository", "user_name", "real_name"]
         select_sql = "SELECT %s FROM %s" % (",".join(cols), self.t_git_hub)
         where_con = []
         if action_no is not None:
