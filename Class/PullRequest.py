@@ -58,5 +58,18 @@ class PullRequestManager:
             for i in range(len(cols)):
                 p_info[cols[i]] = item[i]
             p_info["merged"] = True if p_info["merged"] == "\x01" else False
+            summary = p_info["request_title"]
+            if p_info["real_name"] is not None:
+                summary += u"【BY %s】" % p_info["real_name"]
+            p_info["summary"] = summary
             pull_requests.append(p_info)
         return True, pull_requests
+
+
+if __name__ == "__main__":
+    pull_man = PullRequestManager()
+    exec_r, pulls = pull_man.select_pull_request(action_no=1498017235)
+    print(exec_r)
+    import json
+
+    print(json.dumps(pulls))

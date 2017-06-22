@@ -88,18 +88,6 @@ class ReleaseManager:
 
     def send_wx_msg(self, msg):
         mns_topic.publish_message(msg, "重启IH")
-        # result, user_list = self.wx.user_info()
-        # if result is False:
-        #     return False, user_list
-        # for user_info in user_list:
-        #     # self.wx.send_status(u"后台开发", "ochiws2EiR0cq3qzXYjQkw0m9jdE", "Test", msg)
-        #     # break
-        #     if user_info["groupid"] == 100:
-        #         self.wx.send_status(u"后台开发", user_info["openid"], "Test", msg)
-        #     elif user_info["groupid"] == 101:
-        #         self.wx.send_status(u"前端开发", user_info["openid"], "Test", msg)
-        #     elif user_info["groupid"] == 102:
-        #         self.wx.send_status(u"产品设计", user_info["openid"], "Test", msg)
         return True, "success"
 
     def select_api_pull_request(self):
@@ -143,7 +131,7 @@ class ReleaseManager:
         else:
             wx_msg += u"API更新如下:\n"
             for i in range(len(pull_requests) - 1, -1, -1):
-                wx_msg += u"%s、%s\n" % (i+1, pull_requests[i]["request_title"])
+                wx_msg += u"%s、%s\n" % (i + 1, pull_requests[i]["summary"])
         print("start restart")
         self._restart_api()
         self.update_release_task(release_no, True)
@@ -165,7 +153,7 @@ class ReleaseManager:
         else:
             wx_msg += u"WEB更新如下:\n"
             for i in range(len(pull_requests) - 1, -1, -1):
-                wx_msg += u"%s、%s\n" % (i+1, pull_requests[i]["request_title"])
+                wx_msg += u"%s、%s\n" % (i + 1, pull_requests[i]["summary"])
         print("start restart")
         self._restart_web()
         self.update_release_task(release_no, True)
@@ -187,14 +175,14 @@ class ReleaseManager:
         else:
             wx_msg += u"WEB更新如下:\n"
             for i in range(len(pull_requests) - 1, -1, -1):
-                wx_msg += u"%s、%s\n" % (i+1, pull_requests[i]["request_title"])
+                wx_msg += u"%s、%s\n" % (i + 1, pull_requests[i]["summary"])
         result, pull_requests = self.select_api_pull_request()
         if len(pull_requests) <= 0:
             return False, u"API无更新"
         else:
             wx_msg += u"API更新如下:\n"
             for i in range(len(pull_requests) - 1, -1, -1):
-                wx_msg += u"%s、%s\n" % (i+1, pull_requests[i]["request_title"])
+                wx_msg += u"%s、%s\n" % (i + 1, pull_requests[i]["summary"])
         print("start restart")
         self._restart_api()
         self._restart_web()
@@ -248,15 +236,16 @@ class ReleaseManager:
     def release_online_web(self):
         result, scheduler_info = self.online_web_task.select_scheduler_status()
         task_status = scheduler_info["task_status"]
-        result, pull_requests = self.pull_request_man.select_pull_request(action_no=task_status, repository="GATCWeb",
+        result, pull_requests = self.pull_request_man.select_pull_request(action_no=task_status, repository="GATCAPI",
                                                                           merged=True, base_branch="master")
         msg = u"WEB更新如下:\n"
         for i in range(len(pull_requests) - 1, -1, -1):
-            msg += u"%s、%s\n" % (i + 1, pull_requests[i]["request_title"])
+            msg += u"%s、%s\n" % (i + 1, pull_requests[i]["summary"])
         mns_topic.publish_message(msg, "线上重启")
         self.online_web_task.update_scheduler_status(int(time()), "system", "restart online api")
 
 
 if __name__ == "__main__":
     release_man = ReleaseManager("/data/")
-    release_man.release_online_web()
+    # release_man.release_online_web()
+    print(release_man._release_api("zh_test", 0, u"修复BUG"))
