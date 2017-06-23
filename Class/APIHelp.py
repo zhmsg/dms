@@ -193,15 +193,17 @@ class HelpManager:
 
     def insert_api_body(self, api_no, param, necessary, param_type, param_desc, status=1):
         add_time = datetime.now().strftime(TIME_FORMAT)
+        update_time = int(time())
         param_desc = param_desc[:1000]
         kwargs = dict(api_no=api_no, param=param, necessary=necessary, type=param_type, param_desc=param_desc,
-                      status=status, add_time=add_time)
+                      status=status, add_time=add_time, update_time=update_time)
         l = self.db.execute_insert(self.api_body, kwargs, ignore=True)
         if l == 0:
             self.update_api_body(**kwargs)
         return True, kwargs
 
     def update_api_body(self, api_no, param, **kwargs):
+        kwargs.pop("add_time")
         l = self.db.execute_update(self.api_body, update_value=kwargs, where_value=dict(api_no=api_no, param=param))
         return l
 
@@ -454,17 +456,9 @@ class HelpManager:
             header_info.append({"api_no": item[0], "param": item[1], "necessary": necessary,
                                 "param_desc": item[3]})
         # 获得请求主体参数列表
-        body_cols = ["api_no", "param", "necessary", "type", "param_desc", "status"]
+        body_cols = ["api_no", "param", "necessary", "type", "param_desc", "status", "add_time", "update_time"]
         body_info = self.db.execute_select(self.api_body, where_value=dict(api_no=api_no), order_by=["add_time"],
                                            cols=body_cols)
-        # select_sql = "SELECT api_no,param,necessary,type,param_desc FROM %s WHERE api_no='%s' ORDER BY add_time;" \
-        #              % (self.api_body, api_no)
-        # self.db.execute(select_sql)
-        # body_info = []
-        # for item in self.db.fetchall():
-        #     necessary = True if item[2] == "\x01" else False
-        #     body_info.append({"api_no": item[0], "param": item[1], "necessary": necessary,
-        #                       "type": item[3], "param_desc": item[4]})
         # 获得预定义参数列表
         select_sql = "SELECT param,param_type FROM %s WHERE api_no='%s' ORDER BY add_time;" % (self.predefine_param, api_no)
         self.db.execute(select_sql)

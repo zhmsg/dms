@@ -492,6 +492,10 @@ ul, ol, li {
     opacity: 0;
 }
 
+.grayBg {
+    background: gray;
+}
+
 .zongheBg {
     width: 100px;
     background: #ebc79e;

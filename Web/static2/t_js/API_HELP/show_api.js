@@ -47,6 +47,11 @@ function add_param(data, param_pos) {
         var type_td = new_td("type", data);
         type_td.addClass("text-center");
         add_tr.append(type_td);
+
+        if (data.status == 2) {
+            //add_tr.addClass("grayBg");
+            add_tr.find("td").first().append("【待废弃】");
+        }
     }
     add_tr.append(new_td("param_desc", data));
     $("#api_" + param_pos + "_param").append(add_tr);

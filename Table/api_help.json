@@ -37,6 +37,11 @@
                 "col_comment": "添加的时间",
                 "col_name": "add_time",
                 "col_type": "datetime"
+            },
+          {
+            "col_comment": "更新时间",
+            "col_name": "update_time",
+            "col_type": "int(11)"
             }
         ],
         "table_comment": "",
