@@ -72,19 +72,7 @@
             <th scope="col" width="10%">生效</th>
             <th scope="col" width="12%">操作</th>
         </tr>
-        {% for item in api_info["body_info"] %}
-        <tr id="trb_{{ item["api_no"] }}{{ item["param"] }}">
-            <td>{{ item["param"] }}</td>
-            <td>{% if item["necessary"] %}是{% else %}否{% endif %}</td>
-            <td>{{ item["type"] }}</td>
-            <td>{{ item["param_desc"] }}</td>
-            <td>{{ item["status"] }}</td>
-            <td>
-                <button class="btn btn-success" name="btn_update">更新</button>
-                <button class="btn btn-danger" name="btn_delete">删除</button>
-            </td>
-        </tr>
-        {% endfor %}
+        <tr>
         <td><input class="form-control" id="body_param_name"/></td>
         <td>
             <select class="form-control" id="body_param_necessary">
@@ -109,6 +97,7 @@
             </select>
         </td>
         <td><button class="btn btn-info" id="btn_new_body" onclick="add_api_info('body');">新建</button></td>
+        </tr>
     </table>
     {% for item in api_info["predefine_body"] %}
         {% if item in api_info["predefine_param"]["body"] %}

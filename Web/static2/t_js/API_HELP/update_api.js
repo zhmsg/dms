@@ -25,16 +25,16 @@ function add_header_success(data)
 
 function add_body_success(data)
 {
-    var new_data = data;
-    var param = new_data.param;
-    $("#trb_" + new_data.api_no + new_data.param).remove();
+    var tr_id = "trb_" + data.api_no + data.param;
+    $("#" + tr_id).remove();
     var add_tr = $("<tr></tr>");
+    add_tr.attr("id", tr_id);
 
     var param_td = $("<td></td>");
     param_td.text(data.param);
 
     var necessary_td = $("<td></td>");
-    if (new_data.necessary == true) {
+    if (data.necessary == true) {
         necessary_td.text("是");
     }
     else {
@@ -48,7 +48,7 @@ function add_body_success(data)
     desc_td.text(data.param_desc);
 
     var status_td = $("<td></td>");
-    status_td.text(data.status);
+    status_td.text(["稍后", "立即", "待废弃", "废弃"][data.status]);
 
     var op_td = $("<td></td>");
     var up_btn = $("<button class='btn btn-success'>更新</button>");
@@ -265,6 +265,7 @@ function update_body_param()
     setSelectChecked("body_param_necessary", tds[1].innerHTML);
     setSelectChecked("body_param_type", tds[2].innerHTML);
     $("#body_param_desc").val(tds[3].innerHTML);
+    setSelectChecked("body_param_status", tds[4].innerHTML);
     $("#btn_new_body").text("更新");
     $("#btn_new_body").removeClass();
     $("#btn_new_body").addClass("btn btn-success");
@@ -275,7 +276,25 @@ function update_stage(stage){
     my_async_request(update_url, "PUT", {"stage": stage});
 }
 
+function init_api_info(data) {
+    if (data == null) {
+        my_async_request2(location.href, "GET", null, init_api_info);
+        return;
+    }
+    var api_info = data.api_info;
+
+    console.info(api_info);
+
+    // body
+    var body_len = api_info.body_info.length;
+    for (var i = 0; i < body_len; i++) {
+        add_body_success(api_info.body_info[i]);
+    }
+
+}
+
 $(function(){
+    init_api_info();
     var stage = $("#api_stage").val();
     var update_url = $("#update_stage_url").val();
     if(stage == "新建" || stage == "修改中"){
@@ -292,6 +311,4 @@ $(function(){
 
     }
     $("#span_modify_stage").append('<a class="margin10" href="javascript:void(0)" onclick="update_stage(4);">设置废弃</a>');
-    $("button[name='btn_update']").click(update_body_param);
-    $("button[name='btn_delete']").click(delete_body_param);
 });
