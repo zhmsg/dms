@@ -62,6 +62,16 @@ function add_param(data, param_pos) {
     $("#api_" + param_pos + "_param").append(add_tr);
 }
 
+function add_example(data, sign) {
+    var add_div = $("<div></div>");
+    var desc_p = $("<p></p>");
+    desc_p.text(data[sign + "_desc"]);
+    var example_p = $('<p><textarea class="form-control" readonly>' + data[sign + "_example"] + '</textarea></p>');
+    add_div.append(desc_p);
+    add_div.append(example_p);
+    $("#api_" + sign + "_exist").append(add_div);
+}
+
 function init_api_info(data) {
     if (data == null) {
         my_async_request2(location.href, "GET", null, init_api_info);
@@ -79,6 +89,11 @@ function init_api_info(data) {
             add_param(ph_data, "header");
         }
     }
+    // header
+    var header_len = api_info.header_info.length;
+    for (var i = 0; i < header_len; i++) {
+        add_param(api_info.header_info[i], "header");
+    }
     // predefine body
     var pb_len = api_info.predefine_param.body.length;
     for (var i = 0; i < pb_len; i++) {
@@ -95,6 +110,32 @@ function init_api_info(data) {
         add_param(api_info.body_info[i], "body");
     }
 
+    if (ph_len + header_len == 0) {
+        $("#api_header_param").hide();
+    }
+    if (pb_len + body_len == 0) {
+        $("#api_body_param").hide();
+    }
+
+    // input
+    var input_len = api_info.input_info.length;
+    for (var i = 0; i < input_len; i++) {
+        var input_item = api_info.input_info[i];
+        add_example(input_item, "input");
+    }
+    // output
+    var output_len = api_info.output_info.length;
+    for (var i = 0; i < output_len; i++) {
+        var output_item = api_info.output_info[i];
+        add_example(output_item, "output");
+    }
+
+    if (input_len == 0) {
+        $("#div_api_input").hide();
+    }
+    if (output_len == 0) {
+        $("#div_api_output").hide();
+    }
     // care
     var care_info = api_info.care_info;
     for (var i = 0; i < care_info.length; i++) {
