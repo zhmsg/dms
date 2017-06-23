@@ -94,19 +94,18 @@ function init_api_info(data) {
     for (var i = 0; i < body_len; i++) {
         add_param(api_info.body_info[i], "body");
     }
-}
 
-$(function() {
-    init_api_info();
-    var current_user_name = $("#current_user_name").val();
-    var care_info = JSON.parse($("#lab_care_info").text());
-    for(var i=0;i<care_info.length;i++){
-        if(care_info[i]["user_name"] == current_user_name){
+    // care
+    var care_info = api_info.care_info;
+    for (var i = 0; i < care_info.length; i++) {
+        if (care_info[i]["user_name"] == $("#current_user_name").val()) {
             $("#api_care_user").append('<span id="mine_care">我</span>');
-            if(care_info[i]["level"] == 0){ // 关注level为0 为API创建者不可取消关注
+            if (care_info[i]["level"] == 0) { // 关注level为0 为API创建者不可取消关注
                 $("#make_care").hide();
                 $("#btn_del_api").show();
-                $("#btn_del_api").click(function(){my_request($("#del_api_url").val(), "DELETE")});
+                $("#btn_del_api").click(function () {
+                    my_request($("#del_api_url").val(), "DELETE")
+                });
             }
             else {
                 $("#make_care").text("取消关注");
@@ -116,6 +115,11 @@ $(function() {
             $("#api_care_user").append('<span>' + care_info[i]["nick_name"] + '</span>');
         }
     }
+}
+
+$(function() {
+    init_api_info();
+    var current_user_name = $("#current_user_name").val();
 
     var current_user_role = parseInt($("#current_user_role").val());
     var role_value = JSON.parse($("#role_value").text());

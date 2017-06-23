@@ -96,7 +96,6 @@
         <input id="care_url" value='{{ url_prefix }}/care/' style="display: none"/>
         <button class="btn btn-primary pull-right" onclick="change_care();" id="make_care">关注</button>
         <p><b>已关注的人(如果您使用到该API，请关注，以便API一旦发生更改，能尽快通知您。)</b></p>
-        <label style="display: none" id="lab_care_info">{{ api_info["care_info"] | tojson | safe }}</label>
 
         <div id="api_care_user">
         </div>
