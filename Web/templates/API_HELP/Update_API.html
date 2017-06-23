@@ -65,10 +65,11 @@
     <table class="table table-bordered api-list-table" id="api_body_param">
         <caption>请求主体参数</caption>
         <tr>
-            <th scope="col" width="25%">参数名称</th>
+            <th scope="col" width="15%">参数名称</th>
             <th scope="col" width="8%">是否必须</th>
             <th scope="col" width="10%">参数类型</th>
             <th scope="col" width="45%">参数描述</th>
+            <th scope="col" width="10%">生效</th>
             <th scope="col" width="11%">操作</th>
         </tr>
         {% for item in api_info["body_info"] %}
@@ -77,6 +78,7 @@
             <td>{% if item["necessary"] %}是{% else %}否{% endif %}</td>
             <td>{{ item["type"] }}</td>
             <td>{{ item["param_desc"] }}</td>
+            <td>{{ item["necessary"] }}</td>
             <td>
                <button class="btn btn-success" onclick="update_body_param('{{ item["api_no"] }}','{{ item["param"] }}')">更新</button>
                <button class="btn btn-danger" onclick="delete_body_param('{{ item["api_no"] }}','{{ item["param"] }}')">删除</button>
@@ -100,6 +102,12 @@
             </select>
         </td>
         <td><input class="form-control" id="body_param_desc" placeholder="请详细的描述出后端对参数的限制，包括但不限于字段长度，字符限制等" /></td>
+        <td>
+            <select class="form-control" id="body_param_status">
+                <option value="1" title="立即生效">立即</option>
+                <option value="0" title="稍后生效">稍后</option>
+            </select>
+        </td>
         <td><button class="btn btn-info" id="btn_new_body" onclick="add_api_info('body');">新建</button></td>
     </table>
     {% for item in api_info["predefine_body"] %}

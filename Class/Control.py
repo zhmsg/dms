@@ -343,13 +343,13 @@ class ControlManager(object):
             self._send_api_update_message_thread(user_name, api_no, param)
         return result, info
 
-    def add_body_param(self, user_name, api_no, param, necessary, type, desc, role):
+    def add_body_param(self, user_name, api_no, param, necessary, param_type, param_desc, status, role):
         if role & self.role_value["api_new"] <= 0:
             return False, u"您没有权限"
-        result, info = self.api_help.new_api_body(api_no, {param: {"necessary": necessary, "type": type, "desc": desc}})
-        if result is True:
+        exec_r, info = self.api_help.insert_api_body(api_no, param, necessary, param_type, param_desc, status)
+        if exec_r is True:
             self._send_api_update_message_thread(user_name, api_no, param)
-        return result, info
+        return exec_r, info
 
     def add_input_example(self, user_name, api_no, example, desc, role):
         if role & self.role_value["api_new"] <= 0:

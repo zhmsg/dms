@@ -28,6 +28,11 @@
                 "col_name": "param_desc",
                 "col_type": "varchar(1000)"
             },
+          {
+            "col_comment": "参数状态 0 未启用 1 使用中 2待废弃 3废弃",
+            "col_name": "status",
+            "col_type": "tinyint(4)"
+          },
             {
                 "col_comment": "添加的时间",
                 "col_name": "add_time",

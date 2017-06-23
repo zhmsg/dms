@@ -25,24 +25,22 @@ function add_header_success(data)
 
 function add_body_success(data)
 {
-    var new_data = data.data;
-    for(var i=0;i<new_data.length;i++){
-        var param = new_data[i].param;
-        $("#trb_" + new_data[i].api_no + new_data[i].param).remove();
-        var trHTML = "<tr id='trb_" + new_data[i].api_no + new_data[i].param + "'><td>" + new_data[i].param;
-        trHTML += '</td><td>';
-        if (new_data[i].necessary == true) {
-            trHTML += '是';
-        }
-        else{
-            trHTML += '否';
-        }
-        trHTML += '<td>' + new_data[i].type + '</td><td>' + new_data[i].desc + '</td>';
-        trHTML += '<td><button class="btn btn-success" onclick="update_body_param(' + "'" + api_no + "','" + param + "'" + ')">更新</button>';
-        trHTML += '<button class="btn btn-danger"  onclick="delete_body_param('+ "'" + new_data[i].api_no + "','" + new_data[i].param + "'" + ')">删除</button></td></tr>"';
-        var tr=$("#api_body_param tr").eq(-2);
-        tr.after(trHTML);
+    var new_data = data;
+    var param = new_data.param;
+    $("#trb_" + new_data.api_no + new_data.param).remove();
+    var trHTML = "<tr id='trb_" + new_data.api_no + new_data.param + "'><td>" + new_data.param;
+    trHTML += '</td><td>';
+    if (new_data.necessary == true) {
+        trHTML += '是';
     }
+    else {
+        trHTML += '否';
+    }
+    trHTML += '<td>' + new_data.type + '</td><td>' + new_data.param_desc + '</td><td></td>';
+    trHTML += '<td><button class="btn btn-success" onclick="update_body_param(' + "'" + new_data.api_no + "','" + param + "'" + ')">更新</button>';
+    trHTML += '<button class="btn btn-danger"  onclick="delete_body_param(' + "'" + new_data.api_no + "','" + new_data.param + "'" + ')">删除</button></td></tr>"';
+    var tr = $("#api_body_param tr").eq(-2);
+    tr.after(trHTML);
     $("#body_param_name").val("");
     $("#body_param_desc").val("");
     $("#body_param_type").val("");
@@ -89,7 +87,7 @@ function add_api_info(type){
     if(type == "header")
         my_async_request(request_url, "POST", request_data, add_header_success);
     else if (type == "body")
-        my_async_request(request_url, "POST", request_data, add_body_success);
+        my_async_request2(request_url, "POST", request_data, add_body_success);
     else if(type == "input")
         my_async_request(request_url, "POST", request_data, add_input_success);
     else if(type == "output")

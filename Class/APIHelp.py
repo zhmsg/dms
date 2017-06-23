@@ -191,6 +191,20 @@ class HelpManager:
         self.set_api_update(api_no)
         return True, new_result
 
+    def insert_api_body(self, api_no, param, necessary, param_type, param_desc, status=1):
+        add_time = datetime.now().strftime(TIME_FORMAT)
+        param_desc = param_desc[:1000]
+        kwargs = dict(api_no=api_no, param=param, necessary=necessary, type=param_type, param_desc=param_desc,
+                      status=status, add_time=add_time)
+        l = self.db.execute_insert(self.api_body, kwargs, ignore=True)
+        if l == 0:
+            self.update_api_body(**kwargs)
+        return True, kwargs
+
+    def update_api_body(self, api_no, param, **kwargs):
+        l = self.db.execute_update(self.api_body, update_value=kwargs, where_value=dict(api_no=api_no, param=param))
+        return l
+
     def new_api_body(self, api_no, body_params):
         if len(api_no) != 32:
             return False, "Bad api_no"
@@ -214,7 +228,7 @@ class HelpManager:
                                "type": value["type"], "add_time": add_time})
         if len(value_sql) < 8:
             return True
-        insert_sql = "INSERT INTO %s (api_no,param,necessary,type,param_desc,add_time) %s " \
+        insert_sql = "INSERT INTO %s (api_no,param,necessary,type,param_desc,status,add_time) %s " \
                      "ON DUPLICATE KEY UPDATE necessary=VALUES(necessary),param_desc=VALUES(param_desc),type=VALUES(type)" \
                      % (self.api_body, value_sql)
         result = self.db.execute(insert_sql)

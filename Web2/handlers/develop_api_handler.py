@@ -218,10 +218,12 @@ class APIBodyHandler(_BaseHandler):
         request_data = self.request.json
         param = request_data["name"]
         api_no = self.g.api_no
-        desc = request_data["desc"]
+        param_desc = request_data["desc"]
         necessary = int(request_data["necessary"])
-        type = request_data["type"]
-        result, param_info = control.add_body_param(self.g.user_name, api_no, param, necessary, type, desc, self.g.user_role)
+        param_type = request_data["type"]
+        status = int(request_data.get("status", "1"))
+        result, param_info = control.add_body_param(self.g.user_name, api_no, param, necessary, param_type, param_desc,
+                                                    status, self.g.user_role)
         return self.jsonify({"status": result, "data": param_info})
 
     @referer_api_no

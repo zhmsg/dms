@@ -242,10 +242,12 @@ def add_body_param():
     request_data = request.json
     param = request_data["name"]
     api_no = g.api_no
-    desc = request_data["desc"]
+    param_desc = request_data["desc"]
     necessary = int(request_data["necessary"])
-    body_type = request_data["type"]
-    result, param_info = control.add_body_param(g.user_name, api_no, param, necessary, body_type, desc, g.user_role)
+    param_type = request_data["type"]
+    status = int(request_data.get("status", "1"))
+    result, param_info = control.add_body_param(g.user_name, api_no, param, necessary, param_type, param_desc,
+                                                status, g.user_role)
     return jsonify({"status": result, "data": param_info})
 
 
