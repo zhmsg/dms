@@ -284,7 +284,12 @@ function init_api_info(data) {
     var api_info = data.api_info;
 
     console.info(api_info);
-
+    // basic info
+    var keys = ["api_title", "api_url", "api_method", "api_desc", "stage", "add_time", "update_time"];
+    var key_len = keys.length;
+    for (var i = 0; i < key_len; i++) {
+        $("#span_" + keys[i]).text(api_info.basic_info[keys[i]]);
+    }
     // body
     var body_len = api_info.body_info.length;
     for (var i = 0; i < body_len; i++) {
