@@ -52,6 +52,11 @@ function add_param(data, param_pos) {
             //add_tr.addClass("grayBg");
             add_tr.find("td").first().append("【待废弃】");
         }
+        else if (get_timestamp2() - data.update_time < 60 * 60 * 24 * 7) {
+            if (datetime_2_timestamp(data.add_time) != data.update_time) {
+                add_tr.find("td").first().append("【最近更新】");
+            }
+        }
     }
     add_tr.append(new_td("param_desc", data));
     $("#api_" + param_pos + "_param").append(add_tr);
