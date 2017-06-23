@@ -1,5 +1,10 @@
 {% extends "base.html" %}
 
+{% block js_content %}
+    {{ 't_js/Common/add_node.js' | make_static_html | safe }}
+    {{ 't_js/API_HELP/show_api.js' | make_static_html | safe }}
+{% endblock %}
+
 {% block title %}查看API解释{% endblock %}
 
 {% block content %}
@@ -27,22 +32,6 @@
                 <th class="text-center" scope="col" width="8%">是否必须</th>
                 <th scope="col" width="77%">参数描述</th>
             </tr>
-            {#    加载预定义头部参数描述#}
-            {% for item in api_info["predefine_param"]["header"] %}
-                {% if item in api_info["predefine_header"] %}
-                    <tr>
-                        <td>{{ api_info["predefine_header"][item]["param"] }}</td>
-                        <td class="text-center">
-                            {% if api_info["predefine_header"][item]["necessary"] %}
-                                是
-                            {% else %}
-                                否
-                            {% endif %}
-                        </td>
-                        <td>{{ api_info["predefine_header"][item]["param_desc"] }}</td>
-                    </tr>
-                {% endif %}
-            {% endfor %}
             {% for item in api_info["header_info"] %}
                 <tr>
                     <td>{{ item["param"] }}</td>
@@ -71,37 +60,6 @@
                 <th class="text-center" scope="col" width="10%">参数类型</th>
                 <th scope="col" width="67%">参数描述</th>
             </tr>
-            {#    加载预定义头部参数描述#}
-            {% for item in api_info["predefine_param"]["body"] %}
-                {% if item in api_info["predefine_body"] %}
-                    <tr>
-                        <td>{{ api_info["predefine_body"][item]["param"] }}</td>
-                        <td class="text-center">
-                            {% if api_info["predefine_body"][item]["necessary"] %}
-                                是
-                            {% else %}
-                                否
-                            {% endif %}
-                        </td>
-                        <td class="text-center">{{ api_info["predefine_body"][item]["type"] }}</td>
-                        <td>{{ api_info["predefine_body"][item]["param_desc"] }}</td>
-                    </tr>
-                {% endif %}
-            {% endfor %}
-            {% for item in api_info["body_info"] %}
-                <tr>
-                    <td>{{ item["param"] }}</td>
-                    <td class="text-center">
-                        {% if item["necessary"] %}
-                            是
-                        {% else %}
-                            否
-                        {% endif %}
-                    </td>
-                    <td class="text-center">{{ item["type"] }}</td>
-                    <td>{{ item["param_desc"] }}</td>
-                </tr>
-            {% endfor %}
         </table>
     {% endif %}
     {% if api_info["input_info"] | length > 0 %}
@@ -148,5 +106,4 @@
     <br>
     <a href="{{ status_url }}?api_no={{ api_no }}" title="">查看所有返回状态码解释</a>
     <label style="display: none" id="role_value">{{ role_value | tojson | safe }}</label>
-    {{ 't_js/API_HELP/show_api.js' | make_static_html | safe }}
 {% endblock %}

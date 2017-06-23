@@ -37,7 +37,57 @@ function remove_care(remove_url){
     my_async_request(remove_url, "DELETE", {api_no: api_no}, change_care_success);
 }
 
+function add_param(data, param_pos) {
+    var add_tr = $("<tr></tr>");
+    add_tr.append(new_td("param", data));
+    var necessary_td = new_td("necessary", data);
+    necessary_td.addClass("text-center");
+    add_tr.append(necessary_td);
+    if (param_pos == "body") {
+        var type_td = new_td("type", data);
+        type_td.addClass("text-center");
+        add_tr.append(type_td);
+    }
+    add_tr.append(new_td("param_desc", data));
+    $("#api_" + param_pos + "_param").append(add_tr);
+}
+
+function init_api_info(data) {
+    if (data == null) {
+        my_async_request2(location.href, "GET", null, init_api_info);
+        return;
+    }
+    var api_info = data.api_info;
+
+    console.info(api_info);
+    // predefine header
+    var ph_len = api_info.predefine_param.header.length;
+    for (var i = 0; i < ph_len; i++) {
+        var ph_key = api_info.predefine_param.header[i];
+        if (ph_key in api_info.predefine_header) {
+            var ph_data = api_info.predefine_header[ph_key];
+            add_param(ph_data, "header");
+        }
+    }
+    // predefine body
+    var pb_len = api_info.predefine_param.body.length;
+    for (var i = 0; i < pb_len; i++) {
+        var pb_key = api_info.predefine_param.body[i];
+        if (pb_key in api_info.predefine_body) {
+            var pb_data = api_info.predefine_body[pb_key];
+            pb_data["status"] = 1;
+            add_param(pb_data, "body");
+        }
+    }
+    // body
+    var body_len = api_info.body_info.length;
+    for (var i = 0; i < body_len; i++) {
+        add_param(api_info.body_info[i], "body");
+    }
+}
+
 $(function() {
+    init_api_info();
     var current_user_name = $("#current_user_name").val();
     var care_info = JSON.parse($("#lab_care_info").text());
     for(var i=0;i<care_info.length;i++){
