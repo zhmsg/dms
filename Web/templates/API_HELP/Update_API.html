@@ -67,10 +67,10 @@
         <tr>
             <th scope="col" width="15%">参数名称</th>
             <th scope="col" width="8%">是否必须</th>
-            <th scope="col" width="10%">参数类型</th>
+            <th scope="col" width="9%">参数类型</th>
             <th scope="col" width="45%">参数描述</th>
             <th scope="col" width="10%">生效</th>
-            <th scope="col" width="11%">操作</th>
+            <th scope="col" width="12%">操作</th>
         </tr>
         {% for item in api_info["body_info"] %}
         <tr id="trb_{{ item["api_no"] }}{{ item["param"] }}">
@@ -80,8 +80,8 @@
             <td>{{ item["param_desc"] }}</td>
             <td>{{ item["necessary"] }}</td>
             <td>
-               <button class="btn btn-success" onclick="update_body_param('{{ item["api_no"] }}','{{ item["param"] }}')">更新</button>
-               <button class="btn btn-danger" onclick="delete_body_param('{{ item["api_no"] }}','{{ item["param"] }}')">删除</button>
+                <button class="btn btn-success" name="btn_update">更新</button>
+                <button class="btn btn-danger" name="btn_delete">删除</button>
             </td>
         </tr>
         {% endfor %}

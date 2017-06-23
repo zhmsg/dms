@@ -28,19 +28,44 @@ function add_body_success(data)
     var new_data = data;
     var param = new_data.param;
     $("#trb_" + new_data.api_no + new_data.param).remove();
-    var trHTML = "<tr id='trb_" + new_data.api_no + new_data.param + "'><td>" + new_data.param;
-    trHTML += '</td><td>';
+    var add_tr = $("<tr></tr>");
+
+    var param_td = $("<td></td>");
+    param_td.text(data.param);
+
+    var necessary_td = $("<td></td>");
     if (new_data.necessary == true) {
-        trHTML += '是';
+        necessary_td.text("是");
     }
     else {
-        trHTML += '否';
+        necessary_td.text("否");
     }
-    trHTML += '<td>' + new_data.type + '</td><td>' + new_data.param_desc + '</td><td></td>';
-    trHTML += '<td><button class="btn btn-success" onclick="update_body_param(' + "'" + new_data.api_no + "','" + param + "'" + ')">更新</button>';
-    trHTML += '<button class="btn btn-danger"  onclick="delete_body_param(' + "'" + new_data.api_no + "','" + new_data.param + "'" + ')">删除</button></td></tr>"';
+
+    var type_td = $("<td></td>");
+    type_td.text(data.type);
+
+    var desc_td = $("<td></td>");
+    desc_td.text(data.param_desc);
+
+    var status_td = $("<td></td>");
+    status_td.text(data.status);
+
+    var op_td = $("<td></td>");
+    var up_btn = $("<button class='btn btn-success'>更新</button>");
+    var del_btn = $("<button class='btn btn-danger'>删除</button>");
+    up_btn.click(update_body_param);
+    del_btn.click(delete_body_param);
+    op_td.append(up_btn);
+    op_td.append(del_btn);
+
+    add_tr.append(param_td);
+    add_tr.append(necessary_td);
+    add_tr.append(type_td);
+    add_tr.append(desc_td);
+    add_tr.append(status_td);
+    add_tr.append(op_td);
     var tr = $("#api_body_param tr").eq(-2);
-    tr.after(trHTML);
+    tr.after(add_tr);
     $("#body_param_name").val("");
     $("#body_param_desc").val("");
     $("#body_param_type").val("");
@@ -117,9 +142,12 @@ function delete_header_param(api_no, param){
     });
 }
 
-function delete_body_param(api_no, param){
+function delete_body_param() {
+    var parent_tr = $(this).parent().parent();
+    var tds = parent_tr.find("td");
+    var param = tds[0].innerHTML;
     var del_url = $("#del_body_url").val();
-    var request_data = JSON.stringify({"api_no": api_no, "param": param});
+    var request_data = JSON.stringify({"param": param});
     $.ajax({
         url: del_url,
         method: "DELETE",
@@ -127,7 +155,7 @@ function delete_body_param(api_no, param){
         data: request_data,
         success:function(data){
             if (data.status == true){
-                $("#trb_"+api_no + param).remove();
+                parent_tr.remove();
             }
             else{
                 alert(data);
@@ -229,10 +257,10 @@ function setSelectChecked(selectId, checkValue){
     }
 }
 
-function update_body_param(api_no, param)
+function update_body_param()
 {
-    var param_tr = $("#trb_" + api_no + param);
-    var tds = param_tr.find("td");
+    var parent_tr = $(this).parent().parent();
+    var tds = parent_tr.find("td");
     $("#body_param_name").val(tds[0].innerHTML);
     setSelectChecked("body_param_necessary", tds[1].innerHTML);
     setSelectChecked("body_param_type", tds[2].innerHTML);
@@ -264,4 +292,6 @@ $(function(){
 
     }
     $("#span_modify_stage").append('<a class="margin10" href="javascript:void(0)" onclick="update_stage(4);">设置废弃</a>');
+    $("button[name='btn_update']").click(update_body_param);
+    $("button[name='btn_delete']").click(delete_body_param);
 });
