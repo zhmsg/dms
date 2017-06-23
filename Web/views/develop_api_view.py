@@ -128,8 +128,8 @@ def show_api():
     batch_test_url = url_prefix + "/test/batch/?api_no=%s" % api_no
     status_url = status_url_prefix
     return_url = url_prefix + "/?module_no=%s" % api_info["basic_info"]["module_no"]
-    return rt.render("Show_API.html", api_info=api_info, api_no=api_no, return_url=return_url, test_url=test_url,
-                     status_url=status_url, batch_test_url=batch_test_url)
+    return rt.render("Show_API.html", api_no=api_no, return_url=return_url, test_url=test_url, status_url=status_url,
+                     batch_test_url=batch_test_url)
 
 
 @develop_api_view.route("/basic/", methods=["GET"])

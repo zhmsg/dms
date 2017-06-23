@@ -80,6 +80,12 @@ function init_api_info(data) {
     var api_info = data.api_info;
 
     console.info(api_info);
+    // basic info
+    var keys = ["api_title", "api_url", "api_method", "api_desc", "stage", "add_time", "update_time"];
+    var key_len = keys.length;
+    for (var i = 0; i < key_len; i++) {
+        $("#span_" + keys[i]).text(api_info.basic_info[keys[i]]);
+    }
     // predefine header
     var ph_len = api_info.predefine_param.header.length;
     for (var i = 0; i < ph_len; i++) {
@@ -95,6 +101,9 @@ function init_api_info(data) {
         add_param(api_info.header_info[i], "header");
     }
     // predefine body
+    if (api_info.basic_info.api_method == "GET") {
+        $("#api_body_param").find("caption").text("请求URL参数");
+    }
     var pb_len = api_info.predefine_param.body.length;
     for (var i = 0; i < pb_len; i++) {
         var pb_key = api_info.predefine_param.body[i];
