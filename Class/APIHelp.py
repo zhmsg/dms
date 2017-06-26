@@ -429,7 +429,8 @@ class HelpManager:
 
     def get_api_example(self, api_no):
         cols = ["example_no", "api_no", "example_type", "example_desc", "example_content", "add_time"]
-        db_items = self.db.execute_select(self.t_example, where_value=dict(api_no=api_no), cols=cols)
+        db_items = self.db.execute_select(self.t_example, where_value=dict(api_no=api_no), cols=cols,
+                                          order_by=["add_time"])
         return db_items
 
     def get_api_care_info(self, api_no):
