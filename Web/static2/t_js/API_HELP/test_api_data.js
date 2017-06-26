@@ -111,10 +111,10 @@ function save_test_case(){
 }
 
 function save_output_example(){
-    var request_url = $("#api_output_url").val();
+    var request_url = $("#api_example_url").val();
     var output_desc = $("#output_desc").val();
     var output_example = $("#res_text").val();
-    my_async_request(request_url, "POST", {"desc": output_desc, "example": output_example}, null);
+    my_async_request(request_url, "POST", {"desc": output_desc, "content": output_example, "example_type": 2}, null);
 }
 
 function get_test_case_success(data){
