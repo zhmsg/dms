@@ -200,7 +200,7 @@ class HelpManager:
                       add_time=add_time, update_time=update_time)
         l = self.db.execute_insert(self.api_header, kwargs, ignore=True)
         if l == 0:
-            self.update_api_body(**kwargs)
+            self.update_api_header(**kwargs)
         return True, kwargs
 
     def insert_api_body(self, api_no, param, necessary, param_type, param_desc, status=1):
@@ -213,6 +213,11 @@ class HelpManager:
         if l == 0:
             self.update_api_body(**kwargs)
         return True, kwargs
+
+    def update_api_header(self, api_no, param, **kwargs):
+        kwargs.pop("add_time")
+        l = self.db.execute_update(self.api_header, update_value=kwargs, where_value=dict(api_no=api_no, param=param))
+        return l
 
     def update_api_body(self, api_no, param, **kwargs):
         kwargs.pop("add_time")
