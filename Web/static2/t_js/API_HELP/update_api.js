@@ -2,7 +2,7 @@
  * Created by msg on 11/3/15.
  */
 
-function add_body_success(data) {
+function add_param_success(data) {
     var tr_id = "trb_" + data.api_no + data.param;
     $("#" + tr_id).remove();
     var add_tr = $("<tr></tr>");
@@ -73,17 +73,11 @@ function add_example_info() {
     my_async_request2(data["url"], "POST", data, add_example);
 }
 
-function add_api_info(type) {
-    var request_url = $("#url_prefix").val() + "/" + type + "/";
-    var id_prefix = type + "_param_";
-    var post_params = $("[id^=" + id_prefix + "]");
-    var request_data = new Object();
-    for (var i = 0; i < post_params.length; i++) {
-        var one_param = post_params[i];
-        request_data[one_param.id.substring(id_prefix.length)] = one_param.value;
-    }
-    my_async_request2(request_url, "POST", request_data, add_body_success);
-    console.info(request_data);
+function add_param() {
+    var parent_tr = $(this).parent().parent();
+    var data = package_input(parent_tr);
+    console.info(data);
+    my_async_request2(data["url"], "POST", data, add_param_success);
 }
 
 function delete_param() {
@@ -128,6 +122,7 @@ function handler_success(data) {
     btn.text(inner_value);
     btn.removeClass();
     btn.addClass(class_name);
+    btn.addClass("margin5")
 }
 
 function handle_predefine_param() {
@@ -250,7 +245,7 @@ function init_api_info(data) {
         }
         var l = api_info[param_type + "_info"].length;
         for (var j = 0; j < l; j++) {
-            add_body_success(api_info[param_type + "_info"][j]);
+            add_param_success(api_info[param_type + "_info"][j]);
         }
     }
 
@@ -265,4 +260,5 @@ function init_api_info(data) {
 $(function () {
     init_api_info();
     $("button[name='btn_new']").click(add_example_info);
+    $("button[name='btn_new_param']").click(add_param);
 });
