@@ -16,20 +16,43 @@ function query_option(select_id, v, query_t){
         query_t = "value";
     }
     if (query_t != "text") {
-        var query_option = $("#" + select_id).find("[" + query_t + "='" + v + "']");
+        var o = $("#" + select_id).find("[" + query_t + "='" + v + "']");
     } else {
         var each_option = $("#" + select_id).find("option");
-        var query_option = [];
-        var fix_count = 0;
+        var o = [];
+        var c = 0;
         for (var i = 0; i < each_option.length; i++) {
             var current_option = $(each_option[i]);
             if (current_option.text() == v) {
-                query_option[fix_count] = current_option;
-                fix_count++;
+                o[c] = current_option;
+                c++;
             }
         }
     }
-    return query_option;
+    return o;
+}
+
+function select_option(select_id, v, query_t) {
+    if (query_t == null) {
+        query_t = "value";
+    }
+    if (query_t != "text") {
+        var o = $("#" + select_id).find("[" + query_t + "='" + v + "']");
+        o.attr("selected", true);
+        return true;
+    } else {
+        var each_option = $("#" + select_id).find("option");
+        var c = 0;
+        for (var i = 0; i < each_option.length; i++) {
+            var current_option = $(each_option[i]);
+            if (current_option.text() == v) {
+                current_option.attr("selected", true);
+                $("#" + select_id).val(current_option.val());
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 function new_td(key, obj, max_len, editable) {

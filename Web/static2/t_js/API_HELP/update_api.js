@@ -11,7 +11,6 @@ function add_body_success(data)
 
     var param_td = $("<td></td>");
     param_td.text(data.param);
-    console.info(data);
     add_tr.append(param_td);
 
     var necessary_td = $("<td></td>");
@@ -46,8 +45,10 @@ function add_body_success(data)
     var up_btn = $("<button class='btn btn-success'>更新</button>");
     var del_btn = $("<button class='btn btn-danger'>删除</button>");
     del_btn.attr("param_type", sign);
-    up_btn.click(update_body_param);
-    del_btn.click(delete_body_param);
+    if (sign == "body") {
+        up_btn.click(update_body_param);
+    }
+    del_btn.click(delete_param);
     op_td.append(up_btn);
     op_td.append(" ");
     op_td.append(del_btn);
@@ -83,36 +84,11 @@ function add_api_info(type){
         var one_param = post_params[i];
         request_data[one_param.id.substring(id_prefix.length)] = one_param.value;
     }
-    if(type == "header")
-        my_async_request2(request_url, "POST", request_data, add_body_success);
-    else if (type == "body")
-        my_async_request2(request_url, "POST", request_data, add_body_success);
+    my_async_request2(request_url, "POST", request_data, add_body_success);
     console.info(request_data);
 }
 
-function delete_header_param(api_no, param){
-    var del_url = $("#del_header_url").val();
-    var request_data = JSON.stringify({"api_no": api_no, "param": param});
-    $.ajax({
-        url: del_url,
-        data: request_data,
-        contentType: "application/json",
-        method: "DELETE",
-        success:function(data){
-            if (data.status == true){
-                $("#tr_"+api_no + param).remove();
-            }
-            else{
-                alert(data);
-            }
-        },
-        error:function(xhr){
-            alert(xhr.statusText);
-        }
-    });
-}
-
-function delete_body_param() {
+function delete_param() {
     var parent_tr = $(this).parent().parent();
     var tds = parent_tr.find("td");
     var param = tds[0].innerHTML;
@@ -149,7 +125,7 @@ function handler_success(data){
     }
     else{
         var class_name = "btn btn-danger";
-        var inner_value = inner_value.replace("需要", "不需要");
+        inner_value = inner_value.replace("需要", "不需要");
     }
     btn.text(inner_value);
     btn.removeClass();
@@ -175,25 +151,15 @@ function send_message()
     alert("即将离开");
 }
 
-function setSelectChecked(selectId, checkValue){
-    var select = document.getElementById(selectId);
-    for(var i=0; i<select.options.length; i++){
-        if(select.options[i].innerHTML == checkValue){
-            select.options[i].selected = true;
-            break;
-        }
-    }
-}
-
 function update_body_param()
 {
     var parent_tr = $(this).parent().parent();
     var tds = parent_tr.find("td");
     $("#body_param_name").val(tds[0].innerHTML);
-    setSelectChecked("body_param_necessary", tds[1].innerHTML);
-    setSelectChecked("body_param_type", tds[2].innerHTML);
+    select_option("body_param_necessary", tds[1].innerHTML, "text");
+    select_option("body_param_type", tds[2].innerHTML, "text");
     $("#body_param_desc").val(tds[3].innerHTML);
-    setSelectChecked("body_param_status", tds[4].innerHTML);
+    select_option("body_param_status", tds[4].innerHTML, "text");
     $("#btn_new_body").text("更新");
     $("#btn_new_body").removeClass();
     $("#btn_new_body").addClass("btn btn-success");
