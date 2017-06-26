@@ -298,32 +298,6 @@ def delete_api_example():
     return jsonify({"status": result, "data": data})
 
 
-@develop_api_view.route("/input/", methods=["POST"])
-@referer_api_no
-def add_input_example():
-    request_form = request.json
-    api_no = g.api_no
-    desc = request_form["desc"]
-    example = request_form["example"]
-    result, input_info = control.add_input_example(g.user_name, api_no, example, desc, g.user_role)
-    if result is False:
-        return input_info
-    return jsonify({"status": True, "data": input_info})
-
-
-@develop_api_view.route("/output/", methods=["POST"])
-@referer_api_no
-def add_output_example():
-    request_form = request.json
-    api_no = g.api_no
-    desc = request_form["desc"]
-    example = request_form["example"]
-    result, output_info = control.add_output_example(g.user_name, api_no, example, desc, g.user_role)
-    if result is False:
-        return output_info
-    return jsonify({"status": True, "data": output_info})
-
-
 @develop_api_view.route("/care/", methods=["POST", "DELETE"])
 def add_care():
     request_data = request.json
@@ -333,15 +307,3 @@ def add_care():
     else:
         result, care_info = control.delete_care(api_no, g.user_name)
     return jsonify({"status": result, "data": care_info})
-
-
-@develop_api_view.route("/input/<input_no>/", methods=["DELETE"])
-def delete_input(input_no):
-    result, data = control.delete_input(input_no, g.user_role)
-    return jsonify({"status": result, "data": data})
-
-
-@develop_api_view.route("/output/<output_no>/", methods=["DELETE"])
-def delete_output(output_no):
-    result, data = control.delete_ouput(output_no, g.user_role)
-    return jsonify({"status": result, "data": data})

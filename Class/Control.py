@@ -357,22 +357,6 @@ class ControlManager(object):
         exec_r, data = self.api_help.insert_api_example(api_no, example_type, desc, content)
         return exec_r, data
 
-    def add_input_example(self, user_name, api_no, example, desc, role):
-        if role & self.role_value["api_new"] <= 0:
-            return False, u"您没有权限"
-        result, info = self.api_help.new_api_input(api_no, [{"desc": desc, "example": example}])
-        if result is True:
-            self._send_api_update_message_thread(user_name, api_no, u"请求示例")
-        return result, info
-
-    def add_output_example(self, user_name, api_no, example, desc, role):
-        if role & self.role_value["api_new"] <= 0:
-            return False, u"您没有权限"
-        result, info = self.api_help.new_api_output(api_no, [{"desc": desc, "example": example}])
-        if result is True:
-            self._send_api_update_message_thread(user_name, api_no, u"返回示例")
-        return result, info
-
     def add_care(self, api_no, user_name, role):
         if role & 8 <= 0:
             return False, u"您没有权限"
