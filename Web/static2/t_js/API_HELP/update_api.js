@@ -32,6 +32,7 @@ function add_body_success(data)
 
     var param_td = $("<td></td>");
     param_td.text(data.param);
+    console.info(data);
     add_tr.append(param_td);
 
     var necessary_td = $("<td></td>");
@@ -56,7 +57,7 @@ function add_body_success(data)
     desc_td.text(data.param_desc);
     add_tr.append(desc_td);
 
-    if ("status" in data) {
+    if (sign == "body") {
         var status_td = $("<td></td>");
         status_td.text(["稍后", "立即", "待废弃", "废弃"][data.status]);
         add_tr.append(status_td);
@@ -102,7 +103,7 @@ function add_api_info(type){
         request_data[one_param.id.substring(id_prefix.length)] = one_param.value;
     }
     if(type == "header")
-        my_async_request(request_url, "POST", request_data, add_body_success);
+        my_async_request2(request_url, "POST", request_data, add_body_success);
     else if (type == "body")
         my_async_request2(request_url, "POST", request_data, add_body_success);
     console.info(request_data);
