@@ -28,12 +28,12 @@
                 "col_name": "param_desc",
                 "col_type": "varchar(1000)"
             },
-          {
-            "col_comment": "参数状态 0 未启用 1 使用中 2待废弃 3废弃",
-            "col_name": "status",
-            "col_type": "tinyint(4)"
-          },
             {
+              "col_comment": "参数状态 0 未启用 1 使用中 2待废弃 3废弃",
+              "col_name": "status",
+              "col_type": "tinyint(4)"
+            },
+          {
                 "col_comment": "添加的时间",
                 "col_name": "add_time",
                 "col_type": "datetime"
@@ -453,5 +453,42 @@
         ],
         "table_comment": "API模块可调用的环境信息",
         "table_name": "test_env"
+    },
+  {
+    "table_cols": [
+      {
+        "pri_key": true,
+        "col_comment": "主键 输出系统编号",
+        "col_name": "example_no",
+        "col_type": "char(32)"
+      },
+      {
+        "col_comment": "示例类型 1代表输入 2代表输出",
+        "col_name": "example_type",
+        "col_type": "tinyint(4)"
+      },
+      {
+        "col_comment": "API系統编号 參看api_info api_no",
+        "col_name": "api_no",
+        "col_type": "char(32)"
+      },
+      {
+        "col_comment": "示例描述",
+        "col_name": "example_desc",
+        "col_type": "varchar(550)"
+      },
+      {
+        "col_comment": "示例内容",
+        "col_name": "output_example",
+        "col_type": "mediumtext"
+      },
+      {
+        "col_comment": "添加的时间",
+        "col_name": "add_time",
+        "col_type": "int(11)"
+      }
+    ],
+    "table_comment": "API 输入 输出示例",
+    "table_name": "api_example"
     }
 ]

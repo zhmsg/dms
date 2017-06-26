@@ -167,6 +167,9 @@ function delete_body_param() {
     });
 }
 
+function delete_example() {
+
+}
 function delete_input_param(input_no){
     var del_url = $("#del_input_url").val();
     $.ajax({
@@ -276,6 +279,20 @@ function update_stage(stage){
     my_async_request(update_url, "PUT", {"stage": stage});
 }
 
+function add_example(data, sign) {
+    var add_div = $("<div></div>");
+    var desc_p = $("<p></p>");
+    desc_p.text(data[sign + "_desc"]);
+    var example_p = $('<p><textarea class="form-control" readonly>' + data[sign + "_example"] + '</textarea></p>');
+    var btn_update = $('<p><button class="btn btn-success">更新</button>');
+    var btn_del = $('<button class="btn btn-danger">删除</button></p>');
+    //onclick="delete_output_param('{{ item["output_no"] }}')
+    add_div.append(desc_p);
+    add_div.append(example_p);
+    add_div.append(btn_update);
+    $("#api_" + sign + "_exist").append(add_div);
+}
+
 function init_api_info(data) {
     if (data == null) {
         my_async_request2(location.href, "GET", null, init_api_info);
@@ -295,7 +312,18 @@ function init_api_info(data) {
     for (var i = 0; i < body_len; i++) {
         add_body_success(api_info.body_info[i]);
     }
-
+    // input
+    var input_len = api_info.input_info.length;
+    for (var i = 0; i < input_len; i++) {
+        var input_item = api_info.input_info[i];
+        add_example(input_item, "input");
+    }
+    // output
+    var output_len = api_info.output_info.length;
+    for (var i = 0; i < output_len; i++) {
+        var output_item = api_info.output_info[i];
+        add_example(output_item, "output");
+    }
 }
 
 $(function(){
