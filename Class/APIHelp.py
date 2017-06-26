@@ -495,12 +495,7 @@ class HelpManager:
             necessary = True if item[1] == "\x01" else False
             predefine_body[item[0]] = {"param": item[0], "type": item[2], "necessary": necessary, "param_desc": item[3]}
         # 获得请求示例
-        select_sql = "SELECT input_no,api_no,input_desc,input_example FROM %s WHERE api_no='%s' ORDER BY add_time;" \
-                     % (self.api_input, api_no)
-        self.db.execute(select_sql)
         input_info = []
-        for item in self.db.fetchall():
-            input_info.append({"input_no": item[0], "api_no": item[1], "input_desc": item[2], "input_example": item[3]})
         # 获得返回示例
         output_info = []  # self.get_api_output(api_no)
         # 获得示例
