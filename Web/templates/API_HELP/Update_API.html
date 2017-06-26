@@ -37,22 +37,7 @@
             <th scope="col" width="55%">参数描述</th>
             <th scope="col" width="12%">操作</th>
         </tr>
-        {% for item in api_info["header_info"] %}
-        <tr id="tr_{{ item["api_no"] }}{{ item["param"] }}">
-            <td>{{ item["param"] }}</td>
-            <td>
-                <select class="form-control" disabled>
-                    <option value="1" {% if item["necessary"] %}selected="selected"{% endif %}>是</option>
-                    <option value="0" {% if not item["necessary"] %}selected="selected"{% endif %}>否</option>
-                </select>
-            </td>
-            <td>{{ item["param_desc"] }}</td>
-            <td>
-                <button class="btn btn-success">更新</button>
-                <button class="btn btn-danger" onclick="delete_header_param('{{ item["api_no"] }}','{{ item["param"] }}')">删除</button>
-            </td>
-        </tr>
-        {% endfor %}
+        <tr>
             <td><input class="form-control" id="header_param_name"/></td>
             <td>
                 <select class="form-control" id="header_param_necessary">
@@ -62,7 +47,7 @@
             </td>
             <td><input class="form-control" id="header_param_desc" placeholder="如果你不想既浪费了写文档的时间，还得浪费时间给前端解释。请写的傻子都能看懂" /></td>
             <td><button class="btn btn-info" onclick="add_api_info('header');">新建</button></td>
-
+        </tr>
     </table>
     {% for item in api_info["predefine_header"] %}
         {% if item in api_info["predefine_param"]["header"] %}

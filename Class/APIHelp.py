@@ -9,7 +9,7 @@ sys.path.append("..")
 from datetime import datetime
 from Tools.Mysql_db import DB
 from Class import TIME_FORMAT
-from Check import check_chinese_en, check_http_method, check_path, check_sql_character, check_char_num_underline, check_char, check_int
+from Check import check_chinese_en, check_http_method, check_path, check_sql_character, check_int
 
 temp_dir = tempfile.gettempdir()
 
@@ -162,35 +162,6 @@ class HelpManager:
         insert_sql = "INSERT INTO %s VALUES ('%s','%s');" % (self.test_env, env_name, env_address)
         self.db.execute(insert_sql)
         return True, "success"
-
-    def new_api_header(self, api_no, header_params):
-        if len(api_no) != 32:
-            return False, "Bad api_no"
-        value_sql = "VALUES "
-        new_result = []
-        for key, value in header_params.items():
-            if check_char_num_underline(key) is False:
-                return False, "Bad header param %s" % key
-            if "necessary" not in value or "desc" not in value:
-                return False, "Bad header param %s, need necessary and desc" % key
-            if value["necessary"] != 0 and value["necessary"] != 1:
-                return False, "Bad header param %s, necessary must be 0 or 1" % key
-            value["desc"] = value["desc"][:1000]
-            param_desc = check_sql_character(value["desc"])
-            add_time = datetime.now().strftime(TIME_FORMAT)
-            value_sql += "('%s','%s',%s,'%s','%s')" \
-                         % (api_no, key, value["necessary"], value["desc"], add_time)
-            necessary = True if value["necessary"] == 1 else False
-            new_result.append({"api_no": api_no, "necessary": necessary, "param": key,
-                               "desc": param_desc, "add_time": add_time})
-        if len(value_sql) < 8:
-            return True
-        insert_sql = "INSERT INTO %s (api_no,param,necessary,param_desc, add_time) %s " \
-                     "ON DUPLICATE KEY UPDATE necessary=VALUES(necessary),param_desc=VALUES(param_desc),add_time=VALUES(add_time)" \
-                     % (self.api_header, value_sql)
-        result = self.db.execute(insert_sql)
-        self.set_api_update(api_no)
-        return True, new_result
 
     def insert_api_header(self, api_no, param, necessary, param_desc, status=1):
         add_time = datetime.now().strftime(TIME_FORMAT)

@@ -2,27 +2,6 @@
  * Created by msg on 11/3/15.
  */
 
-function add_header_success(data)
-{
-    var new_data = data.data;
-    for(var i=0;i<new_data.length;i++){
-        var t_len = $("#api_header_param").length;
-        var trHTML = "<tr id='tr_" + new_data[i].api_no + new_data[i].param + "'><td>" + new_data[i].param;
-        trHTML += '</td><td><select class="form-control" disabled>';
-        if (new_data[i].necessary == true) {
-            trHTML += '<option value="1" selected="selected">是</option><option value="0">否</option></select></td>';
-        }
-        else{
-            trHTML += '<option value="1">是</option><option value="0" selected="selected">否</option></select></td>';
-        }
-        trHTML += '<td>' + new_data[i].desc + '</td><td><button class="btn btn-success">更新</button> <button class="btn btn-danger"  onclick="delete_header_param('+ "'" + new_data[i].api_no + "','" + new_data[i].param + "'" + ')">删除</button></td></tr>"';
-        var tr=$("#api_header_param tr").eq(-2);
-        tr.after(trHTML);
-    }
-    $("#header_param_name").val("");
-    $("#header_param_desc").val("");
-}
-
 function add_body_success(data)
 {
     var tr_id = "trb_" + data.api_no + data.param;
@@ -66,9 +45,11 @@ function add_body_success(data)
     var op_td = $("<td></td>");
     var up_btn = $("<button class='btn btn-success'>更新</button>");
     var del_btn = $("<button class='btn btn-danger'>删除</button>");
+    del_btn.attr("param_type", sign);
     up_btn.click(update_body_param);
     del_btn.click(delete_body_param);
     op_td.append(up_btn);
+    op_td.append(" ");
     op_td.append(del_btn);
     add_tr.append(op_td);
 
@@ -135,7 +116,8 @@ function delete_body_param() {
     var parent_tr = $(this).parent().parent();
     var tds = parent_tr.find("td");
     var param = tds[0].innerHTML;
-    var del_url = $("#del_body_url").val();
+    var param_type = $(this).attr("param_type");
+    var del_url = $("#del_" + param_type + "_url").val();
     var request_data = JSON.stringify({"param": param});
     my_async_request2(del_url, "DELETE", {"param": param}, function () {
         parent_tr.remove();
