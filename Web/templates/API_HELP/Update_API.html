@@ -2,6 +2,13 @@
 
 {% block title %}更新API解释{% endblock %}
 
+{% block js_content %}
+    {{ 't_js/Common/add_node.js' | make_static_html | safe }}
+    {{ 't_js/bootstrap.min.js' | make_static_html | safe }}
+    {{ 't_js/API_HELP/update_api.js' | make_static_html | safe }}
+
+{% endblock %}
+
 {% block content %}
     <br>
     <a class="btn btn-primary pull-right" href="{{ return_url }}" title="">返回</a>
@@ -116,40 +123,36 @@
     <div class="bottom20 top6 api-example">
         <b>请求示例</b>
         <div id="api_input_exist">
-            {% for item in api_info["input_info"] %}
-            <div id="div_{{ item["input_no"] }}">
-               <p>{{ item["input_desc"] }}</p>
-               <p><textarea class="form-control" readonly>{{ item["input_example"] }}</textarea></p>
-               <p><button class="btn btn-success">更新</button>
-               <button class="btn btn-danger" onclick="delete_input_param('{{ item["input_no"] }}')">删除</button></p>
-            </div>
-            {% endfor %}
         </div>
-        <p><input class="form-control" id="input_param_desc" placeholder="请求示例描述"  /></p>
-        <p><textarea class="form-control input_example" id="input_param_example" onchange="format_input(this.id);" onkeyup="format_input(this.id);" placeholder="请求示例，写成符合json格式。解释示例，请在描述中解释"></textarea></p>
-        <button class="btn btn-info" onclick="add_api_info('input')">新建</button>
+        <div>
+            <input name="url" value="{{ url_prefix }}/example/" class="display_none"/>
+            <input name="example_type" value="1" class="display_none"/>
 
+            <p><input class="form-control" name="desc" placeholder="请求示例描述"/></p>
+
+            <p><textarea class="form-control input_example" name="content" onchange="format_input(this.id);"
+                         onkeyup="format_input(this.id);" placeholder="请求示例，写成符合json格式。解释示例，请在描述中解释"></textarea></p>
+            <button class="btn btn-info" name="btn_new">新建</button>
+        </div>
     </div>
 
     <div class="bottom20 api-example">
         <b>返回示例</b>
         <div id="api_output_exist">
-            {% for item in api_info["output_info"] %}
-               <div id="div_{{ item["output_no"] }}">
-                   <p>{{ item["output_desc"] }}</p>
-                   <p><textarea class="form-control" readonly>{{ item["output_example"] }}</textarea></p>
-                   <p><button class="btn btn-success">更新</button>
-                   <button class="btn btn-danger" onclick="delete_output_param('{{ item["output_no"] }}')">删除</button></p>
-               </div>
-            {% endfor %}
         </div>
-        <p><input class="form-control" id="output_param_desc" placeholder="返回示例描述" /></p>
-        <p><textarea class="form-control input_example" id="output_param_example" onchange="format_input(this.id);" onkeyup="format_input(this.id);" placeholder="返回示例，写成符合json格式。解释示例，请在描述中解释。所有完成后请将API状态置为完成"></textarea></p>
-        <button class="btn btn-info" onclick="add_api_info('output')">新建</button>
+        <div>
+            <input name="url" value="{{ url_prefix }}/example/" class="display_none"/>
+            <input name="example_type" value="2" class="display_none"/>
 
+            <p><input class="form-control" name="desc" placeholder="返回示例描述"/></p>
+
+            <p><textarea class="form-control input_example" name="content" onchange="format_input(this.id);"
+                         onkeyup="format_input(this.id);"
+                         placeholder="返回示例，写成符合json格式。解释示例，请在描述中解释。所有完成后请将API状态置为完成"></textarea></p>
+            <button class="btn btn-info" name="btn_new">新建</button>
+        </div>
     </div>
     <input id="url_prefix" value="{{ url_prefix }}" style="display: none">
     <input id="update_stage_url" value="{{ update_stage_url }}" style="display: none">
-    {{ 't_js/bootstrap.min.js' | make_static_html | safe }}
-    {{ 't_js/API_HELP/update_api.js' | make_static_html | safe }}
+
 {% endblock %}

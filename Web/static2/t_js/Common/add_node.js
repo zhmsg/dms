@@ -104,3 +104,19 @@ function query_table(t_id, key){
         }
     }
 }
+
+function package_input(parent_el) {
+    var data = new Object();
+    var tags = ["input", "textarea"];
+    var tag_len = tags.length;
+    for (var i = 0; i < tag_len; i++) {
+        var all_input = parent_el.find(tags[i]);
+        var input_len = all_input.length;
+        for (var j = 0; j < input_len; j++) {
+            var item = $(all_input[j]);
+            data[item.attr("name")] = item.val();
+        }
+    }
+
+    return data;
+}

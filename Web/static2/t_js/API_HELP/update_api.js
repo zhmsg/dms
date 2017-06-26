@@ -75,29 +75,27 @@ function add_body_success(data)
     $("#btn_new_body").addClass("btn btn-info");
 }
 
-function add_input_success(data)
-{
-    var new_data = data.data;
-    for(var i=0;i<new_data.length;i++) {
-        var div_html = '<div id="div_' + new_data[i].input_no + '"><p>' + new_data[i].desc +'</p><p><textarea class="form-control" readonly>' + new_data[i].example + '</textarea></p>';
-        div_html += '<button class="btn btn-success">更新</button> <button class="btn btn-danger" onclick="delete_input_param(' + "'" + new_data[i].input_no + "'" + ')">删除</button></div>';
-        $("#api_input_exist").append(div_html);
-    }
-    $("#input_param_desc").val("");
-    $("#input_param_example").val("");
 
+function add_example_success(data)
+{
+    if (data.example_type == 1) {
+        data["input_example"] = data["example_content"];
+        data["input_desc"] = data["example_desc"];
+        add_example(data, "input");
+    }
+    else {
+        data["output_example"] = data["example_content"];
+        data["output_desc"] = data["example_desc"];
+        add_example(data, "output");
+    }
 }
 
-function add_output_success(data)
+function add_example_info()
 {
-    var new_data = data.data;
-    for(var i=0;i<new_data.length;i++) {
-        var div_html = '<div id="div_' + new_data[i].output_no + '"><p>' + new_data[i].desc +'</p><p><textarea class="form-control" readonly>' + new_data[i].example + '</textarea></p>'
-        div_html += '<button class="btn btn-success">更新</button> <button class="btn btn-danger" onclick="delete_output_param(' + "'" + new_data[i].output_no + "'" + ')">删除</button></div>';
-        $("#api_output_exist").append(div_html);
-    }
-    $("#output_param_desc").val("");
-    $("#output_param_example").val("");
+    var current_btn = $(this);
+    var parent_div = current_btn.parent();
+    var data = package_input(parent_div);
+    my_async_request2(data["url"], "POST", data, add_example_success);
 }
 
 function add_api_info(type){
@@ -113,10 +111,6 @@ function add_api_info(type){
         my_async_request(request_url, "POST", request_data, add_header_success);
     else if (type == "body")
         my_async_request2(request_url, "POST", request_data, add_body_success);
-    else if(type == "input")
-        my_async_request(request_url, "POST", request_data, add_input_success);
-    else if(type == "output")
-        my_async_request(request_url, "POST", request_data, add_output_success);
     console.info(request_data);
 }
 
@@ -284,12 +278,15 @@ function add_example(data, sign) {
     var desc_p = $("<p></p>");
     desc_p.text(data[sign + "_desc"]);
     var example_p = $('<p><textarea class="form-control" readonly>' + data[sign + "_example"] + '</textarea></p>');
-    var btn_update = $('<p><button class="btn btn-success">更新</button>');
-    var btn_del = $('<button class="btn btn-danger">删除</button></p>');
+    var op_p = $("<p></p>");
+    var btn_update = $('<button class="btn btn-success">更新</button>');
+    var btn_del = $('<button class="btn btn-danger">删除</button>');
+    op_p.append(btn_update);
+    op_p.append(btn_del);
     //onclick="delete_output_param('{{ item["output_no"] }}')
     add_div.append(desc_p);
     add_div.append(example_p);
-    add_div.append(btn_update);
+    add_div.append(op_p);
     $("#api_" + sign + "_exist").append(add_div);
 }
 
@@ -328,6 +325,7 @@ function init_api_info(data) {
 
 $(function(){
     init_api_info();
+    $("button[name='btn_new']").click(add_example_info);
     var stage = $("#api_stage").val();
     var update_url = $("#update_stage_url").val();
     if(stage == "新建" || stage == "修改中"){

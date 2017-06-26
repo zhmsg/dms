@@ -25,6 +25,7 @@ class HelpManager:
         self.api_info = "api_info"
         self.api_input = "api_input"
         self.api_output = "api_output"
+        self.t_example = "api_example"
         self.api_header = "api_header"
         self.predefine_header = "predefine_header"
         self.predefine_body = "predefine_body"
@@ -250,6 +251,14 @@ class HelpManager:
         r_data["result"] = result
         return True, r_data
 
+    def insert_api_example(self, api_no, example_type, example_desc, example_content):
+        example_no = uuid.uuid4().hex
+        add_time = time()
+        kwargs = dict(example_no=example_no, example_type=example_type, api_no=api_no, example_desc=example_desc,
+                      example_content=example_content, add_time=add_time)
+        l = self.db.execute_insert(self.t_example, kwargs)
+        return True, kwargs
+
     def new_api_input(self, api_no, input_examples):
         if len(api_no) != 32:
             return False, "Bad api_no"
@@ -428,6 +437,11 @@ class HelpManager:
             output_info.append({"output_no": item[0], "api_no": item[1], "output_desc": item[2], "output_example": item[3]})
         return output_info
 
+    def get_api_example(self, api_no):
+        cols = ["example_no", "api_no", "example_type", "example_desc", "example_content", "add_time"]
+        db_items = self.db.execute_select(self.t_example, where_value=dict(api_no=api_no), cols=cols)
+        return db_items
+
     def get_api_care_info(self, api_no):
         # 获得关注列表
         select_sql = "SELECT api_no,c.user_name,care_time,nick_name,level,email FROM sys_user as su,%s as c " \
@@ -488,7 +502,16 @@ class HelpManager:
         for item in self.db.fetchall():
             input_info.append({"input_no": item[0], "api_no": item[1], "input_desc": item[2], "input_example": item[3]})
         # 获得返回示例
-        output_info = self.get_api_output(api_no)
+        output_info = []  # self.get_api_output(api_no)
+        # 获得示例
+        api_examples = self.get_api_example(api_no)
+        for item in api_examples:
+            if item["example_type"] == 1:
+                input_info.append({"input_no": item["example_no"], "api_no": item["api_no"],
+                                   "input_desc": item["example_desc"], "input_example": item["example_content"]})
+            elif item["example_type"] == 2:
+                output_info.append({"output_no": item["example_no"], "api_no": item["api_no"],
+                                    "output_desc": item["example_desc"], "output_example": item["example_content"]})
         # 获得关注列表
         care_info = self.get_api_care_info(api_no)
         return True, {"basic_info": basic_info, "header_info": header_info, "body_info": body_info,

@@ -479,7 +479,7 @@
       },
       {
         "col_comment": "示例内容",
-        "col_name": "output_example",
+        "col_name": "example_content",
         "col_type": "mediumtext"
       },
       {

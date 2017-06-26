@@ -277,6 +277,18 @@ def delete_body():
     return jsonify({"status": False, "data": "need api_no and param"})
 
 
+@develop_api_view.route("/example/", methods=["POST"])
+@referer_api_no
+def add_api_example():
+    request_form = request.json
+    api_no = g.api_no
+    example_type = int(request_form["example_type"])
+    desc = request_form["desc"]
+    content = request_form["content"]
+    result, data = control.add_api_example(g.user_name, g.user_role, api_no, example_type, desc, content)
+    return jsonify({"status": result, "data": data})
+
+
 @develop_api_view.route("/input/", methods=["POST"])
 @referer_api_no
 def add_input_example():
