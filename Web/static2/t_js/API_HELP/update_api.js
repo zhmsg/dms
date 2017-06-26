@@ -2,8 +2,7 @@
  * Created by msg on 11/3/15.
  */
 
-function add_body_success(data)
-{
+function add_body_success(data) {
     var tr_id = "trb_" + data.api_no + data.param;
     $("#" + tr_id).remove();
     var add_tr = $("<tr></tr>");
@@ -67,20 +66,19 @@ function add_body_success(data)
 }
 
 
-function add_example_info()
-{
+function add_example_info() {
     var current_btn = $(this);
     var parent_div = current_btn.parent();
     var data = package_input(parent_div);
     my_async_request2(data["url"], "POST", data, add_example);
 }
 
-function add_api_info(type){
+function add_api_info(type) {
     var request_url = $("#url_prefix").val() + "/" + type + "/";
     var id_prefix = type + "_param_";
-    var post_params = $("[id^="+ id_prefix +"]");
+    var post_params = $("[id^=" + id_prefix + "]");
     var request_data = new Object();
-    for(var i=0;i<post_params.length;i++){
+    for (var i = 0; i < post_params.length; i++) {
         var one_param = post_params[i];
         request_data[one_param.id.substring(id_prefix.length)] = one_param.value;
     }
@@ -109,21 +107,21 @@ function delete_example() {
 }
 
 
-function format_input(input_id){
+function format_input(input_id) {
     var input_content = $("#" + input_id).val();
     var json_content = JSON.stringify(JSON.parse(input_content), null, 4);
     $("#" + input_id).val(json_content);
 }
 
-function handler_success(data){
+function handler_success(data) {
     var btn_id = "pp_" + data.data["param"];
     var btn = $("#" + btn_id);
     var inner_value = btn.text();
-    if(inner_value.indexOf("不需要") == 0){
+    if (inner_value.indexOf("不需要") == 0) {
         var class_name = "btn btn-info";
         var inner_value = inner_value.replace("不", "");
     }
-    else{
+    else {
         var class_name = "btn btn-danger";
         inner_value = inner_value.replace("需要", "不需要");
     }
@@ -132,27 +130,30 @@ function handler_success(data){
     btn.addClass(class_name);
 }
 
-function handle_predefine_param(btn_id, param_type){
+function handle_predefine_param() {
+    var btn = $(this);
+    var param_type = btn.attr("param_type");
     var update_url = $("#url_prefix").val() + "/" + param_type + "/";
-    var btn = $("#" + btn_id);
     var inner_value = btn.text();
     var param = btn.val();
-    if(inner_value.indexOf("不需要") == 0){
+    if (inner_value.indexOf("不需要") == 0) {
         var update_type = "delete";
     }
-    else{
+    else {
         var update_type = "new";
     }
-    my_async_request(update_url, "PUT", {param: param, update_type: update_type, param_type: param_type}, handler_success);
+    my_async_request(update_url, "PUT", {
+        param: param,
+        update_type: update_type,
+        param_type: param_type
+    }, handler_success);
 }
 
-function send_message()
-{
+function send_message() {
     alert("即将离开");
 }
 
-function update_body_param()
-{
+function update_body_param() {
     var parent_tr = $(this).parent().parent();
     var tds = parent_tr.find("td");
     $("#body_param_name").val(tds[0].innerHTML);
@@ -165,7 +166,7 @@ function update_body_param()
     $("#btn_new_body").addClass("btn btn-success");
 }
 
-function update_stage(stage){
+function update_stage(stage) {
     var update_url = $("#update_stage_url").val();
     my_async_request(update_url, "PUT", {"stage": stage});
 }
@@ -222,16 +223,37 @@ function init_api_info(data) {
     if (stage != "已废弃" && stage != "已删除") {
         $("#span_modify_stage").append('<a class="margin10" href="javascript:void(0)" onclick="update_stage(4);">设置废弃</a>');
     }
-    // header
-    var header_len = api_info.header_info.length;
-    for (var i = 0; i < header_len; i++) {
-        add_body_success(api_info.header_info[i]);
+
+    // predefine
+    var pre = ["header", "body"];
+    var pre_len = pre.length;
+    for (var i = 0; i < pre_len; i++) {
+        var param_type = pre[i];
+        for (var key in api_info["predefine_" + param_type]) {
+            var pb_item = api_info["predefine_" + param_type][key];
+            var btn = $('<button></button>');
+            btn.attr("id", "pp_" + pb_item.param);
+            btn.attr("title", pb_item.param_desc);
+            btn.val(pb_item.param);
+            btn.attr("param_type", param_type);
+            if ($.inArray(pb_item.param, api_info.predefine_param[param_type]) >= 0) {
+                btn.addClass("btn btn-danger");
+                btn.text("不需要" + pb_item.param);
+            }
+            else {
+                btn.addClass("btn btn-info");
+                btn.text("需要" + pb_item.param);
+            }
+            btn.addClass("margin5");
+            btn.click(handle_predefine_param);
+            $("#api_" + param_type + "_param").after(btn);
+        }
+        var l = api_info[param_type + "_info"].length;
+        for (var j = 0; j < l; j++) {
+            add_body_success(api_info[param_type + "_info"][j]);
+        }
     }
-    // body
-    var body_len = api_info.body_info.length;
-    for (var i = 0; i < body_len; i++) {
-        add_body_success(api_info.body_info[i]);
-    }
+
     // examples
     var example_len = api_info.examples.length;
     for (var i = 0; i < example_len; i++) {
@@ -240,7 +262,7 @@ function init_api_info(data) {
     }
 }
 
-$(function(){
+$(function () {
     init_api_info();
     $("button[name='btn_new']").click(add_example_info);
 });

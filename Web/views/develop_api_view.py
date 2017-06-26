@@ -122,8 +122,7 @@ def show_api():
     return_url = url_prefix + "/info/?api_no=%s" % api_no
     if "update" in request.args:
         update_stage_url = url_prefix + "/stage/"
-        return rt.render("Update_API.html", api_info=api_info, api_no=api_no, return_url=return_url,
-                         update_stage_url=update_stage_url)
+        return rt.render("Update_API.html", api_no=api_no, return_url=return_url, update_stage_url=update_stage_url)
     test_url = url_prefix + "/test/?api_no=%s" % api_no
     batch_test_url = url_prefix + "/test/batch/?api_no=%s" % api_no
     status_url = status_url_prefix

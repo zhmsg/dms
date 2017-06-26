@@ -49,13 +49,6 @@
             <td><button class="btn btn-info" onclick="add_api_info('header');">新建</button></td>
         </tr>
     </table>
-    {% for item in api_info["predefine_header"] %}
-        {% if item in api_info["predefine_param"]["header"] %}
-            <button id="pp_{{ item }}" class="btn btn-danger" onclick="handle_predefine_param(this.id, 'header');" title="{{ api_info["predefine_header"][item]["param_desc"] }}" value="{{ item }}">不需要{{ item }}</button>
-        {% else %}
-            <button id="pp_{{ item }}" class="btn btn-info" onclick="handle_predefine_param(this.id, 'header');" title="{{ api_info["predefine_header"][item]["param_desc"] }}" value="{{ item }}">需要{{ item }}</button>
-        {% endif %}
-    {% endfor %}
     <table class="table table-bordered api-list-table" id="api_body_param">
         <caption>请求主体参数</caption>
         <tr>
@@ -95,13 +88,6 @@
         <td><button class="btn btn-info" id="btn_new_body" onclick="add_api_info('body');">新建</button></td>
         </tr>
     </table>
-    {% for item in api_info["predefine_body"] %}
-        {% if item in api_info["predefine_param"]["body"] %}
-            <button id="pp_{{ item }}" class="btn btn-danger" onclick="handle_predefine_param(this.id, 'body');" title="{{ api_info["predefine_body"][item]["param_desc"] }}" value="{{ item }}">不需要{{ item }}</button>
-        {% else %}
-            <button id="pp_{{ item }}" class="btn btn-info" onclick="handle_predefine_param(this.id, 'body');" title="{{ api_info["predefine_body"][item]["param_desc"] }}" value="{{ item }}">需要{{ item }}</button>
-        {% endif %}
-    {% endfor %}
     <a href="{{ url_prefix }}/body/?api_no={{ api_no }}">从其他API复制</a>
     <br>
     <div class="bottom20 top6 api-example">
