@@ -12,6 +12,8 @@
 {% block content %}
     <br>
     <a class="btn btn-primary pull-right" href="{{ return_url }}" title="">返回</a>
+    <input class="display_none" id="body_url" value="{{ url_prefix }}/body/"/>
+    <input class="display_none" id="header_url" value="{{ url_prefix }}/header/"/>
     <p>API标题: <span id="span_api_title"></span></p>
     <p>API URL: <span id="span_api_url"></span></p>
     <p>API 请求方式: <span id="span_api_method"></span></p>

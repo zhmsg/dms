@@ -85,8 +85,8 @@ function delete_param() {
     var tds = parent_tr.find("td");
     var param = tds[0].innerHTML;
     var param_type = $(this).attr("param_type");
-    var del_url = $("#del_" + param_type + "_url").val();
-    var request_data = JSON.stringify({"param": param});
+    var del_url = $("#" + param_type + "_url").val();
+    console.info(del_url);
     my_async_request2(del_url, "DELETE", {"param": param}, function () {
         parent_tr.remove();
     });
