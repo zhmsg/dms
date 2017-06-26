@@ -23,8 +23,6 @@ class HelpManager:
         self.api_part_info = "api_part_info"
         self.api_module = "api_module"
         self.api_info = "api_info"
-        self.api_input = "api_input"
-        self.api_output = "api_output"
         self.t_example = "api_example"
         self.api_header = "api_header"
         self.predefine_header = "predefine_header"
@@ -215,63 +213,6 @@ class HelpManager:
                       example_content=example_content, add_time=add_time)
         l = self.db.execute_insert(self.t_example, kwargs)
         return True, kwargs
-
-    def new_api_input(self, api_no, input_examples):
-        if len(api_no) != 32:
-            return False, "Bad api_no"
-        new_result = []
-        value_sql = "VALUES "
-        for item in input_examples:
-            if "desc" not in item or "example" not in item:
-                return False, "input example need desc and example"
-            input_desc = check_sql_character(item["desc"])[:550]
-            input_example = check_sql_character(item["example"])
-            if len(input_desc) < 1:
-                return False, "Bad input_desc"
-            if len(input_example) < 1:
-                return False, "Bad input_example"
-            input_no = uuid.uuid1().hex
-            add_time = datetime.now().strftime(TIME_FORMAT)
-            value_sql += "('%s','%s','%s','%s','%s')" % (input_no,api_no, input_desc, input_example, add_time)
-            new_result.append({"api_no": api_no, "input_no": input_no, "desc": input_desc,
-                               "example": input_example, "add_time": add_time})
-        if len(value_sql) < 8:
-            return True
-        insert_sql = "INSERT INTO %s (input_no,api_no,input_desc,input_example,add_time) %s" % (self.api_input, value_sql)
-        result = self.db.execute(insert_sql)
-        if result != 1:
-            return False, "sql execute result is %s " % result
-        self.set_api_update(api_no)
-        return True, new_result
-
-    def new_api_output(self, api_no, output_examples):
-        if len(api_no) != 32:
-            return False, "Bad api_no"
-        new_result = []
-        value_sql = "VALUES "
-        for item in output_examples:
-            if "desc" not in item or "example" not in item:
-                return False, "output example need desc and example"
-            output_desc = check_sql_character(item["desc"])[:550]
-            output_example = check_sql_character(item["example"])
-            if len(output_desc) < 1:
-                return False, "Bad output_desc"
-            if len(output_example) < 1:
-                return False, "Bad output_example"
-            output_no = uuid.uuid1().hex
-            add_time = datetime.now().strftime(TIME_FORMAT)
-            value_sql += "('%s','%s','%s','%s','%s')" % (output_no,api_no, output_desc, output_example, add_time)
-            new_result.append({"api_no": api_no, "output_no": output_no, "desc": output_desc,
-                               "example": output_example, "add_time": add_time})
-        if len(value_sql) < 8:
-            return True
-        insert_sql = "INSERT INTO %s (output_no,api_no,output_desc,output_example,add_time) %s" \
-                     % (self.api_output, value_sql)
-        result = self.db.execute(insert_sql)
-        if result != 1:
-            return False, "sql execute result is %s " % result
-        self.set_api_update(api_no)
-        return True, new_result
 
     def new_api_care(self, api_no, user_name, care_level=2):
         if len(api_no) != 32:
@@ -547,7 +488,7 @@ class HelpManager:
 
     def del_api_other_info(self, api_no):
         delete_sql_format = "DELETE FROM %s WHERE api_no='" + api_no + "';"
-        for t in (self.api_header, self.api_input, self.api_body, self.api_output):
+        for t in (self.api_header, self.t_example, self.api_body):
             delete_sql = delete_sql_format % t
             self.db.execute(delete_sql)
         return True, "success"
