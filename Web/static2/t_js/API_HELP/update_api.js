@@ -32,6 +32,7 @@ function add_body_success(data)
 
     var param_td = $("<td></td>");
     param_td.text(data.param);
+    add_tr.append(param_td);
 
     var necessary_td = $("<td></td>");
     if (data.necessary == true) {
@@ -40,15 +41,26 @@ function add_body_success(data)
     else {
         necessary_td.text("否");
     }
+    add_tr.append(necessary_td);
 
-    var type_td = $("<td></td>");
-    type_td.text(data.type);
+    var sign = "header";
+
+    if ("type" in data) {
+        var type_td = $("<td></td>");
+        type_td.text(data.type);
+        add_tr.append(type_td);
+        sign = "body";
+    }
 
     var desc_td = $("<td></td>");
     desc_td.text(data.param_desc);
+    add_tr.append(desc_td);
 
-    var status_td = $("<td></td>");
-    status_td.text(["稍后", "立即", "待废弃", "废弃"][data.status]);
+    if ("status" in data) {
+        var status_td = $("<td></td>");
+        status_td.text(["稍后", "立即", "待废弃", "废弃"][data.status]);
+        add_tr.append(status_td);
+    }
 
     var op_td = $("<td></td>");
     var up_btn = $("<button class='btn btn-success'>更新</button>");
@@ -57,22 +69,18 @@ function add_body_success(data)
     del_btn.click(delete_body_param);
     op_td.append(up_btn);
     op_td.append(del_btn);
-
-    add_tr.append(param_td);
-    add_tr.append(necessary_td);
-    add_tr.append(type_td);
-    add_tr.append(desc_td);
-    add_tr.append(status_td);
     add_tr.append(op_td);
-    var tr = $("#api_body_param tr").eq(-2);
-    tr.after(add_tr);
-    $("#body_param_name").val("");
-    $("#body_param_desc").val("");
-    $("#body_param_type").val("");
-    $("#btn_new_body").text("新建");
 
-    $("#btn_new_body").removeClass();
-    $("#btn_new_body").addClass("btn btn-info");
+    var tr = $("#api_" + sign + "_param tr").eq(-2);
+    tr.after(add_tr);
+
+    $("#" + sign + "_param_name").val("");
+    $("#" + sign + "_param_desc").val("");
+    $("#" + sign + "_param_type").val("");
+    $("#btn_new_" + sign).text("新建");
+
+    $("#btn_new_" + sign).removeClass();
+    $("#btn_new_" + sign).addClass("btn btn-info");
 }
 
 
@@ -94,7 +102,7 @@ function add_api_info(type){
         request_data[one_param.id.substring(id_prefix.length)] = one_param.value;
     }
     if(type == "header")
-        my_async_request(request_url, "POST", request_data, add_header_success);
+        my_async_request(request_url, "POST", request_data, add_body_success);
     else if (type == "body")
         my_async_request2(request_url, "POST", request_data, add_body_success);
     console.info(request_data);
@@ -128,22 +136,8 @@ function delete_body_param() {
     var param = tds[0].innerHTML;
     var del_url = $("#del_body_url").val();
     var request_data = JSON.stringify({"param": param});
-    $.ajax({
-        url: del_url,
-        method: "DELETE",
-        contentType: "application/json",
-        data: request_data,
-        success:function(data){
-            if (data.status == true){
-                parent_tr.remove();
-            }
-            else{
-                alert(data);
-            }
-        },
-        error:function(xhr){
-            alert(xhr.statusText);
-        }
+    my_async_request2(del_url, "DELETE", {"param": param}, function () {
+        parent_tr.remove();
     });
 }
 
@@ -240,7 +234,6 @@ function add_example(data) {
     btn_del.click(delete_example);
     op_p.append(btn_update);
     op_p.append(btn_del);
-    //onclick="delete_output_param('{{ item["output_no"] }}')
     add_div.append(desc_p);
     add_div.append(example_p);
     add_div.append(op_p);
@@ -266,6 +259,25 @@ function init_api_info(data) {
     for (var i = 0; i < key_len; i++) {
         $("#span_" + keys[i]).text(api_info.basic_info[keys[i]]);
     }
+    var stage = api_info.basic_info.stage;
+    var update_url = $("#update_stage_url").val();
+    if (stage == "新建" || stage == "修改中") {
+        $("#span_modify_stage").append('<a class="margin10" href="javascript:void(0)" onclick="update_stage(2);">设置完成</a>');
+        $("#span_modify_stage").append('<a class="margin10" href="javascript:void(0)" onclick="update_stage(3);">设置待废弃</a>');
+    }
+    else if (stage == "已完成") {
+        $("#span_modify_stage").append('<a class="margin10" href="javascript:void(0)" onclick="update_stage(1);">设置修改中</a>');
+        $("#span_modify_stage").append('<a class="margin10" href="javascript:void(0)" onclick="update_stage(3);">设置待废弃</a>');
+
+    }
+    if (stage != "已废弃" && stage != "已删除") {
+        $("#span_modify_stage").append('<a class="margin10" href="javascript:void(0)" onclick="update_stage(4);">设置废弃</a>');
+    }
+    // header
+    var header_len = api_info.header_info.length;
+    for (var i = 0; i < header_len; i++) {
+        add_body_success(api_info.header_info[i]);
+    }
     // body
     var body_len = api_info.body_info.length;
     for (var i = 0; i < body_len; i++) {
@@ -282,19 +294,4 @@ function init_api_info(data) {
 $(function(){
     init_api_info();
     $("button[name='btn_new']").click(add_example_info);
-    var stage = $("#api_stage").val();
-    var update_url = $("#update_stage_url").val();
-    if(stage == "新建" || stage == "修改中"){
-        $("#span_modify_stage").append('<a class="margin10" href="javascript:void(0)" onclick="update_stage(2);">设置完成</a>');
-        $("#span_modify_stage").append('<a class="margin10" href="javascript:void(0)" onclick="update_stage(3);">设置待废弃</a>');
-    }
-    else if(stage == "已完成")
-    {
-        $("#span_modify_stage").append('<a class="margin10" href="javascript:void(0)" onclick="update_stage(1);">设置修改中</a>');
-        $("#span_modify_stage").append('<a class="margin10" href="javascript:void(0)" onclick="update_stage(3);">设置待废弃</a>');
-
-    }
-    if (stage != "已废弃" && stage != "已删除") {
-        $("#span_modify_stage").append('<a class="margin10" href="javascript:void(0)" onclick="update_stage(4);">设置废弃</a>');
-    }
 });

@@ -192,6 +192,17 @@ class HelpManager:
         self.set_api_update(api_no)
         return True, new_result
 
+    def insert_api_header(self, api_no, param, necessary, param_desc, status=1):
+        add_time = datetime.now().strftime(TIME_FORMAT)
+        update_time = int(time())
+        param_desc = param_desc[:1000]
+        kwargs = dict(api_no=api_no, param=param, necessary=necessary, param_desc=param_desc, status=status,
+                      add_time=add_time, update_time=update_time)
+        l = self.db.execute_insert(self.api_header, kwargs, ignore=True)
+        if l == 0:
+            self.update_api_body(**kwargs)
+        return True, kwargs
+
     def insert_api_body(self, api_no, param, necessary, param_type, param_desc, status=1):
         add_time = datetime.now().strftime(TIME_FORMAT)
         update_time = int(time())
@@ -207,36 +218,6 @@ class HelpManager:
         kwargs.pop("add_time")
         l = self.db.execute_update(self.api_body, update_value=kwargs, where_value=dict(api_no=api_no, param=param))
         return l
-
-    def new_api_body(self, api_no, body_params):
-        if len(api_no) != 32:
-            return False, "Bad api_no"
-        new_result = []
-        value_sql = "VALUES "
-        for key, value in body_params.items():
-            if check_char_num_underline(key) is False:
-                return False, "Bad body param %s" % key
-            if "necessary" not in value or "desc" not in value or "type" not in value:
-                return False, "Bad body param %s, need necessary type desc" % key
-            if value["necessary"] != 0 and value["necessary"] != 1:
-                return False, "Bad body param %s, necessary must be 0 or 1" % key
-            if check_char(value["type"], 1, 20) is False:
-                return False, "Bad body param %s, type must a-z" % key
-            param_desc = check_sql_character(value["desc"])[:1000]
-            add_time = datetime.now().strftime(TIME_FORMAT)
-            value_sql += "('%s','%s',%s,'%s','%s','%s')" \
-                         % (api_no, key, value["necessary"], value["type"], param_desc, add_time)
-            necessary = True if value["necessary"] == 1 else False
-            new_result.append({"api_no": api_no, "necessary": necessary, "param": key, "desc": param_desc,
-                               "type": value["type"], "add_time": add_time})
-        if len(value_sql) < 8:
-            return True
-        insert_sql = "INSERT INTO %s (api_no,param,necessary,type,param_desc,status,add_time) %s " \
-                     "ON DUPLICATE KEY UPDATE necessary=VALUES(necessary),param_desc=VALUES(param_desc),type=VALUES(type)" \
-                     % (self.api_body, value_sql)
-        result = self.db.execute(insert_sql)
-        self.set_api_update(api_no)
-        return True, new_result
 
     def new_predefine_param(self, api_no, param, param_type, add_time=None):
         if len(api_no) != 32:

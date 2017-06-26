@@ -13,7 +13,6 @@
     <br>
     <a class="btn btn-primary pull-right" href="{{ return_url }}" title="">返回</a>
     <input id="api_no" value="{{ api_no }}" style="display:none;"/>
-    <input id="api_stage" value="{{ api_info["basic_info"]["stage"] }}" style="display: none">
     <p>API标题: <span id="span_api_title"></span></p>
     <p>API URL: <span id="span_api_url"></span></p>
     <p>API 请求方式: <span id="span_api_method"></span></p>
@@ -21,7 +20,7 @@
     <p>API 状态: <span id="span_stage"></span></p>
     <p>添加时间: <span id="span_add_time"></span></p>
     <p>最近更新时间: <span id="span_update_time"></span></p>
-    <a href="{{ url_prefix }}/basic/?api_no={{ api_info["basic_info"]["api_no"] }}">更新API信息</a>
+    <a href="{{ url_prefix }}/basic/?api_no={{ api_no }}">更新API信息</a>
     <span class="margin10" id="span_modify_stage">
 
     </span>
@@ -118,7 +117,7 @@
             <button id="pp_{{ item }}" class="btn btn-info" onclick="handle_predefine_param(this.id, 'body');" title="{{ api_info["predefine_body"][item]["param_desc"] }}" value="{{ item }}">需要{{ item }}</button>
         {% endif %}
     {% endfor %}
-    <a href="{{ url_prefix }}/body/?api_no={{ api_info["basic_info"]["api_no"] }}">从其他API复制</a>
+    <a href="{{ url_prefix }}/body/?api_no={{ api_no }}">从其他API复制</a>
     <br>
     <div class="bottom20 top6 api-example">
         <b>请求示例</b>
