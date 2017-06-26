@@ -327,10 +327,10 @@ class ControlManager(object):
                 return False, u"您没有权限"
         return result, api_info
 
-    def add_header_param(self, user_name, api_no, param, necessary, desc, role):
-        if role & self.role_value["api_new"] <= 0:
+    def add_header_param(self, user_name, user_role, api_no, param, necessary, param_desc):
+        if self.judge_role(user_role, self.role_value["api_new"]) <= 0:
             return False, u"您没有权限"
-        result, info = self.api_help.new_api_header(api_no, {param: {"necessary": necessary, "desc": desc}})
+        result, info = self.api_help.insert_api_header(api_no, param, necessary, param_desc)
         if result is True:
             self._send_api_update_message_thread(user_name, api_no, param)
         return result, info
@@ -429,7 +429,7 @@ class ControlManager(object):
             return False, u"您没有权限"
         if stage == 2:
             # 必须至少一个返回示例
-            output_info = self.api_help.get_api_output(api_no)
+            output_info = self.api_help.get_api_example(api_no)
             if len(output_info) <= 0:
                 return False, u"请至少提交一个返回示例"
         result, info = self.api_help.set_api_stage(api_no, stage)

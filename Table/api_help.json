@@ -101,9 +101,19 @@
                 "col_type": "varchar(1000)"
             },
             {
+              "col_comment": "参数状态 0 未启用 1 使用中 2待废弃 3废弃",
+              "col_name": "status",
+              "col_type": "tinyint(4)"
+            },
+          {
                 "col_comment": "添加的时间",
                 "col_name": "add_time",
                 "col_type": "datetime"
+          },
+          {
+            "col_comment": "更新时间",
+            "col_name": "update_time",
+            "col_type": "int(11)"
             }
         ],
         "table_comment": "",
@@ -162,38 +172,6 @@
         ],
         "table_comment": "",
         "table_name": "api_info"
-    },
-    {
-        "table_cols": [
-            {
-                "pri_key": true,
-                "col_comment": "主键 输入系统编号",
-                "col_name": "input_no",
-                "col_type": "char(32)"
-            },
-            {
-                "col_comment": "API系統编号 參看api_info api_no",
-                "col_name": "api_no",
-                "col_type": "char(32)"
-            },
-            {
-                "col_comment": "API输入描述",
-                "col_name": "input_desc",
-                "col_type": "varchar(550)"
-            },
-            {
-                "col_comment": "API调用输入示例",
-                "col_name": "input_example",
-                "col_type": "mediumtext"
-            },
-            {
-                "col_comment": "添加的时间",
-                "col_name": "add_time",
-                "col_type": "datetime"
-            }
-        ],
-        "table_comment": "",
-        "table_name": "api_input"
     },
     {
         "table_cols": [
@@ -260,38 +238,6 @@
         ],
         "table_comment": "",
         "table_name": "api_part_info"
-    },
-    {
-        "table_cols": [
-            {
-                "pri_key": true,
-                "col_comment": "主键 输出系统编号",
-                "col_name": "output_no",
-                "col_type": "char(32)"
-            },
-            {
-                "col_comment": "API系統编号 參看api_info api_no",
-                "col_name": "api_no",
-                "col_type": "char(32)"
-            },
-            {
-                "col_comment": "API输出描述",
-                "col_name": "output_desc",
-                "col_type": "varchar(550)"
-            },
-            {
-                "col_comment": "API调用输出示例",
-                "col_name": "output_example",
-                "col_type": "mediumtext"
-            },
-            {
-                "col_comment": "添加的时间",
-                "col_name": "add_time",
-                "col_type": "datetime"
-            }
-        ],
-        "table_comment": "",
-        "table_name": "api_output"
     },
     {
         "table_cols": [

@@ -184,7 +184,8 @@ class APIHeaderHandler(_BaseHandler):
         api_no = self.g.api_no
         desc = request_data["desc"]
         necessary = int(request_data["necessary"])
-        result, param_info = control.add_header_param(self.g.user_name, api_no, param, necessary, desc, self.g.user_role)
+        result, param_info = control.add_header_param(self.g.user_name, self.g.user_role, api_no, param, necessary,
+                                                      desc)
         return self.jsonify({"status": result, "data": param_info})
 
     @referer_api_no

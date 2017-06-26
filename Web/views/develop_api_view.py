@@ -198,7 +198,7 @@ def add_header_param():
     api_no = g.api_no
     desc = request_data["desc"]
     necessary = int(request_data["necessary"])
-    result, param_info = control.add_header_param(g.user_name, api_no, param, necessary, desc, g.user_role)
+    result, param_info = control.add_header_param(g.user_name, g.user_role, api_no, param, necessary, desc)
     return jsonify({"status": result, "data": param_info})
 
 
