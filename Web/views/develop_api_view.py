@@ -289,6 +289,16 @@ def add_api_example():
     return jsonify({"status": result, "data": data})
 
 
+@develop_api_view.route("/example/", methods=["DELETE"])
+@referer_api_no
+def delete_api_example():
+    request_data = request.json
+    api_no = g.api_no
+    example_no = request_data["example_no"]
+    result, data = control.delete_api_example(g.user_role, example_no)
+    return jsonify({"status": result, "data": data})
+
+
 @develop_api_view.route("/input/", methods=["POST"])
 @referer_api_no
 def add_input_example():

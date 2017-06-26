@@ -76,26 +76,12 @@ function add_body_success(data)
 }
 
 
-function add_example_success(data)
-{
-    if (data.example_type == 1) {
-        data["input_example"] = data["example_content"];
-        data["input_desc"] = data["example_desc"];
-        add_example(data, "input");
-    }
-    else {
-        data["output_example"] = data["example_content"];
-        data["output_desc"] = data["example_desc"];
-        add_example(data, "output");
-    }
-}
-
 function add_example_info()
 {
     var current_btn = $(this);
     var parent_div = current_btn.parent();
     var data = package_input(parent_div);
-    my_async_request2(data["url"], "POST", data, add_example_success);
+    my_async_request2(data["url"], "POST", data, add_example);
 }
 
 function add_api_info(type){
@@ -162,45 +148,13 @@ function delete_body_param() {
 }
 
 function delete_example() {
-
-}
-function delete_input_param(input_no){
-    var del_url = $("#del_input_url").val();
-    $.ajax({
-        url: del_url + input_no + "/",
-        method: "DELETE",
-        success:function(data){
-            if (data.status == true){
-                $("#div_"+input_no).remove();
-            }
-            else{
-                alert(data);
-            }
-        },
-        error:function(xhr){
-            alert(xhr.statusText);
-        }
+    var current_btn = $(this);
+    var example_no = current_btn.attr("example_no");
+    my_async_request2("/dev/api/example/", "DELETE", {"example_no": example_no}, function () {
+        $("#example_" + example_no).remove();
     });
 }
 
-function delete_output_param(output_no){
-    var del_url = $("#del_output_url").val();
-    $.ajax({
-        url: del_url + output_no + "/",
-        method: "DELETE",
-        success:function(data){
-            if (data.status == true){
-                $("#div_"+output_no).remove();
-            }
-            else{
-                alert(data);
-            }
-        },
-        error:function(xhr){
-            alert(xhr.statusText);
-        }
-    });
-}
 
 function format_input(input_id){
     var input_content = $("#" + input_id).val();
@@ -273,21 +227,29 @@ function update_stage(stage){
     my_async_request(update_url, "PUT", {"stage": stage});
 }
 
-function add_example(data, sign) {
+function add_example(data) {
     var add_div = $("<div></div>");
+    add_div.attr("id", "example_" + data.example_no);
     var desc_p = $("<p></p>");
-    desc_p.text(data[sign + "_desc"]);
-    var example_p = $('<p><textarea class="form-control" readonly>' + data[sign + "_example"] + '</textarea></p>');
+    desc_p.text(data["example_desc"]);
+    var example_p = $('<p><textarea class="form-control" readonly>' + data["example_content"] + '</textarea></p>');
     var op_p = $("<p></p>");
     var btn_update = $('<button class="btn btn-success">更新</button>');
     var btn_del = $('<button class="btn btn-danger">删除</button>');
+    btn_del.attr("example_no", data.example_no);
+    btn_del.click(delete_example);
     op_p.append(btn_update);
     op_p.append(btn_del);
     //onclick="delete_output_param('{{ item["output_no"] }}')
     add_div.append(desc_p);
     add_div.append(example_p);
     add_div.append(op_p);
-    $("#api_" + sign + "_exist").append(add_div);
+    if (data.example_type == 1) {
+        $("#api_input_exist").append(add_div);
+    }
+    else if (data.example_type == 2) {
+        $("#api_output_exist").append(add_div);
+    }
 }
 
 function init_api_info(data) {
@@ -309,17 +271,11 @@ function init_api_info(data) {
     for (var i = 0; i < body_len; i++) {
         add_body_success(api_info.body_info[i]);
     }
-    // input
-    var input_len = api_info.input_info.length;
-    for (var i = 0; i < input_len; i++) {
-        var input_item = api_info.input_info[i];
-        add_example(input_item, "input");
-    }
-    // output
-    var output_len = api_info.output_info.length;
-    for (var i = 0; i < output_len; i++) {
-        var output_item = api_info.output_info[i];
-        add_example(output_item, "output");
+    // examples
+    var example_len = api_info.examples.length;
+    for (var i = 0; i < example_len; i++) {
+        var example_item = api_info.examples[i];
+        add_example(example_item);
     }
 }
 

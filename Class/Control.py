@@ -410,15 +410,10 @@ class ControlManager(object):
             return False, u"您没有权限"
         return self.api_help.del_api_body(api_no=api_no, param=param)
 
-    def delete_input(self, input_no, role):
-        if role & self.role_value["api_new"] <= 0:
+    def delete_api_example(self, user_role, example_no):
+        if self.judge_role(user_role, self.role_value["api_new"]) is False:
             return False, u"您没有权限"
-        return self.api_help.del_api_input(input_no)
-
-    def delete_ouput(self, output_no, role):
-        if role & self.role_value["api_new"] <= 0:
-            return False, u"您没有权限"
-        return self.api_help.del_api_output(output_no)
+        return self.api_help.del_api_example(example_no)
 
     def delete_care(self, api_no, user_name):
         return self.api_help.del_api_care(api_no, user_name)

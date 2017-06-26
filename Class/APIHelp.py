@@ -427,16 +427,6 @@ class HelpManager:
         basic_info["update_time"] = basic_info["update_time"].strftime(TIME_FORMAT) if basic_info["update_time"] is not None else ""
         return True, basic_info
 
-    def get_api_output(self, api_no):
-        # 获得返回示例
-        select_sql = "SELECT output_no,api_no,output_desc,output_example FROM %s WHERE api_no='%s' ORDER BY add_time;" \
-                     % (self.api_output, api_no)
-        self.db.execute(select_sql)
-        output_info = []
-        for item in self.db.fetchall():
-            output_info.append({"output_no": item[0], "api_no": item[1], "output_desc": item[2], "output_example": item[3]})
-        return output_info
-
     def get_api_example(self, api_no):
         cols = ["example_no", "api_no", "example_type", "example_desc", "example_content", "add_time"]
         db_items = self.db.execute_select(self.t_example, where_value=dict(api_no=api_no), cols=cols)
@@ -497,7 +487,7 @@ class HelpManager:
         # 获得请求示例
         input_info = []
         # 获得返回示例
-        output_info = []  # self.get_api_output(api_no)
+        output_info = []
         # 获得示例
         api_examples = self.get_api_example(api_no)
         for item in api_examples:
@@ -512,7 +502,7 @@ class HelpManager:
         return True, {"basic_info": basic_info, "header_info": header_info, "body_info": body_info,
                       "input_info": input_info, "output_info": output_info, "care_info": care_info,
                       "predefine_param": predefine_param, "predefine_header": predefine_header,
-                      "predefine_body": predefine_body}
+                      "predefine_body": predefine_body, "examples": api_examples}
 
     def get_api_list(self, module_no):
         if type(module_no) != int:
@@ -564,19 +554,9 @@ class HelpManager:
         where_value["result"] = result
         return True, where_value
 
-    def del_api_input(self, input_no):
-        if len(input_no) != 32:
-            return False, "Bad input_no"
-        delete_sql = "DELETE FROM %s WHERE input_no='%s';" % (self.api_input, input_no)
-        result = self.db.execute(delete_sql)
-        return True, result
-
-    def del_api_output(self, output_no):
-        if len(output_no) != 32:
-            return False, "Bad output_no"
-        delete_sql = "DELETE FROM %s WHERE output_no='%s';" % (self.api_output, output_no)
-        result = self.db.execute(delete_sql)
-        return True, result
+    def del_api_example(self, example_no):
+        l = self.db.execute_delete(self.t_example, where_value=dict(example_no=example_no))
+        return True, l
 
     def del_api_care(self, api_no, user_name):
         if len(api_no) != 32:
