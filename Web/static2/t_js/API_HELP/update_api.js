@@ -173,7 +173,7 @@ function add_example(data) {
     desc_p.text(data["example_desc"]);
     var example_p = $('<p><textarea class="form-control" readonly>' + data["example_content"] + '</textarea></p>');
     var op_p = $("<p></p>");
-    var btn_update = $('<button class="btn btn-success">更新</button>');
+    var btn_update = $('<button class="btn btn-success margin5">更新</button>');
     var btn_del = $('<button class="btn btn-danger">删除</button>');
     btn_del.attr("example_no", data.example_no);
     btn_del.click(delete_example);
