@@ -101,10 +101,10 @@ function delete_example() {
 }
 
 
-function format_input(input_id) {
-    var input_content = $("#" + input_id).val();
+function format_input() {
+    var input_content = $(this).val();
     var json_content = JSON.stringify(JSON.parse(input_content), null, 4);
-    $("#" + input_id).val(json_content);
+    $(this).val(json_content);
 }
 
 function handler_success(data) {
@@ -261,4 +261,6 @@ $(function () {
     init_api_info();
     $("button[name='btn_new']").click(add_example_info);
     $("button[name='btn_new_param']").click(add_param);
+    $("textarea").change(format_input);
+    $("textarea").keyup(format_input);
 });
