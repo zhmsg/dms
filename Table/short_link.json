@@ -1,0 +1,67 @@
+[
+  {
+    "table_cols": [
+      {
+        "pri_key": true,
+        "auto_increment": true,
+        "col_comment": "编号",
+        "col_name": "no",
+        "col_type": "int(11)"
+      },
+      {
+        "col_comment": "链接备注",
+        "col_name": "remark",
+        "col_type": "varchar(30)"
+      },
+      {
+        "col_comment": "链接",
+        "col_name": "link",
+        "col_type": "varchar(200)"
+      },
+      {
+        "col_comment": "添加者",
+        "col_name": "adder",
+        "col_type": "varchar(22)"
+      },
+      {
+        "col_comment": "插入时间",
+        "col_name": "insert_time",
+        "col_type": "int(11)"
+      }
+    ],
+    "table_comment": "整形短链接",
+    "table_name": "short_link_n"
+  },
+  {
+    "table_cols": [
+      {
+        "pri_key": true,
+        "col_comment": "编号",
+        "col_name": "s",
+        "col_type": "varchar(10)"
+      },
+      {
+        "col_comment": "链接备注",
+        "col_name": "remark",
+        "col_type": "varchar(30)"
+      },
+      {
+        "col_comment": "链接",
+        "col_name": "link",
+        "col_type": "varchar(200)"
+      },
+      {
+        "col_comment": "添加者",
+        "col_name": "adder",
+        "col_type": "varchar(22)"
+      },
+      {
+        "col_comment": "插入时间",
+        "col_name": "insert_time",
+        "col_type": "int(11)"
+      }
+    ],
+    "table_comment": "字符串短链接",
+    "table_name": "short_link_s"
+  }
+]
