@@ -75,7 +75,7 @@ function add_param(data, param_pos) {
 function add_example(data, sign) {
     var add_div = $("<div></div>");
     var desc_p = $("<p></p>");
-    desc_p.text(data[sign + "_desc"]);
+    desc_p.html(replace_url(data[sign + "_desc"]));
     var example_p = $('<p><textarea class="form-control" readonly>' + data[sign + "_example"] + '</textarea></p>');
     add_div.append(desc_p);
     add_div.append(example_p);

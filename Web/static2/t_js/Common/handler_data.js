@@ -48,3 +48,12 @@ function format_json_str(s) {
 function format_num(s) {
     return s.replace(/[^\d]/g, "");
 }
+
+
+function replace_url(content) {
+    var reg = /https?:\/\/(\w|=|\?|\.|\/|\&|-)+/g;
+    content = content.replace(reg, function ($url) {
+        return "<a href='" + $url + "' target='_blank'> " + $url + " </a>";
+    });
+    return content;
+}
