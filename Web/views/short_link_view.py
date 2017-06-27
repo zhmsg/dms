@@ -12,7 +12,7 @@ sys.path.append('..')
 
 __author__ = 'Zhouheng'
 
-short_link_view = create_blue('git_hup_view', url_prefix=url_prefix)
+short_link_view = create_blue('short_link_view', url_prefix=url_prefix)
 
 
 @short_link_view.route("/<int:no>/", methods=["GET"])
