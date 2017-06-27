@@ -170,6 +170,7 @@ class HelpManager:
         l = self.db.execute_insert(self.api_header, kwargs, ignore=True)
         if l == 0:
             self.update_api_header(**kwargs)
+        self.set_api_update(api_no)
         return True, kwargs
 
     def insert_api_body(self, api_no, param, necessary, param_type, param_desc, status=1):
@@ -181,6 +182,7 @@ class HelpManager:
         l = self.db.execute_insert(self.api_body, kwargs, ignore=True)
         if l == 0:
             self.update_api_body(**kwargs)
+        self.set_api_update(api_no)
         return True, kwargs
 
     def update_api_header(self, api_no, param, **kwargs):
