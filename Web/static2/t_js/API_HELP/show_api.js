@@ -39,6 +39,8 @@ function remove_care(remove_url){
 
 function add_param(data, param_pos) {
     var add_tr = $("<tr></tr>");
+    $("#api_" + param_pos + "_param").append(add_tr);
+
     add_tr.append(new_td("param", data));
     var necessary_td = new_td("necessary", data);
     necessary_td.addClass("text-center");
@@ -49,17 +51,25 @@ function add_param(data, param_pos) {
         add_tr.append(type_td);
 
         if (data.status == 2) {
-            //add_tr.addClass("grayBg");
-            add_tr.find("td").first().append("【待废弃】");
+            var span_aba = $("<span> 待废弃</span>");
+            add_tr.find("td").first().append(span_aba);
+            span_aba.addClass("abandonTag")
         }
         else if (get_timestamp2() - data.update_time < 60 * 60 * 24 * 7) {
             if (datetime_2_timestamp(data.add_time) != data.update_time) {
-                add_tr.find("td").first().append("【最近更新】");
+                var span_update = $("<span>最近更新</span>");
+                add_tr.find("td").first().append(span_update);
+                span_update.addClass("updateTag");
+            }
+            else {
+                var span_add = $("<span>最近新增</span>");
+                add_tr.find("td").first().append(span_add);
+                span_add.addClass("addTag");
             }
         }
     }
     add_tr.append(new_td("param_desc", data));
-    $("#api_" + param_pos + "_param").append(add_tr);
+
 }
 
 function add_example(data, sign) {

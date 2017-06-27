@@ -711,3 +711,57 @@ body, td, th {
 .parent_background {
     background-color: transparent;
 }
+
+.addTag {
+    background: green;
+    color: #ffffff;
+    opacity: 0.4;
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    -moz-border-radius: 20px;
+    -webkit-border-radius: 20px;
+    text-align: center;
+    list-style: none;
+    position: absolute;
+    overflow: hidden;
+    float: right;
+    margin-top: -10px;
+    margin-right: 10px;
+}
+
+.updateTag {
+    background: goldenrod;
+    color: #ffffff;
+    opacity: 0.4;
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    -moz-border-radius: 20px;
+    -webkit-border-radius: 20px;
+    text-align: center;
+    list-style: none;
+    position: absolute;
+    overflow: hidden;
+    float: right;
+    margin-top: -10px;
+    margin-right: 10px;
+}
+
+.abandonTag {
+    background: red;
+    color: #ffffff;
+    opacity: 0.4;
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    -moz-border-radius: 20px;
+    -webkit-border-radius: 20px;
+    text-align: center;
+    list-style: none;
+    position: absolute;
+    overflow: hidden;
+    float: right;
+    margin-top: -10px;
+    margin-right: 10px;
+}
