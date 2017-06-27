@@ -110,6 +110,7 @@ jingdu_url_prefix = web_prefix + "/jd"
 editor_url_prefix = web_prefix + "/editor"
 article_url_prefix = web_prefix + "/article"
 message_url_prefix = web_prefix + "/message"
+short_link_prefix = web_prefix + "/s"
 
 data_dir = "/geneac/dmsdata"
 
