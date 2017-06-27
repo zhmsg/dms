@@ -214,6 +214,7 @@ class HelpManager:
         kwargs = dict(example_no=example_no, example_type=example_type, api_no=api_no, example_desc=example_desc,
                       example_content=example_content, add_time=add_time)
         l = self.db.execute_insert(self.t_example, kwargs)
+        self.set_api_update(api_no)
         return True, kwargs
 
     def new_api_care(self, api_no, user_name, care_level=2):
