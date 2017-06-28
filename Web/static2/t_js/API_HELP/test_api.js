@@ -23,6 +23,7 @@ function get_param_value(){
     var param_el = $("input[id$='_value']");
     var body_param = new Object();
     var header_param = new Object();
+    var u_header_param = new Object();
     var url_param = new Object();
     for(var i=0;i<param_el.length;i++){
         var el = param_el[i];
@@ -74,6 +75,28 @@ function get_param_value(){
                 header_param[param_key] = param_value;
         }
     }
+    for (var param_key in header_param) {
+        var param_value = header_param[param_key];
+        if (param_key == "authorization") {
+            if ($("#skip_auth").is(':checked')) {
+                u_header_param["X-Skip-Auth"] = param_value.split(":")[0];
+            }
+            else {
+                var auth_split = param_value.split(":");
+                if (auth_split.length != 2) {
+                    update_res("请输入正确的authorization,例如zh_test:123456");
+                    return false;
+                }
+                u_header_param[param_key] = "Basic " + base64encode(param_value);
+            }
+        }
+        else if (param_key == "X-Authorization") {
+            u_header_param[param_key] = "OAuth2 " + param_value;
+        }
+        else {
+            u_header_param[param_key] = param_value;
+        }
+    }
     var url_el = $("input[id^='url_value_']");
     for(var i=0;i<url_el.length;i++) {
         var el = url_el[i];
@@ -84,7 +107,7 @@ function get_param_value(){
         }
         url_param[param_key] = param_value;
     }
-    var test_case_info = {body: body_param, header: header_param, url: url_param};
+    var test_case_info = {body: body_param, header: header_param, url: url_param, u_header: u_header_param};
     return test_case_info;
 
 }
@@ -131,6 +154,38 @@ function set_default_type()
     }
 }
 
+function generating_code() {
+    var test_case_info = get_param_value();
+    var api_url = $("#api_url").val();
+    var api_method = $("#api_method").val();
+    var test_env = $("#test_env").val();
+    var request_url = test_env + api_url;
+    if ($("#request_url").val() != "") {
+        request_url = $("#request_url").val();
+    }
+    else {
+        update_res("无效的请求URL");
+        return false;
+    }
+    var cmd = "import requests\n";
+    cmd += 'url = "' + request_url + '"\n';
+    cmd += 'method = "' + api_method + '"\n';
+    cmd += 'headers = ' + JSON.stringify(test_case_info.u_header) + "\n";
+    cmd += 'data = ' + JSON.stringify(test_case_info.body) + '\n';
+    if (api_method == "GET") {
+        cmd += "resp = requests.request(method, url, headers=headers, params=data)\n";
+    }
+    else {
+        cmd += "resp = requests.request(method, url, headers=headers, json=data)\n";
+    }
+    cmd += "assert resp.status_code == 200\n";
+    cmd += "r_data = resp.json()\n";
+    cmd += 'print "success" if r_data["status"] % 10000 < 100 else "status exception"\n';
+    cmd += 'print(r_data["status"])\n';
+    cmd += 'print(r_data["message"])\n';
+    cmd += 'print r_data if "data" in resp else "no data"\n';
+    update_res(cmd);
+}
 
 $(function(){
     $("#btn_save_case").click(function(){
@@ -208,6 +263,7 @@ $(function(){
     }
     $("#authorization_value").parent().after('<li><input type="checkbox" id="skip_auth"> Skip Auth</li>');
     $("#Content-Type_value").val("application/json");
+    $("#btn_generating_code").click(generating_code);
 });
 
 
