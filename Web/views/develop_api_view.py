@@ -7,7 +7,7 @@ import re
 from functools import wraps
 from flask import request, jsonify, g
 from Tools.RenderTemplate import RenderTemplate
-from Web import api_url_prefix, create_blue, test_url_prefix, status_url_prefix
+from Web import api_url_prefix, create_blue, test_url_prefix, status_url_prefix, param_url_prefix
 from Web import control
 
 
@@ -126,9 +126,10 @@ def show_api():
     test_url = url_prefix + "/test/?api_no=%s" % api_no
     batch_test_url = url_prefix + "/test/batch/?api_no=%s" % api_no
     status_url = status_url_prefix
+    param_url = param_url_prefix + "/query/"
     return_url = url_prefix + "/?module_no=%s" % api_info["basic_info"]["module_no"]
     return rt.render("Show_API.html", api_no=api_no, return_url=return_url, test_url=test_url, status_url=status_url,
-                     batch_test_url=batch_test_url)
+                     batch_test_url=batch_test_url, param_url=param_url)
 
 
 @develop_api_view.route("/basic/", methods=["GET"])

@@ -71,4 +71,5 @@
     <br>
     <a href="{{ status_url }}?api_no={{ api_no }}" title="">查看所有返回状态码解释</a>
     <label style="display: none" id="role_value">{{ role_value | tojson | safe }}</label>
+    <input class="display_none" id="param_url" value="{{ param_url }}"/>
 {% endblock %}
