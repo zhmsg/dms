@@ -929,14 +929,14 @@ class ControlManager(object):
                 kwargs["real_name"] = user_info["nick_name"]
         return self.pull_request_man.add_pull_request(**kwargs)
 
-    def review_pull_request(self, action_user, html_url, reviewer):
+    def review_pull_request(self, action_user, html_url, title, body, reviewer):
         user_name = self.pull_request_man.select_user(action_user)
         review_users = []
         for r_item in reviewer:
             user_item = self.pull_request_man.select_user(r_item)
             if user_item is not None:
                 review_users.append(user_item)
-        content = u"有人喊你review code，地址是 %s" % html_url
+        content = u"有人喊你review %s\n%s，地址是 %s" % (title, body, html_url)
         at_mobiles = []
         for u_item in review_users:
             exec_r, user_info = self.user.get_user_info(u_item)
