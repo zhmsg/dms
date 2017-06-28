@@ -947,7 +947,7 @@ class ControlManager(object):
         if exec_r is True:
             content = user_info["nick_name"] + content
             self.ding_msg.send_text(content, at_mobiles=at_mobiles,
-                                    access_token="66f2cdeb57bc80b0dd9d5290e8889b98b1779190ee079bb9f1ca4f3e5e7cefc1")
+                                    access_token="a49a7c62e8601123cd417465ff8037cd8410a3572244903fa694e4b7548a917a")
         return True
 
     # 节点管理
