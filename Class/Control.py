@@ -918,6 +918,9 @@ class ControlManager(object):
     def get_params_info(self, user_name, user_role):
         return self.param_man.select_param_format()
 
+    def query_params(self, user_name, user_role, params):
+        return self.param_man.select_mul_param_format(params)
+
     # 针对pull request
     def add_pull_request(self, **kwargs):
         action_user = kwargs["action_user"]
