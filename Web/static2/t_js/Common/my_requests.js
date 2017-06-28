@@ -91,6 +91,12 @@ function my_async_request(request_url, request_method, body_param, request_succe
 }
 
 function my_async_request2(request_url, request_method, body_param, request_success, exec_obj){
+    if (request_url.indexOf("/?") > 0) {
+        request_url += "&rf=async";
+    }
+    else {
+        request_url += "?rf=async";
+    }
     if(request_method != "GET"){
         body_param = JSON.stringify(body_param)
     }
