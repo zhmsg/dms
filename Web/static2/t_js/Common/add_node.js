@@ -104,6 +104,28 @@ function add_row_td(t_id, content, col_len)
     return add_td;
 }
 
+
+function msg_include(s, s2) {
+    var len_include = s2.length;
+    var len_str = s.length;
+    var i = 0, j = 0;
+    while (true) {
+        if (i >= len_include) {
+            return true;
+        }
+        if (j >= len_str) {
+            return false;
+        }
+        if (s[j] == s2[i]) {
+            i++;
+            j++;
+        }
+        else {
+            j++;
+        }
+    }
+}
+
 function query_table(t_id, key){
     var trs = $("#" + t_id + " tr").not(":first");
     var tr_len = trs.length;
@@ -114,7 +136,7 @@ function query_table(t_id, key){
         var is_show = false;
         for(var j=0;j<td_len;j++){
             var td_item = $(tr_tds[j]);
-            if(td_item.text().indexOf(key) >= 0){
+            if (msg_include(td_item.text(), key) == true) {
                 is_show = true;
                 break;
             }
