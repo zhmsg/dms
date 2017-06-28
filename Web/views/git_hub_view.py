@@ -33,4 +33,13 @@ def receive_github_func():
                     request_body=request_body, base_branch=base_branch, compare_branch=compare_branch, merged=merged,
                     repository=repository)
         control.add_pull_request(**info)
+    elif res["action"] == "review_requested" and "pull_request" in res:
+        pr_info = res["pull_request"]
+        action_user = pr_info["user"]["login"]
+        reviewers = pr_info["requested_reviewers"]
+        r_reviewer = []
+        for r_item in reviewers:
+            r_reviewer.append(r_item["login"])
+        html_url = pr_info["html_url"]
+        control.review_pull_request(action_user, html_url, r_reviewer)
     return jsonify({"status": True, "data": "success"})

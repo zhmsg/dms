@@ -929,6 +929,27 @@ class ControlManager(object):
                 kwargs["real_name"] = user_info["nick_name"]
         return self.pull_request_man.add_pull_request(**kwargs)
 
+    def review_pull_request(self, action_user, html_url, reviewer):
+        user_name = self.pull_request_man.select_user(action_user)
+        review_users = []
+        for r_item in reviewer:
+            user_item = self.pull_request_man.select_user(r_item)
+            if user_item is not None:
+                review_users.append(user_item)
+        content = u"有人喊你review code，地址是 %s" % html_url
+        at_mobiles = []
+        for u_item in review_users:
+            exec_r, user_info = self.user.get_user_info(u_item)
+            if exec_r is True:
+                if user_info["tel"] is not None:
+                    at_mobiles.append(user_info["tel"])
+        exec_r, user_info = self.user.get_user_info(user_name)
+        if exec_r is True:
+            content = user_info["nick_name"] + content
+            self.ding_msg.send_text(content, at_mobiles=at_mobiles,
+                                    access_token="66f2cdeb57bc80b0dd9d5290e8889b98b1779190ee079bb9f1ca4f3e5e7cefc1")
+        return True
+
     # 节点管理
     def get_server_list(self, user_name, user_role, upstream_name):
         # 判断角色值
