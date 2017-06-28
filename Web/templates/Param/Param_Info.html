@@ -4,13 +4,15 @@
 
 {% block center_content %}
     <div class="clear bottom20">
-        <input class="box-side width150"  placeholder="参数名称"/>
-        <select class="box-side width150 margin10">
+        <input class="box-side width300" placeholder="参数名称，多个逗号分割" id="query_params"/>
+        <select class="box-side width150 margin10" disabled>
             <option value="all">all</option>
             <option value="unicode">unicode</option>
             <option value="int">int</option>
         </select>
-        <a><button class="btn btn-primary" id="btn_query" disabled>暂不可用</button></a>
+        <a>
+            <button class="btn btn-primary" id="btn_query">搜索</button>
+        </a>
     </div>
     <table class="table table-bordered table-hover api-list-table" id="t_params_info">
         <tr>
