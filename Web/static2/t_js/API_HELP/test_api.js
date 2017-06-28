@@ -183,7 +183,7 @@ function generating_code() {
     cmd += 'print "success" if r_data["status"] % 10000 < 100 else "status exception"\n';
     cmd += 'print(r_data["status"])\n';
     cmd += 'print(r_data["message"])\n';
-    cmd += 'print r_data if "data" in resp else "no data"\n';
+    cmd += 'print r_data["data"] if "data" in r_data else "no data"\n';
     update_res(cmd);
 }
 
