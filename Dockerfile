@@ -33,3 +33,4 @@ RUN pip install redis
 RUN pip install JYAliYun
 RUN pip install Fabric
 RUN pip install m2crypto
+RUN pip install JYTools
