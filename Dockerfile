@@ -12,12 +12,14 @@ RUN curl -o /tmp/setuptools.zip https://pypi.python.org/packages/a9/23/720c7558b
 RUN unzip /tmp/setuptools.zip -d /tmp
 
 RUN cd /tmp/setuptools-36.0.1/ && python setup.py install
+RUN rm -rf /tmp/setuptools*
 
 # install pip
 RUN curl -o /tmp/pip-9.0.1.tar.gz https://pypi.python.org/packages/11/b6/abcb525026a4be042b486df43905d6893fb04f05aac21c32c638e939e447/pip-9.0.1.tar.gz#md5=35f01da33009719497f01a4ba69d63c9
 RUN tar -zxvf /tmp/pip-9.0.1.tar.gz -C /tmp
 
 RUN cd /tmp/pip-9.0.1 && python setup.py install
+RUN rm -rf /tmp/pip*
 
 
 # install python package
