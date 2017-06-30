@@ -1,7 +1,7 @@
 <div class="div_jy_about_barcode">
     <div>
         <div class="clear bottom20">
-            <input class="box-side width250 margin10" id="select_app_id"/>
+            <input class="box-side width250 margin10" id="barcode_num"/>
             <a>
                 <button class="btn btn-primary" id="btn_query_barcode">查询</button>
             </a>
@@ -12,7 +12,7 @@
             <label id="lab_s_error_key" class="hand error_result" style="display: none">输入的样本编号无效，请检查后重新输入</label>
         </div>
         <div style="position: relative">
-            <table class="table table-bordered table-hover api-list-table" id="t_user_task">
+            <table class="table table-bordered table-hover api-list-table" id="t_barcode_list">
                 <tr>
                     <th scope="col" width="10%">Barcode</th>
                     <th scope="col" width="15%">APP List</th>
@@ -27,5 +27,5 @@
             </table>
         </div>
     </div>
-    <input id="task_log_url" class="display_none" value="{{ task_log_url }}">
+    <input id="barcode_url" class="display_none" value="{{ barcode_url }}">
 </div>
