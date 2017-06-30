@@ -24,6 +24,7 @@ function list_barcode(data) {
     else {
         var query_url = $("#barcode_url").val();
         var barcode_num = $("#barcode_num").val();
+        barcode_num = barcode_num.replace(/[^\d]/g, "");
         if (barcode_num.length <= 0) {
             return false;
         }
