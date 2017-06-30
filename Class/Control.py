@@ -946,9 +946,10 @@ class ControlManager(object):
             if exec_r is True:
                 if user_info["tel"] is not None:
                     at_mobiles.append(user_info["tel"])
+                content += user_info["nick_name"] + " " + content
         exec_r, user_info = self.user.get_user_info(user_name)
         if exec_r is True:
-            content = user_info["nick_name"] + content
+            # content = user_info["nick_name"] + content
             self.ding_msg.send_text(content, at_mobiles=at_mobiles,
                                     access_token="a49a7c62e8601123cd417465ff8037cd8410a3572244903fa694e4b7548a917a")
         return True
