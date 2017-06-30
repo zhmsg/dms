@@ -5,7 +5,6 @@
 function list_barcode(data) {
     var t_id = "t_barcode_list";
     if (data != null) {
-        console.info(data);
         clear_table(t_id);
         var d_len = data.length;
         var keys = ["barcode_num", "app_list", "app_id", "account", "sample_no", "stage", "auto_gen", "version"];
@@ -28,7 +27,6 @@ function list_barcode(data) {
         if (barcode_num.length <= 0) {
             return false;
         }
-        console.info(query_url);
         my_async_request2(query_url, "GET", {"barcode_num": barcode_num}, list_barcode);
     }
 }
