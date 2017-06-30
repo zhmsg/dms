@@ -858,6 +858,9 @@ class ControlManager(object):
             return False, "您没有权限"
         return self.jd_man.select_app_list()
 
+    def query_barcode(self, user_name, user_role, **kwargs):
+        return self.jd_man.query_barcode(**kwargs)
+
     # 针对工具
     def get_ip_info(self, ip_value):
         return self.ip.select_info_info(ip_value)

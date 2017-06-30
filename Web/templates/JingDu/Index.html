@@ -22,6 +22,7 @@
             <li class="active"><a href="#jdproject" data-toggle="tab" id="btn_jy_about_project">项目相关</a></li>
             <li><a href="#jdsample" data-toggle="tab" id="btn_jy_about_sample">样本相关</a></li>
             <li><a href="#jdtask" data-toggle="tab" id="btn_jy_about_task">任务相关</a></li>
+            <li><a href="#jdbarcode" data-toggle="tab" id="btn_jy_about_barcode">Barcode相关</a></li>
         </ul>
         <div id="myTabContent" class="tab-content" style="padding-top: 20px;">
             <div class="tab-pane fade in active" id="jdproject">
@@ -32,6 +33,9 @@
             </div>
             <div class="tab-pane fade" id="jdtask">
                 {% include "JingDu/About_Task.html" %}
+            </div>
+            <div class="tab-pane fade" id="jdbarcode">
+                {% include "JingDu/About_Barcode.html" %}
             </div>
         </div>
     </div>

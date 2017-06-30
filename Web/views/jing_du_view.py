@@ -143,3 +143,14 @@ def query_task():
 def get_app_list():
     exec_r, app_info = control.get_app_list(g.user_name, g.user_role)
     return jsonify({"status": exec_r, "data": app_info})
+
+
+@jing_du_view.route("/barcode/", methods=["GET"])
+def query_barcode_func():
+    kwargs = dict()
+    if "barcode_num" in request.args:
+        kwargs["barcode_num"] = request.args["barcode_num"]
+    if len(kwargs.keys()) <= 0:
+        return jsonify({"status": True, "data": []})
+    exec_r, data = control.query_barcode(g.user_name, g.user_role, **kwargs)
+    return jsonify({"status": exec_r, "data": data})
