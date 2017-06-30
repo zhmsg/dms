@@ -946,7 +946,7 @@ class ControlManager(object):
             if exec_r is True:
                 if user_info["tel"] is not None:
                     at_mobiles.append(user_info["tel"])
-                content += user_info["nick_name"] + " " + content
+                content = user_info["nick_name"] + " " + content
         exec_r, user_info = self.user.get_user_info(user_name)
         if exec_r is True:
             # content = user_info["nick_name"] + content
