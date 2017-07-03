@@ -1,8 +1,7 @@
 FROM docker.io/centos
 MAINTAINER meisanggou
 
-RUN yum install -y gcc unzip wget
-RUN yum install -y python-devel mysql-devel
+RUN yum install -y gcc unzip wget python-devel mysql-devel
 
 # install setuptools
 RUN curl -o /tmp/setuptools.zip https://pypi.python.org/packages/a9/23/720c7558ba6ad3e0f5ad01e0d6ea2288b486da32f053c73e259f7c392042/setuptools-36.0.1.zip#md5=430eb106788183eefe9f444a300007f0
@@ -17,16 +16,9 @@ RUN tar -zxvf /tmp/pip-9.0.1.tar.gz -C /tmp
 RUN cd /tmp/pip-9.0.1 && python setup.py install && rm -rf /tmp/pip*
 
 # install python package
-RUN pip install gunicorn
-RUN pip install gevent
-RUN pip install Flask
-RUN pip install Flask-Login
-RUN pip install MySQL-python
-RUN pip install requests
-RUN pip install xlwt
-RUN pip install Flask-APScheduler
-RUN pip install redis
-RUN pip install JYAliYun
-RUN pip install Fabric
-RUN pip install m2crypto
-RUN pip install JYTools
+RUN pip install gunicorn gevent
+RUN pip install Flask Flask-Login Flask-APScheduler
+RUN pip install MySQL-python redis
+RUN pip install requests Fabric
+RUN pip install xlwt m2crypto
+RUN pip install JYAliYun JYTools
