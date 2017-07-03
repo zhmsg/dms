@@ -1,8 +1,7 @@
 FROM docker.io/centos
 MAINTAINER meisanggou
 
-RUN yum install -y gcc epel-release
-RUN yum install -y python2-pip python-devel mysql-devel
+RUN yum install -y gcc epel-release && yum install -y python2-pip python-devel mysql-devel
 
 # install setuptools
 # RUN curl -o /tmp/setuptools.zip https://pypi.python.org/packages/a9/23/720c7558ba6ad3e0f5ad01e0d6ea2288b486da32f053c73e259f7c392042/setuptools-36.0.1.zip#md5=430eb106788183eefe9f444a300007f0
