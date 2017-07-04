@@ -8,6 +8,8 @@
 {% block js_content %}
     {{ 't_js/ueditor/ueditor.config.js' | make_static_html | safe }}
     {{ 't_js/ueditor/ueditor.all.js' | make_static_html | safe }}
+    {{ 't_js/Common/position_tools.js' | make_static_html | safe }}
+    {{ 't_js/Common/add_node.js' | make_static_html | safe }}
     {{ 't_js/Article/add.js' | make_static_html | safe }}
 {% endblock %}
 
