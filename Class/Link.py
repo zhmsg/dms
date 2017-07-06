@@ -38,7 +38,7 @@ class LinkManager(object):
         if len(db_items) > 0:
             return True, db_items[0]["s"]
         insert_time = time()
-        kwargs = dict(remark=remark, link=link, link_md5=link_md5, adder=adder, insert_time=insert_time)
+        kwargs = dict(remark=remark[:200], link=link, link_md5=link_md5, adder=adder, insert_time=insert_time)
         t = self.t_n
         if s is not None:
             kwargs["s"] = s

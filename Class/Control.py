@@ -1107,3 +1107,6 @@ class ControlManager(object):
 
     def get_link_n_info(self, user_name, user_role, no):
         return self.link_man.select_link_n(no)
+
+    def create_link(self, user_name, user_role, link, remark, s=None):
+        return self.link_man.insert_link(remark, link, user_name, s)
