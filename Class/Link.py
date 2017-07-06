@@ -33,7 +33,11 @@ class LinkManager(object):
         m.update(link)
         link_md5 = m.hexdigest().upper()
         exec_r, db_items = self.select_md5(link_md5)
-        return exec_r, db_items
+        if exec_r is False:
+            return False, db_items
+        if len(db_items) <= 0:
+            return True, None
+        return True, db_items[0]["s"]
 
     def insert_link(self, remark, link, adder, s=None):
         m = hashlib.md5()

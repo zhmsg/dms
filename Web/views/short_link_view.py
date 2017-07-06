@@ -39,7 +39,11 @@ def get_short_link_s(s):
 def create_link_func():
     r_data = request.json
     link = r_data["link"]
-    s = r_data["s"]
-    remark = r_data["remark"]
-    exec_r, data = control.create_link(g.user_name, g.user_role, link, remark, s)
+    is_query = r_data.get("is_query", False)
+    if is_query is True:
+        exec_r, data = control.query_link(g.user_name, g.user_role, link)
+    else:
+        s = r_data.get("s", None)
+        remark = r_data["remark"]
+        exec_r, data = control.create_link(g.user_name, g.user_role, link, remark, s)
     return jsonify({"status": exec_r, "data": data})
