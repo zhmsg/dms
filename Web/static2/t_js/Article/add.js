@@ -16,12 +16,16 @@ function handler(data) {
 }
 
 function save_article() {
+    var auto = $("#auto").val();
+    if (auto != 1) {
+        return;
+    }
     var title = $("#article_title").val();
     var content = ue.getContent();
     var abstract = ue.getContentTxt().substr(0, 400);
     var article_no = $("#article_no").val();
     var method = "POST";
-    var r_data = {"content": content, "abstract": abstract, "title": title};
+    var r_data = {"content": content, "abstract": abstract, "title": title, "auto": true};
     if (article_no.length == 32) {
         r_data["article_no"] = article_no;
         method = "PUT";
@@ -57,5 +61,6 @@ $(document).ready(function () {
         }
         var r_url = location.href;
         my_async_request2(r_url, method, r_data, handler);
+        $("#auto").val("1");
     });
 });

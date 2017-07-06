@@ -43,6 +43,8 @@ def update_article_action():
     title = request_data["title"]
     abstract = request_data["abstract"]
     content = request_data["content"]
+    auto = request_data.get("auto", False)
+    print(auto)
     exec_r, data = control.update_article(g.user_name, g.user_role, article_no, title, abstract, content)
     return jsonify({"status": exec_r, "data": data})
 
