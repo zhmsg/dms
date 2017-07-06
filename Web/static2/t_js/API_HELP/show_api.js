@@ -40,8 +40,6 @@ function remove_care(remove_url){
 function add_param(data, param_pos) {
     var add_tr = $("<tr></tr>");
     add_tr.attr("id", "tr_body_" + data.param);
-    $("#api_" + param_pos + "_param").append(add_tr);
-
     add_tr.append(new_td("param", data));
     var necessary_td = new_td("necessary", data);
     necessary_td.addClass("text-center");
@@ -50,8 +48,10 @@ function add_param(data, param_pos) {
         var type_td = new_td("type", data);
         type_td.addClass("text-center");
         add_tr.append(type_td);
-
-        if (data.status == 2) {
+        if (data.status == 3) {
+            return false
+        }
+        else if (data.status == 2) {
             var span_aba = $("<span> 待废弃</span>");
             add_tr.find("td").first().append(span_aba);
             span_aba.addClass("abandonTag")
@@ -70,7 +70,7 @@ function add_param(data, param_pos) {
         }
     }
     add_tr.append(new_td("param_desc", data));
-
+    $("#api_" + param_pos + "_param").append(add_tr);
 }
 
 function add_example(data, sign) {
