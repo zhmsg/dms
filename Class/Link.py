@@ -28,6 +28,13 @@ class LinkManager(object):
         db_items = self.db.execute_select(self.t_m, where_value=where_value, cols=cols)
         return True, db_items
 
+    def query_md5(self, link):
+        m = hashlib.md5()
+        m.update(link)
+        link_md5 = m.hexdigest().upper()
+        exec_r, db_items = self.select_md5(link_md5)
+        return exec_r, db_items
+
     def insert_link(self, remark, link, adder, s=None):
         m = hashlib.md5()
         m.update(link)

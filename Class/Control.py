@@ -1110,3 +1110,6 @@ class ControlManager(object):
 
     def create_link(self, user_name, user_role, link, remark, s=None):
         return self.link_man.insert_link(remark, link, user_name, s)
+
+    def query_link(self, user_name, user_role, link):
+        return self.link_man.query_md5(link)
