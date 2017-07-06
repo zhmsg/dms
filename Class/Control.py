@@ -1011,7 +1011,7 @@ class ControlManager(object):
         exec_r, data = self.article_man.new_article(user_name, title, abstract, content)
         return exec_r, data
 
-    def update_article(self, user_name, user_role, article_no, title=None, abstract=None, content=None):
+    def update_article(self, user_name, user_role, article_no, title=None, abstract=None, content=None, auto=False):
         exec_r, data = self.article_man.update_article(article_no, title, abstract, content)
         return exec_r, data
 
