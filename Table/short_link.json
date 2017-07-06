@@ -19,6 +19,11 @@
         "col_type": "varchar(200)"
       },
       {
+        "col_comment": "链接MD5",
+        "col_name": "link_md5",
+        "col_type": "char(32)"
+      },
+      {
         "col_comment": "添加者",
         "col_name": "adder",
         "col_type": "varchar(22)"
@@ -51,6 +56,11 @@
         "col_type": "varchar(200)"
       },
       {
+        "col_comment": "链接MD5",
+        "col_name": "link_md5",
+        "col_type": "char(32)"
+      },
+      {
         "col_comment": "添加者",
         "col_name": "adder",
         "col_type": "varchar(22)"
@@ -63,5 +73,22 @@
     ],
     "table_comment": "字符串短链接",
     "table_name": "short_link_s"
+  },
+  {
+    "table_cols": [
+      {
+        "pri_key": true,
+        "col_comment": "链接MD5",
+        "col_name": "link_md5",
+        "col_type": "char(32)"
+      },
+      {
+        "col_comment": "短链名",
+        "col_name": "s",
+        "col_type": "varchar(10)"
+      }
+    ],
+    "table_comment": "url md5 对应短链",
+    "table_name": "short_link_md5"
   }
 ]
