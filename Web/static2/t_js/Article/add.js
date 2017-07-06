@@ -61,6 +61,6 @@ $(document).ready(function () {
         }
         var r_url = location.href;
         my_async_request2(r_url, method, r_data, handler);
-        //$("#auto").val("1");
+        $("#auto").val("1");
     });
 });

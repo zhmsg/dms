@@ -115,6 +115,10 @@ short_link_prefix = web_prefix + "/s"
 data_dir = "/geneac/dmsdata"
 
 editor_data_dir = data_dir + "/editor"
+article_data_dir = data_dir + "/article"
+
+if os.path.isdir(article_data_dir) is False:
+    os.mkdir(article_data_dir)
 
 import os
 if os.path.isdir(data_dir) is False:

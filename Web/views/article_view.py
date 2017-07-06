@@ -1,9 +1,11 @@
 #! /usr/bin/env python
 # coding: utf-8
 
+import os
+from time import time
 from flask import request, g, jsonify
 from Tools.RenderTemplate import RenderTemplate
-from Web import article_url_prefix as url_prefix, create_blue, control
+from Web import article_url_prefix as url_prefix, create_blue, control, article_data_dir
 
 __author__ = 'ZhouHeng'
 
@@ -44,8 +46,13 @@ def update_article_action():
     abstract = request_data["abstract"]
     content = request_data["content"]
     auto = request_data.get("auto", False)
-    print(auto)
-    exec_r, data = control.update_article(g.user_name, g.user_role, article_no, title, abstract, content)
+    if auto is False:
+        exec_r, data = control.update_article(g.user_name, g.user_role, article_no, title, abstract, content)
+    else:
+        article_file = os.path.join(article_data_dir, "%s_%s.txt" % (article_no, int(time())))
+        with open(article_file, "w") as wa:
+            wa.write(content.encode("utf-8"))
+        exec_r, data = True, article_file
     return jsonify({"status": exec_r, "data": data})
 
 
