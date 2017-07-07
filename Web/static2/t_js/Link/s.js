@@ -23,6 +23,9 @@ function handler2(data) {
     else {
         $("#link_op_s").attr("s", data);
         $("#link_op_s").show();
+        var title = location.protocol + "//" + location.host + $("#link_op_s").attr("sl_url") + "/" + data + "/";
+        console.info(title);
+        $("#link_op_s").attr("title", title);
         $("#link_op_s").text("复制短链");
     }
 }
@@ -44,8 +47,7 @@ function create_link() {
 $(document).ready(function () {
     var current_url = location.pathname;
     var path = location.href.substr(location.protocol.length + 2 + location.host.length);
-    console.info(path);
-    if (path.length > 32) {
+    if (path.length > 32 && current_url.length > 2) {
         op_link(true);
         $("#link_op_s").click(create_link);
     }
