@@ -29,10 +29,11 @@ from TopicMessage import MessageManager
 from WeiXin import WeiXinManager
 from Link import LinkManager
 from Class import DATE_FORMAT_STR, release_dir, jd_mysql_host, jd_mysql_db, dyups_server, wx_service, TIME_FORMAT
+from Class import conf_dir
 
 __author__ = 'ZhouHeng'
 
-my_email = MyEmailManager("/home/msg/conf/")
+my_email = MyEmailManager(conf_dir)
 my_wx = WeiXinManager(wx_service)
 
 
