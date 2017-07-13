@@ -19,6 +19,7 @@ git_hub_view = create_blue('git_hup_view', url_prefix=url_prefix, auth_required=
 @git_hub_view.route("/", methods=["POST"])
 def receive_github_func():
     res = request.json
+    print(res)
     if res["action"] == "closed" and "pull_request" in res:
         request_num = res["number"]
         pr_info = res["pull_request"]
