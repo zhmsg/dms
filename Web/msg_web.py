@@ -69,12 +69,11 @@ def create_app():
     if cookie_domain != "":
         msg_web.config.update(SESSION_COOKIE_DOMAIN=cookie_domain)
     msg_web.config.update(PERMANENT_SESSION_LIFETIME=600)
-
+    print("local")
     api_files = os.listdir("./views")
     for api_file in api_files:
         if api_file.endswith("_view.py"):
             __import__("Web.views.%s" % api_file[:-3])
-
     from Web import blues
     for key, value in blues.items():
         if len(value[1]) > 1:
