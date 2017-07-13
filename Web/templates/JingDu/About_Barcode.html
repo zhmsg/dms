@@ -1,0 +1,31 @@
+<div class="div_jy_about_barcode">
+    <div>
+        <div class="clear bottom20">
+            <input class="box-side width250 margin10" id="barcode_num"/>
+            <a>
+                <button class="btn btn-primary" id="btn_query_barcode">查询</button>
+            </a>
+            {#            <button id="link_today_task" class="status_move hand btn btn-primary">今日任务</button>#}
+            {#            <button id="link_three_task" class="status_move hand btn btn-primary">三日内任务</button>#}
+            {#            <button id="link_running_task" class="status_move hand btn btn-primary">进行中任务</button>#}
+            {#            <button id="link_fail_task" class="status_move hand btn btn-primary">失败任务</button>#}
+            <label id="lab_s_error_key" class="hand error_result" style="display: none">输入的样本编号无效，请检查后重新输入</label>
+        </div>
+        <div style="position: relative">
+            <table class="table table-bordered table-hover api-list-table" id="t_barcode_list">
+                <tr>
+                    <th scope="col" width="10%">Barcode</th>
+                    <th scope="col" width="15%">APP List</th>
+                    <th scope="col" width=8%">APPID</th>
+                    <th scope="col" width=10%">账户</th>
+                    <th scope="col" width=8%">样本号</th>
+                    <th scope="col" width=8%">状态</th>
+                    <th scope="col" width=7%">Auto</th>
+                    <th scope="col" width=14%">版本</th>
+                    <th scope="col" width=10%">更新时间</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <input id="barcode_url" class="display_none" value="{{ barcode_url }}">
+</div>

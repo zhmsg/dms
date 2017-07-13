@@ -108,6 +108,7 @@
                 {% endif %}
             {% endfor %}
         {% for param_info in api_info["body_info"] %}
+            {% if param_info["status"] < 3 %}
             <div class="paramListMode">
                 <ul>
                     <li class="star">{% if param_info["necessary"] == true %}* {% endif %}</li>
@@ -128,6 +129,7 @@
                 </ul>
                 <p>【{{ param_info["type"] }}】{{ param_info["param_desc"] }}</p>
             </div>
+            {% endif %}
         {% endfor %}
         <p>
             <button class="btn btn-primary" onclick="test_api()">检查</button>

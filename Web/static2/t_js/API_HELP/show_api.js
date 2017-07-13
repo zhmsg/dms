@@ -39,8 +39,7 @@ function remove_care(remove_url){
 
 function add_param(data, param_pos) {
     var add_tr = $("<tr></tr>");
-    $("#api_" + param_pos + "_param").append(add_tr);
-
+    add_tr.attr("id", "tr_body_" + data.param);
     add_tr.append(new_td("param", data));
     var necessary_td = new_td("necessary", data);
     necessary_td.addClass("text-center");
@@ -49,8 +48,10 @@ function add_param(data, param_pos) {
         var type_td = new_td("type", data);
         type_td.addClass("text-center");
         add_tr.append(type_td);
-
-        if (data.status == 2) {
+        if (data.status == 3) {
+            return false
+        }
+        else if (data.status == 2) {
             var span_aba = $("<span> 待废弃</span>");
             add_tr.find("td").first().append(span_aba);
             span_aba.addClass("abandonTag")
@@ -69,7 +70,7 @@ function add_param(data, param_pos) {
         }
     }
     add_tr.append(new_td("param_desc", data));
-
+    $("#api_" + param_pos + "_param").append(add_tr);
 }
 
 function add_example(data, sign) {
@@ -175,12 +176,53 @@ function init_api_info(data) {
             $("#api_care_user").append('<span>' + care_info[i]["nick_name"] + '</span>');
         }
     }
+
+    fill_param_desc();
+}
+
+function fill_param_desc(data) {
+    if (data == null) {
+        var tds = $("#api_body_param").find("td[name='td_param_desc']");
+        var td_len = tds.length;
+        var params = "";
+        for (var i = 0; i < td_len; i++) {
+            var td_item = $(tds[i]);
+            if (td_item.text().length <= 0) {
+                params += td_item.parent().attr("id").substr(8);
+            }
+        }
+        var query_url = $("#param_url").val() + "?params=" + params;
+        my_async_request2(query_url, "GET", null, fill_param_desc);
+    }
+    else {
+        var data_len = data.length;
+        for (var i = 0; i < data_len; i++) {
+            var param_item = data[i];
+            var current_tr = $("#tr_body_" + param_item["param"]);
+            if (current_tr.length > 0) {
+                var param_desc = param_item["param_desc"];
+                if (param_item["match_str"] != null) {
+                    param_desc += " 参数必须匹配" + param_item["match_str"];
+                }
+                if (param_item["max_len"] != null) {
+                    param_desc += " 参数最大长度" + param_item["max_len"];
+                }
+                if (param_item["min_len"] != null) {
+                    param_desc += " 参数最小长度" + param_item["min_len"];
+                }
+                if (param_item["not_allow"] != null) {
+                    param_desc += " 参数不允许出现" + param_item["not_allow"];
+                }
+                current_tr.find("td[name='td_param_desc']").text(param_desc);
+
+            }
+        }
+    }
+
 }
 
 $(function() {
     init_api_info();
-    var current_user_name = $("#current_user_name").val();
-
     var current_user_role = parseInt($("#current_user_role").val());
     var role_value = JSON.parse($("#role_value").text());
     if(bit_and(current_user_role, role_value["api_new"])){

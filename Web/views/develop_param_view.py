@@ -44,3 +44,12 @@ def add_param_func():
     else:
         result, info = control.update_param_format(g.user_name, g.user_role, param, **r_data)
     return jsonify({"status": result, "data": info})
+
+
+@develop_param_view.route("/query/", methods=["GET"])
+def query_param():
+    if "params" not in request.args:
+        return jsonify({"status": True, "data": []})
+    params = request.args["params"]
+    exec_r, params_info = control.query_params(g.user_name, g.user_role, params)
+    return jsonify({"status": exec_r, "data": params_info})

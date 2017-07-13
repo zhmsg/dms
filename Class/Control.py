@@ -29,10 +29,11 @@ from TopicMessage import MessageManager
 from WeiXin import WeiXinManager
 from Link import LinkManager
 from Class import DATE_FORMAT_STR, release_dir, jd_mysql_host, jd_mysql_db, dyups_server, wx_service, TIME_FORMAT
+from Class import conf_dir
 
 __author__ = 'ZhouHeng'
 
-my_email = MyEmailManager("/home/msg/conf/")
+my_email = MyEmailManager(conf_dir)
 my_wx = WeiXinManager(wx_service)
 
 
@@ -858,6 +859,9 @@ class ControlManager(object):
             return False, "您没有权限"
         return self.jd_man.select_app_list()
 
+    def query_barcode(self, user_name, user_role, **kwargs):
+        return self.jd_man.query_barcode(**kwargs)
+
     # 针对工具
     def get_ip_info(self, ip_value):
         return self.ip.select_info_info(ip_value)
@@ -918,6 +922,9 @@ class ControlManager(object):
     def get_params_info(self, user_name, user_role):
         return self.param_man.select_param_format()
 
+    def query_params(self, user_name, user_role, params):
+        return self.param_man.select_mul_param_format(params)
+
     # 针对pull request
     def add_pull_request(self, **kwargs):
         action_user = kwargs["action_user"]
@@ -928,6 +935,28 @@ class ControlManager(object):
                 kwargs["user_name"] = user_info["user_name"]
                 kwargs["real_name"] = user_info["nick_name"]
         return self.pull_request_man.add_pull_request(**kwargs)
+
+    def review_pull_request(self, action_user, html_url, title, body, reviewer):
+        user_name = self.pull_request_man.select_user(action_user)
+        review_users = []
+        for r_item in reviewer:
+            user_item = self.pull_request_man.select_user(r_item)
+            if user_item is not None:
+                review_users.append(user_item)
+        content = u"有人喊你review %s\n%s，地址是 %s" % (title, body, html_url)
+        at_mobiles = []
+        for u_item in review_users:
+            exec_r, user_info = self.user.get_user_info(u_item)
+            if exec_r is True:
+                if user_info["tel"] is not None:
+                    at_mobiles.append(user_info["tel"])
+                content = user_info["nick_name"] + " " + content
+        exec_r, user_info = self.user.get_user_info(user_name)
+        if exec_r is True:
+            # content = user_info["nick_name"] + content
+            self.ding_msg.send_text(content, at_mobiles=at_mobiles,
+                                    access_token="a49a7c62e8601123cd417465ff8037cd8410a3572244903fa694e4b7548a917a")
+        return True
 
     # 节点管理
     def get_server_list(self, user_name, user_role, upstream_name):
@@ -983,7 +1012,7 @@ class ControlManager(object):
         exec_r, data = self.article_man.new_article(user_name, title, abstract, content)
         return exec_r, data
 
-    def update_article(self, user_name, user_role, article_no, title=None, abstract=None, content=None):
+    def update_article(self, user_name, user_role, article_no, title=None, abstract=None, content=None, auto=False):
         exec_r, data = self.article_man.update_article(article_no, title, abstract, content)
         return exec_r, data
 
@@ -1079,3 +1108,9 @@ class ControlManager(object):
 
     def get_link_n_info(self, user_name, user_role, no):
         return self.link_man.select_link_n(no)
+
+    def create_link(self, user_name, user_role, link, remark, s=None):
+        return self.link_man.insert_link(remark, link, user_name, s)
+
+    def query_link(self, user_name, user_role, link):
+        return self.link_man.query_md5(link)

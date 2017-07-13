@@ -172,3 +172,14 @@ function package_input(parent_el) {
 
     return data;
 }
+
+function alert1(msg) {
+    $("div[role='alert']").hide();
+    var dialog_div = $('<div class="alert alert-success" role="alert" style="z-index:999"></div>');
+    dialog_div.text(msg);
+    $("body").append(dialog_div);
+    register_reset_bottom(dialog_div);
+    setTimeout(function () {
+        dialog_div.remove();
+    }, 2000);
+}

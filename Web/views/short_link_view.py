@@ -33,3 +33,17 @@ def get_short_link_s(s):
     if len(items) <= 0:
         return redirect("/")
     return redirect(items[0]["link"])
+
+
+@short_link_view.route("/", methods=["POST"])
+def create_link_func():
+    r_data = request.json
+    link = r_data["link"]
+    is_query = r_data.get("is_query", False)
+    if is_query is True:
+        exec_r, data = control.query_link(g.user_name, g.user_role, link)
+    else:
+        s = r_data.get("s", None)
+        remark = r_data["remark"]
+        exec_r, data = control.create_link(g.user_name, g.user_role, link, remark, s)
+    return jsonify({"status": exec_r, "data": data})

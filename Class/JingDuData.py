@@ -1,8 +1,9 @@
 #! /usr/bin/env python
 # coding: utf-8
 
-import sys
+import requests
 from Tools.Mysql_db import DB, DBItem
+from Class import sample_service
 
 __author__ = 'ZhouHeng'
 
@@ -123,3 +124,14 @@ class JingDuDataManager(object):
         cols = ["app_id", "app_name", "app_desc", "status_desc"]
         db_items = self.db_app.execute_select(cols=cols)
         return True, db_items
+
+    @staticmethod
+    def query_barcode(**kwargs):
+        query_url = "%s/sample/barcode/query/" % sample_service
+        resp = requests.post(query_url, json=kwargs)
+        if resp.status_code != 200:
+            return False, resp.status_code
+        r_data = resp.json()
+        if r_data["status"] % 10000 > 100:
+            return False, r_data["message"]
+        return True, r_data["data"]["barcode_list"]

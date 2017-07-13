@@ -10,3 +10,4 @@ redis>=2.10.5
 m2crypto
 JYAliYun
 Fabric
+JYTools
