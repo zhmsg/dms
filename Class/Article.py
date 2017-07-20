@@ -72,13 +72,14 @@ class ArticleManager(object):
             return None
         return db_items[0]
 
-    def _select_info(self, article_no):
+    def _select_info(self, article_no, where_cond=None, where_cond_args=None):
         cols = ["article_no", "user_name", "title", "abstract", "update_time"]
         if article_no is not None:
             where_value = dict(article_no=article_no)
         else:
             where_value = None
-        db_items = self.db.execute_select(self.t_info, where_value=where_value, cols=cols)
+        db_items = self.db.execute_select(self.t_info, where_value=where_value, cols=cols, where_cond=where_cond,
+                                          where_cond_args=where_cond_args)
         return db_items
 
     def get_article(self, article_no, user_name):
@@ -97,5 +98,10 @@ class ArticleManager(object):
         return True, article_info
 
     def query_article(self, **kwargs):
-        db_items = self._select_info(None)
+        where_cond = []
+        where_cond_args = []
+        if "title" in kwargs:
+            where_cond.append("title like %%%s%%")
+            where_cond_args.append(kwargs["title"])
+        db_items = self._select_info(None, where_cond, where_cond_args)
         return True, db_items
