@@ -229,20 +229,20 @@ class ReleaseManager:
                                                                           merged=True, base_branch="master")
         msg = u"API更新如下:\n"
         for i in range(len(pull_requests) - 1, -1, -1):
-            msg += u"%s、%s\n" % (i + 1, pull_requests[i]["request_title"])
+            msg += u"%s、%s\n" % (i + 1, pull_requests[i]["summary"])
         mns_topic.publish_message(msg, "线上重启")
         self.online_api_task.update_scheduler_status(int(time()), "system", "restart online api")
 
     def release_online_web(self):
         result, scheduler_info = self.online_web_task.select_scheduler_status()
         task_status = scheduler_info["task_status"]
-        result, pull_requests = self.pull_request_man.select_pull_request(action_no=task_status, repository="GATCAPI",
+        result, pull_requests = self.pull_request_man.select_pull_request(action_no=task_status, repository="GATCWeb",
                                                                           merged=True, base_branch="master")
         msg = u"WEB更新如下:\n"
         for i in range(len(pull_requests) - 1, -1, -1):
             msg += u"%s、%s\n" % (i + 1, pull_requests[i]["summary"])
         mns_topic.publish_message(msg, "线上重启")
-        self.online_web_task.update_scheduler_status(int(time()), "system", "restart online api")
+        self.online_web_task.update_scheduler_status(int(time()), "system", "restart online web")
 
 
 if __name__ == "__main__":
