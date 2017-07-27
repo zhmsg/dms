@@ -45,10 +45,12 @@ function create_link() {
 }
 
 $(document).ready(function () {
-    var current_url = location.pathname;
-    var path = location.href.substr(location.protocol.length + 2 + location.host.length);
-    if (path.length > 32 && current_url.length > 2) {
-        op_link(true);
-        $("#link_op_s").click(create_link);
+    if ($("#current_user_name").length > 0) {
+        var current_url = location.pathname;
+        var path = location.href.substr(location.protocol.length + 2 + location.host.length);
+        if (path.length > 32 && current_url.length > 2) {
+            op_link(true);
+            $("#link_op_s").click(create_link);
+        }
     }
 });
