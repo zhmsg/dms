@@ -81,7 +81,8 @@ class ControlManager(object):
         self.article_man = ArticleManager()
         self.message_man = MessageManager()
         self.link_man = LinkManager()
-        self.name_2_role_key = {"apicluster": "dyups_api", "webcluster": "dyups_web", "amscluster": "dyups_web"}
+        self.name_2_role_key = {"apicluster": "dyups_api", "webcluster": "dyups_web", "amscluster": "dyups_web",
+                                "healthcluster": "dyups_api", "authcluster": "dyups_api", "samplecluster": "dyups_api"}
 
     def check_user_name_exist(self, user_name, role, check_user_name):
         if role & self.role_value["user_new"] <= 0:

@@ -49,7 +49,6 @@ def remove_upstream():
 @develop_dyups_view.route("/server/", methods=["POST", "DELETE"])
 def op_server_nodes():
     request_data = request.json
-    print(request_data)
     server_ip = request_data["server_ip"]
     server_port = int(request_data["server_port"])
     upstream_name = request_data["upstream_name"]
