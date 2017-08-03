@@ -13,6 +13,9 @@
     <button type="button" class="btn btn-primary margin20" id="btn_jy_web_upstream" value="">本地WEB</button>
     <button type="button" class="btn btn-primary margin20" id="btn_jy_api_upstream" value="">本地API</button>
     <button type="button" class="btn btn-primary margin20" id="btn_jy_ams_upstream" value="">本地AMS</button>
+    <button type="button" class="btn btn-primary margin20" id="btn_jy_auth_upstream" value="">本地用户验证</button>
+    <button type="button" class="btn btn-primary margin20" id="btn_jy_sample_upstream" value="">本地Sample</button>
+    <button type="button" class="btn btn-primary margin20" id="btn_jy_health_upstream" value="">本地Health</button>
     <div class="declare">
         <p class="redColor">部署节点 须知：</p>
 
@@ -30,4 +33,7 @@
     {% include "Dyups/web.html" %}
     {% include "Dyups/api.html" %}
     {% include "Dyups/ams.html" %}
+    {% include "Dyups/auth.html" %}
+    {% include "Dyups/sample.html" %}
+    {% include "Dyups/health.html" %}
 {% endblock %}

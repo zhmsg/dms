@@ -1,0 +1,31 @@
+<div class="div_jy_sample_upstream" style="display: none">
+    <div class="infoShow">
+        <div class="form-group apiContentLine" name="div_new_server" id="div_samplecluster">
+            <input value="{{ g.user_role |  bit_and(apicluster_role) }}" class="display_none">
+            <ul style="margin-bottom: 1em">
+                <li>
+                    <label class="api-describe" for="">节点IP：</label>
+                    <input class="box-side" name="server_ip" placeholder="192.168.120.10"/>
+                </li>
+                <li>
+                    <label for="">端口号：</label>
+                    <input class="box-side" name="server_port" value="80"/>
+                </li>
+            </ul>
+            <button name="btn_add_upstream" class="btn btn-success btn-down api-newBtn">添加Sample节点</button>
+        </div>
+
+    </div>
+    <div style="position: relative">
+        <table class="table table-bordered table-hover api-list-table" id="t_samplecluster" op_role="0">
+            <caption>已有用户验证节点</caption>
+            <tr>
+                <th scope="col" width="35%">节点</th>
+                <th scope="col" width="25%">节点IP</th>
+                <th scope="col" width="10%">节点端口</th>
+                <th scope="col" width="10%">状态</th>
+                <th scope="col" width="20%">操作</th>
+            </tr>
+        </table>
+    </div>
+</div>
