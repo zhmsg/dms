@@ -188,7 +188,7 @@ function fill_param_desc(data) {
         for (var i = 0; i < td_len; i++) {
             var td_item = $(tds[i]);
             if (td_item.text().length <= 0) {
-                params += td_item.parent().attr("id").substr(8);
+                params += "," + td_item.parent().attr("id").substr(8);
             }
         }
         var query_url = $("#param_url").val() + "?params=" + params;
