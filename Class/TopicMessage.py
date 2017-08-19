@@ -15,7 +15,7 @@ class MessageManager(object):
 
     def insert_topic_message(self, **kwargs):
         kwargs["insert_time"] = int(time())
-        l = self.db.execute_insert(self.t_msg, args=kwargs)
+        l = self.db.execute_insert(self.t_msg, args=kwargs, ignore=True)
         return l
 
     def insert_user_tag(self, **kwargs):
