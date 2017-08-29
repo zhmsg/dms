@@ -96,7 +96,7 @@ function init_api_info(data) {
     var keys = ["api_title", "api_url", "api_method", "api_desc", "stage", "add_time", "update_time"];
     var key_len = keys.length;
     for (var i = 0; i < key_len; i++) {
-        $("#span_" + keys[i]).text(replace_url(api_info.basic_info[keys[i]]));
+        $("#span_" + keys[i]).html(replace_url(api_info.basic_info[keys[i]]));
     }
     // predefine header
     var ph_len = api_info.predefine_param.header.length;
