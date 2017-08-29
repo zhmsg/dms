@@ -69,6 +69,7 @@ function add_param(data, param_pos) {
             }
         }
     }
+    data.param_desc = replace_url(data.param_desc);
     add_tr.append(new_td("param_desc", data));
     $("#api_" + param_pos + "_param").append(add_tr);
 }
@@ -95,7 +96,7 @@ function init_api_info(data) {
     var keys = ["api_title", "api_url", "api_method", "api_desc", "stage", "add_time", "update_time"];
     var key_len = keys.length;
     for (var i = 0; i < key_len; i++) {
-        $("#span_" + keys[i]).text(api_info.basic_info[keys[i]]);
+        $("#span_" + keys[i]).text(replace_url(api_info.basic_info[keys[i]]));
     }
     // predefine header
     var ph_len = api_info.predefine_param.header.length;
