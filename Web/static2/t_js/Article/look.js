@@ -11,6 +11,15 @@ function handler(data) {
         document.title = data.title;
         $("#container").html(data.content);
     }
+    if("user_name" in data){
+
+        if(data.user_name == $("#current_user_name").val()){
+            var edit_url = location.origin + location.pathname + "?article_no=" + data.article_no;
+            var edit_link = $("<a>编辑</a>");
+            edit_link.attr("href", edit_url);
+            $("#div_edit").append(edit_link);
+        }
+    }
 }
 
 $(document).ready(function () {
