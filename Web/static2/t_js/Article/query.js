@@ -50,4 +50,24 @@ $(document).ready(function () {
     $("#btn_add_article").click(function () {
         window.open($("#url_add_article").val());
     });
+    $("#btn_query").click(function(){
+        console.info("query");
+        var q_value = $("#query_str").val().trim(" ");
+        var div_l = $(".articleList");
+        var li_articles = div_l.find("li");
+        var li_len = li_articles.length;
+        for(var i=0;i<li_len;i++){
+            var li_item = $(li_articles[i]);
+            li_item.hide();
+            if(q_value.length == 0){
+                li_item.show();
+            }
+            else{
+                if(li_item.text().indexOf(q_value) >= 0){
+                    li_item.show();
+                }
+            }
+
+        }
+    });
 });
