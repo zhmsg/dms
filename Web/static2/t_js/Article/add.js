@@ -5,6 +5,7 @@
 function handler(data) {
     if ("article_no" in data) {
         $("#article_no").val(data.article_no);
+        set_look_link();
     }
     if ("content" in data && "title" in data) {
         $("#article_title").val(data.title);
@@ -31,6 +32,19 @@ function save_article() {
         method = "PUT";
         var r_url = location.href;
         my_async_request2(r_url, method, r_data, handler);
+    }
+}
+
+function set_look_link()
+{
+    var article_no = $("#article_no").val();
+    if (article_no.length == 32) {
+        $("#link_look").show();
+        var look_url = location.origin + location.pathname + "?&action=look&article_no=" + article_no;
+        $("#link_look").attr("href", look_url);
+    }
+    else{
+        $("#link_look").hide();
     }
 }
 
@@ -63,4 +77,5 @@ $(document).ready(function () {
         my_async_request2(r_url, method, r_data, handler);
         $("#auto").val("1");
     });
+    set_look_link();
 });
