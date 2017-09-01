@@ -3,6 +3,7 @@
 
 
 import sys
+from urlparse import urlparse
 from flask import request, jsonify, g, redirect
 
 from Web import short_link_prefix as url_prefix, create_blue
@@ -39,6 +40,10 @@ def get_short_link_s(s):
 def create_link_func():
     r_data = request.json
     link = r_data["link"]
+    url_item = urlparse(link)
+    if len(url_item.query) > 0:
+        sorted_query = "&".join(sorted(url_item.query.split("&")))
+        link = "%s://%s%s?%s" % (url_item.scheme, url_item.netloc, url_item.path, sorted_query)
     is_query = r_data.get("is_query", False)
     if is_query is True:
         exec_r, data = control.query_link(g.user_name, g.user_role, link)
