@@ -8,8 +8,11 @@ function ensure_right_time()
     var now_time = new Date();
     var hour = now_time.getHours();
     var minute = now_time.getMinutes();
+    var week_day = now_time.getDay();
     $("#btn_add_task").unbind('click');
-    if ((9 <= hour && hour <= 11 || 14 <= hour && hour <= 17) && 10 <= minute && minute < 20) {
+    // 周三 14-18 周四 8-12 14-16
+    // 10分-20分
+    if (((week_day == 3 && 14 <= hour && hour<= 18) || ( week_day == 4 && (8 <= hour && hour <= 12 || 14 <= hour && hour <= 16))) && 10 <= minute && minute < 20) {
         if(hour <= max_hour)
         {
             $("#btn_add_task").attr("disabled", "disabled");

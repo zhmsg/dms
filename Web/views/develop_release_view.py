@@ -27,7 +27,7 @@ def before_request():
     g.now_minute = now_time.minute
     g.role_value = control.role_value
     g.ihVIP = False
-    if g.user_role & control.role_value["release_ih_V"] > 0:
+    if g.user_role & control.role_value["release_ih_V"] > 0 and "noVIP" not in request.args:
         g.ihVIP = True
     if g.ihVIP is True:
         g.release_period = True
