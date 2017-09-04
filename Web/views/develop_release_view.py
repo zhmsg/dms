@@ -57,7 +57,11 @@ def system_auto_release():
     if current_env != "Production":
         print("Not Production")
         return
-    for restart_service in [0, 1, 2]:
+    if datetime.now().weekday() == 2:  # only allow wednesday restart API
+        service_list = [0, 1, 2]
+    else:
+        service_list = [2]
+    for restart_service in service_list:
         result, info = control.new_task("system", 0, u"自动发布", restart_service, u"系统周一到周五每天12：10，18：10左右自动重新发布晶云测试环境")
         if result is True:
             release_no = info["release_no"]
