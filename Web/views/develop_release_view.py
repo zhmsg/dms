@@ -23,12 +23,17 @@ develop_release_view = create_blue('develop_release_view', url_prefix=url_prefix
 def before_request():
     now_time = datetime.now()
     now_hour = now_time.hour
+    now_weekday = now_time.weekday()
     g.now_minute = now_time.minute
     g.role_value = control.role_value
     g.ihVIP = False
     if g.user_role & control.role_value["release_ih_V"] > 0:
         g.ihVIP = True
-    if now_hour in [9, 10, 11, 14, 15, 16, 17] and 10 <= g.now_minute < 20 or g.ihVIP is True:
+    if g.ihVIP is True:
+        g.release_period = True
+    elif now_weekday == 2 and now_hour in [14, 15, 16, 17, 18] and 10 <= g.now_minute < 20:
+        g.release_period = True
+    elif now_weekday == 4 and now_hour in [8, 9, 10, 11, 12, 14, 15, 16] and 10 <= g.now_minute < 20:
         g.release_period = True
     else:
         g.release_period = False
