@@ -105,7 +105,7 @@ class ReleaseManager:
         with cd(self.api_work_dir):
             run('rm -rf *.log')
             run("sh stop.sh")
-            run('ssh service "sh /home/msg/GATCAPI/restart_service.sh"', quiet=True)
+            run('ssh -f -n service "sh /home/msg/GATCAPI/restart_service.sh"', quiet=True)
             run(
                 'nohup gunicorn -b 0.0.0.0:8101 -t 3600 -w 5 -k "gevent" --backlog 2048 -p "/tmp/api_gunicorn_test.pid" --chdir API run:app 1>> API.log 2>> API_ERROR.log & sleep 3')
             run('cat /tmp/api_gunicorn_test.pid >> service.pid')
