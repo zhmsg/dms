@@ -33,6 +33,7 @@ jd_mysql_db = config.get(env, "jd_mysql_db")
 dyups_server = config.get(env, "dyups_server")
 sample_service = config.get(env, "sample_service")
 conf_dir = config.get(env, "conf_dir")
+mongo_host = config.get(env, "mongo_host")
 
 mns_account = RAMAccount(conf_dir=conf_dir, conf_name="mns.conf")
 mns_server = MNSServerManager(ram_account=mns_account, conf_dir=conf_dir)
