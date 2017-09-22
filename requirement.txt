@@ -3,6 +3,7 @@ gevent
 Flask==0.11.1
 Flask-Login
 MySQL-python
+pymongo
 requests
 xlwt
 Flask-APScheduler==1.4.0
