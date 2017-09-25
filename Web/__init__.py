@@ -72,18 +72,16 @@ login_manager.session_protection = 'strong'
 def load_user(user_name):
     user = User()
     user.user_name = user_name
+    if "roles" in session:
+        user.roles = session["roles"]
+    else:
+        user.roles = None
+        session["roles"] = None
     if "role" in session:
         user.role = session["role"]
     else:
-        select_sql = "SELECT role FROM sys_user WHERE user_name='%s';" % user_name
-        print(select_sql)
-        result = db.execute(select_sql)
-        if result > 0:
-            user.role = db.fetchone()[0]
-            session["role"] = user.role
-        else:
-            user.role = 0
-            session["role"] = user.role
+        user.role = 0
+        session["role"] = user.role
     return user
 
 
@@ -111,6 +109,7 @@ editor_url_prefix = web_prefix + "/editor"
 article_url_prefix = web_prefix + "/article"
 message_url_prefix = web_prefix + "/message"
 short_link_prefix = web_prefix + "/s"
+dist_key_prefix = web_prefix + "/dist/key"
 
 data_dir = "/geneac/dmsdata"
 

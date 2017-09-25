@@ -8,7 +8,8 @@ from flask.sessions import SecureCookieSessionInterface
 from flask_login import login_user, current_user, logout_user
 from flask_login import login_required
 from werkzeug.security import gen_salt
-from Class.User import UserManager
+from Class import mongo_host
+from Class.User import UserManager, RoleManager
 from Web import User
 
 from Web import dms_url_prefix, dev_url_prefix, api_url_prefix, bug_url_prefix, right_url_prefix
@@ -26,6 +27,7 @@ dms_view = create_blue('dms_view', url_prefix=url_prefix, auth_required=False)
 
 
 user_m = UserManager()
+role_m = RoleManager(mongo_host)
 
 
 def load_domain_session():
@@ -91,6 +93,7 @@ def login():
     user.user_name = info["account"]
     login_user(user, remember=remember)
     session["role"] = info["role"]
+    session["roles"] = role_m.select(info["account"])
     if "next" in request_data and request_data["next"] != "":
         return jsonify({"status": True, "data": {"location": request_data["next"], "user_name": user.user_name}})
     if session["role"] == 0:

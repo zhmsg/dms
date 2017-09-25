@@ -4,6 +4,7 @@
 import sys
 import requests
 from datetime import datetime
+from pymongo import MongoClient
 from Tools.Mysql_db import DB
 from Check import check_char_num_underline as check_user, check_account_format
 from Class import TIME_FORMAT, env
@@ -16,7 +17,7 @@ else:
     jy_auth_host = "http://100.98.137.7/auth"
 
 
-class UserManager:
+class UserManager(object):
 
     def __init__(self):
         self.db = DB()
@@ -287,3 +288,18 @@ class UserManager:
         self.db.execute(update_sql)
         return True, "success"
 
+
+class RoleManager(object):
+
+    def __init__(self, mongo_host):
+        self.conn = MongoClient(mongo_host)
+        self.db = self.conn.dms
+        self.col = self.db.user_role
+
+    def select(self, user_name):
+        role_v = self.col.find_one(dict(user_name=user_name))
+        print(role_v)
+        return role_v
+
+    def insert(self, user_name):
+        pass

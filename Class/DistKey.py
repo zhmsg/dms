@@ -25,8 +25,11 @@ class DistKey(object):
     def select(self, app, **kwargs):
         where_value = dict(app=app)
         where_value.update(kwargs)
+        items = []
         for item in self.col.find(filter=where_value):
-            print(item)
+            item["_id"] = str(item["_id"])
+            items.append(item)
+        return items
 
     def remove(self, id):
         print self.col.delete_one({"_id": ObjectId(id)})
