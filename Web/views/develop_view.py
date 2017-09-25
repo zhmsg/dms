@@ -68,6 +68,7 @@ def backup_table_info():
         mul_t_info = control.get_backup_table()
         return jsonify({"status": True, "data": mul_t_info})
 
+
 # 每天0：30，备份线上数据表。
 def backup_func():
     if current_env != "Production":

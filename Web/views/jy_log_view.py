@@ -187,5 +187,5 @@ def send_login_info_func():
 if current_env == "Production" or current_env == "Development":
     dms_job.append({"func": "%s:send_log_func" % __name__, "trigger": "cron", "id": "send_daily_log", "hour": 8,
                     "minute": "30"})
-    dms_job.append({"func": "%s:send_login_info_func" % __name__, "trigger": "cron", "id": "send_login_info",
-                    "hour": "9-11,14-17", "minute": "5"})
+    # dms_job.append({"func": "%s:send_login_info_func" % __name__, "trigger": "cron", "id": "send_login_info",
+    #                 "hour": "9-11,14-17", "minute": "5"})
