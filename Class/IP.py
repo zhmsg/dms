@@ -5,7 +5,7 @@ __author__ = 'ZhouHeng'
 from Tools.Mysql_db import DB
 
 
-class IPManager:
+class IPManager(object):
 
     def __init__(self):
         self.db = DB()
