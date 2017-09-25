@@ -298,7 +298,6 @@ class RoleManager(object):
 
     def select(self, user_name):
         role_v = self.col.find_one(dict(user_name=user_name))
-        print(role_v)
         return role_v
 
     def insert(self, user_name):

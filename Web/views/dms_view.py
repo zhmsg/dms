@@ -113,6 +113,7 @@ def login_vip():
     user.user_name = info["account"]
     login_user(user)
     session["role"] = info["role"]
+    session["roles"] = role_m.select(info["account"])
     return jsonify({"status": True, "data": "success"})
 
 
