@@ -207,9 +207,9 @@ class DBTool:
         return True, init_info
 
 # example
-# dbt = DBTool("localhost")
-# result = dbt.create_from_dir(".")
-# print(result)
+dbt = DBTool("localhost")
+result = dbt.create_from_dir(".")
+print(result)
 # result, info = dbt.init_data_from_dir("Data")
 # print(result)
 
