@@ -3,6 +3,7 @@
 import sys
 from flask import request, jsonify, g, redirect
 
+from Tools.RenderTemplate import RenderTemplate
 from Class import mongo_host
 from Class.DistKey import DistKey
 
@@ -12,7 +13,9 @@ sys.path.append('..')
 
 __author__ = 'Zhouheng'
 
-dist_key_view = create_blue('dist_key_view', url_prefix=url_prefix)
+rt = RenderTemplate("Dist_Key", url_prefix=url_prefix)
+
+dist_key_view = create_blue('dist_key_view', url_prefix=url_prefix, auth_required=False)
 
 dt = DistKey(mongo_host)
 
@@ -26,8 +29,14 @@ def before_request():
 @dist_key_view.route("/", methods=["GET"])
 def get_key():
     if "app" not in request.args:
-        return jsonify({"status": False, "data": "need app"})
+        return rt.render("index.html")
     app = request.args["app"]
     keys = dt.select(app)
     print(app)
     return jsonify({"status": True, "data": keys})
+
+
+@dist_key_view.route("/", methods=["POST"])
+def add_key():
+    pass
+

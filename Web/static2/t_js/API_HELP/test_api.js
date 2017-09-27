@@ -91,7 +91,12 @@ function get_param_value(){
             }
         }
         else if (param_key == "X-Authorization") {
-            u_header_param[param_key] = "OAuth2 " + param_value;
+            if(param_value.indexOf("OAuth2 ") == 0){
+                u_header_param[param_key] = param_value;
+            }
+            else {
+                u_header_param[param_key] = "OAuth2 " + param_value;
+            }
         }
         else {
             u_header_param[param_key] = param_value;

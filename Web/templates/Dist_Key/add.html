@@ -1,0 +1,44 @@
+<fieldset>
+    <legend>基本配置</legend>
+    <div class="form-group apiContentLine">
+        <ul>
+
+            <li>
+                <label for="">应用名称：</label>
+                <input class="box-side width150" id="app" type="text"/>
+            </li>
+            <li>
+                <label for="">有效天数：</label>
+                <input class="box-side width100" id="interval_time" type="text" placeholder="2-99999"/>
+            </li>
+        </ul>
+
+    </div>
+</fieldset>
+<fieldset>
+    <legend>权限配置</legend>
+    <div class="form-group apiContentLine">
+        <ul>
+            <label class="checkbox-inline"><input type="checkbox" name="email_notify"/>允许不登录获得</label>
+            <li><label for="">IP分组：</label>
+                <select class="box-side width300" id="ip_group">
+                    <option value="1">公司IP</option>
+                    <option value="2" selected>公司IP</option>
+                </select></li>
+        </ul>
+    </div>
+</fieldset>
+<fieldset>
+    <legend>密钥信息</legend>
+    <div class="form-group apiContentLine">
+        <ul>
+            <label class="checkbox-inline"><input type="checkbox" name="email_notify"/>允许不登录获得</label>
+            <li><label for="">IP分组：</label>
+                <select class="box-side width300" id="ip_group">
+                    <option value="1"></option>
+                    <option value="2" selected>链接方式</option>
+                </select></li>
+        </ul>
+    </div>
+</fieldset>
+<button class="btn btn-success btn-down api-newBtn" id="btn_new_tag">新建</button>
