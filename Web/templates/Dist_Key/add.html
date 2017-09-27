@@ -19,12 +19,16 @@
     <legend>权限配置</legend>
     <div class="form-group apiContentLine">
         <ul>
-            <label class="checkbox-inline"><input type="checkbox" name="email_notify"/>允许不登录获得</label>
-            <li><label for="">IP分组：</label>
-                <select class="box-side width300" id="ip_group">
+            <label class="checkbox-inline"><input type="checkbox" name="allow_not_login" bind-el="#li_select_group"/>允许不登录获得</label>
+            <li class="display_none" id="li_select_group">
+                <label for="">IP分组：</label>
+                <select class="box-side width300" id="ip_groups">
                     <option value="1">公司IP</option>
                     <option value="2" selected>公司IP</option>
-                </select></li>
+                </select>
+                <span class="symbol" name="span_add" bind-select="#ip_groups" bind-div="#div_add_group">+</span>
+                <div class="tag" id="div_add_group"></div>
+            </li>
         </ul>
     </div>
 </fieldset>
@@ -32,12 +36,12 @@
     <legend>密钥信息</legend>
     <div class="form-group apiContentLine">
         <ul>
-            <label class="checkbox-inline"><input type="checkbox" name="email_notify"/>允许不登录获得</label>
-            <li><label for="">IP分组：</label>
-                <select class="box-side width300" id="ip_group">
-                    <option value="1"></option>
-                    <option value="2" selected>链接方式</option>
-                </select></li>
+            <li>
+                <input class="box-side width150" type="text" placeholder=""/>
+                <label> : </label>
+                <input class="box-side width300" type="text" placeholder=""/>
+                <label class="checkbox-inline"><input type="checkbox" name="email_notify"/>加密</label>
+            </li>
         </ul>
     </div>
 </fieldset>
