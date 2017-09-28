@@ -6,9 +6,12 @@ function add_option(select_id, value, text, title){
     if(title == null){
         title = text;
     }
+    if(select_id.indexOf("#") != 0){
+        select_id = "#" + select_id;
+    }
     var option = "<option value='{value}' title='{title}'>{text}</option>";
     var option_item = option.replace("{value}", value).replace("{text}", text).replace("{title}", title);
-    $("#" + select_id).append(option_item);
+    $(select_id).append(option_item);
 }
 
 function query_option(select_id, v, query_t){
