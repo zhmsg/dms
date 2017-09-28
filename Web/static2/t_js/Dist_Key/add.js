@@ -55,4 +55,15 @@ $(function(){
             $($(this).attr("bind-el")).hide();
         }
     });
+    $("a[name='link_add_input']").click(function(){
+        var p_li = $(this.parentNode);
+        var c_li = p_li.clone(true);
+        c_li.find("input").val("");
+        $(this).parent().after(c_li);
+        $(this).text("删除");
+        $(this).unbind('click');
+        $(this).click(function () {
+           $(this.parentNode).remove();
+        });
+    });
 });

@@ -22,7 +22,8 @@ dt = DistKey(mongo_host)
 
 @dist_key_view.before_request
 def before_request():
-    print(g.user_roles)
+    if "user_roles" in g:
+        print(g.user_roles)
     print(g.request_IP_s)
 
 
