@@ -4,9 +4,9 @@ function add_key()
     var app = $("#app").val();
     var effective_days = $("#effective_days").val();
     var deadline = new Date().getTime() / 1000 + 3600 * 24 * effective_days;
-    var data = {"app": app, "deadline": deadline, "allow_api": false};
-    if ($("input[name='allow_not_login']").is(":checked")){
-        data["allow_api"] = true;
+    var data = {"app": app, "deadline": deadline, "ip_auth": false};
+    if ($("input[name='ip_auth']").is(":checked")){
+        data["ip_auth"] = true;
         var group_spans = $("#div_add_group").find("span");
         var gs_len = group_spans.length;
         var ip_groups = new Array();
@@ -60,7 +60,7 @@ $(document).ready(function () {
         $(bind_div).append(new_span);
         item.remove();
     });
-    $("input[name='allow_not_login']").click(function(){
+    $("input[name='ip_auth']").click(function(){
         if ($(this).is(":checked")){
             $($(this).attr("bind-el")).show();
         }
