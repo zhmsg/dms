@@ -1,8 +1,9 @@
 #! /usr/bin/env python
 # coding: utf-8
 import sys
-from flask import request, jsonify, g, redirect
 
+from flask import request, jsonify, g, redirect, make_response
+from flask_login import login_required
 from Tools.RenderTemplate import RenderTemplate
 from Class import mongo_host
 from Class.DistKey import DistKey
@@ -22,9 +23,21 @@ dt = DistKey(mongo_host)
 
 @dist_key_view.before_request
 def before_request():
-    if "user_roles" in g:
-        print(g.user_roles)
+
+    @login_required
+    def web_access():
+        if "dist_key" not in g.user_roles:
+            return make_response("无权限", 403)
+
+    def api_access():
+        if request.method != "GET":
+            return make_response("Not Allow", 403)
+
     print(g.request_IP_s)
+    if request.headers.get("User-Agent") != "jyrequests":
+        return web_access()
+    else:
+        return api_access()
 
 
 @dist_key_view.route("/", methods=["GET"])
@@ -39,5 +52,11 @@ def get_key():
 
 @dist_key_view.route("/", methods=["POST"])
 def add_key():
-    pass
+    r_data = request.json
+    app = r_data["app"]
+    deadline = int(r_data["deadline"])
+    del r_data["app"]
+    del r_data["deadline"]
+    dt.insert(app, deadline, g.user_name, **r_data)
+    return jsonify({"status": True, "data": "success"})
 

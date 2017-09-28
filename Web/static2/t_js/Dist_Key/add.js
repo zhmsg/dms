@@ -1,4 +1,40 @@
 
+function add_key()
+{
+    var app = $("#app").val();
+    var effective_days = $("#effective_days").val();
+    var deadline = new Date().getTime() / 1000 + 3600 * 24 * effective_days;
+    var data = {"app": app, "deadline": deadline, "allow_api": false};
+    if ($("input[name='allow_not_login']").is(":checked")){
+        data["allow_api"] = true;
+        var group_spans = $("#div_add_group").find("span");
+        var gs_len = group_spans.length;
+        var ip_groups = new Array();
+        for(var i=0;i<gs_len;i++){
+            var v = $(group_spans[i]).attr("value");
+            console.info(v);
+            ip_groups[i] = v;
+        }
+        data["ip_groups"] = ip_groups;
+    }
+    var key_info = $("li[name='key_info']");
+    var ki_len = key_info.length;
+    for(var j=0;j<ki_len;j++)
+    {
+        var li_item = $(key_info[j]);
+        var li_input = li_item.find("input");
+        var k = $(li_input[0]).val();
+        var v = $(li_input[1]).val();
+        console.info($(li_input[2]).is(":checked"));
+        if($(li_input[2]).is(":checked")){
+            k = "_" + k;
+        }
+        data[k]= v;
+    }
+    my_async_request2(location.href, "POST", data);
+}
+
+
 $(function(){
     $("span[name='span_add']").click(function(){
         var bind_select = $(this).attr("bind-select");
@@ -43,4 +79,5 @@ $(function(){
            $(this.parentNode).remove();
         });
     });
+    $("#btn_new_key").click(add_key);
 });
