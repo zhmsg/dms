@@ -43,10 +43,20 @@ def before_request():
 @dist_key_view.route("/", methods=["GET"])
 def get_key():
     if "app" not in request.args:
-        return rt.render("index.html")
+        query_url = url_prefix + "/query/"
+        return rt.render("index.html", query_url=query_url)
     app = request.args["app"]
     keys = dt.select(app)
     print(app)
+    return jsonify({"status": True, "data": keys})
+
+
+@dist_key_view.route("/query/", methods=["POST"])
+def query_users_key():
+    r_data = request.json
+    if r_data is None:
+        r_data = dict()
+    keys = dt.select2(g.user_name, **r_data)
     return jsonify({"status": True, "data": keys})
 
 
@@ -55,8 +65,12 @@ def add_key():
     r_data = request.json
     app = r_data["app"]
     deadline = int(r_data["deadline"])
+    allow_api = r_data["allow_api"]
     del r_data["app"]
     del r_data["deadline"]
-    dt.insert(app, deadline, g.user_name, **r_data)
+    del r_data["allow_api"]
+    if "user_name" in r_data:
+        del r_data["user_name"]
+    dt.insert(app, deadline, g.user_name, allow_api=allow_api, **r_data)
     return jsonify({"status": True, "data": "success"})
 

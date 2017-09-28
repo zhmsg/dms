@@ -17,8 +17,8 @@ class DistKey(object):
         pass
 
     def insert(self, app, deadline, user_name, **kwargs):
-        doc = dict(app=app, deadline=deadline, user_name=user_name, insert_time=int(time()))
-        doc.update(kwargs)
+        doc = kwargs
+        doc.update(dict(app=app, deadline=deadline, user_name=user_name, insert_time=int(time())))
         self.col.insert_one(doc)
         pass
 
@@ -28,6 +28,16 @@ class DistKey(object):
         items = []
         for item in self.col.find(filter=where_value):
             item["_id"] = str(item["_id"])
+            items.append(item)
+        return items
+
+    def select2(self, user_name, **kwargs):
+        where_value = kwargs
+        where_value.update(user_name=user_name)
+        items = []
+        for item in self.col.find(filter=where_value):
+            item["id"] = str(item["_id"])
+            del item["_id"]
             items.append(item)
         return items
 

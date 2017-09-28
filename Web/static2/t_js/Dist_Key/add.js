@@ -35,7 +35,7 @@ function add_key()
 }
 
 
-$(function(){
+$(document).ready(function () {
     $("span[name='span_add']").click(function(){
         var bind_select = $(this).attr("bind-select");
         var bind_div = $(this).attr("bind-div");
