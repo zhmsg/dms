@@ -26,7 +26,7 @@ def before_request():
 
     @login_required
     def web_access():
-        if "dist_key" not in g.user_roles:
+        if g.user_roles is None or "dist_key" not in g.user_roles:
             return make_response("无权限", 403)
 
     def api_access():
