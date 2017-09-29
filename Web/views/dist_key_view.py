@@ -65,12 +65,12 @@ def add_key():
     r_data = request.json
     app = r_data["app"]
     deadline = int(r_data["deadline"])
-    allow_api = r_data["allow_api"]
+    ip_auth = r_data["ip_auth"]
     del r_data["app"]
     del r_data["deadline"]
-    del r_data["allow_api"]
+    del r_data["ip_auth"]
     if "user_name" in r_data:
         del r_data["user_name"]
-    dt.insert(app, deadline, g.user_name, allow_api=allow_api, **r_data)
+    dt.insert(app, deadline, g.user_name, ip_auth=ip_auth, **r_data)
     return jsonify({"status": True, "data": "success"})
 
