@@ -1,6 +1,7 @@
 <fieldset>
     <legend>录入须知</legend>
     <p>【1】请勿录入私人密钥</p>
+
     <p>【2】</p>
 
 </fieldset>
@@ -14,8 +15,12 @@
                 <input class="box-side width150" id="app" type="text"/>
             </li>
             <li>
-                <label for="">有效天数：</label>
+                <label for="effective_days">有效天数：</label>
                 <input class="box-side width100" id="effective_days" type="text" placeholder="2-99999"/>
+            </li>
+            <li>
+                <label for="">密钥备注：</label>
+                <input class="box-side width300" id="remark" type="text"/>
             </li>
         </ul>
 
@@ -25,7 +30,8 @@
     <legend>权限配置</legend>
     <div class="form-group apiContentLine">
         <ul>
-            <label class="checkbox-inline"><input type="checkbox" name="ip_auth" bind-el="#li_select_group"/>通过IP认证</label>
+            <label class="checkbox-inline"><input type="checkbox" name="ip_auth"
+                                                  bind-el="#li_select_group"/>通过IP认证</label>
             <li class="display_none" id="li_select_group">
                 <label for="">IP分组：</label>
                 <select class="box-side width300" id="ip_groups">

@@ -16,6 +16,7 @@ function load_keys(data) {
         add_tr.append(new_td("deadline", data_item));
         add_tr.append(new_td("ip_auth", data_item));
         add_tr.append(new_td("user_name", data_item));
+        add_tr.append(new_td("remark", data_item));
         var op_td = $("<td></td>");
         op_td.append($("<a name='op_look' href='#div_key_detail'>查看</a>"));
         add_tr.append(op_td);

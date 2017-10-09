@@ -4,7 +4,7 @@
 
 function timestamp_2_datetime(ts){
     var dt = new Date(parseInt(ts) * 1000);
-    var dt_str = dt.toLocaleDateString().replace(/\//g, "-") + " ";
+    var dt_str = dt.toLocaleDateString().replace(/\/\d{1,2}/g, function(word){console.info(word);if(word.length >= 3){return "-" + word.substr(1)}else{return "-0" + word.substr(1)}}) + " ";
     dt_str += dt.toTimeString().substr(0, 8);
     return dt_str;
 }

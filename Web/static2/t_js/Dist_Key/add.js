@@ -4,7 +4,8 @@ function add_key()
     var app = $("#app").val();
     var effective_days = $("#effective_days").val();
     var deadline = new Date().getTime() / 1000 + 3600 * 24 * effective_days;
-    var data = {"app": app, "deadline": deadline, "ip_auth": false};
+    var remark = $("#remark").val();
+    var data = {"app": app, "deadline": deadline, "ip_auth": false, "remark": remark};
     if ($("input[name='ip_auth']:visible").is(":checked")){
         data["ip_auth"] = true;
         var group_spans = $("#div_add_group").find("span");
@@ -12,7 +13,6 @@ function add_key()
         var ip_groups = new Array();
         for(var i=0;i<gs_len;i++){
             var v = $(group_spans[i]).attr("value");
-            console.info(v);
             ip_groups[i] = v;
         }
         data["ip_groups"] = ip_groups;
