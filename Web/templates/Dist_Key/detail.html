@@ -1,0 +1,48 @@
+<fieldset>
+    <legend>基本配置</legend>
+    <div class="form-group apiContentLine">
+        <ul>
+            <li>
+                <label for="">应用名称：</label>
+                <input class="box-side width150" id="app2" type="text" readonly/>
+            </li>
+            <li>
+                <label for="">有效天数：</label>
+                <input class="box-side width100" id="effective_days2" type="text" placeholder="2-99999"/>
+            </li>
+        </ul>
+
+    </div>
+</fieldset>
+<fieldset>
+    <legend>权限配置</legend>
+    <div class="form-group apiContentLine">
+        <ul>
+            <label class="checkbox-inline"><input type="checkbox" name="ip_auth" bind-el="#li_select_group2"/>通过IP认证</label>
+            <li class="display_none" id="li_select_group2">
+                <label for="">IP分组：</label>
+                <select class="box-side width300" id="ip_groups2">
+                    <option value="1">公司IP</option>
+                    <option value="2" selected>公司IP</option>
+                </select>
+                <span class="symbol" name="span_add" bind-select="#ip_groups2" bind-div="#div_add_group2">+</span>
+
+                <div class="tag" id="div_add_group2"></div>
+            </li>
+        </ul>
+    </div>
+</fieldset>
+<fieldset>
+    <legend>密钥信息</legend>
+    <div class="form-group apiContentLine">
+        <ul>
+            <li name="key_info">
+                <input class="box-side width150" type="text" placeholder=""/>
+                <label> : </label>
+                <input class="box-side width300" type="text" placeholder=""/>
+                <label class="checkbox-inline margin10"><input type="checkbox" name="email_notify"/>加密</label>
+                <a href="javascript:void(0)" name="link_add_input">添加</a>
+            </li>
+        </ul>
+    </div>
+</fieldset>

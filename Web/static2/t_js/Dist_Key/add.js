@@ -5,7 +5,7 @@ function add_key()
     var effective_days = $("#effective_days").val();
     var deadline = new Date().getTime() / 1000 + 3600 * 24 * effective_days;
     var data = {"app": app, "deadline": deadline, "ip_auth": false};
-    if ($("input[name='ip_auth']").is(":checked")){
+    if ($("input[name='ip_auth']:visible").is(":checked")){
         data["ip_auth"] = true;
         var group_spans = $("#div_add_group").find("span");
         var gs_len = group_spans.length;
@@ -17,7 +17,7 @@ function add_key()
         }
         data["ip_groups"] = ip_groups;
     }
-    var key_info = $("li[name='key_info']");
+    var key_info = $("li[name='key_info']:visible");
     var ki_len = key_info.length;
     for(var j=0;j<ki_len;j++)
     {
@@ -31,7 +31,8 @@ function add_key()
         }
         data[k]= v;
     }
-    my_async_request2(location.href, "POST", data);
+    console.info(data);
+    //my_async_request2(location.href, "POST", data);
 }
 
 
