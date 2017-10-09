@@ -26,7 +26,7 @@ function load_keys(data) {
         detail_td.css({"text-align": "center"});
         detail_td.attr("colSpan", col_len);
         for(var key in data_item){
-            if(["user_name", "id", "ip_auth", "deadline", "app", "insert_time"].indexOf(key) >= 0){
+            if(["user_name", "id", "ip_auth", "deadline", "app", "insert_time", "remark"].indexOf(key) >= 0){
                 continue;
             }
             if(key[0] == "_"){
