@@ -32,7 +32,7 @@ function add_key()
         data[k]= v;
     }
     console.info(data);
-    //my_async_request2(location.href, "POST", data);
+    my_async_request2(location.href, "POST", data);
 }
 
 
