@@ -77,6 +77,8 @@ def login():
         user_name = request_data["user_name"]
         password = request_data["password"]
     result, info = user_m.check(user_name, password)
+    session["role"] = info["role"]
+    session["roles"] = role_m.select(info["account"])
     if result is False:
         return jsonify({"status": False, "data": info})
     if info["tel"] is None:
@@ -92,8 +94,6 @@ def login():
     user = User()
     user.user_name = info["account"]
     login_user(user, remember=remember)
-    session["role"] = info["role"]
-    session["roles"] = role_m.select(info["account"])
     if "next" in request_data and request_data["next"] != "":
         return jsonify({"status": True, "data": {"location": request_data["next"], "user_name": user.user_name}})
     if session["role"] == 0:

@@ -51,10 +51,11 @@ def get_key():
         kwargs[item] = request.args[item]
     kwargs.update(dict(ip_auth=True))
     keys = dt.select(**kwargs)
-    # for item in keys:
-    #     if item.get("ip_auth") is not True:
-    #         print(item)
-    #         del item
+    for item in keys:
+        # if "ip_groups" not in
+        if item.get("ip_groups") is not True:
+            print(item)
+            del item
     return jsonify({"status": True, "data": keys})
 
 
