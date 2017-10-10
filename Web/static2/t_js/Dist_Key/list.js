@@ -1,14 +1,16 @@
 function load_keys(data) {
-    console.info(data);
     var data_len = data.length;
     var t_name = "t_keys";
     clear_table(t_name);
-    var col_len = 6;
     if (data_len == 0) {
         add_row_td(t_name, "暂无密钥");
     }
+    var col_len = 6;
+    var ct = get_timestamp() / 1000;
+    var current_user = $("#current_user_name").val();
     for (var i = 0; i < data_len; i++) {
         var data_item = data[i];
+        var left_days = (data_item["deadline"] - ct) / 24 / 60 / 60;
         data_item["deadline"] = timestamp_2_datetime(data_item["deadline"]);
         var add_tr = $("<tr></tr>");
         add_tr.attr("id", data_item.id);
@@ -19,6 +21,20 @@ function load_keys(data) {
         add_tr.append(new_td("remark", data_item));
         var op_td = $("<td></td>");
         op_td.append($("<a name='op_look' href='javascript:void(0)'>查看</a>"));
+        if(data_item["ip_auth"] == true && current_user == data_item["user_name"]) {
+            if(left_days <= 10) {
+                op_td.append(" | ");
+                op_td.append($("<a name='update_deadline' href='javascript:void(0)'>延长到期</a>"));
+            }
+            if(left_days >= 1) {
+                op_td.append(" | ");
+                op_td.append($("<a name='update_deadline' href='javascript:void(0)'>提前到期</a>"));
+            }
+            if(left_days <= 0){
+                op_td.append(" | ");
+                op_td.append($("<a name='op_delete' href='javascript:void(0)'>删除</a>"));
+            }
+        }
         add_tr.append(op_td);
 
         var detail_tr = $("<tr name='tr_extend' class='display_none'></tr>");
@@ -46,8 +62,6 @@ function load_keys(data) {
     }
     $("a[name='op_look']").click(function(){
         var parent_tr = $(this).parent().parent();
-        var current_id = parent_tr.attr("id");
-        console.info(current_id);
         $("tr[name='tr_extend']").hide();
         if($(this).text() == "查看") {
             parent_tr.next().show();
@@ -57,6 +71,13 @@ function load_keys(data) {
         else{
             $(this).text("查看");
         }
+
+    });
+    $("a[name='update_deadline']").click(function(){
+        var parent_tr = $(this).parent().parent();
+        var current_id = parent_tr.attr("id");
+        var data = {"id": current_id, "offset": 24 * 60 * 60};
+        my_async_request2(location.href, "PUT", data, load_keys);
 
     });
 }

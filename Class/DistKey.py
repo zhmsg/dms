@@ -3,7 +3,7 @@
 
 from time import time
 from bson.objectid import ObjectId
-from pymongo import MongoClient, DESCENDING
+from pymongo import MongoClient, DESCENDING, ReturnDocument
 
 __author__ = 'meisanggou'
 
@@ -43,6 +43,13 @@ class DistKey(object):
 
     def remove(self, id):
         print self.col.delete_one({"_id": ObjectId(id)})
+
+    def update(self, id, user_name, **kwargs):
+        return self.col.update_one(filter={"_id": ObjectId(id), "user_name": user_name}, update={'$set': kwargs})
+
+    def update_deadline(self, id, user_name, offset):
+        return self.col.find_one_and_update(filter={"_id": ObjectId(id), "user_name": user_name},
+                                            update={'$inc': {"deadline": offset}}, return_document=ReturnDocument.AFTER)
 
 
 if __name__ == "__main__":

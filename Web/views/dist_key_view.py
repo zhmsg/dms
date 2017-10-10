@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 # coding: utf-8
 import sys
+from time import time
 
 from flask import request, jsonify, g, redirect, make_response
 from flask_login import login_required
@@ -59,7 +60,8 @@ def get_one_key():
         if isinstance(item.get("ip_groups"), list) is False:
             continue
         for g_name in item["ip_groups"]:
-            if len(ip_man.query(g_name, g.request_IP)) > 0:
+            if len(ip_man.query(g_name, g.request_IP)) > 0 and item["deadline"] > time() + 24 * 60 * 60:
+                item["deadline"] = int(time()) + 24 * 60 * 60
                 return jsonify({"status": True, "data": item})
     return jsonify({"status": False, "data": "No Key"})
 
@@ -91,3 +93,21 @@ def add_key():
     dt.insert(app, deadline, g.user_name, ip_auth=ip_auth, **r_data)
     return jsonify({"status": True, "data": "success"})
 
+
+@dist_key_view.route("/", methods=["PUT"])
+def update_key():
+    r_data = request.json
+    id = r_data["id"]
+    offset = int(r_data["offset"])
+    # ip_auth = r_data["ip_auth"]
+    # del r_data["app"]
+    # del r_data["deadline"]
+    # del r_data["ip_auth"]
+    # if "user_name" in r_data:
+    #     del r_data["user_name"]
+    # dt.insert(app, deadline, g.user_name, ip_auth=ip_auth, **r_data)
+    data = dt.update_deadline(id, g.user_name, offset)
+    if data is not None:
+        data["id"] = str(data["_id"])
+        del data["_id"]
+    return jsonify({"status": True, "data": [data]})
