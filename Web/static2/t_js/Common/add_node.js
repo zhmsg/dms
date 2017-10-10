@@ -84,12 +84,18 @@ function new_td(key, obj, max_len, editable) {
 }
 
 function clear_table(table_id){
-    $("#" + table_id + " tr").not(":first").remove();
+    if(table_id[0] != "#"){
+        table_id = "#" + table_id;
+    }
+    $(table_id + " tr").not(":first").remove();
 }
 
 function add_row_td(t_id, content, col_len)
 {
-    var t =$("#" + t_id);
+    if(t_id[0] != "#"){
+        t_id = "#" + t_id;
+    }
+    var t = $(t_id);
     var add_tr = $("<tr></tr>");
     var add_td = $("<td></td>");
     add_td.text(content);
