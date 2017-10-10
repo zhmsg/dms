@@ -51,6 +51,7 @@ function load_keys(data) {
         $("tr[name='tr_extend']").hide();
         if($(this).text() == "查看") {
             parent_tr.next().show();
+            $("a[name='op_look']").text("查看");
             $(this).text("隐藏");
         }
         else{
