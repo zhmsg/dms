@@ -1,22 +1,30 @@
 function load_keys(data) {
     var data_len = data.length;
     var t_name = "#t_keys";
-    clear_table(t_name);
+    //clear_table(t_name);
     if (data_len == 0) {
         add_row_td(t_name, "暂无密钥");
     }
     var col_len = 6;
     var ct = get_timestamp() / 1000;
     var current_user = $("#current_user_name").val();
+    var index = 1;
     for (var i = 0; i < data_len; i++) {
         var data_item = data[i];
         var left_days = (data_item["deadline"] - ct) / 24 / 60 / 60;
         data_item["deadline"] = timestamp_2_datetime(data_item["deadline"]);
         if($("#" + data_item.id).length > 0){
+            index = $("#" + data_item.id).attr("index");
+            $("#" + data_item.id).next().remove();
             $("#" + data_item.id).remove();
+        }
+        else{
+            index = $(t_name).find("tr").length;
+            console.info(index);
         }
         var add_tr = $("<tr></tr>");
         add_tr.attr("id", data_item.id);
+        add_tr.index("index", index);
         add_tr.append(new_td("app", data_item));
         add_tr.append(new_td("deadline", data_item));
         add_tr.append(new_td("ip_auth", data_item));
@@ -61,7 +69,7 @@ function load_keys(data) {
         detail_tr.append(detail_td);
 
         $(t_name).append(add_tr);
-        $(t_name).append(detail_tr);
+        detail_tr.insertAfter(add_tr);
     }
     $("a[name='op_look']").click(function(){
         var parent_tr = $(this).parent().parent();
