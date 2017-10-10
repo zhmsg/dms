@@ -50,6 +50,8 @@ def get_one_key():
         return rt.render("index.html", query_url=query_url, ip_group_url=ip_group_url)
     kwargs = dict()
     for item in request.args:
+        if item[0] == "_":
+            continue
         kwargs[item] = request.args[item]
     kwargs.update(dict(ip_auth=True))
     keys = dt.select(**kwargs)
