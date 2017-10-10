@@ -7,6 +7,7 @@ from flask_login import login_required
 from Tools.RenderTemplate import RenderTemplate
 from Class import mongo_host
 from Class.DistKey import DistKey
+from Class.IP import IPManager
 
 from Web import dist_key_prefix as url_prefix, create_blue, tools_url_prefix
 
@@ -19,6 +20,7 @@ rt = RenderTemplate("Dist_Key", url_prefix=url_prefix)
 dist_key_view = create_blue('dist_key_view', url_prefix=url_prefix, auth_required=False)
 
 dt = DistKey(mongo_host)
+ip_man = IPManager()
 
 
 @dist_key_view.before_request
@@ -41,7 +43,7 @@ def before_request():
 
 
 @dist_key_view.route("/", methods=["GET"])
-def get_key():
+def get_one_key():
     if "app" not in request.args:
         query_url = url_prefix + "/query/"
         ip_group_url = tools_url_prefix + "/ip/group/"
@@ -52,11 +54,12 @@ def get_key():
     kwargs.update(dict(ip_auth=True))
     keys = dt.select(**kwargs)
     for item in keys:
-        # if "ip_groups" not in
-        if item.get("ip_groups") is not True:
-            print(item)
-            del item
-    return jsonify({"status": True, "data": keys})
+        if isinstance(item.get("ip_groups"), list) is False:
+            continue
+        for g_name in item["ip_groups"]:
+            if len(ip_man.query(g_name, g.request_IP)) > 0:
+                return jsonify({"status": True, "data": item})
+    return jsonify({"status": False, "data": "No Key"})
 
 
 @dist_key_view.route("/query/", methods=["POST"])
