@@ -76,7 +76,13 @@ function load_keys(data) {
     $("a[name='update_deadline']").click(function(){
         var parent_tr = $(this).parent().parent();
         var current_id = parent_tr.attr("id");
-        var data = {"id": current_id, "offset": 24 * 60 * 60};
+        var data = {"id": current_id};
+        if($(this).text() == "延长到期"){
+            data["offset"] = 10 * 24 * 60 * 60;
+        }
+        else{
+            data["deadline"] = get_timestamp2() + 24 * 60 * 60;
+        }
         my_async_request2(location.href, "PUT", data, load_keys);
 
     });

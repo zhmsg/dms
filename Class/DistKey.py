@@ -47,9 +47,15 @@ class DistKey(object):
     def update(self, id, user_name, **kwargs):
         return self.col.update_one(filter={"_id": ObjectId(id), "user_name": user_name}, update={'$set': kwargs})
 
-    def update_deadline(self, id, user_name, offset):
+    def update_deadline(self, id, user_name, offset=None, deadline=None):
+        if offset is not None:
+            update_v = {'$inc': {"deadline": offset}}
+        elif deadline is not None:
+            update_v = {'$set': {"deadline": deadline}}
+        else:
+            return None
         return self.col.find_one_and_update(filter={"_id": ObjectId(id), "user_name": user_name},
-                                            update={'$inc': {"deadline": offset}}, return_document=ReturnDocument.AFTER)
+                                            update=update_v, return_document=ReturnDocument.AFTER)
 
 
 if __name__ == "__main__":

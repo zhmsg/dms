@@ -98,16 +98,16 @@ def add_key():
 def update_key():
     r_data = request.json
     id = r_data["id"]
-    offset = int(r_data["offset"])
-    # ip_auth = r_data["ip_auth"]
-    # del r_data["app"]
-    # del r_data["deadline"]
-    # del r_data["ip_auth"]
-    # if "user_name" in r_data:
-    #     del r_data["user_name"]
-    # dt.insert(app, deadline, g.user_name, ip_auth=ip_auth, **r_data)
-    data = dt.update_deadline(id, g.user_name, offset)
+    kwargs = dict()
+    if "offset" in r_data:
+        kwargs["offset"] = int(r_data["offset"])
+    elif "deadline" in r_data:
+        kwargs["deadline"] = r_data["deadline"]
+    else:
+        return jsonify({"status": True, "data": []})
+    data = dt.update_deadline(id, g.user_name, **kwargs)
     if data is not None:
         data["id"] = str(data["_id"])
         del data["_id"]
-    return jsonify({"status": True, "data": [data]})
+        return jsonify({"status": True, "data": [data]})
+    return jsonify({"status": True, "data": []})
