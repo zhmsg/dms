@@ -8,23 +8,20 @@ function load_keys(data) {
     var col_len = 6;
     var ct = get_timestamp() / 1000;
     var current_user = $("#current_user_name").val();
-    var index = 1;
     for (var i = 0; i < data_len; i++) {
         var data_item = data[i];
         var left_days = (data_item["deadline"] - ct) / 24 / 60 / 60;
         data_item["deadline"] = timestamp_2_datetime(data_item["deadline"]);
+        var add_tr = $("<tr></tr>");
         if($("#" + data_item.id).length > 0){
-            index = $("#" + data_item.id).attr("index");
+            add_tr.insertBefore($("#" + data_item.id));
             $("#" + data_item.id).next().remove();
             $("#" + data_item.id).remove();
         }
         else{
-            index = $(t_name).find("tr").length;
-            console.info(index);
+            $(t_name).append(add_tr);
         }
-        var add_tr = $("<tr></tr>");
         add_tr.attr("id", data_item.id);
-        add_tr.index("index", index);
         add_tr.append(new_td("app", data_item));
         add_tr.append(new_td("deadline", data_item));
         add_tr.append(new_td("ip_auth", data_item));
@@ -68,7 +65,6 @@ function load_keys(data) {
         }
         detail_tr.append(detail_td);
 
-        $(t_name).append(add_tr);
         detail_tr.insertAfter(add_tr);
     }
     $("a[name='op_look']").click(function(){
