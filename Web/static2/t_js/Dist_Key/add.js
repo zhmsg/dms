@@ -35,8 +35,16 @@ function add_key()
     my_async_request2(location.href, "POST", data);
 }
 
+function load_groups(data){
+    var data_len = data.length;
+    for(var i=0;i<data_len;i++){
+        var d_item = data[i];
+        add_option("ip_groups", d_item["g_name"], d_item["g_name"], d_item["remark"]);
+    }
+}
 
 $(document).ready(function () {
+    my_async_request2($("#ip_group_url").val(), "GET", null, load_groups);
     $("span[name='span_add']").click(function(){
         var bind_select = $(this).attr("bind-select");
         var bind_div = $(this).attr("bind-div");

@@ -8,7 +8,7 @@ from Tools.RenderTemplate import RenderTemplate
 from Class import mongo_host
 from Class.DistKey import DistKey
 
-from Web import dist_key_prefix as url_prefix, create_blue
+from Web import dist_key_prefix as url_prefix, create_blue, tools_url_prefix
 
 sys.path.append('..')
 
@@ -44,10 +44,17 @@ def before_request():
 def get_key():
     if "app" not in request.args:
         query_url = url_prefix + "/query/"
-        return rt.render("index.html", query_url=query_url)
-    app = request.args["app"]
-    keys = dt.select(app)
-    print(app)
+        ip_group_url = tools_url_prefix + "/ip/group/"
+        return rt.render("index.html", query_url=query_url, ip_group_url=ip_group_url)
+    kwargs = dict()
+    for item in request.args:
+        kwargs[item] = request.args[item]
+    kwargs.update(dict(ip_auth=True))
+    keys = dt.select(**kwargs)
+    # for item in keys:
+    #     if item.get("ip_auth") is not True:
+    #         print(item)
+    #         del item
     return jsonify({"status": True, "data": keys})
 
 
