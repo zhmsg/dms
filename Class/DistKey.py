@@ -3,7 +3,7 @@
 
 from time import time
 from bson.objectid import ObjectId
-from pymongo import MongoClient
+from pymongo import MongoClient, DESCENDING
 
 __author__ = 'meisanggou'
 
@@ -26,7 +26,7 @@ class DistKey(object):
         where_value = dict(app=app)
         where_value.update(kwargs)
         items = []
-        for item in self.col.find(filter=where_value):
+        for item in self.col.find(filter=where_value, sort=[("deadline", DESCENDING)]):
             item["_id"] = str(item["_id"])
             items.append(item)
         return items
