@@ -3,7 +3,7 @@ function load_keys(data) {
     var data_len = data.length;
     var t_name = "t_keys";
     clear_table(t_name);
-    var col_len = 5;
+    var col_len = 6;
     if (data_len == 0) {
         add_row_td(t_name, "暂无密钥");
     }
