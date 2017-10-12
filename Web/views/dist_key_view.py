@@ -74,8 +74,8 @@ def query_users_key():
     keys = dt.select2(g.user_name, **r_data)
     for item in keys:
         for sk in item:
-		    if len(sk) <= 0:
-			    continue
+            if len(sk) <= 0:
+                continue
             if sk[0] == "_":
                 item[sk] = "*" * len(item[sk])
     return jsonify({"status": True, "data": keys})
