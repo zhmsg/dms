@@ -11,6 +11,7 @@ function load_keys(data) {
     for (var i = 0; i < data_len; i++) {
         var data_item = data[i];
         if("deleted" in data_item){
+            $("#" + data_item.id).next().remove();
             $("#" + data_item.id).remove();
             continue;
         }
