@@ -113,3 +113,11 @@ def update_key():
         del data["_id"]
         return jsonify({"status": True, "data": [data]})
     return jsonify({"status": True, "data": []})
+
+
+@dist_key_view.route("/", methods=["DELETE"])
+def delete_key():
+    r_data = request.json
+    id = r_data["id"]
+    dt.remove(id)
+    return jsonify({"status": True, "data": [{"id": id, "deleted": True}]})

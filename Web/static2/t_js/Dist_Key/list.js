@@ -10,6 +10,10 @@ function load_keys(data) {
     var current_user = $("#current_user_name").val();
     for (var i = 0; i < data_len; i++) {
         var data_item = data[i];
+        if("deleted" in data_item){
+            $("#" + data_item.id).remove();
+            continue;
+        }
         var left_days = (data_item["deadline"] - ct) / 24 / 60 / 60;
         data_item["deadline"] = timestamp_2_datetime(data_item["deadline"]);
         var add_tr = $("<tr></tr>");
@@ -79,6 +83,12 @@ function load_keys(data) {
             $(this).text("查看");
         }
 
+    });
+    $("a[name='op_delete']").click(function(){
+        var parent_tr = $(this).parent().parent();
+        var current_id = parent_tr.attr("id");
+        var data = {"id": current_id};
+        my_async_request2(location.href, "DELETE", data, load_keys);
     });
     $("a[name='update_deadline']").click(function(){
         var parent_tr = $(this).parent().parent();

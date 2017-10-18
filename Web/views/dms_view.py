@@ -77,10 +77,10 @@ def login():
         user_name = request_data["user_name"]
         password = request_data["password"]
     result, info = user_m.check(user_name, password)
-    session["role"] = info["role"]
-    session["roles"] = role_m.select(info["account"])
     if result is False:
         return jsonify({"status": False, "data": info})
+    session["role"] = info["role"]
+    session["roles"] = role_m.select(info["account"])
     if info["tel"] is None:
         session["user_name"] = info["account"]
         session["bind_token"] = gen_salt(57)

@@ -42,7 +42,7 @@ class DistKey(object):
         return items
 
     def remove(self, id):
-        print self.col.delete_one({"_id": ObjectId(id)})
+        return self.col.delete_one({"_id": ObjectId(id), "deadline": {"$lt": time()}})
 
     def update(self, id, user_name, **kwargs):
         return self.col.update_one(filter={"_id": ObjectId(id), "user_name": user_name}, update={'$set': kwargs})
