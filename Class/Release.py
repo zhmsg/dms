@@ -28,7 +28,10 @@ def _pull_code(work_dir, branch):
     # 拉取代码
     with cd(work_dir):
         run("git stash && git fetch origin")
-        run("git pull && git pull --no-commit origin %s" % branch)
+        if branch is not None:
+            run("git pull && git pull --no-commit origin %s" % branch)
+        else:
+            run("git pull")
 
 
 class ReleaseManager:
@@ -101,8 +104,9 @@ class ReleaseManager:
         return self.pull_request_man.select_pull_request(action_no=task_status, repository="GATCWeb", merged=True, base_branch="master")
 
     def _restart_api(self):
-        _pull_code(self.api_work_dir, self.latest_branch)
+        _pull_code(self.api_work_dir, None)
         with cd(self.api_work_dir):
+            run("rm -rf my.conf && cp config.conf my.conf && sed -i 's/env:.*/env: Test/' my.conf")
             run('rm -rf *.log')
             run("sh stop.sh")
             run('ssh -f -n service "sh /home/msg/GATCAPI/restart_service.sh"', quiet=True)
