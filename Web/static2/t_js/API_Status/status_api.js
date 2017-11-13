@@ -9,6 +9,14 @@ var search_type = "in";
 
 function get_module_info_success(data){
     module_info = data.data;
+    $("tr[id^='s_']").each(function() {
+        var code = this.id.substr(2, 8);
+        var service_id = code.substr(0, 2);
+        var service_title = module_info[service_id].title;
+        var fun_id = code.substr(2, 2);
+        var fun_title = module_info[service_id]["fun_info"][fun_id].title;
+        $(this).find("td:eq(1)").text(service_title + "-" + fun_title);
+    });
 }
 function get_module_info() {
     var request_url = $("#fun_info_url").val();
@@ -182,20 +190,6 @@ function get_info(code){
     return info;
 }
 
-$(function(){
-    //鼠标移入显示 移出消失 的效果
-    $("tr[id^='s_']").hover(
-        function(){
-            var code_info = get_info(this.id.substr(2,8));
-            $("#status_code_info").html(code_info + "<br /> <p class='redColor'>点击可复制</p>");
-            $(".status_out").show();
-            $(".status_out").css('top',(this.offsetHeight + this.offsetTop)+'px')
-        },
-        function(){
-            $(".status_out").hide()
-        }
-    );
-});
 
 // 显示或隐藏 按钮
 $(function(){
@@ -263,6 +257,18 @@ $(function(){
         var code = current_td.text().replace(/[^\d]/g, "");
         copy_text(lTrim(code, '0'));
     });
+    //鼠标移入显示 移出消失 的效果
+    $("tr[id^='s_']").hover(
+        function(){
+            var code_info = get_info(this.id.substr(2,8));
+            $("#status_code_info").html(code_info + "<br /> <p class='redColor'>点击可复制</p>");
+            $(".status_out").show();
+            $(".status_out").css('top',(this.offsetHeight + this.offsetTop)+'px')
+        },
+        function(){
+            $(".status_out").hide()
+        }
+    );
 });
 
 // 分页相关方法
