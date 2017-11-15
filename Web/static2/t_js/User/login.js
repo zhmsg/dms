@@ -62,5 +62,13 @@ $(document).ready(function () {
     //    var request_data = {"domain_user": true};
     //    my_async_request2(request_url, "POST", request_data, login_success);
     //});
+    $(function(){
+        document.onkeydown = function(e){
+            var ev = document.all ? window.event : e;
+            if(ev.keyCode==13) {
+                $("#btn_login").click();
+             }
+        }
+    });
 
 });
