@@ -244,9 +244,9 @@ function load_location_status(){
 
 $(function(){
     search_code(1);
+    get_module_info();
+    get_error_type();
     if($("#new_info_show").length > 0){
-        get_module_info();
-        get_error_type();
         $("#service_id").change(set_fun_id);
         $("#fun_id").change(save_location_status);
         $(".updateinfo").change(update_info);

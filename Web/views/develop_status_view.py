@@ -22,8 +22,8 @@ develop_status_view = create_blue('develop_status_view', url_prefix=url_prefix)
 
 @develop_status_view.route("/", methods=["GET"])
 def show_status_info():
-    if "log_no" in request.args:
-        result, status_info = control.get_status(current_user.role, log_no=request.args["log_no"])
+    if "status" in request.args:
+        result, status_info = control.get_status(current_user.role, status_code=request.args["status"])
     else:
         result, status_info = control.get_status(current_user.role)
     if request.is_xhr:
@@ -42,7 +42,33 @@ def show_status_info():
         del_power = True
     if current_user.role & control.role_value["status_code_module"] > 0:
         new_module_power = True
+
+    if new_power is False:
+        return redirect(url_prefix + "/q/")
     return render_template("%s/Status_API.html" % html_dir, fun_info_url=fun_info_url, status_info=status_info,
+                           error_type_url=error_type_url, return_url=return_url, search_status=search_status,
+                           new_power=new_power, del_power=del_power, new_module_power=new_module_power,
+                           del_status_code_url=del_status_code_url)
+
+
+@develop_status_view.route("/q/", methods=["GET"])
+def query_status_page():
+    if "status" in request.args:
+        result, status_info = control.get_status(current_user.role, status_code=request.args["status"])
+        return jsonify({"status": result, "data": {"items": status_info, "q": request.args["status"]}})
+    del_status_code_url = url_prefix + "/remove/"
+    fun_info_url = url_prefix + "/fun/"
+    error_type_url = url_prefix + "/type/"
+    return_url = api_url_prefix + ("/" if "api_no" not in request.args else "/info/?api_no=%s" % request.args["api_no"])
+    search_status = "" if "status" not in request.args else request.args["status"]
+    new_power = del_power = new_module_power = False
+    if current_user.role & control.role_value["status_code_new"] > 0:
+        new_power = True
+    if current_user.role & control.role_value["status_code_del"] > 0:
+        del_power = True
+    if current_user.role & control.role_value["status_code_module"] > 0:
+        new_module_power = True
+    return render_template("%s/Status_Info.html" % html_dir, fun_info_url=fun_info_url,
                            error_type_url=error_type_url, return_url=return_url, search_status=search_status,
                            new_power=new_power, del_power=del_power, new_module_power=new_module_power,
                            del_status_code_url=del_status_code_url)
