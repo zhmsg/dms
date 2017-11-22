@@ -2,13 +2,14 @@
     <legend>基本配置</legend>
     <div class="form-group apiContentLine">
         <ul>
+            <input class="display_none" id="detail_key_id" type="text"/>
             <li>
                 <label for="">应用名称：</label>
                 <input class="box-side width150" id="app2" type="text" readonly/>
             </li>
             <li>
-                <label for="">有效天数：</label>
-                <input class="box-side width100" id="effective_days2" type="text" placeholder="2-99999"/>
+                <label for="">有效期至：</label>
+                <input class="box-side width200" id="deadline" type="text" readonly/>
             </li>
         </ul>
 
@@ -34,14 +35,15 @@
 </fieldset>
 <fieldset>
     <legend>密钥信息</legend>
-    <div class="form-group apiContentLine">
+    <div class="form-group apiContentLine" id="div_key_all">
         <ul>
             <li name="key_info">
-                <input class="box-side width150" type="text" placeholder=""/>
+                <input class="box-side width150" type="text" readonly />
                 <label> : </label>
                 <input class="box-side width300" type="text" placeholder=""/>
-                <label class="checkbox-inline margin10"><input type="checkbox" name="email_notify"/>加密</label>
-                <a href="javascript:void(0)" name="link_add_input">添加</a>
+                <a href="javascript:void(0)" name="link_copy">复制</a>
+                <a href="javascript:void(0)" name="link_receive" class="display_none">获取</a>
+{#                <a href="javascript:void(0)" name="link_delete_input">删除</a>#}
             </li>
         </ul>
     </div>

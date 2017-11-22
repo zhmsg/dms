@@ -26,6 +26,7 @@ function load_keys(data) {
         else{
             $(t_name).append(add_tr);
         }
+        sessionStorage.setItem("jy_dms_distKey_" + data_item.id, JSON.stringify(data_item));
         add_tr.attr("id", data_item.id);
         add_tr.append(new_td("app", data_item));
         add_tr.append(new_td("deadline", data_item));
@@ -51,6 +52,7 @@ function load_keys(data) {
         add_tr.append(op_td);
 
         var detail_tr = $("<tr name='tr_extend' class='display_none'></tr>");
+        detail_tr.attr("id", "tr_detail_" + data_item.id);
         var detail_td = $("<td></td>");
         detail_td.css({"text-align": "center"});
         detail_td.attr("colSpan", col_len);
@@ -68,6 +70,7 @@ function load_keys(data) {
             detail_td.append(data_item[key]);
             detail_td.append($("<br></br>"));
         }
+        detail_td.append($('<a href="javascript:void(0)" onclick="switch_to_detail(\'' + data_item.id + '\')">More</a>'));
         detail_tr.append(detail_td);
 
         detail_tr.insertAfter(add_tr);
@@ -106,6 +109,58 @@ function load_keys(data) {
     });
 }
 
+function receive_secret(data)
+{
+    console.info(data);
+    var li_id = data.id + "__" + data.key;
+    console.info(li_id);
+    $("#" + li_id).find("[name='link_receive']").hide();
+    $("#" + li_id).find("[name='link_copy']").show();
+    var ss_key = "jy_dms_distKey_" + data.id;
+    var data_item = JSON.parse(sessionStorage.getItem(ss_key));
+    data_item[data.key] = data.value;
+    sessionStorage.setItem(ss_key, JSON.stringify(data_item));
+}
+
+function switch_to_detail(id)
+{
+    var data_item = JSON.parse(sessionStorage.getItem("jy_dms_distKey_" + id));
+    console.info(data_item);
+    $("#detail_key_id").val(data_item.id);
+    $("#app2").val(data_item.app);
+    $("#deadline").val(data_item.deadline);
+    var first_li = $("#div_key_all li:first");
+    for(var key in data_item){
+        if(["user_name", "id", "ip_auth", "deadline", "app", "insert_time", "remark"].indexOf(key) >= 0){
+            continue;
+        }
+        var c_li = first_li.clone(true);
+        c_li.attr("id", id + "_" + key);
+        if(key[0] == "_"){
+            c_li.find("input:first").val(key.substr(1));
+            c_li.find("[name='link_copy']").hide();
+            c_li.find("[name='link_receive']").show();
+            c_li.find("[name='link_receive']").click(function(){
+                var key_id = $("#detail_key_id").val();
+                var key = $(this).parent().find("input:first").val();
+                my_async_request2("/dist/key/query/secret/", "POST", {"id": key_id, "key": key}, receive_secret);
+            });
+        }
+        else{
+            c_li.find("input:first").val(key);
+        }
+        c_li.find("[name='link_copy']").click(function(){
+            var ss_key = "jy_dms_distKey_" + $("#detail_key_id").val();
+            var item = JSON.parse(sessionStorage.getItem(ss_key));
+            copy_text(item[$(this).parent().find("input:first").val()]);
+        });
+        c_li.find("input:last").val(data_item[key]);
+        first_li.after(c_li);
+    }
+    first_li.hide();
+    $("#div_key_all input").attr("readonly", "readonly");
+    $("#ul_menu li:eq(2) a").tab('show');
+}
 
 $(document).ready(function () {
     var query_url = $("#query_url").val();

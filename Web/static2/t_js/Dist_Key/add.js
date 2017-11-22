@@ -25,7 +25,6 @@ function add_key()
         var li_input = li_item.find("input");
         var k = $(li_input[0]).val();
         var v = $(li_input[1]).val();
-        console.info($(li_input[2]).is(":checked"));
         if($(li_input[2]).is(":checked")){
             k = "_" + k;
         }

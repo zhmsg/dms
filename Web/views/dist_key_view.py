@@ -81,6 +81,15 @@ def query_users_key():
     return jsonify({"status": True, "data": keys})
 
 
+@dist_key_view.route("/query/secret/", methods=["POST"])
+def query_users_key_secret():
+    r_data = request.json
+    key_id = r_data["id"]
+    key = r_data["key"]
+    value = dt.select_secret(key_id, g.user_name, "_%s" % key)
+    return jsonify({"status": True, "data": dict(id=key_id, key=key, value=value)})
+
+
 @dist_key_view.route("/", methods=["POST"])
 def add_key():
     r_data = request.json

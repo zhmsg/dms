@@ -10,7 +10,6 @@
     {{ 't_js/bootstrap.min.js' | make_static_html | safe }}
     {{ 't_js/Common/add_node.js' | make_static_html | safe }}
     {{ 't_js/Common/datetime_tools.js' | make_static_html | safe }}
-    {{ 't_js/Common/handler_data.js' | make_static_html | safe }}
     {{ 't_js/Common/url_tool.js' | make_static_html | safe }}
     {{ 't_js/Common/position_tools.js' | make_static_html | safe }}
     {{ 't_js/Dist_Key/list.js' | make_static_html | safe }}
@@ -22,7 +21,7 @@
         <ul id="ul_menu" class="nav nav-tabs comTab">
             <li class="active"><a href="#div_keys" data-toggle="tab">密钥管理</a></li>
             <li><a href="#div_add_key" data-toggle="tab">录入密钥</a></li>
-{#            <li><a href="#div_key_detail" data-toggle="tab">密钥详情</a></li>#}
+            <li><a href="#div_key_detail" data-toggle="tab">密钥详情</a></li>
         </ul>
         <div id="myTabContent" class="tab-content" style="padding-top: 20px;">
             <div class="tab-pane fade in active" id="div_keys">
@@ -31,9 +30,9 @@
             <div class="tab-pane fade" id="div_add_key">
                 {% include "Dist_Key/add.html" %}
             </div>
-{#            <div class="tab-pane fade" id="div_key_detail">#}
-{#                {% include "Dist_Key/detail.html" %}#}
-{#            </div>#}
+            <div class="tab-pane fade" id="div_key_detail">
+                {% include "Dist_Key/detail.html" %}
+            </div>
         </div>
     </div>
     <input id="ip_group_url" value="{{ ip_group_url }}" class="display_none">

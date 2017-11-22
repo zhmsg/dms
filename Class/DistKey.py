@@ -41,6 +41,15 @@ class DistKey(object):
             items.append(item)
         return items
 
+    def select_secret(self, key_id, user_name, key):
+        where_value = dict(_id=ObjectId(key_id), user_name=user_name)
+        item = self.col.find_one(filter=where_value)
+        if item is None:
+            return None
+        if key not in item:
+            return None
+        return item[key]
+
     def remove(self, id):
         return self.col.delete_one({"_id": ObjectId(id), "deadline": {"$lt": time()}})
 
