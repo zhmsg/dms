@@ -46,12 +46,17 @@
 <fieldset>
     <legend>密钥信息</legend>
     <div class="form-group apiContentLine">
+        <a href="javascript:void(0)" value="user" name="link_quick_add">用户</a>
+        <a href="javascript:void(0)" value="account" name="link_quick_add">账户</a>
+        <a href="javascript:void(0)" value="password" name="link_quick_add" secret="true">密码</a>
+        <a href="javascript:void(0)" value="tel" name="link_quick_add">手机</a>
+        <a href="javascript:void(0)" value="email" name="link_quick_add">邮箱</a>
         <ul>
             <li name="key_info">
                 <input class="box-side width150" type="text" placeholder=""/>
                 <label> : </label>
                 <input class="box-side width300" type="text" placeholder=""/>
-                <label class="checkbox-inline margin10"><input type="checkbox" name="email_notify"/>加密</label>
+                <label class="checkbox-inline margin10"><input type="checkbox" name="secret_value"/>加密</label>
                 <a href="javascript:void(0)" name="link_add_input">添加</a>
             </li>
         </ul>

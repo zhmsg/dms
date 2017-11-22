@@ -25,6 +25,9 @@ function add_key()
         var li_input = li_item.find("input");
         var k = $(li_input[0]).val();
         var v = $(li_input[1]).val();
+        if(v.length <= 0 || k.length <= 0){
+            continue;
+        }
         if($(li_input[2]).is(":checked")){
             k = "_" + k;
         }
@@ -86,6 +89,22 @@ $(document).ready(function () {
         $(this).click(function () {
            $(this.parentNode).remove();
         });
+    });
+    $("[name='link_quick_add']").click(function(){
+        var current_item = $(this);
+        var v = current_item.attr("value");
+        var secret = current_item.attr("secret");
+        var ul = current_item.siblings("ul");
+        ul.find("li[name='key_info']:last a[name='link_add_input']").click();
+        ul.find("li[name='key_info']:last").find("input:first").val(v);
+        console.info(secret);
+        if(secret == "true"){
+            ul.find("li[name='key_info']:last").find("input[name='secret_value']").attr("checked", true);
+        }
+        else{
+            ul.find("li[name='key_info']:last").find("input[name='secret_value']").removeAttr("checked");
+        }
+
     });
     $("#btn_new_key").click(add_key);
 });
