@@ -16,18 +16,18 @@ function copy_text(s)
     var pop_div = $('<div class="popup_div_1 display_none" name="pop_div"><div class="popup_content_1">成功复制' + s +'</div></div>');
     $("body").append(pop_div);
     pop_div.show();
-    reset_bottom();
+    r();
 
     window.setTimeout(function(){
         pop_div.remove();
     }, 3000);
 
     window.onresize = function() {
-        reset_bottom();
+        r();
     };
 }
 
-function reset_bottom()
+function r()
 {
     $(".popup_div_1").each(function(){
         var div_el = $(this);
