@@ -32,6 +32,7 @@ jd_mysql_host = config.get(env, "jd_mysql_host")
 jd_mysql_db = config.get(env, "jd_mysql_db")
 dyups_server = config.get(env, "dyups_server")
 sample_service = config.get(env, "sample_service")
+right_service = config.get(env, "right_service")
 conf_dir = config.get(env, "conf_dir")
 mongo_host = config.get(env, "mongo_host")
 

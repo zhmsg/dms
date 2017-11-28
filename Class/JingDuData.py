@@ -2,8 +2,9 @@
 # coding: utf-8
 
 import requests
+from time import time
 from Tools.Mysql_db import DB, DBItem
-from Class import sample_service
+from Class import sample_service, right_service
 
 __author__ = 'ZhouHeng'
 
@@ -138,7 +139,11 @@ class JingDuDataManager(object):
 
     @staticmethod
     def new_auth_code(**kwargs):
-        url = ""
+        url = "%s/right/auth/code/" % right_service
+        if "start_time" not in kwargs:
+            kwargs["start_time"] = int(time())
+        if "end_time" not in kwargs:
+            kwargs["end_time"] = kwargs["start_time"] + 60 * 60 * 24
         resp = requests.post(url, json=kwargs)
         if resp.status_code != 200:
             return False, resp.status_code
