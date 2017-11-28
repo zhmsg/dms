@@ -135,3 +135,14 @@ class JingDuDataManager(object):
         if r_data["status"] % 10000 > 100:
             return False, r_data["message"]
         return True, r_data["data"]["barcode_list"]
+
+    @staticmethod
+    def new_auth_code(**kwargs):
+        url = ""
+        resp = requests.post(url, json=kwargs)
+        if resp.status_code != 200:
+            return False, resp.status_code
+        r_data = resp.json()
+        if r_data["status"] % 10000 > 100:
+            return False, r_data["message"]
+        return True, r_data["data"]["barcode_list"]

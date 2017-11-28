@@ -1,0 +1,29 @@
+<div class="div_jy_about_authcode">
+    <div>
+        <div class="clear bottom20">
+            <input class="box-side width250 margin10" id="authcode" placeholder="输入4-20位授权码"/>
+            <select class="box-side width100" id="code_type" disabled>
+                <option value="portal4" selected>晶读</option>
+            </select>
+            <a>
+                <button class="btn btn-primary" id="btn_new_authcode">新建</button>
+            </a>
+            <label id="lab_s_error_code" class="hand error_result" style="display: none">输入的授权码无效</label>
+        </div>
+        <div style="position: relative">
+            <table class="table table-bordered table-hover api-list-table" id="t_authcode_list">
+                <tr>
+                    <th scope="col" width="10%">授权码</th>
+                    <th scope="col" width="15%">类型</th>
+                    <th scope="col" width=8%">账户</th>
+                    <th scope="col" width=10%">开始时间</th>
+                    <th scope="col" width=8%">结束时间</th>
+                    <th scope="col" width=8%">可用次数</th>
+                    <th scope="col" width=7%">已用次数</th>
+                    <th scope="col" width=10%">创建时间</th>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <input id="auth_code_url" class="display_none" value="{{ auth_code_url }}">
+</div>

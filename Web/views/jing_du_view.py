@@ -20,7 +20,9 @@ jing_du_view = create_blue('jing_du_view', url_prefix=url_prefix, special_protoc
 @jing_du_view.route("/", methods=["GET"])
 def index():
     barcode_url = url_prefix + "/barcode/"
-    return render_template("%s/Index.html" % html_dir, task_log_url=task_log_url, barcode_url=barcode_url)
+    auth_code_url = url_prefix + "/auth/code/"
+    return render_template("%s/Index.html" % html_dir, task_log_url=task_log_url, barcode_url=barcode_url,
+                           auth_code_url=auth_code_url)
 
 
 @jing_du_view.route("/project/", methods=["GET"])
@@ -155,3 +157,9 @@ def query_barcode_func():
         return jsonify({"status": True, "data": []})
     exec_r, data = control.query_barcode(g.user_name, g.user_role, **kwargs)
     return jsonify({"status": exec_r, "data": data})
+
+
+@jing_du_view.route("/auth/code/", methods=["POST"])
+def new_auth_code():
+    data = dict()
+    return jsonify({"status": True, "data": data})
