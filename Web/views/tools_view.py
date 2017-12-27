@@ -23,7 +23,8 @@ ip_man = IPManager()
 
 @tools_view.route("/", methods=["GET"])
 def tools_page():
-    return render_template("%s/Tools.html" % html_dir, request_ip=g.request_IP_s)
+    ip_group_url = url_prefix + "/ip/group/"
+    return render_template("%s/Tools.html" % html_dir, request_ip=g.request_IP_s, ip_group_url=ip_group_url)
 
 
 @tools_view.route("/ip/<int:ip_value>/", methods=["GET"])
