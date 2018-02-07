@@ -264,14 +264,23 @@ def register_check():
     return jsonify({"status": True, "data": {"result": result, "message": message}})
 
 
+@dms_view.route("/remove/user/", methods=["DELETE"])
+@login_required
+def remove_register_user():
+    user_name = request.json["user_name"]
+    user_m.remove_user(user_name, g.user_name)
+    return jsonify({"status": True, "data": "success"})
+
+
 @dms_view.route("/authorize/", methods=["GET"])
 @login_required
 def authorize_page():
     result, my_user = control.get_my_user(current_user.user_name, current_user.role)
     if result is False:
         return my_user
+    url_remove = url_prefix + "/remove/user/"
     return render_template("authorize.html", my_user=my_user, url_prefix=url_prefix,
-                           role_desc=control.user.role_desc)
+                           role_desc=control.user.role_desc, url_remove=url_remove)
 
 
 @dms_view.route("/authorize/user/", methods=["POST"])

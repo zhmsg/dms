@@ -18,10 +18,14 @@ function bit_and(a, b) {
 
 function user_select_change(){
     var role_value = JSON.parse($("#role_desc").text());
-    console.info(role_value);
     var selected_user = $("#perm_user option:selected");
     var user_role = parseInt(selected_user.attr("role"));
-
+    if(user_role == 0){
+        $("#link_remove_user").show();
+    }
+    else{
+        $("#link_remove_user").hide();
+    }
     for(var role_module in role_value) {
         var role_list = role_value[role_module]["role_list"];
         for(var role in role_list) {
@@ -39,4 +43,17 @@ function user_select_change(){
     }
 
 }
-user_select_change();
+
+function reload(data){
+    location.reload();
+}
+
+function remove_user(){
+    var selected_user = $("#perm_user option:selected").val();
+    var r_url = $("#link_remove_user").attr("url");
+    my_async_request2(r_url, "DELETE", {"user_name": selected_user}, reload);
+}
+$(function() {
+    user_select_change();
+    $("#link_remove_user").click(remove_user);
+});
