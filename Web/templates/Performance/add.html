@@ -1,0 +1,52 @@
+<fieldset>
+    <legend>录入须知</legend>
+    <p>【1】</p>
+
+    <p>【2】</p>
+
+</fieldset>
+
+<fieldset>
+    <legend>绩效信息</legend>
+    <div class="form-group apiContentLine">
+        <ul>
+            <li>
+                <label for="">绩效分类：</label>
+                <select class="box-side width150" id="modules" type="text"></select>
+            </li>
+            <li>
+                <label for="effective_days">绩效名称：</label>
+                <input class="box-side width500" id="name" type="text" placeholder=""/>
+            </li>
+            <li>
+                <label for="effective_days">详情地址：</label>
+                <input class="box-side width500" id="detail_info" type="text" placeholder="tower贴地址"/>
+            </li>
+            <li>
+                <label for="effective_days">开始时间：</label>
+                <input class="box-side width200" id="start_time" type="text" placeholder=""/>
+            </li>
+            <li>
+                <label for="effective_days">结束时间：</label>
+                <input class="box-side width200" id="end_time" type="text" placeholder=""/>
+            </li>
+        </ul>
+
+    </div>
+</fieldset>
+<fieldset>
+    <legend>参与成员</legend>
+    <div class="form-group apiContentLine">
+        <ul>
+            <li name="li_members">
+                <select class="box-side width150" type="text" placeholder="">
+                    </select>
+                <label> : </label>
+                <input class="box-side width300" type="text" placeholder="" readonly/>
+                <label class="checkbox-inline margin10"><input type="checkbox" name="set_weighted"/>加权</label>
+                <a href="javascript:void(0)" name="link_add_input">添加</a>
+            </li>
+        </ul>
+    </div>
+</fieldset>
+<button class="btn btn-success btn-down api-newBtn" id="btn_new_key">新建</button>

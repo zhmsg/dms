@@ -226,6 +226,16 @@ class UserManager(object):
                               "creator": item[4], "add_time": item[5].strftime(TIME_FORMAT)})
         return True, user_list
 
+    def list_user(self, user_name):
+        """
+
+        :param user_name:
+        :return:
+        """
+        cols = ["user_name", "role", "nick_name", "creator", "add_time"]
+        items = self.db.execute_select(self.user, cols=cols, package=True)
+        return items
+
     def get_user_info(self, user_name):
         cols = ["user_name", "role", "nick_name", "wx_id", "creator", "add_time", "email", "tel"]
         db_items = self.db.execute_select(self.user, where_value=dict(user_name=user_name), cols=cols)

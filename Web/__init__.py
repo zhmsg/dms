@@ -110,6 +110,7 @@ article_url_prefix = web_prefix + "/article"
 message_url_prefix = web_prefix + "/message"
 short_link_prefix = web_prefix + "/s"
 dist_key_prefix = web_prefix + "/dist/key"
+performance_prefix = web_prefix + "/performance"
 
 data_dir = "/geneac/dmsdata"
 

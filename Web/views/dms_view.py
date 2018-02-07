@@ -309,3 +309,10 @@ def select_portal():
                            log_url_prefix=log_url_prefix, param_url_prefix=param_url_prefix,
                            release_url_prefix=release_url_prefix, status_url_prefix=status_url_prefix,
                            jd_url_prefix=jingdu_url_prefix, dyups_url_prefix=dyups_url_prefix)
+
+
+@dms_view.route("/user/", methods=["GET"])
+@login_required
+def list_user():
+    items = user_m.list_user(g.user_name)
+    return jsonify({"status": True, "data": items})
