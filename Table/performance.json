@@ -56,8 +56,8 @@
                 "col_type":"int(11)"
             },
             {
-                "col_comment":"id",
-                "col_name":"唯一标示一项工作绩效",
+                "col_comment":"唯一标示一项工作绩效",
+                "col_name":"id",
                 "col_type":"char(32)"
             }
         ],
@@ -79,8 +79,8 @@
                 "col_type":"varchar(22)"
             },
             {
-                "col_comment":"score",
-                "col_name":"得分* 1000",
+                "col_comment":"得分 * 1000",
+                "col_name":"score",
                 "col_type":"int(11)"
             }
         ],

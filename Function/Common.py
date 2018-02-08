@@ -18,6 +18,8 @@ def unix_timestamp(t, style="time"):
         x = time.localtime(t)
         if style == "time":
             return time.strftime('%H:%M:%S', x)
+        elif style == "month":
+            return time.strftime('%Y%m', x)
         else:
             return time.strftime("%Y-%m-%d %H:%M:%S", x)
     return t

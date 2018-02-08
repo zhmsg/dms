@@ -64,9 +64,29 @@ function new_performance()
 {
     var module = parseInt($("#modules").val().split("|")[0]);
     var name = $("#name").val();
+    if(name.length <= 0){
+        popup_show("必须输入名称");
+        return false;
+    }
     var detail_info = $("#detail_info").val();
-    var start_time = $("#start_time").val();
-    var end_time = $("#end_time").val();
+    if(detail_info.length <= 0){
+        popup_show("必须输入详情地址");
+        return false;
+    }
+    var start_time = datetime_2_timestamp($("#start_time").val());
+    if(isNaN(start_time)){
+        popup_show("请输入正确的开始时间");
+        return false;
+    }
+    var end_time = datetime_2_timestamp($("#end_time").val());
+    if(isNaN(end_time)){
+        popup_show("请输入正确的结束时间");
+        return false;
+    }
+    if(end_time < start_time){
+        popup_show("结束时间不能小于开始时间");
+        return false;
+    }
     var data = {"module": module, "name": name, "detail_info": detail_info, "start_time": start_time,
         "end_time": end_time, "members": new Array()};
     var members_elem = $("li[name='li_members']");

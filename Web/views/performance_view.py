@@ -6,9 +6,8 @@ from time import time
 from flask import request, jsonify, g, make_response
 from flask_login import login_required
 from Tools.RenderTemplate import RenderTemplate
-from Class import mongo_host
-from Class.DistKey import DistKey
-from Class.IP import IPManager
+from Class.Performance import PerformanceManager
+from Function.Common import unix_timestamp
 
 from Web import performance_prefix as url_prefix, create_blue, dms_url_prefix
 
@@ -17,14 +16,14 @@ sys.path.append('..')
 __author__ = 'Zhouheng'
 
 rt = RenderTemplate("Performance", url_prefix=url_prefix)
-
+performance_man = PerformanceManager()
 performance_view = create_blue('performance_view', url_prefix=url_prefix, auth_required=False)
 
 m_1 = dict(module_no=1, module_name="需求", score=1, weighted_score=2)
 m_2 = dict(module_no=2, module_name="二次需求", score=0.4, weighted_score=0.8)
 m_3 = dict(module_no=3, module_name="任务", score=0.25, weighted_score=0.5)
 m_4 = dict(module_no=4, module_name="技术", score=1, weighted_score=2)
-m_5 = dict(module_no=5, module_name="BUG", score=0.25, weighted_score=0.5)
+m_5 = dict(module_no=5, module_name="BUG响应", score=0.25, weighted_score=0.5)
 m_s = [m_1, m_2, m_3, m_4, m_5]
 
 
@@ -69,6 +68,29 @@ def query_users_key():
 @performance_view.route("/", methods=["POST"])
 def new_performance():
     r_data = request.json
-    print(r_data)
+    name = r_data["name"]
+    detail_info = r_data["detail_info"]
+    start_time = r_data["start_time"]
+    end_time = r_data["end_time"]
+    month = unix_timestamp(end_time, "month")
+    module = r_data["module"]
+    current_module = None
+    for item in m_s:
+        if module == item["module_no"]:
+            current_module = item
+            break
+    if current_module is None:
+        return jsonify({"status": True, "data": "success"})
+    basic_data = performance_man.insert_performance(name, detail_info, start_time, end_time, g.user_name)
+    if basic_data is None:
+        return jsonify({"status": True, "data": "success"})
+    related_data = performance_man.insert_module_related(month, module, basic_data["id"])
+    if related_data is None:
+        return jsonify({"status": True, "data": "success"})
+    basic_data.update(related_data)
+    members = r_data["members"]
+    for m_item in members:
+        score = current_module["weighted_score"] if m_item["is_weighted"] is True else current_module["score"]
+        performance_man.insert_members(basic_data["id"], m_item["user_name"], score * 1000)
     return jsonify({"status": True, "data": "success"})
 
