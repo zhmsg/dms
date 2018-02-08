@@ -56,6 +56,7 @@
                 "col_type":"int(11)"
             },
             {
+                "pri_key":true,
                 "col_comment":"唯一标示一项工作绩效",
                 "col_name":"id",
                 "col_type":"char(32)"
