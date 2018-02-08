@@ -18,14 +18,18 @@
 {% block center_content %}
     <div id="div_content">
         <ul id="ul_menu" class="nav nav-tabs comTab">
-            <li class="active"><a href="#div_keys" data-toggle="tab">绩效查看</a></li>
-            <li><a href="#div_add_key" data-toggle="tab">录入绩效</a></li>
+            <li class="active"><a href="#div_overview" data-toggle="tab">绩效总揽</a></li>
+            <li><a href="#div_mine" data-toggle="tab">我的绩效</a></li>
+            <li><a href="#div_add" data-toggle="tab">录入绩效</a></li>
         </ul>
         <div id="myTabContent" class="tab-content" style="padding-top: 20px;">
-            <div class="tab-pane fade in active" id="div_keys">
-                {% include "Dist_Key/keys.html" %}
+            <div class="tab-pane fade in active" id="div_overview">
+                {% include "Performance/overview.html" %}
             </div>
-            <div class="tab-pane fade" id="div_add_key">
+            <div class="tab-pane fade in" id="div_mine">
+                {% include "Performance/mine.html" %}
+            </div>
+            <div class="tab-pane fade" id="div_add">
                 {% include "Performance/add.html" %}
             </div>
         </div>

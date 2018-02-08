@@ -60,6 +60,28 @@ function f()
     }
 }
 
+function new_performance()
+{
+    var module = parseInt($("#modules").val().split("|")[0]);
+    var name = $("#name").val();
+    var detail_info = $("#detail_info").val();
+    var start_time = $("#start_time").val();
+    var end_time = $("#end_time").val();
+    var data = {"module": module, "name": name, "detail_info": detail_info, "start_time": start_time,
+        "end_time": end_time, "members": new Array()};
+    var members_elem = $("li[name='li_members']");
+    var mem_num = members_elem.length;
+    for(var i=0; i<mem_num; i++){
+        var mem_elem = $(members_elem[i]);
+        var user_name = mem_elem.find("select").val();
+        var is_weighted = $(mem_elem.find("input:eq(1)")).is(":checked");
+        var mem_item = {"user_name": user_name, "is_weighted": is_weighted};
+        data.members[i] = mem_item;
+
+    }
+    console.info(data);
+    my_async_request2(location.href, "POST", data);
+}
 
 $(document).ready(function () {
     my_async_request2($("#module_url").val(), "GET", null, load_modules);
@@ -103,4 +125,5 @@ $(document).ready(function () {
         p_li.find("input:eq(0)").val(s);
     });
     $("li[name='li_members'] select").change(f);
+    $("#btn_new").click(new_performance);
 });
