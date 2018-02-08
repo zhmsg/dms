@@ -50,9 +50,11 @@ function f()
         for(var j=0; j<options_len; j++){
             var option_item = $(options[j]);
             option_item.show();
+            option_item.removeAttr("disabled");
             var option_value = option_item.val();
             for(var k=0; k<lis_len; k++){
                 if(option_value == members[k] && k != i){
+                    option_item.attr("disabled", "disabled");
                     option_item.hide();
                 }
             }
@@ -107,18 +109,19 @@ $(document).ready(function () {
     my_async_request2($("#module_url").val(), "GET", null, load_modules);
     my_async_request2($("#list_user_url").val(), "GET", null, load_users);
     $("a[name='link_add_input']").click(function(){
-        var p_li = $(this.parentNode);
+        var p_li = $(this).parent();
         p_li.find("select option:selected").hide();
+        p_li.find("select option:selected").attr("disabled", "disabled");
         var c_li = p_li.clone(true);
-        //c_li.find("input").val("");
-        $(this).parent().after(c_li);
-        if(c_li.find("select option:visible").length < 1)
+        p_li.find("select option:selected").show();
+        p_li.find("select option:selected").removeAttr("disabled");
+        p_li.after(c_li);
+        if(c_li.find("select option:enabled").length < 1)
         {
             c_li.remove();
-            p_li.find("select option:selected").show();
             return false;
         }
-        var v = $(c_li.find("select option:visible:eq(0)")).val();
+        var v = $(c_li.find("select option:enabled:eq(0)")).val();
         $(c_li.find("select")).val(v);
         $(this).text("删除");
         $(this).unbind('click');
