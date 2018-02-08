@@ -15215,7 +15215,7 @@
         };
     };
 
-// plugins/list.js
+// plugins/index.js
     /**
      * 有序列表,无序列表插件
      * @file

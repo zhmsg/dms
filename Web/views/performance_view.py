@@ -47,12 +47,14 @@ def before_request():
 
 @performance_view.route("/", methods=["GET"])
 def get_one_key():
-    if "app" not in request.args:
+    if "data" not in request.args:
         query_url = url_prefix + "/query/"
         module_url = url_prefix + "/module/"
         list_user_url = dms_url_prefix + "/user/"
         return rt.render("index.html", query_url=query_url, module_url=module_url, list_user_url=list_user_url)
-    return jsonify({"status": False, "data": "No Key"})
+    r_items, p_items, m_items = performance_man.get_performance()
+    data = dict(realated=r_items, info=p_items, members=m_items)
+    return jsonify({"status": False, "data": data})
 
 
 @performance_view.route("/module/", methods=["GET"])

@@ -1,6 +1,5 @@
 #! /usr/bin/env python
 # coding: utf-8
-__author__ = 'ZhouHeng'
 
 import time
 import base64
@@ -11,6 +10,8 @@ from Tools.MyIP import IPManager
 from Config.Config import *
 
 ip = IPManager()
+
+__author__ = 'ZhouHeng'
 
 
 def unix_timestamp(t, style="time"):
