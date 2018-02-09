@@ -53,7 +53,30 @@ def get_one_key():
         list_user_url = dms_url_prefix + "/user/"
         return rt.render("index.html", query_url=query_url, module_url=module_url, list_user_url=list_user_url)
     data = performance_man.get_performance()
-    return jsonify({"status": True, "data": data})
+    t_items = dict()
+    for item in data:
+        module_no = item["module_no"]
+        for m_item in item["members"]:
+            user_name = m_item["user_name"]
+            if user_name not in t_items:
+                t_items[user_name] = dict()
+            if module_no not in t_items[user_name]:
+                t_items[user_name][module_no] = m_item["score"]
+            else:
+                t_items[user_name][module_no] += m_item["score"]
+    t_list = dict(columns=[], users=t_items.keys(), data=[])
+    for item in m_s:
+        t_list["columns"].append(item["module_name"])
+    for user_name in t_items:
+        l_item = dict(State=user_name)
+        for m in m_s:
+            if m["module_no"] in t_items[user_name]:
+                l_item[m["module_name"]] = t_items[user_name][m["module_no"]]
+            else:
+                l_item[m["module_name"]] = 0
+        t_list["data"].append(l_item)
+    r_data = dict(detail=data, statistics=t_list)
+    return jsonify({"status": True, "data": r_data})
 
 
 @performance_view.route("/module/", methods=["GET"])
