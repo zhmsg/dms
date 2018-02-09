@@ -173,7 +173,7 @@ function draw_stacked_bar_chart(svg_select, columns, data) {
         .attr("fill", "#000")
         .attr("font-weight", "bold")
         .attr("text-anchor", "start")
-        .text("Population");
+        .text("Score");
 
     var legend = g.append("g")
         .attr("font-family", "sans-serif")

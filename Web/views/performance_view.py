@@ -61,9 +61,9 @@ def get_one_key():
             if user_name not in t_items:
                 t_items[user_name] = dict()
             if module_no not in t_items[user_name]:
-                t_items[user_name][module_no] = m_item["score"]
+                t_items[user_name][module_no] = float(m_item["score"] / 1000)
             else:
-                t_items[user_name][module_no] += m_item["score"]
+                t_items[user_name][module_no] += float(m_item["score"] / 1000)
     t_list = dict(columns=["State"])
     t_data = []
     for item in m_s:
