@@ -1,3 +1,4 @@
+var all_users = null;
 
 function load_keys(data) {
     var current_user = $("#current_user_name").val();
@@ -6,7 +7,7 @@ function load_keys(data) {
     var statistics = data["statistics"];
 
     draw_stacked_bar_chart("#svg_total", statistics.columns, statistics.data);
-    draw_bar_chart("#svg_1", statistics.data, "State", "技术");
+    draw_bar_chart("#svg_1", statistics.data, "nick_name", "技术");
     var pr_len = pr_items.length;
 
     var keys = ["month", "module_no", "name", "start_time", "end_time", "user_name", "score", "detail_info"];

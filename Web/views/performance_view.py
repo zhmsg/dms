@@ -7,6 +7,7 @@ from flask import request, jsonify, g, make_response
 from flask_login import login_required
 from Tools.RenderTemplate import RenderTemplate
 from Class.Performance import PerformanceManager
+from Class.User import UserManager
 from Function.Common import unix_timestamp
 
 from Web import performance_prefix as url_prefix, create_blue, dms_url_prefix
@@ -17,6 +18,7 @@ __author__ = 'Zhouheng'
 
 rt = RenderTemplate("Performance", url_prefix=url_prefix)
 performance_man = PerformanceManager()
+user_m = UserManager()
 performance_view = create_blue('performance_view', url_prefix=url_prefix, auth_required=False)
 
 m_1 = dict(module_no=1, module_name="需求", score=1, weighted_score=2, max_sum=8)
@@ -53,6 +55,10 @@ def get_one_key():
         list_user_url = dms_url_prefix + "/user/"
         return rt.render("index.html", query_url=query_url, module_url=module_url, list_user_url=list_user_url)
     data = performance_man.get_performance()
+    user_items = user_m.list_user(g.user_name)
+    user_dict = dict()
+    for item in user_items:
+        user_dict[item["user_name"]] = item
     t_items = dict()
     for item in data:
         module_no = item["module_no"]
@@ -64,19 +70,23 @@ def get_one_key():
                 t_items[user_name][module_no] = float(m_item["score"]) / 1000.0
             else:
                 t_items[user_name][module_no] += float(m_item["score"]) / 1000.0
-    t_list = dict(columns=["State"])
+    t_list = dict(columns=["nick_name"])
     t_data = []
     for item in m_s:
         t_list["columns"].append(item["module_name"])
     for user_name in t_items:
-        l_item = dict(State=user_name)
+        l_item = dict()
         for m in m_s:
             if m["module_no"] in t_items[user_name]:
                 l_item[m["module_name"]] = t_items[user_name][m["module_no"]]
             else:
                 l_item[m["module_name"]] = 0
+        user = user_dict.get(user_name)
+        if user is None:
+            l_item["nick_name"] = user_name
+        else:
+            l_item["nick_name"] = user["nick_name"]
         t_data.append(l_item)
-        print(l_item)
     t_list["data"] = t_data
     r_data = dict(detail=data, statistics=t_list)
 

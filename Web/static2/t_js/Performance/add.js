@@ -14,6 +14,7 @@ function load_modules(data){
 }
 
 function load_users(data){
+    all_users = data;
     var data_len = data.length;
     for(var i=0; i<data_len;i++){
         var u_item = data[i];
