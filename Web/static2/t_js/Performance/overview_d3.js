@@ -99,6 +99,7 @@ function draw_grouped_bar_chart(svg_select, columns, data) {
 }
 
 function draw_stacked_bar_chart(svg_select, columns, data) {
+    console.info(data);
     var svg = d3.select(svg_select),
         margin = {top: 20, right: 20, bottom: 30, left: 40},
         width = +svg.attr("width") - margin.left - margin.right,

@@ -61,9 +61,9 @@ def get_one_key():
             if user_name not in t_items:
                 t_items[user_name] = dict()
             if module_no not in t_items[user_name]:
-                t_items[user_name][module_no] = float(m_item["score"] / 1000)
+                t_items[user_name][module_no] = float(m_item["score"]) / 1000.0
             else:
-                t_items[user_name][module_no] += float(m_item["score"] / 1000)
+                t_items[user_name][module_no] += float(m_item["score"]) / 1000.0
     t_list = dict(columns=["State"])
     t_data = []
     for item in m_s:
@@ -76,8 +76,10 @@ def get_one_key():
             else:
                 l_item[m["module_name"]] = 0
         t_data.append(l_item)
+        print(l_item)
     t_list["data"] = t_data
     r_data = dict(detail=data, statistics=t_list)
+
     return jsonify({"status": True, "data": r_data})
 
 
