@@ -19,11 +19,11 @@ rt = RenderTemplate("Performance", url_prefix=url_prefix)
 performance_man = PerformanceManager()
 performance_view = create_blue('performance_view', url_prefix=url_prefix, auth_required=False)
 
-m_1 = dict(module_no=1, module_name="需求", score=1, weighted_score=2)
-m_2 = dict(module_no=2, module_name="二次需求", score=0.4, weighted_score=0.8)
-m_3 = dict(module_no=3, module_name="任务", score=0.25, weighted_score=0.5)
-m_4 = dict(module_no=4, module_name="技术", score=1, weighted_score=2)
-m_5 = dict(module_no=5, module_name="BUG响应", score=0.25, weighted_score=0.5)
+m_1 = dict(module_no=1, module_name="需求", score=1, weighted_score=2, max_sum=8)
+m_2 = dict(module_no=2, module_name="二次需求", score=0.4, weighted_score=0.8, max_sum=2)
+m_3 = dict(module_no=3, module_name="任务", score=0.25, weighted_score=0.5, max_sum=1.5)
+m_4 = dict(module_no=4, module_name="技术", score=1, weighted_score=2, max_sum=6)
+m_5 = dict(module_no=5, module_name="问题响应", score=0.25, weighted_score=0.5, max_sum=1.5)
 m_s = [m_1, m_2, m_3, m_4, m_5]
 
 
@@ -64,7 +64,8 @@ def get_one_key():
                 t_items[user_name][module_no] = m_item["score"]
             else:
                 t_items[user_name][module_no] += m_item["score"]
-    t_list = dict(columns=[], users=t_items.keys(), data=[])
+    t_list = dict(columns=["State"])
+    t_data = []
     for item in m_s:
         t_list["columns"].append(item["module_name"])
     for user_name in t_items:
@@ -74,7 +75,8 @@ def get_one_key():
                 l_item[m["module_name"]] = t_items[user_name][m["module_no"]]
             else:
                 l_item[m["module_name"]] = 0
-        t_list["data"].append(l_item)
+        t_data.append(l_item)
+    t_list["data"] = t_data
     r_data = dict(detail=data, statistics=t_list)
     return jsonify({"status": True, "data": r_data})
 
