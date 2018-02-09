@@ -9,6 +9,12 @@ function timestamp_2_datetime(ts){
     return dt_str;
 }
 
+function timestamp_2_date(ts){
+    var dt = new Date(parseInt(ts) * 1000);
+    var dt_str = dt.toLocaleDateString().replace(/\/\d{1,2}/g, function(word){if(word.length >= 3){return "-" + word.substr(1)}else{return "-0" + word.substr(1)}}) + " ";
+    return dt_str;
+}
+
 function get_timestamp(){
     return (new Date()).valueOf();
 }

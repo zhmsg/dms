@@ -58,10 +58,35 @@ class PerformanceManager(object):
         if months is None:
             months = self.get_months()
         r_cols = ["month", "module_no", "id"]
-        r_items = self.db.execute_multi_select(self.t_module_related, where_value=dict(month=months), cols=r_cols)
+        r_items = self.db.execute_multi_select(self.t_module_related, where_value=dict(month=months), cols=r_cols,
+                                               order_by=["id"])
         ids = map(lambda x: x["id"], r_items)
-        p_cols = ["id", "name", "detail_info", "start_time"]
+        p_cols = ["id", "name", "detail_info", "start_time", "end_time"]
         p_items = self.db.execute_multi_select(self.t, where_value=dict(id=ids), cols=p_cols)
+        pr_items = []
+        pi = 0
+        ri = 0
+        while ri < len(r_items) and pi < len(p_items):
+            if r_items[ri]["id"] == p_items[pi]["id"]:
+                r_items[ri].update(p_items[pi])
+                r_items[ri]["members"] = []
+                pr_items.append(r_items[ri])
+                pi += 1
+                ri += 1
+            elif r_items[ri]["id"] > p_items[pi]["id"]:
+                pi += 1
+            else:
+                ri += 1
         m_cols = ["id", "user_name", "score"]
         m_items = self.db.execute_multi_select(self.t_members, where_value=dict(id=ids), cols=m_cols)
-        return r_items, p_items, m_items
+        pri = 0
+        mi = 0
+        while pri < len(pr_items) and mi < len(m_items):
+            if pr_items[pri]["id"] == m_items[mi]["id"]:
+                pr_items[pri]["members"].append(m_items[mi])
+                mi += 1
+            elif pr_items[pri]["id"] > m_items[mi]["id"]:
+                mi += 1
+            else:
+                pri += 1
+        return pr_items
