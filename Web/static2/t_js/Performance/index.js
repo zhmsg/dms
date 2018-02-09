@@ -7,7 +7,13 @@ function load_keys(data) {
     var statistics = data["statistics"];
 
     draw_stacked_bar_chart("#svg_total", statistics.columns, statistics.data);
-    draw_bar_chart("#svg_1", statistics.data, "nick_name", "技术");
+    for(var i=1; i<statistics.columns.length; i++){
+        var add_svg = $('<svg width="860" height="500"></svg>');
+        var svg_id = "svg_" + i;
+        add_svg.attr("id", svg_id);
+        $("#div_svg").append(add_svg);
+        draw_bar_chart("#" + svg_id, statistics.data, "nick_name", statistics.columns[i]);
+    }
     var pr_len = pr_items.length;
 
     var keys = ["month", "module_no", "name", "start_time", "end_time", "user_name", "score", "detail_info"];
