@@ -45,22 +45,26 @@ class PerformanceManager(object):
         return None
 
     @staticmethod
-    def get_months():
+    def get_months(only_last=False):
         now_time = datetime.datetime.now()
         now_month = "%s%s" % (now_time.year, str(now_time.month).zfill(2))
         if now_time.month == 1:
             last_month = "%s%s" % (now_time.year - 1, 12)
         else:
             last_month = "%s%s" % (now_time.year, str(now_time.month - 1).zfill(2))
+        if only_last is True:
+            return [last_month]
         return [now_month, last_month]
 
     def get_performance(self, months=None):
-        if months is None:
+        if months is None or len(months) == 0:
             months = self.get_months()
         r_cols = ["month", "module_no", "id"]
         r_items = self.db.execute_multi_select(self.t_module_related, where_value=dict(month=months), cols=r_cols,
                                                order_by=["id"])
         ids = map(lambda x: x["id"], r_items)
+        if len(ids) <= 0:
+            return []
         p_cols = ["id", "name", "detail_info", "start_time", "end_time"]
         p_items = self.db.execute_multi_select(self.t, where_value=dict(id=ids), cols=p_cols)
         pr_items = []

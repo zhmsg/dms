@@ -42,5 +42,9 @@ function load_keys(data) {
 
 $(document).ready(function () {
     var url = location.pathname;
-    my_async_request2(url, "GET", {"data": true}, load_keys)
+    var months = UrlArgsValue(location.href, "months");
+    if(months == null){
+        months = "";
+    }
+    my_async_request2(url, "GET", {"months": months}, load_keys)
 });

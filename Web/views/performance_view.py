@@ -49,12 +49,13 @@ def before_request():
 
 @performance_view.route("/", methods=["GET"])
 def get_one_key():
-    if "data" not in request.args:
+    if request.is_xhr is False:
         query_url = url_prefix + "/query/"
         module_url = url_prefix + "/module/"
         list_user_url = dms_url_prefix + "/user/"
         return rt.render("index.html", query_url=query_url, module_url=module_url, list_user_url=list_user_url)
-    data = performance_man.get_performance()
+    months = request.args["months"]
+    data = performance_man.get_performance([months])
     user_items = user_m.list_user(g.user_name)
     user_dict = dict()
     for item in user_items:
