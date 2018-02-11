@@ -43,6 +43,7 @@ $(function(){
         }
     }
     $("#div_main_menu").append('<a href="' + '/article/query/">' + '文章查看' + '</a>');
+    $("#div_main_menu").append('<a href="' + '/performance/">' + '绩效查看' + '</a>');
     $("#div_main_menu").append('<a href="' + '/message/manager/">' + '消息管理' + '</a>');
     $("#div_main_menu").append('<a href="' + '/dist/key/">' + '密钥管理' + '</a>');
     $("#div_main_menu").append('<a href="' + $("#password_url_prefix").val() + '/">' + '修改密码' + '</a>');
