@@ -57,6 +57,11 @@ class PerformanceManager(object):
         return [now_month, last_month]
 
     def get_performance(self, months=None):
+        if isinstance(months, unicode) is True:
+            if len(months) != 6:
+                months = None
+            else:
+                months = [months]
         if months is None or len(months) == 0:
             months = self.get_months()
         r_cols = ["month", "module_no", "id"]
