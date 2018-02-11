@@ -2,7 +2,6 @@ var all_users = null;
 
 function load_performance(data) {
     var current_user = $("#current_user_name").val();
-    var current_user = "wangzhihao";
 
     var pr_items = data["detail"];
     var statistics = data["statistics"];
