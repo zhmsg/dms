@@ -102,7 +102,6 @@ function new_performance()
         data.members[i] = mem_item;
 
     }
-    console.info(data);
     my_async_request2(location.href, "POST", data);
 }
 

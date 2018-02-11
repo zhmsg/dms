@@ -73,9 +73,10 @@ function load_performance(data) {
                 m_item["score"] = m_item["score"] / 1000;
             }
             var add_tr = $("<tr></tr>");
-            for(var k=0; k<5;k++){
-                add_tr.append($("<td></td>"));
-            }
+            var add_td = $("<td></td>");
+            add_td.attr("colSpan", 5);
+            add_tr.append(add_td);
+
             add_tr.append(new_td("user_name", m_item));
             add_tr.append(new_td("score", m_item));
             add_tr.append($("<td></td>"));
