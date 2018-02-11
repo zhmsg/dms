@@ -31,6 +31,10 @@ function load_performance(data) {
             prm_item["score"] = prm_item["score"] / 1000;
             prm_item["start_time"] = timestamp_2_date(pr_item["start_time"]);
             prm_item["end_time"] = timestamp_2_date(pr_item["end_time"]);
+            var reg = /https?:\/\/(\w|=|\?|\.|\/|\&|-)+/ig;
+            if(reg.test(prm_item["detail_info"])){
+                prm_item["detail_info"] = "<a href='" + prm_item["detail_info"] + "' target='_blank'> " + "查看" + " </a>";
+            }
             var main_tr = $("<tr></tr>");
             for(var k=0; k<keys.length; k++){
                 var td = new_td(keys[k], prm_item);
@@ -39,14 +43,14 @@ function load_performance(data) {
             if(pr_item.members.length > 1) {
                 var span_user = $("<span></span>");
                 span_user.text(prm_item["user_name"]);
-                var link_more = $('<a class="status_move">[+]</a>');
+                var link_more = $('<a class="status_move" name="link_more">[+]</a>');
                 var user_td = main_tr.find("td[name='td_user_name']");
                 user_td.text("");
                 user_td.append(span_user);
                 user_td.append(link_more);
                 main_tr.click(function(){
                    var tr_id = $(this).attr("id");
-                   var link = $(this).find("a");
+                   var link = $(this).find("a[name='link_more']");
                    if(link.text() == "[+]"){
                        link.text("[-]");
                        $('tr[id^="' + tr_id + '_"]').show();

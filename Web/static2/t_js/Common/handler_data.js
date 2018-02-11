@@ -51,7 +51,7 @@ function format_num(s) {
 
 
 function replace_url(content) {
-    var reg = /https?:\/\/(\w|=|\?|\.|\/|\&|-)+/g;
+    var reg = /https?:\/\/(\w|=|\?|\.|\/|\&|-)+/ig;
     content = content.replace(reg, function ($url) {
         return "<a href='" + $url + "' target='_blank'> " + $url + " </a>";
     });
