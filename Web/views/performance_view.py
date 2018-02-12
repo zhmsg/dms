@@ -29,24 +29,6 @@ m_5 = dict(module_no=5, module_name="问题响应", score=0.25, weighted_score=0
 m_s = [m_1, m_2, m_3, m_4, m_5]
 
 
-@performance_view.before_request
-def before_request():
-
-    @login_required
-    def web_access():
-        if g.user_roles is None or "dist_key" not in g.user_roles:
-            return make_response("无权限", 403)
-
-    def api_access():
-        if request.method != "GET":
-            return make_response("Not Allow", 403)
-
-    if request.headers.get("User-Agent") != "jyrequests":
-        return web_access()
-    else:
-        return api_access()
-
-
 @performance_view.route("/", methods=["GET"])
 def get_one_key():
     if request.is_xhr is False:
