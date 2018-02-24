@@ -47,8 +47,9 @@ def before_request():
 def get_one_key():
     if "app" not in request.args:
         query_url = url_prefix + "/query/"
+        value_url = url_prefix + "/value/"
         ip_group_url = tools_url_prefix + "/ip/group/"
-        return rt.render("index.html", query_url=query_url, ip_group_url=ip_group_url)
+        return rt.render("index.html", query_url=query_url, ip_group_url=ip_group_url, value_url=value_url)
     kwargs = dict()
     for item in request.args:
         if item[0] == "_":
@@ -108,7 +109,7 @@ def add_key():
 @dist_key_view.route("/", methods=["PUT"])
 def update_key():
     r_data = request.json
-    id = r_data["id"]
+    doc_id = r_data["id"]
     kwargs = dict()
     if "offset" in r_data:
         kwargs["offset"] = int(r_data["offset"])
@@ -116,7 +117,7 @@ def update_key():
         kwargs["deadline"] = r_data["deadline"]
     else:
         return jsonify({"status": True, "data": []})
-    data = dt.update_deadline(id, g.user_name, **kwargs)
+    data = dt.update_deadline(doc_id, g.user_name, **kwargs)
     if data is not None:
         data["id"] = str(data["_id"])
         del data["_id"]
@@ -124,9 +125,20 @@ def update_key():
     return jsonify({"status": True, "data": []})
 
 
+@dist_key_view.route("/value/", methods=["PUT"])
+def update_key_value():
+    r_data = request.json
+    doc_id = r_data["doc_id"]
+    doc_key = r_data["doc_key"]
+    doc_value = r_data["doc_value"]
+    kwargs = {doc_key: doc_value}
+    r = dt.update(doc_id, g.user_name, **kwargs)
+    return jsonify({"status": True, "data": "success"})
+
+
 @dist_key_view.route("/", methods=["DELETE"])
 def delete_key():
     r_data = request.json
-    id = r_data["id"]
-    dt.remove(id)
-    return jsonify({"status": True, "data": [{"id": id, "deleted": True}]})
+    doc_id = r_data["id"]
+    dt.remove(doc_id)
+    return jsonify({"status": True, "data": [{"id": doc_id, "deleted": True}]})

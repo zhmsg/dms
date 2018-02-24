@@ -50,20 +50,24 @@ class DistKey(object):
             return None
         return item[key]
 
-    def remove(self, id):
-        return self.col.delete_one({"_id": ObjectId(id), "deadline": {"$lt": time()}})
+    def remove(self, doc_id):
+        return self.col.delete_one({"_id": ObjectId(doc_id), "deadline": {"$lt": time()}})
 
-    def update(self, id, user_name, **kwargs):
-        return self.col.update_one(filter={"_id": ObjectId(id), "user_name": user_name}, update={'$set': kwargs})
+    def update(self, doc_id, user_name, **kwargs):
+        kwargs.pop("_id", None)
+        kwargs.pop("user_name", None)
+        kwargs.pop("deadline", None)
+        r = self.col.update_one(filter={"_id": ObjectId(doc_id), "user_name": user_name}, update={'$set': kwargs})
+        return r
 
-    def update_deadline(self, id, user_name, offset=None, deadline=None):
+    def update_deadline(self, doc_id, user_name, offset=None, deadline=None):
         if offset is not None:
             update_v = {'$inc': {"deadline": offset}}
         elif deadline is not None:
             update_v = {'$set': {"deadline": deadline}}
         else:
             return None
-        return self.col.find_one_and_update(filter={"_id": ObjectId(id), "user_name": user_name},
+        return self.col.find_one_and_update(filter={"_id": ObjectId(doc_id), "user_name": user_name},
                                             update=update_v, return_document=ReturnDocument.AFTER)
 
 

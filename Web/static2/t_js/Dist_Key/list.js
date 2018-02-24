@@ -129,7 +129,9 @@ function switch_to_detail(id)
     $("#detail_key_id").val(data_item.id);
     $("#app2").val(data_item.app);
     $("#deadline").val(data_item.deadline);
+    $("#div_key_all li:not(:last)").remove();
     var first_li = $("#div_key_all li:first");
+    first_li.show();
     for(var key in data_item){
         if(["user_name", "id", "ip_auth", "deadline", "app", "insert_time", "remark"].indexOf(key) >= 0){
             continue;
@@ -155,9 +157,32 @@ function switch_to_detail(id)
             copy_text(item[$(this).parent().find("input:first").val()]);
         });
         c_li.find("input:last").val(data_item[key]);
-        first_li.after(c_li);
+        first_li.before(c_li);
     }
     first_li.hide();
+    var update_link = $('<a class="status_move">更新</a>');
+    update_link.click(function(){
+        var parent_li = $(this).parent();
+        var current_action = $(this).text();
+        if(current_action == "更新"){
+            parent_li.find("input:eq(1)").removeAttr("readonly");
+            $(this).text("保存");
+        }
+        else{
+            var value_input = parent_li.find("input:eq(1)");
+            value_input.attr("readonly", "readonly");
+            var parent_id = parent_li.attr("id");
+            var index = parent_id.indexOf("_");
+            var doc_id = parent_id.substring(0, index);
+            var doc_key = parent_id.substring(index + 1, parent_id.length);
+            var doc_value = value_input.val();
+            var data = {"doc_id": doc_id, "doc_key": doc_key, "doc_value": doc_value};
+            var value_url = $("#value_url").val();
+            my_async_request2(value_url, "PUT", data);
+            $(this).text("更新");
+        }
+    });
+    $("#div_key_all li:not(:last)").append(update_link);
     $("#div_key_all input").attr("readonly", "readonly");
     $("#ul_menu li:eq(2) a").tab('show');
 }
