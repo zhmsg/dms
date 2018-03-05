@@ -94,5 +94,11 @@ $(document).ready(function () {
     if(months == null){
         months = "";
     }
-    my_async_request2(url, "GET", {"months": months}, load_performance)
+    var args = {"months": months};
+    var multi = UrlArgsValue(location.href, "multi");
+    if(multi != null){
+        args["multi"] = multi;
+    }
+
+    my_async_request2(url, "GET", args, load_performance)
 });

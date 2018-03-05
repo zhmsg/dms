@@ -37,6 +37,17 @@ def get_one_key():
         list_user_url = dms_url_prefix + "/user/"
         return rt.render("index.html", query_url=query_url, module_url=module_url, list_user_url=list_user_url)
     months = request.args["months"]
+    if "multi" in request.args and len(months) == 8:
+        year = months[:4]
+        s_months = int(months[4:6])
+        e_months = int(months[6:])
+        months = []
+        print(s_months)
+        print(e_months)
+        for i in range(s_months, e_months + 1):
+            i_s = unicode(i).zfill(2)
+            months.append("%s%s" % (year, i_s))
+        print(months)
     data = performance_man.get_performance(months)
     user_items = user_m.list_user(g.user_name)
     user_dict = dict()
