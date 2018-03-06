@@ -108,6 +108,7 @@ class PerformanceManager(object):
     def export_performance(self, months, modules, user_items, save_path, user_name=None):
         row_height = 21
         data = self.get_performance(months)
+
         xls_data = dict()
         titles = ["月份", "开始日期", "完成日期", "任务名称"]
         current_user_index = None
@@ -136,11 +137,8 @@ class PerformanceManager(object):
             else:
                 xls_data[p_item["module_no"]] = [titles, pl_item]
         wb = Workbook()
-        total_sheet = wb.active
-        total_sheet.title = u"总计"
-        # 总计 sheet
-        total_sheet.append([None] + titles[4:-1])
         col_len = len(user_items) + 5
+        module_sheets = []
         for item in modules:
             if item["module_no"] not in xls_data:
                 v = [titles]
@@ -178,15 +176,24 @@ class PerformanceManager(object):
                     c_location = dict(col_letter=get_column_letter(current_user_index + 5), row_index=i)
                     cell_s = "{col_letter}{row_index}".format(**c_location)
                     ws[cell_s].font = styles.Font(bold=True, color=colors.RED)
-            total_row = [ws.title]
+            module_sheets.append(ws)
+
+        # 总计 sheet
+        total_sheet = wb.active
+        total_sheet.title = u"总计"
+        total_sheet.append([None] + titles[4:-1])
+        # 将每个模块sheet的总计引用到总计sheet
+        for s_item in module_sheets:
+            total_row = [s_item.title]
             for k in range(len(user_items)):
-                c_location = dict(sheet=ws.title, col_letter=get_column_letter(k + 5), row_index=len(v))
+                c_location = dict(sheet=s_item.title, col_letter=get_column_letter(k + 5), row_index=s_item.max_row)
                 c_v = u"={sheet}!{col_letter}{row_index}".format(**c_location)
                 total_row.append(c_v)
             total_sheet.append(total_row)
+        # 所有模块每个人的总计
         total_sum_row = [total_sheet.title]
         for k in range(len(user_items)):
-            c_location = dict(col_letter=get_column_letter(k + 2), row_start=2, row_end=len(modules))
+            c_location = dict(col_letter=get_column_letter(k + 2), row_start=2, row_end=total_sheet.max_row)
             c_v = "=SUM({col_letter}{row_start}:{col_letter}{row_end})".format(**c_location)
             total_sum_row.append(c_v)
         total_sheet.append(total_sum_row)
