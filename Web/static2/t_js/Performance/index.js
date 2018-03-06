@@ -102,6 +102,6 @@ $(document).ready(function () {
         args["multi"] = multi;
         export_url += "&multi=" + multi;
     }
-    $("#link_export").attr("href", export_url);
+    $("a[name='link_export']").attr("href", export_url);
     my_async_request2(url, "GET", args, load_performance)
 });
