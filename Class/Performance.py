@@ -6,6 +6,7 @@ import datetime
 import time
 import hashlib
 from openpyxl import Workbook, styles
+from openpyxl.styles import colors
 from openpyxl.utils import get_column_letter
 from JYTools.DB import DB
 from Class import conf_dir
@@ -104,12 +105,16 @@ class PerformanceManager(object):
                 pri += 1
         return pr_items
 
-    def export_performance(self, months, modules, user_items, save_path):
+    def export_performance(self, months, modules, user_items, save_path, user_name=None):
         row_height = 21
         data = self.get_performance(months)
         xls_data = dict()
         titles = ["月份", "开始日期", "完成日期", "任务名称"]
-        for user_item in user_items:
+        current_user_index = None
+        for i in range(len(user_items)):
+            user_item = user_items[i]
+            if user_item["user_name"] == user_name:
+                current_user_index = i
             titles.append(user_item["nick_name"])
         titles.append("tower地址")
         for p_item in data:
@@ -131,7 +136,7 @@ class PerformanceManager(object):
             else:
                 xls_data[p_item["module_no"]] = [titles, pl_item]
         wb = Workbook()
-        total_sheet = wb.get_active_sheet()
+        total_sheet = wb.active
         total_sheet.title = u"总计"
         # 总计 sheet
         total_sheet.append([None] + titles[4:-1])
@@ -156,12 +161,17 @@ class PerformanceManager(object):
                 ws.row_dimensions[row_index].height = row_height
                 for j in range(col_len):
                     cell_s = "%s%s" % (get_column_letter(j + 1), row_index)
-                    ws[cell_s].alignment = styles.Alignment(horizontal='center', vertical='center')
+                    ws[cell_s].alignment = styles.Alignment(horizontal='center', vertical='center')  # , wrapText=True
             ws.column_dimensions["A"].width = 10
             ws.column_dimensions["B"].width = 12
             ws.column_dimensions["C"].width = 12
             ws.column_dimensions["D"].width = 40
             ws.column_dimensions[get_column_letter(col_len)].width = 100
+            # 对总计背景色标记为黄色
+            for k in range(len(user_items) + 1):
+                c_location = dict(col_letter=get_column_letter(k + 4), row_index=ws.max_row)
+                cell_s = "{col_letter}{row_index}".format(**c_location)
+                ws[cell_s].fill = styles.PatternFill(fill_type="solid", fgColor=colors.YELLOW)
             total_row = [ws.title]
             for k in range(len(user_items)):
                 c_location = dict(sheet=ws.title, col_letter=get_column_letter(k + 5), row_index=len(v))
