@@ -87,6 +87,10 @@ function load_performance(data) {
     }
 }
 
+function filter_performance()
+{
+
+}
 
 $(document).ready(function () {
     var url = location.pathname;

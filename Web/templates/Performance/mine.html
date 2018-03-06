@@ -1,7 +1,8 @@
 <div>
     <div style="position: relative">
         <input class="display_none" id="export_url" value="{{ export_url }}" />
-        <a class="status_move" name="link_export">导出</a>
+{#        <label class="checkbox-inline"><input type="checkbox" name="show_mine" />仅显示我的</label>#}
+        <a class="status_move pull-right" name="link_export">导出</a>
         <table class="table table-bordered table-hover api-list-table margintop20" id="t_mine">
             <tr>
                 <th scope="col" width="8%">月份</th>
@@ -13,7 +14,10 @@
                 <th scope="col" width=5%">得分</th>
                 <th scope="col" width=25%">详情</th>
             </tr>
+            <tr id="tr_none" class="display_none">
+                <td colSpan="9" class="text-center">一条绩效记录都没有</td>
+            </tr>
         </table>
-        <a class="status_move margintop20" name="link_export">导出</a>
+        <a class="status_move margintop20 pull-right" name="link_export">导出</a>
     </div>
 </div>
