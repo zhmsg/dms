@@ -3,8 +3,10 @@
 
 import os
 import datetime
-from time import time
+import time
 import hashlib
+from openpyxl import Workbook, styles
+from openpyxl.utils import get_column_letter
 from JYTools.DB import DB
 from Class import conf_dir
 
@@ -12,6 +14,8 @@ __author__ = 'ZhouHeng'
 
 
 class PerformanceManager(object):
+
+    date_format = "%Y-%m-%d"
 
     def __init__(self):
         self.db = DB(conf_path=os.path.join(conf_dir, "mysql_dms.conf"))
@@ -21,7 +25,7 @@ class PerformanceManager(object):
 
     def insert_performance(self, name, detail_info, start_time, end_time, user_name):
         data = dict(name=name, detail_info=detail_info, start_time=start_time, end_time=end_time, adder=user_name)
-        data["insert_time"] = int(time())
+        data["insert_time"] = int(time.time())
         m = hashlib.md5()
         m.update(detail_info)
         data["id"] = m.hexdigest()
@@ -99,3 +103,82 @@ class PerformanceManager(object):
             else:
                 pri += 1
         return pr_items
+
+    def export_performance(self, months, modules, user_items, save_path):
+        row_height = 21
+        data = self.get_performance(months)
+        xls_data = dict()
+        titles = ["月份", "开始日期", "完成日期", "任务名称"]
+        for user_item in user_items:
+            titles.append(user_item["nick_name"])
+        titles.append("tower地址")
+        for p_item in data:
+            pl_item = []
+            for key in ["month", "start_time", "end_time", "name"]:
+                pl_item.append(p_item[key])
+            pl_item[1] = time.strftime(self.date_format, time.localtime(pl_item[1]))
+            pl_item[2] = time.strftime(self.date_format, time.localtime(pl_item[2]))
+            for user_item in user_items:
+                score = None
+                for mem_item in p_item["members"]:
+                    if mem_item["user_name"] == user_item["user_name"]:
+                        score = float(mem_item["score"]) / 1000
+                        break
+                pl_item.append(score)
+            pl_item.append(p_item["detail_info"])
+            if p_item["module_no"] in xls_data:
+                xls_data[p_item["module_no"]].append(pl_item)
+            else:
+                xls_data[p_item["module_no"]] = [titles, pl_item]
+        wb = Workbook()
+        total_sheet = wb.get_active_sheet()
+        total_sheet.title = u"总计"
+        # 总计 sheet
+        total_sheet.append([None] + titles[4:-1])
+        col_len = len(user_items) + 5
+        for item in modules:
+            if item["module_no"] not in xls_data:
+                v = [titles]
+            else:
+                v = xls_data[item["module_no"]]
+            ws = wb.create_sheet(item["module_name"].decode("utf-8"))
+
+            v.append([])
+            sum_row = [None, None, None, u"%s总计" % ws.title]
+            for k in range(len(user_items)):
+                c_location = dict(col_letter=get_column_letter(k + 5), row_start=2, row_end=len(v))
+                c_v = "=SUM({col_letter}{row_start}:{col_letter}{row_end})".format(**c_location)
+                sum_row.append(c_v)
+            v.append(sum_row)
+            for i in range(len(v)):
+                ws.append(v[i])
+                row_index = i + 1
+                ws.row_dimensions[row_index].height = row_height
+                for j in range(col_len):
+                    cell_s = "%s%s" % (get_column_letter(j + 1), row_index)
+                    ws[cell_s].alignment = styles.Alignment(horizontal='center', vertical='center')
+            ws.column_dimensions["A"].width = 10
+            ws.column_dimensions["B"].width = 12
+            ws.column_dimensions["C"].width = 12
+            ws.column_dimensions["D"].width = 40
+            ws.column_dimensions[get_column_letter(col_len)].width = 100
+            total_row = [ws.title]
+            for k in range(len(user_items)):
+                c_location = dict(sheet=ws.title, col_letter=get_column_letter(k + 5), row_index=len(v))
+                c_v = u"={sheet}!{col_letter}{row_index}".format(**c_location)
+                total_row.append(c_v)
+            total_sheet.append(total_row)
+        total_sum_row = [total_sheet.title]
+        for k in range(len(user_items)):
+            c_location = dict(col_letter=get_column_letter(k + 2), row_start=2, row_end=len(modules))
+            c_v = "=SUM({col_letter}{row_start}:{col_letter}{row_end})".format(**c_location)
+            total_sum_row.append(c_v)
+        total_sheet.append(total_sum_row)
+        # 修改总计Sheet样式
+        for j in range(1, len(modules) + 3):
+            for i in range(1, len(user_items) + 2):
+                cell_s = "%s%s" % (get_column_letter(i), j)
+                total_sheet[cell_s].alignment = styles.Alignment(horizontal='center', vertical='center')
+            total_sheet.row_dimensions[j].height = row_height
+        wb.save(save_path)
+        return save_path

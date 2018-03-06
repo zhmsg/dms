@@ -90,15 +90,18 @@ function load_performance(data) {
 
 $(document).ready(function () {
     var url = location.pathname;
+    var export_url = $("#export_url").val();
     var months = UrlArgsValue(location.href, "months");
     if(months == null){
         months = "";
     }
+    export_url += "?months=" + months;
     var args = {"months": months};
     var multi = UrlArgsValue(location.href, "multi");
     if(multi != null){
         args["multi"] = multi;
+        export_url += "&multi=" + multi;
     }
-
+    $("#link_export").attr("href", export_url);
     my_async_request2(url, "GET", args, load_performance)
 });

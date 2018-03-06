@@ -1,10 +1,10 @@
 #! /usr/bin/env python
 # coding: utf-8
 import sys
-from time import time
-
-from flask import request, jsonify, g, make_response
-from flask_login import login_required
+import time
+import os
+import tempfile
+from flask import request, jsonify, g, send_file
 from Tools.RenderTemplate import RenderTemplate
 from Class.Performance import PerformanceManager
 from Class.User import UserManager
@@ -19,7 +19,7 @@ __author__ = 'Zhouheng'
 rt = RenderTemplate("Performance", url_prefix=url_prefix)
 performance_man = PerformanceManager()
 user_m = UserManager()
-performance_view = create_blue('performance_view', url_prefix=url_prefix, auth_required=False)
+performance_view = create_blue('performance_view', url_prefix=url_prefix)
 
 m_1 = dict(module_no=1, module_name="需求", score=1, weighted_score=2, max_sum=8, manager=["zh_test"])
 m_2 = dict(module_no=2, module_name="二次需求", score=0.4, weighted_score=0.8, max_sum=2, manager=["zh_test"])
@@ -30,24 +30,26 @@ m_s = [m_1, m_2, m_3, m_4, m_5]
 
 
 @performance_view.route("/", methods=["GET"])
-def get_one_key():
+def get_performance():
     if request.is_xhr is False:
         query_url = url_prefix + "/query/"
         module_url = url_prefix + "/module/"
         list_user_url = dms_url_prefix + "/user/"
-        return rt.render("index.html", query_url=query_url, module_url=module_url, list_user_url=list_user_url)
-    months = request.args["months"]
+        export_url = url_prefix + "/export/"
+        return rt.render("index.html", query_url=query_url, module_url=module_url, list_user_url=list_user_url,
+                         export_url=export_url)
+    if "months" in request.args:
+        months = request.args["months"]
+    else:
+        months = ""
     if "multi" in request.args and len(months) == 8:
         year = months[:4]
         s_months = int(months[4:6])
         e_months = int(months[6:])
         months = []
-        print(s_months)
-        print(e_months)
         for i in range(s_months, e_months + 1):
             i_s = unicode(i).zfill(2)
             months.append("%s%s" % (year, i_s))
-        print(months)
     data = performance_man.get_performance(months)
     user_items = user_m.list_user(g.user_name)
     user_dict = dict()
@@ -83,7 +85,6 @@ def get_one_key():
         t_data.append(l_item)
     t_list["data"] = t_data
     r_data = dict(detail=data, statistics=t_list)
-
     return jsonify({"status": True, "data": r_data})
 
 
@@ -95,6 +96,29 @@ def get_module_info():
 @performance_view.route("/query/", methods=["POST"])
 def query_users_key():
     return jsonify({"status": True, "data": []})
+
+
+@performance_view.route("/export/", methods=["GET"])
+def export_performance():
+    if "months" in request.args:
+        months = request.args["months"]
+    else:
+        months = ""
+    if "multi" in request.args and len(months) == 8:
+        year = months[:4]
+        s_months = int(months[4:6])
+        e_months = int(months[6:])
+        months = []
+        for i in range(s_months, e_months + 1):
+            i_s = unicode(i).zfill(2)
+            months.append("%s%s" % (year, i_s))
+    user_items = user_m.list_user(g.user_name)
+    save_name = "%s_%s_%s.xlsx" % (months, g.user_name, int(time.time()))
+    save_path = os.path.join(tempfile.gettempdir(), save_name)
+    filename = u"绩效%s_%s.xlsx" % (months, g.user_name)
+    file_path = performance_man.export_performance(months, m_s, user_items, save_path)
+    g.download_file = save_path
+    return send_file(file_path, attachment_filename=filename.encode("utf-8"), as_attachment=True, cache_timeout=2)
 
 
 @performance_view.route("/", methods=["POST"])
