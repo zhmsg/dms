@@ -102,8 +102,10 @@ def query_users_key():
 def export_performance():
     if "months" in request.args:
         months = request.args["months"]
+        arg_months = months
     else:
         months = ""
+        arg_months = months
     if "multi" in request.args and len(months) == 8:
         year = months[:4]
         s_months = int(months[4:6])
@@ -113,9 +115,9 @@ def export_performance():
             i_s = unicode(i).zfill(2)
             months.append("%s%s" % (year, i_s))
     user_items = user_m.list_user(g.user_name)
-    save_name = "%s_%s_%s.xlsx" % (months, g.user_name, int(time.time()))
+    save_name = "%s_%s_%s.xlsx" % (arg_months, g.user_name, int(time.time()))
     save_path = os.path.join(tempfile.gettempdir(), save_name)
-    filename = u"绩效%s_%s.xlsx" % (months, g.user_name)
+    filename = u"绩效%s_%s.xlsx" % (arg_months, g.user_name)
     file_path = performance_man.export_performance(months, m_s, user_items, save_path, g.user_name)
     g.download_file = save_path
     return send_file(file_path, attachment_filename=filename.encode("utf-8"), as_attachment=True, cache_timeout=2)
