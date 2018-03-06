@@ -203,5 +203,15 @@ class PerformanceManager(object):
                 cell_s = "%s%s" % (get_column_letter(i), j)
                 total_sheet[cell_s].alignment = styles.Alignment(horizontal='center', vertical='center')
             total_sheet.row_dimensions[j].height = row_height
+        # 对总计背景色标记为黄色
+        for i in range(1, total_sheet.max_column + 1):
+            cell_s = "%s%s" % (get_column_letter(i), total_sheet.max_row)
+            total_sheet[cell_s].fill = styles.PatternFill(fill_type="solid", fgColor=colors.YELLOW)
+        # 对当前用户得分加上红色
+        if current_user_index is not None:
+            for i in range(2, total_sheet.max_row + 1):
+                c_location = dict(col_letter=get_column_letter(current_user_index + 2), row_index=i)
+                cell_s = "{col_letter}{row_index}".format(**c_location)
+                total_sheet[cell_s].font = styles.Font(bold=True, color=colors.RED)
         wb.save(save_path)
         return save_path
