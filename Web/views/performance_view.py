@@ -116,7 +116,7 @@ def export_performance():
     save_name = "%s_%s_%s.xlsx" % (months, g.user_name, int(time.time()))
     save_path = os.path.join(tempfile.gettempdir(), save_name)
     filename = u"绩效%s_%s.xlsx" % (months, g.user_name)
-    file_path = performance_man.export_performance(months, m_s, user_items, save_path)
+    file_path = performance_man.export_performance(months, m_s, user_items, save_path, g.user_name)
     g.download_file = save_path
     return send_file(file_path, attachment_filename=filename.encode("utf-8"), as_attachment=True, cache_timeout=2)
 

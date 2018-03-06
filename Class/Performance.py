@@ -172,6 +172,12 @@ class PerformanceManager(object):
                 c_location = dict(col_letter=get_column_letter(k + 4), row_index=ws.max_row)
                 cell_s = "{col_letter}{row_index}".format(**c_location)
                 ws[cell_s].fill = styles.PatternFill(fill_type="solid", fgColor=colors.YELLOW)
+            # 对当前用户得分加上红色
+            if current_user_index is not None:
+                for i in range(2, ws.max_row + 1):
+                    c_location = dict(col_letter=get_column_letter(current_user_index + 5), row_index=i)
+                    cell_s = "{col_letter}{row_index}".format(**c_location)
+                    ws[cell_s].font = styles.Font(bold=True, color=colors.RED)
             total_row = [ws.title]
             for k in range(len(user_items)):
                 c_location = dict(sheet=ws.title, col_letter=get_column_letter(k + 5), row_index=len(v))
