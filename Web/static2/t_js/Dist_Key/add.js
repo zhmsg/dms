@@ -25,7 +25,7 @@ function add_key()
         var li_input = li_item.find("input");
         var k = $(li_input[0]).val();
         console.info(k);
-        if(["id", "deadline", "ip_auth", "remark", "app"].indexOf("id") >= 0){
+        if(["id", "deadline", "ip_auth", "remark", "app"].indexOf(k) >= 0){
             popup_show("不允许使用的key:【" + k + "】");
             return false;
         }
