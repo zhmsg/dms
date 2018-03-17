@@ -42,7 +42,7 @@ def get_performance():
         months = request.args["months"]
     else:
         months = ""
-    if "multi" in request.args and len(months) == 8:
+    if len(months) == 8:
         year = months[:4]
         s_months = int(months[4:6])
         e_months = int(months[6:])
@@ -85,7 +85,9 @@ def get_performance():
         t_data.append(l_item)
     t_list["data"] = t_data
     r_data = dict(detail=data, statistics=t_list)
-    return jsonify({"status": True, "data": r_data})
+    resp = jsonify({"status": True, "data": r_data})
+    resp.headers['Cache-Control'] = "public, max-age=43200"
+    return resp
 
 
 @performance_view.route("/module/", methods=["GET"])

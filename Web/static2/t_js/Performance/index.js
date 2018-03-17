@@ -107,5 +107,41 @@ $(document).ready(function () {
         export_url += "&multi=" + multi;
     }
     $("a[name='link_export']").attr("href", export_url);
-    my_async_request2(url, "GET", args, load_performance)
+    my_async_request2(url, "GET", args, load_performance);
+    var current_month = get_current_month();
+    var cm_li = $("<li></li>");
+    cm_li.text("本月");
+    cm_li.attr("value", current_month);
+    $("#ul_menu_months").append(cm_li);
+    var past_months = get_past_months();
+    if(past_months.length > 1){
+        var previous_li = $("<li></li>");
+        previous_li.text("上月");
+        previous_li.attr("value", past_months[past_months.length - 1]);
+        $("#ul_menu_months").append(previous_li);
+        if(months == ""){
+            previous_li.addClass("current");
+        }
+        var year_li = $("<li></li>");
+        year_li.text("本年");
+        year_li.attr("value", past_months[0] + current_month.substr(4));
+        $("#ul_menu_months").append(year_li);
+    }
+
+    for(var i=past_months.length-2; i>=0;i--){
+        var add_li = $("<li></li>");
+        add_li.text(past_months[i]);
+        add_li.addClass("");
+        add_li.attr("value", past_months[i]);
+        $("#ul_menu_months").append(add_li);
+    }
+    if(months.length > 0){
+        $("#ul_menu_months li[value=" + months + "]").addClass("current");
+    }
+    $("#ul_menu_months li").click(function(){
+        var current_li = $(this);
+        var m = current_li.attr("value");
+        var url = location.pathname + "?months=" + m;
+        location.href = url;
+    });
 });

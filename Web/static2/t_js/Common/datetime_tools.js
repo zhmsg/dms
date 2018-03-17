@@ -59,3 +59,23 @@ function duration_show(d){
 
     return s_duration;
 }
+
+function get_current_month(){
+    var M = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+    var current_date = new Date();
+    var y = current_date.getFullYear();
+    var m = current_date.getMonth();
+    return y + M[m];
+}
+
+function get_past_months(){
+    var M = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+    var current_date = new Date();
+    var y = current_date.getFullYear();
+    var m = current_date.getMonth();
+    var months = [];
+    for(var i=0; i<m; i++){
+        months[i] = y + M[i];
+    }
+    return months;
+}

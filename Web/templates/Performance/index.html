@@ -36,6 +36,41 @@
             </div>
         </div>
     </div>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+        }
+
+        .lift-nav {
+            position: fixed;
+            top: 100px;
+            left: 30px;
+        }
+
+        .lift-nav li {
+            width: 70px;
+            height: 50px;
+            text-align: center;
+            line-height: 30px;
+            color: #fff;
+            padding: 10px 5px;
+            margin-bottom: 10px;
+            background: skyblue;
+            cursor: pointer;
+        }
+
+        .lift-nav li.current {
+            background: tomato;
+        }
+
+
+    </style>
+    <div class="lift-nav">
+        <ul class="lift" id="ul_menu_months">
+        </ul>
+    </div>
     <input id="module_url" value="{{ module_url }}" class="display_none">
     <input id="query_url" value="{{ query_url }}" class="display_none">
     <input id="list_user_url" value="{{ list_user_url }}" class="display_none">
