@@ -108,7 +108,7 @@ def export_performance():
     else:
         months = ""
         arg_months = months
-    if "multi" in request.args and len(months) == 8:
+    if len(months) == 8:
         year = months[:4]
         s_months = int(months[4:6])
         e_months = int(months[6:])
