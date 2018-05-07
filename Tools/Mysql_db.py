@@ -20,7 +20,7 @@ class DB(object):
 
     def __init__(self, host="", mysql_user="dms", mysql_password="gene_ac252", mysql_db="dms"):
         if env == "Development":
-            self.host = "192.168.120.10"
+            self.host = "172.16.110.10"
         elif env == "Production":
             self.host = "localhost"
         else:
