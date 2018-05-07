@@ -19,7 +19,7 @@ class LogManager(object):
 
     def __init__(self):
         if env == "Development":
-            service_mysql = "192.168.120.2"
+            service_mysql = "172.16.110.2"
             self.data_db_name = "clinic_basic"
         else:
             service_mysql = "rdsikqm8sr3rugdu1muh3.mysql.rds.aliyuncs.com"

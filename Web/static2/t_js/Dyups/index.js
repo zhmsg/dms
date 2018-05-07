@@ -104,11 +104,11 @@ function submit_add() {
         return;
     }
     var r_url = $("#op_upstream_url").val();
-    if (request_data["server_ip"].match(/^(192\.168\.120\.|127\.0\.0\.)\d{1,3}$/)) {
+    if (request_data["server_ip"].match(/^(172\.16\.110\.|127\.0\.0\.)\d{1,3}$/)) {
         my_async_request2(r_url, "POST", request_data, update_upstream);
         current_btn.attr("disabled", "disabled");
     } else {
-        var swal_text = "确定提交" + request_data["server_ip"] + "\n最好以192.168.120.或者127.0.0.开头";
+        var swal_text = "确定提交" + request_data["server_ip"] + "\n最好以172.6.110.或者127.0.0.开头";
         swal({
                 title: "确定提交",
                 text: swal_text,

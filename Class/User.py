@@ -12,7 +12,7 @@ from Class import TIME_FORMAT, env
 __author__ = 'ZhouHeng'
 
 if env == "Development":
-    jy_auth_host = "http://192.168.120.2:6011/auth"
+    jy_auth_host = "http://172.16.110.2:6011/auth"
 else:
     jy_auth_host = "http://100.98.137.7/auth"
 
