@@ -4,7 +4,7 @@
 import os
 import re
 from time import time
-from JYTools.DB import DB
+from mysqldb_rich import DB
 from Class import conf_dir
 
 

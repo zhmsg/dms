@@ -8,7 +8,7 @@ import hashlib
 from openpyxl import Workbook, styles
 from openpyxl.styles import colors
 from openpyxl.utils import get_column_letter
-from JYTools.DB import DB
+from mysqldb_rich import DB
 from Class import conf_dir
 
 __author__ = 'ZhouHeng'

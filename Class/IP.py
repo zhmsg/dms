@@ -3,7 +3,7 @@
 
 import os
 from time import time
-from JYTools.DB import DB
+from mysqldb_rich import DB
 from Class import conf_dir
 
 __author__ = 'ZhouHeng'
