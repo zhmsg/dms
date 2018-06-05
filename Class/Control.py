@@ -1044,12 +1044,14 @@ class ControlManager(object):
     def notification_topic_message(self, message_info, query_url=None):
         message_tag = message_info.get("message_tag", None)
         if message_tag is None:
-            _message_tag = "DMS"
+            _message_tag = self.message_man.default_tag
             # self.ding_msg.send_text(message_info["message_content"])
             # return 4, 60
         else:
             _message_tag = message_tag
         tags_setting = self.message_man.select_user_tag(_message_tag)
+        if len(tags_setting) != 1 and _message_tag != self.message_man.default_tag:
+            tags_setting = self.message_man.select_user_tag(self.message_man.default_tag)
         if len(tags_setting) != 1:
             msg_content = u"#%s#\n%s" % (message_tag, message_info["message_content"])
             self.ding_msg.send_text(msg_content)

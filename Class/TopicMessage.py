@@ -8,6 +8,9 @@ __author__ = 'ZhouHeng'
 
 
 class MessageManager(object):
+
+    default_tag = "DMS"
+
     def __init__(self):
         self.db = DB()
         self.t_msg = "topic_message_content"
