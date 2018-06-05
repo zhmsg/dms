@@ -101,7 +101,7 @@ class BCMessage(object):
             s = o["State"]
             if s in BCMessage.state:
                 s = BCMessage.state[s]
-            h_msg += u"作业状态: %s\n" % s
+            h_msg += u"状态: %s\n" % s
         for item in BCMessage.cn_desc:
             if item[0] in o:
                 h_msg += u"%s: %s" % (item[1], o[item[0]])
