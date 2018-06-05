@@ -74,21 +74,21 @@ class BCMessage(object):
                 c = BCMessage.category[o["Category"]]
             else:
                 c = o["Category"]
-            h_msg += u"作业类型:%s\n" % c
+            h_msg += u"作业类型: %s\n" % c
         if "JobName" in o:
-            h_msg += u"作业名称:%s\n" % o["JobName"]
+            h_msg += u"作业名称: %s\n" % o["JobName"]
         if "Task" in o:
-            h_msg += u"任务名称:%s\n" % o["Task"]
+            h_msg += u"任务名称: %s\n" % o["Task"]
         if "Event" in o:
             e = o["Event"]
             if e in BCMessage.event:
                 e = BCMessage.event[e]
-            h_msg += u"推送事件:%s\n" % e
+            h_msg += u"推送事件: %s\n" % e
         if "State" in o:
             s = o["State"]
             if s in BCMessage.state:
                 s = BCMessage.state[s]
-            h_msg += u"作业状态:%s\n" % s
+            h_msg += u"作业状态: %s\n" % s
         if "JobId" in o:
-            h_msg += u"作业ID:%s\n" % o["JobId"]
+            h_msg += u"作业ID: %s\n" % o["JobId"]
         return True, h_msg
