@@ -11,7 +11,7 @@ __author__ = 'zhouheng'
 
 
 def create_app():
-    msg_web = Flask("__name__")
+    msg_web = Flask(__name__)
     msg_web.secret_key = 'a string'
     login_manager.init_app(msg_web)
 
