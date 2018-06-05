@@ -1057,7 +1057,7 @@ class ControlManager(object):
         if len(tags_setting) != 1 and _message_tag != self.message_man.default_tag:
             tags_setting = self.message_man.select_user_tag(self.message_man.default_tag)
         if len(tags_setting) != 1:
-            msg_content = u"#%s#\n%s" % (message_tag, message_content)
+            msg_content = self.message_man.package_msg(message_tag, message_content)
             self.ding_msg.send_text(msg_content)
             return 4, 60
         tag_setting = tags_setting[0]
@@ -1065,7 +1065,7 @@ class ControlManager(object):
         # 获取用户账户信息
         exec_r, user_info = self.user.get_user_info(tag_setting["user_name"])
         if exec_r is False:
-            msg_content = "#%s#\n%s" % (message_tag, message_content)
+            msg_content = self.message_man.package_msg(message_tag, message_content)
             self.ding_msg.send_text(msg_content)
             return 4, 60
         if query_url is not None:
@@ -1100,7 +1100,7 @@ class ControlManager(object):
             elif tag_setting["ding_mode"] == 2:
                 self.ding_msg.send_link(message_content, message_tag, url, access_token=tag_setting["access_ding"])
             else:
-                msg_content = "#%s#\n%s" % (message_tag, message_content)
+                msg_content = self.message_man.package_msg(message_tag, message_content)
                 self.ding_msg.send_text(msg_content, access_token=tag_setting["access_ding"])
         return notify_mode, tag_setting["interval_time"]
 

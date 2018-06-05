@@ -17,6 +17,14 @@ class MessageManager(object):
         self.t_msg = "topic_message_content"
         self.t_user_tag = "user_topic_tag"
 
+    @staticmethod
+    def package_msg(message_tag, message_content):
+        s = ""
+        if message_tag:
+            s += u"#%s#\n" % message_tag
+        s += message_content
+        return s
+
     def insert_topic_message(self, **kwargs):
         kwargs["insert_time"] = int(time())
         l = self.db.execute_insert(self.t_msg, args=kwargs, ignore=True)
