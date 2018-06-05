@@ -104,5 +104,5 @@ class BCMessage(object):
             h_msg += u"状态: %s\n" % s
         for item in BCMessage.cn_desc:
             if item[0] in o:
-                h_msg += u"%s: %s" % (item[1], o[item[0]])
+                h_msg += u"%s: %s\n" % (item[1], o[item[0]])
         return True, h_msg
