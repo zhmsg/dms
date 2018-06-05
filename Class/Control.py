@@ -1036,6 +1036,7 @@ class ControlManager(object):
 
     # 主题消息管理
     def new_topic_message(self, **kwargs):
+        kwargs.pop("readable_content")
         return self.message_man.insert_topic_message(**kwargs)
 
     def query_topic_message(self, **kwargs):
@@ -1043,6 +1044,9 @@ class ControlManager(object):
 
     def notification_topic_message(self, message_info, query_url=None):
         message_tag = message_info.get("message_tag", None)
+        message_content = message_info["message_content"]
+        if "readable_content" in message_info:
+            message_content = message_info["readable_content"]
         if message_tag is None:
             _message_tag = self.message_man.default_tag
             # self.ding_msg.send_text(message_info["message_content"])
@@ -1053,7 +1057,7 @@ class ControlManager(object):
         if len(tags_setting) != 1 and _message_tag != self.message_man.default_tag:
             tags_setting = self.message_man.select_user_tag(self.message_man.default_tag)
         if len(tags_setting) != 1:
-            msg_content = u"#%s#\n%s" % (message_tag, message_info["message_content"])
+            msg_content = u"#%s#\n%s" % (message_tag, message_content)
             self.ding_msg.send_text(msg_content)
             return 4, 60
         tag_setting = tags_setting[0]
@@ -1061,7 +1065,7 @@ class ControlManager(object):
         # 获取用户账户信息
         exec_r, user_info = self.user.get_user_info(tag_setting["user_name"])
         if exec_r is False:
-            msg_content = "#%s#\n%s" % (message_tag, message_info["message_content"])
+            msg_content = "#%s#\n%s" % (message_tag, message_content)
             self.ding_msg.send_text(msg_content)
             return 4, 60
         if query_url is not None:
@@ -1074,7 +1078,7 @@ class ControlManager(object):
             if user_info["email"] is None:
                 notify_mode &= ~1
             else:
-                email_content = message_info["message_content"].replace("\n", "<br />")
+                email_content = message_content.replace("\n", "<br />")
                 my_email.send_mail_thread(user_info["email"], message_tag, email_content)
         if self.judge_role(notify_mode, 2) is True:
             if user_info["wx_id"] is None:
@@ -1082,22 +1086,21 @@ class ControlManager(object):
             else:
                 x = time.localtime(long(message_info["publish_time"]) / 1000)
                 occur_time = time.strftime(TIME_FORMAT, x)
-                mul_msg_lines = message_info["message_content"].split("\n", 1)
+                mul_msg_lines = message_content.split("\n", 1)
                 if len(mul_msg_lines) == 2:
                     title = mul_msg_lines[0]
                     wx_content = mul_msg_lines[1]
                 else:
-                    title = message_info["message_content"]
+                    title = message_content
                     wx_content = ""
                 my_wx.send_fault(message_tag, title, occur_time, wx_content, user_info["wx_id"], url)
         if self.judge_role(notify_mode, 4) is True:
             if user_info["tel"] is None or tag_setting["access_ding"] is None:
                 notify_mode &= ~4
             elif tag_setting["ding_mode"] == 2:
-                self.ding_msg.send_link(message_info["message_content"], message_tag, url,
-                                        access_token=tag_setting["access_ding"])
+                self.ding_msg.send_link(message_content, message_tag, url, access_token=tag_setting["access_ding"])
             else:
-                msg_content = "#%s#\n%s" % (message_tag, message_info["message_content"])
+                msg_content = "#%s#\n%s" % (message_tag, message_content)
                 self.ding_msg.send_text(msg_content, access_token=tag_setting["access_ding"])
         return notify_mode, tag_setting["interval_time"]
 

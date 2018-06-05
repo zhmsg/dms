@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 # coding: utf-8
 
+import json
 from time import time
 from Tools.Mysql_db import DB
 
@@ -52,3 +53,42 @@ class MessageManager(object):
                 "publish_time", "insert_time", "message_content"]
         db_items = self.db.execute_select(self.t_msg, where_value=kwargs, cols=cols)
         return db_items
+
+
+class BCMessage(object):
+
+    category = dict(Job=u"DAG作业")
+    event = dict(OnJobFinished=u"作业已经结束", OnJobWaiting=u"作业开始等待", OnJobStopped=u"作业被终止",
+                 OnJobFailded=u"作业挂掉了", OnJobRunning=u"作业开始运行")
+    state = dict(Finished=u"作业结束了")
+
+    @staticmethod
+    def convert_humanable(msg):
+        try:
+            o = json.loads(msg)
+        except ValueError:
+            return False, None
+        h_msg = ""
+        if "Category" in o:
+            if o["Category"] in BCMessage.category:
+                c = BCMessage.category[o["Category"]]
+            else:
+                c = o["Category"]
+            h_msg += u"作业类型:%s\n" % c
+        if "JobName" in o:
+            h_msg += u"作业名称:%s\n" % o["JobName"]
+        if "Task" in o:
+            h_msg += u"任务名称:%s\n" % o["Task"]
+        if "Event" in o:
+            e = o["Event"]
+            if e in BCMessage.event:
+                e = BCMessage.event[e]
+            h_msg += u"推送事件:%s\n" % e
+        if "State" in o:
+            s = o["State"]
+            if s in BCMessage.state:
+                s = BCMessage.state[s]
+            h_msg += u"作业状态:%s\n" % s
+        if "JobId" in o:
+            h_msg += u"作业ID:%s\n" % o["JobId"]
+        return True, h_msg

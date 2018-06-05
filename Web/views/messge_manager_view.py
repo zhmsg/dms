@@ -5,6 +5,7 @@ import re
 import base64
 from flask import request, jsonify, g
 from Tools.RenderTemplate import RenderTemplate
+from Class.TopicMessage import BCMessage
 from Web import message_url_prefix as url_prefix, create_blue, verify_mns_message, redis, control, login_required
 
 __author__ = 'ZhouHeng'
@@ -28,6 +29,10 @@ def receive_message_func():
             message_info[coverage_keys[key]] = r_data[key]
     if re.match("^[a-z\\d/\+]+=*$", message_info["message_content"], re.I) is not None:
         message_info["message_content"] = base64.b64decode(message_info["message_content"])
+    if message_info["topic_name"] == "bc":
+        r, h_content = BCMessage.convert_humanable(message_info["message_content"])
+        if r is True:
+            message_info["readable_content"] = h_content
     message_md5 = r_data["MessageMD5"]
     message_tag = message_info.get("message_tag", "")
     for key in message_info:
