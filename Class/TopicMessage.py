@@ -68,7 +68,12 @@ class BCMessage(object):
     category = dict(Job=u"DAG作业")
     event = dict(OnJobFinished=u"作业已经结束", OnJobWaiting=u"作业开始等待", OnJobStopped=u"作业被终止",
                  OnJobFailded=u"作业挂掉了", OnJobRunning=u"作业开始运行")
-    state = dict(Finished=u"作业结束了")
+    state = dict(Finished=u"结束了", Stopped="被停止了")
+
+    cn_desc = [
+        ["JobId", u"作业ID"],
+        ["InstanceId", u"实例ID"]
+    ]
 
     @staticmethod
     def convert_humanable(msg):
@@ -97,6 +102,7 @@ class BCMessage(object):
             if s in BCMessage.state:
                 s = BCMessage.state[s]
             h_msg += u"作业状态: %s\n" % s
-        if "JobId" in o:
-            h_msg += u"作业ID: %s\n" % o["JobId"]
+        for item in BCMessage.cn_desc:
+            if item[0] in o:
+                h_msg += u"%s: %s" % (item[1], o[item[0]])
         return True, h_msg
