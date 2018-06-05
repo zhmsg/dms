@@ -1036,7 +1036,7 @@ class ControlManager(object):
 
     # 主题消息管理
     def new_topic_message(self, **kwargs):
-        kwargs.pop("readable_content")
+        kwargs.pop("readable_content", None)
         return self.message_man.insert_topic_message(**kwargs)
 
     def query_topic_message(self, **kwargs):
