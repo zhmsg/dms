@@ -143,7 +143,7 @@ def query_message():
 
 
 @message_view.route("/cache/", methods=["GET"])
-def query_message():
+def cache_message():
     # message_id = request.args["message_id"]
     # topic_owner = "1530531001163833"
     # if "topic_owner" in request.args:
