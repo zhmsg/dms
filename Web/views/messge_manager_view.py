@@ -2,6 +2,7 @@
 # coding: utf-8
 
 import re
+import json
 import base64
 from flask import request, jsonify, g
 from Tools.RenderTemplate import RenderTemplate
@@ -12,6 +13,24 @@ __author__ = 'ZhouHeng'
 
 rt = RenderTemplate("Message", url_prefix=url_prefix)
 message_view = create_blue('message_view', url_prefix=url_prefix, auth_required=False)
+
+
+def cache_message(message_info):
+    cache_key = "dms_cache_message"
+    max_len = 100
+    current_len = redis.llen(cache_key)
+    while current_len >= max_len:
+        redis.rpop(cache_key)
+        current_len -= 1
+    message_info = json.dumps(message_info)
+    redis.lpush(cache_key, message_info)
+
+
+def get_cache_message(start, stop):
+    cache_key = "dms_cache_message"
+    items = redis.lrange(cache_key, start, stop)
+    n_items = map(json.loads, items)
+    return n_items
 
 
 @message_view.route("/receive", methods=["POST"])
@@ -43,6 +62,8 @@ def receive_message_func():
         control.new_topic_message(**message_info)
         return jsonify({"success": True, "data": "not notification"})
     redis.setex(redis_key, "", 60)
+    # cache message
+    cache_message(message_info)
     # 通知
     query_url = "http://" + request.host + url_prefix + "/manager/"
     notify_mode, interval_time = control.notification_topic_message(message_info, query_url)
