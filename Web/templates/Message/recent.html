@@ -9,8 +9,11 @@
                 {#                <th scope="col" width=20%">备注</th>#}
                 <th scope="col" width=15%">操作{{test}}</th>
             </tr>
-            <tr>
-                <td class="center" colSpan="3">最近没有消息</td>
+            <tr v-if="need_login">
+                <td class="text-center" colSpan="3">需要登录</td>
+            </tr>
+            <tr v-else-if="messages.length == 0">
+                <td class="text-center" colSpan="3">最近没有消息</td>
             </tr>
             <tr v-for="m_item in messages">
                 <td>{{m_item.message_tag}}</td>
@@ -18,6 +21,6 @@
                 <td><a>查看</a></td>
             </tr>
         </table>
-
+        <input id="url_cache_messages" class="display_none" value="{{ url_cache_messages }}" />
     </div>
 </div>

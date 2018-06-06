@@ -77,8 +77,9 @@ def receive_message_func():
 def manager_page():
     tag_url = url_prefix + "/tag/"
     query_url = url_prefix + "/query/"
+    url_cache_messages = url_prefix + "/cache/"
     test = '{{test}}'
-    return rt.render("Index.html", tag_url=tag_url, query_url=query_url)
+    return rt.render("Index.html", tag_url=tag_url, query_url=query_url, url_cache_messages=url_cache_messages)
 
 
 @message_view.route("/tag/", methods=["GET"])
