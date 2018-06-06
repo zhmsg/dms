@@ -140,3 +140,17 @@ def query_message():
         topic_name = request.args["topic_name"]
     db_items = control.query_topic_message(topic_owner=topic_owner, topic_name=topic_name, message_id=message_id)
     return jsonify({"status": True, "data": db_items})
+
+
+@message_view.route("/cache/", methods=["GET"])
+def query_message():
+    # message_id = request.args["message_id"]
+    # topic_owner = "1530531001163833"
+    # if "topic_owner" in request.args:
+    #     topic_owner = request.args["topic_owner"]
+    # topic_name = "JYWaring"
+    # if "topic_name" in request.args:
+    #     topic_name = request.args["topic_name"]
+    # db_items = control.query_topic_message(topic_owner=topic_owner, topic_name=topic_name, message_id=message_id)
+    items = get_cache_message(0, 100)
+    return jsonify({"status": True, "data": items})
