@@ -77,6 +77,7 @@ def receive_message_func():
 def manager_page():
     tag_url = url_prefix + "/tag/"
     query_url = url_prefix + "/query/"
+    test = '{{test}}'
     return rt.render("Index.html", tag_url=tag_url, query_url=query_url)
 
 
@@ -143,7 +144,7 @@ def query_message():
 
 
 @message_view.route("/cache/", methods=["GET"])
-def cache_message():
+def cache_message_action():
     # message_id = request.args["message_id"]
     # topic_owner = "1530531001163833"
     # if "topic_owner" in request.args:

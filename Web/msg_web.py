@@ -94,6 +94,8 @@ def create_app():
     env.filters['make_static_url'] = make_static_url
     env.filters['make_default_static_url'] = make_default_static_url
     env.filters['make_static_html'] = make_static_html
+    env.variable_start_string = "{{ "
+    env.variable_end_string = " }}"
     return msg_web
 
 msg_web = create_app()

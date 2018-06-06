@@ -1,14 +1,23 @@
 <div>
-    <div style="position: relative">
-        <table class="table table-bordered table-hover api-list-table" id="t_keys">
+    <div style="position: relative" id="div_messages">
+        <table class="table table-bordered table-hover api-list-table" id="t_messages">
             <tr>
                 <th scope="col" width="10%">消息标签</th>
                 <th scope="col" width="15%">推送时间</th>
-{#                <th scope="col" width=20%">IP认证</th>#}
-{#                <th scope="col" width=10%">拥有者</th>#}
-{#                <th scope="col" width=20%">备注</th>#}
-                <th scope="col" width=15%">操作</th>
+                {#                <th scope="col" width=20%">IP认证</th>#}
+                {#                <th scope="col" width=10%">拥有者</th>#}
+                {#                <th scope="col" width=20%">备注</th>#}
+                <th scope="col" width=15%">操作{{test}}</th>
+            </tr>
+            <tr>
+                <td class="center" colSpan="3">最近没有消息</td>
+            </tr>
+            <tr v-for="m_item in messages">
+                <td>{{m_item.message_tag}}</td>
+                <td>{{m_item.publish_time}}</td>
+                <td><a>查看</a></td>
             </tr>
         </table>
+
     </div>
 </div>
