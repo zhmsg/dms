@@ -11,13 +11,14 @@ $(document).ready(function () {
         el: "#div_messages",
         data: {
             need_login: need_login,
-            test: "VUE",
-            messages: [
-                {"message_tag": "TEST", "publish_time": "2018"}
-            ]
+            messages: []
         }
     });
     my_async_request2($("#url_cache_messages").val(), "GET", null, function(data){
-       vm.messages =  data;
+        for(var i=0; i<data.length;i++){
+            var item = data[i];
+            item.publish_time = timestamp_2_datetime(item.publish_time, true);
+            vm.messages.push(item);
+        }
     });
 });

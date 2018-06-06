@@ -2,8 +2,14 @@
  * Created by msg on 2/7/17.
  */
 
-function timestamp_2_datetime(ts){
-    var dt = new Date(parseInt(ts) * 1000);
+function timestamp_2_datetime(ts, is_msec){
+    if(is_msec == null){
+        ts = parseInt(ts) * 1000
+    }
+    else{
+        ts = parseInt(ts)
+    }
+    var dt = new Date(ts);
     var dt_str = dt.toLocaleDateString().replace(/\/\d{1,2}/g, function(word){if(word.length >= 3){return "-" + word.substr(1)}else{return "-0" + word.substr(1)}}) + " ";
     dt_str += dt.toTimeString().substr(0, 8);
     return dt_str;
