@@ -26,6 +26,11 @@
                     <td v-html="m_item.readable_content"></td>
                 </tr>
             </tbody>
+            <tbody style="border-top: none">
+            <tr v-if="can_load">
+                <td class="text-center" colSpan="3"><a class="status_move" v-on:click="load_more">加载更多</a></td>
+            </tr>
+            </tbody>
         </table>
         <input id="url_cache_messages" class="display_none" value="{{ url_cache_messages }}" />
     </div>

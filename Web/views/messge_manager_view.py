@@ -146,6 +146,12 @@ def query_message():
 
 @message_view.route("/cache/", methods=["GET"])
 def cache_message_action():
+    start = 0
+    end = 100
+    if "start" in request.args:
+        start = int(request.args["start"])
+    if "end" in request.args:
+        end = int(request.args["end"]) - 1
     # message_id = request.args["message_id"]
     # topic_owner = "1530531001163833"
     # if "topic_owner" in request.args:
@@ -154,5 +160,5 @@ def cache_message_action():
     # if "topic_name" in request.args:
     #     topic_name = request.args["topic_name"]
     # db_items = control.query_topic_message(topic_owner=topic_owner, topic_name=topic_name, message_id=message_id)
-    items = get_cache_message(0, 100)
+    items = get_cache_message(start, end)
     return jsonify({"status": True, "data": items})
