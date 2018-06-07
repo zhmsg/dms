@@ -22,8 +22,8 @@
                     <td><a v-on:click="m_item.show=!m_item.show" class="status_move">查看</a></td>
                 </tr>
                 <tr v-if="m_item.show">
-                    <td colspan="2">{{m_item.message_content}}</td>
-                    <td>{{m_item.readable_content}}</td>
+                    <td colspan="2" v-html="m_item.message_content"></td>
+                    <td v-html="m_item.readable_content"></td>
                 </tr>
             </tbody>
         </table>

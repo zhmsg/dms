@@ -26,6 +26,9 @@ $(document).ready(function () {
             for (var i = 0; i < data.length; i++) {
                 var item = data[i];
                 item.show = false;
+                if("readable_content" in item){
+                    item.readable_content = item.readable_content.replace("\n", "<br/>")
+                }
                 item.publish_time = timestamp_2_datetime(item.publish_time, true);
                 vm.messages.push(item);
             }
