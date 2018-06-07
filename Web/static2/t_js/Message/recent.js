@@ -36,7 +36,7 @@ $(document).ready(function () {
     var vm = new Vue({
         el: "#div_messages",
         data: {
-            login_url: "/?next=" + location.href,
+            login_url: "/?next=" + location.pathname + location.search,
             need_login: need_login,
             messages: [],
             can_load: false,

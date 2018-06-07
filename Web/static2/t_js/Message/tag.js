@@ -92,7 +92,7 @@ function judge_whether_update(index) {
     var notify_mode = 0;
     for (var key in notify_mode_dict) {
         if (now_item[key] == true) {
-            notify_mode += notify_mode_dict[key]
+            notify_mode += notify_mode_dict[key];
         }
     }
     now_item.notify_mode = notify_mode;
@@ -176,9 +176,15 @@ function show_access_ding() {
 }
 
 $(document).ready(function () {
+    var need_login = false;
+    if ($("#current_user_name").length <= 0) {
+        var need_login = true;
+    }
     var tag_vm = new Vue({
         el: "#t_tag",
         data: {
+            login_url: "/?next=" + location.pathname + location.search,
+            need_login: need_login,
             tags: []
         },
         methods: {

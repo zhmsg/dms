@@ -11,6 +11,12 @@
                 <th scope="col" width=10%">拥有者</th>
                 <th scope="col" width=15%">操作</th>
             </tr>
+            <tr v-if="need_login">
+                <td class="text-center" colSpan="8">需要登录<a :href="login_url">登录</a></td>
+            </tr>
+            <tr v-else-if="tags.length == 0">
+                <td class="text-center" colSpan="8">还没有人添加标签</td>
+            </tr>
             <template v-for="(item, index) in tags">
                 <tr v-if="!item.is_delete">
                     <td>{{item.message_tag}}</td>
