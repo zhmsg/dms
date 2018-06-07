@@ -4,6 +4,7 @@
 
 var request_tag_flag = new Object();
 var notify_tds = {"td_notify_email": 1, "td_notify_wx": 2, "td_notify_ding": 4};
+var g_tags_vm = null;
 
 function format_access_ding(el) {
     var current_access_ding = el.val();
@@ -48,6 +49,17 @@ function tag_info_2_tr(tag_info, current_tr) {
     }
 }
 
+function show_msg(msg)
+{
+    $("div[role='alert']").hide();
+    var dialog_div = $('<div class="alert alert-success" role="alert"></div>');
+    $("body").append(dialog_div);
+    register_reset_bottom(dialog_div);
+    setTimeout(function () {
+        dialog_div.remove();
+    }, 2000);
+    dialog_div.text(msg)
+}
 function handler_tags(tags_data) {
     var data_len = tags_data.length;
     var t_name = "t_tag";
@@ -175,6 +187,20 @@ function handler_tags(tags_data) {
     });
     $("td[name='tr_ding_setting']").hide();
 
+    var notify_mode = {"notify_email": 1, "notify_wx": 2, "notify_ding": 4};
+    for(var i=0;i<data_len;i++){
+        var t_item = tags_data[i];
+        for (var key in notify_mode)
+        {
+            t_item[key] = judge_include_value(t_item["notify_mode"], notify_mode[key])
+        }
+        t_item["add_time"] = timestamp_2_datetime(t_item["insert_time"]);
+        t_item.is_owner = $("#current_user_name").val() == t_item.user_name;
+        t_item.show = false;
+        t_item.is_delete = false;
+        //console.info(t_item);
+        g_tags_vm.tags.push(t_item);
+    }
 }
 
 function judge_tr_update(tr_el) {
@@ -224,20 +250,23 @@ function judge_tr_update(tr_el) {
 
 function update_success(update_data) {
     if (update_data["exec_r"] == 1) {
-        $("div[role='alert']").hide();
-        var dialog_div = $('<div class="alert alert-success" role="alert"></div>');
-        $("body").append(dialog_div);
-        register_reset_bottom(dialog_div);
-        setTimeout(function () {
-            dialog_div.remove();
-        }, 2000);
+        //$("div[role='alert']").hide();
+        //var dialog_div = $('<div class="alert alert-success" role="alert"></div>');
+        //$("body").append(dialog_div);
+        //register_reset_bottom(dialog_div);
+        //setTimeout(function () {
+        //    dialog_div.remove();
+        //}, 2000);
         var current_tr = $("tr[message_tag='" + update_data["message_tag"] + "']");
         if (update_data["op"] == "PUT") {
+            var msg = "更新消息标签 " + update_data["message_tag"] + " 成功";
+            show_msg(msg);
             tag_info_2_tr(update_data, current_tr);
-            dialog_div.text("更新消息标签 " + update_data["message_tag"] + " 成功");
+            //dialog_div.text("更新消息标签 " + update_data["message_tag"] + " 成功");
         }
         else {
-            dialog_div.text("删除消息标签 " + update_data["message_tag"] + " 成功");
+            var msg = "删除消息标签 " + update_data["message_tag"] + " 成功";
+            show_msg(msg);
             current_tr.remove();
         }
     }
@@ -300,6 +329,51 @@ function show_access_ding() {
 }
 
 $(document).ready(function () {
+    var tag_vm = new Vue({
+        el: "#t_tag",
+        data: {
+            tags: []
+        },
+        methods: {
+            delete_tag: function (index) {
+                console.info(index);
+                var message_tag = this.tags[index].message_tag;
+                var show_text = "确定删除消息标签\n" + message_tag;
+                swal({
+                        title: "确定删除",
+                        text: show_text,
+                        type: "info",
+                        showCancelButton: true,
+                        confirmButtonColor: '#DD6B55',
+                        confirmButtonText: '删除',
+                        cancelButtonText: "取消",
+                        closeOnConfirm: true,
+                        closeOnCancel: true
+                    },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            var tag_url = $("#tag_url").val();
+                            my_async_request2(tag_url, "DELETE", {"message_tag": message_tag}, function(data){
+                                var item = g_tags_vm.tags[index];
+                                item.is_delete = true;
+                                var msg = "删除消息标签 " + message_tag + " 成功";
+                                show_msg(msg);
+                            });
+                        }
+                    }
+                );
+            },
+            show_ding: function(index){
+                console.info(index);
+                for(var i=0;i<this.tags.length;i++)
+                {
+                    this.tags[i].show = false;
+                }
+                this.tags[index].show = true;
+            }
+        }
+    });
+    g_tags_vm = tag_vm;
     if ($("#current_user_name").length <= 0) {
         var t_name = "t_tag";
         clear_table(t_name);
