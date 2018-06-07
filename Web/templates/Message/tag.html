@@ -14,10 +14,11 @@
             <template v-for="(item, index) in tags">
                 <tr v-if="!item.is_delete">
                     <td>{{item.message_tag}}</td>
-                    <td><label class="checkbox-inline"><input type="checkbox" class="left5" :checked="item.notify_email" :disabled="!item.is_owner" />通知</label></td>
-                    <td><label class="checkbox-inline"><input type="checkbox" class="left5" :checked="item.notify_wx" :disabled="!item.is_owner" />通知</label></td>
-                    <td @click="show_ding(index)"><label class="checkbox-inline"><input type="checkbox" class="left5" :checked="item.notify_ding" :disabled="!item.is_owner" />通知</label></td>
-                    <td>{{item.interval_time}}</td>
+                    <td><label class="checkbox-inline"><input type="checkbox" class="left5" v-model="item.notify_email" :disabled="!item.is_owner" @change="update_action(index)" />通知</label></td>
+                    <td><label class="checkbox-inline"><input type="checkbox" class="left5" v-model="item.notify_wx" :disabled="!item.is_owner" @change="update_action(index)"  />通知</label></td>
+                    <td @click="show_ding(index)"><label class="checkbox-inline"><input type="checkbox" class="left5" v-model="item.notify_ding" :disabled="!item.is_owner" @change="update_action(index)"  />通知</label></td>
+                    <td v-if="item.is_owner"><input style="border: 0px none; background-color: transparent" v-model.number="item.interval_time"  @change="update_action(index)" /></td>
+                    <td v-else>{{item.interval_time}}</td>
                     <td>{{item.add_time}}</td>
                     <td>{{item.user_name}}</td>
                     <td><a href='javascript:void(0)' name='link_delete' v-if="item.is_owner" @click="delete_tag(index)">删除</a></td>
@@ -25,9 +26,9 @@
                 <tr v-if="item.is_owner && item.show && !item.is_delete">
                     <td colspan="8">
                         <label for="">钉钉Token：</label>
-                        <input class="box-side width600 margin10" name="access_ding" type="text" :value="item.access_ding"/>
+                        <input class="box-side width600 margin10" name="access_ding" type="text" v-model.trim="item.access_ding"/>
                         <label for="">钉的方式：</label>
-                        <select class="box-side width300" name="ding_mode" :value="item.ding_mode">
+                        <select class="box-side width300" name="ding_mode" v-model="item.ding_mode">
                             <option value="1">文本方式</option>
                             <option value="2">链接方式</option>
                         </select>
