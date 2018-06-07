@@ -155,4 +155,8 @@ def cache_message_action():
     #     topic_name = request.args["topic_name"]
     # db_items = control.query_topic_message(topic_owner=topic_owner, topic_name=topic_name, message_id=message_id)
     items = get_cache_message(0, 100)
+    items = [
+        {"message_tag": "TEST", "publish_time": 1528271311000, "message_content": "this is test message", "show": False},
+        {"message_tag": "BC", "publish_time": 1528272341000, "message_content": "from bc ali", "show": True}
+    ]
     return jsonify({"status": True, "data": items})

@@ -10,15 +10,25 @@ $(document).ready(function () {
     var vm = new Vue({
         el: "#div_messages",
         data: {
+            login_url: "/?next=" + location.href,
             need_login: need_login,
             messages: []
         }
+        //methods: {
+        //    look_msg: function(index){
+        //        var show = this.messages[index].show;
+        //        this.messages[index].show = !show;
+        //    }
+        //}
     });
-    my_async_request2($("#url_cache_messages").val(), "GET", null, function(data){
-        for(var i=0; i<data.length;i++){
-            var item = data[i];
-            item.publish_time = timestamp_2_datetime(item.publish_time, true);
-            vm.messages.push(item);
-        }
-    });
+    if(need_login == false) {
+        my_async_request2($("#url_cache_messages").val(), "GET", null, function (data) {
+            for (var i = 0; i < data.length; i++) {
+                var item = data[i];
+                item.show = false;
+                item.publish_time = timestamp_2_datetime(item.publish_time, true);
+                vm.messages.push(item);
+            }
+        });
+    }
 });
