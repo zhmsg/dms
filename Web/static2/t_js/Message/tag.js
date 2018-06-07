@@ -6,12 +6,16 @@ var request_tag_flag = new Object();
 var g_tags_vm = null;
 var can_update_key = ["interval_time", "notify_mode", "access_ding", "ding_mode"];
 
-function format_access_ding(el) {
-    var current_access_ding = el.val();
-    if (current_access_ding.indexOf("access_token=") >= 0) {
-        current_access_ding = current_access_ding.substr(current_access_ding.indexOf("access_token=") + 13);
-        el.val(current_access_ding);
+function f_access_ding(v){
+    if (v.indexOf("access_token=") >= 0) {
+        v = v.substr(v.indexOf("access_token=") + 13);
     }
+    return v;
+}
+
+function format_access_ding(el) {
+    var current_access_ding = f_access_ding(el.val());
+    el.val(current_access_ding);
     return current_access_ding;
 }
 
@@ -122,6 +126,11 @@ function start_update_tag2(index) {
         my_async_request2(tag_url, "PUT", update_info, function(data){
             var msg = "更新消息标签 " + message_tag + " 成功";
             show_msg(msg);
+            var t_item = g_tags_vm.tags[index];
+            for(var j=0;j<can_update_key.length;j++) {
+                var key = can_update_key[j];
+                t_item["origin_" + key] = t_item[key];
+            }
         });
     }
     if (message_tag in request_tag_flag) {
@@ -208,7 +217,10 @@ $(document).ready(function () {
                 }
                 this.tags[index].show = true;
             },
-            update_action: function(index){
+            update_action: function(index, format){
+                if(format == 1){
+                    this.tags[index].access_ding = f_access_ding(this.tags[index].access_ding);
+                }
                 prepare_update2(index);
             }
         }

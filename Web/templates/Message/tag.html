@@ -26,9 +26,9 @@
                 <tr v-if="item.is_owner && item.show && !item.is_delete">
                     <td colspan="8">
                         <label for="">钉钉Token：</label>
-                        <input class="box-side width600 margin10" name="access_ding" type="text" v-model.trim="item.access_ding"/>
+                        <input class="box-side width600 margin10" name="access_ding" type="text" v-model.trim="item.access_ding" @change="update_action(index, 1)"/>
                         <label for="">钉的方式：</label>
-                        <select class="box-side width300" name="ding_mode" v-model="item.ding_mode">
+                        <select class="box-side width300" name="ding_mode" v-model="item.ding_mode" @change="update_action(index)">
                             <option value="1">文本方式</option>
                             <option value="2">链接方式</option>
                         </select>
