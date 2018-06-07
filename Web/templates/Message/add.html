@@ -2,29 +2,30 @@
     <ul>
         <li>
             <label for="">消息标签：</label>
-            <input class="box-side width300" id="message_tag" type="text"/>
+            <input class="box-side width300" type="text" v-model="tag_item.message_tag"/>
         </li>
         <li>
             <label for="">时间间隔：</label>
-            <input class="box-side width100" id="interval_time" type="text" placeholder="10-99999"/>
+            <input class="box-side width100" type="text" placeholder="10-99999" v-model.number="tag_item.interval_time"/>
         </li>
-        <label class="checkbox-inline"><input type="checkbox" name="email_notify"/>邮件通知</label>
-        <label class="checkbox-inline"><input type="checkbox" name="wx_notify"/>微信通知</label>
-        <label class="checkbox-inline" id="lab_ding_notify"><input type="checkbox" name="ding_notify"/>钉钉通知</label>
+        <label class="checkbox-inline"><input type="checkbox" v-model="tag_item.notify_email"/>邮件通知</label>
+        <label class="checkbox-inline"><input type="checkbox" v-model="tag_item.notify_wx"/>微信通知</label>
+        <label class="checkbox-inline"><input type="checkbox" v-model="tag_item.notify_ding"/>钉钉通知</label>
 
-        <div class="display_none" id="div_ding">
+        <div v-if="tag_item.notify_ding">
             <li>
                 <label for="">钉钉Token：</label>
-                <input class="box-side width600" id="access_ding" type="text"/>
+                <input class="box-side width600" type="text" v-model="tag_item.access_ding" @change="format_ding"/>
             </li>
             <li>
                 <label for="">钉的方式：</label>
-                <select class="box-side width300" id="ding_mode">
+                <select class="box-side width300" v-model="tag_item.ding_mode">
                     <option value="1">文本方式</option>
                     <option value="2" selected>链接方式</option>
                 </select>
             </li>
         </div>
     </ul>
+    <a v-if="need_login" class="btn btn-success btn-down api-newBtn margintop20" :href="login_url">未登录</a>
+    <button v-else class="btn btn-success btn-down api-newBtn margintop20" @click="action_new">新建</button>
 </div>
-<button class="btn btn-success btn-down api-newBtn" id="btn_new_tag">新建</button>

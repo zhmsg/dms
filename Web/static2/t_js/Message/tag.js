@@ -5,6 +5,7 @@
 var request_tag_flag = new Object();
 var g_tags_vm = null;
 var can_update_key = ["interval_time", "notify_mode", "access_ding", "ding_mode"];
+var notify_mode_dict = {"notify_email": 1, "notify_wx": 2, "notify_ding": 4};
 
 function f_access_ding(v){
     if (v.indexOf("access_token=") >= 0) {
@@ -13,11 +14,6 @@ function f_access_ding(v){
     return v;
 }
 
-function format_access_ding(el) {
-    var current_access_ding = f_access_ding(el.val());
-    el.val(current_access_ding);
-    return current_access_ding;
-}
 
 function prepare_update2(index)
 {
@@ -64,15 +60,14 @@ function show_msg(msg)
 
 function handler_tags(tags_data) {
     var data_len = tags_data.length;
-    var notify_mode = {"notify_email": 1, "notify_wx": 2, "notify_ding": 4};
     for(var i=0;i<data_len;i++){
         var t_item = tags_data[i];
         for(var j=0;j<can_update_key.length;j++) {
             var key = can_update_key[j];
             t_item["origin_" + key] = t_item[key];
         }
-        for (var key in notify_mode) {
-            t_item[key] = judge_include_value(t_item["notify_mode"], notify_mode[key])
+        for (var key in notify_mode_dict) {
+            t_item[key] = judge_include_value(t_item["notify_mode"], notify_mode_dict[key])
         }
         t_item["add_time"] = timestamp_2_datetime(t_item["insert_time"]);
         t_item.is_owner = $("#current_user_name").val() == t_item.user_name;
@@ -88,7 +83,6 @@ function judge_whether_update(index) {
     console.info(message_tag);
     var update_info = {"message_tag": message_tag};
     var has_update = false;
-    var notify_mode_dict = {"notify_email": 1, "notify_wx": 2, "notify_ding": 4};
     var notify_mode = 0;
     for (var key in notify_mode_dict) {
         if (now_item[key] == true) {
@@ -111,7 +105,6 @@ function judge_whether_update(index) {
         return update_info
     }
 }
-
 
 
 function start_update_tag2(index) {
@@ -139,51 +132,16 @@ function start_update_tag2(index) {
 }
 
 
-function add_tag() {
-    var message_tag = $("#message_tag").val();
-    if (message_tag.length <= 0) {
-        return;
-    }
-    var interval_time = $("#interval_time").val();
-    var notify_mode = 0;
-    var r_data = {"message_tag": message_tag, "interval_time": interval_time};
-    if ($("input[name='email_notify']").is(':checked')) {
-        notify_mode += 1;
-    }
-    if ($("input[name='wx_notify']").is(':checked')) {
-        notify_mode += 2;
-    }
-    if ($("input[name='ding_notify']").is(':checked')) {
-        notify_mode += 4;
-        var access_ding = format_access_ding($("#access_ding"));
-        var ding_mode = $("#ding_mode").val();
-        r_data["access_ding"] = access_ding;
-        r_data["ding_mode"] = ding_mode;
-    }
-    r_data["notify_mode"] = notify_mode;
-    var tag_url = $("#tag_url").val();
-    my_async_request2(tag_url, "POST", r_data);
-}
-
-function show_access_ding() {
-    var current_lab = $(this);
-    if (current_lab.find("input[name='ding_notify']").is(':checked')) {
-        $("#div_ding").show();
-    }
-    else {
-        $("#div_ding").hide();
-    }
-}
-
 $(document).ready(function () {
     var need_login = false;
+    var login_url = "/?next=" + location.pathname + location.search;
     if ($("#current_user_name").length <= 0) {
         var need_login = true;
     }
     var tag_vm = new Vue({
         el: "#t_tag",
         data: {
-            login_url: "/?next=" + location.pathname + location.search,
+            login_url: login_url,
             need_login: need_login,
             tags: []
         },
@@ -232,28 +190,47 @@ $(document).ready(function () {
         }
     });
     g_tags_vm = tag_vm;
-    if ($("#current_user_name").length <= 0) {
-        var t_name = "t_tag";
-        clear_table(t_name);
-        var login_link = $("<a>登录</a>");
-        var login_url = "/?next=" + location.href;
-        login_link.attr("href", login_url);
-        add_row_td(t_name, "未登录").append(login_link);
-        $("#btn_new_tag").text("未登录");
-        $("#btn_new_tag").click(function () {
-            location.href = login_url;
-        });
-    }
-    else {
+
+
+    var tag_item = {"message_tag": "", "interval_time": "", "notify_email": false, "notify_wx": false,
+        "notify_ding": false, "access_ding": "", "ding_mode": "1"};
+    var add_vm = new Vue({
+        el: "#div_add_tag",
+        data:{
+            login_url: login_url,
+            need_login: need_login,
+            tag_item: tag_item
+        },
+        methods:{
+            action_new: function(){
+                var tag_item = this.tag_item;
+                var message_tag = tag_item.message_tag;
+                if (message_tag.length <= 0) {
+                    return;
+                }
+                var interval_time = tag_item.interval_time;
+                var notify_mode = 0;
+                var r_data = {"message_tag": message_tag, "interval_time": interval_time};
+                for (var key in notify_mode_dict) {
+                    if (tag_item[key] == true) {
+                        notify_mode += notify_mode_dict[key];
+                    }
+                }
+                r_data["access_ding"] = tag_item.access_ding;
+                r_data["ding_mode"] = tag_item.ding_mode;
+                r_data["notify_mode"] = notify_mode;
+                var tag_url = $("#tag_url").val();
+                console.info(r_data);
+                my_async_request2(tag_url, "POST", r_data);
+            },
+            format_ding: function(){
+                this.tag_item.access_ding = f_access_ding(this.tag_item.access_ding);
+            }
+        }
+
+    });
+    if (need_login == false) {
         var tag_url = $("#tag_url").val();
         my_async_request2(tag_url, "GET", null, handler_tags);
-        $("#btn_new_tag").click(add_tag);
-        $("#lab_ding_notify").click(show_access_ding);
-        $("#interval_time").keyup(function () {
-            $("#interval_time").val(format_num($("#interval_time").val()));
-        });
-        $("#access_ding").change(function () {
-            format_access_ding($(this));
-        });
     }
 });
