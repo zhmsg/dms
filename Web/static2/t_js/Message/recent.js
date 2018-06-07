@@ -9,10 +9,11 @@ function load_message(vm)
         for (var i = 0; i < data.length; i++) {
             var item = data[i];
             item.show = false;
-            item.message_content = item.message_content.replace(/\n/g, "<br/>");
             if ("readable_content" in item) {
-                item.readable_content = item.readable_content.replace(/\n/g, "<br/>")
+                item.readable_content = item.readable_content.replace(/\n/g, "<br/>");
+                item.message_content = JSON.stringify(JSON.parse(item.message_content), null, 4)
             }
+            item.message_content = item.message_content.replace(/\n/g, "<br/>").replace(/ /g, "&nbsp;");
             item.publish_time = timestamp_2_datetime(item.publish_time, true);
             vm.messages.push(item);
         }
@@ -43,10 +44,6 @@ $(document).ready(function () {
             end: 10
         },
         methods: {
-            look_msg: function(index){
-                var show = this.messages[index].show;
-                this.messages[index].show = !show;
-            },
             load_more: function(){
                 console.info("start load more");
                 load_message(this);
