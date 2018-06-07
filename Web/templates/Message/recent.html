@@ -15,14 +15,15 @@
             <tr v-else-if="messages.length == 0">
                 <td class="text-center" colSpan="3">最近没有消息</td>
             </tr>
-            <tbody v-for="m_item in messages">
+            <tbody v-for="m_item in messages" style="border-top: none">
                 <tr>
                     <td>{{m_item.message_tag}}</td>
                     <td>{{m_item.publish_time}}</td>
                     <td><a v-on:click="m_item.show=!m_item.show" class="status_move">查看</a></td>
                 </tr>
                 <tr v-if="m_item.show">
-                    <td colspan="3" class="text-center">{{m_item.message_content}}</td>
+                    <td colspan="2">{{m_item.message_content}}</td>
+                    <td>{{m_item.readable_content}}</td>
                 </tr>
             </tbody>
         </table>
