@@ -15,7 +15,7 @@
             <tr v-else-if="messages.length == 0">
                 <td class="text-center" colSpan="3">最近没有消息</td>
             </tr>
-            <tbody v-for="m_item in messages" style="border-top: none">
+            <template v-for="m_item in messages">
                 <tr>
                     <td>{{m_item.message_tag}}</td>
                     <td>{{m_item.publish_time}}</td>
@@ -25,12 +25,10 @@
                     <td colspan="2" v-html="m_item.message_content"></td>
                     <td v-html="m_item.readable_content"></td>
                 </tr>
-            </tbody>
-            <tbody style="border-top: none">
+            </template>
             <tr v-if="can_load">
                 <td class="text-center" colSpan="3"><a class="status_move" @click="load_more">加载更多</a></td>
             </tr>
-            </tbody>
         </table>
         <input id="url_cache_messages" class="display_none" value="{{ url_cache_messages }}" />
     </div>
