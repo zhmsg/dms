@@ -41,6 +41,9 @@
                     </td>
                 </tr>
             </template>
+            <tr v-if="can_load">
+                <td class="text-center" colSpan="8"><a class="status_move" @click="load_more">加载更多</a></td>
+            </tr>
         </table>
     </div>
 </div>
