@@ -161,7 +161,7 @@ $(document).ready(function () {
             all_tags: [],
             suit_tags: [],
             tags: [],
-            can_load: true,
+            can_load: false,
             index: 0
         },
         methods: {
