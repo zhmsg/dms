@@ -1,21 +1,23 @@
-<div class="div_jy_query_ip" style="display: none">
+<div class="div_jy_query_ip" style="display: none" id="div_tool_ip" >
     <p class="bottom10">
-        <input class="form-control pull-left width300 margin10" id="input_ip" placeholder="{{ request_ip }}"
-               onkeyup="check_input_ip(this);" value="{{ request_ip }}">
-        <button class="btn btn-primary pull-left" id="btn_q_ip" disabled>查询</button>
+        <input class="form-control pull-left width300 margin10" placeholder="{{ request_ip }}" v-model="input_ip">
+        <button class="btn btn-primary pull-left" :disabled="ip_item.ip==''" @click="query_ip">查询</button>
         <span class="clear block"></span>
     </p>
-    <p>
-    <li>IP地址：<label id="ip_str">123.7.182.111</label></li>
-    <li>IP地址：<label id="ip_value">2064103023</label></li>
-    <li>IP归属地：<label id="ip_info1">河南洛阳</label></li>
-    <li>IP归属地：<label id="ip_info2">河南洛阳</label></li>
+    <li>IP地址：<label>{{ip_item.ip_str}}</label></li>
+    <li>IP地址：<label>{{ip_item.ip}}</label></li>
+    <li>IP归属地：<label>{{ip_item.info1}}</label></li>
+    <li>IP归属地：<label>{{ip_item.info2}}</label></li>
     <li>IP分组：<label id="ip_group"></label></li>
-    <li>加入分组：<select class="box-side margin10">
-        <option value="">自定义</option>
-    </select><input class="box-side width150 margin10"/>
-        <button class="btn btn-primary" id="btn_join">加入</button>
-    </li>
-    </p>
+    <div>
+        <li>加入分组：<select class="box-side margin10" v-model="group">
+            <option value="">自定义</option>
+            <option v-for="item in list_name" :value="item">{{item}}</option>
+        </select>
+            <input v-if="!group" class="box-side width150 margin10" v-model="group_name"/>
+            <button class="btn btn-primary"  @click="join_group">加入</button>
+        </li>
+    </div>
+    <input id="request_ip" class="display_none" value="{{ request_ip }}"/>
     <input id="ip_group_url" class="display_none" value="{{ ip_group_url }}"/>
 </div>
