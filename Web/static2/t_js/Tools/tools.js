@@ -40,6 +40,9 @@ $(document).ready(function(){
                     return false;
                 }
                 console.info(this.group_name);
+                var g_data = {"g_name": this.group_name, "ip_value": this.ip_item.ip};
+                var ip_group_url = $("#ip_group_url").val();
+                my_async_request2(ip_group_url, "POST", g_data);
             },
             query_ip: function(){
                 var ip_value = this.ip_item.ip;

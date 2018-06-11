@@ -39,3 +39,11 @@ def get_ip_group():
     db_items = ip_man.select(g_name=request.args.get("g_name"))
     return jsonify({"status": True, "data": db_items})
 
+
+@tools_view.route("/ip/group/", methods=["POST"])
+def add_ip_group():
+    data = request.json
+    g_name = data["g_name"]
+    ip_value = data["ip_value"]
+    exec_r = ip_man.insert_one(g_name, ip_value)
+    return jsonify({"status": True, "data": "success"})
