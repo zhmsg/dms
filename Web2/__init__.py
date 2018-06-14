@@ -217,36 +217,16 @@ class ErrorHandler(tornado.web.RequestHandler):
         return
 
 
-from tornado.concurrent import run_on_executor, Future
-from concurrent.futures import ThreadPoolExecutor
-from tornado.httpclient import AsyncHTTPClient
-import requests
-
-
 class PingHandler(BaseHandler):
     route_url = BaseHandler.route_url + "ping/"
-    executor = ThreadPoolExecutor(15)
 
-    @run_on_executor
     def sleep2(self, seconds):
         from time import sleep
 
         sleep(seconds)
         return "success"
 
-    def requests(self, *args, **kwargs):
-        http_cli = AsyncHTTPClient()
-        return http_cli.fetch(*args, **kwargs)
-        res = requests.get("http://127.0.0.1:2200/ping/", headers={"User-Agent": "jyrequests"})
-        return res.text
-
-    @tornado.web.asynchronous
-    @tornado.gen.coroutine
     def get(self):
-        http_cli = AsyncHTTPClient()
-        # res = yield http_cli.fetch("http://127.0.0.1:2200/ping/", headers={"User-Agent": "jyrequests"})
-        res = yield self.requests("http://127.0.0.1:2200/ping/", headers={"User-Agent": "jyrequests"})
-        print(res.body)
         self.jsonify({"status": True, "data": "ping %s success" % self.request.path})
         self.finish()
 
