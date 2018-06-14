@@ -21,10 +21,13 @@ class DB(object):
     def __init__(self, host="", mysql_user="dms", mysql_password="gene_ac252", mysql_db="dms"):
         if env == "Development":
             self.host = "172.16.110.10"
+            self.port = 3306
         elif env == "Production":
             self.host = "localhost"
+            self.port = 9536
         else:
-            self.host = "10.51.72.158"
+            self.host = "127.0.0.1"
+            self.port = 9536
         if host != "":
             self.host = host
         self.mysql_user = mysql_user
@@ -33,7 +36,7 @@ class DB(object):
         self.url = "mysql://%s:%s@%s/%s" % (self.mysql_user, self.mysql_password, self.host, self.db)
 
     def connect(self):
-        self.conn = MySQLdb.connect(host=self.host, port=3306, user=self.mysql_user,
+        self.conn = MySQLdb.connect(host=self.host, port=self.port, user=self.mysql_user,
                                     passwd=self.mysql_password, db=self.db, charset='utf8')
         self.cursor = self.conn.cursor()
         self.conn.autocommit(True)
