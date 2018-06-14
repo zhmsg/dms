@@ -30,6 +30,7 @@ class DB(object):
             self.port = 9536
         if host != "":
             self.host = host
+            self.port = 3306
         self.mysql_user = mysql_user
         self.mysql_password = mysql_password
         self.db = mysql_db
