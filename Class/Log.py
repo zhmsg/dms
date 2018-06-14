@@ -6,7 +6,7 @@ from Tools.Mysql_db import DB
 from Tools.TimeUUID import TimeStampUUID2
 from datetime import timedelta
 from time import time
-from Class import env
+from Class import env, jd_mysql_host, jd_mysql_db
 from Class.Task import TaskManager
 from Check import check_int, check_sql_character
 
@@ -22,8 +22,8 @@ class LogManager(object):
             service_mysql = "172.16.110.2"
             self.data_db_name = "clinic_basic"
         else:
-            service_mysql = "rdsikqm8sr3rugdu1muh3.mysql.rds.aliyuncs.com"
-            self.data_db_name = "clinic"
+            service_mysql = jd_mysql_host
+            self.data_db_name = jd_mysql_db
         self.db = DB(host=service_mysql, mysql_user="gener", mysql_password="gene_ac252", mysql_db=self.data_db_name)
         self.local_db = DB()
         self.api_log = "api_log_2"
