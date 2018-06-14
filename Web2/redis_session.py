@@ -24,8 +24,8 @@ class RedisSessionInterface:
     serializer = pickle
     session_class = RedisSession
 
-    def __init__(self, redis_host, prefix, cookie_domain, cookie_name):
-        redis = Redis(host=redis_host)
+    def __init__(self, redis_host, prefix, cookie_domain, cookie_name, redis_port):
+        redis = Redis(host=redis_host, port=redis_port)
         self.redis = redis
         self.prefix = prefix + ":"
         self.cookie_name = cookie_name

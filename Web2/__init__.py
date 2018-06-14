@@ -68,7 +68,8 @@ class TemplateRendering(object):
         return content
 
 
-session_interface = RedisSessionInterface(redis_host, session_id_prefix, cookie_domain, session_cookie_name)
+session_interface = RedisSessionInterface(redis_host, session_id_prefix, cookie_domain, session_cookie_name,
+                                          redis_port=redis_port)
 
 
 class BaseHandler(tornado.web.RequestHandler, TemplateRendering):

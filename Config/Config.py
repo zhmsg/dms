@@ -17,6 +17,7 @@ config = ConfigParser.ConfigParser()
 config.read("../config.conf")
 
 redis_host = config.get(current_env, "redis_host")
+redis_port = config.get(current_env, "redis_port")
 static_prefix_url = config.get(current_env, "static_prefix_url")
 company_ip_start = config.getint(current_env, "company_ip_start")
 company_ip_end = config.getint(current_env, "company_ip_end")
