@@ -215,28 +215,12 @@ class ErrorHandler(tornado.web.RequestHandler):
                 return self.write("Not Found")
         return
 
-from tornado import ioloop
-from tornado.concurrent import TracebackFuture
-
-def async(task, *args, **kwargs):
-    future = TracebackFuture()
-    callback = kwargs.pop("callback", None)
-    if callback:
-        ioloop.IOLoop.instance().add_future(future, lambda future: callback(future.result()))
-    result = task(*args, **kwargs)
-    ioloop.IOLoop.instance().add_callback(_on_result, result, future)
-    return future
-
-def _on_result(result, future):
-    if result:
-        future.set_result(result)
-    else:
-        ioloop.IOLoop.instance().add_callback(_on_result, result, future)
 
 from tornado.concurrent import run_on_executor, Future
 from concurrent.futures import ThreadPoolExecutor
 from tornado.httpclient import AsyncHTTPClient
 import requests
+
 
 class PingHandler(BaseHandler):
     route_url = BaseHandler.route_url + "ping/"
@@ -244,10 +228,6 @@ class PingHandler(BaseHandler):
 
     @run_on_executor
     def sleep2(self, seconds):
-        print("start")
-        from tornado.concurrent import Future
-
-        from tornado import ioloop
         from time import sleep
 
         sleep(seconds)
