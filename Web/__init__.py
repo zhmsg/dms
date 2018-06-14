@@ -23,7 +23,7 @@ ip = IPManager()
 control = ControlManager()
 my_email = MyEmailManager("/home/msg/conf/")
 dms_scheduler = BackgroundScheduler()
-redis = Redis(host=redis_host)
+redis = Redis(host=redis_host, port=redis_port)
 # job_store = SQLAlchemyJobStore(url=db.url)
 # dms_scheduler.add_jobstore(job_store)
 
