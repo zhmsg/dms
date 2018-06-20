@@ -20,8 +20,8 @@ class DevManager:
     def __init__(self):
         self.db = DB()
         if env == "Development":
-            service_mysql = "192.168.120.2"
-            self.data_db_name = "clinic_basic"
+            service_mysql = "172.16.110.4"
+            self.data_db_name = "jingd_clinic"
         else:
             service_mysql = "rdsikqm8sr3rugdu1muh3.mysql.rds.aliyuncs.com"
             self.data_db_name = "clinic"

@@ -104,6 +104,7 @@ class UserManager(object):
         try:
             res = requests.post(check_url, json={"account": user_name, "password": password})
         except requests.ConnectionError as ce:
+            print(ce)
             return False, u"暂时无法登录，请稍后重试"
         r = res.json()
         if r["status"] != 1:
