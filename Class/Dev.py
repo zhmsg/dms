@@ -23,11 +23,16 @@ class DevManager(object):
             service_mysql = "172.16.110.4"
             self.data_db_name = "jingd_clinic"
             self.port = 9536
+            self.user = "jingdr"
+            self.password = "JingD1017@@g"
         else:
             service_mysql = "rdsikqm8sr3rugdu1muh3421.mysql.rds.aliyuncs.com"
             self.data_db_name = "clinic"
             self.port = 3306
-        self.service_db = DB(host=service_mysql, mysql_user="jingdr", mysql_password="JingD1017@@g", mysql_db="information_schema", port=self.port)
+            self.user = "gene_app_r"
+            self.password = "APP_ac1711"
+        self.service_db = DB(host=service_mysql, mysql_user=self.user, mysql_password=self.password,
+                             mysql_db="information_schema", port=self.port)
         self.auth_role = "auth_role"
         self.operate_role = "operate_role"
         self.right_module = "right_module"
