@@ -15,17 +15,19 @@ temp_dir = tempfile.gettempdir()
 __author__ = 'ZhouHeng'
 
 
-class DevManager:
+class DevManager(object):
 
     def __init__(self):
         self.db = DB()
         if env == "Development":
             service_mysql = "172.16.110.4"
             self.data_db_name = "jingd_clinic"
+            self.port = 9536
         else:
-            service_mysql = "rdsikqm8sr3rugdu1muh3.mysql.rds.aliyuncs.com"
+            service_mysql = "rdsikqm8sr3rugdu1muh3421.mysql.rds.aliyuncs.com"
             self.data_db_name = "clinic"
-        self.service_db = DB(host=service_mysql, mysql_user="gener", mysql_password="gene_ac252", mysql_db="information_schema")
+            self.port = 3306
+        self.service_db = DB(host=service_mysql, mysql_user="jingdr", mysql_password="JingD1017@@g", mysql_db="information_schema", port=self.port)
         self.auth_role = "auth_role"
         self.operate_role = "operate_role"
         self.right_module = "right_module"

@@ -18,7 +18,7 @@ class DB(object):
     cursor = None
     _sock_file = ''
 
-    def __init__(self, host="", mysql_user="dms", mysql_password="gene_ac252", mysql_db="dms"):
+    def __init__(self, host="", mysql_user="dms", mysql_password="gene_ac252", mysql_db="dms", port=None):
         if env == "Development":
             self.host = "172.16.110.10"
             self.port = 3306
@@ -34,6 +34,8 @@ class DB(object):
         self.mysql_user = mysql_user
         self.mysql_password = mysql_password
         self.db = mysql_db
+        if port is not None:
+            self.port = port
         self.url = "mysql://%s:%s@%s/%s" % (self.mysql_user, self.mysql_password, self.host, self.db)
 
     def connect(self):
