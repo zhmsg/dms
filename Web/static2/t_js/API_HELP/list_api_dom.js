@@ -8,14 +8,7 @@ function Load_API_Module(data)
     var url_prefix = $("#url_prefix").val();
     for(var i=0;i<module_data.length;i++){
         var part_info = module_data[i];
-        var add_part_div = $('<div class="apiMode api-help-mode"></div>');
-        add_part_div.append('<div style="margin-bottom: 10px"><b>【' + part_info["part_desc"] + '】</b><br /></div>');
-        for(var j=0;j<part_info["module_list"].length;j++)
-        {
-            var module_info = part_info["module_list"][j];
-            add_part_div.append('<a id="a_module_' + module_info["module_no"] + '" href="' + url_prefix + '/?module_no=' + module_info["module_no"] +'">' + module_info["module_name"] + '</a>');
-        }
-        $("#div_module_list").append(add_part_div);
+        m_vm.modules_data.push(part_info);
         add_option("module_part", part_info["part_no"], part_info["part_name"]);
     }
 }
@@ -53,32 +46,8 @@ function Load_API_List(api_list, module_prefix)
     var t = $("#t_api_list");
     for(var i=0;i<api_list.length;i++){
         var api_info = api_list[i];
-        var tr_id = 'tr_' + api_info["api_no"];
-        var exist_tr = $("#" + tr_id);
-        if(exist_tr.length == 1){
-            exist_tr.html("");
-            var add_tr = exist_tr;
-        }
-        else {
-            var add_tr = $("<tr id='" + tr_id + "'></tr>");
-        }
-        if(api_info["api_path"] == "/ping/"){
-            t.find("tr:first").after(add_tr);
-        }
-        else
-            t.append(add_tr);
-        api_info["api_url"] = escape(rTrim(module_prefix, "/") + "/" + lTrim(api_info["api_path"], "/"));
-        var keys = ["api_title", "api_url", "api_method", "stage"];
-        for(var j=0;j<keys.length;j++){
-            var key = keys[j];
-            add_tr.append(new_td(key, api_info));
-        }
-        add_tr.append('<td class="text-center"><a href="' + url_prefix + '/info/?api_no=' + api_info["api_no"] + '">查看</a> | <a href="' + url_prefix + '/test/?api_no=' + api_info["api_no"] + '">测试</a></td>');
-        if(api_info["update_recent"] == true) {
-            var title_td = add_tr.find("td:first");
-            title_td.text(title_td.text() + "【最近更新】");
-            title_td.addClass("zongheBg");
-        }
+        api_info["api_url2"] = rTrim(module_prefix, "/") + "/" + lTrim(api_info["api_path"], "/");
+        api_vm.api_list.push(api_info);
     }
     if(api_list.length > 10){
         $("#a_query_list").show();
@@ -86,14 +55,6 @@ function Load_API_List(api_list, module_prefix)
     else{
         $("#a_query_list").hide();
     }
-    $("td[name='td_api_url']").each(function(){
-        $(this).addClass("status_move");
-        $(this).attr("title", "点击复制URL");
-        $(this).click(function(){
-           var url = $(this).text();
-            copy_text(url);
-        });
-    });
 }
 
 function Load_Care_Info(care_info){

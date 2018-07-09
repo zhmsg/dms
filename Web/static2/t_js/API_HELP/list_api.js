@@ -2,6 +2,8 @@
  * Created by msg on 3/18/16.
  */
 
+var m_vm = null;
+var api_vm = null;
 
 function change_care() {
     if ($("#make_care").text() == "关注")
@@ -109,6 +111,32 @@ function Get_API_List(module_no)
 
 
 $(function(){
+    var url_prefix = $("#url_prefix").val();
+    m_vm = new Vue({
+        el: "#div_module_list",
+        data: {
+            url_prefix: url_prefix,
+            modules_data: []
+        },
+        methods: {
+            to_module: function(module_no){
+                var url = url_prefix + '/?module_no=' + module_no;
+                location.href = url;
+            }
+        }
+    });
+    api_vm = new Vue({
+        el: "#t_api_list",
+        data: {
+            url_prefix: url_prefix,
+            api_list: []
+        },
+        methods: {
+            to_copy: function(content){
+                copy_text(content);
+            }
+        }
+    });
     $("#btn_op_module").click(function(){
         var body_param = new Object();
         var method = "POST";

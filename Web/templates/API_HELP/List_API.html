@@ -14,6 +14,15 @@
     API模块列表 开始
     -->
     <div id="div_module_list">
+        <div class="apiMode api-help-mode" v-for="part in modules_data">
+            <div style="margin-bottom: 10px">
+                <b>【{{part["part_desc"]}}】</b>
+                <br />
+                <template v-for="item in part.module_list">
+                    <a class="status_move" @click="to_module(item.module_no)" :id="'a_module_' + item.module_no">{{item["module_name"]}}</a>
+                </template>
+            </div>
+        </div>
     </div>
     <!--
         更新 或 新建 API模块信息
@@ -37,7 +46,8 @@
                 </li>
                 <li>
                     <label class="api-describe" for="">所属分类：</label>
-                    <select class="box-side" id="module_part" required>
+                        <select class="box-side" id="module_part" required>
+
                     </select>
                 </li>
                 <li>
@@ -85,6 +95,17 @@
                 <th scope="col" width="8%">请求方式</th>
                 <th scope="col" width="7%">API状态</th>
                 <th class="text-center" scope="col" width="10%">操作</th>
+            </tr>
+            <tr v-for="item in api_list">
+                <td v-if="item['update_recent']" class="zongheBg" @click="to_copy(item.api_title)">{{item["api_title"]}}【最近更新】</td>
+                <td v-else @click="to_copy(item.api_title)">{{item["api_title"]}}</td>
+                <td @click="to_copy(item.api_url2)" title="点击复制URL" class="status_move">{{item["api_url2"]}}</td>
+                <td>{{item["api_method"]}}</td>
+                <td>{{item["stage"]}}</td>
+                <td>
+                    <a :href="url_prefix + '/info/?api_no=' + item.api_no">查看</a>
+                    |
+                    <a :href="url_prefix + '/test/?api_no=' + item.api_no">测试</a></td>
             </tr>
         </table>
         <div id="div_api_new_add_api" style="display: none">
