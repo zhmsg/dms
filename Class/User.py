@@ -109,15 +109,16 @@ class UserManager(object):
         r = res.json()
         if r["status"] != 1:
             return False, r["message"]
-        select_sql = "SELECT user_name,role,tel,wx_id FROM %s WHERE user_name='%s';" % (self.user, r["data"]["account"])
-        result = self.db.execute(select_sql)
-        if result <= 0:
+        cols = ["user_name", "role", "tel", "wx_id"]
+        where_value = dict(user_name=r["data"]["account"])
+        items = self.db.execute_select(self.user, where_value=where_value, cols=cols)
+        if len(items) <= 0:
             r["data"]["role"] = 0
             return True, r["data"]
-        db_r = self.db.fetchone()
-        role = db_r[1]
-        dms_tel = db_r[2]
-        dms_wx = db_r[3]
+        db_r = items[0]
+        role = db_r["role"]
+        dms_tel = db_r["tel"]
+        dms_wx = db_r["wx_id"]
         if dms_tel != r["data"]["tel"]:
             self._update_user(user_name, tel=r["data"]["tel"])
         if dms_wx != r["data"]["wx_id"]:
