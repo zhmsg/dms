@@ -102,8 +102,7 @@ class ArticleManager(object):
         # 获得read_times前10篇
         # 获得self_read_times前10篇文章
         # 获得最近有人读的前10篇
-        # 获得最新更新的文章10篇
-        cols = ['article_no']
+        cols = ['article_no', 'read_times', 'self_read_times', 'update_times']
         items1 = self.db.execute_select(self.t_statistics, cols=cols, limit=10, order_by=["read_times"],
                                         order_desc=True)
         items2 = self.db.execute_select(self.t_statistics, cols=cols, limit=10, order_by=["self_read_times"],
@@ -111,21 +110,52 @@ class ArticleManager(object):
         items3 = self.db.execute_select(self.t_statistics, cols=cols, limit=10, order_by=["update_times"],
                                         order_desc=True)
         # 交叉合并
-        nos1 = map(lambda x: x["article_no"], items1)
-        nos2 = map(lambda x: x["article_no"], items2)
-        nos3 = map(lambda x: x["article_no"], items3)
-        nos = list(chain(zip(nos1, nos2, nos3)))
-        where_value = dict(article_no=nos)
-        cols = ["article_no", "user_name", "title", "abstract", "update_time"]
-        items = self.db.execute_multi_select(self.t_info, where_value=where_value, cols=cols)
-        return True, items
+        items = list(chain.from_iterable(zip(items1, items2, items3)))
+        if len(items) > 0:
+            nos = map(lambda x: x["article_no"], items)
+            where_value = dict(article_no=nos)
+            cols = ["article_no", "user_name", "title", "abstract", "update_time"]
+            data = self.db.execute_multi_select(self.t_info, where_value=where_value, cols=cols)
+            index = 0
+            i_index = 0
+            while index < len(data) and i_index < len(items):
+                if data[index]["article_no"] == items[i_index]["article_no"]:
+                    data[index].update(items[i_index])
+                    index += 1
+                    i_index += 1
+                else:
+                    i_index += 1
+            return True, data
+        # 获得最新更新的文章10篇
+        return True, []
 
     def query_article(self, **kwargs):
-        return self.top_20_article()
-        where_cond = []
-        where_cond_args = []
-        if "title" in kwargs:
-            where_cond.append("title like %%%s%%")
-            where_cond_args.append(kwargs["title"])
-        db_items = self._select_info(None, where_cond, where_cond_args)
-        return True, db_items
+        if "query_str" not in kwargs:
+            return self.top_20_article()
+        cols = ["article_no", "user_name", "title", "abstract", "update_time"]
+        sql = "SELECT {0} FROM article_info WHERE MATCH(title, abstract) AGAINST(%s);".format(",".join(cols))
+        self.db.execute(sql, args=[kwargs["query_str"]], auto_close=False)
+        items = self.db.fetchall()
+        data = []
+        nos = []
+        for item in items:
+            d_item = dict()
+            for i in range(len(cols)):
+                d_item[cols[i]] = item[i]
+            nos.append(d_item["article_no"])
+            data.append(d_item)
+        if len(data) > 0:
+            cols = ['article_no', 'read_times', 'self_read_times', 'update_times']
+            where_value = dict(article_no=nos)
+            s_items = self.db.execute_multi_select(self.t_statistics, where_value=where_value, cols=cols)
+            index = 0
+            s_index = 0
+            while index < len(data) and s_index < len(s_items):
+                if s_items[s_index]["article_no"] == data[index]["article_no"]:
+                    s_items[s_index].update(data[index])
+                    index += 1
+                    s_index += 1
+                else:
+                    index += 1
+            return True, s_items
+        return True, []

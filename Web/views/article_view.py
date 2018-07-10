@@ -59,7 +59,10 @@ def update_article_action():
 @article_view.route("/query/", methods=["GET"])
 def query_func():
     if request.is_xhr is True:
-        exec_r, articles = control.query_article(g.user_name, g.user_role)
+        kwargs = dict()
+        if "query_str" in request.args:
+            kwargs["query_str"]= request.args["query_str"]
+        exec_r, articles = control.query_article(g.user_name, g.user_role, **kwargs)
         return jsonify({"status": exec_r, "data": articles})
     url_add_article = url_prefix + "/"
     return rt.render("query.html", url_add_article=url_add_article)
