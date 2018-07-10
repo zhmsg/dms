@@ -16,7 +16,7 @@ class OthersManager(object):
         insert_time = int(time())
         result_no = int(time() * 1000)
         kwargs = dict(result_no=result_no, other_type=other_type, result_info=result_info, insert_time=insert_time)
-        l = self.db.execute_insert(self.t_others_r, args=kwargs)
+        l = self.db.execute_insert(self.t_others_r, kwargs=kwargs)
         return True, l
 
     def select_others_info(self, other_type):

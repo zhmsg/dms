@@ -2,6 +2,7 @@
 # coding: utf-8
 __author__ = 'ZhouHeng'
 
+from itertools import chain
 from time import time
 import uuid
 from Tools.Mysql_db import DB
@@ -16,17 +17,17 @@ class ArticleManager(object):
 
     def insert_info(self, article_no, user_name, title, abstract):
         kwargs = dict(article_no=article_no, user_name=user_name, title=title, abstract=abstract, update_time=time())
-        l = self.db.execute_insert(self.t_info, args=kwargs)
+        l = self.db.execute_insert(self.t_info, kwargs=kwargs)
         return l
 
     def insert_content(self, article_no, content):
         kwargs = dict(article_no=article_no, content=content, insert_time=time())
-        l = self.db.execute_insert(self.t_content, args=kwargs)
+        l = self.db.execute_insert(self.t_content, kwargs=kwargs)
         return l
 
     def insert_statistics(self, article_no):
         kwargs = dict(article_no=article_no, update_times=1, read_times=0, self_read_times=1, comment_num=0)
-        l = self.db.execute_insert(self.t_statistics, args=kwargs)
+        l = self.db.execute_insert(self.t_statistics, kwargs=kwargs)
         return l
 
     def new_article(self, user_name, title, abstract, content):
@@ -97,7 +98,30 @@ class ArticleManager(object):
             self._update_statistics(article_no, "self_read_times")
         return True, article_info
 
+    def top_20_article(self):
+        # 获得read_times前10篇
+        # 获得self_read_times前10篇文章
+        # 获得最近有人读的前10篇
+        # 获得最新更新的文章10篇
+        cols = ['article_no']
+        items1 = self.db.execute_select(self.t_statistics, cols=cols, limit=10, order_by=["read_times"],
+                                        order_desc=True)
+        items2 = self.db.execute_select(self.t_statistics, cols=cols, limit=10, order_by=["self_read_times"],
+                                        order_desc=True)
+        items3 = self.db.execute_select(self.t_statistics, cols=cols, limit=10, order_by=["update_times"],
+                                        order_desc=True)
+        # 交叉合并
+        nos1 = map(lambda x: x["article_no"], items1)
+        nos2 = map(lambda x: x["article_no"], items2)
+        nos3 = map(lambda x: x["article_no"], items3)
+        nos = list(chain(zip(nos1, nos2, nos3)))
+        where_value = dict(article_no=nos)
+        cols = ["article_no", "user_name", "title", "abstract", "update_time"]
+        items = self.db.execute_multi_select(self.t_info, where_value=where_value, cols=cols)
+        return True, items
+
     def query_article(self, **kwargs):
+        return self.top_20_article()
         where_cond = []
         where_cond_args = []
         if "title" in kwargs:

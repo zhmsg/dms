@@ -26,7 +26,7 @@ class DyUpsManager(object):
     def insert_server_nodes(self, upstream_name, server_ip, server_port, adder):
         kwargs = dict(upstream_name=upstream_name, server_ip=server_ip, server_port=server_port, adder=adder)
         kwargs["insert_time"] = int(time())
-        l = self.db.execute_insert(self.t_server, args=kwargs, ignore=True)
+        l = self.db.execute_insert(self.t_server, kwargs=kwargs, ignore=True)
         return l
 
     def delete_server_nodes(self, upstream_name, server_ip, server_port, adder):

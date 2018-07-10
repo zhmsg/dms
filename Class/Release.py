@@ -57,7 +57,7 @@ class ReleaseManager:
         status_info = "%s1" % int(time())
         args = dict(release_no=release_no, user_name=user_name, reason=reason, restart_service=restart_service,
                     reason_desc=reason_desc, status_info=status_info)
-        result = self.db.execute_insert(self.release_task, args=args, ignore=True)
+        result = self.db.execute_insert(self.release_task, kwargs=args, ignore=True)
         if result <= 0:
             return False, u"任务已存在"
         return True, args

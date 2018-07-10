@@ -35,7 +35,7 @@ class PullRequestManager:
         request_info["repository"] = kwargs["repository"][:50]
         request_info["user_name"] = kwargs.get("user_name")
         request_info["real_name"] = kwargs.get("real_name")
-        self.db.execute_insert(self.t_git_hub, args=request_info)
+        self.db.execute_insert(self.t_git_hub, kwargs=request_info)
         return True
 
     def select_pull_request(self, action_no=None, **kwargs):

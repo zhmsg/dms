@@ -24,7 +24,7 @@ class TaskManager(object):
         status_info = "%s1" % int(time())
         args = dict(task_no=task_no, task_type=self.task_type, user_name=user_name, reason=reason,
                     reason_desc=reason_desc, status_info=status_info)
-        result = self.db.execute_insert(self.register_task, args=args, ignore=True)
+        result = self.db.execute_insert(self.register_task, kwargs=args, ignore=True)
         if result <= 0:
             return False, result
         return True, args
@@ -59,7 +59,7 @@ class TaskManager(object):
         update_time = int(time())
         args = dict(task_type=self.task_type, task_status=task_status, user_name=user_name, reason_desc=reason_desc,
                     update_time=update_time)
-        result = self.db.execute_insert(self.scheduler_status, args=args)
+        result = self.db.execute_insert(self.scheduler_status, kwargs=args)
         return True, result
 
     def update_scheduler_status(self, task_status, user_name, reason_desc):

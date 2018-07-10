@@ -38,7 +38,7 @@ class BugManager(object):
         bug_title = check_sql_character(bug_title)[:50]
         kwargs = {"bug_no": bug_no, "bug_title": bug_title, "submitter": submitter, "submit_time": submit_time,
                   "bug_level": bug_level}
-        result = self.db.execute_insert(self.bug, args=kwargs)
+        result = self.db.execute_insert(self.bug, kwargs=kwargs)
         if result != 1:
             return False, "sql execute result is %s " % result
         if bug_level == 0:
@@ -206,7 +206,7 @@ class BugManager(object):
 
     def insert_bug_reason(self, **kwargs):
         kwargs.update(dict(add_time=int(time())))
-        l = self.db.execute_insert(self.t_reason, args=kwargs, ignore=True)
+        l = self.db.execute_insert(self.t_reason, kwargs=kwargs, ignore=True)
         return True, kwargs
 
     def update_bug_reason(self, bug_no, submitter, reason):

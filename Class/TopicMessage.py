@@ -27,12 +27,12 @@ class MessageManager(object):
 
     def insert_topic_message(self, **kwargs):
         kwargs["insert_time"] = int(time())
-        l = self.db.execute_insert(self.t_msg, args=kwargs, ignore=True)
+        l = self.db.execute_insert(self.t_msg, kwargs=kwargs, ignore=True)
         return l
 
     def insert_user_tag(self, **kwargs):
         kwargs["update_time"] = kwargs["insert_time"] = time()
-        l = self.db.execute_insert(self.t_user_tag, args=kwargs, ignore=True)
+        l = self.db.execute_insert(self.t_user_tag, kwargs=kwargs, ignore=True)
         return l
 
     def update_user_tag(self, message_tag, user_name, **kwargs):

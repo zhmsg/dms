@@ -148,5 +148,5 @@ class DevManager(object):
     def insert_backup_table(self, t_name, adder):
         insert_data = dict(t_name=t_name, adder=adder, status=0)
         insert_data["insert_time"] = int(time())
-        l = self.db.execute_insert(self.t_backup, args=insert_data, ignore=True)
+        l = self.db.execute_insert(self.t_backup, kwargs=insert_data, ignore=True)
         return l

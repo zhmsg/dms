@@ -2,45 +2,17 @@
  * Created by msg on 3/22/17.
  */
 
+var q_vm = null;
+
 function handler_query_article(data) {
     console.info(data);
     var article_count = data.length;
-    //article_count = 0;
-    if (article_count <= 0) {
-        var no_article_div = $('<div class="paddingTop50 text-center">暂无文章显示 </div>');
-        var add_link = $("<a>添加文章</a>");
-        add_link.attr("href", $("#url_add_article").val());
-        no_article_div.append(add_link);
-        $("#article_container").append(no_article_div);
+    for (var i = 0; i < article_count; i++) {
+        var article_item = data[i];
+        article_item["time_text"] = timestamp_2_datetime(article_item["update_time"]) + "   [ 作者：" + article_item["user_name"] + " ]";
+        q_vm.articles.push(article_item);
     }
-    else {
-        var article_list = $('<div class="articleList"></>');
-        var current_user_name = "";
-        if ($("#current_user_name").length > 0) {
-            current_user_name = $("#current_user_name").val();
-        }
-        for (var i = 0; i < article_count; i++) {
-            var article_item = data[i];
-            var article_li = $("<li></li>");
-            var title_p = $('<p><a href="javascript:void(0)" target="_blank">' + article_item["title"] + '</a></p>');
-            title_p.find("a").attr("href", $("#url_add_article").val() + "?action=look&article_no=" + article_item["article_no"]);
-            article_li.append(title_p);
-            var abstract_p = $('<p></p>');
-            abstract_p.text(article_item["abstract"]);
-            article_li.append(abstract_p);
-            var time_p = $('<p></p>');
-            var time_text = timestamp_2_datetime(article_item["update_time"]) + "&nbsp;&nbsp;&nbsp;&nbsp;[ 作者：" + article_item["user_name"] + " ]";
-            time_p.html(time_text);
-            if (current_user_name == article_item["user_name"]) {
-                var update_a = $("<a>编辑</a>");
-                update_a.attr("href", $("#url_add_article").val() + "?article_no=" + article_item["article_no"]);
-                time_p.append($(update_a));
-            }
-            article_li.append(time_p);
-            article_list.append(article_li);
-        }
-        $("#article_container").append(article_list);
-    }
+
 }
 
 $(document).ready(function () {
@@ -78,4 +50,20 @@ $(document).ready(function () {
              }
         }
     });
+    var current_user_name = "";
+    if ($("#current_user_name").length > 0) {
+        current_user_name = $("#current_user_name").val();
+    }
+    var url_prefix= $("#url_add_article").val();
+    q_vm = new Vue({
+        el: "#article_list",
+        data: {
+            current_user_name: current_user_name,
+            url_prefix: url_prefix,
+            articles: []
+        },
+        methods: {
+
+        }
+    })
 });
