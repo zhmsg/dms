@@ -291,7 +291,7 @@ class HelpManager:
         # 获得关注列表
         select_sql = "SELECT module_no,c.user_name,care_time,nick_name,level,email FROM sys_user as su,%s as c " \
                      "WHERE su.user_name=c.user_name AND module_no='%s';" % (self.module_care, module_no)
-        self.db.execute(select_sql)
+        self.db.execute(select_sql, auto_close=False)
         care_info = []
         for item in self.db.fetchall():
             care_info.append({"module_no": item[0], "user_name": item[1], "care_time": item[2].strftime(TIME_FORMAT),
@@ -400,26 +400,27 @@ class HelpManager:
     def get_api_list(self, module_no):
         if type(module_no) != int:
             return False, "Bad module_no"
-        select_sql = "SELECT api_no,module_no,api_title,api_path,api_method,api_desc,stage,add_time,update_time FROM %s" \
-                     " WHERE module_no=%s AND stage<4 ORDER BY stage, api_path, api_method;" % (self.api_info, module_no)
-        self.db.execute(select_sql)
+        cols = ["api_no", "module_no", "api_title", "api_path", "api_method", "api_desc", "stage", "add_time",
+                "update_time"]
+        order_by = ["stage", "api_path", "api_method"]
+        items = self.db.execute_select(self.api_info, where_value=dict(module_no=module_no), order_by=order_by, cols=cols)
         api_list = []
         now_time = datetime.now()
         recent_seconds = 7 * 24 * 60 * 60
-        for item in self.db.fetchall():
-            if item[6] >= len(self.api_stage_desc) or item[6] < 0:
+        for item in items:
+            if item["stage"] >= len(self.api_stage_desc) or item["stage"] < 0 or item["stage"] >= 4:
                 continue
             update_recent = False
-            api_stage = self.api_stage_desc[item[6]]
-            if (now_time - item[7]).total_seconds() < recent_seconds:
-                update_recent = True
-            add_time = item[7].strftime(TIME_FORMAT)
-            if item[8] is not None and (now_time - item[8]).total_seconds() < recent_seconds:
-                update_recent = True
-            update_time = item[8].strftime(TIME_FORMAT) if item[8] is not None else ""
-            api_list.append({"api_no": item[0], "module_no": item[1], "api_title": item[2], "api_path": item[3],
-                             "api_method": item[4], "api_desc": item[5], "stage": api_stage, "add_time": add_time,
-                             "update_time": update_time, "update_recent": update_recent})
+            api_stage = self.api_stage_desc[item["stage"]]
+            # if (now_time - item["add_time"]).total_seconds() < recent_seconds:
+            #     update_recent = True
+            # item["add_time"] = item["add_time"].strftime(TIME_FORMAT)
+            # if item[8] is not None and (now_time - item[8]).total_seconds() < recent_seconds:
+            #     update_recent = True
+            # update_time = item[8].strftime(TIME_FORMAT) if item[8] is not None else ""
+            item["update_recent"] = update_recent
+            item["stage"] = api_stage
+            api_list.append(item)
         care_info = self.get_module_care_list(module_no)
         return True, {"api_list": api_list, "care_info": care_info, "module_info": {"module_no": module_no}}
 
