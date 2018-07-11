@@ -32,4 +32,6 @@ task_log_url = config.get(current_env, "task_log_url")
 sx_variant = config.get(current_env, "sx_variant")
 check_variant = [False]
 
+conf_dir = config.get(current_env, "conf_dir")
+
 user_blacklist = []

@@ -9,7 +9,7 @@ from flask_login import LoginManager, UserMixin, login_required
 from apscheduler.schedulers.background import BackgroundScheduler
 import apscheduler.events
 from Tools.Mysql_db import DB
-from Tools.MyEmail import MyEmailManager
+from JYTools import EmailManager
 from Class.Control import ControlManager
 from Function.Common import *
 
@@ -21,7 +21,7 @@ TIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 db = DB()
 ip = IPManager()
 control = ControlManager()
-my_email = MyEmailManager("/home/msg/conf/")
+my_email = EmailManager(conf_dir)
 dms_scheduler = BackgroundScheduler()
 redis = Redis(host=redis_host, port=redis_port)
 # job_store = SQLAlchemyJobStore(url=db.url)

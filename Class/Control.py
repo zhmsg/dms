@@ -6,7 +6,7 @@ import time
 from threading import Thread
 from datetime import datetime
 from Tools.Mysql_db import DB
-from Tools.MyEmail import MyEmailManager
+from JYTools import EmailManager
 from User import UserManager
 from Dev import DevManager
 from APIHelp import HelpManager
@@ -29,7 +29,7 @@ from Class import conf_dir
 
 __author__ = 'ZhouHeng'
 
-my_email = MyEmailManager(conf_dir)
+my_email = EmailManager(conf_dir)
 my_wx = WeiXinManager(wx_service)
 
 
