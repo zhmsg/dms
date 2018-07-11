@@ -263,7 +263,7 @@ class HelpManager:
             select_sql = " UNION ".join(union_sql_list)
         else:
             return False, "Bad env_no_list"
-        self.db.execute(select_sql)
+        self.db.execute(select_sql, auto_close=False)
         db_result = self.db.fetchall()
         env_info = []
         for item in db_result:
@@ -271,11 +271,8 @@ class HelpManager:
         return True, env_info
 
     def get_part_list(self, user_name):
-        select_sql = "SELECT part_no,part_name,part_desc,part_detail FROM %s;" % self.api_part_info
-        self.db.execute(select_sql)
-        part_list = []
-        for item in self.db.fetchall():
-            part_list.append({"part_no": item[0], "part_name": item[1], "part_desc": item[2], "part_detail": item[3]})
+        cols = ["part_no", "part_name", "part_desc", "part_detail"]
+        part_list = self.db.execute_select(self.api_part_info, cols=cols)
         return part_list
 
     def get_part_api(self, user_name):
@@ -286,14 +283,8 @@ class HelpManager:
         return True, part_list
 
     def get_module_list(self, part_no=None):
-        select_sql = "SELECT module_no,module_name,module_prefix,module_desc,module_part,module_env " \
-                     "FROM %s WHERE module_part=%s;" % (self.api_module, part_no)
-        self.db.execute(select_sql)
-        module_list = []
-        for item in self.db.fetchall():
-            info = {"module_no": item[0], "module_name": item[1], "module_prefix": item[2], "module_desc": item[3],
-                    "module_part": item[4], "module_env": item[5]}
-            module_list.append(info)
+        cols = ["module_no", "module_name", "module_prefix", "module_desc", "module_part", "module_env"]
+        module_list = self.db.execute_select(self.api_module, cols=cols, where_value=dict(module_part=part_no))
         return True, module_list
 
     def get_module_care_list(self, module_no):
