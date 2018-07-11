@@ -304,7 +304,7 @@ class HelpManager:
                           "update_time", "module_name", "module_prefix", "module_desc", "module_env", "stage")
         select_sql = "SELECT m.%s FROM %s AS i, api_module AS m WHERE i.module_no=m.module_no AND api_no='%s';" \
                      % (",".join(basic_info_col), self.api_info, api_no)
-        result = self.db.execute(select_sql)
+        result = self.db.execute(select_sql, auto_close=False)
         if result <= 0:
             return False, "Not Exist api_no"
         db_info = self.db.fetchone()
@@ -329,7 +329,7 @@ class HelpManager:
         # 获得关注列表
         select_sql = "SELECT api_no,c.user_name,care_time,nick_name,level,email FROM sys_user as su,%s as c " \
                      "WHERE su.user_name=c.user_name AND api_no='%s';" % (self.api_care, api_no)
-        self.db.execute(select_sql)
+        self.db.execute(select_sql, auto_close=False)
         care_info = []
         for item in self.db.fetchall():
             care_info.append({"api_no": item[0], "user_name": item[1], "care_time": item[2].strftime(TIME_FORMAT),
@@ -339,44 +339,37 @@ class HelpManager:
     def get_api_info(self, api_no):
         if len(api_no) != 32:
             return False, "Bad api_no"
+        where_value = dict(api_no=api_no)
         # get basic info
         result, basic_info = self.get_api_basic_info(api_no)
         if result is False:
             return False, basic_info
         # 获得请求头部参数列表
-        select_sql = "SELECT api_no,param,necessary,param_desc FROM %s WHERE api_no='%s' ORDER BY add_time;" \
-                     % (self.api_header, api_no)
-        self.db.execute(select_sql)
-        header_info = []
-        for item in self.db.fetchall():
-            necessary = True if item[2] == "\x01" else False
-            header_info.append({"api_no": item[0], "param": item[1], "necessary": necessary,
-                                "param_desc": item[3]})
+        cols = ["api_no", "param", "necessary", "param_desc"]
+        header_info = self.db.execute_select(self.api_header, where_value=where_value, cols=cols, order_by=["add_time"])
         # 获得请求主体参数列表
         body_cols = ["api_no", "param", "necessary", "type", "param_desc", "status", "add_time", "update_time"]
         body_info = self.db.execute_select(self.api_body, where_value=dict(api_no=api_no), order_by=["add_time"],
                                            cols=body_cols)
         # 获得预定义参数列表
-        select_sql = "SELECT param,param_type FROM %s WHERE api_no='%s' ORDER BY add_time;" % (self.predefine_param, api_no)
-        self.db.execute(select_sql)
+        cols = ["param", "param_type"]
+        items = self.db.execute_select(self.predefine_param, cols=cols, where_value=where_value, order_by=["add_time"])
         predefine_param = {"header": [], "body": []}
-        for item in self.db.fetchall():
-            if item[1] in predefine_param:
-                predefine_param[item[1]].append(item[0])
+        for item in items:
+            if item["param_type"] in predefine_param:
+                predefine_param[item["param_type"]].append(item["param"])
         # 获得预定义头部参数信息
-        select_sql = "SELECT param,necessary,param_desc FROM %s;" % self.predefine_header
-        self.db.execute(select_sql)
+        cols = ["param", "necessary", "param_desc"]
+        items = self.db.execute_select(self.predefine_header, cols=cols)
         predefine_header = {}
-        for item in self.db.fetchall():
-            necessary = True if item[1] == "\x01" else False
-            predefine_header[item[0]] = {"param": item[0], "necessary": necessary, "param_desc": item[2]}
+        for item in items:
+            predefine_header[item["param"]] = item
         # 获得预定义头部主体信息
-        select_sql = "SELECT param,necessary,type,param_desc FROM %s;" % self.predefine_body
-        self.db.execute(select_sql)
+        cols = ["param", "necessary", "type", "param_desc"]
+        items = self.db.execute_select(self.predefine_body, cols=cols)
         predefine_body = {}
-        for item in self.db.fetchall():
-            necessary = True if item[1] == "\x01" else False
-            predefine_body[item[0]] = {"param": item[0], "type": item[2], "necessary": necessary, "param_desc": item[3]}
+        for item in items:
+            predefine_body[item["param"]] = item
         # 获得请求示例
         input_info = []
         # 获得返回示例
