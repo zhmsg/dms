@@ -51,7 +51,7 @@ class StatusManager:
         if check_special_character(function_desc) is False:
             return False, "Bad function_desc"
         select_sql = "SELECT MAX(function_id) FROM %s WHERE service_id=%s;" % (self.function_module, service_id)
-        result = self.db.execute(select_sql)
+        result = self.db.execute(select_sql, auto_close=False)
         if result == 0:
             function_id = 0
         else:
@@ -115,42 +115,40 @@ class StatusManager:
         return True, success_new
 
     def get_status_code(self, status_code=None):
-        select_sql = "SELECT status_code,code_desc,add_time,adder FROM %s" % self.status_code
-        args = []
+        cols = ["status_code", "code_desc", "add_time", "adder"]
         if status_code is not None:
-            select_sql += " WHERE status_code=%s"
-            args.append(status_code)
-        select_sql += ";"
-        self.db.execute(select_sql, args=args)
-        status_info = []
-        for item in self.db.fetchall():
-            status_info.append({"status_code": fill_zero(item[0], 8), "code_desc": item[1],
-                                "add_time": item[2].strftime(TIME_FORMAT), "adder": item[3]})
-        return True, status_info
+            where_value = dict(status_code=status_code)
+        else:
+            where_value = None
+        items = self.db.execute_select(self.status_code, where_value=where_value, cols=cols)
+        for item in items:
+            item["status_code"] = fill_zero(item["status_code"], 8)
+        return True, items
 
     def get_function_info(self):
-        select_sql = "SELECT service_id,service_title,service_desc FROM %s;" % self.service_module
-        self.db.execute(select_sql)
+        cols = ["service_id", "service_title", "service_desc"]
+        items = self.db.execute_select(self.service_module, cols=cols)
         module_info = {}
-        for item in self.db.fetchall():
-            service_id_s = fill_zero(item[0], 2)
-            module_info[service_id_s] = {"title": item[1], "desc": item[2], "fun_info": {}}
-        select_sql = "SELECT service_id,function_id,function_title,function_desc FROM %s;" % self.function_module
-        self.db.execute(select_sql)
-        for item in self.db.fetchall():
-            service_id_s = fill_zero(item[0], 2)
+        for item in items:
+            service_id_s = fill_zero(item["service_id"], 2)
+            module_info[service_id_s] = {"title": item["service_title"], "desc": item["service_desc"], "fun_info": {}}
+        cols = ["service_id", "function_id", "function_title", "function_desc"]
+        items = self.db.execute_select(self.function_module, cols=cols)
+        for item in items:
+            service_id_s = fill_zero(item["service_id"], 2)
             if service_id_s in module_info:
-                fun_id_s = fill_zero(item[1], 2)
-                module_info[service_id_s]["fun_info"][fun_id_s] = {"title": item[2], "desc": item[3]}
+                fun_id_s = fill_zero(item["function_id"], 2)
+                module_info[service_id_s]["fun_info"][fun_id_s] = {"title": item["function_title"],
+                                                                   "desc": item["function_desc"]}
         return True, module_info
 
     def get_error_type(self):
-        select_sql = "SELECT type_id,type_title,type_desc FROM %s;" % self.error_type
-        self.db.execute(select_sql)
-        type_info = {}
-        for item in self.db.fetchall():
-            type_id_s = fill_zero(item[0], 2)
-            type_info[type_id_s] = {"title": item[1], "desc": item[2]}
+        cols = ["type_id", "type_title", "type_desc"]
+        items = self.db.execute_select(self.error_type, cols=cols)
+        type_info = dict()
+        for item in items:
+            type_id_s = fill_zero(item["type_id"], 2)
+            type_info[type_id_s] = item
         return True, type_info
 
     def del_status_code(self, status_code):
