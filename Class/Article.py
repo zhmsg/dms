@@ -133,8 +133,9 @@ class ArticleManager(object):
         if "query_str" not in kwargs:
             return self.top_20_article()
         cols = ["article_no", "user_name", "title", "abstract", "update_time"]
-        sql = "SELECT {0} FROM article_info WHERE MATCH(title, abstract) AGAINST(%s);".format(",".join(cols))
-        self.db.execute(sql, args=[kwargs["query_str"]], auto_close=False)
+        sql = "SELECT {0} FROM article_info WHERE title LIKE %s OR abstract LIKE %s;".format(",".join(cols))
+        arg = u"%{0}%".format(kwargs["query_str"])
+        self.db.execute(sql, args=[arg, arg], auto_close=False)
         items = self.db.fetchall()
         data = []
         nos = []
