@@ -111,5 +111,5 @@ def release_online():
     control.release_online(service)
     return jsonify({"status": True, "data": "success"})
 
-dms_job.append({"func": "%s:system_auto_release" % __name__, "trigger": "cron", "id": "release_ih_daily",
-                "day_of_week": "0-4", "hour": "12", "minute": "10"})
+# dms_job.append({"func": "%s:system_auto_release" % __name__, "trigger": "cron", "id": "release_ih_daily",
+#                 "day_of_week": "0-4", "hour": "12", "minute": "10"})
