@@ -162,6 +162,6 @@ def query_barcode_func():
 @jing_du_view.route("/auth/code/", methods=["POST"])
 def new_auth_code():
     request_data = request.json
-    request_data.update(account=g.user_name, code_type="portal1", avail_time=1)
+    request_data.update(account=g.user_name, code_type="portal1", avail_times=1)
     exec_r, data = control.new_auth_code(g.user_name, g.user_role, **request_data)
     return jsonify({"status": exec_r, "data": data})
