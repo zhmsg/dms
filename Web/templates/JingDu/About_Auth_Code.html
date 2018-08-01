@@ -22,6 +22,16 @@
                     <th scope="col" width=7%">已用次数</th>
                     <th scope="col" width=10%">创建时间</th>
                 </tr>
+                <tr v-for="item in codes">
+                    <td>{{item.code}}</td>
+                    <td>{{item.code_type}}</td>
+                    <td>{{item.account}}</td>
+                    <td>{{item.start_time}}</td>
+                    <td>{{item.end_time}}</td>
+                    <td>{{item.avail_times}}</td>
+                    <td>{{item.used_times}}</td>
+                    <td>{{item.insert_time}}</td>
+                </tr>
             </table>
         </div>
     </div>

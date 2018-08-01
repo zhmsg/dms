@@ -150,4 +150,5 @@ class JingDuDataManager(object):
         r_data = resp.json()
         if r_data["status"] % 10000 > 100:
             return False, r_data["message"]
+        r_data["data"]["used_times"] = 0
         return True, r_data["data"]
