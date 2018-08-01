@@ -7,13 +7,22 @@
     <br>
     <a class="btn btn-primary pull-right" href="{{ api_info_url }}?api_no={{ api_no }}" title="">API信息</a>
     <div class="margin20 apiTest">
-        <p>
-            <span class="pull-left text-right width150">服务环境：</span>
-            <select class="form-control bug-input" id="test_env" onchange="update_request_url();">
-                {% for env in module_test_env %}
-                    <option value="{{ env["env_address"] }}">{{ env["env_name"] }}</option>
-                {% endfor %}
-            </select>
+        <p id="p_env">
+            <label class="display_none" id="lab_env_data">{{ module_test_env | tojson | safe }}</label>
+            <input class="display_none" id="test_env" :value="use_env"/>
+
+            <template v-if="custom_env">
+                <span class="pull-left text-right width150">自定义环境：</span>
+                <input class="form-control pull-left bug-input" id="i_test_env" v-model.trim="use_env"/>
+            </template>
+            <template v-else>
+                <span class="pull-left text-right width150">服务环境：</span>
+                <select class="form-control pull-left bug-input" id="s_test_env" v-model="use_env">
+                    <option v-for="env in all_env" :value="env.env_address">{{env["env_name"]}}</option>
+                </select>
+            </template>
+            <span class="pull-left"><input type="checkbox" v-model="custom_env"/> 自定义</span>
+            <span class="clear"></span>
         </p>
         <p>
             <span class="pull-left text-right width150">API模块：</span>

@@ -121,9 +121,14 @@ function update_res(s){
     $("#res_text").text(s);
 }
 
-function update_request_url(){
-    var test_env = $("#test_env").val();
-    if(test_env == null){
+function update_request_url(env_address){
+    if(env_address == null) {
+        var test_env = $("#test_env").val();
+    }
+    else{
+        test_env = env_address;
+    }
+    if (test_env == null) {
         $("#request_url").val("");
         return;
     }
@@ -269,6 +274,24 @@ $(function(){
     $("#authorization_value").parent().after('<li><input type="checkbox" id="skip_auth"> Skip Auth</li>');
     $("#Content-Type_value").val("application/json");
     $("#btn_generating_code").click(generating_code);
+
+    var env_data = $("#lab_env_data").text();
+    var test_envs = JSON.parse(env_data);
+    console.info(test_envs);
+    var te_vm = new Vue({
+        el: "#p_env",
+        data: {
+            all_env: test_envs,
+            use_env: "",
+            custom_env: false
+        },
+        watch: {
+            use_env: function(val){
+                console.info(val);
+                update_request_url(val);
+            }
+        }
+    });
 });
 
 
