@@ -1,13 +1,13 @@
 gunicorn
 gevent
-Flask==0.11.1
+Flask
 Flask-Login
 MySQL-python
 pymongo
 requests
 xlwt
-Flask-APScheduler==1.4.0
-redis>=2.10.5
+Flask-APScheduler
+redis
 m2crypto
 JYAliYun
 Fabric
