@@ -24,11 +24,12 @@ function get_module_info() {
 }
 
 function get_error_type_success(data){
-    error_type = data.data;
+    console.info(data);
+    error_type = data;
 }
 function get_error_type() {
     var request_url = $("#error_type_url").val();
-    my_async_request(request_url, "GET", null, get_error_type_success);
+    my_request2(request_url, "GET", null, get_error_type_success);
 }
 
 function set_service_id(){
@@ -56,7 +57,7 @@ function set_error_type(){
     var select_obj = $("#type_id");
     select_obj.empty();
     for(var key in error_type){
-        add_option("type_id", key, error_type[key].title, error_type[key].title);
+        add_option("type_id", key, error_type[key].type_title, error_type[key].type_title);
     }
 }
 

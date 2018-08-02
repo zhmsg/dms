@@ -45,12 +45,12 @@ function get_error_type_success(data){
 
         var data = new Array();
         data[0] = key;
-        data[1] = error_type[key].title;
+        data[1] = error_type[key].type_title;
         data[2] = error_type[key].desc;
         error_row[i] = data;
         i++;
-        if(error_type[key].title.indexOf("参数") >= 0) {
-            var new_cb = new_checkbox("error_type_" + key, "preview_status_code", error_type[key].title);
+        if(error_type[key].type_title.indexOf("参数") >= 0) {
+            var new_cb = new_checkbox("error_type_" + key, "preview_status_code", error_type[key].type_title);
             $("#p_status_prefix").append(new_cb);
         }
     }
