@@ -41,7 +41,12 @@ function set_look_link()
     if (article_no.length == 32) {
         $("#link_look").show();
         var look_url = location.origin + location.pathname + "?&action=look&article_no=" + article_no;
-        $("#link_look").attr("href", look_url);
+        $("#link_look").click(function () {
+            var r = $("#btn_save").click();
+            if(r == true){
+                location.href = look_url;
+            }
+        });
     }
     else{
         $("#link_look").hide();
@@ -76,6 +81,7 @@ $(document).ready(function () {
         var r_url = location.href;
         my_async_request2(r_url, method, r_data, handler);
         $("#auto").val("1");
+        return true;
     });
     set_look_link();
 });
