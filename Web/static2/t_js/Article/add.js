@@ -42,7 +42,7 @@ function set_look_link()
         $("#link_look").show();
         var look_url = location.origin + location.pathname + "?&action=look&article_no=" + article_no;
         $("#link_look").click(function () {
-            var r = $("#btn_save").click();
+            var r = btn_action_save();
             if(r == true){
                 location.href = look_url;
             }
@@ -51,6 +51,27 @@ function set_look_link()
     else{
         $("#link_look").hide();
     }
+}
+
+function btn_action_save(){
+    var title = $("#article_title").val();
+    if (title.length < 3) {
+        alert1("标题不可少于3个字符");
+        return;
+    }
+    var content = ue.getContent();
+    var abstract = ue.getContentTxt().substr(0, 400);
+    var article_no = $("#article_no").val();
+    var method = "POST";
+    var r_data = {"content": content, "abstract": abstract, "title": title};
+    if (article_no.length == 32) {
+        r_data["article_no"] = article_no;
+        method = "PUT";
+    }
+    var r_url = location.href;
+    my_async_request2(r_url, method, r_data, handler);
+    $("#auto").val("1");
+    return true;
 }
 
 $(document).ready(function () {
@@ -64,24 +85,7 @@ $(document).ready(function () {
     });
     window.setInterval(save_article, 60000);
     $("#btn_save").click(function () {
-        var title = $("#article_title").val();
-        if (title.length < 3) {
-            alert1("标题不可少于3个字符");
-            return;
-        }
-        var content = ue.getContent();
-        var abstract = ue.getContentTxt().substr(0, 400);
-        var article_no = $("#article_no").val();
-        var method = "POST";
-        var r_data = {"content": content, "abstract": abstract, "title": title};
-        if (article_no.length == 32) {
-            r_data["article_no"] = article_no;
-            method = "PUT";
-        }
-        var r_url = location.href;
-        my_async_request2(r_url, method, r_data, handler);
-        $("#auto").val("1");
-        return true;
+        btn_action_save();
     });
     set_look_link();
 });
