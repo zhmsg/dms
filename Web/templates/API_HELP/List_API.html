@@ -50,13 +50,19 @@
 
                     </select>
                 </li>
-                <li>
+                <li id="li_test_env">
                     <label class="api-describe" for="">调用环境：</label>
-                    <select class="box-side" id="s_add_env">
+                    <select class="box-side" id="s_add_env" v-model="selected_index">
+                        <template v-for="(item, index) in all_env">
+                            <option v-if="item.selected==false" :value="index" :title="item.env_address">{{item.env_name}}</option>
+                        </template>
                     </select>
-                    <span class="symbol" onclick="add_test_env();">+</span>
+                    <span class="symbol" @click="select">+</span>
 
                     <div class="tag" id="div_add_env">
+                        <template v-for="(item, index) in all_env">
+                            <span v-if="item.selected==true" :value="item.env_no" :title="item.env_address">{{item.env_name}}<b @click="cancel_select(index)">X</b></span>
+                        </template>
                     </div>
                 </li>
             </ul>

@@ -33,8 +33,11 @@ function Load_Module_Info(load_type){
         $("#div_add_env span").click();
         var test_envs = current_module["module_env"].split("|");
         for(var i=0;i<test_envs.length;i++){
-            $("#s_add_env").val(test_envs[i]);
-            add_test_env();
+            for(var j=0;j<env_vm.all_env.length;j++){
+                if(test_envs[i] == env_vm.all_env[j].env_no){
+                    env_vm.all_env[j].selected = true;
+                }
+            }
         }
     }
 }
@@ -68,14 +71,5 @@ function Load_Care_Info(care_info){
         else {
             $("#module_care_user").append('<span>' + care_info[i]["nick_name"] + '</span>');
         }
-    }
-}
-
-
-function Load_Test_Env(data){
-    var env_list = data.data;
-    for(var i=0;i<env_list.length;i++){
-        var one_env = env_list[i];
-        add_option("s_add_env", one_env["env_no"], one_env["env_name"], one_env["env_address"]);
     }
 }

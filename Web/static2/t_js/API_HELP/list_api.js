@@ -4,6 +4,7 @@
 
 var m_vm = null;
 var api_vm = null;
+var env_vm = null;
 
 function change_care() {
     if ($("#make_care").text() == "关注")
@@ -37,30 +38,6 @@ function new_care() {
 function remove_care() {
     var change_url = $("#care_url").val();
     my_async_request(change_url, "DELETE", null, change_care_success);
-}
-
-function add_test_env(){
-    var env = $("#s_add_env option:selected");
-    var env_no = env.val();
-    var env_name = env.text();
-    var env_address = env.attr("title");
-    var new_span = $("<span></span>");
-    new_span.attr("title", env_address);
-    new_span.attr("value", env_no);
-    new_span.attr("about", env_name);
-    new_span.append(env_name);
-    new_span.append("<b>X</b>");
-    new_span.click(remove_test_env);
-    $("#div_add_env").append(new_span);
-    env.remove();
-}
-
-function remove_test_env(){
-    var env_address = this.title;
-    var env_name = $(this).attr("about");
-    var env_no = $(this).attr("value");
-    this.remove();
-    add_option("s_add_env", env_no, env_name, env_address);
 }
 
 
@@ -137,6 +114,31 @@ $(function(){
             }
         }
     });
+
+    env_vm = new Vue({
+        el: "#li_test_env",
+        data: {
+            all_env: [],
+            selected_index: 0,
+            use_env: []
+        },
+        methods: {
+            select: function(){
+                this.all_env[this.selected_index].selected = true;
+                for(var i=0;i<this.all_env.length;i++){
+                    if(this.all_env[i].selected==false){
+                        this.selected_index = i;
+                        break;
+                    }
+                }
+            },
+            cancel_select: function(index){
+                this.all_env[index].selected = false;
+                this.selected_index = index;
+            }
+        }
+    });
+
     $("#btn_op_module").click(function(){
         var body_param = new Object();
         var method = "POST";
@@ -157,14 +159,19 @@ $(function(){
         var request_url = $("#module_url").val();
         my_request(request_url, method, body_param, new_module_success);
     });
-    $("#div_add_env").find("span").click(remove_test_env);
+
 
     var current_user_role = parseInt($("#current_user_role").val());
     var role_value = JSON.parse($("#role_value").text());
     if(bit_and(current_user_role, role_value["api_new"])){
         $("div[id^='div_api_new_']").show();
         var test_env_url = $("#test_env_url").val();
-        my_async_request(test_env_url, "GET", null, Load_Test_Env)
+        my_async_request2(test_env_url, "GET", null, function (data) {
+            for(var i=0;i<data.length;i++){
+                data[i].selected = false;
+                env_vm.all_env.push(data[i]);
+            }
+        });
     }
 
     var request_url = $("#module_url").val();
