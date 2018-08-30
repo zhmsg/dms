@@ -118,7 +118,9 @@ $(function(){
         data: {
             current_module: current_module,
             all_env: [],
-            selected_index: 0
+            selected_index: 0,
+            create_env: false,
+            env_obj: {"env_name": "", "env_address": "http://"}
         },
         methods: {
             select: function(){
@@ -133,6 +135,10 @@ $(function(){
             cancel_select: function(index){
                 this.all_env[index].selected = false;
                 this.selected_index = index;
+            },
+            new_env: function(){
+                var env_obj = this.env_obj;
+                alert1("请输入环境名");
             },
             op_module: function(){
                 var body_param = env_vm.current_module;
