@@ -118,6 +118,13 @@ def get_test_env():
     return jsonify({"status": result, "data": env_info})
 
 
+@develop_test_view.route("/env/", methods=["POST"])
+def add_test_env():
+    r_data = request.json
+    result, env_info = control.new_test_env(g.user_role, r_data["env_name"], r_data["env_address"])
+    return jsonify({"status": result, "data": env_info})
+
+
 @develop_test_view.route("/case/", methods=["POST"])
 @referer_api_no
 def add_test_case():
