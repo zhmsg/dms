@@ -23,14 +23,6 @@ function Load_Module_Info(load_type){
     else{
         $("#div_api_list").hide();
         $("#div_api_new_add").show();
-        $("#module_no").val(current_module["module_no"]);
-        $("#module_name").val(current_module["module_name"]);
-        $("#module_prefix").val(current_module["module_prefix"]);
-        $("#module_desc").text(current_module["module_desc"]);
-        console.info(current_module);
-        $("#module_part").val(current_module["module_part"]);
-        $("#btn_op_module").text("更新模块");
-        $("#div_add_env span").click();
         var test_envs = current_module["module_env"].split("|");
         for(var i=0;i<test_envs.length;i++){
             for(var j=0;j<env_vm.all_env.length;j++){

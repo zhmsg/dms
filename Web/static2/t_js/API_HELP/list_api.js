@@ -41,12 +41,8 @@ function remove_care() {
 }
 
 
-function new_module_success(data){
-    location.reload();
-}
-
 var module_data = null;
-var current_module = null;
+var current_module = {"module_no": "", "module_name": "", "module_prefix": "",  "module_desc": "", "module_part": ""};
 
 
 function Get_API_List_Success(data)
@@ -60,14 +56,15 @@ function Get_API_List_Success(data)
         {
             if(module_no == part_info["module_list"][j]["module_no"])
             {
-                current_module = part_info["module_list"][j]
+                current_module = part_info["module_list"][j];
+                env_vm.current_module = current_module;
+                api_vm.current_module = current_module;
             }
         }
     }
     if(current_module == null){
         return false;
     }
-    Load_Module_Info("info");
     var api_list = data.data.api_list;
     var module_prefix = current_module["module_prefix"];
     Load_API_List(api_list, module_prefix);
@@ -103,8 +100,9 @@ $(function(){
         }
     });
     api_vm = new Vue({
-        el: "#t_api_list",
+        el: "#div_api_list",
         data: {
+            current_module: current_module,
             url_prefix: url_prefix,
             api_list: []
         },
@@ -116,11 +114,11 @@ $(function(){
     });
 
     env_vm = new Vue({
-        el: "#li_test_env",
+        el: "#div_module",
         data: {
+            current_module: current_module,
             all_env: [],
-            selected_index: 0,
-            use_env: []
+            selected_index: 0
         },
         methods: {
             select: function(){
@@ -135,31 +133,29 @@ $(function(){
             cancel_select: function(index){
                 this.all_env[index].selected = false;
                 this.selected_index = index;
+            },
+            op_module: function(){
+                var body_param = env_vm.current_module;
+                var method = "POST";
+                if(this.current_module.module_no != "") {
+                    method = "PUT";
+                }
+                body_param["module_env"] = new Array();
+                var env_len = this.all_env.length;
+                var select_count = 0;
+                for(var i=0;i<env_len;i++) {
+                    if(this.all_env[i].selected == true) {
+                        body_param["module_env"][select_count] = this.all_env[i].env_no;
+                        select_count += 1;
+                    }
+                }
+                var request_url = $("#module_url").val();
+                my_request(request_url, method, body_param, function(){
+                    location.reload();
+                });
             }
         }
     });
-
-    $("#btn_op_module").click(function(){
-        var body_param = new Object();
-        var method = "POST";
-        if(current_module != null) {
-            body_param["module_no"] = current_module["module_no"];
-            method = "PUT";
-        }
-        body_param["module_name"] = $("#module_name").val();
-        body_param["module_prefix"] = $("#module_prefix").val();
-        body_param["module_desc"] = $("#module_desc").val();
-        body_param["module_part"] = parseInt($("#module_part").val());
-        body_param["module_env"] = new Array();
-        var all_span_env = $("#div_add_env").find("span");
-        var span_len = all_span_env.length;
-        for(var i=0;i<span_len;i++) {
-            body_param["module_env"][i] = parseInt($(all_span_env[i]).attr("value"));
-        }
-        var request_url = $("#module_url").val();
-        my_request(request_url, method, body_param, new_module_success);
-    });
-
 
     var current_user_role = parseInt($("#current_user_role").val());
     var role_value = JSON.parse($("#role_value").text());

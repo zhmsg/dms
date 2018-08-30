@@ -72,7 +72,7 @@ class HelpManager:
             return False, "Bad module_part"
         if type(module_env) != list:
             return False, "Bad module_env"
-        if len(module_env) not in range(1, 6):
+        if len(module_env) not in range(1, 10):
             print(module_env)
             return False, "Bad module_env."
         module_desc = check_sql_character(module_desc)[:240]

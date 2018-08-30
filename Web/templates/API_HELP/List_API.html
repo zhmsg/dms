@@ -30,27 +30,27 @@
     <div style="display: none" id="div_api_new_add">
         <input value="{{ url_prefix }}/module/" id="module_url" style="display: none"/>
 
-        <div class="form-group apiContentLine">
+        <div class="form-group apiContentLine" id="div_module">
             <ul style="margin-bottom: 1em">
                 <li>
                     <label for="">模块名称：</label>
-                    <input class="box-side width300" id="module_name" type="text" required/>
+                    <input class="box-side width300" v-model="current_module.module_name" type="text" required/>
                 </li>
                 <li>
                     <label for="">模块前缀：</label>
-                    <input class="box-side width300" id="module_prefix" type="text" required/>
+                    <input class="box-side width300" v-model="current_module.module_prefix" type="text" required/>
                 </li>
                 <li>
                     <label class="api-describe" for="">模块描述：</label>
-                    <textarea class="box-side" rows="3" id="module_desc" required></textarea>
+                    <textarea class="box-side" rows="3" v-model="current_module.module_desc" required></textarea>
                 </li>
                 <li>
                     <label class="api-describe" for="">所属分类：</label>
-                        <select class="box-side" id="module_part" required>
+                        <select class="box-side" v-model="current_module.module_part" id="module_part" required>
 
                     </select>
                 </li>
-                <li id="li_test_env">
+                <li>
                     <label class="api-describe" for="">调用环境：</label>
                     <select class="box-side" id="s_add_env" v-model="selected_index">
                         <template v-for="(item, index) in all_env">
@@ -66,7 +66,8 @@
                     </div>
                 </li>
             </ul>
-            <button id="btn_op_module" class="btn btn-success btn-down api-newBtn">新建模块</button>
+            <button v-if="current_module.module_no==''" class="btn btn-success btn-down api-newBtn" @click="op_module">新建模块</button>
+            <button v-else class="btn btn-success btn-down api-newBtn" @click="op_module">更新模块</button>
         </div>
     </div>
     <!--
@@ -77,11 +78,11 @@
 {##}
 {#        <p>模块编号：<span id="span_module_no"></span></p>#}
 
-        <p>模块名称：<span id="span_module_name" class="selected"></span></p>
+        <p>模块名称：<span class="selected">{{current_module.module_name}}</span></p>
 
-        <p>模块URL前缀：<span id="span_module_prefix"></span></p>
+        <p>模块URL前缀：<span>{{current_module.module_prefix}}</span></p>
 
-        <p>模块描述：<span id="span_module_desc"></span></p>
+        <p>模块描述：<span>{{current_module.module_desc}}</span></p>
 
         <div id="div_api_new_op_module" class="left" style="display: none">
             <a href="javascript:void(0)" onclick="Load_Module_Info('update')" class="margin10">更新模块信息</a>
