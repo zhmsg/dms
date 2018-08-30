@@ -138,7 +138,35 @@ $(function(){
             },
             new_env: function(){
                 var env_obj = this.env_obj;
-                alert1("请输入环境名");
+                if(env_obj.env_name.length <= 0){
+                    alert1("请输入环境名");
+                    return false;
+                }
+                for(var i=0;i<this.all_env.length;i++){
+                    if(this.all_env[i].env_name == env_obj.env_name){
+                        alert1("环境名已存在");
+                        if(this.all_env[i].selected == false){
+                            this.selected_index = i;
+                        }
+                        return false;
+                    }
+                    else if(this.all_env[i].env_address == env_obj.env_address){
+                        alert1("环境地址已存在，请查看【" + this.all_env[i].env_name + "】");
+                        if(this.all_env[i].selected == false){
+                            this.selected_index = i;
+                        }
+                        return false;
+                    }
+                }
+                var test_env_url = $("#test_env_url").val();
+                my_async_request2(test_env_url, "POST", env_obj, function(data){
+                    data.selected = false;
+                    env_vm.all_env.push(data);
+                    env_vm.selected_index = env_vm.all_env.length - 1;
+                    env_vm.create_env = false;
+                    env_vm.env_obj = {"env_name": "", "env_address": "http://"};
+                })
+
             },
             op_module: function(){
                 var body_param = env_vm.current_module;
