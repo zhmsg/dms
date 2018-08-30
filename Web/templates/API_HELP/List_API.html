@@ -64,7 +64,7 @@
                         <input class="box-side width200" v-model="env_obj.env_name">
                         环境网址：
                         <input class="box-side width300" v-model="env_obj.env_address">
-                        <button @click="new_env">创建</button>
+                        <button class="btn" @click="new_env">创建</button>
                     </div>
                     <div class="tag" id="div_add_env">
                         <template v-for="(item, index) in all_env">
