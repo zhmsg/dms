@@ -157,9 +157,20 @@ class HelpManager:
         return True, "success"
 
     def new_test_env(self, env_name, env_address):
-        insert_sql = "INSERT INTO %s VALUES ('%s','%s');" % (self.test_env, env_name, env_address)
-        self.db.execute(insert_sql)
-        return True, "success"
+        self.db.start_transaction()
+        try:
+            values = dict(env_address=env_address, env_name=env_name)
+            self.db.execute_insert(self.test_env, kwargs=values)
+            cols = ["env_no", "env_address", "env_name"]
+            items = self.db.execute_select(self.test_env, cols=cols, where_value=dict(env_name=env_name))
+            if len(items) != 1:
+                self.db.end_transaction(fail=True)
+                return False, len(items)
+            self.db.end_transaction()
+            return True, items[0]
+        except Exception as e:
+            self.db.end_transaction(fail=True)
+            return False, str(e)
 
     def insert_api_header(self, api_no, param, necessary, param_desc, status=1):
         add_time = datetime.now().strftime(TIME_FORMAT)

@@ -199,6 +199,11 @@ class ControlManager(object):
             return False, u"您没有权限"
         return self.api_help.get_module_list()
 
+    def new_test_env(self, role, env_name, env_address):
+        if role & self.role_value["api_look"] <= 0:
+            return False, u"您没有权限"
+        return self.api_help.new_test_env(env_name, env_address)
+
     def get_test_env(self, role, env_no_list=None):
         if role & self.role_value["api_look"] <= 0:
             return False, u"您没有权限"
