@@ -81,11 +81,15 @@ $(function(){
             $(".newMode").show();
             $("#conBtn").html("隐藏新建");
             search_type = "start";
+            s_vm.show_num = 10;
+            search_code();
         }
         if(conBtnValue == "隐藏新建"){
             $(".newMode").hide();
             $("#conBtn").html("单个新建");
             search_type = "in";
+            s_vm.show_num = 15;
+            search_code();
         }
     });
 });
