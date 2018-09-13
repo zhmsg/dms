@@ -21,18 +21,11 @@ develop_status_view = create_blue('develop_status_view', url_prefix=url_prefix)
 
 
 @develop_status_view.route("/", methods=["GET"])
-def show_status_info():
-    if "status" in request.args:
-        result, status_info = control.get_status(current_user.role, status_code=request.args["status"])
-    else:
-        result, status_info = control.get_status(current_user.role)
-    if request.is_xhr:
-        return jsonify({"status": result, "data": status_info})
-    if result is False:
-        return status_info
+def show_status_info_page():
     del_status_code_url = url_prefix + "/remove/"
     fun_info_url = url_prefix + "/fun/"
     error_type_url = url_prefix + "/type/"
+    url_code = url_prefix + "/code/"
     return_url = api_url_prefix + ("/" if "api_no" not in request.args else "/info/?api_no=%s" % request.args["api_no"])
     search_status = "" if "status" not in request.args else request.args["status"]
     new_power = del_power = new_module_power = False
@@ -45,10 +38,10 @@ def show_status_info():
 
     if new_power is False:
         return redirect(url_prefix + "/q/")
-    return render_template("%s/Status_API.html" % html_dir, fun_info_url=fun_info_url, status_info=status_info,
-                           error_type_url=error_type_url, return_url=return_url, search_status=search_status,
+    return render_template("%s/Status_API.html" % html_dir, fun_info_url=fun_info_url, error_type_url=error_type_url,
+                           return_url=return_url, search_status=search_status,
                            new_power=new_power, del_power=del_power, new_module_power=new_module_power,
-                           del_status_code_url=del_status_code_url)
+                           del_status_code_url=del_status_code_url, url_code=url_code)
 
 
 @develop_status_view.route("/q/", methods=["GET"])
@@ -116,9 +109,18 @@ def get_error_type():
     return jsonify({"status": result, "data": error_type})
 
 
-@develop_status_view.route("/new/", methods=["POST"])
+@develop_status_view.route("/code/", methods=["GET"])
+def get_code_info():
+    if "status" in request.args:
+        result, status_info = control.get_status(current_user.role, status_code=request.args["status"])
+    else:
+        result, status_info = control.get_status(current_user.role)
+    return jsonify({"status": result, "data": status_info})
+
+
+@develop_status_view.route("/code/", methods=["POST"])
 def new_status():
-    request_data = request.form
+    request_data = request.json
     service_id = int(request_data["service_id"])
     fun_id = int(request_data["fun_id"])
     type_id = int(request_data["type_id"])

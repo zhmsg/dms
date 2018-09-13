@@ -204,7 +204,7 @@ $(function(){
             }
         }
     });
-    my_request2(location.href, "GET", null, function(data) {
+    my_request2($("#url_code").val(), "GET", null, function(data) {
         for (var i = 0; i < data.length; i++) {
             var item = data[i];
             item["code_1"] = item["status_code"].substring(0, 2);
@@ -260,8 +260,22 @@ $(function(){
                 if(end_code.length <= 0){
                     end_code = "请填写";
                 }
-
                 this.add_desc["show_code"] = this.select_module + " " + this.select_fun + " " + this.select_type + " " + end_code;
+            },
+            add_action: function(){
+                var data = {"service_id": this.select_module, "fun_id": this.select_fun, "type_id": this.select_type};
+                if(this.status_end_code.length <= 0){
+                    alert1("请填写末位状态码");
+                    return false;
+                }
+                if(this.status_code_desc.length <= 0){
+                    alert1("请填写状态解释");
+                    return false;
+                }
+                data["error_id"] = this.status_end_code;
+                data["error_desc"] = this.status_code_desc;
+                console.info(data);
+                my_async_request2($("#url_code").val(), "POST", data);
             }
         },
         watch: {
