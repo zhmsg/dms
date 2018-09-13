@@ -277,12 +277,18 @@ $(function(){
 
     var env_data = $("#lab_env_data").text();
     var test_envs = JSON.parse(env_data);
+    var use_env = "";
+    if(test_envs.length > 0){
+        use_env = test_envs[0].env_address;
+        console.info(use_env);
+        update_request_url(use_env);
+    }
     console.info(test_envs);
     var te_vm = new Vue({
         el: "#p_env",
         data: {
             all_env: test_envs,
-            use_env: "",
+            use_env: use_env,
             custom_env: false
         },
         watch: {

@@ -81,7 +81,6 @@ $(function(){
             $(".newMode").show();
             $("#conBtn").html("隐藏新建");
             search_type = "start";
-            load_location_status();
         }
         if(conBtnValue == "隐藏新建"){
             $(".newMode").hide();
@@ -226,7 +225,9 @@ $(function(){
             select_fun: "",
             error_type: {},
             select_type: "",
-            add_desc: {"end_code": "00", "status_desc": ""}
+            add_desc: {"end_code": "00", "status_desc": ""},
+            status_end_code: "",
+            status_code_desc: ""
         },
         methods: {
             change_module: function () {
@@ -255,11 +256,11 @@ $(function(){
                 this.add_desc["fun_desc"] = this.fun_info[this.select_fun]["desc"];
                 this.add_desc["type_title"] = this.error_type[this.select_type]["type_title"];
                 this.add_desc["type_desc"] = this.error_type[this.select_type]["type_desc"];
-                var end_code = this.add_desc["end_code"];
+                var end_code = this.status_end_code;
                 if(end_code.length <= 0){
                     end_code = "请填写";
                 }
-                var status_desc_input = this.add_desc["status_desc"];
+                var status_desc_input = this.status_code_desc;
                 if(status_desc_input.length <= 0){
                     status_desc_input = "请填写";
                 }

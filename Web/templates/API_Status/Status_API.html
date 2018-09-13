@@ -65,8 +65,8 @@
                     <select class="box-side width150 pull-left margin10" v-model="select_type" @change="change_type">
                         <option v-for="value, key in error_type" :value="key">{{value.type_title}}</option>
                     </select>
-                    <input class="form-control pull-left width100 margin10" v-model="add_desc.end_code" @keyup="update_add_desc" required>
-                    <input class="form-control pull-left width366 margin10" v-model="add_desc.status_desc" @keyup="update_add_desc" required>
+                    <input class="form-control pull-left width100 margin10" v-model="status_end_code" required>
+                    <input class="form-control pull-left width366 margin10" v-model="status_code_desc" required>
                     <span class="clear block"></span>
                 </p>
                 <p>
@@ -88,13 +88,13 @@
                 <p>
                     <span>末位</span>
                     :
-                    <span class="font-red">{{add_desc["end_desc"]}}</span>
-                    <a class="status_move left5">推荐</a>
+                    <span class="font-red">{{status_end_code}}</span>
+                    <a class="status_move left5">推荐一个</a>
                 </p>
                 <p>
                     <span>状态描述</span>
                     :
-                    <span class="font-red">{{add_desc["status_desc_input"]}}</span>
+                    <span class="font-red">{{status_code_desc}}</span>
                 </p>
                 <p>
                     <span>最终状态码为</span>
