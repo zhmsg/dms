@@ -1,7 +1,7 @@
 /**
  * Created by msg on 12/24/15.
  */
-
+var s_vm = null;
 var module_info = new Object();
 var error_type = new Object();
 
@@ -9,14 +9,15 @@ var search_type = "in";
 
 function get_module_info_success(data){
     module_info = data.data;
-    $("tr[id^='s_']").each(function() {
-        var code = this.id.substr(2, 8);
-        var service_id = code.substr(0, 2);
-        var service_title = module_info[service_id].title;
-        var fun_id = code.substr(2, 2);
-        var fun_title = module_info[service_id]["fun_info"][fun_id].title;
-        $(this).find("td:eq(1)").text(service_title + "-" + fun_title);
-    });
+    s_vm.module_info = module_info;
+    //$("tr[id^='s_']").each(function() {
+    //    var code = this.id.substr(2, 8);
+    //    var service_id = code.substr(0, 2);
+    //    var service_title = module_info[service_id].title;
+    //    var fun_id = code.substr(2, 2);
+    //    var fun_title = module_info[service_id]["fun_info"][fun_id].title;
+    //    $(this).find("td:eq(1)").text(service_title + "-" + fun_title);
+    //});
 }
 function get_module_info() {
     var request_url = $("#fun_info_url").val();
@@ -71,7 +72,7 @@ function fun_update(){
 }
 function error_type_update(){
     var type_id = $("#type_id").val();
-    var desc = '<span class="font-red">' + error_type[type_id].title + '</span>: '  + error_type[type_id].desc;
+    var desc = '<span class="font-red">' + error_type[type_id].type_title + '</span>: '  + error_type[type_id].type_desc;
     $("#error_type_desc").html(desc);
 }
 
@@ -124,11 +125,11 @@ function update_info(){
         var code = service_id + fun_id + type_id;
         $("#search_code").val(code);
         search_type = "start";
-        filter_code(code, "start", 1);
+        filter2(code, "start");
     }
     else{
         search_type = "in";
-        filter_code($("#search_code").val(), "in", 1);
+        filter2($("#search_code").val(), "in");
     }
 }
 
@@ -147,37 +148,10 @@ function compare_str(l_s, s_s, c_type){
     return false
 }
 
-function filter_code(code, s_type, page_num){
-    var trs = $("tr[id^='s_']");
-    var tr_len = trs.length;
-    var match_count = 0;
-    var show_count = 15;
-    var start_num = (page_num - 1) * show_count;
-    var end_num = start_num + show_count;
-    var i = 0;
-    for(; i < tr_len; i++){
-        var tr = trs[i];
-        //console.info(tr.children[1]);
-        if(compare_str(tr.id.substr(2, 8), code, s_type) == true || compare_str(tr.children[1].innerHTML, code, s_type)){
-            match_count++;
-            if(match_count <= start_num || match_count > end_num) {
-                tr.hidden = true;
-            }
-            else {
-                tr.hidden = false;
-            }
-        }
-        else{
-            tr.hidden = true;
-        }
-    }
-    var total_page_num = (match_count - 1 ) / show_count + 1;
-    add_page_num(total_page_num, page_num);
-}
 
-function search_code(page_num){
+function search_code(){
     var query_s = $("#search_code").val();
-    filter_code(query_s, search_type, page_num);
+    filter2(query_s, search_type);
 }
 
 function get_info(code){
@@ -243,8 +217,108 @@ function load_location_status(){
 
 }
 
+function filter2(query_s, q_type)
+{
+    console.info(query_s);
+    s_vm.show_status = [];
+    for(var i=0;i<s_vm.all_status.length;i++){
+        if(query_s == null || query_s.length == 0) {
+            s_vm.show_status.push(i);
+        }
+        else{
+            var s_item = s_vm.all_status[i];
+            if(compare_str(s_item["status_code"], query_s, q_type) || compare_str(s_item["code_desc"], query_s, q_type)){
+                s_vm.show_status.push(i);
+            }
+        }
+    }
+    s_vm.page_num = Math.ceil(s_vm.show_status.length / s_vm.show_num);
+    console.info(s_vm.page_num);
+    load_page();
+}
+
+function load_page(){
+    if(s_vm.current_page <= 0){
+        s_vm.current_page = 1;
+    }
+    if(s_vm.current_page > s_vm.page_num){
+        s_vm.current_page = s_vm.page_num;
+    }
+
+    s_vm.page_status = [];
+    var min_index = (s_vm.current_page - 1) * s_vm.show_num;
+    if(min_index < 0){
+        min_index = 0;
+    }
+    var max_index = s_vm.current_page * s_vm.show_num;
+    if(max_index >= s_vm.show_status.length){
+        max_index = s_vm.show_status.length;
+    }
+    for(var index=min_index;index<max_index;index++){
+        s_vm.page_status.push(s_vm.all_status[s_vm.show_status[index]]);
+    }
+
+    var show_page_num = 15;
+    var current_page = s_vm.current_page;
+    var page_count = s_vm.page_num;
+    var start_num = 1;
+    var end_num = page_count;
+    var mid_num = parseInt((show_page_num + 1) / 2);
+    var left_num = show_page_num - mid_num;
+    if (current_page <= mid_num) {
+        if (page_count > show_page_num) {
+            end_num = show_page_num;
+        }
+    }
+    else if (page_count - current_page < left_num) {
+        if (page_count > show_page_num) {
+            start_num = page_count - show_page_num + 1;
+        }
+    }
+    else {
+        start_num = current_page - left_num;
+        end_num = start_num + show_page_num - 1;
+    }
+    s_vm.show_page = [];
+    for (var i = start_num; i <= end_num; i++)
+    {
+        s_vm.show_page.push(i);
+    }
+}
+
 $(function(){
-    search_code(1);
+    s_vm = new Vue({
+        el: "#div_list",
+        data: {
+            all_status: [],  // 所有的状态码
+            show_status: [],  // 符合条件的状态码下标
+            page_status: [], // 当前页面的状态码
+            page_num: 0,
+            current_page: 0,
+            show_page: [],
+            show_num: 15,
+            module_info: null
+        },
+        methods: {
+            update_current_page: function(page_num){
+                this.current_page = page_num;
+                load_page();
+            }
+        }
+    });
+    my_request2(location.href, "GET", null, function(data) {
+        for (var i = 0; i < data.length; i++) {
+            var item = data[i];
+            item["code_1"] = item["status_code"].substring(0, 2);
+            item["code_2"] = item["status_code"].substring(2, 4);
+            item["code_3"] = item["status_code"].substring(4, 6);
+            item["code_4"] = item["status_code"].substring(6, 8);
+            s_vm.all_status.push(data[i]);
+
+        }
+        filter2();
+    });
+
     get_module_info();
     get_error_type();
     if($("#new_info_show").length > 0){
@@ -271,8 +345,3 @@ $(function(){
         }
     );
 });
-
-// 分页相关方法
-function add_page_num(num, current_page){
-    force_current_page(num, current_page);
-}

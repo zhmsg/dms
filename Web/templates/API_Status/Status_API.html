@@ -12,35 +12,43 @@
 {% block content %}
     <a class="btn btn-primary pull-right margin20" href="{{ return_url }}" title="">返回API解释</a>
     <div class="clear bottom20">
-        <input class="form-control" id="search_code" onkeyup="search_code(1);" placeholder="搜索状态码"
+        <input class="form-control" id="search_code" onkeyup="search_code();" placeholder="搜索状态码"
                value="{{ search_status }}"/>
     </div>
-    <div style="position: relative">
+    <div style="position: relative" id="div_list">
         <table class="table table-bordered table-hover api-list-table">
             <tr>
                 <th scope="col" width="10%">状态码</th>
                 <th scope="col" width="20%">模块</th>
-                <th scope="col" width=60%">解释</th>
+                <th scope="col" width="60%">解释</th>
                 {% if del_power %}
                     <th scope="col" width=5%">操作</th>
                 {% endif %}
             </tr>
-            {% for item in status_info %}
-                <tr id="s_{{ item["status_code"] }}">
-                    <td class="status_move" name="status_code"><span>{{ item["status_code"][:2] }}</span>
-                        <span>{{ item["status_code"][2:4] }}</span> <span>{{ item["status_code"][4:6] }}</span>
-                        <span>{{ item["status_code"][6:8] }}</span></td>
-                    <td></td>
-                    <td>{{ item["code_desc"] }}</td>
-                    {% if del_power %}
-                        <td><a href="{{ del_status_code_url }}?status_code={{ item["status_code"] }}" title="">删除</a>
-                        </td>
-                    {% endif %}
-                </tr>
-            {% endfor %}
+            <template v-for="item in page_status">
+            <tr :id="'s_' + item.status_code">
+                <td class="status_move" name="status_code">
+                    <span>{{item["code_1"]}}</span>
+                    <span>{{item["code_2"]}}</span>
+                    <span>{{item["code_3"]}}</span>
+                    <span>{{item["code_4"]}}</span>
+                </td>
+                <td>{{module_info[item["code_1"]]["title"]}}-{{module_info[item["code_1"]]["fun_info"][item["code_2"]].title}}</td>
+                <td>{{item["code_desc"]}}</td>
+                {% if del_power %}
+                    <td>
+                        <a title="">删除</a>
+                    </td>
+                {% endif %}
+            </tr>
+            </template>
         </table>
         <div class="status_out" id="status_code_info">ni</div>
         <ul class="pagination" id="pagination">
+            <template v-for="page_num in show_page">
+                <li v-if="page_num == current_page" class="active"><a href="javascript:void(0)">{{page_num}}</a></li>
+                <li v-else><a href="javascript:void(0)" @click="update_current_page(page_num)">{{page_num}}</a></li>
+            </template>
         </ul>
     </div>
     {% if new_power %}
