@@ -280,10 +280,8 @@ $(function(){
     var use_env = "";
     if(test_envs.length > 0){
         use_env = test_envs[0].env_address;
-        console.info(use_env);
         update_request_url(use_env);
     }
-    console.info(test_envs);
     var te_vm = new Vue({
         el: "#p_env",
         data: {
@@ -293,7 +291,6 @@ $(function(){
         },
         watch: {
             use_env: function(val){
-                console.info(val);
                 update_request_url(val);
             }
         }

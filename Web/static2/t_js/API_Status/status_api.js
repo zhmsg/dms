@@ -260,13 +260,13 @@ $(function(){
                 if(end_code.length <= 0){
                     end_code = "请填写";
                 }
-                var status_desc_input = this.status_code_desc;
-                if(status_desc_input.length <= 0){
-                    status_desc_input = "请填写";
-                }
-                this.add_desc["status_desc_input"] = status_desc_input;
-                this.add_desc["end_desc"] = end_code;
+
                 this.add_desc["show_code"] = this.select_module + " " + this.select_fun + " " + this.select_type + " " + end_code;
+            }
+        },
+        watch: {
+            status_end_code: function(){
+                this.update_add_desc();
             }
         }
     });
