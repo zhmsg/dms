@@ -203,17 +203,21 @@ $(function(){
                 copy_text(lTrim(code, '0'));
             },
             delete_code: function(code){
-                var index = -1;
-                for(var i=this.all_status.length - 1;i>=0;i--){
-                    if(this.all_status[i]["status_code"] == code){
-                        index = i;
-                        this.all_status.splice(index, 1);
+                var delete_url = $("#url_code").val();
+                my_async_request2(delete_url, "DELETE", {"status_code": code}, function(data){
+                    var index = -1;
+                    for(var i=s_vm.all_status.length - 1;i>=0;i--){
+                        if(s_vm.all_status[i]["status_code"] == data){
+                            index = i;
+                            s_vm.all_status.splice(index, 1);
+                        }
                     }
-                }
-                if(index == -1){
-                    return false;
-                }
-                search_code();
+                    if(index == -1){
+                        return false;
+                    }
+                    search_code();
+                });
+
             }
         }
     });
