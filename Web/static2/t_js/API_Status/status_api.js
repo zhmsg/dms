@@ -225,7 +225,7 @@ $(function(){
             select_fun: "",
             error_type: {},
             select_type: "",
-            add_desc: {"end_code": "00", "status_desc": ""},
+            add_desc: {},
             status_end_code: "",
             status_code_desc: "",
             filter_similar_code: false

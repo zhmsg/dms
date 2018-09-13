@@ -149,6 +149,7 @@ def remove_status_code():
     return redirect("%s/?status=%s" % (url_prefix, status_code))
 
 
+@develop_status_view.route("/code/", methods=["DELETE"])
 @develop_status_view.route("/remove/", methods=["DELETE"])
 def remove_status_code_d():
     status_code = int(request.json["status_code"])
