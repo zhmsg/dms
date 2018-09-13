@@ -58,20 +58,65 @@
                 <p class="bottom10">
                     <select class="box-side width150 pull-left margin10" id="service_id" name="service_id"></select>
                     <select class="box-side width150 pull-left margin10 updateinfo" id="fun_id" name="fun_id"></select>
-                    <select class="box-side width150 pull-left margin10 updateinfo" id="type_id"
-                            name="type_id"></select>
+                    <select class="box-side width150 pull-left margin10 updateinfo" id="type_id" name="type_id"></select>
                     <input name="error_id" class="form-control pull-left width100 margin10" id="error_id" required>
                     <input name="error_desc" class="form-control pull-left width366 margin10" id="error_desc" required>
                     <button type="submit" class="btn btn-primary pull-left" id="btn_new">新建</button>
                     <!-- 复选框组 start -->
             <span class="pull-left top6 left5">
-             <label class="checkbox-inline updateinfo"><input type="checkbox" id="show_exist"
-                                                              value="复选框"/>显示已有状态码</label>
+             <label class="checkbox-inline updateinfo"><input type="checkbox" id="show_exist" value="复选框"/>显示已有状态码</label>
             </span>
                     <!-- 复选框组 end -->
                     <span class="clear block"></span>
                 </p>
                 <p class="bottom20" id="new_info_show"></p>
+
+                <p id="service_desc"></p>
+
+                <p id="fun_desc"></p>
+
+                <p id="error_type_desc"></p>
+            </form>
+            {% if new_module_power %}
+                <a href="module/">添加状态码模块</a>
+            {% endif %}
+        </div>
+        <div class="newMode" style="display: none;" id="div_new_one">
+            <form action="{{ url_for('develop_status_view.new_status') }}" method="post">
+                <p class="bottom10">
+                    <select class="box-side width150 pull-left margin10" v-model="select_module" @change="change_module">
+                        <option v-for="value, key in module_info" :value="key" :title="value.title">{{value.title}}</option>
+                    </select>
+                    <select class="box-side width150 pull-left margin10" v-model="select_fun" @change="update_add_desc">
+                        <option v-for="value, key in fun_info" :value="key">{{value.title}}</option>
+                    </select>
+                    <select class="box-side width150 pull-left margin10" v-model="select_type" @change="update_add_desc">
+                        <option v-for="value, key in error_type" :value="key">{{value.type_title}}</option>
+                    </select>
+                    <input class="form-control pull-left width100 margin10" v-model.number="add_desc.end_code" required>
+                    <input class="form-control pull-left width366 margin10" v-model="add_desc.desc" required>
+                    <button type="submit" class="btn btn-primary pull-left">新建</button>
+                    <!-- 复选框组 start -->
+            <span class="pull-left top6 left5">
+             <label class="checkbox-inline updateinfo"><input type="checkbox" value="复选框"/>显示已有状态码</label>
+            </span>
+                    <!-- 复选框组 end -->
+                    <span class="clear block"></span>
+                </p>
+                <p class="bottom20">
+                    您将新建一个服务模块为
+                    <span class="font-red">{{add_desc["module_title"]}}</span>
+                    功能模块为
+                    <span class="font-red">{{add_desc["fun_title"]}}</span>
+                    错误类型为
+                    <span class="font-red">{{add_desc["type_title"]}}</span>
+                    错误状态码为
+                    <span class="font-red">{{add_desc["end_desc"]}}</span>
+                    错误描述为
+                    <span class="font-red">请填写</span>
+                    最终状态码为
+                    <span class="font-red">{{add_desc["show_code"]}}</span>
+                </p>
 
                 <p id="service_desc"></p>
 

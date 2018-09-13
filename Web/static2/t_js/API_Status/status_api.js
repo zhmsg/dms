@@ -2,6 +2,7 @@
  * Created by msg on 12/24/15.
  */
 var s_vm = null;
+var m_vm = null;
 var module_info = new Object();
 var error_type = new Object();
 
@@ -10,6 +11,12 @@ var search_type = "in";
 function get_module_info_success(data){
     module_info = data.data;
     s_vm.module_info = module_info;
+    m_vm.module_info = module_info;
+    for(var key in m_vm.module_info){
+        m_vm.select_module = key;
+        m_vm.change_module();
+        break;
+    }
     //$("tr[id^='s_']").each(function() {
     //    var code = this.id.substr(2, 8);
     //    var service_id = code.substr(0, 2);
@@ -25,8 +32,12 @@ function get_module_info() {
 }
 
 function get_error_type_success(data){
-    console.info(data);
     error_type = data;
+    m_vm.error_type = error_type;
+    for(var key in m_vm.error_type){
+        m_vm.select_type = key;
+        m_vm.update_add_desc();
+    }
 }
 function get_error_type() {
     var request_url = $("#error_type_url").val();
@@ -219,7 +230,6 @@ function load_location_status(){
 
 function filter2(query_s, q_type)
 {
-    console.info(query_s);
     s_vm.show_status = [];
     for(var i=0;i<s_vm.all_status.length;i++){
         if(query_s == null || query_s.length == 0) {
@@ -233,7 +243,7 @@ function filter2(query_s, q_type)
         }
     }
     s_vm.page_num = Math.ceil(s_vm.show_status.length / s_vm.show_num);
-    console.info(s_vm.page_num);
+
     load_page();
 }
 
@@ -318,7 +328,39 @@ $(function(){
         }
         filter2();
     });
-
+    m_vm = new Vue({
+        el: "#div_new_one",
+        data: {
+            module_info: {},
+            select_module: "",
+            fun_info: {},
+            select_fun: "",
+            error_type: {},
+            select_type: "",
+            add_desc: {"end_code": "00", "desc": ""}
+        },
+        methods: {
+            change_module: function () {
+                this.fun_info = this.module_info[this.select_module]["fun_info"];
+                for(var key in this.fun_info){
+                    this.select_fun = key;
+                    break;
+                }
+                this.update_add_desc();
+            },
+            update_add_desc: function(){
+                this.add_desc["module_title"] = this.module_info[this.select_module]["title"];
+                this.add_desc["fun_title"] = this.fun_info[this.select_fun]["title"];
+                this.add_desc["type_title"] = this.error_type[this.select_type]["type_title"];
+                var end_code = this.add_desc["end_code"];
+                if(end_code.length <= 0){
+                    end_code = "请填写";
+                }
+                this.add_desc["end_desc"] = end_code;
+                this.add_desc["show_code"] = this.select_module + " " + this.select_fun + " " + this.select_type + " " + end_code;
+            }
+        }
+    });
     get_module_info();
     get_error_type();
     if($("#new_info_show").length > 0){
