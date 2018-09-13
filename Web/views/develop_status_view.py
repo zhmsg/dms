@@ -150,7 +150,6 @@ def remove_status_code():
 
 
 @develop_status_view.route("/code/", methods=["DELETE"])
-@develop_status_view.route("/remove/", methods=["DELETE"])
 def remove_status_code_d():
     status_code = int(request.json["status_code"])
     result, info = control.delete_api_status(current_user.user_name, current_user.role, status_code)
@@ -164,7 +163,7 @@ def new_mul_status_page():
     return_url = url_prefix
     fun_info_url = url_prefix + "/fun/"
     error_type_url = url_prefix + "/type/"
-    del_status_code_url = url_prefix + "/remove/"
+    del_status_code_url = url_prefix + "/code/"
     return render_template("%s/New_Mul_Status.html" % html_dir, return_url=return_url, fun_info_url=fun_info_url,
                            error_type_url=error_type_url, del_status_code_url=del_status_code_url)
 

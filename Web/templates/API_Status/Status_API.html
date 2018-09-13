@@ -37,7 +37,7 @@
                 <td>{{item["code_desc"]}}</td>
                 {% if del_power %}
                     <td>
-                        <a title="">删除</a>
+                        <a class="status_move" @click="delete_code(item.status_code)">删除</a>
                     </td>
                 {% endif %}
             </tr>
