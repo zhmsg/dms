@@ -267,6 +267,38 @@ $(function(){
                 this.update_add_desc();
                 save_location_status();
             },
+            recommend_code: function(){
+                var code_prefix =  this.select_module + this.select_fun + this.select_type;
+                var basic_code = parseInt(code_prefix) * 100;
+                var max_code = basic_code + 100;
+                var forward_code = basic_code + 1;
+                for(var i=0;i<s_vm.all_status.length;i++){
+                    var code = parseInt(s_vm.all_status[i]["status_code"]);
+                    if(code > 2030100){
+                        console.info("code is " + code);
+                    }
+                    if(code < forward_code){
+                        continue;
+                    }
+                    if(code == forward_code){
+                        console.info(forward_code);
+                        forward_code += 1;
+                        if(forward_code >= max_code){
+                            alert1("没有推荐的，请删除一些不用的再试");
+                            return false;
+                        }
+                        continue;
+                    }
+                    var plus = forward_code - basic_code;
+                    if(plus >= 10){
+                        this.status_end_code = plus;
+                    }else{
+                        this.status_end_code = "0" + plus;
+                    }
+
+                    return true;
+                }
+            },
             update_add_desc: function(){
                 this.add_desc["module_title"] = this.module_info[this.select_module]["title"];
                 this.add_desc["module_desc"] = this.module_info[this.select_module]["desc"];

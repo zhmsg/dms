@@ -89,7 +89,7 @@
                 :
                 <span class="font-red" v-if="status_end_code.length!=0">{{status_end_code}}</span>
                 <span class="font-red" v-else>请填写</span>
-                <a class="status_move left5">推荐一个</a>
+                <a class="status_move left5" @click="recommend_code">推荐一个</a>
             </p>
             <p>
                 <span>状态描述</span>
