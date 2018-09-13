@@ -214,7 +214,7 @@ $(function(){
             s_vm.all_status.push(data[i]);
 
         }
-        filter2();
+        search_code();
     });
     m_vm = new Vue({
         el: "#div_new_one",
@@ -227,7 +227,8 @@ $(function(){
             select_type: "",
             add_desc: {"end_code": "00", "status_desc": ""},
             status_end_code: "",
-            status_code_desc: ""
+            status_code_desc: "",
+            filter_similar_code: false
         },
         methods: {
             change_module: function () {
@@ -261,6 +262,10 @@ $(function(){
                     end_code = "请填写";
                 }
                 this.add_desc["show_code"] = this.select_module + " " + this.select_fun + " " + this.select_type + " " + end_code;
+                if(this.filter_similar_code == true){
+                    var code_prefix =  this.select_module + this.select_fun + this.select_type;
+                    filter2(code_prefix, "start");
+                }
             },
             add_action: function(){
                 var data = {"service_id": this.select_module, "fun_id": this.select_fun, "type_id": this.select_type};
@@ -281,6 +286,15 @@ $(function(){
         watch: {
             status_end_code: function(){
                 this.update_add_desc();
+            },
+            filter_similar_code: function(val){
+                if(val == true){
+                    var code_prefix =  this.select_module + this.select_fun + this.select_type;
+                    filter2(code_prefix, "start");
+                }
+                else{
+                    filter2();
+                }
             }
         }
     });

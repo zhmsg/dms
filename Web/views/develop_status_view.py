@@ -137,7 +137,7 @@ def new_status():
     for key in uq:
         param_list.append("%s=%s" % (key, uq[key][0]))
     redirect_url = redirect_url.path + "?" + "&".join(param_list)
-    return redirect(redirect_url)
+    return jsonify({"status": True, "data": "", "location": redirect_url})
 
 
 @develop_status_view.route("/remove/", methods=["GET"])
