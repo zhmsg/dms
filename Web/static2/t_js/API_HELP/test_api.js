@@ -177,11 +177,11 @@ function generating_code() {
         update_res("无效的请求URL");
         return false;
     }
-    var cmd = "import requests\n";
+    var cmd = "import json\nimport requests\n";
     cmd += 'url = "' + request_url + '"\n';
     cmd += 'method = "' + api_method + '"\n';
-    cmd += 'headers = ' + JSON.stringify(test_case_info.u_header) + "\n";
-    cmd += 'data = ' + JSON.stringify(test_case_info.body) + '\n';
+    cmd += "headers = json.loads('" + JSON.stringify(test_case_info.u_header) + "')\n";
+    cmd += "'data = json.loads('" + JSON.stringify(test_case_info.body) + "')\n";
     if (api_method == "GET") {
         cmd += "resp = requests.request(method, url, headers=headers, params=data)\n";
     }
