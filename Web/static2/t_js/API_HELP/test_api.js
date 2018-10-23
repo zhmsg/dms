@@ -181,7 +181,7 @@ function generating_code() {
     cmd += 'url = "' + request_url + '"\n';
     cmd += 'method = "' + api_method + '"\n';
     cmd += "headers = json.loads('" + JSON.stringify(test_case_info.u_header) + "')\n";
-    cmd += "'data = json.loads('" + JSON.stringify(test_case_info.body) + "')\n";
+    cmd += "data = json.loads('" + JSON.stringify(test_case_info.body) + "')\n";
     if (api_method == "GET") {
         cmd += "resp = requests.request(method, url, headers=headers, params=data)\n";
     }
