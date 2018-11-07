@@ -102,10 +102,10 @@ class StatusManager:
             error_desc = item["error_desc"]
             if check_int(type_id) is False:
                 continue
-            error_code = basic_code + type_id * 100
+            error_code = basic_code + type_id * 100 + 1
             # 查询该模块下此类错误最大的状态码
             select_sql = "SELECT status_code FROM %s WHERE status_code>=%s AND status_code<%s " \
-                         "ORDER BY status_code DESC LIMIT 1;" % (self.status_code, error_code, error_code + 100)
+                         "ORDER BY status_code DESC LIMIT 1;" % (self.status_code, error_code, error_code + 99)
             result = self.db.execute(select_sql)
             if result > 0:
                 error_code = self.db.fetchone()[0] + 1
