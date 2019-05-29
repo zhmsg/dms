@@ -150,6 +150,11 @@ function Get_API_List(module_no)
 
 
 $(function(){
+    window.onpageshow = function(event) {
+        if (event.0) {
+            window.location.reload()
+        }
+    };
     var url_prefix = $("#url_prefix").val();
     m_vm = new Vue({
         el: "#div_module_list",
