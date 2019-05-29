@@ -150,12 +150,8 @@ function Get_API_List(module_no)
 
 
 $(function(){
-    onload=function(){
-        var e=document.getElementById("refreshed");
-        if(e.value=="no")e.value="yes";
-        else{e.value="no";location.reload();}
-    }
     var url_prefix = $("#url_prefix").val();
+    url_prefix = "/dev/api";
     m_vm = new Vue({
         el: "#div_module_list",
         data: {
