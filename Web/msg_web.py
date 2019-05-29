@@ -69,7 +69,7 @@ def create_app():
                              view_func=msg_web.send_static_file)
     if cookie_domain != "":
         msg_web.config.update(SESSION_COOKIE_DOMAIN=cookie_domain)
-    msg_web.config.update(PERMANENT_SESSION_LIFETIME=600)
+    msg_web.config.update(PERMANENT_SESSION_LIFETIME=60)
 
     api_files = os.listdir("./views")
     for api_file in api_files:

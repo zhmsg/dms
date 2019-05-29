@@ -21,7 +21,8 @@ function request_error(xhr){
             },
             function(isConfirm){
                 if (isConfirm){
-                    location.reload(true);
+//                    location.reload(true);
+                    location.href = "/login?next=" + location.href;
                 }
             }
         );
