@@ -116,9 +116,8 @@ def show_api():
     result, api_info = control.get_api_info(api_no, g.user_role)
     if result is False:
         return api_info
-    if "X-Requested-With" in request.headers:
-        if request.headers["X-Requested-With"] == "XMLHttpRequest":
-            return jsonify({"status": True, "data": {"api_info": api_info}})
+    if g.accept_json or request.headers.get("X-Requested-With") == "XMLHttpRequest":
+        return jsonify({"status": True, "data": {"api_info": api_info}})
     return_url = url_prefix + "/info/?api_no=%s" % api_no
     if "update" in request.args:
         update_stage_url = url_prefix + "/stage/"
