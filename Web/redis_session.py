@@ -50,6 +50,7 @@ class RedisSessionInterface(SessionInterface):
         if val is not None:
             data = self.serializer.loads(val)
             return self.session_class(data, sid=sid)
+        sid = self.generate_sid()
         return self.session_class(sid=sid, new=True)
 
     def save_session(self, app, session, response):
