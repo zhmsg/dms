@@ -151,7 +151,12 @@ function Get_API_List(module_no)
 
 $(function(){
     var url_prefix = $("#url_prefix").val();
-    url_prefix = "/dev/api";
+    if(location.href.indexOf("tornado") >= 0){
+        url_prefix = "/tornado/dev/api";
+    }
+    else{
+        url_prefix = "/dev/api";
+    }
     m_vm = new Vue({
         el: "#div_module_list",
         data: {
