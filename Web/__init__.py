@@ -65,7 +65,7 @@ class User(UserMixin):
         return self.user_name
 
 login_manager = LoginManager()
-login_manager.session_protection = 'strong'
+# login_manager.session_protection = 'strong'
 
 
 @login_manager.user_loader
