@@ -6,6 +6,17 @@ var m_vm = null;
 var api_vm = null;
 var env_vm = null;
 
+function get_url_prefix(){
+    var url_prefix = $("#url_prefix").val();
+    if(location.href.indexOf("tornado") >= 0){
+        url_prefix = "/tornado/dev/api";
+    }
+    else{
+        url_prefix = "/dev/api";
+    }
+    return url_prefix;
+}
+
 function change_care() {
     if ($("#make_care").text() == "关注")
     {
@@ -47,7 +58,7 @@ var current_module = {"module_no": "", "module_name": "", "module_prefix": "",  
 function Load_API_Module(data)
 {
     module_data = data.data;
-    var url_prefix = $("#url_prefix").val();
+    var url_prefix = get_url_prefix()
     for(var i=0;i<module_data.length;i++){
         var part_info = module_data[i];
         m_vm.modules_data.push(part_info);
@@ -79,7 +90,7 @@ function Load_Module_Info(load_type){
 
 function Load_API_List(api_list, module_prefix)
 {
-    var url_prefix = $("#url_prefix").val();
+    var url_prefix = get_url_prefix()
     $("#t_api_list tr").not(":first").remove();
     var t = $("#t_api_list");
     for(var i=0;i<api_list.length;i++){
@@ -150,13 +161,7 @@ function Get_API_List(module_no)
 
 
 $(function(){
-    var url_prefix = $("#url_prefix").val();
-    if(location.href.indexOf("tornado") >= 0){
-        url_prefix = "/tornado/dev/api";
-    }
-    else{
-        url_prefix = "/dev/api";
-    }
+    var url_prefix = get_url_prefix();
     m_vm = new Vue({
         el: "#div_module_list",
         data: {
