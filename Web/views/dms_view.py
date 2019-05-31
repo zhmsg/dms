@@ -93,7 +93,7 @@ def login():
         remember = False
     user = User()
     user.user_name = info["account"]
-    login_user(user, remember=remember)
+    login_user(user, remember=False)
     if "next" in request_data and request_data["next"] != "":
         return jsonify({"status": True, "data": {"location": request_data["next"], "user_name": user.user_name}})
     if session["role"] == 0:
@@ -114,6 +114,7 @@ def login_vip():
     login_user(user)
     session["role"] = info["role"]
     session["roles"] = role_m.select(info["account"])
+    session.modified = True
     return jsonify({"status": True, "data": "success"})
 
 
