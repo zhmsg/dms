@@ -60,8 +60,8 @@ def create_app():
     def handle_500(e):
         return str(e)
 
-    msg_web.session_interface = RedisSessionInterface(redis=redis, prefix=session_id_prefix,
-                                                      cookie_name=session_cookie_name)
+    # msg_web.session_interface = RedisSessionInterface(redis=redis, prefix=session_id_prefix,
+    #                                                   cookie_name=session_cookie_name)
 
     msg_web.static_folder = "static2"
     if static_prefix_url.startswith("/"):
