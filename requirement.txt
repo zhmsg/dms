@@ -11,5 +11,5 @@ redis
 m2crypto
 JYAliYun
 Fabric
-openpyxl
+openpyxl<3.0
 JYTools
