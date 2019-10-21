@@ -1,0 +1,37 @@
+[
+    {
+        "table_cols": [
+            {
+                "pri_key": true,
+                "col_comment": "配置名称",
+                "col_name": "config_key",
+                "col_type": "varchar(20)"
+            },
+            {
+                "col_comment": "配置的值",
+                "col_name": "config_value",
+                "col_type": "varchar(100)"
+            },
+            {
+                "col_comment": "是否允许更新",
+                "col_name": "allow_update",
+                "col_type": "bit(1)",
+                "default_value": 1
+            },
+            {
+                "col_comment": "配置更新时间",
+                "col_name": "update_time",
+                "col_type": "int(11)",
+                "allow_null": true
+            },
+            {
+                "col_comment": "配置添加时间",
+                "col_name": "add_time",
+                "col_type": "int(11)",
+                "allow_null": true
+            }
+        ],
+        "table_comment": "",
+        "table_name": "web_config"
+    }
+]
