@@ -13,5 +13,5 @@ services:
     - dms-mysql:/var/lib/mysql
 version: '2.4'
 volumes:
-  mysql:
+  dms-mysql:
     name: dms-mysql

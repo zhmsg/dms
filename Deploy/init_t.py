@@ -14,7 +14,7 @@ if __name__ == "__main__":
         root_password = sys.argv[1]
     else:
         root_password = "dmS1021<zh>"
-    db_conf_path = os.path.join(script_dir, "..", "mysql_app.conf")  # TODO
+    db_conf_path = os.path.join(script_dir, "..", "mysql_app.conf")
     db = DB(conf_path=db_conf_path, user="root", password=root_password)
     db.root_init_conf('%')
     db2 = TableDB(conf_path=db_conf_path)
