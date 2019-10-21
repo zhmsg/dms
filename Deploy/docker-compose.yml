@@ -7,7 +7,7 @@ services:
     - MYSQL_DATABASE=dms
     image: mysql:5.7
     ports:
-    - 3306:3306
+    - 9536:3306
     restart: always
     volumes:
     - dms-mysql:/var/lib/mysql
