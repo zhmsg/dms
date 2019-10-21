@@ -12,4 +12,5 @@ m2crypto
 JYAliYun
 Fabric
 openpyxl<3.0
+mysqldb-rich
 JYTools
