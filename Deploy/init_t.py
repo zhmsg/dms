@@ -18,5 +18,5 @@ if __name__ == "__main__":
     db = DB(conf_path=db_conf_path, user="root", password=root_password)
     db.root_init_conf('%')
     db2 = TableDB(conf_path=db_conf_path)
-    db2.create_from_dir(os.path.join(script_dir, "table"))
+    db2.create_from_dir(os.path.join(script_dir, "..", "Table"))
 
