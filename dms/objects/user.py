@@ -25,7 +25,8 @@ class UserObject(DBObject):
     @staticmethod
     def _md5_hash(s):
         m = hashlib.md5()
-        if isinstance(s, unicode) is True:
+        print(s)
+        if isinstance(s, str) is True:
             s = s.encode("utf-8")
         m.update(s)
         return m.hexdigest()
@@ -55,7 +56,7 @@ class UserObject(DBObject):
                     role=1):
         add_time = int(time.time())
         if nick_name is not None:
-            if isinstance(nick_name, unicode):
+            if isinstance(nick_name, str):
                 nick_name = nick_name.encode("utf-8")
             nick_name = base64.b64encode(nick_name)
         kwargs = dict(user_name=user_name, password=password, tel=tel,
@@ -82,7 +83,7 @@ class UserObject(DBObject):
                 del update_value[key]
         if "nick_name" in update_value:
             nick_name = update_value["nick_name"]
-            if isinstance(nick_name, unicode):
+            if isinstance(nick_name, str):
                 nick_name = nick_name.encode("utf-8")
             update_value["nick_name"] = base64.b64encode(nick_name)
         l = self.db.execute_update(self.t, update_value=update_value,

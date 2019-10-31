@@ -20,7 +20,6 @@ from .Dyups import DyUpsManager
 from .Article import ArticleManager
 from .TopicMessage import MessageManager
 from .WeiXin import WeiXinManager
-from .Link import LinkManager
 from Class import DATE_FORMAT_STR, release_dir, jd_mysql_host, jd_mysql_db, dyups_server, wx_service, TIME_FORMAT
 from Class import conf_dir
 
@@ -59,7 +58,6 @@ class ControlManager(object):
         self.dyups_man = DyUpsManager(dyups_server)
         self.article_man = ArticleManager()
         self.message_man = MessageManager()
-        self.link_man = LinkManager()
         self.name_2_role_key = {"apicluster": "dyups_api", "webcluster": "dyups_web", "amscluster": "dyups_web",
                                 "healthcluster": "dyups_api", "authcluster": "dyups_api", "samplecluster": "dyups_api"}
 
@@ -790,15 +788,3 @@ class ControlManager(object):
 
     def delete_user_topic_tag(self, user_name, user_role, message_tag):
         return self.message_man.delete_user_tag(message_tag, user_name)
-
-    def get_link_s_info(self, user_name, user_role, s):
-        return self.link_man.select_link_s(s)
-
-    def get_link_n_info(self, user_name, user_role, no):
-        return self.link_man.select_link_n(no)
-
-    def create_link(self, user_name, user_role, link, remark, s=None):
-        return self.link_man.insert_link(remark, link, user_name, s)
-
-    def query_link(self, user_name, user_role, link):
-        return self.link_man.query_md5(link)

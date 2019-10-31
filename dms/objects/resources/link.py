@@ -3,14 +3,18 @@
 
 import hashlib
 from time import time
-from Tools.Mysql_db import DB
+
+from dms.objects.base import ResourceManager
 
 __author__ = 'meisanggou'
 
 
-class LinkManager(object):
+class ShortLinkManager(ResourceManager):
+
+    NAME = "short_link"
+
     def __init__(self):
-        self.db = DB()
+        ResourceManager.__init__(self)
         self.t_s = "short_link_s"
         self.t_n = "short_link_n"
         self.t_m = "short_link_md5"
@@ -30,7 +34,8 @@ class LinkManager(object):
 
     def query_md5(self, link):
         m = hashlib.md5()
-        m.update(link)
+
+        m.update(link.encode("utf-8"))
         link_md5 = m.hexdigest().upper()
         exec_r, db_items = self.select_md5(link_md5)
         if exec_r is False:
@@ -84,7 +89,7 @@ class LinkManager(object):
 
 
 if __name__ == "__main__":
-    l_man = LinkManager()
+    l_man = ShortLinkManager()
     s = l_man.insert_link("test", "http://dms.gene.ac/article/?action=look&article_no=18c1ed7251a911e7873f00163e0045ef",
                           "zh_test")
     print(s)

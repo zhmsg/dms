@@ -73,7 +73,8 @@ def create_app():
 
     api_files = os.listdir("./views")
     for api_file in api_files:
-        if api_file not in ["develop_api_view.py", "dms_view.py", "develop_test_view.py"]:
+        if api_file not in ["develop_api_view.py", "dms_view.py",
+                            "develop_test_view.py", "short_link_view.py"]:
             continue
         if api_file.endswith("_view.py"):
             __import__("Web.views.%s" % api_file[:-3])
