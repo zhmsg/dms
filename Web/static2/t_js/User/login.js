@@ -5,7 +5,7 @@
 function login_success(data) {
     console.info(data);
     var current_user = data.user_name;
-    var storage_key = "jingyun_username";
+    var storage_key = "dms_username";
     var rem_user_names = localStorage.getItem(storage_key);
     var rem_v2 = "";
     if ($("input[name='remember']").is(':checked')) {
@@ -26,8 +26,10 @@ function login_success(data) {
         console.info("un checked");
         localStorage.removeItem(storage_key);
     }
-
-
+    var url = "/policies"
+    my_request2(url, "GET", null, function(data){
+        save_policies(data);
+    })
     location.href = data.location;
 }
 

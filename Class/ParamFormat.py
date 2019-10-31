@@ -4,17 +4,17 @@
 import os
 import re
 from time import time
-from mysqldb_rich import DB
-from Class import conf_dir
+
+from dms.objects.base import DBObject
 
 
 __author__ = 'ZhouHeng'
 
 
-class ParamFormatManager(object):
+class ParamFormatManager(DBObject):
 
     def __init__(self):
-        self.db = DB(conf_path=os.path.join(conf_dir, "mysql_dms.conf"))
+        DBObject.__init__(self)
         self.t_param_format = "param_format"
 
     def new_param_format(self, user_name, param, param_type, **kwargs):

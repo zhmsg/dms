@@ -4,16 +4,10 @@ import time
 
 from mysqldb_rich.db2 import DB
 
+from dms.utils.singleton import Singleton
 
-class WebConfig(object):
-    _instance = None
 
-    def __new__(cls, *args, **kwargs):
-        if cls._instance is not None:
-            return cls._instance
-        object.__new__(cls)
-        _instance = cls
-        return cls
+class WebConfig(Singleton):
 
     def __init__(self, db_config):
         self.t = "web_config"

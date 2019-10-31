@@ -5,7 +5,7 @@ import time
 import base64
 import re
 import requests
-import M2Crypto
+# import M2Crypto
 from Tools.MyIP import IPManager
 from Config.Config import *
 

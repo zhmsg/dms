@@ -35,7 +35,7 @@ def check_chinese(s, min_len=1, max_len=-1):
 
 
 def check_chinese_en(s, min_len=1, max_len=-1):
-    regex = u'[^\u4e00-\u9fa5a-zA-Z]'
+    regex = u'[^\u4e00-\u9fa5a-zA-Z_]'
     return check(regex, s, min_len, max_len)
 
 
@@ -45,7 +45,7 @@ def check_password(s, min_len=1, max_len=-1):
 
 
 def check_path(s, min_len=1, max_len=-1):
-    regex = '[^/a-z_<>0-9:]'
+    regex = r'[^/a-z_<>0-9:\.]'
     return check(regex, s, min_len, max_len)
 
 

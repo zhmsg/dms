@@ -3,16 +3,16 @@
 
 import os
 from time import time
-from mysqldb_rich import DB
-from Class import conf_dir
+
+from dms.objects.base import DBObject
 
 __author__ = 'ZhouHeng'
 
 
-class IPManager(object):
+class IPManager(DBObject):
 
     def __init__(self):
-        self.db = DB(conf_path=os.path.join(conf_dir, "mysql_dms.conf"))
+        DBObject.__init__(self)
         self.ip_info = "ip_info_s"
         self.t_group = "ip_group"
 

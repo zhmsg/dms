@@ -10,6 +10,10 @@ from Tools.RenderTemplate import RenderTemplate
 from Web import api_url_prefix, create_blue, test_url_prefix, status_url_prefix, param_url_prefix
 from Web import control
 
+from dms.utils.manager import ResourcesManager
+
+
+api_man = ResourcesManager.get_instance().get_object_manager("api_help")
 
 sys.path.append('..')
 
@@ -70,10 +74,10 @@ def list_api():
 @develop_api_view.route("/module/", methods=["GET"])
 def get_module_api():
     if "module_no" not in request.args:
-        result, part_module = control.get_part_api(g.user_name, g.user_role)
+        result, part_module = api_man.get_part_api(g.user_name)
         return jsonify({"status": result, "data": part_module})
     module_no = int(request.args["module_no"])
-    result, module_data = control.get_api_list(module_no, g.user_role)
+    result, module_data = api_man.get_api_list(module_no)
     return jsonify({"status": result, "data": module_data})
 
 
@@ -86,11 +90,11 @@ def new_api_module():
     module_part = int(request_data["module_part"])
     module_env = request_data["module_env"]
     if request.method == "POST":
-        result, message = control.new_api_module(g.user_role, module_name, module_prefix, module_desc, module_part,
+        result, message = api_man.new_api_module(module_name, module_prefix, module_desc, module_part,
                                                  module_env)
     else:
         module_no = request_data["module_no"]
-        result, message = control.update_api_module(g.user_role, module_no, module_name, module_prefix, module_desc,
+        result, message = api_man.update_api_module(module_no, module_name, module_prefix, module_desc,
                                                     module_part, module_env)
     return jsonify({"status": result, "data": message})
 

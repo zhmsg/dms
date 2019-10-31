@@ -9,13 +9,15 @@ from flask_login import login_user, current_user, logout_user
 from flask_login import login_required
 from werkzeug.security import gen_salt
 from Class import mongo_host
-from Class.User import UserManager, RoleManager
+from Class.User import RoleManager
 from Web import User
 
 from Web import dms_url_prefix, dev_url_prefix, api_url_prefix, bug_url_prefix, right_url_prefix
 from Web import log_url_prefix, create_blue, param_url_prefix, release_url_prefix, status_url_prefix
 from Web import jingdu_url_prefix, dyups_url_prefix
 from Web import control
+
+from dms.objects.user import UserObject
 
 sys.path.append('..')
 
@@ -26,7 +28,7 @@ url_prefix = dms_url_prefix
 dms_view = create_blue('dms_view', url_prefix=url_prefix, auth_required=False)
 
 
-user_m = UserManager()
+user_m = UserObject()
 role_m = RoleManager(mongo_host)
 
 
@@ -76,23 +78,27 @@ def login():
     else:
         user_name = request_data["user_name"]
         password = request_data["password"]
-    result, info = user_m.check(user_name, password)
-    if result is False:
-        return jsonify({"status": False, "data": info})
+    r_code, info = user_m.user_confirm(password, user=user_name)
+    if r_code == -3:
+        return jsonify({"status": False, "data": "内部错误"})
+    elif r_code == -2:
+        return jsonify({"status": False, "data": "账号不存在"})
+    elif r_code == -1:
+        return jsonify({"status": False, "data": "密码不正确"})
     session["role"] = info["role"]
-    session["roles"] = role_m.select(info["account"])
-    if info["tel"] is None:
-        session["user_name"] = info["account"]
-        session["bind_token"] = gen_salt(57)
-        session["expires_in"] = datetime.now() + timedelta(seconds=300)
-        session["password"] = password
-        return jsonify({"status": True, "data": {"location": "%s/tel/" % url_prefix, "user_name": info["account"]}})
+    session["roles"] = dict()  # role_m.select(info["account"])
+    # if info["tel"] is None:
+    #     session["user_name"] = info["user_name"]
+    #     session["bind_token"] = gen_salt(57)
+    #     session["expires_in"] = datetime.now() + timedelta(seconds=300)
+    #     session["password"] = password
+    #     return jsonify({"status": True, "data": {"location": "%s/tel/" % url_prefix, "user_name": info["user_name"]}})
     if "remember" in request_data and request_data["remember"] == "on":
         remember = True
     else:
         remember = False
     user = User()
-    user.user_name = info["account"]
+    user.user_name = info["user_name"]
     login_user(user, remember=False)
     if "next" in request_data and request_data["next"] != "":
         return jsonify({"status": True, "data": {"location": request_data["next"], "user_name": user.user_name}})
@@ -304,7 +310,10 @@ def authorize():
 @dms_view.route("/portal/", methods=["GET"])
 @login_required
 def select_portal():
-    return render_template("portal.html", api_url_prefix=api_url_prefix, dev_url_prefix=dev_url_prefix,
+    menu = [
+        {"desc": u"API文档", "url": api_url_prefix}
+    ]
+    return render_template("portal.html", menu=menu, dev_url_prefix=dev_url_prefix,
                            bug_url_prefix=bug_url_prefix,
                            dms_url_prefix=dms_url_prefix, right_url_prefix=right_url_prefix,
                            log_url_prefix=log_url_prefix, param_url_prefix=param_url_prefix,
@@ -317,3 +326,12 @@ def select_portal():
 def list_user():
     items = user_m.list_user(g.user_name)
     return jsonify({"status": True, "data": items})
+
+
+@dms_view.route("/policies", methods=["GET"])
+@login_required
+def get_policies():
+    role = session["role"]
+    policies = dict(api_help=["api_module_new", "api_new", "api_look"])
+    return jsonify({"status": True, "data": {"role": role,
+                                             "policies": policies}})

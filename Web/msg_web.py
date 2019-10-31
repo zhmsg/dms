@@ -60,8 +60,8 @@ def create_app():
     def handle_500(e):
         return str(e)
 
-    msg_web.session_interface = RedisSessionInterface(redis=redis, prefix=session_id_prefix,
-                                                      cookie_name=session_cookie_name)
+    # msg_web.session_interface = RedisSessionInterface(redis=redis, prefix=session_id_prefix,
+    #                                                   cookie_name=session_cookie_name)
 
     msg_web.static_folder = "static2"
     if static_prefix_url.startswith("/"):
@@ -73,6 +73,8 @@ def create_app():
 
     api_files = os.listdir("./views")
     for api_file in api_files:
+        if api_file not in ["develop_api_view.py", "dms_view.py", "develop_test_view.py"]:
+            continue
         if api_file.endswith("_view.py"):
             __import__("Web.views.%s" % api_file[:-3])
 
@@ -98,15 +100,8 @@ def create_app():
     env.variable_end_string = " }}"
     return msg_web
 
+
 msg_web = create_app()
-
-if current_env == "Production" or current_env == "Development":
-    for item in dms_job:
-        item["max_instances"] = 10
-        item["replace_existing"] = True
-        dms_scheduler.add_job(**item)
-
-dms_scheduler.start()
 
 
 if __name__ == '__main__':

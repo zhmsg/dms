@@ -12,6 +12,7 @@ from Tools.RenderTemplate import RenderTemplate
 from Web import test_url_prefix, api_url_prefix, status_url_prefix, data_dir, create_blue
 from Web import control
 
+from dms.utils.manager import ResourcesManager
 
 sys.path.append('..')
 
@@ -20,8 +21,10 @@ __author__ = 'Zhouheng'
 url_prefix = test_url_prefix
 html_dir = "/API_HELP"
 case_dir = "%s/test_case" % data_dir
-if os.path.isdir(case_dir) is False:
-    os.mkdir(case_dir)
+# if os.path.isdir(case_dir) is False:
+#     os.mkdir(case_dir)
+
+api_man = ResourcesManager.get_instance().get_object_manager("api_help")
 
 rt = RenderTemplate("API_HELP", url_prefix=url_prefix)
 develop_test_view = create_blue('develop_test_view', url_prefix=url_prefix)
@@ -114,14 +117,14 @@ def get_test_env():
     env_no_list = None
     if "env_no" in request.args:
         env_no_list = request.args["env_no"].split(",")
-    result, env_info = control.get_test_env(g.user_role, env_no_list)
+    result, env_info = api_man.get_test_env(env_no_list)
     return jsonify({"status": result, "data": env_info})
 
 
 @develop_test_view.route("/env/", methods=["POST"])
 def add_test_env():
     r_data = request.json
-    result, env_info = control.new_test_env(g.user_role, r_data["env_name"], r_data["env_address"])
+    result, env_info = api_man.new_test_env(r_data["env_name"], r_data["env_address"])
     return jsonify({"status": result, "data": env_info})
 
 

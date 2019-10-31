@@ -269,7 +269,7 @@ $(function(){
 
     var current_user_role = parseInt($("#current_user_role").val());
     var role_value = JSON.parse($("#role_value").text());
-    if(bit_and(current_user_role, role_value["api_new"])){
+    if(verify_policy("api_help", "api_new")){
         $("div[id^='div_api_new_']").show();
         var test_env_url = $("#test_env_url").val();
         my_async_request2(test_env_url, "GET", null, function (data) {

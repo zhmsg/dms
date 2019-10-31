@@ -14,9 +14,7 @@ from APIStatus import StatusManager
 from Bug import BugManager
 from Log import LogManager
 from IP import IPManager
-from Release import ReleaseManager
 from ParamFormat import ParamFormatManager
-from PullRequest import PullRequestManager
 from JingDuData import JingDuDataManager
 from DingMsg import DingMsgManager
 from Dyups import DyUpsManager
@@ -55,9 +53,7 @@ class ControlManager(object):
         self.api_status = StatusManager()
         self.bug = BugManager()
         self.ip = IPManager()
-        self.release_man = ReleaseManager(release_dir)
         self.param_man = ParamFormatManager()
-        self.pull_request_man = PullRequestManager()
         self.jd_man = JingDuDataManager(jd_mysql_host, jd_mysql_db)
         self.manger_email = ["budechao@ict.ac.cn", "biozy@ict.ac.cn"]
         self.jy_log = LogManager()
@@ -198,26 +194,6 @@ class ControlManager(object):
         if role & self.role_value["api_look"] <= 0:
             return False, u"您没有权限"
         return self.api_help.get_module_list()
-
-    def new_test_env(self, role, env_name, env_address):
-        if role & self.role_value["api_look"] <= 0:
-            return False, u"您没有权限"
-        return self.api_help.new_test_env(env_name, env_address)
-
-    def get_test_env(self, role, env_no_list=None):
-        if role & self.role_value["api_look"] <= 0:
-            return False, u"您没有权限"
-        return self.api_help.get_test_env(env_no_list)
-
-    def new_api_module(self, role, module_name, module_prefix, module_desc, module_part, module_env):
-        if role & self.role_value["api_module_new"] <= 0:
-            return False, u"您没有权限"
-        return self.api_help.new_api_module(module_name, module_prefix, module_desc, module_part, module_env)
-
-    def update_api_module(self, role, module_no, module_name, module_prefix, module_desc, module_part, module_env):
-        if role & self.role_value["api_module_new"] <= 0:
-            return False, u"您没有权限"
-        return self.api_help.update_api_module(module_no, module_name, module_prefix, module_desc, module_part, module_env)
 
     def delete_api_module(self, role, module_no):
         if role & self.role_value["api_module_new"] <= 0:

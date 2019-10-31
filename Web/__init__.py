@@ -6,8 +6,6 @@ from redis import Redis
 from functools import wraps
 from flask import session, g, make_response, Blueprint, jsonify, request, redirect
 from flask_login import LoginManager, UserMixin, login_required
-from apscheduler.schedulers.background import BackgroundScheduler
-import apscheduler.events
 from Tools.Mysql_db import DB
 from JYTools import EmailManager
 from Class.Control import ControlManager
@@ -22,40 +20,10 @@ db = DB()
 ip = IPManager()
 control = ControlManager()
 my_email = EmailManager(conf_dir)
-dms_scheduler = BackgroundScheduler()
+
 redis = Redis(host=redis_host, port=redis_port)
 # job_store = SQLAlchemyJobStore(url=db.url)
 # dms_scheduler.add_jobstore(job_store)
-
-
-def err_listener(ev):
-    with open("dms_task.log", "a") as wr:
-        wr.write("----------%s----------\n" % datetime.now().strftime(TIME_FORMAT))
-        if isinstance(ev, apscheduler.events.JobSubmissionEvent):
-            wr.write("Job Submission Event\n")
-            wr.write("code: %s\n" % ev.code)
-            wr.write("job_id: %s\n" % ev.job_id)
-            wr.write("scheduled_run_times: %s\n" % ev.scheduled_run_times)
-        elif isinstance(ev, apscheduler.events.JobExecutionEvent):
-            wr.write("Job Execution Event\n")
-            wr.write("code: %s\n" % ev.code)
-            wr.write("job_id: %s\n" % ev.job_id)
-            wr.write("scheduled_run_time: %s\n" % ev.scheduled_run_time)
-            print(ev.scheduled_run_time)
-            wr.write("retval: %s\n" % ev.retval)
-            wr.write("exception: %s\n" % ev.exception)
-            wr.write("traceback: %s\n" % ev.traceback)
-        elif isinstance(ev, apscheduler.events.JobEvent):
-            wr.write("Job Event\n")
-            wr.write("code: %s\n" % ev.code)
-            wr.write("job_id: %s\n" % ev.job_id)
-        elif isinstance(ev, apscheduler.events.SchedulerEvent):
-            wr.write("Scheduler Event\n")
-            wr.write("code: %s\n" % ev.code)
-            wr.write("alias: %s\n" % ev.alias)
-        wr.write("----------end----------\n")
-
-dms_scheduler.add_listener(err_listener)
 
 
 class User(UserMixin):
@@ -63,6 +31,7 @@ class User(UserMixin):
 
     def get_id(self):
         return self.user_name
+
 
 login_manager = LoginManager()
 # login_manager.session_protection = 'strong'
@@ -117,15 +86,15 @@ data_dir = "/geneac/dmsdata"
 editor_data_dir = data_dir + "/editor"
 article_data_dir = data_dir + "/article"
 
-if os.path.isdir(article_data_dir) is False:
-    os.mkdir(article_data_dir)
+# if os.path.isdir(article_data_dir) is False:
+#     os.mkdir(article_data_dir)
 
 import os
-if os.path.isdir(data_dir) is False:
-    os.mkdir(data_dir)
+# if os.path.isdir(data_dir) is False:
+#     os.mkdir(data_dir)
 
-if os.path.isdir(editor_data_dir) is False:
-    os.mkdir(editor_data_dir)
+# if os.path.isdir(editor_data_dir) is False:
+#     os.mkdir(editor_data_dir)
 
 
 def company_ip_required(f):

@@ -3,19 +3,32 @@
         "table_cols": [
             {
                 "pri_key": true,
+                "auto_increment": true,
+                "col_comment": "账户编号",
+                "col_name": "user_no",
+                "col_type": "int(11)"
+            },
+            {
+                "uni_key": true,
                 "col_comment": "",
                 "col_name": "user_name",
                 "col_type": "varchar(15)"
             },
             {
-                "col_comment": "",
-                "col_name": "role",
-              "col_type": "bigint(20)"
+                "col_comment": "密码",
+                "col_name": "password",
+                "col_type": "varchar(255)",
+                "allow_null": true
             },
             {
-                "col_comment": "",
+                "col_comment": "角色值 1为默认普通用户 2为内部体验用户 3 11超级管理员",
+                "col_name": "role",
+                "col_type": "bigint(20)"
+            },
+            {
+                "col_comment": "昵称base64",
                 "col_name": "nick_name",
-                "col_type": "varchar(20)"
+                "col_type": "varchar(100)"
             },
             {
                 "col_comment": "",
@@ -30,12 +43,6 @@
                 "allow_null": true
             },
             {
-                "col_comment": "",
-                "col_name": "add_time",
-                "col_type": "datetime",
-                "allow_null": true
-            },
-            {
                 "col_comment": "用户邮箱",
                 "col_name": "email",
                 "col_type": "varchar(100)",
@@ -45,6 +52,18 @@
                 "col_comment": "手机号",
                 "col_name": "tel",
                 "col_type": "char(11)",
+                "allow_null": true
+            },
+            {
+                "col_comment": "头像",
+                "col_name": "avatar_url",
+                "col_type": "varchar(200)",
+                "allow_null": true
+            },
+            {
+                "col_comment": "添加时间",
+                "col_name": "add_time",
+                "col_type": "int(11)",
                 "allow_null": true
             }
         ],
