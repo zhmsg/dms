@@ -25,7 +25,6 @@ class UserObject(DBObject):
     @staticmethod
     def _md5_hash(s):
         m = hashlib.md5()
-        print(s)
         if isinstance(s, str) is True:
             s = s.encode("utf-8")
         m.update(s)

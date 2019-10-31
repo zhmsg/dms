@@ -54,7 +54,7 @@ def test_api_page():
     api_no = request.args["api_no"]
     if len(api_no) != 32:
         return "Bad api_no"
-    result, api_info = control.get_api_info(api_no, g.user_role)
+    result, api_info = api_man.get_api_info(api_no)
     if result is False:
         return api_info
     module_test_env = []
@@ -63,7 +63,7 @@ def test_api_page():
         env_no_list = []
         for env_no_s in module_env_s:
             env_no_list.append(int(env_no_s))
-        result, module_test_env = control.get_test_env(g.user_role, env_no_list)
+        result, module_test_env = api_man.get_test_env(env_no_list)
         if result is False:
             return module_test_env
     if g.user_role & control.role_value["api_new"] == control.role_value["api_new"]:
