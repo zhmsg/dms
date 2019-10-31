@@ -8,7 +8,7 @@ from datetime import timedelta
 from time import time
 from Class import env, jd_mysql_host, jd_mysql_db
 from Class.Task import TaskManager
-from Check import check_int, check_sql_character
+from .Check import check_int, check_sql_character
 
 __author__ = 'ZhouHeng'
 

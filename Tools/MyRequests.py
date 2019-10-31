@@ -2,7 +2,7 @@
 # coding: utf-8
 __author__ = 'ZhouHeng'
 
-import thread
+import threading
 import requests
 
 
@@ -53,7 +53,9 @@ class RequestsManager(object):
     def request(self, method, url, **kwargs):
         as_thread = kwargs.pop("as_thread", False)
         if as_thread is True:
-            return thread.start_new_thread(self.request, (method, url), kwargs)
+            t = threading.Thread(target=self.request, args=(method, url), kwargs=kwargs)
+            t.start()
+            return t
         if "allow_redirects" not in kwargs:
             kwargs["allow_redirects"] = True
         try:

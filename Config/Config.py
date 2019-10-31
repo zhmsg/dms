@@ -3,7 +3,7 @@
 __author__ = 'ZhouHeng'
 
 import os
-import ConfigParser
+import configparser
 
 if os.path.exists("../env.conf") is False:
     current_env = "Development"
@@ -13,7 +13,7 @@ else:
         current_env = r_env.read().strip()
 
 # read config
-config = ConfigParser.ConfigParser()
+config = configparser.ConfigParser()
 config.read("../config.conf")
 
 redis_host = config.get(current_env, "redis_host")

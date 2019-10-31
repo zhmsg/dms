@@ -6,7 +6,7 @@ import requests
 from datetime import datetime
 from pymongo import MongoClient
 from Tools.Mysql_db import DB
-from Check import check_char_num_underline as check_user, check_account_format
+from .Check import check_char_num_underline as check_user, check_account_format
 from Class import TIME_FORMAT, env
 
 __author__ = 'ZhouHeng'

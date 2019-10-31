@@ -6,28 +6,28 @@ import time
 from threading import Thread
 from datetime import datetime
 from Tools.Mysql_db import DB
-from JYTools import EmailManager
-from User import UserManager
-from Dev import DevManager
-from APIHelp import HelpManager
-from APIStatus import StatusManager
-from Bug import BugManager
-from Log import LogManager
-from IP import IPManager
-from ParamFormat import ParamFormatManager
-from JingDuData import JingDuDataManager
-from DingMsg import DingMsgManager
-from Dyups import DyUpsManager
-from Article import ArticleManager
-from TopicMessage import MessageManager
-from WeiXin import WeiXinManager
-from Link import LinkManager
+# from JYTools import EmailManager
+from .User import UserManager
+from .Dev import DevManager
+from .APIHelp import HelpManager
+from .APIStatus import StatusManager
+from .Bug import BugManager
+from .Log import LogManager
+from .IP import IPManager
+from .ParamFormat import ParamFormatManager
+from .JingDuData import JingDuDataManager
+from .DingMsg import DingMsgManager
+from .Dyups import DyUpsManager
+from .Article import ArticleManager
+from .TopicMessage import MessageManager
+from .WeiXin import WeiXinManager
+from .Link import LinkManager
 from Class import DATE_FORMAT_STR, release_dir, jd_mysql_host, jd_mysql_db, dyups_server, wx_service, TIME_FORMAT
 from Class import conf_dir
 
 __author__ = 'ZhouHeng'
 
-my_email = EmailManager(conf_dir)
+# my_email = EmailManager(conf_dir)
 my_wx = WeiXinManager(wx_service)
 
 
@@ -185,11 +185,6 @@ class ControlManager(object):
             my_email.send_mail_thread(email, sub, content)
 
     # 针对API HELP的应用
-    def get_part_api(self, user_name, role):
-        if role & self.role_value["api_look"] <= 0:
-            return False, u"您没有权限"
-        return self.api_help.get_part_api(user_name=user_name)
-
     def get_module_list(self, role):
         if role & self.role_value["api_look"] <= 0:
             return False, u"您没有权限"
@@ -199,29 +194,6 @@ class ControlManager(object):
         if role & self.role_value["api_module_new"] <= 0:
             return False, u"您没有权限"
         return self.api_help.del_api_module(module_no)
-
-    def new_api_info(self, module_no, title, path, method, desc, user_name, role):
-        if role & self.role_value["api_new"] <= 0:
-            return False, u"您没有权限"
-        result, data = self.api_help.new_api_info(module_no, title, path, method, desc)
-        if result is True:
-            self.api_help.new_api_care(data["api_no"], user_name, 0)
-        return result, data
-
-    def update_api_info(self, role, api_no, module_no, title, path, method, desc):
-        if role & self.role_value["api_new"] <= 0:
-            return False, u"您没有权限"
-        result, data = self.api_help.update_api_info(api_no, module_no, title, path, method, desc)
-        return result, data
-
-    def get_api_info(self, api_no, role):
-        if role & self.role_value["api_look"] <= 0:
-            return False, u"您没有权限"
-        result, api_info = self.api_help.get_api_info(api_no)
-        if result is True:
-            if role & self.role_value["api_new"] <= 0 and api_info["basic_info"]["stage"] == u'新建':
-                return False, u"您没有权限"
-        return result, api_info
 
     def add_header_param(self, user_name, user_role, api_no, param, necessary, param_desc):
         if self.judge_role(user_role, self.role_value["api_new"]) <= 0:

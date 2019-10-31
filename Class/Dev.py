@@ -5,10 +5,10 @@ import sys
 import re
 import tempfile
 from Tools.Mysql_db import DB
-from Check import check_sql_character
+from .Check import check_sql_character
 from time import time
 from Class import env
-from Task import DayTaskManager
+from .Task import DayTaskManager
 
 temp_dir = tempfile.gettempdir()
 

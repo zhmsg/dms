@@ -8,7 +8,7 @@ sys.path.append("..")
 from datetime import datetime
 from Tools.Mysql_db import DB
 from Class import TIME_FORMAT
-from Check import check_sql_character, check_int, fill_zero, check_chinese_en, check_special_character
+from .Check import check_sql_character, check_int, fill_zero, check_chinese_en, check_special_character
 
 temp_dir = tempfile.gettempdir()
 

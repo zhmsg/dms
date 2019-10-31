@@ -108,6 +108,7 @@ class ApiHelpManager(ResourceManager):
         self.db.execute(delete_sql)
         return True, "success"
 
+    @PolicyManager.verify_policy(["api_module_new"])
     def new_api_info(self, module_no, api_title, api_path, api_method, api_desc):
         if type(module_no) != int:
             return False , "Bad module_no"
@@ -132,6 +133,7 @@ class ApiHelpManager(ResourceManager):
             return False, "sql execute result is %s " % result
         return True, {"api_no": api_no}
 
+    @PolicyManager.verify_policy(["api_new"])
     def update_api_info(self, api_no, module_no, api_title, api_path, api_method, api_desc):
         if len(api_no) != 32:
             return False, "Bad api_no"
@@ -299,6 +301,7 @@ class ApiHelpManager(ResourceManager):
             env_info.append({"env_no": item[0], "env_name": item[1], "env_address": item[2]})
         return True, env_info
 
+    @PolicyManager.verify_policy(["api_look"])
     def get_part_list(self, user_name):
         cols = ["part_no", "part_name", "part_desc", "part_detail"]
         part_list = self.db.execute_select(self.api_part_info, cols=cols)
@@ -365,6 +368,7 @@ class ApiHelpManager(ResourceManager):
                               "nick_name": item[3], "level": item[4], "email": item[5]})
         return care_info
 
+    @PolicyManager.verify_policy(["api_look"])
     def get_api_info(self, api_no):
         if len(api_no) != 32:
             return False, "Bad api_no"

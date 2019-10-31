@@ -117,7 +117,8 @@ def show_api():
     api_no = request.args["api_no"][:32]
     if len(api_no) != 32:
         return "Bad api_no"
-    result, api_info = control.get_api_info(api_no, g.user_role)
+    # TODO 未按角色筛选 新建 状态的API
+    result, api_info = api_man.get_api_info(api_no)
     if result is False:
         return api_info
     if g.accept_json or request.headers.get("X-Requested-With") == "XMLHttpRequest":
@@ -137,7 +138,7 @@ def show_api():
 
 @develop_api_view.route("/basic/", methods=["GET"])
 def new_api_page():
-    result, part_module = control.get_part_api(g.user_name, g.user_role)
+    result, part_module = api_man.get_part_api(g.user_name)
     if result is False:
         return part_module
     if "api_no" in request.args:
@@ -161,12 +162,12 @@ def new_update_api_info():
     module_no = int(api_module)
     if request.method == "PUT":
         api_no = request_data["api_no"]
-        r, m = control.update_api_info(role=g.user_role, api_no=api_no, desc=desc, method=method, path=url,
+        r, m = api_man.update_api_info(api_no=api_no, desc=desc, method=method, path=url,
                                        module_no=module_no, title=title)
         if r is False:
             return jsonify({"status": False, "data": m})
     else:
-        r, api_info = control.new_api_info(module_no, title, url, method, desc, g.user_name, g.user_role)
+        r, api_info = api_man.new_api_info(module_no, title, url, method, desc)
         if r is False:
             return jsonify({"status": False, "data": api_info})
         api_no = api_info["api_no"]

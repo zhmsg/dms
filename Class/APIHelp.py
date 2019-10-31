@@ -9,7 +9,7 @@ sys.path.append("..")
 from datetime import datetime
 from Tools.Mysql_db import DB
 from Class import TIME_FORMAT
-from Check import check_chinese_en, check_http_method, check_path, check_sql_character, check_int
+from .Check import check_chinese_en, check_http_method, check_path, check_sql_character, check_int
 
 temp_dir = tempfile.gettempdir()
 

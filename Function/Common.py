@@ -128,4 +128,4 @@ if __name__ == "__main__":
                 continue
             key_value = item.split(":", 1)
             headers[key_value[0]] = key_value[1].strip()
-        print verify_mns_message("POST", headers, "/message/receive")
+        print(verify_mns_message("POST", headers, "/message/receive"))

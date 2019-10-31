@@ -1,7 +1,6 @@
 # encoding: utf-8
 # !/usr/bin/env python
 
-import MySQLdb
 import json
 from datetime import date, datetime
 import os

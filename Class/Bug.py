@@ -8,7 +8,7 @@ from datetime import datetime, timedelta
 from time import time
 from Tools.Mysql_db import DB
 from Class import TIME_FORMAT
-from Check import check_sql_character
+from .Check import check_sql_character
 
 temp_dir = tempfile.gettempdir()
 

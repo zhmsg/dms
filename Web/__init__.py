@@ -7,7 +7,7 @@ from functools import wraps
 from flask import session, g, make_response, Blueprint, jsonify, request, redirect
 from flask_login import LoginManager, UserMixin, login_required
 from Tools.Mysql_db import DB
-from JYTools import EmailManager
+# from JYTools import EmailManager
 from Class.Control import ControlManager
 from Function.Common import *
 
@@ -19,7 +19,7 @@ TIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 db = DB()
 ip = IPManager()
 control = ControlManager()
-my_email = EmailManager(conf_dir)
+# my_email = EmailManager(conf_dir)
 
 redis = Redis(host=redis_host, port=redis_port)
 # job_store = SQLAlchemyJobStore(url=db.url)

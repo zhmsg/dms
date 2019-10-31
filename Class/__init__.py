@@ -2,9 +2,9 @@
 # coding: utf-8
 
 import os
-import ConfigParser
-from JYAliYun.AliYunAccount import RAMAccount
-from JYAliYun.AliYunMNS.AliMNSServer import MNSServerManager
+import configparser
+# from JYAliYun.AliYunAccount import RAMAccount
+# from JYAliYun.AliYunMNS.AliMNSServer import MNSServerManager
 
 __author__ = 'ZhouHeng'
 
@@ -21,7 +21,7 @@ else:
         env = r_env.read().strip()
 
 # read config
-config = ConfigParser.ConfigParser()
+config = configparser.ConfigParser()
 config.read("../config.conf")
 
 wx_service = config.get(env, "wx_service")

@@ -23,7 +23,7 @@ author = "meisanggou"
 short_description = "dms"
 long_description = """dms"""
 keywords = "dms"
-install_requires = ["six", "werkzeug", "flask"]
+install_requires = ["six", "werkzeug", "flask", "flask-login"]
 
 entry_points = {'console_scripts': [
     # 'json-merge=jingyun_cli.json.cli:json_merge',
