@@ -8,7 +8,7 @@ from functools import wraps
 from flask import request, jsonify, g
 from Tools.RenderTemplate import RenderTemplate
 from Web import api_url_prefix, create_blue, test_url_prefix, status_url_prefix, param_url_prefix
-from Web import control
+
 
 from dms.utils.manager import ResourcesManager
 
@@ -104,9 +104,9 @@ def new_api_module():
 def add_module_care():
     module_no = int(g.module_no)
     if request.method == "POST":
-        result, care_info = control.add_module_care(g.user_name, g.user_role, module_no)
+        result, care_info = api_man.new_module_care(module_no, g.user_name)
     else:
-        result, care_info = control.delete_module_care(g.user_name, module_no)
+        result, care_info = api_man.del_module_care(module_no, g.user_name)
     return jsonify({"status": result, "data": care_info})
 
 
@@ -177,7 +177,7 @@ def new_update_api_info():
 @develop_api_view.route("/basic/", methods=["DELETE"])
 @referer_api_no
 def delete_api():
-    result, data = control.delete_api(g.api_no, g.user_name)
+    result, data = api_man.del_api_info(g.api_no, g.user_name)
     if result is False:
         return jsonify({"status": False, "data": data})
     return jsonify({"status": True, "location": url_prefix + "/", "data": "success"})
@@ -188,7 +188,7 @@ def delete_api():
 def update_api_status_func():
     api_no = g.api_no
     stage = request.json["stage"]
-    result, info = control.set_api_status(g.user_name, g.user_role, api_no, stage)
+    result, info = api_man.set_api_stage(api_no, stage)
     if result is False:
         return jsonify({"status": False, "data": info})
     return jsonify({"status": True, "location": g.ref_url, "data": "success"})
@@ -202,7 +202,7 @@ def add_header_param():
     api_no = g.api_no
     desc = request_data["desc"]
     necessary = int(request_data["necessary"])
-    result, param_info = control.add_header_param(g.user_name, g.user_role, api_no, param, necessary, desc)
+    result, param_info = api_man.insert_api_header(api_no, param, necessary, desc)
     return jsonify({"status": result, "data": param_info})
 
 
@@ -215,9 +215,9 @@ def update_api_predefine_header():
     update_type = request_data["update_type"]
     param_type = "header"
     if update_type == "delete":
-        result, message = control.delete_predefine_param(g.user_role, api_no, param)
+        result, message = api_man.del_predefine_param(api_no, param)
     else:
-        result, message = control.add_predefine_header(g.user_name, api_no, param, param_type, g.user_role)
+        result, message = api_man.new_predefine_param(api_no, param, param_type)
     return jsonify({"status": result, "data": message})
 
 
@@ -227,7 +227,7 @@ def delete_header():
     request_data = request.json
     api_no = g.api_no
     if "param" in request_data:
-        result, data = control.delete_header(g.user_role, api_no, request_data["param"])
+        result, data = api_man.del_api_header(api_no, request_data["param"])
         return jsonify({"status": result, "data": data})
     return jsonify({"status": False, "data": "need api_no and param"})
 
@@ -250,8 +250,7 @@ def add_body_param():
     necessary = int(request_data["necessary"])
     param_type = request_data["type"]
     status = int(request_data.get("status", "1"))
-    result, param_info = control.add_body_param(g.user_name, api_no, param, necessary, param_type, param_desc,
-                                                status, g.user_role)
+    result, param_info = api_man.insert_api_body(api_no, param, necessary, param_type, param_desc, status)
     return jsonify({"status": result, "data": param_info})
 
 
@@ -264,9 +263,9 @@ def update_api_predefine_body():
     update_type = request_data["update_type"]
     param_type = "body"
     if update_type == "delete":
-        result, message = control.delete_predefine_param(g.user_role, api_no, param)
+        result, message = api_man.del_predefine_param(api_no, param)
     else:
-        result, message = control.add_predefine_header(g.user_name, api_no, param, param_type, g.user_role)
+        result, message = api_man.new_predefine_param(api_no, param, param_type)
     return jsonify({"status": result, "data": message})
 
 
@@ -276,7 +275,7 @@ def delete_body():
     request_data = request.json
     api_no = g.api_no
     if "param" in request_data:
-        result, data = control.delete_body(g.user_role, api_no, request_data["param"])
+        result, data = api_man.del_api_body(api_no, request_data["param"])
         return jsonify({"status": result, "data": data})
     return jsonify({"status": False, "data": "need api_no and param"})
 
@@ -289,7 +288,7 @@ def add_api_example():
     example_type = int(request_form["example_type"])
     desc = request_form["desc"]
     content = request_form["content"]
-    result, data = control.add_api_example(g.user_name, g.user_role, api_no, example_type, desc, content)
+    result, data = api_man.insert_api_example(api_no, example_type, desc, content)
     return jsonify({"status": result, "data": data})
 
 
@@ -299,7 +298,7 @@ def delete_api_example():
     request_data = request.json
     api_no = g.api_no
     example_no = request_data["example_no"]
-    result, data = control.delete_api_example(g.user_role, example_no)
+    result, data = api_man.del_api_example(example_no)
     return jsonify({"status": result, "data": data})
 
 
@@ -308,7 +307,7 @@ def add_care():
     request_data = request.json
     api_no = request_data["api_no"]
     if request.method == "POST":
-        result, care_info = control.add_care(api_no, g.user_name, g.user_role)
+        result, care_info = api_man.new_api_care(api_no, g.user_name)
     else:
-        result, care_info = control.delete_care(api_no, g.user_name)
+        result, care_info = api_man.del_api_care(api_no, g.user_name)
     return jsonify({"status": result, "data": care_info})

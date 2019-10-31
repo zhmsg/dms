@@ -103,6 +103,7 @@ class ApiHelpManager(ResourceManager):
         result = self.db.execute(update_sql)
         return True, "success"
 
+    @PolicyManager.verify_policy(["api_module_new"])
     def del_api_module(self, module_no):
         delete_sql = "DELETE FROM %s WHERE module_no=%s;" % (self.api_module, module_no)
         self.db.execute(delete_sql)
@@ -163,7 +164,9 @@ class ApiHelpManager(ResourceManager):
         self.db.execute(update_sql)
         return True
 
+    @PolicyManager.verify_policy(["api_new"])
     def set_api_stage(self, api_no, stage):
+        # TODO 未控制是否有请求示例
         if len(api_no) != 32:
             return False, "Bad api_no"
         if stage <= 0 or stage > 5:
@@ -191,6 +194,7 @@ class ApiHelpManager(ResourceManager):
             self.db.end_transaction(fail=True)
             return False, str(e)
 
+    @PolicyManager.verify_policy(["api_new"])
     def insert_api_header(self, api_no, param, necessary, param_desc, status=1):
         add_time = datetime.now().strftime(TIME_FORMAT)
         update_time = int(time())
@@ -203,6 +207,7 @@ class ApiHelpManager(ResourceManager):
         self.set_api_update(api_no)
         return True, kwargs
 
+    @PolicyManager.verify_policy(["api_new"])
     def insert_api_body(self, api_no, param, necessary, param_type, param_desc, status=1):
         add_time = datetime.now().strftime(TIME_FORMAT)
         update_time = int(time())
@@ -225,6 +230,7 @@ class ApiHelpManager(ResourceManager):
         l = self.db.execute_update(self.api_body, update_value=kwargs, where_value=dict(api_no=api_no, param=param))
         return l
 
+    @PolicyManager.verify_policy(["api_new"])
     def new_predefine_param(self, api_no, param, param_type, add_time=None):
         if len(api_no) != 32:
             return False, "Bad api_no"
@@ -238,6 +244,7 @@ class ApiHelpManager(ResourceManager):
         r_data["result"] = result
         return True, r_data
 
+    @PolicyManager.verify_policy(["api_new"])
     def insert_api_example(self, api_no, example_type, example_desc, example_content):
         example_no = uuid.uuid4().hex
         add_time = time()
@@ -247,6 +254,7 @@ class ApiHelpManager(ResourceManager):
         self.set_api_update(api_no)
         return True, kwargs
 
+    @PolicyManager.verify_policy(["api_look"])
     def new_api_care(self, api_no, user_name, care_level=2):
         if len(api_no) != 32:
             return False, "Bad api_no"
@@ -259,6 +267,7 @@ class ApiHelpManager(ResourceManager):
             return False, "sql execute result is %s " % result
         return True, {"user_name": user_name, "api_no": api_no, "care_time": care_time}
 
+    @PolicyManager.verify_policy(["api_look"])
     def new_module_care(self, module_no, user_name, care_level=2):
         if type(module_no) != int:
             return False, "Bad module_no"
@@ -314,6 +323,7 @@ class ApiHelpManager(ResourceManager):
             api_part["module_list"] = module_list
         return True, part_list
 
+    @PolicyManager.verify_policy(["api_look"])
     def get_module_list(self, part_no=None):
         cols = ["module_no", "module_name", "module_prefix", "module_desc", "module_part", "module_env"]
         module_list = self.db.execute_select(self.api_module, cols=cols, where_value=dict(module_part=part_no))
@@ -423,6 +433,7 @@ class ApiHelpManager(ResourceManager):
                       "predefine_param": predefine_param, "predefine_header": predefine_header,
                       "predefine_body": predefine_body, "examples": api_examples}
 
+    @PolicyManager.verify_policy(["api_look"])
     def get_api_list(self, module_no):
         if type(module_no) != int:
             return False, "Bad module_no"
@@ -450,6 +461,7 @@ class ApiHelpManager(ResourceManager):
         care_info = self.get_module_care_list(module_no)
         return True, {"api_list": api_list, "care_info": care_info, "module_info": {"module_no": module_no}}
 
+    @PolicyManager.verify_policy(["api_new"])
     def del_api_header(self, api_no, param):
         if len(api_no) != 32:
             return False, "Bad api_no"
@@ -458,6 +470,7 @@ class ApiHelpManager(ResourceManager):
         self.set_api_update(api_no)
         return True, result
 
+    @PolicyManager.verify_policy(["api_new"])
     def del_api_body(self, api_no, param):
         if len(api_no) != 32:
             return False, "Bad api_no"
@@ -465,6 +478,7 @@ class ApiHelpManager(ResourceManager):
         result = self.db.execute(delete_sql)
         return True, result
 
+    @PolicyManager.verify_policy(["api_new"])
     def del_predefine_param(self, api_no, param):
         if len(api_no) != 32:
             return False, "Bad api_no"
@@ -474,10 +488,12 @@ class ApiHelpManager(ResourceManager):
         where_value["result"] = result
         return True, where_value
 
+    @PolicyManager.verify_policy(["api_new"])
     def del_api_example(self, example_no):
         l = self.db.execute_delete(self.t_example, where_value=dict(example_no=example_no))
         return True, l
 
+    @PolicyManager.verify_policy(["api_look"])
     def del_api_care(self, api_no, user_name):
         if len(api_no) != 32:
             return False, "Bad api_no"
@@ -485,6 +501,7 @@ class ApiHelpManager(ResourceManager):
         result = self.db.execute(delete_sql)
         return True, result
 
+    @PolicyManager.verify_policy(["api_look"])
     def del_module_care(self, module_no, user_name, level=2):
         if type(module_no) != int:
             return False, "Bad module_no"
@@ -493,6 +510,7 @@ class ApiHelpManager(ResourceManager):
         result = self.db.execute(delete_sql)
         return True, result
 
+    @PolicyManager.verify_policy(["api_new"])
     def del_api_info(self, api_no, user_name):
         if len(api_no) != 32:
             return False, "Bad api_no"

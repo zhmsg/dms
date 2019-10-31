@@ -9,7 +9,6 @@ from Tools.Mysql_db import DB
 # from JYTools import EmailManager
 from .User import UserManager
 from .Dev import DevManager
-from .APIHelp import HelpManager
 from .APIStatus import StatusManager
 from .Bug import BugManager
 from .Log import LogManager
@@ -49,7 +48,6 @@ class ControlManager(object):
         self.user_role_desc = self.user.role_desc
         self.role_value = self.user.role_value
         self.dev = DevManager()
-        self.api_help = HelpManager()
         self.api_status = StatusManager()
         self.bug = BugManager()
         self.ip = IPManager()
@@ -183,111 +181,6 @@ class ControlManager(object):
             content += "%s : %s<br>" % (attribute_ch[index], info[attribute[index]])
         for email in self.manger_email:
             my_email.send_mail_thread(email, sub, content)
-
-    # 针对API HELP的应用
-    def get_module_list(self, role):
-        if role & self.role_value["api_look"] <= 0:
-            return False, u"您没有权限"
-        return self.api_help.get_module_list()
-
-    def delete_api_module(self, role, module_no):
-        if role & self.role_value["api_module_new"] <= 0:
-            return False, u"您没有权限"
-        return self.api_help.del_api_module(module_no)
-
-    def add_header_param(self, user_name, user_role, api_no, param, necessary, param_desc):
-        if self.judge_role(user_role, self.role_value["api_new"]) <= 0:
-            return False, u"您没有权限"
-        result, info = self.api_help.insert_api_header(api_no, param, necessary, param_desc)
-        if result is True:
-            self._send_api_update_message_thread(user_name, api_no, param)
-        return result, info
-
-    def add_predefine_header(self, user_name, api_no, param, param_type, role):
-        if role & self.role_value["api_new"] <= 0:
-            return False, u"您没有权限"
-        result, info = self.api_help.new_predefine_param(api_no, param, param_type)
-        if result is True:
-            self._send_api_update_message_thread(user_name, api_no, param)
-        return result, info
-
-    def add_body_param(self, user_name, api_no, param, necessary, param_type, param_desc, status, role):
-        if role & self.role_value["api_new"] <= 0:
-            return False, u"您没有权限"
-        exec_r, info = self.api_help.insert_api_body(api_no, param, necessary, param_type, param_desc, status)
-        if exec_r is True:
-            self._send_api_update_message_thread(user_name, api_no, param)
-        return exec_r, info
-
-    def add_api_example(self, user_name, user_role, api_no, example_type, desc, content):
-        if self.judge_role(user_role, self.role_value["api_new"]) is False:
-            return False, u"您没有权限"
-        exec_r, data = self.api_help.insert_api_example(api_no, example_type, desc, content)
-        return exec_r, data
-
-    def add_care(self, api_no, user_name, role):
-        if role & 8 <= 0:
-            return False, u"您没有权限"
-        return self.api_help.new_api_care(api_no, user_name)
-
-    def add_module_care(self, user_name, role, module_no):
-        if role & 8 <= 0:
-            return False, u"您没有权限"
-        return self.api_help.new_module_care(module_no, user_name)
-
-    def get_api_list(self, module_no, role):
-        if role & self.role_value["api_look"] <= 0:
-            return False, u"您没有权限"
-        result, api_list = self.api_help.get_api_list(module_no)
-        if result is True and role & self.role_value["api_new"] <= 0:
-            len_api = len(api_list["api_list"])
-            for i in range(len_api - 1, -1, -1):
-                api_item = api_list["api_list"][i]
-                if api_item["stage"] == u'新建':
-                    api_list["api_list"].remove(api_item)
-        return result, api_list
-
-    def delete_header(self, role, api_no, param):
-        if role & self.role_value["api_new"] <= 0:
-            return False, u"您没有权限"
-        return self.api_help.del_api_header(api_no, param)
-
-    def delete_predefine_param(self, role, api_no, param):
-        if role & self.role_value["api_new"] <= 0:
-            return False, u"您没有权限"
-        return self.api_help.del_predefine_param(api_no, param)
-
-    def delete_body(self, role, api_no, param):
-        if role & self.role_value["api_new"] <= 0:
-            return False, u"您没有权限"
-        return self.api_help.del_api_body(api_no=api_no, param=param)
-
-    def delete_api_example(self, user_role, example_no):
-        if self.judge_role(user_role, self.role_value["api_new"]) is False:
-            return False, u"您没有权限"
-        return self.api_help.del_api_example(example_no)
-
-    def delete_care(self, api_no, user_name):
-        return self.api_help.del_api_care(api_no, user_name)
-
-    def delete_module_care(self, user_name, module_no):
-        return self.api_help.del_module_care(module_no, user_name)
-
-    def delete_api(self, api_no, user_name):
-        return self.api_help.del_api_info(api_no, user_name)
-
-    def set_api_status(self, user_name, role, api_no, stage):
-        if role & self.role_value["api_new"] <= 0:
-            return False, u"您没有权限"
-        if stage == 2:
-            # 必须至少一个返回示例
-            output_info = self.api_help.get_api_example(api_no)
-            if len(output_info) <= 0:
-                return False, u"请至少提交一个返回示例"
-        result, info = self.api_help.set_api_stage(api_no, stage)
-        if result is True and stage == 2:
-            self._send_api_completed_message_thread(user_name, api_no)
-        return result, info
 
     # 针对API状态码的应用
     def get_fun_info(self, role):
@@ -545,93 +438,6 @@ class ControlManager(object):
         if role & self.role_value["bug_cancel"]:
             return False, u"您无权限修改该BUG的状态"
         return self.bug.new_bug_link(bug_no, link_user, 5, user_name)
-
-    # 发送API更新提醒
-    def _send_module_message(self, user_name, module_no, api_no, title, method, desc):
-        care_info = self.api_help.get_module_care_list(module_no=module_no)
-        rec_user = []
-        rec_email = []
-        for care_user in care_info:
-            if care_user["email"] is None:
-                continue
-            rec_user.append("%s|%s" % (care_user["user_name"], care_user["email"]))
-            rec_email.append(care_user["email"])
-        email_content_lines = []
-        email_content_lines.append(u"模块增加新的API")
-        email_content_lines.append(u"API标题：%s" % title)
-        email_content_lines.append(u"API访问方法：%s" % method)
-        email_content_lines.append(u"API描述：%s" % desc)
-        access_url = "http://dms.gene.ac/dev/api/info/?api_no=%s" % api_no
-        email_content_lines.append(u"<a href='%s'>查看详情</a>" % access_url)
-        email_content = "<br/>".join(email_content_lines)
-        # 写入更新信息
-        self.api_help.new_send_message(user_name, rec_user, email_content)
-        for email in rec_email:
-            my_email.send_mail(email, u"模块增加新的API：%s" % title, email_content)
-
-    def _send_api_update_message(self, user_name, api_no, param):
-        result, api_info = self.api_help.get_api_basic_info(api_no)
-        if result is False:
-            return False
-        # 判断添加api是否已完成
-        if api_info["stage"] != 2:
-            return False
-        care_info = self.api_help.get_api_care_info(api_no)
-        rec_user = []
-        rec_email = []
-        for care_user in care_info:
-            if care_user["email"] is None:
-                continue
-            rec_user.append("%s|%s" % (care_user["user_name"], care_user["email"]))
-            rec_email.append(care_user["email"])
-        email_content_lines = []
-        email_content_lines.append(u"API更新了参数")
-        email_content_lines.append(u"API标题：%s" % api_info["api_title"])
-        email_content_lines.append(u"API描述：%s" % api_info["api_desc"])
-        email_content_lines.append(u"更新的参数名称：%s" % param)
-        access_url = "http://dms.gene.ac/dev/api/info/?api_no=%s" % api_no
-        email_content_lines.append(u"<a href='%s'>查看详情</a>" % access_url)
-        email_content = "<br/>".join(email_content_lines)
-        # 写入更新信息
-        self.api_help.new_send_message(user_name, rec_user, email_content)
-        for email in rec_email:
-            my_email.send_mail(email, u"API:%s，更新了参数" % api_info["api_title"], email_content)
-        return True
-
-    def _send_api_update_message_thread(self, user_name, api_no, param):
-        t = Thread(target=self._send_api_update_message, args=(user_name, api_no, param))
-        t.start()
-
-    def _send_api_completed_message(self, user_name, api_no):
-        result, api_info = self.api_help.get_api_basic_info(api_no)
-        if result is False:
-            return False
-        api_care_info = self.api_help.get_api_care_info(api_no)
-        care_info = self.api_help.get_module_care_list(module_no=api_info["module_no"])
-        care_info.extend(api_care_info)
-        rec_user = []
-        rec_email = set()
-        for care_user in care_info:
-            if care_user["email"] is None or care_user["email"] in rec_email:
-                continue
-            rec_user.append("%s|%s" % (care_user["user_name"], care_user["email"]))
-            rec_email.add(care_user["email"])
-        email_content_lines = []
-        email_content_lines.append(u"API文档完成")
-        email_content_lines.append(u"API标题：%s" % api_info["api_title"])
-        email_content_lines.append(u"API描述：%s" % api_info["api_desc"])
-        access_url = "http://dms.gene.ac/dev/api/info/?api_no=%s" % api_no
-        email_content_lines.append(u"<a href='%s'>查看详情</a>" % access_url)
-        email_content = "<br/>".join(email_content_lines)
-        # 写入更新信息
-        self.api_help.new_send_message(user_name, rec_user, email_content)
-        for email in rec_email:
-            my_email.send_mail(email, u"API:%s，文档已完成" % api_info["api_title"], email_content)
-        return True
-
-    def _send_api_completed_message_thread(self, user_name, api_no):
-        t = Thread(target=self._send_api_completed_message, args=(user_name, api_no))
-        t.start()
 
     def test_send(self, user_name, content):
         result, user_info = self.user.get_user_info(user_name)
