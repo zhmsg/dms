@@ -2,68 +2,7 @@
  * Created by msg on 11/3/15.
  */
 
-function add_param_success(data) {
-    var tr_id = "trb_" + data.api_no + data.param;
-    $("#" + tr_id).remove();
-    var add_tr = $("<tr></tr>");
-    add_tr.attr("id", tr_id);
-
-    var param_td = $("<td></td>");
-    param_td.text(data.param);
-    add_tr.append(param_td);
-
-    var necessary_td = $("<td></td>");
-    if (data.necessary == true) {
-        necessary_td.text("是");
-    }
-    else {
-        necessary_td.text("否");
-    }
-    add_tr.append(necessary_td);
-
-    var sign = "header";
-
-    if ("type" in data) {
-        var type_td = $("<td></td>");
-        type_td.text(data.type);
-        add_tr.append(type_td);
-        sign = "body";
-    }
-
-    var desc_td = $("<td></td>");
-    desc_td.text(data.param_desc);
-    add_tr.append(desc_td);
-
-    if (sign == "body") {
-        var status_td = $("<td></td>");
-        status_td.text(["稍后", "立即", "待废弃", "废弃"][data.status]);
-        add_tr.append(status_td);
-    }
-
-    var op_td = $("<td></td>");
-    var up_btn = $("<button class='btn btn-success'>更新</button>");
-    var del_btn = $("<button class='btn btn-danger'>删除</button>");
-    del_btn.attr("param_type", sign);
-    if (sign == "body") {
-        up_btn.click(update_body_param);
-    }
-    del_btn.click(delete_param);
-    op_td.append(up_btn);
-    op_td.append(" ");
-    op_td.append(del_btn);
-    add_tr.append(op_td);
-
-    var tr = $("#api_" + sign + "_param tr").eq(-2);
-    tr.after(add_tr);
-
-    $("#" + sign + "_param_name").val("");
-    $("#" + sign + "_param_desc").val("");
-    $("#" + sign + "_param_type").val("");
-    $("#btn_new_" + sign).text("新建");
-
-    $("#btn_new_" + sign).removeClass();
-    $("#btn_new_" + sign).addClass("btn btn-info");
-}
+var param_vm = null;
 
 
 function add_example_info() {
@@ -71,25 +10,6 @@ function add_example_info() {
     var parent_div = current_btn.parent();
     var data = package_input(parent_div);
     my_async_request2(data["url"], "POST", data, add_example);
-}
-
-function add_param() {
-    var parent_tr = $(this).parent().parent();
-    var data = package_input(parent_tr);
-    console.info(data);
-    my_async_request2(data["url"], "POST", data, add_param_success);
-}
-
-function delete_param() {
-    var parent_tr = $(this).parent().parent();
-    var tds = parent_tr.find("td");
-    var param = tds[0].innerHTML;
-    var param_type = $(this).attr("param_type");
-    var del_url = $("#" + param_type + "_url").val();
-    console.info(del_url);
-    my_async_request2(del_url, "DELETE", {"param": param}, function () {
-        parent_tr.remove();
-    });
 }
 
 function delete_example() {
@@ -148,18 +68,6 @@ function send_message() {
     alert("即将离开");
 }
 
-function update_body_param() {
-    var parent_tr = $(this).parent().parent();
-    var tds = parent_tr.find("td");
-    $("#body_param_name").val(tds[0].innerHTML);
-    select_option("body_param_necessary", tds[1].innerHTML, "text");
-    select_option("body_param_type", tds[2].innerHTML, "text");
-    $("#body_param_desc").val(tds[3].innerHTML);
-    select_option("body_param_status", tds[4].innerHTML, "text");
-    $("#btn_new_body").text("更新");
-    $("#btn_new_body").removeClass();
-    $("#btn_new_body").addClass("btn btn-success");
-}
 
 function update_stage(stage) {
     var update_url = $("#update_stage_url").val();
@@ -222,6 +130,7 @@ function init_api_info(data) {
     // predefine
     var pre = ["header", "body"];
     var pre_len = pre.length;
+
     for (var i = 0; i < pre_len; i++) {
         var param_type = pre[i];
         for (var key in api_info["predefine_" + param_type]) {
@@ -244,9 +153,6 @@ function init_api_info(data) {
             $("#api_" + param_type + "_param").after(btn);
         }
         var l = api_info[param_type + "_info"].length;
-        for (var j = 0; j < l; j++) {
-            add_param_success(api_info[param_type + "_info"][j]);
-        }
     }
 
     // examples
@@ -255,12 +161,79 @@ function init_api_info(data) {
         var example_item = api_info.examples[i];
         add_example(example_item);
     }
+    // body info
+    var param_len = api_info.body_info.length;
+    for(var k=0;k<param_len;k++){
+        param_vm.all_api_params.push(api_info.body_info[k]);
+    }
 }
 
 $(function () {
     init_api_info();
     $("button[name='btn_new']").click(add_example_info);
-    $("button[name='btn_new_param']").click(add_param);
     $("textarea").change(format_input);
     $("textarea").keyup(format_input);
+    var param_url = "/dev/api/param"
+    param_vm = new Vue({
+        el: "#api_params",
+        data: {
+            all_api_params: [],
+            all_location: [],
+            current_location: "body",
+            current_param_name: "",
+            current_necessary: "1",
+            current_type: "",
+            current_desc: "",
+            current_status: "1"
+        },
+        methods: {
+            new_param_action: function(){
+                if(this.current_param_name.length <= 0){
+                    alert_error("请设置 参数名称");
+                    return false;
+                }
+                if(this.current_necessary == ""){
+                    alert_error("请选择 参数是否必须");
+                    return false;
+                }
+                if(this.current_type == ""){
+                    alert_error("请选择 参数类型");
+                    return false;
+                }
+                if(this.current_desc == ""){
+                    alert_error("请设置 参数描述");
+                    return false;
+                }
+                var that = this;
+                var param_data = {"param_name": this.current_param_name, "location": this.current_location,
+                                    "necessary": this.current_necessary, "type": this.current_type,
+                                    "param_desc": this.current_desc, "status": this.current_status};
+
+                my_async_request2(param_url, "POST", param_data, function(data){
+                    that.all_api_params.push(data);
+                    that.current_location =  "body";
+                    console.info(that.current_location);
+                    console.info(param_vm.current_location);
+                    that.current_param_name = "";
+                    that.current_necessary = "1";
+                    that.current_type = "";
+                    that.current_desc = "";
+                    that.current_status = "1";
+                });
+            },
+            update_param_action: function(index){
+                var param_data = this.all_api_params[index];
+                my_async_request2(param_url, "POST", param_data, function(data){
+                    alert1("更新成功");
+                });
+            },
+            remove_param_action: function(index){
+                var that = this;
+                var param_name = that.all_api_params[index]["param_name"];
+                my_async_request2(param_url, "DELETE", {"param_name": param_name}, function(data){
+                    that.all_api_params.splice(index, 1);
+                })
+            },
+        }
+    });
 });

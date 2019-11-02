@@ -3,7 +3,7 @@
 import os
 import sys
 
-from mysqldb_rich import DB, TableDB
+from mysqldb_rich.db2 import DB, TableDB
 
 __author__ = 'meisa'
 
@@ -18,7 +18,5 @@ if __name__ == "__main__":
     db = DB(conf_path=db_conf_path, user="root", password=root_password)
     db.root_init_conf('%')
     db2 = TableDB(conf_path=db_conf_path)
-    import pdb
-    pdb.set_trace()
     db2.create_from_dir(os.path.join(script_dir, "..", "Table"))
 

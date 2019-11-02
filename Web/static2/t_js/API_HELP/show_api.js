@@ -224,9 +224,7 @@ function fill_param_desc(data) {
 
 $(function() {
     init_api_info();
-    var current_user_role = parseInt($("#current_user_role").val());
-    var role_value = JSON.parse($("#role_value").text());
-    if(bit_and(current_user_role, role_value["api_new"])){
+    if(verify_policy("api_help", "api_new")){
         $("#a_update_api").attr("href", location.href + "&update=");
         $("div[id^='div_api_new_']").show();
     }

@@ -228,3 +228,14 @@ function alert1(msg) {
         dialog_div.remove();
     }, 2000);
 }
+
+function alert_error(msg) {
+    $("div[role='alert']").hide();
+    var dialog_div = $('<div class="alert alert-danger" role="alert" style="z-index:999"></div>');
+    dialog_div.text(msg);
+    $("body").append(dialog_div);
+    register_reset_bottom(dialog_div);
+    setTimeout(function () {
+        dialog_div.remove();
+    }, 2000);
+}

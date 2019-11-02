@@ -31,7 +31,7 @@ if __name__ == "__main__":
     class A(object):
 
         @PolicyManager.verify_policy(["abc"])
-        def test(self, a, b):
+        def test(self, a, b, *args, **kwargs):
             print(a)
             print(b)
     a = A()

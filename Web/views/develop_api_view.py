@@ -240,17 +240,20 @@ def update_api_body_page():
     return rt.render("Update_API_Param.html", api_no=api_no, body_url=body_url)
 
 
-@develop_api_view.route("/body/", methods=["POST"])
+@develop_api_view.route("/param", methods=["POST"])
 @referer_api_no
 def add_body_param():
     request_data = request.json
-    param = request_data["name"]
+    param_name = request_data["param_name"]
+    location = request_data["location"]
     api_no = g.api_no
-    param_desc = request_data["desc"]
+    param_desc = request_data["param_desc"]
     necessary = int(request_data["necessary"])
     param_type = request_data["type"]
     status = int(request_data.get("status", "1"))
-    result, param_info = api_man.insert_api_body(api_no, param, necessary, param_type, param_desc, status)
+    result, param_info = api_man.insert_api_body(api_no, param_name, location,
+                                                 necessary, param_type,
+                                                 param_desc, status)
     return jsonify({"status": result, "data": param_info})
 
 
@@ -269,13 +272,14 @@ def update_api_predefine_body():
     return jsonify({"status": result, "data": message})
 
 
-@develop_api_view.route("/body/", methods=["DELETE"])
+@develop_api_view.route("/param", methods=["DELETE"])
 @referer_api_no
 def delete_body():
     request_data = request.json
     api_no = g.api_no
-    if "param" in request_data:
-        result, data = api_man.del_api_body(api_no, request_data["param"])
+    if "param_name" in request_data:
+        param_name = request_data["param_name"]
+        result, data = api_man.del_api_param(api_no, param_name)
         return jsonify({"status": result, "data": data})
     return jsonify({"status": False, "data": "need api_no and param"})
 

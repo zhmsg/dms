@@ -26,34 +26,11 @@
     <span class="margin10" id="span_modify_stage">
 
     </span>
-    <table class="table table-bordered api-list-table" id="api_header_param">
-        <caption>请求头部参数</caption>
+
+    <table class="table table-bordered api-list-table" id="api_params">
+        <caption>请求参数</caption>
         <tr>
-            <th scope="col" width="25%">参数名称</th>
-            <th scope="col" width="8%">是否必须</th>
-            <th scope="col" width="55%">参数描述</th>
-            <th scope="col" width="12%">操作</th>
-        </tr>
-        <tr>
-            <td><input class="form-control" id="header_param_name" name="name"/></td>
-            <td>
-                <select class="form-control" id="header_param_necessary" name="necessary">
-                    <option value="1">是</option>
-                    <option value="0">否</option>
-                </select>
-            </td>
-            <td><input class="form-control" id="header_param_desc" name="desc"
-                       placeholder="如果你不想既浪费了写文档的时间，还得浪费时间给前端解释。请写的傻子都能看懂"/>
-            </td>
-            <td>
-                <input name="url" value="{{ url_prefix }}/header/" class="display_none"/>
-                <button class="btn btn-info" name="btn_new_param">新建</button>
-            </td>
-        </tr>
-    </table>
-    <table class="table table-bordered api-list-table" id="api_body_param">
-        <caption>请求主体参数</caption>
-        <tr>
+            <th scope="col" width="10%">参数位置</th>
             <th scope="col" width="15%">参数名称</th>
             <th scope="col" width="8%">是否必须</th>
             <th scope="col" width="9%">参数类型</th>
@@ -61,16 +38,22 @@
             <th scope="col" width="10%">生效</th>
             <th scope="col" width="12%">操作</th>
         </tr>
-        <tr>
-            <td><input class="form-control" id="body_param_name" name="name"/></td>
+        <tr v-for="(param_item,param_index) in all_api_params">
             <td>
-                <select class="form-control" id="body_param_necessary" name="necessary">
+                <select class="form-control" v-model="param_item.location">
+                    <option value="body">body</option>
+                    <option value="header">header</option>
+                </select>
+            </td>
+            <td><input class="form-control" v-model="param_item.param_name"/></td>
+            <td>
+                <select class="form-control" v-model="param_item.necessary">
                     <option value="1">是</option>
                     <option value="0">否</option>
                 </select>
             </td>
             <td>
-                <select class="form-control" id="body_param_type" name="type">
+                <select class="form-control" v-model="param_item.type">
                     <option value="string">string</option>
                     <option value="int">int</option>
                     <option value="list">list</option>
@@ -78,10 +61,50 @@
                     <option value="bool">bool</option>
                 </select>
             </td>
-            <td><input class="form-control" id="body_param_desc" name="desc"
+            <td>
+                <input class="form-control" v-model="param_item.param_desc"
                        placeholder="请详细的描述出后端对参数的限制，包括但不限于字段长度，字符限制等"/></td>
             <td>
-                <select class="form-control" id="body_param_status" name="status">
+                <select class="form-control" v-model="param_item.status">
+                    <option value="1" title="立即生效">立即</option>
+                    <option value="0" title="稍后生效">稍后</option>
+                    <option value="2" title="待废弃">待废弃</option>
+                    <option value="3" title="已废弃">已废弃</option>
+                </select>
+            </td>
+            <td>
+                <button class="btn btn-success margin5" @click="update_param_action(param_index)">更新</button>
+                <button class="btn btn-danger" @click="remove_param_action(param_index)">删除</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <select class="form-control" v-model="current_location">
+                    <option value="body">body</option>
+                    <option value="header">header</option>
+                </select>
+            </td>
+            <td><input class="form-control" v-model="current_param_name"/></td>
+            <td>
+                <select class="form-control" v-model="current_necessary">
+                    <option value="1">是</option>
+                    <option value="0">否</option>
+                </select>
+            </td>
+            <td>
+                <select class="form-control" v-model="current_type">
+                    <option value="string">string</option>
+                    <option value="int">int</option>
+                    <option value="list">list</option>
+                    <option value="object">object</option>
+                    <option value="bool">bool</option>
+                </select>
+            </td>
+            <td>
+                <input class="form-control" v-model="current_desc"
+                       placeholder="请详细的描述出后端对参数的限制，包括但不限于字段长度，字符限制等"/></td>
+            <td>
+                <select class="form-control" v-model="current_status">
                     <option value="1" title="立即生效">立即</option>
                     <option value="0" title="稍后生效">稍后</option>
                     <option value="2" title="待废弃">待废弃</option>
@@ -90,10 +113,11 @@
             </td>
             <td>
                 <input name="url" value="{{ url_prefix }}/body/" class="display_none"/>
-                <button class="btn btn-info" name="btn_new_param">新建</button>
+                <button class="btn btn-info" @click="new_param_action">新建</button>
             </td>
         </tr>
     </table>
+
     <a href="{{ url_prefix }}/body/?api_no={{ api_no }}">从其他API复制</a>
     <br>
     <div class="bottom20 top6 api-example">

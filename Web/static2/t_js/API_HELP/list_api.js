@@ -267,8 +267,6 @@ $(function(){
         }
     });
 
-    var current_user_role = parseInt($("#current_user_role").val());
-    var role_value = JSON.parse($("#role_value").text());
     if(verify_policy("api_help", "api_new")){
         $("div[id^='div_api_new_']").show();
         var test_env_url = $("#test_env_url").val();

@@ -2,6 +2,7 @@
 # coding: utf-8
 
 from datetime import datetime
+from functools import partial
 import sys
 import tempfile
 from time import time
@@ -11,6 +12,8 @@ sys.path.append("..")
 
 from Class import TIME_FORMAT
 from Class.Check import check_chinese_en, check_http_method, check_path, check_sql_character, check_int
+
+from dms.utils.verify_convert import verify_uuid
 
 from dms.objects.base import ResourceManager
 from dms.objects.policy import PolicyManager
@@ -33,6 +36,7 @@ class ApiHelpManager(ResourceManager):
         self.predefine_header = "predefine_header"
         self.predefine_body = "predefine_body"
         self.api_body = "api_body"
+        self.api_params = "api_params"
         self.predefine_param = "predefine_param"
         self.api_care = "api_care"
         self.module_care = "module_care"
@@ -49,6 +53,12 @@ class ApiHelpManager(ResourceManager):
             "api_module_new": {"desc": "新建模块"},
         }}
         return [api_doc]
+
+    @staticmethod
+    def require_verify_args():
+        rv_args = dict()
+        rv_args["api_no"] = partial(verify_uuid, "api_no")
+        return rv_args
 
     @PolicyManager.verify_policy(["api_module_new"])
     def new_api_module(self, module_name, module_prefix, module_desc, module_part, module_env):
@@ -208,13 +218,15 @@ class ApiHelpManager(ResourceManager):
         return True, kwargs
 
     @PolicyManager.verify_policy(["api_new"])
-    def insert_api_body(self, api_no, param, necessary, param_type, param_desc, status=1):
+    def insert_api_body(self, api_no, param_name, location, necessary, param_type,
+                        param_desc, status=1):
         add_time = datetime.now().strftime(TIME_FORMAT)
         update_time = int(time())
         param_desc = param_desc[:1000]
-        kwargs = dict(api_no=api_no, param=param, necessary=necessary, type=param_type, param_desc=param_desc,
+        kwargs = dict(api_no=api_no, param_name=param_name, location=location,
+                      necessary=necessary, type=param_type, param_desc=param_desc,
                       status=status, add_time=add_time, update_time=update_time)
-        l = self.db.execute_insert(self.api_body, kwargs, ignore=True)
+        l = self.db.execute_insert(self.api_params, kwargs, ignore=True)
         if l == 0:
             self.update_api_body(**kwargs)
         self.set_api_update(api_no)
@@ -225,9 +237,11 @@ class ApiHelpManager(ResourceManager):
         l = self.db.execute_update(self.api_header, update_value=kwargs, where_value=dict(api_no=api_no, param=param))
         return l
 
-    def update_api_body(self, api_no, param, **kwargs):
+    def update_api_body(self, api_no, param_name, **kwargs):
         kwargs.pop("add_time")
-        l = self.db.execute_update(self.api_body, update_value=kwargs, where_value=dict(api_no=api_no, param=param))
+        l = self.db.execute_update(self.api_params, update_value=kwargs,
+                                   where_value=dict(api_no=api_no,
+                                                    param_name=param_name))
         return l
 
     @PolicyManager.verify_policy(["api_new"])
@@ -380,19 +394,17 @@ class ApiHelpManager(ResourceManager):
 
     @PolicyManager.verify_policy(["api_look"])
     def get_api_info(self, api_no):
-        if len(api_no) != 32:
-            return False, "Bad api_no"
         where_value = dict(api_no=api_no)
         # get basic info
         result, basic_info = self.get_api_basic_info(api_no)
         if result is False:
             return False, basic_info
-        # 获得请求头部参数列表
-        cols = ["api_no", "param", "necessary", "param_desc"]
-        header_info = self.db.execute_select(self.api_header, where_value=where_value, cols=cols, order_by=["add_time"])
+
+        header_info = []
         # 获得请求主体参数列表
-        body_cols = ["api_no", "param", "necessary", "type", "param_desc", "status", "add_time", "update_time"]
-        body_info = self.db.execute_select(self.api_body, where_value=dict(api_no=api_no), order_by=["add_time"],
+        body_cols = ["api_no", "param_name", "location", "necessary", "type",
+                     "param_desc", "status", "add_time", "update_time"]
+        body_info = self.db.execute_select(self.api_params, where_value=dict(api_no=api_no), order_by=["add_time"],
                                            cols=body_cols)
         # 获得预定义参数列表
         cols = ["param", "param_type"]
@@ -463,25 +475,20 @@ class ApiHelpManager(ResourceManager):
 
     @PolicyManager.verify_policy(["api_new"])
     def del_api_header(self, api_no, param):
-        if len(api_no) != 32:
-            return False, "Bad api_no"
         delete_sql = "DELETE FROM %s WHERE api_no='%s' AND param='%s';" % (self.api_header, api_no, param)
         result = self.db.execute(delete_sql)
         self.set_api_update(api_no)
         return True, result
 
     @PolicyManager.verify_policy(["api_new"])
-    def del_api_body(self, api_no, param):
-        if len(api_no) != 32:
-            return False, "Bad api_no"
-        delete_sql = "DELETE FROM %s WHERE api_no='%s' AND param='%s';" % (self.api_body, api_no, param)
-        result = self.db.execute(delete_sql)
+    def del_api_param(self, api_no, param_name):
+        where_value = dict(api_no=api_no, param_name=param_name)
+        result = self.db.execute_delete(self.api_params,
+                                        where_value=where_value)
         return True, result
 
     @PolicyManager.verify_policy(["api_new"])
     def del_predefine_param(self, api_no, param):
-        if len(api_no) != 32:
-            return False, "Bad api_no"
         where_value = {"api_no": api_no, "param": param}
         result = self.db.execute_delete(self.predefine_param, where_value)
         self.set_api_update(api_no)
@@ -495,8 +502,6 @@ class ApiHelpManager(ResourceManager):
 
     @PolicyManager.verify_policy(["api_look"])
     def del_api_care(self, api_no, user_name):
-        if len(api_no) != 32:
-            return False, "Bad api_no"
         delete_sql = "DELETE FROM %s WHERE api_no='%s' AND user_name='%s' AND level <> 0;" % (self.api_care, api_no, user_name)
         result = self.db.execute(delete_sql)
         return True, result
@@ -512,8 +517,6 @@ class ApiHelpManager(ResourceManager):
 
     @PolicyManager.verify_policy(["api_new"])
     def del_api_info(self, api_no, user_name):
-        if len(api_no) != 32:
-            return False, "Bad api_no"
         select_sql = "SELECT level FROM %s WHERE api_no='%s' AND user_name='%s' AND level=0;" \
                      % (self.api_care, api_no, user_name)
         result = self.db.execute(select_sql)
