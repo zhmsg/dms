@@ -223,7 +223,7 @@ class ApiHelpManager(ResourceManager):
         return True, kwargs
 
     def _verify_location(self, api_no, param_name, location):
-        if location in ("body", "header"):
+        if location in ("body", "header", "url"):
             items = [dict(param_type="object", param_no=location,
                           param_name=location)]
         else:
@@ -231,6 +231,8 @@ class ApiHelpManager(ResourceManager):
         if len(items) <= 0:
             raise ResourceNotFound("location", location)
         l_items = self._select_api_param(api_no, location=items[0]["param_no"])
+        if items[0]["location"] in ("header", "url"):
+            raise BadRequest("location", "not allow header")
         if items[0]["param_type"] == "list" and len(l_items) > 0:
             # if link param type is list, only one link.
             raise ConflictRequest("list param has link other param")
@@ -319,7 +321,7 @@ class ApiHelpManager(ResourceManager):
 
     @PolicyManager.verify_policy(["api_new"])
     def insert_api_example(self, api_no, example_type, example_desc, example_content):
-        example_no = uuid.uuid4().hex
+        example_no = self.gen_uuid()
         add_time = time()
         kwargs = dict(example_no=example_no, example_type=example_type, api_no=api_no, example_desc=example_desc,
                       example_content=example_content, add_time=add_time)

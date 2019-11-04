@@ -5,28 +5,6 @@
 var param_vm = null;
 
 
-function add_example_info() {
-    var current_btn = $(this);
-    var parent_div = current_btn.parent();
-    var data = package_input(parent_div);
-    my_async_request2(data["url"], "POST", data, add_example);
-}
-
-function delete_example() {
-    var current_btn = $(this);
-    var example_no = current_btn.attr("example_no");
-    my_async_request2("/dev/api/example/", "DELETE", {"example_no": example_no}, function () {
-        $("#example_" + example_no).remove();
-    });
-}
-
-
-function format_input() {
-    var input_content = $(this).val();
-    var json_content = JSON.stringify(JSON.parse(input_content), null, 4);
-    $(this).val(json_content);
-}
-
 function handler_success(data) {
     var btn_id = "pp_" + data.data["param"];
     var btn = $("#" + btn_id);
@@ -74,29 +52,6 @@ function update_stage(stage) {
     my_async_request(update_url, "PUT", {"stage": stage});
 }
 
-function add_example(data) {
-    var add_div = $("<div></div>");
-    add_div.attr("id", "example_" + data.example_no);
-    var desc_p = $("<p></p>");
-    desc_p.text(data["example_desc"]);
-    var example_p = $('<p><textarea class="form-control" readonly>' + data["example_content"] + '</textarea></p>');
-    var op_p = $("<p></p>");
-    var btn_update = $('<button class="btn btn-success margin5">更新</button>');
-    var btn_del = $('<button class="btn btn-danger">删除</button>');
-    btn_del.attr("example_no", data.example_no);
-    btn_del.click(delete_example);
-    op_p.append(btn_update);
-    op_p.append(btn_del);
-    add_div.append(desc_p);
-    add_div.append(example_p);
-    add_div.append(op_p);
-    if (data.example_type == 1) {
-        $("#api_input_exist").append(add_div);
-    }
-    else if (data.example_type == 2) {
-        $("#api_output_exist").append(add_div);
-    }
-}
 
 function init_api_info(data) {
     if (data == null) {
@@ -159,11 +114,16 @@ function init_api_info(data) {
     var example_len = api_info.examples.length;
     for (var i = 0; i < example_len; i++) {
         var example_item = api_info.examples[i];
-        add_example(example_item);
+        if(example_item["example_type"] == 1){
+            param_vm.all_input_examples.push(example_item);
+        }
+        else if(example_item["example_type"] == 2){
+            param_vm.all_output_examples.push(example_item);
+        }
     }
     // body info
     var param_len = api_info.body_info.length;
-    var location_map = {"header": "header", "body": "body"};
+    var location_map = {"header": "header", "body": "body", "url": "url"};
     for(var k=0;k<param_len;k++){
         var p_item = api_info.body_info[k];
         if(p_item["location"] in location_map){
@@ -183,22 +143,28 @@ function init_api_info(data) {
 }
 
 $(function () {
-
-    $("button[name='btn_new']").click(add_example_info);
-    $("textarea").change(format_input);
-    $("textarea").keyup(format_input);
     var param_url = "/dev/api/param"
+    var example_url = "/dev/api/example"
     param_vm = new Vue({
-        el: "#api_params",
+        el: "#div_content",
         data: {
             all_api_params: [],
             all_location: [],
+            all_input_examples: [],
+            all_output_examples: [],
+            //about param
+            default_location: "body",
             current_location: "body",
             current_param_name: "",
             current_necessary: "1",
             current_type: "",
             current_desc: "",
-            current_status: "1"
+            current_status: "1",
+            //about input example
+            i_example: {"desc": "", "content": ""},
+            // about output example
+            o_example: {"desc": "", "content": ""},
+
         },
         methods: {
             update_location: function(){
@@ -257,7 +223,7 @@ $(function () {
                 my_async_request2(param_url, "POST", param_data, function(data){
                     data["location_name"] = data["location_item"]["param_name"]
                     that.all_api_params.push(data);
-                    that.current_location =  "body";
+                    that.current_location =  this.default_location;
                     console.info(that.current_location);
                     console.info(param_vm.current_location);
                     that.current_param_name = "";
@@ -282,6 +248,65 @@ $(function () {
                     that.all_api_params.splice(index, 1);
                 })
             },
+            format_e_content: function(example_type){
+                if(example_type== 1){
+                    var json_content = JSON.stringify(JSON.parse(this.i_example.content), null, 4);
+                    this.i_example.content = json_content;
+                }
+                else if(example_type == 2){
+                    var json_content = JSON.stringify(JSON.parse(this.o_example.content), null, 4);
+                    this.o_example.content = json_content;
+                }
+
+            },
+            new_example: function(example_type){
+                var that = this;
+                var e_data = {"example_type": example_type};
+                if(example_type == 1){
+                    var e_item = this.i_example;
+                }
+                else{
+                    var e_item = this.o_example;
+                }
+                e_data["desc"] = e_item.desc;
+                e_data["content"] = e_item.content;
+                my_async_request2(example_url, "POST", e_data, function(data){
+                    if(example_type == 1){
+                        that.all_input_examples.push(data);
+                    }
+                    else{
+                        that.all_output_examples.push(data);
+                    }
+                    e_item.content = "";
+                    e_item.desc = "";
+                });
+
+            },
+            copy_example: function(example_type, index){
+                if(example_type == 1){
+                    var e_item = this.all_input_examples[index];
+                    var e_current = this.i_example;
+                }
+                else{
+                    var e_item = this.all_output_examples[index];
+                    var e_current = this.o_example;
+                }
+                e_current.desc = e_item["example_desc"];
+                e_current.content = e_item["example_content"];
+            },
+            remove_example: function(example_type, index){
+                var that = this;
+                if(example_type == 1){
+                    var e_list = this.all_input_examples;
+                }
+                else{
+                    var e_list = this.all_output_examples;
+                }
+                var example_no = e_list[index]["example_no"];
+                my_async_request2(example_url, "DELETE", {"example_no": example_no}, function(data){
+                    e_list.splice(index, 1);
+                })
+            }
         }
     });
     init_api_info();

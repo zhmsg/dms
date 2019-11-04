@@ -115,8 +115,7 @@ def show_api():
     if "api_no" not in request.args:
         return "Need api_no"
     api_no = request.args["api_no"][:32]
-    if len(api_no) != 32:
-        return "Bad api_no"
+
     # TODO 未按角色筛选 新建 状态的API
     result, api_info = api_man.get_api_info(api_no)
     if result is False:
@@ -298,7 +297,7 @@ def delete_body():
     return jsonify({"status": False, "data": "need api_no and param"})
 
 
-@develop_api_view.route("/example/", methods=["POST"])
+@develop_api_view.route("/example", methods=["POST"])
 @referer_api_no
 def add_api_example():
     request_form = request.json
@@ -310,7 +309,7 @@ def add_api_example():
     return jsonify({"status": result, "data": data})
 
 
-@develop_api_view.route("/example/", methods=["DELETE"])
+@develop_api_view.route("/example", methods=["DELETE"])
 @referer_api_no
 def delete_api_example():
     request_data = request.json

@@ -2,6 +2,8 @@
  * Created by msg on 11/3/15.
  */
 
+ var param_vm = null;
+
 function change_care(){
     var change_url = $("#care_url").val();
     if ($("#make_care").text() == "关注")
@@ -126,16 +128,33 @@ function init_api_info(data) {
         }
     }
     // body
-    var body_len = api_info.body_info.length;
-    for (var i = 0; i < body_len; i++) {
-        add_param(api_info.body_info[i], "body");
+    var param_len = api_info.body_info.length;
+    var location_map = {"header": "header", "body": "body"};
+    for(var k=0;k<param_len;k++){
+        var p_item = api_info.body_info[k];
+        if(p_item["location"] == "header"){
+            param_vm.all_header_params.push(p_item);
+            continue
+        }
+        if(p_item["location"] == "url"){
+            param_vm.all_url_params.push(p_item);
+            continue
+        }
+        if(p_item["location"] == "body"){
+            p_item["sub_params"] = [];
+            for(var kk=0;kk<param_len;kk++){
+                var pp_item = api_info.body_info[kk];
+                if(pp_item["location"] == p_item["param_no"]){
+                   p_item["sub_params"].push(pp_item);
+                }
+            }
+            param_vm.all_body_params.push(p_item);
+        }
+
     }
 
     if (ph_len + header_len == 0) {
         $("#api_header_param").hide();
-    }
-    if (pb_len + body_len == 0) {
-        $("#api_body_param").hide();
     }
 
     // input
@@ -223,6 +242,17 @@ function fill_param_desc(data) {
 }
 
 $(function() {
+    param_vm = new Vue({
+        el: "#div_show_params",
+        data: {
+            all_url_params: [],
+            all_header_params: [],
+            all_body_params: [],
+        },
+        methods: {
+
+        }
+    });
     init_api_info();
     if(verify_policy("api_help", "api_new")){
         $("#a_update_api").attr("href", location.href + "&update=");

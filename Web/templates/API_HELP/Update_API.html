@@ -23,10 +23,12 @@
     <p>添加时间: <span id="span_add_time"></span></p>
     <p>最近更新时间: <span id="span_update_time"></span></p>
     <a href="{{ url_prefix }}/basic/?api_no={{ api_no }}">更新API信息</a>
+
+    <div id="div_content">
     <span class="margin10" id="span_modify_stage">
-
+        <a class="margin10" href="javascript:void(0)" onclick="update_stage(2);">设置完成</a>
+        <a class="margin10" href="javascript:void(0)" onclick="update_stage(3);">设置待废弃</a>
     </span>
-
     <table class="table table-bordered api-list-table" id="api_params">
         <caption>请求参数</caption>
         <tr>
@@ -35,7 +37,7 @@
             <th scope="col" width="8%">是否必须</th>
             <th scope="col" width="9%">参数类型</th>
             <th scope="col" width="45%">参数描述</th>
-            <th scope="col" width="10%">生效</th>
+            <!--<th scope="col" width="10%">生效</th>-->
             <th scope="col" width="12%">操作</th>
         </tr>
         <tr v-for="(param_item,param_index) in all_api_params">
@@ -65,14 +67,14 @@
             <td>
                 <input class="form-control" v-model="param_item.param_desc"
                        placeholder="请详细的描述出后端对参数的限制，包括但不限于字段长度，字符限制等"/></td>
-            <td>
-                <select class="form-control" v-model="param_item.status">
-                    <option value="1" title="立即生效">立即</option>
-                    <option value="0" title="稍后生效">稍后</option>
-                    <option value="2" title="待废弃">待废弃</option>
-                    <option value="3" title="已废弃">已废弃</option>
-                </select>
-            </td>
+            <!--<td>-->
+                <!--<select class="form-control" v-model="param_item.status">-->
+                    <!--<option value="1" title="立即生效">立即</option>-->
+                    <!--<option value="0" title="稍后生效">稍后</option>-->
+                    <!--<option value="2" title="待废弃">待废弃</option>-->
+                    <!--<option value="3" title="已废弃">已废弃</option>-->
+                <!--</select>-->
+            <!--</td>-->
             <td>
                 <button class="btn btn-success margin5" @click="update_param_action(param_index)">更新</button>
                 <button class="btn btn-danger" @click="remove_param_action(param_index)">删除</button>
@@ -83,6 +85,7 @@
                 <select class="form-control" v-model="current_location">
                     <option value="body">body</option>
                     <option value="header">header</option>
+                     <option value="url">header</option>
                     <option v-for="l_item in all_location" :value="l_item.param_no">{{l_item['param_name']}}</option>
                 </select>
             </td>
@@ -105,14 +108,14 @@
             <td>
                 <input class="form-control" v-model="current_desc"
                        placeholder="请详细的描述出后端对参数的限制，包括但不限于字段长度，字符限制等"/></td>
-            <td>
-                <select class="form-control" v-model="current_status">
-                    <option value="1" title="立即生效">立即</option>
-                    <option value="0" title="稍后生效">稍后</option>
-                    <option value="2" title="待废弃">待废弃</option>
-                    <option value="3" title="已废弃">已废弃</option>
-                </select>
-            </td>
+            <!--<td>-->
+                <!--<select class="form-control" v-model="current_status">-->
+                    <!--<option value="1" title="立即生效">立即</option>-->
+                    <!--<option value="0" title="稍后生效">稍后</option>-->
+                    <!--<option value="2" title="待废弃">待废弃</option>-->
+                    <!--<option value="3" title="已废弃">已废弃</option>-->
+                <!--</select>-->
+            <!--</td>-->
             <td>
                 <input name="url" value="{{ url_prefix }}/body/" class="display_none"/>
                 <button class="btn btn-info" @click="new_param_action">新建</button>
@@ -124,37 +127,47 @@
     <br>
     <div class="bottom20 top6 api-example">
         <b>请求示例</b>
-
-        <div id="api_input_exist">
+        <div>
+            <div v-for="(req_example,index) in all_input_examples">
+                <p>{{req_example['example_desc']}}</p>
+                <p><textarea class="form-control" readonly="">{{req_example['example_content']}}</textarea></p>
+                <p>
+                    <button class="btn btn-success margin5" @click="copy_example(1,index)">复制新建</button>
+                    <button class="btn btn-danger" @click="remove_example(1,index)">删除</button>
+                </p>
+            </div>
         </div>
         <div>
-            <input name="url" value="{{ url_prefix }}/example/" class="display_none"/>
-            <input name="example_type" value="1" class="display_none"/>
-
-            <p><input class="form-control" name="desc" placeholder="请求示例描述"/></p>
-
-            <p><textarea class="form-control input_example" name="content"
-                         placeholder="请求示例，写成符合json格式。解释示例，请在描述中解释"></textarea></p>
-            <button class="btn btn-info" name="btn_new">新建</button>
+            <p><input class="form-control" placeholder="请求示例描述" v-model="i_example.desc"/></p>
+            <p>
+                <textarea class="form-control input_example" @keyup="format_e_content(1)"
+                         placeholder="请求示例，写成符合json格式。解释示例，请在描述中解释" v-model="i_example.content"></textarea>
+            </p>
+            <button class="btn btn-info" @click="new_example(1)">新建</button>
         </div>
     </div>
-
     <div class="bottom20 api-example">
         <b>返回示例</b>
-
-        <div id="api_output_exist">
+            <div v-for="(r_example,index) in all_output_examples">
+                <p>{{r_example['example_desc']}}</p>
+                <p><textarea class="form-control" readonly="">{{r_example['example_content']}}</textarea></p>
+                <p>
+                    <button class="btn btn-success margin5" @click="copy_example(2,index)">复制新建</button>
+                    <button class="btn btn-danger" @click="remove_example(2,index)">删除</button>
+                </p>
+            </div>
+        <div>
         </div>
         <div>
-            <input name="url" value="{{ url_prefix }}/example/" class="display_none"/>
-            <input name="example_type" value="2" class="display_none"/>
+            <p><input class="form-control" placeholder="返回示例描述" v-model="o_example.desc"/></p>
 
-            <p><input class="form-control" name="desc" placeholder="返回示例描述"/></p>
-
-            <p><textarea class="form-control input_example" name="content"
+            <p><textarea class="form-control input_example" v-model="o_example.content" @keyup="format_e_content(2)"
                          placeholder="返回示例，写成符合json格式。解释示例，请在描述中解释。所有完成后请将API状态置为完成"></textarea></p>
-            <button class="btn btn-info" name="btn_new">新建</button>
+            <button class="btn btn-info" @click="new_example(2)">新建</button>
         </div>
     </div>
+    </div>
+
     <input id="url_prefix" value="{{ url_prefix }}" style="display: none">
     <input id="update_stage_url" value="{{ update_stage_url }}" style="display: none">
 
