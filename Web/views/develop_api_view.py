@@ -249,11 +249,25 @@ def add_body_param():
     api_no = g.api_no
     param_desc = request_data["param_desc"]
     necessary = int(request_data["necessary"])
-    param_type = request_data["type"]
+    param_type = request_data["param_type"]
     status = int(request_data.get("status", "1"))
-    result, param_info = api_man.insert_api_body(api_no, param_name, location,
-                                                 necessary, param_type,
-                                                 param_desc, status)
+    result, param_info = api_man.insert_api_param(
+        api_no, param_name, location, necessary, param_type, param_desc,
+        status)
+    return jsonify({"status": result, "data": param_info})
+
+
+@develop_api_view.route("/param", methods=["PUT"])
+@referer_api_no
+def update_body_param():
+    request_data = request.json
+    param_no = request_data["param_no"]
+    api_no = g.api_no
+    u_data = dict()
+    for a_key in ("param_desc", "necessary", "param_type", "status"):
+        if a_key in request_data:
+            u_data[a_key] = request_data[a_key]
+    result, param_info = api_man.update_api_param(api_no, param_no, **u_data)
     return jsonify({"status": result, "data": param_info})
 
 

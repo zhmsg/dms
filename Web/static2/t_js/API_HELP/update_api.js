@@ -163,13 +163,27 @@ function init_api_info(data) {
     }
     // body info
     var param_len = api_info.body_info.length;
+    var location_map = {"header": "header", "body": "body"};
     for(var k=0;k<param_len;k++){
-        param_vm.all_api_params.push(api_info.body_info[k]);
+        var p_item = api_info.body_info[k];
+        if(p_item["location"] in location_map){
+            p_item["location_name"] = location_map[p_item["location"]]
+        }
+        else{
+            for(var kk=0;kk<param_len;kk++){
+                var pp_item = api_info.body_info[kk];
+                if(p_item["location"] == pp_item["param_no"]){
+                    p_item["location_name"] = pp_item["param_name"];
+                }
+            }
+        }
+        param_vm.all_api_params.push(p_item);
     }
+    param_vm.update_location();
 }
 
 $(function () {
-    init_api_info();
+
     $("button[name='btn_new']").click(add_example_info);
     $("textarea").change(format_input);
     $("textarea").keyup(format_input);
@@ -187,6 +201,36 @@ $(function () {
             current_status: "1"
         },
         methods: {
+            update_location: function(){
+                var l = this.all_api_params;
+                var tj = {};
+                var len_p = this.all_api_params.length;
+                this.all_location = [];
+                var pending_location = [];
+                for(var j=0;j<len_p;j++){
+                    var p_item = this.all_api_params[j];
+                    if(!(p_item["location"] in tj)){
+                        tj[p_item["location"]] = 0;
+                    }
+                    tj[p_item["location"]] = 1 + tj[p_item["location"]];
+                    if(p_item["location"] == "body"){
+                        if(p_item["param_type"] == "object"){
+                            this.all_location.push(p_item);
+                        }
+                        else if(p_item["param_type"] == "list"){
+                            pending_location.push(p_item);
+                        }
+                    }
+                }
+                var pl_len = pending_location.length;
+                for(var k=0;k<pl_len;k++){
+                    if(pending_location[k]["param_no"] in tj){
+                        continue;
+                    }
+                    this.all_location.push(pending_location[k]);
+                }
+
+            },
             new_param_action: function(){
                 if(this.current_param_name.length <= 0){
                     alert_error("请设置 参数名称");
@@ -205,11 +249,13 @@ $(function () {
                     return false;
                 }
                 var that = this;
+                var param_depth = 1
                 var param_data = {"param_name": this.current_param_name, "location": this.current_location,
-                                    "necessary": this.current_necessary, "type": this.current_type,
+                                    "necessary": this.current_necessary, "param_type": this.current_type,
                                     "param_desc": this.current_desc, "status": this.current_status};
 
                 my_async_request2(param_url, "POST", param_data, function(data){
+                    data["location_name"] = data["location_item"]["param_name"]
                     that.all_api_params.push(data);
                     that.current_location =  "body";
                     console.info(that.current_location);
@@ -219,12 +265,14 @@ $(function () {
                     that.current_type = "";
                     that.current_desc = "";
                     that.current_status = "1";
+                    that.update_location();
                 });
             },
             update_param_action: function(index){
                 var param_data = this.all_api_params[index];
-                my_async_request2(param_url, "POST", param_data, function(data){
+                my_async_request2(param_url, "PUT", param_data, function(data){
                     alert1("更新成功");
+                    that.update_location();
                 });
             },
             remove_param_action: function(index){
@@ -236,4 +284,5 @@ $(function () {
             },
         }
     });
+    init_api_info();
 });

@@ -3,21 +3,25 @@
         "table_cols": [
             {
                 "pri_key": true,
-                "col_comment": "API系統编号 參看api_info api_no",
-                "col_name": "api_no",
+                "col_comment": "参数编号 uuid",
+                "col_name": "param_no",
                 "col_type": "char(32)"
             },
             {
-                "pri_key": true,
+                "col_comment": "API系統编号 參看api_info api_no",
+                "col_name": "api_no",
+                "col_type": "char(32)",
+                "mul_key": true
+            },
+            {
                 "col_comment": "请求参数",
                 "col_name": "param_name",
                 "col_type": "varchar(30)"
             },
             {
-                "pri_key": true,
-                "col_comment": "参数位置 body header或者其他参数里",
+                "col_comment": "参数位置 body header或者其他参数param_no里",
                 "col_name": "location",
-                "col_type": "varchar(30)"
+                "col_type": "varchar(32)"
             },
             {
                 "col_comment": "请求参数是否必需0非必需1必需",
@@ -26,7 +30,7 @@
             },
             {
                 "col_comment": "请求参数类型",
-                "col_name": "type",
+                "col_name": "param_type",
                 "col_type": "varchar(20)"
             },
             {
@@ -50,6 +54,9 @@
             "col_type": "int(11)"
             }
         ],
+        "uni_key": {
+            "location_param": ["location", "param_name"]
+        },
         "table_comment": "",
         "table_name": "api_params"
     },

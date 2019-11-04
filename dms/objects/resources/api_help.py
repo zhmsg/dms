@@ -13,14 +13,17 @@ sys.path.append("..")
 from Class import TIME_FORMAT
 from Class.Check import check_chinese_en, check_http_method, check_path, check_sql_character, check_int
 
-from dms.utils.verify_convert import verify_uuid
+from dms.utils.exception import BadRequest, ConflictRequest, ResourceNotFound
+from dms.utils.verify_convert import verify_uuid, verify_int
 
-from dms.objects.base import ResourceManager
+from dms.objects.base import ResourceManager, UnsetValue
 from dms.objects.policy import PolicyManager
 
 temp_dir = tempfile.gettempdir()
 
 __author__ = 'ZhouHeng'
+
+UNSET = UnsetValue.get_instance()
 
 
 class ApiHelpManager(ResourceManager):
@@ -58,6 +61,12 @@ class ApiHelpManager(ResourceManager):
     def require_verify_args():
         rv_args = dict()
         rv_args["api_no"] = partial(verify_uuid, "api_no")
+        rv_args["param_depth"] = partial(verify_int, "param_depth", min_v=1,
+                                         max_v=15)
+        rv_args["necessary"] = partial(verify_int, "necessary", min_v=0,
+                                       max_v=1)
+        rv_args["status"] = partial(verify_int, "status", min_v=0,
+                                    max_v=3)
         return rv_args
 
     @PolicyManager.verify_policy(["api_module_new"])
@@ -146,8 +155,6 @@ class ApiHelpManager(ResourceManager):
 
     @PolicyManager.verify_policy(["api_new"])
     def update_api_info(self, api_no, module_no, api_title, api_path, api_method, api_desc):
-        if len(api_no) != 32:
-            return False, "Bad api_no"
         if type(module_no) != int:
             return False , "Bad module_no"
         if check_path(api_path) is False:
@@ -177,8 +184,6 @@ class ApiHelpManager(ResourceManager):
     @PolicyManager.verify_policy(["api_new"])
     def set_api_stage(self, api_no, stage):
         # TODO 未控制是否有请求示例
-        if len(api_no) != 32:
-            return False, "Bad api_no"
         if stage <= 0 or stage > 5:
             return False, "Bad stage"
         update_time = datetime.now().strftime(TIME_FORMAT)
@@ -217,31 +222,85 @@ class ApiHelpManager(ResourceManager):
         self.set_api_update(api_no)
         return True, kwargs
 
+    def _verify_location(self, api_no, param_name, location):
+        if location in ("body", "header"):
+            items = [dict(param_type="object", param_no=location,
+                          param_name=location)]
+        else:
+            items = self._select_api_param(api_no, param_no=location)
+        if len(items) <= 0:
+            raise ResourceNotFound("location", location)
+        l_items = self._select_api_param(api_no, location=items[0]["param_no"])
+        if items[0]["param_type"] == "list" and len(l_items) > 0:
+            # if link param type is list, only one link.
+            raise ConflictRequest("list param has link other param")
+        for l_item in l_items:
+            if l_item['param_name'] == param_name:
+                raise ConflictRequest("object param has link same param")
+        return items[0]
+
+    def _select_api_param(self, api_no, **other_cond):
+        order_by = other_cond.pop("order_by", ["add_time"])
+        where_value = dict(api_no=api_no)
+        where_value.update(other_cond)
+        param_cols = ["param_no", "api_no", "param_name", "location",
+                      "necessary", "param_type", "param_desc", "status",
+                      "add_time", "update_time"]
+        body_info = self.db.execute_select(self.api_params, where_value=where_value, order_by=order_by,
+                                           cols=param_cols)
+        return body_info
+
     @PolicyManager.verify_policy(["api_new"])
-    def insert_api_body(self, api_no, param_name, location, necessary, param_type,
-                        param_desc, status=1):
+    def insert_api_param(self, api_no, param_name, location, necessary,
+                         param_type, param_desc, status=1):
+        param_no = self.gen_uuid()
         add_time = datetime.now().strftime(TIME_FORMAT)
         update_time = int(time())
         param_desc = param_desc[:1000]
-        kwargs = dict(api_no=api_no, param_name=param_name, location=location,
-                      necessary=necessary, type=param_type, param_desc=param_desc,
-                      status=status, add_time=add_time, update_time=update_time)
+        l_item = self._verify_location(api_no, param_name, location)
+        kwargs = dict(param_no=param_no, api_no=api_no, param_name=param_name,
+                      location=location, necessary=necessary,
+                      param_type=param_type, param_desc=param_desc,
+                      status=status, add_time=add_time,
+                      update_time=update_time)
         l = self.db.execute_insert(self.api_params, kwargs, ignore=True)
         if l == 0:
-            self.update_api_body(**kwargs)
+            return False, kwargs
         self.set_api_update(api_no)
+        kwargs["location_item"] = l_item
         return True, kwargs
+
+    @PolicyManager.verify_policy(["api_new"])
+    def update_api_param(self, api_no, param_no,  param_type=UNSET, necessary=UNSET, param_desc=UNSET,
+                         status=UNSET):
+        where_value = dict(param_no=param_no)
+        update_value = dict()
+        if UnsetValue.not_unset(param_type):
+            # verify not in use by other param
+            items = self._select_api_param(api_no, location=param_no)
+            if len(items) > 0:
+                raise ConflictRequest("Param in use by other param. "
+                                      "not allow update type")
+
+            update_value["param_type"] = param_type
+        if UnsetValue.not_unset(necessary):
+            update_value["necessary"] = necessary
+        if UnsetValue.not_unset(param_desc):
+            update_value["param_desc"] = param_desc
+        if UnsetValue.not_unset(status):
+            update_value["status"] = status
+        if not update_value:
+            return 0, "not update"
+        l = self.db.execute_update(self.api_params, update_value=update_value,
+                                   where_value=where_value)
+        if l <= 0:
+            return 0, "not update"
+        where_value.update(update_value)
+        return l, where_value
 
     def update_api_header(self, api_no, param, **kwargs):
         kwargs.pop("add_time")
         l = self.db.execute_update(self.api_header, update_value=kwargs, where_value=dict(api_no=api_no, param=param))
-        return l
-
-    def update_api_body(self, api_no, param_name, **kwargs):
-        kwargs.pop("add_time")
-        l = self.db.execute_update(self.api_params, update_value=kwargs,
-                                   where_value=dict(api_no=api_no,
-                                                    param_name=param_name))
         return l
 
     @PolicyManager.verify_policy(["api_new"])
@@ -402,10 +461,7 @@ class ApiHelpManager(ResourceManager):
 
         header_info = []
         # 获得请求主体参数列表
-        body_cols = ["api_no", "param_name", "location", "necessary", "type",
-                     "param_desc", "status", "add_time", "update_time"]
-        body_info = self.db.execute_select(self.api_params, where_value=dict(api_no=api_no), order_by=["add_time"],
-                                           cols=body_cols)
+        body_info = self._select_api_param(api_no)
         # 获得预定义参数列表
         cols = ["param", "param_type"]
         items = self.db.execute_select(self.predefine_param, cols=cols, where_value=where_value, order_by=["add_time"])

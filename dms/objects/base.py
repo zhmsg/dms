@@ -5,6 +5,7 @@ from functools import wraps
 import inspect
 
 import sys
+import uuid
 
 sys.path.insert(0, "D:/Project/mysqldb-rich")
 
@@ -23,6 +24,10 @@ class UnsetValue(Singleton):
     @classmethod
     def is_unset(cls, value):
         return value == cls.get_instance()
+
+    @classmethod
+    def not_unset(cls, value):
+        return not cls.is_unset(value)
 
 
 _UNSET = UnsetValue.get_instance()
@@ -65,6 +70,10 @@ class ResourceManager(DBObject):
     @staticmethod
     def require_verify_args():
         return dict()
+
+    @staticmethod
+    def gen_uuid():
+        return uuid.uuid4().hex
 
     def __getattribute__(self, item):
         attr_value = super(ResourceManager, self).__getattribute__(item)
