@@ -1,9 +1,13 @@
-{% if role_desc %}
-    {% for key, moudle_item in role_desc.items() %}
+{% if resources_m %}
+    {% for resource_name, resource_item in resources_m.objects.items() %}
         <div class="checkbox font16">
-            <span class="text-right">{{ moudle_item["module_desc"] }}权限：</span>
-            {% for key, value in moudle_item["role_list"].items() %}
-                <label><input type="checkbox" id="{{ key }}" {% if g.user_role | bit_and(value["role_value"]) <= 0 %}disabled{% else %}name="{{ key }}"  {% endif %}>{{ value["role_desc"] }}</label>
+            {% for module_item in resource_item.get_modules_desc() %}
+                <span class="text-right">{{ module_item["desc"] }}权限：</span>
+                <label><input type="checkbox" name="{{ resource_name }}.basic">准入</label>
+                {% for key, value in module_item["policies"].items() %}
+                    <label><input type="checkbox" name="{{ resource_name }}.{{ key }}">{{ value["desc"] }}</label>
+                {% endfor %}
+                <label><input type="checkbox" name="{{ resource_name }}.manager">管理员</label>
             {% endfor %}
         </div>
     {% endfor %}

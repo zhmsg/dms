@@ -4,11 +4,10 @@
 
 function check_user_name_success(data){
     if(data.data.result == true){
-        $("#check_result").text("可以添加注册");
-        $("#user_name").val(data.data.message);
+        $("#check_result").text("已被注册");
     }
     else{
-        $("#check_result").text(data.data.message);
+        $("#check_result").text("可以注册");
     }
 }
 

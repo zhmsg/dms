@@ -15,7 +15,7 @@ class UserObject(DBObject):
     """
     role
     11 超级管理员 授权管理员
-    10 管理员 可访问任意模块
+    10 管理员 可访问任意模块 可创建用户
     ...
     1  默认普通用户 根据模块权限访问模块
 
@@ -48,6 +48,14 @@ class UserObject(DBObject):
     def __init__(self):
         DBObject.__init__(self)
         self.t = "sys_user"
+
+    @classmethod
+    def roles(cls):
+        _roles = list()
+        _roles.append({"value": 11, "desc": "超级管理员"})
+        _roles.append({"value": 10, "desc": "管理员"})
+        _roles.append({"value": 1, "desc": "普通用户"})
+        return _roles
 
     # 插入用户注册数据
     def insert_user(self, user_name=None, password=None, tel=None,
@@ -89,8 +97,14 @@ class UserObject(DBObject):
                                    where_value=dict(user_no=user_no))
         return l
 
+    def user_exist(self, user_name):
+        items = self._verify_user_exist(user_name=user_name)
+        if len(items) > 0:
+            return True
+        return False
+
     # 验证auth是否存在 包括 account tel alias wx_id
-    def verify_user_exist(self, **kwargs):
+    def _verify_user_exist(self, **kwargs):
         cols = ["user_no", "user_name", "tel", "email", "wx_id", "role",
                 "nick_name", "avatar_url"]
         if kwargs.pop("need_password", None) is not None:
@@ -106,7 +120,7 @@ class UserObject(DBObject):
 
     def new_user(self, user_name, password=None, nick_name=None,
                  creator=None, role=1):
-        items = self.verify_user_exist(user_name=user_name)
+        items = self._verify_user_exist(user_name=user_name)
         if len(items) > 0:
             return False, u"用户名已存在"
         if nick_name is None:
@@ -117,7 +131,7 @@ class UserObject(DBObject):
 
     def new_wx_user(self, wx_id):
         self.insert_user(wx_id=wx_id)
-        items = self.verify_user_exist(wx_id=wx_id)
+        items = self._verify_user_exist(wx_id=wx_id)
         if len(items) <= 0:
             return None
         return items[0]
@@ -144,7 +158,7 @@ class UserObject(DBObject):
         else:
             return -3, None
         where_value["need_password"] = True
-        db_items = self.verify_user_exist(**where_value)
+        db_items = self._verify_user_exist(**where_value)
         if len(db_items) <= 0:
             return -2, None
         user_item = db_items[0]

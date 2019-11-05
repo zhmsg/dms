@@ -17,6 +17,7 @@ from Web import log_url_prefix, create_blue, param_url_prefix, release_url_prefi
 from Web import jingdu_url_prefix, dyups_url_prefix
 from Web import control
 
+from dms.utils.manager import ResourcesManager
 from dms.objects.user import UserObject
 
 sys.path.append('..')
@@ -30,6 +31,7 @@ dms_view = create_blue('dms_view', url_prefix=url_prefix, auth_required=False)
 
 user_m = UserObject()
 role_m = RoleManager(mongo_host)
+resources_m = ResourcesManager.get_instance()
 
 
 def load_domain_session():
@@ -235,10 +237,12 @@ def set_password():
 @dms_view.route("/register/", methods=["GET"])
 @login_required
 def register_page():
-    if g.user_role & control.role_value["user_new"] <= 0:
-        return u"用户无权限操作"
+    # if g.user_role & control.role_value["user_new"] <= 0:
+    #     return u"用户无权限操作"
     check_url = url_prefix + "/register/check/"
-    return render_template("register.html", url_prefix=url_prefix, check_url=check_url, role_desc=control.user.role_desc)
+    return render_template("register.html", url_prefix=url_prefix,
+                           check_url=check_url, resources_m=resources_m,
+                           roles=user_m.roles())
 
 
 @dms_view.route("/register/", methods=["POST"])
@@ -246,15 +250,9 @@ def register_page():
 def register():
     request_data = request.form
     user_name = request_data["user_name"]
-    if "register_name" not in session or session["register_name"] != user_name:
-        return u"页面已过期，请刷新重试"
     nick_name = request_data["nick_name"]
-    user_role = 0
-    for key, role_module in control.user.role_desc.items():
-        for role_key, role_info in role_module["role_list"].items():
-            if role_key in request.form and request.form[role_key] == "on":
-                user_role += role_info["role_value"]
-    result, message = control.new_user(user_name, user_role, nick_name, current_user.user_name, current_user.role)
+    user_role = 1
+    result, message = user_m.new_user(user_name, "dms", nick_name, current_user.user_name, user_role)
     if result is False:
         return message
     return redirect(url_for("dms_view.select_portal"))
@@ -265,10 +263,8 @@ def register():
 def register_check():
     request_data = request.json
     check_name = request_data["check_name"]
-    result, message = control.check_user_name_exist(current_user.user_name, current_user.role, check_name)
-    if result is True:
-        session["register_name"] = message
-    return jsonify({"status": True, "data": {"result": result, "message": message}})
+    is_exist = user_m.user_exist(check_name)
+    return jsonify({"status": True, "data": {"result": is_exist, "message": ""}})
 
 
 @dms_view.route("/remove/user/", methods=["DELETE"])

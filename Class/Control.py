@@ -61,11 +61,6 @@ class ControlManager(object):
         self.name_2_role_key = {"apicluster": "dyups_api", "webcluster": "dyups_web", "amscluster": "dyups_web",
                                 "healthcluster": "dyups_api", "authcluster": "dyups_api", "samplecluster": "dyups_api"}
 
-    def check_user_name_exist(self, user_name, role, check_user_name):
-        if role & self.role_value["user_new"] <= 0:
-            return False, u"用户无权限新建用户"
-        return self.user.check_account_exist(user_name, check_user_name)
-
     def new_user(self, user_name, role, nick_name, creator, creator_role):
         if creator_role & self.role_value["user_new"] <= 0:
             return False, u"用户无权限新建用户"

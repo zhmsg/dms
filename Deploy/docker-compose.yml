@@ -11,7 +11,20 @@ services:
     restart: always
     volumes:
     - dms-mysql:/var/lib/mysql
+  dms-mongo:
+    container_name: dms-mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=dms
+      - MONGO_INITDB_ROOT_PASSWORD=mongo<dms>
+    image: mongo
+    ports:
+      - 9536:3306
+    restart: always
+    volumes:
+      - dms-mongo:/data/db
 version: '2.4'
 volumes:
   dms-mysql:
     name: dms-mysql
+  dms-mongo:
+    name: dms-mongo
