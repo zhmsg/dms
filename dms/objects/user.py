@@ -57,6 +57,12 @@ class UserObject(DBObject):
         _roles.append({"value": 1, "desc": "普通用户"})
         return _roles
 
+    @classmethod
+    def is_manager(cls, role):
+        if role >= 10:
+            return True
+        return False
+
     # 插入用户注册数据
     def insert_user(self, user_name=None, password=None, tel=None,
                     nick_name=None, email=None, wx_id=None, creator=None,
@@ -187,4 +193,4 @@ class UserObject(DBObject):
 
 if __name__ == "__main__":
     user = UserObject()
-    user.new_user("admin", "admin")
+    user.new_user("admin", "admin", role=11)

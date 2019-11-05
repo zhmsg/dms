@@ -41,16 +41,12 @@ login_manager = LoginManager()
 def load_user(user_name):
     user = User()
     user.user_name = user_name
-    if "roles" in session:
-        user.roles = session["roles"]
-    else:
-        user.roles = None
-        session["roles"] = None
-    if "role" in session:
-        user.role = session["role"]
-    else:
-        user.role = 0
-        session["role"] = user.role
+    if "policies" not in session:
+        session["policies"] = ["api_help.basic"]
+    user.policies = session["policies"]
+    if "role" not in session:
+        session["role"] = 0
+    user.role = session["role"]
     return user
 
 

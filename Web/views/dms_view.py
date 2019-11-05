@@ -17,6 +17,7 @@ from Web import log_url_prefix, create_blue, param_url_prefix, release_url_prefi
 from Web import jingdu_url_prefix, dyups_url_prefix
 from Web import control
 
+from dms.utils.exception import Forbidden
 from dms.utils.manager import ResourcesManager
 from dms.objects.user import UserObject
 
@@ -241,7 +242,7 @@ def register_page():
     #     return u"用户无权限操作"
     check_url = url_prefix + "/register/check/"
     return render_template("register.html", url_prefix=url_prefix,
-                           check_url=check_url, resources_m=resources_m,
+                           check_url=check_url, modules=resources_m.modules,
                            roles=user_m.roles())
 
 
@@ -278,12 +279,16 @@ def remove_register_user():
 @dms_view.route("/authorize/", methods=["GET"])
 @login_required
 def authorize_page():
-    result, my_user = control.get_my_user(current_user.user_name, current_user.role)
-    if result is False:
-        return my_user
+    if user_m.is_manager(g.user_role):
+        man_modules = resources_m.modules
+    else:
+        man_modules = resources_m.manager_modules(g.user_policies)
+        if not man_modules:
+            raise Forbidden()
+    my_user = []
     url_remove = url_prefix + "/remove/user/"
     return render_template("authorize.html", my_user=my_user, url_prefix=url_prefix,
-                           role_desc=control.user.role_desc, url_remove=url_remove)
+                           modules=man_modules, url_remove=url_remove)
 
 
 @dms_view.route("/authorize/user/", methods=["POST"])
@@ -306,9 +311,31 @@ def authorize():
 @dms_view.route("/portal/", methods=["GET"])
 @login_required
 def select_portal():
-    menu = [
-        {"desc": u"API文档", "url": api_url_prefix}
-    ]
+    menu = []
+    can_authorize = False
+    if user_m.is_manager(g.user_role):
+        for m_name, module in resources_m.modules.items():
+            if "url_prefix" not in module:
+                continue
+            menu.append({"desc": module["desc"],
+                         "url": module["url_prefix"]})
+        menu.append({"desc": "注册用户", "url": "/register"})
+        can_authorize = True
+    else:
+        for module in resources_m.modules:
+            if "url_prefix" not in module:
+                continue
+            basic_role = "%s.basic" % module.name
+            if basic_role not in g.user_policies:
+                continue
+
+            menu.append({"desc": module["url_prefix"],
+                         "url": module["url_prefix"]})
+            manager_role = "%s.manager" % module.name
+            if manager_role in g.user_polices:
+                can_authorize = True
+    if can_authorize:
+        menu.append({"desc": "用户授权", "url": "/authorize"})
     return render_template("portal.html", menu=menu, dev_url_prefix=dev_url_prefix,
                            bug_url_prefix=bug_url_prefix,
                            dms_url_prefix=dms_url_prefix, right_url_prefix=right_url_prefix,

@@ -53,8 +53,9 @@ class ApiHelpManager(ResourceManager):
             "api_look": {"desc": "查看"},
             "api_new": {"desc": "新建"},
             "api_module_new": {"desc": "新建模块"},
-        }}
-        return [api_doc]
+        },
+                   "url_prefix": "/dev/api"}
+        return api_doc
 
     @staticmethod
     def require_verify_args():

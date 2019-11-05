@@ -20,20 +20,6 @@ var menu_list = [["api_look", "api_url_prefix", "API文档"], ["status_code_look
 $(function(){
     var current_user_role = parseInt($("#current_user_role").val());
     if(current_user_role > 0) {
-        var role_value = JSON.parse($("#role_value").text());
-        var exist_menu = new Array();
-        var exist_index = 0;
-        for (var i = 0; i < menu_list.length; i++) {
-            var menu_item = menu_list[i];
-            if (exist_menu.indexOf(menu_item[2]) >= 0) {
-                continue;
-            }
-            if (bit_and(current_user_role, role_value[menu_item[0]])) {
-                $("#div_main_menu").append('<a href="' + $("#" + menu_item[1]).val() + '/">' + menu_item[2] + '</a>');
-                exist_menu[exist_index] = menu_item[2];
-                exist_index++;
-            }
-        }
         var current_href = location.href.substr((location.protocol + "//" + location.host).length);
         if(current_href.indexOf("/tornado") == 0){
             $("#div_current_env").append('<a href="' + current_href.substr(8) + '">' + '还用Flask' + '</a>');
@@ -42,10 +28,6 @@ $(function(){
             $("#div_current_env").append('<a href="/tornado' + current_href + '">' + '体验Tornado' + '</a>');
         }
     }
-//    $("#div_main_menu").append('<a href="' + '/article/query/">' + '文章查看' + '</a>');
-//    $("#div_main_menu").append('<a href="' + '/performance/">' + '绩效查看' + '</a>');
-//    $("#div_main_menu").append('<a href="' + '/message/manager/">' + '消息管理' + '</a>');
-//    $("#div_main_menu").append('<a href="' + '/dist/key/">' + '密钥管理' + '</a>');
     $("#div_main_menu").append('<a href="' + $("#password_url_prefix").val() + '/">' + '修改密码' + '</a>');
     $("#div_main_menu").append('<a href="' + $("#exit_url_prefix").val() + '/">' + '退出' + '</a>');
 });

@@ -1,0 +1,12 @@
+{% if modules %}
+    {% for m_name, m_item in modules.items() %}
+        <div class="checkbox font16">
+                <span class="text-right">{{ m_item["desc"] }}权限：</span>
+                <label><input type="checkbox" name="{{ m_name }}.basic">准入</label>
+                {% for key, value in m_item["policies"].items() %}
+                    <label><input type="checkbox" name="{{ m_name }}.{{ key }}">{{ value["desc"] }}</label>
+                {% endfor %}
+                <label><input type="checkbox" name="{{ m_name }}.manager">管理员</label>
+        </div>
+    {% endfor %}
+{% endif %}

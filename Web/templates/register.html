@@ -8,17 +8,18 @@
   <div class="loginMode">
     <form class="clear amendPrivilege" action="{{ url_prefix }}/register/" method="post">
       <h4 class="form-signin-heading">请填写注册信息</h4>
-      <input type="text" id="user_name" name="user_name" class="form-control" placeholder="用户名" required autofocus onblur="check_user_name();"> <span class="block bottom10" id="check_result"></span>
+      <input type="text" id="user_name" name="user_name" class="form-control width300 bottom10" placeholder="用户名" required autofocus onblur="check_user_name();">
+      <span class="block bottom10" id="check_result"> </span>
       <input id="check_url" value="{{ check_url }}" style="display: none"/>
-      <input type="text" id="inputName" name="nick_name" class="form-control" placeholder="真实姓名" required>
-      <select>
+      <input type="text" id="inputName" name="nick_name" class="form-control width300 bottom10" placeholder="真实姓名" required>
+      <select class="form-control width300 bottom10">
         {% for role in roles %}
           {% if role['value'] < g.user_role %}
               <option value="{{ role['value'] }}">{{ role['desc'] }}</option>
           {% endif %}
         {% endfor %}
       </select>
-      {% include "perm_conent.html" %}
+      {% include "perm_content.html" %}
       <button class="btn btn-lg btn-primary amendBtn" type="submit">注册</button>
     </form>
 {#    <p>注意：新建账户密码默认为dms,用户首次登录必须修改密码才能继续操作</p>#}

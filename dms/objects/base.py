@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 # coding: utf-8
 
+import abc
 from functools import wraps
 import inspect
 
@@ -57,11 +58,11 @@ class ResourceManager(DBObject):
     @classmethod
     def get_modules_desc(cls):
         """
-        return modules desc, a list
+        return modules desc
         :return:
 
         """
-        return []
+        return dict()
 
     @staticmethod
     def support_view():

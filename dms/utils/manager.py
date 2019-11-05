@@ -10,14 +10,39 @@ from dms.objects.resources.link import ShortLinkManager
 class ResourcesManager(Singleton):
 
     def __init__(self):
-        self.objects = dict()
+        self._objects = dict()
+        self._modules = dict()
         self.load_objects()
+
+    @property
+    def objects(self):
+        return self._objects
+
+    @property
+    def modules(self):
+        return self._modules
+
+    def manager_modules(self, policies):
+        _manager_modules = dict()
+        for name, module in self._modules.items():
+            manager_role = "%s.manager" % name
+            if manager_role in policies:
+                _manager_modules[name] = module
+        return _manager_modules
+
+    def _add_object(self, o):
+        if o.name in self._objects:
+            raise RuntimeError("Duplicate object name %s" % o.name)
+        self._objects[o.name] = o
+        _m = o.get_modules_desc()
+        if _m:
+            self._modules[o.name] = _m
 
     def load_objects(self):
         api_help = ApiHelpManager()
         link_man = ShortLinkManager()
-        self.objects[api_help.name] = api_help
-        self.objects[link_man.name] = link_man
+        self._add_object(api_help)
+        self._add_object(link_man)
 
     def get_object_manager(self, name):
-        return self.objects.get(name)
+        return self._objects.get(name)
