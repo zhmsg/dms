@@ -46,7 +46,6 @@ class ApiHelpManager(ResourceManager):
         self.send_message = "send_message"
         self.test_env = "test_env"
         self.api_stage_desc = [u"新建", u"修改中", u"已完成", u"待废弃", u"已废弃", u"已删除"]
-        self.user = "sys_user"
 
     @classmethod
     def get_modules_desc(cls):

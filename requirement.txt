@@ -6,7 +6,6 @@ MySQL-python
 pymongo
 requests
 xlwt
-Flask-APScheduler
 redis
 m2crypto
 JYAliYun

@@ -53,7 +53,7 @@ def create_app():
                 os.system("rm -rf %s" % g.download_file)
             except Exception as e:
                 print(e)
-        res.headers["Server"] = "JingYun Server"
+        res.headers["Server"] = "DMS Server"
         return res
 
     @msg_web.errorhandler(500)
