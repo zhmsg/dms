@@ -7,5 +7,6 @@ RUN pip install -r /tmp/requirement.txt
 
 ENV DMSPATH /opt/dms
 ENV PYTHONPATH $DMSPATH
+ENV LISTENPORT 2200
 
-CMD ["gunicorn", "-b", "0.0.0.0:2000", "-w", "4", "-k", "gevent", "--chdir", "$DMSPATH/Web", "msg_web:msg_web"]
+CMD ["/bin/bash", "-c", "gunicorn -b 0.0.0.0:$LISTENPORT -w 4 -k gevent --chdir $DMSPATH/Web msg_web:msg_web"]
