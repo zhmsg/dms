@@ -16,9 +16,8 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=dms
       - MONGO_INITDB_ROOT_PASSWORD=mongo<dms>
+    network_mode: host
     image: mongo
-    ports:
-      - 9536:3306
     restart: always
     volumes:
       - dms-mongo:/data/db

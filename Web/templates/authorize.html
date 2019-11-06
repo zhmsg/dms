@@ -10,9 +10,17 @@
     <a role="button" class="btn btn-success pull-right" href="{{ url_for('dms_view.select_portal') }}">主菜单</a>
     <form class="clear amendPrivilege" action="{{ url_prefix }}/authorize/user/" method="post">
       <h4 class="form-signin-heading">修改用户权限 按照用户修改</h4>
-      <select class="form-control width300" id="perm_user" onchange="user_select_change();" name="perm_user">
-      </select>
-        <a class="status_move" id="link_remove_user" url="{{ url_remove }}">移除用户</a>
+      <input type="text" id="user_name" name="user_name" class="form-control width300 bottom10" placeholder="用户名" required autofocus onblur="check_user_name();">
+      {% if roles %}
+        <select class="form-control width300 bottom10">
+        {% for role in roles %}
+          {% if role['value'] < g.user_role %}
+              <option value="{{ role['value'] }}">{{ role['desc'] }}</option>
+          {% endif %}
+        {% endfor %}
+        </select>
+      {% endif %}
+        <!--<a class="status_move" id="link_remove_user" url="{{ url_remove }}">移除用户</a>-->
       {% include "perm_content.html" %}
       <button class="btn btn-lg btn-primary amendBtn" type="submit">修改</button>
 
