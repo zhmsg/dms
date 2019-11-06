@@ -3,7 +3,7 @@ MAINTAINER meisanggou
 
 
 ADD https://raw.githubusercontent.com/zhmsg/dms/master/requirement.txt /tmp/
-RUN pip install -r /tmp/requirement.txt
+RUN pip install --no-cache-dir -r /tmp/requirement.txt
 
 ENV DMSPATH /opt/dms
 ENV PYTHONPATH $DMSPATH
