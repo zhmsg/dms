@@ -215,13 +215,12 @@ $(function () {
                     return false;
                 }
                 var that = this;
-                var param_depth = 1
                 var param_data = {"param_name": this.current_param_name, "location": this.current_location,
                                     "necessary": this.current_necessary, "param_type": this.current_type,
                                     "param_desc": this.current_desc, "status": this.current_status};
 
                 my_async_request2(param_url, "POST", param_data, function(data){
-                    data["location_name"] = data["location_item"]["param_name"]
+                    data["location_name"] = data["location_item"]["param_name"];
                     that.all_api_params.push(data);
                     that.current_location =  this.default_location;
                     console.info(that.current_location);
@@ -235,6 +234,7 @@ $(function () {
                 });
             },
             update_param_action: function(index){
+                var that = this;
                 var param_data = this.all_api_params[index];
                 my_async_request2(param_url, "PUT", param_data, function(data){
                     alert1("更新成功");

@@ -198,6 +198,29 @@ function generating_code() {
     update_res(cmd);
 }
 
+function extract_value(d){
+    if("sub_params" in d){
+        if(d["param_type"] == 'object'){
+            var o = {};
+            for(var key in d["sub_params"]){
+                o[key] = extract_value(d['sub_params'][key]);
+            }
+            return o
+        }else{
+            var l = [];
+            for(var i=0;i<d['sub_params'].length;i++){
+                l[i] = extract_value(d['sub_params'][i]);
+            }
+            return l;
+        }
+    }
+    else if("param_value" in d){
+        d['value_error'] = "abc";
+        return d["param_value"];
+    }
+    return null;
+}
+
 $(function(){
     $("#btn_save_case").click(function(){
         var btn_t = this.innerHTML;
@@ -303,7 +326,20 @@ $(function(){
         },
         methods: {
             test_api_action: function(){
-                console.info(this.body_params);
+                var e_data = extract_value(this.body_params);
+                console.info(e_data);
+            },
+            add_sub_params: function(parent_item){
+                var ns_item = {};
+                var keys = ["param_name", "param_type", "necessary", "param_desc"];
+                for(var k_i in keys){
+                    var key = keys[k_i];
+                    ns_item[key] = parent_item.sub_param_item[key];
+                }
+                parent_item.sub_params.push(ns_item);
+            },
+            delete_sub_params: function(parent_item, index){
+                parent_item.sub_params.splice(index, 1);
             }
         },
         watch: {
@@ -314,9 +350,7 @@ $(function(){
     });
     var params_url = "/dev/api/param";
     my_async_request2(params_url, "GET", null, function(data){
-        console.info(data);
         params_vm.body_params = data.body;
-        console.info(params_vm.body_params);
     });
 });
 

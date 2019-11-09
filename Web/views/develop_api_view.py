@@ -258,6 +258,7 @@ def gety_param():
             parent_p['sub_params'][p_param["param_name"]] = p_param
         elif parent_p['param_type'] == 'list':
             parent_p['sub_params'] = [p_param]
+            parent_p['sub_param_item'] = p_param
     return jsonify({"status": True, "data": _param_dict})
 
 

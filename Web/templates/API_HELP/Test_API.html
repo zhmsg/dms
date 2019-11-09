@@ -129,18 +129,23 @@
                 <div class="panel-heading">
                     <h3 class="panel-title">{{param_item.param_name}} 【{{param_item.param_type}}】 {{param_item.param_desc}}</h3>
                 </div>
-                <div class="panel-body" v-for="sub_param in param_item.sub_params">
+                <div class="panel-body" v-for="(sub_param,s_index) in param_item.sub_params">
                     <ul>
                         <li class="star" v-if="sub_param['necessary']">*</li>
                         <li name="param">{{sub_param.param_name}}</li>
                         <li>：</li>
                         <li>
-                            <input class="form-control bug-input" v-model="sub_param.param_value"/>
+                            <input class="form-control bug-input has-error" v-model="sub_param.param_value"/>
                         </li>
+                        <li>
+                        <a class="status_move" @click="delete_sub_params(param_item, s_index)" v-if="param_item.param_type=='list'">删除</a>
+                        </li>
+                        <li class="left5 text-danger">{{sub_param.value_error}}</li>
                         <div class="clear"></div>
                     </ul>
                     <p>【{{sub_param.param_type}}】{{sub_param.param_desc}}</p>
                 </div>
+                <a class="status_move left5 bottom20" @click="add_sub_params(param_item)" v-if="param_item.param_type=='list'">添加</a>
             </div>
             <div v-else>
                 <ul>
@@ -150,6 +155,7 @@
                     <li>
                         <input class="form-control bug-input" v-model="param_item.param_value"/>
                     </li>
+                    <li class="left5 text-danger">{{param_item.value_error}}</li>
                     <div class="clear"></div>
                 </ul>
                 <p>【{{param_item.param_type}}】{{param_item.param_desc}}</p>
@@ -160,7 +166,6 @@
         </p>
     </div>
     <p>
-        <button class="btn btn-primary" onclick="test_api()">检查</button>
         <button class="btn btn-primary" id="btn_generating_code">Python</button>
         <input class="box-side width300" id="test_case_name" type="text" placeholder="请输入测试用例的名称"
                style="display: none"/>
