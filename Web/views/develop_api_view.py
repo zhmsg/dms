@@ -239,6 +239,28 @@ def update_api_body_page():
     return rt.render("Update_API_Param.html", api_no=api_no, body_url=body_url)
 
 
+@develop_api_view.route("/param", methods=["GET"])
+@referer_api_no
+def gety_param():
+    api_no = g.api_no
+    param_info = api_man.get_api_param(api_no)
+    _param_dict = dict(body=dict(param_type='object'),
+                       header=dict(param_type='object'))
+    for item in param_info:
+        _param_dict[item['param_no']] = item
+    while param_info:
+        p_param = param_info.pop()
+        p_l = p_param["location"]
+        parent_p = _param_dict[p_l]
+        if parent_p['param_type'] == 'object':
+            if 'sub_params' not in _param_dict[p_l]:
+                parent_p['sub_params'] = dict()
+            parent_p['sub_params'][p_param["param_name"]] = p_param
+        elif parent_p['param_type'] == 'list':
+            parent_p['sub_params'] = [p_param]
+    return jsonify({"status": True, "data": _param_dict})
+
+
 @develop_api_view.route("/param", methods=["POST"])
 @referer_api_no
 def add_body_param():

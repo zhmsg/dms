@@ -28,6 +28,7 @@ UNSET = UnsetValue.get_instance()
 
 class ApiHelpManager(ResourceManager):
     NAME = "api_help"
+    top_location = ["header", "body", "url", "url_args"]
 
     def __init__(self):
         ResourceManager.__init__(self)
@@ -251,6 +252,10 @@ class ApiHelpManager(ResourceManager):
         body_info = self.db.execute_select(self.api_params, where_value=where_value, order_by=order_by,
                                            cols=param_cols)
         return body_info
+
+    @PolicyManager.verify_policy(["api_look"])
+    def get_api_param(self, api_no):
+        return self._select_api_param(api_no)
 
     @PolicyManager.verify_policy(["api_new"])
     def insert_api_param(self, api_no, param_name, location, necessary,

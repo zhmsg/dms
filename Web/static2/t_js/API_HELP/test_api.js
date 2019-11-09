@@ -2,6 +2,7 @@
  * Created by msg on 12/3/15.
  */
 
+var params_vm = null;
 var new_right = false;
 
 function fill_zero(num, for_len) {
@@ -294,6 +295,28 @@ $(function(){
                 update_request_url(val);
             }
         }
+    });
+    params_vm = new Vue({
+        el: "#div_params",
+        data: {
+            body_params: {},
+        },
+        methods: {
+            test_api_action: function(){
+                console.info(this.body_params);
+            }
+        },
+        watch: {
+            use_env: function(val){
+                update_request_url(val);
+            }
+        }
+    });
+    var params_url = "/dev/api/param";
+    my_async_request2(params_url, "GET", null, function(data){
+        console.info(data);
+        params_vm.body_params = data.body;
+        console.info(params_vm.body_params);
     });
 });
 
