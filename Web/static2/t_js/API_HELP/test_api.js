@@ -343,11 +343,10 @@ $(function(){
         el: "#div_params",
         data: {
             tabs_class: {"URL": "", "Body": "active", "Headers": ""},
-            is_show_body: false,
-            is_show_headers: false,
             params: {},
             body_params: {},
-            header_params: {}
+            header_params: {},
+            url_params: {}
         },
         methods: {
             change_tab: function(key){
@@ -360,6 +359,9 @@ $(function(){
                 }
                 else if(key == "Headers"){
                     this.params = this.header_params;
+                }
+                else{
+                    this.params = this.url_params;
                 }
             },
             test_api_action: function(){
@@ -390,6 +392,7 @@ $(function(){
         init_params(data.body);
         params_vm.body_params = data.body;
         params_vm.header_params = data.header;
+        params_vm.url_params = data.url;
         params_vm.params = data.body;
     });
 });

@@ -245,7 +245,9 @@ def gety_param():
     api_no = g.api_no
     param_info = api_man.get_api_param(api_no)
     _param_dict = dict(body=dict(param_type='object'),
-                       header=dict(param_type='object'))
+                       header=dict(param_type='object'),
+                       url=dict(param_type='object'),
+                       url_args=dict(param_type='object'))
     for item in param_info:
         _param_dict[item['param_no']] = item
     while param_info:

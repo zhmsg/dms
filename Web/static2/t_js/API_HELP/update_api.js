@@ -243,8 +243,8 @@ $(function () {
             },
             remove_param_action: function(index){
                 var that = this;
-                var param_name = that.all_api_params[index]["param_name"];
-                my_async_request2(param_url, "DELETE", {"param_name": param_name}, function(data){
+                var param_no = that.all_api_params[index]["param_no"];
+                my_async_request2(param_url, "DELETE", {"param_no": param_no}, function(data){
                     that.all_api_params.splice(index, 1);
                 })
             },

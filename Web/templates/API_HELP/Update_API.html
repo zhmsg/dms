@@ -41,22 +41,18 @@
             <th scope="col" width="12%">操作</th>
         </tr>
         <tr v-for="(param_item,param_index) in all_api_params">
-            <td>
-                {{param_item.location_name}}
-                <!--<select class="form-control" v-model="param_item.location">-->
-                    <!--<option value="body">body</option>-->
-                    <!--<option value="header">header</option>-->
-                <!--</select>-->
-            </td>
+            <td>{{param_item.location_name}} </td>
             <td>{{param_item.param_name}}</td>
             <td>
-                <select class="form-control" v-model="param_item.necessary">
+                <span v-if="param_item.location=='url'">是</span>
+                <select v-else class="form-control" v-model="param_item.necessary">
                     <option value="1">是</option>
                     <option value="0">否</option>
                 </select>
             </td>
             <td>
-                <select class="form-control" v-model="param_item.param_type">
+                <span v-if="param_item.location=='url'">{{param_item.param_type}}</span>
+                <select v-else class="form-control" v-model="param_item.param_type">
                     <option value="string">string</option>
                     <option value="int">int</option>
                     <option value="list">list</option>
@@ -77,7 +73,7 @@
             <!--</td>-->
             <td>
                 <button class="btn btn-success margin5" @click="update_param_action(param_index)">更新</button>
-                <button class="btn btn-danger" @click="remove_param_action(param_index)">删除</button>
+                <button v-if="param_item.location!='url'" class="btn btn-danger" @click="remove_param_action(param_index)">删除</button>
             </td>
         </tr>
         <tr>

@@ -28,7 +28,7 @@
     <p>最近更新时间: <span id="span_update_time"></span></p>
 
     <div id="div_show_params">
-        <table class="table table-bordered api-list-table" v-if="all_header_params.length>0">
+        <table class="table table-bordered api-list-table" v-if="all_header_params">
             <caption>请求头部参数</caption>
             <tr>
                 <th scope="col" width="15%">参数名称</th>
@@ -43,7 +43,7 @@
                 <td>{{header_p["param_desc"]}}</td>
             </tr>
         </table>
-        <table class="table table-bordered api-list-table" v-if="all_url_params.length>0">
+        <table class="table table-bordered api-list-table" v-if="all_url_params">
             <caption>请求URL参数</caption>
             <tr>
                 <th scope="col" width="15%">参数名称</th>
@@ -74,7 +74,7 @@
                         <td class="text-center">{{body_p["param_type"]}}</td>
                         <td>{{body_p["param_desc"]}}</td>
                     </tr>
-                    <template v-if="body_p['sub_params'].length">
+                    <template v-if="body_p['sub_params']">
                         <tr>
                             <td colspan="4">
                                 <table class="table table-bordered">
