@@ -43,90 +43,15 @@
         <span class="pull-left text-right width150">请求URL：</span>
         <input class="form-control bug-input" id="request_url" readonly/>
     </p>
-    {% if url_param_info | length > 0 %}
-    <p>URL参数列表:</p>
-    {% for item in url_param_info %}
-    <div class="paramListMode">
-        <ul>
-            <li class="star">*</li>
-            <li name="param">{{ item["param_name"] }}</li>
-            <li>：</li>
-            <li><input class="form-control bug-input" id='url_value_{{ item["param_name"] }}'
-                       onkeyup="update_request_url();" origin_param="{{ item[" origin_param"] }}"/>
-            </li>
-            <div class="clear"></div>
-        </ul>
-        <p>输入{{ item["param_type"] }}类型</p>
-    </div>
-    {% endfor %}
-    {% endif %}
-    <p>参数列表:</p>
-    {% for item in api_info["predefine_param"]["header"] %}
-    {% if item in api_info["predefine_header"] %}
-    <div class="paramListMode">
-        <ul>
-            <li class="star">{% if api_info["predefine_header"][item]["necessary"] == true %}
-                * {% endif %}
-            </li>
-            <li name="param">{{ api_info["predefine_header"][item]["param"] }}</li>
-            <li>：</li>
-            <li><input class="form-control bug-input"
-                       id="{{ api_info[" predefine_header"][item]["param"] }}_value" param_type="header"/>
-            </li>
-            <div class="clear"></div>
-        </ul>
-        <p>{{ api_info["predefine_header"][item]["param_desc"] }}</p>
-    </div>
-    {% endif %}
-    {% endfor %}
-    {% for param_info in api_info["header_info"] %}
-    <div class="paramListMode">
-        <ul>
-            <li class="star">{% if param_info["necessary"] == true %}* {% endif %}</li>
-            <li name="param">{{ param_info["param"] }}</li>
-            <li>：</li>
-            <li><input class="form-control bug-input" id="{{ param_info["param"] }}_value" param_type="header"/>
-            </li>
-            <div class="clear"></div>
-        </ul>
-        <p>{{ param_info["param_desc"] }}</p>
-    </div>
-    {% endfor %}
-    {% for item in api_info["predefine_param"]["body"] %}
-    {% if item in api_info["predefine_body"] %}
-    <div class="paramListMode">
-        <ul>
-            <li class="star">{% if api_info["predefine_body"][item]["necessary"] == true %}
-                * {% endif %}
-            </li>
-            <li name="param">{{ api_info["predefine_body"][item]["param"] }}</li>
-            <li>：</li>
-            <li>
-                <input class="form-control bug-input" id="{{ api_info["predefine_body"][item]["param"] }}_value"
-                param_type="body" type="{{ api_info["predefine_body"][item]["type"] }}"/>
-            </li>
-            <li>
-                <select class="form-control" id="{{ api_info["predefine_body"][item]["param"] }}_type"
-                name="body_param_type_{{ api_info["predefine_body"][item]["type"] }}" {% if not new_right %}disabled {%
-                endif %}>
-                <option value="string">string</option>
-                <option value="int">int</option>
-                <option value="list">list</option>
-                <option value="object">object</option>
-                <option value="bool">bool</option>
-                </select>
-            </li>
-            <div class="clear"></div>
-        </ul>
-        <p>【{{ api_info["predefine_body"][item]["type"] }}】{{ api_info["predefine_body"][item]["param_desc"] }}</p>
-    </div>
-    {% endif %}
-    {% endfor %}
+
     <div id="div_params">
-        <ul class="nav nav-tabs bottom10">
-            <li v-for="(tab_item, tab_key) in tabs_class" @click="change_tab(tab_key)" :class="tab_item">
-                <a href="#" data-toggle="tab">{{tab_key}}</a>
-            </li>
+        <p v-if="has_params">参数列表:</p>
+        <ul class="nav nav-tabs bottom10" v-if="has_params">
+            <template v-for="(tab_item, tab_key) in tabs_class">
+                <li @click="change_tab(tab_key)" :class="tab_item.active" v-if="tab_item.params.sub_params">
+                    <a href="#" data-toggle="tab">{{tab_item.name}}</a>
+                </li>
+            </template>
         </ul>
         <div class="paramListMode" v-for="(param_item, param_no, _index) in params.sub_params">
             <div class="panel panel-info" v-if="param_item.sub_params">

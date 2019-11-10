@@ -342,27 +342,25 @@ $(function(){
     params_vm = new Vue({
         el: "#div_params",
         data: {
-            tabs_class: {"URL": "", "Body": "active", "Headers": ""},
+            has_params: true,
+            tabs_class: {"url_args": {"active": "", params: {}, "name": "Url args"},
+                "body": {"active": "", params: {}, "name": "Body"},
+                "header": {"active": "", "params": {}, "name": "Headers"}},
             params: {},
-            body_params: {},
-            header_params: {},
-            url_params: {}
         },
         methods: {
             change_tab: function(key){
                 for(var _key in this.tabs_class){
-                    this.tabs_class[_key] = "";
+                    this.tabs_class[_key]['active'] = "";
                 }
-                this.tabs_class[key] = "active";
-                if(key == "Body"){
-                    this.params = this.body_params;
+                if(key == ""){
+                    this.has_params = false;
+                    return false;
                 }
-                else if(key == "Headers"){
-                    this.params = this.header_params;
-                }
-                else{
-                    this.params = this.url_params;
-                }
+                console.info(this.tabs_class[key]);
+                this.params = this.tabs_class[key]['params'];
+                this.has_params = true;
+                this.tabs_class[key]['active'] = "active";
             },
             test_api_action: function(){
                 var e_data = extract_value(this.body_params);
@@ -390,10 +388,23 @@ $(function(){
     var params_url = "/dev/api/param";
     my_async_request2(params_url, "GET", null, function(data){
         init_params(data.body);
-        params_vm.body_params = data.body;
-        params_vm.header_params = data.header;
-        params_vm.url_params = data.url;
-        params_vm.params = data.body;
+        init_params(data.url_args);
+        params_vm.tabs_class["url_args"].params = data.url_args;
+        params_vm.tabs_class["body"].params = data.body;
+        params_vm.tabs_class["header"].params = data.header;
+        if("sub_params" in data.url_args){
+            params_vm.change_tab("url_args");
+        }
+        else if("sub_params" in data.body){
+            params_vm.change_tab("body");
+        }
+        else if("sub_params" in data.header){
+            params_vm.change_tab("header");
+        }
+        else{
+            params_vm.change_tab("");
+        }
+
     });
 });
 
