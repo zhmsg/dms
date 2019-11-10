@@ -161,8 +161,8 @@ def new_update_api_info():
     module_no = int(api_module)
     if request.method == "PUT":
         api_no = request_data["api_no"]
-        r, m = api_man.update_api_info(api_no=api_no, desc=desc, method=method, path=url,
-                                       module_no=module_no, title=title)
+        r, m = api_man.update_api_info(api_no, module_no, title, url,
+                                       method, desc)
         if r is False:
             return jsonify({"status": False, "data": m})
     else:
@@ -258,7 +258,6 @@ def gety_param():
             parent_p['sub_params'][p_param["param_name"]] = p_param
         elif parent_p['param_type'] == 'list':
             parent_p['sub_params'] = [p_param]
-            parent_p['sub_param_item'] = p_param
     return jsonify({"status": True, "data": _param_dict})
 
 
@@ -313,9 +312,9 @@ def update_api_predefine_body():
 def delete_body():
     request_data = request.json
     api_no = g.api_no
-    if "param_name" in request_data:
-        param_name = request_data["param_name"]
-        result, data = api_man.del_api_param(api_no, param_name)
+    if "param_no" in request_data:
+        param_no = request_data["param_no"]
+        result, data = api_man.del_api_param(api_no, param_no)
         return jsonify({"status": result, "data": data})
     return jsonify({"status": False, "data": "need api_no and param"})
 

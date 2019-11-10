@@ -7,7 +7,7 @@ __author__ = 'ZhouHeng'
 
 
 def check(regex, s, min_len=1, max_len=-1):
-    if type(s) != unicode and type(s) != str:
+    if type(s) != str:
         return False
     if min_len > 0 and len(s) < min_len:
         return False
@@ -56,7 +56,7 @@ def check_http_method(m):
 
 
 def check_sql_character(s):
-    if type(s) != unicode and type(s) != str:
+    if type(s) != str:
         s = str(s)
     return s.replace("\\", "\\\\").replace("'", "\\'")
 

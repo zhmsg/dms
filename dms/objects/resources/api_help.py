@@ -3,6 +3,7 @@
 
 from datetime import datetime
 from functools import partial
+import re
 import sys
 import tempfile
 from time import time
@@ -129,6 +130,31 @@ class ApiHelpManager(ResourceManager):
         self.db.execute(delete_sql)
         return True, "success"
 
+    def _handle_api_path(self, api_no, api_path):
+        url_params = re.findall("<([\w:]+)>", api_path)
+        _params = []
+        for param in url_params:
+            param_sp = param.split(":")
+            if len(param_sp) > 1:
+                _params.append({"param_type": param_sp[0],
+                                "param_name": param_sp[1],
+                                "param_desc": "<%s>" % param})
+            else:
+                _params.append({"param_type": "string",
+                                "param_name": param_sp[0],
+                                "param_desc": "<%s>" % param})
+        exist_params = self._select_api_param(api_no, location="url")
+        for i in range(len(exist_params) - 1, -1, -1):
+            for j in range(len(_params) - 1, -1, -1):
+                if exist_params[i]['param_name'] == _params[j]['param_name']:
+                    exist_params.pop(i)
+                    _params.pop(j)
+        for item in _params:
+            self.insert_api_param(api_no, item["param_name"], "url", 1,
+                                  item["param_type"], item["param_desc"])
+        for e_item in exist_params:
+            self.del_api_param(api_no, e_item["param_no"])
+
     @PolicyManager.verify_policy(["api_module_new"])
     def new_api_info(self, module_no, api_title, api_path, api_method, api_desc):
         if type(module_no) != int:
@@ -160,8 +186,6 @@ class ApiHelpManager(ResourceManager):
             return False , "Bad module_no"
         if check_path(api_path) is False:
             return False, "Bad api_path"
-        if api_path.endswith("/") is False:
-            return False, u"api path should end with /"
         if check_http_method(api_method) is False:
             return False, "Bad api_method"
         api_title = check_sql_character(api_title)
@@ -174,6 +198,8 @@ class ApiHelpManager(ResourceManager):
                      "WHERE api_no='%s'; "  \
                      % (self.api_info, module_no, api_title, api_path, api_method, api_desc, update_time, api_no)
         result = self.db.execute(update_sql)
+        if result > 0:
+            self._handle_api_path(api_no, api_path)
         return True, "success"
 
     def set_api_update(self, api_no):
@@ -224,7 +250,7 @@ class ApiHelpManager(ResourceManager):
         return True, kwargs
 
     def _verify_location(self, api_no, param_name, location):
-        if location in ("body", "header", "url"):
+        if location in self.top_location:
             items = [dict(param_type="object", param_no=location,
                           param_name=location)]
         else:
@@ -232,8 +258,8 @@ class ApiHelpManager(ResourceManager):
         if len(items) <= 0:
             raise ResourceNotFound("location", location)
         l_items = self._select_api_param(api_no, location=items[0]["param_no"])
-        if items[0]["location"] in ("header", "url"):
-            raise BadRequest("location", "not allow header")
+        if items[0].get("location", None) in ("header", "url"):
+            raise BadRequest("location", "not allow header and url")
         if items[0]["param_type"] == "list" and len(l_items) > 0:
             # if link param type is list, only one link.
             raise ConflictRequest("list param has link other param")
@@ -544,8 +570,8 @@ class ApiHelpManager(ResourceManager):
         return True, result
 
     @PolicyManager.verify_policy(["api_new"])
-    def del_api_param(self, api_no, param_name):
-        where_value = dict(api_no=api_no, param_name=param_name)
+    def del_api_param(self, api_no, param_no):
+        where_value = dict(api_no=api_no, param_no=param_no)
         result = self.db.execute_delete(self.api_params,
                                         where_value=where_value)
         return True, result

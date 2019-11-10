@@ -198,6 +198,26 @@ function generating_code() {
     update_res(cmd);
 }
 
+function init_params(d){
+    if("sub_params" in d){
+        if(d["param_type"] == 'object'){
+            var o = {};
+            for(var key in d["sub_params"]){
+                init_params(d['sub_params'][key]);
+            }
+            return o;
+        }else{
+            var l = [];
+            d['sub_param_item'] = d['sub_params'][0];
+            for(var i=0;i<d['sub_params'].length;i++){
+                init_params(d['sub_params'][i]);
+            }
+            return l;
+        }
+    }
+    d.value_error = "";
+}
+
 function extract_value(d){
     if("sub_params" in d){
         if(d["param_type"] == 'object'){
@@ -205,7 +225,7 @@ function extract_value(d){
             for(var key in d["sub_params"]){
                 o[key] = extract_value(d['sub_params'][key]);
             }
-            return o
+            return o;
         }else{
             var l = [];
             for(var i=0;i<d['sub_params'].length;i++){
@@ -215,7 +235,7 @@ function extract_value(d){
         }
     }
     else if("param_value" in d){
-        d['value_error'] = "abc";
+        d['value_error'] = d["param_value"];
         return d["param_value"];
     }
     return null;
@@ -322,9 +342,26 @@ $(function(){
     params_vm = new Vue({
         el: "#div_params",
         data: {
+            tabs_class: {"URL": "", "Body": "active", "Headers": ""},
+            is_show_body: false,
+            is_show_headers: false,
+            params: {},
             body_params: {},
+            header_params: {}
         },
         methods: {
+            change_tab: function(key){
+                for(var _key in this.tabs_class){
+                    this.tabs_class[_key] = "";
+                }
+                this.tabs_class[key] = "active";
+                if(key == "Body"){
+                    this.params = this.body_params;
+                }
+                else if(key == "Headers"){
+                    this.params = this.header_params;
+                }
+            },
             test_api_action: function(){
                 var e_data = extract_value(this.body_params);
                 console.info(e_data);
@@ -350,7 +387,10 @@ $(function(){
     });
     var params_url = "/dev/api/param";
     my_async_request2(params_url, "GET", null, function(data){
+        init_params(data.body);
         params_vm.body_params = data.body;
+        params_vm.header_params = data.header;
+        params_vm.params = data.body;
     });
 });
 

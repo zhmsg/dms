@@ -123,8 +123,12 @@
     {% endif %}
     {% endfor %}
     <div id="div_params">
-
-        <div class="paramListMode" v-for="(param_item, param_no, _index) in body_params.sub_params">
+        <ul class="nav nav-tabs bottom10">
+            <li v-for="(tab_item, tab_key) in tabs_class" @click="change_tab(tab_key)" :class="tab_item">
+                <a href="#" data-toggle="tab">{{tab_key}}</a>
+            </li>
+        </ul>
+        <div class="paramListMode" v-for="(param_item, param_no, _index) in params.sub_params">
             <div class="panel panel-info" v-if="param_item.sub_params">
                 <div class="panel-heading">
                     <h3 class="panel-title">{{param_item.param_name}} 【{{param_item.param_type}}】 {{param_item.param_desc}}</h3>
