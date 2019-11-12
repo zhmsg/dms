@@ -15,7 +15,7 @@ from Class import TIME_FORMAT
 from Class.Check import check_chinese_en, check_http_method, check_path, check_sql_character, check_int
 
 from dms.utils.exception import BadRequest, ConflictRequest, ResourceNotFound
-from dms.utils.verify_convert import verify_uuid, verify_int
+from dms.utils.verify_convert import verify_uuid, verify_int, verify_url_path
 
 from dms.objects.base import ResourceManager, UnsetValue
 from dms.objects.policy import PolicyManager
@@ -69,6 +69,10 @@ class ApiHelpManager(ResourceManager):
                                        max_v=1)
         rv_args["status"] = partial(verify_int, "status", min_v=0,
                                     max_v=3)
+        rv_args['api_path'] = partial(verify_url_path, "api_path",
+                                      max_len=150)
+        rv_args['module_prefix'] = partial(verify_url_path, 'module_prefix',
+                                           max_len=100)
         return rv_args
 
     @PolicyManager.verify_policy(["api_module_new"])
@@ -76,8 +80,6 @@ class ApiHelpManager(ResourceManager):
         module_name = module_name.strip(" ")
         if check_chinese_en(module_name, 1, 35) is False:
             return False, "Bad module_name."
-        if check_path(module_prefix, 1, 35) is False:
-            return False, "Bad module_prefix"
         if check_int(module_part, max_v=9999) is False:
             return False, "Bad module_part"
         if type(module_env) != list:
@@ -103,8 +105,6 @@ class ApiHelpManager(ResourceManager):
     def update_api_module(self, module_no, module_name, module_prefix, module_desc, module_part, module_env):
         if check_chinese_en(module_name, 0, 35) is False:
             return False, "Bad module_name."
-        if check_path(module_prefix, 0, 35) is False:
-            return False, "Bad module_prefix"
         if check_int(module_part, max_v=9999) is False:
             return False, "Bad module_part"
         if type(module_env) != list:
@@ -159,10 +159,6 @@ class ApiHelpManager(ResourceManager):
     def new_api_info(self, module_no, api_title, api_path, api_method, api_desc):
         if type(module_no) != int:
             return False , "Bad module_no"
-        if check_path(api_path) is False:
-            return False, "Bad api_path"
-        if api_path.endswith("/") is False:
-            return False, u"api path should end with /"
         if check_http_method(api_method) is False:
             return False, "Bad api_method"
         api_title = check_sql_character(api_title)
@@ -399,7 +395,7 @@ class ApiHelpManager(ResourceManager):
     def get_test_env(self, env_no_list=None):
         if env_no_list is None:
             select_sql = "SELECT env_no,env_name,env_address FROM %s;" % self.test_env
-        elif type(env_no_list) == list and 1 <= len(env_no_list) <= 10:
+        elif isinstance(env_no_list, list) and 1 <= len(env_no_list) <= 10:
             union_sql_list = []
             for env_no in env_no_list:
                 if type(env_no) != int:
@@ -462,7 +458,10 @@ class ApiHelpManager(ResourceManager):
         if basic_info["stage"] >= len(self.api_stage_desc) or basic_info["stage"] < 0:
             return False, "Not Exist api_no"
         basic_info["stage"] = self.api_stage_desc[basic_info["stage"]]
-        basic_info["api_url"] = basic_info["module_prefix"].rstrip("/") + "/" + basic_info["api_path"].lstrip("/")
+        if basic_info["api_path"]:
+            basic_info["api_url"] = basic_info["module_prefix"].rstrip("/") + "/" + basic_info["api_path"].lstrip("/")
+        else:
+            basic_info["api_url"] = basic_info["module_prefix"]
         basic_info["add_time"] = basic_info["add_time"].strftime(TIME_FORMAT) if basic_info["add_time"] is not None else ""
         basic_info["update_time"] = basic_info["update_time"].strftime(TIME_FORMAT) if basic_info["update_time"] is not None else ""
         return True, basic_info
@@ -628,3 +627,4 @@ class ApiHelpManager(ResourceManager):
 if __name__ == "__main__":
     api_help = ApiHelpManager()
     api_help.get_test_env([2, 3])
+

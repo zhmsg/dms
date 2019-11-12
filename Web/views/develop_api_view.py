@@ -65,7 +65,7 @@ def referer_module_no(f):
 @develop_api_view.route("/", methods=["GET"])
 def list_api():
     test_module_url = test_url_prefix + "/batch/"
-    test_env_url = test_url_prefix + "/env/"
+    test_env_url = test_url_prefix + "/env"
     module_url = url_prefix + "/module/"
     return rt.render("List_API.html", test_module_url=test_module_url, test_env_url=test_env_url,
                      module_url=module_url)
@@ -111,10 +111,9 @@ def add_module_care():
 
 
 @develop_api_view.route("/info/", methods=["GET"])
+@referer_api_no
 def show_api():
-    if "api_no" not in request.args:
-        return "Need api_no"
-    api_no = request.args["api_no"][:32]
+    api_no = g.api_no
 
     # TODO 未按角色筛选 新建 状态的API
     result, api_info = api_man.get_api_info(api_no)

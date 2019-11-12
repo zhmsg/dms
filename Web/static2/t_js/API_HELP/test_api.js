@@ -119,33 +119,33 @@ function get_param_value(){
 }
 
 function update_res(s){
-    $("#res_text").text(s);
+    params_vm.output_info = s;
 }
 
 function update_request_url(env_address){
     if(env_address == null) {
-        var test_env = $("#test_env").val();
+        var test_env = params_vm.use_env;
     }
     else{
         test_env = env_address;
     }
     if (test_env == null) {
-        $("#request_url").val("");
+        params_vm.request_url = "";
         return;
     }
-    var api_url = $("#api_url").val();
+    var api_url = params_vm.basic_info.api_url;
     var request_url = test_env + api_url;
-    var url_param = $("input[id^='url_value_']");
-    for(var i=0;i<url_param.length;i++){
-        var up = url_param[i];
-        var param_v = up.value;
-        if(param_v == ""){
-            continue;
-        }
-        var origin_param = up.attributes["origin_param"].value;
-        request_url = request_url.replace(origin_param, param_v);
-    }
-    $("#request_url").val(request_url);
+    //var url_param = $("input[id^='url_value_']");
+    //for(var i=0;i<url_param.length;i++){
+    //    var up = url_param[i];
+    //    var param_v = up.value;
+    //    if(param_v == ""){
+    //        continue;
+    //    }
+    //    var origin_param = up.attributes["origin_param"].value;
+    //    request_url = request_url.replace(origin_param, param_v);
+    //}
+    params_vm.request_url = request_url;
 }
 
 function update_status_url(status_code){
@@ -235,11 +235,54 @@ function extract_value(d){
         }
     }
     else if("param_value" in d){
-        d['value_error'] = d["param_value"];
+        //d['value_error'] = d["param_value"];
         return d["param_value"];
     }
     return null;
 }
+
+function test_api22(){
+    update_res("正在请求...");
+    var api_method = params_vm.basic_info.api_method;
+    var request_url = params_vm.request_url;
+    if(request_url != ""){
+    }
+    else{
+        update_res("无效的请求URL");
+        return false;
+    }
+
+    var header_param = extract_value(params_vm.tabs_class.header.params);
+    var body_param = extract_value(params_vm.tabs_class.body.params);
+    if(api_method != "GET"){
+        body_param = JSON.stringify(body_param);
+    }
+    $.ajax({
+        url: request_url + "?dms=test",
+        method: api_method,
+        contentType: "application/json",
+        headers: header_param,
+        data: body_param,
+        success:function(data){
+            if(typeof(data) == "string")
+            {
+                data = JSON.parse(data);
+            }
+            update_res(JSON.stringify(data, null, 4));
+        },
+        error:function(xhr){
+            params_vm.r_http_code = xhr.status;
+            params_vm.r_http_text = xhr.statusText;
+            if(xhr.responseJSON){
+                update_res(JSON.stringify(xhr.responseJSON, null, 4));
+            }
+            else{
+                update_res(xhr.responseText);
+            }
+        }
+    });
+}
+
 
 $(function(){
     $("#btn_save_case").click(function(){
@@ -310,7 +353,7 @@ $(function(){
             $("#output_desc").hide();
         }
     });
-    update_request_url();
+    //update_request_url();
     set_default_type();
     if($("#new_right").val() == "True"){
         new_right = true;
@@ -319,34 +362,23 @@ $(function(){
     $("#Content-Type_value").val("application/json");
     $("#btn_generating_code").click(generating_code);
 
-    var env_data = $("#lab_env_data").text();
-    var test_envs = JSON.parse(env_data);
-    var use_env = "";
-    if(test_envs.length > 0){
-        use_env = test_envs[0].env_address;
-        update_request_url(use_env);
-    }
-    var te_vm = new Vue({
-        el: "#p_env",
-        data: {
-            all_env: test_envs,
-            use_env: use_env,
-            custom_env: false
-        },
-        watch: {
-            use_env: function(val){
-                update_request_url(val);
-            }
-        }
-    });
     params_vm = new Vue({
         el: "#div_params",
         data: {
+            all_env: [],
+            use_env: "",
+            custom_env: false,
+            basic_info: {},
             has_params: true,
             tabs_class: {"url_args": {"active": "", params: {}, "name": "Url args"},
                 "body": {"active": "", params: {}, "name": "Body"},
                 "header": {"active": "", "params": {}, "name": "Headers"}},
             params: {},
+            url_params: {},
+            request_url: "",
+            output_info: "",
+            r_http_code: "",
+            r_http_text: ""
         },
         methods: {
             change_tab: function(key){
@@ -357,14 +389,12 @@ $(function(){
                     this.has_params = false;
                     return false;
                 }
-                console.info(this.tabs_class[key]);
                 this.params = this.tabs_class[key]['params'];
                 this.has_params = true;
                 this.tabs_class[key]['active'] = "active";
             },
             test_api_action: function(){
-                var e_data = extract_value(this.body_params);
-                console.info(e_data);
+                test_api22();
             },
             add_sub_params: function(parent_item){
                 var ns_item = {};
@@ -385,6 +415,19 @@ $(function(){
             }
         }
     });
+
+    var info_url = "/dev/api/info/";
+    my_async_request2(info_url, "GET", null, function(data){
+        params_vm.basic_info = data.api_info.basic_info;
+        var module_env = data.api_info.basic_info.module_env;
+        var env_url = "/dev/api/test/env?env_no=" + module_env.replace("|", ",");
+        my_async_request2(env_url, "GET", null, function(data){
+            params_vm.all_env = data;
+            if(data.length > 0){
+                params_vm.use_env = data[0].env_address;
+            }
+        });
+    });
     var params_url = "/dev/api/param";
     my_async_request2(params_url, "GET", null, function(data){
         init_params(data.body);
@@ -392,6 +435,7 @@ $(function(){
         params_vm.tabs_class["url_args"].params = data.url_args;
         params_vm.tabs_class["body"].params = data.body;
         params_vm.tabs_class["header"].params = data.header;
+        params_vm.url_params = data.url;
         if("sub_params" in data.url_args){
             params_vm.change_tab("url_args");
         }

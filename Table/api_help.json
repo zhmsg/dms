@@ -55,7 +55,7 @@
             }
         ],
         "uni_key": {
-            "location_param": ["location", "param_name"]
+            "location_param": ["api_no", "location", "param_name"]
         },
         "table_comment": "",
         "table_name": "api_params"
@@ -203,7 +203,7 @@
             {
                 "col_comment": "模块的URL前綴",
                 "col_name": "module_prefix",
-                "col_type": "varchar(35)"
+                "col_type": "varchar(100)"
             },
             {
                 "col_comment": "关于模块的描述",
@@ -211,7 +211,7 @@
                 "col_type": "varchar(240)"
             },
             {
-                "col_comment": "文档模块所属部分，1属于晶云平台API 2属于晶云平台基础服务系统 3 晶云系统支持子系统",
+                "col_comment": "文档模块所属部分",
                 "col_name": "module_part",
                 "col_type": "tinyint(4)"
             },

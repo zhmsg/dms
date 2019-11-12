@@ -90,12 +90,17 @@ function Load_Module_Info(load_type){
 
 function Load_API_List(api_list, module_prefix)
 {
-    var url_prefix = get_url_prefix()
+    var url_prefix = get_url_prefix();
     $("#t_api_list tr").not(":first").remove();
     var t = $("#t_api_list");
     for(var i=0;i<api_list.length;i++){
         var api_info = api_list[i];
-        api_info["api_url2"] = rTrim(module_prefix, "/") + "/" + lTrim(api_info["api_path"], "/");
+        if(api_info["api_path"].length > 0) {
+            api_info["api_url2"] = rTrim(module_prefix, "/") + "/" + lTrim(api_info["api_path"], "/");
+        }
+        else{
+            api_info["api_url2"] = module_prefix;
+        }
         api_vm.api_list.push(api_info);
     }
     if(api_list.length > 10){

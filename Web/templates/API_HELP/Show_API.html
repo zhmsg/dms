@@ -44,13 +44,24 @@
             </tr>
         </table>
         <table class="table table-bordered api-list-table" v-if="all_url_params">
+            <caption>URL内参数</caption>
+            <tr>
+                <th scope="col" width="15%">参数名称</th>
+                <th scope="col" width="85%">参数描述</th>
+            </tr>
+            <tr v-for="url_p in all_url_params">
+                <td>{{url_p['param_name']}}</td>
+                <td>{{url_p["param_desc"]}}</td>
+            </tr>
+        </table>
+        <table class="table table-bordered api-list-table" v-if="all_url_args_params">
             <caption>请求URL参数</caption>
             <tr>
                 <th scope="col" width="15%">参数名称</th>
                 <th class="text-center" scope="col" width="8%">是否必须</th>
                 <th scope="col" width="77%">参数描述</th>
             </tr>
-            <tr v-for="url_p in all_url_params">
+            <tr v-for="url_p in all_url_args_params">
                 <td>{{url_p['param_name']}}</td>
 
                 <td v-if="url_p['necessary']" class="text-center">是</td>
@@ -58,7 +69,7 @@
                 <td>{{url_p["param_desc"]}}</td>
             </tr>
         </table>
-        <table class="table table-bordered api-list-table">
+        <table class="table table-bordered api-list-table" v-if="all_body_params">
             <caption>请求主体参数</caption>
             <tr>
                 <th scope="col" width="15%">参数名称</th>

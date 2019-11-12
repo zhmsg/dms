@@ -104,11 +104,12 @@ def batch_test_api_page():
                      module_api_url=module_api_url, module_no=module_no, api_url_prefix=api_url_prefix)
 
 
-@develop_test_view.route("/env/", methods=["GET"])
+@develop_test_view.route("/env", methods=["GET"])
 def get_test_env():
     env_no_list = None
     if "env_no" in request.args:
         env_no_list = request.args["env_no"].split(",")
+        env_no_list = [int(v) for v in env_no_list]
     result, env_info = api_man.get_test_env(env_no_list)
     return jsonify({"status": result, "data": env_info})
 

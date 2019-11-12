@@ -26,7 +26,7 @@ def create_app():
             g.user_name = current_user.user_name
             g.user_policies = current_user.policies
             if g.user_name in user_blacklist:
-                message =u"不好意思，您的帐号存在异常，可能访问本系统出现不稳定的想象，现在就是不稳定中。本系统不是很智能，所以不知道啥时候会稳定，也许一分钟，也许一天，也许。。。"
+                message ="不好意思，您的帐号存在异常，可能访问本系统出现不稳定的想象，现在就是不稳定中。本系统不是很智能，所以不知道啥时候会稳定，也许一分钟，也许一天，也许。。。"
                 if "X-Requested-With" in request.headers:
                     return jsonify({"status": False, "data": message})
                 return message
