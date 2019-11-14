@@ -36,12 +36,12 @@ def verify_string(key, s, min_len=None, max_len=None):
     return s
 
 
-URL_PATH_REG = re.compile("[^/\w<>:\.]")
+URL_PATH_REG = re.compile("[^/\w<>{}:\.-]")
 
 
 def verify_url_path(key, path, min_len=None, max_len=None):
     path = verify_string(key, path, min_len, max_len)
     if URL_PATH_REG.search(path):
-        raise BadRequest(key, "value not allow \w<>:./")
+        raise BadRequest(key, "value not allow \w<>{}-:./")
     return path
 

@@ -190,6 +190,9 @@ $(function(){
         methods: {
             to_copy: function(content){
                 copy_text(content);
+            },
+            delete_module: function(module_no){
+                alert1("不能删除模块" + module_no);
             }
         }
     });

@@ -123,7 +123,7 @@ function init_api_info(data) {
     }
     // body info
     var param_len = api_info.body_info.length;
-    var location_map = {"header": "header", "body": "body", "url": "url"};
+    var location_map = {"header": "header", "body": "body", "url": "url", "url_args": "url_args"};
     for(var k=0;k<param_len;k++){
         var p_item = api_info.body_info[k];
         if(p_item["location"] in location_map){
@@ -143,8 +143,8 @@ function init_api_info(data) {
 }
 
 $(function () {
-    var param_url = "/dev/api/param"
-    var example_url = "/dev/api/example"
+    var param_url = "/dev/api/param";
+    var example_url = "/dev/api/example";
     param_vm = new Vue({
         el: "#div_content",
         data: {
@@ -163,7 +163,7 @@ $(function () {
             //about input example
             i_example: {"desc": "", "content": ""},
             // about output example
-            o_example: {"desc": "", "content": ""},
+            o_example: {"desc": "", "content": ""}
 
         },
         methods: {
@@ -223,8 +223,6 @@ $(function () {
                     data["location_name"] = data["location_item"]["param_name"];
                     that.all_api_params.push(data);
                     that.current_location =  this.default_location;
-                    console.info(that.current_location);
-                    console.info(param_vm.current_location);
                     that.current_param_name = "";
                     that.current_necessary = "1";
                     that.current_type = "";

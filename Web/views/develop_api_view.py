@@ -31,8 +31,9 @@ def referer_api_no(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if "Referer" not in request.headers:
-            return jsonify({"status": False, "data": "Bad Request"})
-        g.ref_url = request.headers["Referer"]
+            g.ref_url = ""
+        else:
+            g.ref_url = request.headers["Referer"]
         find_result = re.findall("api_no=([a-z\d]{32})", g.ref_url)
         if len(find_result) > 0:
             g.api_no = find_result[0]
@@ -169,7 +170,9 @@ def new_update_api_info():
         if r is False:
             return jsonify({"status": False, "data": api_info})
         api_no = api_info["api_no"]
-    return jsonify({"status": True, "location": "%s/info/?api_no=%s&update=" % (url_prefix, api_no), "data": "success"})
+    return jsonify({"status": True, "location": "%s/info/?api_no=%s&update="
+                                                % (url_prefix, api_no),
+                    "data": "success"})
 
 
 @develop_api_view.route("/basic/", methods=["DELETE"])

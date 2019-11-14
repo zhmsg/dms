@@ -123,7 +123,7 @@ function update_res(s){
 }
 
 function update_request_url(env_address){
-    if(env_address == null) {
+    if(env_address == undefined) {
         var test_env = params_vm.use_env;
     }
     else{
@@ -134,6 +134,15 @@ function update_request_url(env_address){
         return;
     }
     var api_url = params_vm.basic_info.api_url;
+    for(var index in params_vm.url_params.sub_params){
+        var p = params_vm.url_params.sub_params[index];
+        var v = p.param_value;
+        if(v.length == 0){
+            continue;
+        }
+        var reg = new RegExp("[<{]([a-z]*:?" + p.param_name + ")[}>]", "gi");
+        api_url = api_url.replace(reg, v);
+    }
     var request_url = test_env + api_url;
     //var url_param = $("input[id^='url_value_']");
     //for(var i=0;i<url_param.length;i++){
@@ -215,6 +224,7 @@ function init_params(d){
             return l;
         }
     }
+    d.param_value = "";
     d.value_error = "";
 }
 
@@ -223,7 +233,10 @@ function extract_value(d){
         if(d["param_type"] == 'object'){
             var o = {};
             for(var key in d["sub_params"]){
-                o[key] = extract_value(d['sub_params'][key]);
+                var sub_value = extract_value(d['sub_params'][key]);
+                if(sub_value != null && sub_value != ""){
+                    o[key] = sub_value;
+                }
             }
             return o;
         }else{
@@ -254,11 +267,15 @@ function test_api22(){
 
     var header_param = extract_value(params_vm.tabs_class.header.params);
     var body_param = extract_value(params_vm.tabs_class.body.params);
+    var url_args = extract_value(params_vm.tabs_class.url_args.params);
     if(api_method != "GET"){
         body_param = JSON.stringify(body_param);
     }
+    else{
+        body_param = url_args;
+    }
     $.ajax({
-        url: request_url + "?dms=test",
+        url: request_url,
         method: api_method,
         contentType: "application/json",
         headers: header_param,
@@ -269,6 +286,8 @@ function test_api22(){
                 data = JSON.parse(data);
             }
             update_res(JSON.stringify(data, null, 4));
+            params_vm.r_http_code = "";
+            params_vm.r_http_text = "";
         },
         error:function(xhr){
             params_vm.r_http_code = xhr.status;
@@ -393,6 +412,9 @@ $(function(){
                 this.has_params = true;
                 this.tabs_class[key]['active'] = "active";
             },
+            update_url_action: function () {
+                update_request_url();
+            },
             test_api_action: function(){
                 test_api22();
             },
@@ -432,6 +454,7 @@ $(function(){
     my_async_request2(params_url, "GET", null, function(data){
         init_params(data.body);
         init_params(data.url_args);
+        init_params(data.url);
         params_vm.tabs_class["url_args"].params = data.url_args;
         params_vm.tabs_class["body"].params = data.body;
         params_vm.tabs_class["header"].params = data.header;

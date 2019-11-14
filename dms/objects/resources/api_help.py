@@ -12,7 +12,7 @@ import uuid
 sys.path.append("..")
 
 from Class import TIME_FORMAT
-from Class.Check import check_chinese_en, check_http_method, check_path, check_sql_character, check_int
+from Class.Check import check_chinese_en, check_http_method, check_sql_character, check_int
 
 from dms.utils.exception import BadRequest, ConflictRequest, ResourceNotFound
 from dms.utils.verify_convert import verify_uuid, verify_int, verify_url_path
@@ -131,7 +131,7 @@ class ApiHelpManager(ResourceManager):
         return True, "success"
 
     def _handle_api_path(self, api_no, api_path):
-        url_params = re.findall("<([\w:]+)>", api_path)
+        url_params = re.findall("[<{]([a-z]*:?\w+)[}>]", api_path)
         _params = []
         for param in url_params:
             param_sp = param.split(":")
@@ -165,7 +165,7 @@ class ApiHelpManager(ResourceManager):
         api_desc = check_sql_character(api_desc)
         if len(api_desc) < 1:
             return False, "Bad api_desc"
-        api_no = uuid.uuid1().hex
+        api_no = uuid.uuid4().hex
         # 新建 api_info
         add_time = datetime.now().strftime(TIME_FORMAT)
         insert_sql = "INSERT INTO %s (api_no,module_no,api_title,api_path,api_method,api_desc,add_time,update_time) " \
@@ -174,14 +174,13 @@ class ApiHelpManager(ResourceManager):
         result = self.db.execute(insert_sql)
         if result != 1:
             return False, "sql execute result is %s " % result
+        self._handle_api_path(api_no, api_path)
         return True, {"api_no": api_no}
 
     @PolicyManager.verify_policy(["api_new"])
     def update_api_info(self, api_no, module_no, api_title, api_path, api_method, api_desc):
         if type(module_no) != int:
             return False , "Bad module_no"
-        if check_path(api_path) is False:
-            return False, "Bad api_path"
         if check_http_method(api_method) is False:
             return False, "Bad api_method"
         api_title = check_sql_character(api_title)

@@ -49,7 +49,7 @@
                 <li name="param">{{url_ai.param_name}}</li>
                 <li>：</li>
                 <li>
-                    <input class="form-control bug-input has-error" v-model="url_ai.param_value"/>
+                    <input class="form-control bug-input has-error" @keyup="update_url_action()" v-model="url_ai.param_value"/>
                 </li>
                 <li class="left5 text-danger">{{url_ai.value_error}}</li>
                 <div class="clear"></div>
