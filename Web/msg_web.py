@@ -74,6 +74,7 @@ def create_app():
     api_files = os.listdir("./views")
     for api_file in api_files:
         if api_file not in ["develop_api_view.py", "dms_view.py",
+                            'dms_config_view.py',
                             "develop_test_view.py", "short_link_view.py",
                             "develop_param_view.py"]:
             continue

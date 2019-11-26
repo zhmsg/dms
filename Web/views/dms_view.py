@@ -251,6 +251,8 @@ def register_page():
 def register():
     request_data = request.form
     user_name = request_data["user_name"]
+    if len(user_name) < 5:
+        return "账户名长度过短"
     nick_name = request_data["nick_name"]
     user_role = 1
     result, message = user_m.new_user(user_name, "dms", nick_name, current_user.user_name, user_role)

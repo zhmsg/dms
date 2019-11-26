@@ -1,0 +1,20 @@
+{% extends "base_menu.html" %}
+
+{% block title %}配置服务{% endblock %}
+
+{% block center_content %}
+
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label class="col-sm-5 control-label">配置完成需要重启</label>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">mongo_host</label>
+            <div class="col-sm-6">
+                <input class="form-control" />
+            </div>
+        </div>
+        <button class="btn btn-primary" @click="op_module">提交配置</button>
+    </form>
+    {{ 't_js/Tools/tools.js' | make_static_html | safe }}
+{% endblock %}

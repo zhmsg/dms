@@ -4,7 +4,7 @@
 import hashlib
 from time import time
 
-from dms.objects.base import ResourceManager
+from dms.objects.resources.base import ResourceManager
 
 __author__ = 'meisanggou'
 

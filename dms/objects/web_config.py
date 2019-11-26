@@ -2,18 +2,17 @@
 # coding: utf-8
 import time
 
-from mysqldb_rich.db2 import DB
-
 from dms.utils.singleton import Singleton
 
+from dms.objects.base import DBObject
 
-class WebConfig(Singleton):
 
-    def __init__(self, db_config):
+class WebConfig(Singleton, DBObject):
+
+    def __init__(self):
+        DBObject.__init__(self)
         self.t = "web_config"
         self.cache = dict()
-        self.db_config = db_config
-        self.db = DB(conf_path=db_config)
         self.cols = ["config_key", "config_value", "allow_update",
                      "update_time", "add_time"]
 
@@ -52,7 +51,7 @@ class WebConfig(Singleton):
 
 
 if __name__ == "__main__":
-    config_man = WebConfig("")
-    config_man2 = WebConfig("")
+    config_man = WebConfig()
+    config_man2 = WebConfig()
     print(id(config_man))
     print(id(config_man2))

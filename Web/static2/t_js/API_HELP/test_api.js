@@ -164,15 +164,6 @@ function update_status_url(status_code){
     $("#look_status").attr("href", title + "&status=" + status_code);
 }
 
-function set_default_type()
-{
-    var type_select = $("select[name^='body_param_type_']");
-    for(var i=0;i<type_select.length;i++){
-        var one_select = type_select[i];
-        var default_type = one_select.name.split("_")[3];
-        one_select.value = default_type;
-    }
-}
 
 function generating_code() {
     var test_case_info = get_param_value();
@@ -229,29 +220,55 @@ function init_params(d){
 }
 
 function extract_value(d){
+    var ev_r = {'r': true, 'v': null};
     if("sub_params" in d){
         if(d["param_type"] == 'object'){
             var o = {};
             for(var key in d["sub_params"]){
-                var sub_value = extract_value(d['sub_params'][key]);
-                if(sub_value != null && sub_value != ""){
+                var sub_ev_r = extract_value(d['sub_params'][key]);
+                if(sub_ev_r['r'] == false){
+                    ev_r['r'] = false;
+                }
+
+                var sub_value = sub_ev_r['v'];
+                if(typeof sub_value == 'object' || typeof sub_value == 'array'){
+                    o[key] = sub_value;
+                }
+                else if(sub_value != null && sub_value != ""){
                     o[key] = sub_value;
                 }
             }
-            return o;
+            ev_r['v'] = o;
+            return ev_r;
         }else{
             var l = [];
             for(var i=0;i<d['sub_params'].length;i++){
-                l[i] = extract_value(d['sub_params'][i]);
+                var sub_ev_r = extract_value(d['sub_params'][i]);
+                if(sub_ev_r['r'] == false){
+                    ev_r['r'] = false;
+                }
+                l[i] = sub_ev_r['v'];
             }
+            ev_r['v'] = l;
             return l;
         }
     }
     else if("param_value" in d){
-        //d['value_error'] = d["param_value"];
-        return d["param_value"];
+        ev_r['v'] = d["param_value"];
+        if(ev_r['v'] != "") {
+            if (d["param_type"] == 'object' || d["param_type"] == 'list') {
+                try {
+                    var param_value = JSON.parse(d["param_value"]);
+                    ev_r['v'] = param_value;
+                }
+                catch (e) {
+                    ev_r['r'] = false;
+                    d["value_error"] = "无效的" + d['param_name'];
+                }
+            }
+        }
     }
-    return null;
+    return ev_r;
 }
 
 function test_api22(){
@@ -265,16 +282,38 @@ function test_api22(){
         return false;
     }
 
-    var header_param = extract_value(params_vm.tabs_class.header.params);
-    var body_param = extract_value(params_vm.tabs_class.body.params);
-    var url_args = extract_value(params_vm.tabs_class.url_args.params);
+    var header_ev_r = extract_value(params_vm.tabs_class.header.params);
+    if(header_ev_r['r'] == false){
+        update_res("header 值存在设置错误");
+        return false;
+    }
+    var header_param = header_ev_r['v'];
+
+    var body_ev_r = extract_value(params_vm.tabs_class.body.params);
+    if(body_ev_r['r'] == false){
+        update_res("body 值存在设置错误");
+        return false;
+    }
+
+    var body_param = body_ev_r['v'];
+
+    var url_args_ev_r = extract_value(params_vm.tabs_class.url_args.params);
+    if(url_args_ev_r['r'] == false){
+        update_res("url args 值存在设置错误");
+        return false;
+    }
+    var url_args = url_args_ev_r['v'];
+
     if(api_method != "GET"){
-        body_param = JSON.stringify(body_param);
+        if(typeof body_param == "object")
+        {
+            body_param = JSON.stringify(body_param);
+        }
     }
     else{
         body_param = url_args;
     }
-    $.ajax({
+    var req = {
         url: request_url,
         method: api_method,
         contentType: "application/json",
@@ -299,9 +338,71 @@ function test_api22(){
                 update_res(xhr.responseText);
             }
         }
-    });
+    };
+    if(header_param != null && header_param != ""){
+        req['headers'] = header_param;
+    }
+    if(body_param != null && body_param != ""){
+        req['data'] = body_param;
+    }
+    $.ajax(req);
 }
 
+
+function storage_action()
+{
+    if(params_vm == null){
+        return;
+    }
+    if(params_vm.api_no == ""){
+        return
+    }
+    var header_param = extract_value(params_vm.tabs_class.header.params)['v'];
+    var body_param = extract_value(params_vm.tabs_class.body.params)['v'];
+    var url_args = extract_value(params_vm.tabs_class.url_args.params)['v'];
+    var url_param = extract_value(params_vm.url_params)['v'];
+    var data = {'body': body_param, 'headers': header_param,
+        'args': url_args, 'urls': url_param};
+    save_api_test_example(params_vm.api_no, data);
+}
+
+function dict_value_copy(dest_d, source_d)
+{
+    if("sub_params" in dest_d) {
+        if (typeof source_d == 'object' && dest_d.param_type == 'object') {
+            for(var key in dest_d["sub_params"]){
+                if(key in source_d){
+                    dict_value_copy(dest_d["sub_params"][key], source_d[key])
+                }
+            }
+        }
+        else if (typeof source_d == 'array' && dest_d.param_type == 'list') {
+            for(var i=0;i<source_d.length;i++){
+                params_vm.add_sub_params(dest_d);
+                dict_value_copy(dest_d.sub_params[dest_d.sub_params.length - 1], source_d[i]);
+            }
+        }
+    }
+    else{
+        dest_d.param_value = source_d;
+    }
+}
+
+function load_storage()
+{
+    if(params_vm == null || params_vm.api_no == ""){
+        return;
+    }
+    var data = get_api_test_example(params_vm.api_no);
+    if(data == null){
+        return
+    }
+
+    dict_value_copy(params_vm.tabs_class.header.params, data.headers);
+    dict_value_copy(params_vm.tabs_class.body.params, data.body);
+    dict_value_copy(params_vm.tabs_class.url_args.params, data.args);
+    dict_value_copy(params_vm.url_params, data.urls);
+}
 
 $(function(){
     $("#btn_save_case").click(function(){
@@ -372,8 +473,7 @@ $(function(){
             $("#output_desc").hide();
         }
     });
-    //update_request_url();
-    set_default_type();
+
     if($("#new_right").val() == "True"){
         new_right = true;
     }
@@ -384,6 +484,7 @@ $(function(){
     params_vm = new Vue({
         el: "#div_params",
         data: {
+            api_no: "",
             all_env: [],
             use_env: "",
             custom_env: false,
@@ -417,6 +518,7 @@ $(function(){
             },
             test_api_action: function(){
                 test_api22();
+                storage_action();
             },
             add_sub_params: function(parent_item){
                 var ns_item = {};
@@ -426,6 +528,7 @@ $(function(){
                     ns_item[key] = parent_item.sub_param_item[key];
                 }
                 parent_item.sub_params.push(ns_item);
+                return ns_item
             },
             delete_sub_params: function(parent_item, index){
                 parent_item.sub_params.splice(index, 1);
@@ -434,12 +537,15 @@ $(function(){
         watch: {
             use_env: function(val){
                 update_request_url(val);
+                return val;
             }
         }
     });
 
     var info_url = "/dev/api/info/";
     my_async_request2(info_url, "GET", null, function(data){
+        params_vm.api_no = data.api_info.basic_info.api_no;
+        document.title = data.api_info.basic_info.api_title;
         params_vm.basic_info = data.api_info.basic_info;
         var module_env = data.api_info.basic_info.module_env;
         var env_url = "/dev/api/test/env?env_no=" + module_env.replace("|", ",");
@@ -449,6 +555,7 @@ $(function(){
                 params_vm.use_env = data[0].env_address;
             }
         });
+        load_storage();
     });
     var params_url = "/dev/api/param";
     my_async_request2(params_url, "GET", null, function(data){
@@ -471,7 +578,7 @@ $(function(){
         else{
             params_vm.change_tab("");
         }
-
+        load_storage();
     });
 });
 

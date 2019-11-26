@@ -52,6 +52,7 @@ def load_user(user_name):
 
 login_manager.login_view = "dms_view.index"
 web_prefix = web_prefix_url
+config_url_prefix = web_prefix + '/config'
 api_url_prefix = web_prefix + "/dev/api"
 status_url_prefix = web_prefix + "/dev/api/status"
 test_url_prefix = web_prefix + "/dev/api/test"
@@ -108,12 +109,19 @@ blues = {}
 dms_job = []
 
 
-def create_blue(blue_name, url_prefix="/", auth_required=True, special_protocol=False):
+def create_blue(blue_name, url_prefix="/", auth_required=True, special_protocol=False, **kwargs):
+    required_resource = kwargs.pop('required_resource', None)
     add_blue = Blueprint(blue_name, __name__)
     if auth_required:
         @add_blue.before_request
         @login_required
         def before_request():
+            if required_resource:
+                for rr in required_resource:
+                    if rr.missing_config:
+                        redirect_url = "/config?keys=%s" % \
+                                       ",".join(rr.missing_config)
+                        return redirect(redirect_url)
             if special_protocol is True:
                 r_protocol = request.headers.get("X-Request-Protocol", "http")
                 if r_protocol not in request_special_protocol:

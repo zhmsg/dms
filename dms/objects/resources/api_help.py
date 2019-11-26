@@ -17,8 +17,11 @@ from Class.Check import check_chinese_en, check_http_method, check_sql_character
 from dms.utils.exception import BadRequest, ConflictRequest, ResourceNotFound
 from dms.utils.verify_convert import verify_uuid, verify_int, verify_url_path
 
-from dms.objects.base import ResourceManager, UnsetValue
+from dms.objects.base import UnsetValue
 from dms.objects.policy import PolicyManager
+from dms.objects.web_config import WebConfig
+
+from dms.objects.resources.base import ResourceManager
 
 temp_dir = tempfile.gettempdir()
 
@@ -30,6 +33,7 @@ UNSET = UnsetValue.get_instance()
 class ApiHelpManager(ResourceManager):
     NAME = "api_help"
     top_location = ["header", "body", "url", "url_args"]
+    # REQUIRED_CONFIG = ['mongo_host', 'mongo_password']
 
     def __init__(self):
         ResourceManager.__init__(self)

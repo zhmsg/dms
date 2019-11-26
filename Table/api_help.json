@@ -163,7 +163,7 @@
             {
                 "col_comment": "关于API的详细描述",
                 "col_name": "api_desc",
-                "col_type": "varchar(300)"
+                "col_type": "varchar(500)"
             },
             {
                 "col_comment": "添加的时间",

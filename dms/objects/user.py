@@ -8,13 +8,15 @@ import re
 import time
 from werkzeug.security import generate_password_hash, check_password_hash
 
+
 from dms.objects.base import DBObject
+from dms.utils.verify_convert import verify_string
 
 
 class UserObject(DBObject):
     """
     role
-    11 超级管理员 授权管理员
+    11 超级管理员 授权管理员 配置web config
     10 管理员 可访问任意模块 可创建用户
     ...
     1  默认普通用户 根据模块权限访问模块
