@@ -10,6 +10,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 
 from dms.objects.base import DBObject
+from dms.objects.web_config import WebConfig
 from dms.utils.verify_convert import verify_string
 
 
@@ -60,6 +61,12 @@ class UserObject(DBObject):
         return _roles
 
     @classmethod
+    def is_admin(cls, role):
+        if role >= 11:
+            return True
+        return False
+
+    @classmethod
     def is_manager(cls, role):
         if role >= 10:
             return True
@@ -83,7 +90,14 @@ class UserObject(DBObject):
         l = self.db.execute_insert(self.t, kwargs=kwargs, ignore=True)
         return l
 
-    def update_password(self, user_name, new_password):
+    def change_password(self, user_name, old_password, new_password):
+        r, item = self.user_confirm(old_password, user_name=user_name)
+        if r != 0:
+            return False
+        self._update_password(user_name, new_password)
+        return True
+
+    def _update_password(self, user_name, new_password):
         _md5_p = self._md5_hash_password(user_name, new_password)
         en_password = generate_password_hash(_md5_p)
         update_value = {"password": en_password}

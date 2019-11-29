@@ -33,7 +33,7 @@ UNSET = UnsetValue.get_instance()
 class ApiHelpManager(ResourceManager):
     NAME = "api_help"
     top_location = ["header", "body", "url", "url_args"]
-    # REQUIRED_CONFIG = ['mongo_host', 'mongo_password']
+    REQUIRED_CONFIG = ['mongo_host', 'mongo_user', 'mongo_password']
 
     def __init__(self):
         ResourceManager.__init__(self)

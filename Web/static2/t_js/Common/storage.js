@@ -3,7 +3,6 @@
  */
 
  var key_prefix = "dms_";
- var policies_key = "use_policies";
 
 function _save_storage(key, value)
 {
@@ -39,45 +38,6 @@ function _get_session_storage(key)
     return null;
 }
 
- function save_policies(policies)
- {
-    _save_session_storage(policies_key, policies)
- }
-
- function get_policies()
- {
-    return _get_session_storage(policies_key)
- }
-
- function verify_policy(m_key, p_key)
- {
-    var policies = get_policies();
-    if(policies == null){
-        return false;
-    }
-    var role = 0;
-    if(policies.hasOwnProperty("role")){
-        role = policies['role'];
-    }
-    if(role >= 10){
-        return true;
-    }
-    if(!policies.hasOwnProperty("policies")){
-        return false
-    }
-
-    var o_policies = policies["policies"];
-
-    if(!o_policies.hasOwnProperty(m_key)){
-        return false;
-    }
-    var m_values = o_policies[m_key];
-    if(m_values.indexOf(p_key) >= 0)
-    {
-        return true;
-    }
-    return false;
- }
 
 function get_api_test_example(api_no){
     return _get_storage("api_te_" + api_no)

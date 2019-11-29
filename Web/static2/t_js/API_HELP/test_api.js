@@ -119,6 +119,9 @@ function get_param_value(){
 }
 
 function update_res(s){
+    if(typeof s == "object"){
+        s = JSON.stringify(s, null, 4)
+    }
     params_vm.output_info = s;
 }
 
@@ -269,6 +272,41 @@ function extract_value(d){
         }
     }
     return ev_r;
+}
+
+function load_request(){
+    var header_ev_r = extract_value(params_vm.tabs_class.header.params);
+    if(header_ev_r['r'] == false){
+        update_res("header 值存在设置错误");
+        return false;
+    }
+    var header_param = header_ev_r['v'];
+
+    var body_ev_r = extract_value(params_vm.tabs_class.body.params);
+    if(body_ev_r['r'] == false){
+        update_res("body 值存在设置错误");
+        return false;
+    }
+
+    var body_param = body_ev_r['v'];
+
+    var url_args_ev_r = extract_value(params_vm.tabs_class.url_args.params);
+    if(url_args_ev_r['r'] == false){
+        update_res("url args 值存在设置错误");
+        return false;
+    }
+    var url_args = url_args_ev_r['v'];
+    var r = {};
+    if(typeof header_param == 'object'){
+        r['headers'] = header_param;
+    }
+    if(typeof body_param == 'object'){
+        r['body'] = body_param;
+    }
+    if(typeof url_args == 'object'){
+        r['url_args'] = url_args;
+    }
+    return r;
 }
 
 function test_api22(){
@@ -532,6 +570,12 @@ $(function(){
             },
             delete_sub_params: function(parent_item, index){
                 parent_item.sub_params.splice(index, 1);
+            },
+            load_request_action: function(){
+                var r = load_request();
+                if(r != false){
+                    update_res(r);
+                }
             }
         },
         watch: {

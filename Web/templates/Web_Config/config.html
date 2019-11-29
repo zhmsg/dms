@@ -2,19 +2,30 @@
 
 {% block title %}配置服务{% endblock %}
 
-{% block center_content %}
+{% block js_content %}
+    {{ 't_js/Common/add_node.js' | make_static_html | safe }}
+    {{ 't_js/Common/url_tool.js' | make_static_html | safe }}
+    {{ 't_js/Web_Config/config.js' | make_static_html | safe }}
 
-    <form class="form-horizontal">
+{% endblock %}
+
+{% block center_content %}
+    <div id="div_config">
+    <div class="form-horizontal">
         <div class="form-group">
             <label class="col-sm-5 control-label">配置完成需要重启</label>
         </div>
-        <div class="form-group">
-            <label class="col-sm-2 control-label">mongo_host</label>
+        <div class="form-group" v-for="(value,key) in config_keys">
+            <label class="col-sm-2 control-label">{{key}}:</label>
             <div class="col-sm-6">
-                <input class="form-control" />
+                <input class="form-control" v-model="value.value" />
             </div>
         </div>
-        <button class="btn btn-primary" @click="op_module">提交配置</button>
-    </form>
-    {{ 't_js/Tools/tools.js' | make_static_html | safe }}
+        <div class="form-group">
+            <label class="col-sm-2 control-label"></label>
+            <button class="btn btn-primary " @click="submit_action()">提交配置</button>
+        </div>
+    </div>
+    </div>
+
 {% endblock %}

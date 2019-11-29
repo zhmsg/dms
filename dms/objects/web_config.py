@@ -39,6 +39,12 @@ class WebConfig(Singleton, DBObject):
             self.cache[config_key] = item
         return item
 
+    def get_keys(self, config_keys):
+        r = dict()
+        for key in config_keys:
+            r[key] = self.get_key(key)
+        return r
+
     def update_key(self, config_key, config_value, allow_update=None):
         c_time = time.time()
         where_value = dict(config_key=config_key, allow_update=True)
@@ -49,6 +55,10 @@ class WebConfig(Singleton, DBObject):
                                       where_value=where_value)
         return line
 
+    def new_configs(self, configs, allow_update=False):
+        for key, value in configs.items():
+            self.insert_config(key, value, allow_update)
+        return True
 
 if __name__ == "__main__":
     config_man = WebConfig()

@@ -5,49 +5,51 @@
 var config_vm = null;
 
 $(function(){
+    var o_keys = UrlArgsValue(location.href, "keys");
+    if(o_keys == null){
+        var keys = [];
+    }
+    else{
+        var keys = o_keys.split(",");
+    }
+    var config_keys = {};
+    for(var index in keys){
+        config_keys[keys[index]] = {'value': ''}
+    }
+    var values_url = "/config/values";
+    my_request2(values_url, "GET", {'keys': o_keys}, function (data) {
+        for(var key in data){
+            var value = data[key];
+            if(value != null){
+                config_keys[key]['origin_value'] = value.config_value;
+                config_keys[key]['value'] = value.config_value;
+            }
+        }
+    });
     config_vm = new Vue({
         el: "#div_config",
         data: {
-            config: null
+            config_keys: config_keys
         },
         methods: {
-            change_tab: function(key){
-                for(var _key in this.tabs_class){
-                    this.tabs_class[_key]['active'] = "";
+            submit_action: function(){
+                var data = {};
+                var has_update = false;
+                for(var key in this.config_keys){
+                    if(this.config_keys[key].value != this.config_keys[key].origin_value) {
+                        data[key] = this.config_keys[key].value;
+                        has_update = true;
+                    }
                 }
-                if(key == ""){
-                    this.has_params = false;
+                console.info(data);
+                if(has_update == false){
+                    alert1("无更新无需提交");
                     return false;
                 }
-                this.params = this.tabs_class[key]['params'];
-                this.has_params = true;
-                this.tabs_class[key]['active'] = "active";
-            },
-            update_url_action: function () {
-                update_request_url();
-            },
-            test_api_action: function(){
-                test_api22();
-                storage_action();
-            },
-            add_sub_params: function(parent_item){
-                var ns_item = {};
-                var keys = ["param_name", "param_type", "necessary", "param_desc"];
-                for(var k_i in keys){
-                    var key = keys[k_i];
-                    ns_item[key] = parent_item.sub_param_item[key];
-                }
-                parent_item.sub_params.push(ns_item);
-                return ns_item
-            },
-            delete_sub_params: function(parent_item, index){
-                parent_item.sub_params.splice(index, 1);
-            }
-        },
-        watch: {
-            use_env: function(val){
-                update_request_url(val);
-                return val;
+                my_async_request2(values_url, 'POST', data, function(data){
+                    alert1("更新成功！");
+                    location.reload();
+                })
             }
         }
     });

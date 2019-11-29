@@ -26,10 +26,6 @@ function login_success(data) {
         console.info("un checked");
         localStorage.removeItem(storage_key);
     }
-    var url = "/policies"
-    my_request2(url, "GET", null, function(data){
-        save_policies(data);
-    })
     location.href = data.location;
 }
 

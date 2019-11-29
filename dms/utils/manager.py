@@ -5,6 +5,7 @@ from dms.utils.singleton import Singleton
 
 from dms.objects.resources.api_help import ApiHelpManager
 from dms.objects.resources.link import ShortLinkManager
+from dms.objects.resources.user_policies import UserPoliciesManager
 
 
 class ResourcesManager(Singleton):
@@ -41,8 +42,10 @@ class ResourcesManager(Singleton):
     def load_objects(self):
         api_help = ApiHelpManager()
         link_man = ShortLinkManager()
+        up_man = UserPoliciesManager()
         self._add_object(api_help)
         self._add_object(link_man)
+        self._add_object(up_man)
 
     def get_object_manager(self, name):
         return self._objects.get(name)

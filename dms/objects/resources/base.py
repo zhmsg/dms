@@ -44,7 +44,7 @@ class ResourceManager(DBObject):
         for config_key in self.get_required_config():
             v = web_c.get_key(config_key)
             if v:
-                loaded[config_key] = v
+                loaded[config_key] = v['config_value']
             else:
                 missing.append(config_key)
         _config = {'loaded': loaded, 'missing': missing}

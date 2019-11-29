@@ -12,7 +12,7 @@
       <span class="block bottom10" id="check_result"> </span>
       <input id="check_url" value="{{ check_url }}" style="display: none"/>
       <input type="text" id="inputName" name="nick_name" class="form-control width300 bottom10" placeholder="真实姓名" required>
-      <select class="form-control width300 bottom10">
+      <select class="form-control width300 bottom10" name="user_role">
         {% for role in roles %}
           {% if role['value'] < g.user_role %}
               <option value="{{ role['value'] }}">{{ role['desc'] }}</option>

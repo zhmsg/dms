@@ -31,8 +31,8 @@ dms_view = create_blue('dms_view', url_prefix=url_prefix, auth_required=False)
 
 
 user_m = UserObject()
-role_m = RoleManager(mongo_host)
 resources_m = ResourcesManager.get_instance()
+ur_man = ResourcesManager.get_instance().get_object_manager("user_role")
 
 
 def load_domain_session():
@@ -122,7 +122,6 @@ def login_vip():
     user.user_name = info["account"]
     login_user(user)
     session["role"] = info["role"]
-    session["roles"] = role_m.select(info["account"])
     session.modified = True
     return jsonify({"status": True, "data": "success"})
 
@@ -210,9 +209,9 @@ def set_password():
         old_password= request.form["old_password"]
         if old_password == new_password:
             return u"新密码不能和旧密码一样"
-        result, message = control.change_password(user_name, old_password, new_password)
+        result = user_m.change_password(user_name, old_password, new_password)
         if result is False:
-            return message
+            return "旧密码不正确"
         return redirect(url_for("dms_view.login_page"))
     elif "change_token" in session and "expires_in" in session and "user_name" in session and "password" in session:
         expires_in = session["expires_in"]
@@ -222,9 +221,9 @@ def set_password():
                 return "Bad change_token"
             if user_name != session["user_name"]:
                 return "Bad user_name"
-            result, message = control.change_password(user_name, session["password"], new_password)
+            result = user_m.change_password(user_name, session["password"], new_password)
             if result is False:
-                return message
+                return "旧密码不正确"
             del session["user_name"]
             del session["change_token"]
             del session["expires_in"]
@@ -250,14 +249,23 @@ def register_page():
 @login_required
 def register():
     request_data = request.form
-    user_name = request_data["user_name"]
+    user_name = request_data['user_name']
     if len(user_name) < 5:
         return "账户名长度过短"
-    nick_name = request_data["nick_name"]
-    user_role = 1
+    nick_name = request_data['nick_name']
+    user_role = request_data['user_role']
+    policies = dict()
+    for key in request_data:
+        keys = key.split(".")
+        if len(keys) != 2:
+            continue
+        if keys[0] not in policies:
+            policies[keys[0]] = list()
+        policies[keys[0]].append(keys[1])
     result, message = user_m.new_user(user_name, "dms", nick_name, current_user.user_name, user_role)
     if result is False:
         return message
+    ur_man.new_policies(user_name, policies)
     return redirect(url_for("dms_view.select_portal"))
 
 
@@ -352,11 +360,3 @@ def list_user():
     items = user_m.list_user(g.user_name)
     return jsonify({"status": True, "data": items})
 
-
-@dms_view.route("/policies", methods=["GET"])
-@login_required
-def get_policies():
-    role = session["role"]
-    policies = dict(api_help=["api_module_new", "api_new", "api_look"])
-    return jsonify({"status": True, "data": {"role": role,
-                                             "policies": policies}})
