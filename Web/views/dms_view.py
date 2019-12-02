@@ -89,7 +89,7 @@ def login():
     elif r_code == -1:
         return jsonify({"status": False, "data": "密码不正确"})
     session["role"] = info["role"]
-    session["roles"] = dict()  # role_m.select(info["account"])
+    session["policies"] = ur_man.get_policies(user_name)
     # if info["tel"] is None:
     #     session["user_name"] = info["user_name"]
     #     session["bind_token"] = gen_salt(57)
@@ -332,17 +332,18 @@ def select_portal():
         menu.append({"desc": "注册用户", "url": "/register"})
         can_authorize = True
     else:
-        for module in resources_m.modules:
+        for m_name, module in resources_m.modules.items():
             if "url_prefix" not in module:
                 continue
-            basic_role = "%s.basic" % module.name
-            if basic_role not in g.user_policies:
+            if m_name not in g.user_policies:
                 continue
-
-            menu.append({"desc": module["url_prefix"],
+            basic_role = "basic"
+            if basic_role not in g.user_policies[m_name]:
+                continue
+            menu.append({"desc": module["desc"],
                          "url": module["url_prefix"]})
-            manager_role = "%s.manager" % module.name
-            if manager_role in g.user_polices:
+            manager_role = "manager"
+            if manager_role in g.user_policies[m_name]:
                 can_authorize = True
     if can_authorize:
         menu.append({"desc": "用户授权", "url": "/authorize"})

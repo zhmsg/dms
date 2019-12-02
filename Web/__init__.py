@@ -42,7 +42,7 @@ def load_user(user_name):
     user = User()
     user.user_name = user_name
     if "policies" not in session:
-        session["policies"] = ["api_help.basic"]
+        session["policies"] = dict()
     user.policies = session["policies"]
     if "role" not in session:
         session["role"] = 0

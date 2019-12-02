@@ -26,8 +26,10 @@ class ResourcesManager(Singleton):
     def manager_modules(self, policies):
         _manager_modules = dict()
         for name, module in self._modules.items():
-            manager_role = "%s.manager" % name
-            if manager_role in policies:
+            if name not in policies:
+                continue
+            manager_role = "manager"
+            if manager_role in policies[name]:
                 _manager_modules[name] = module
         return _manager_modules
 

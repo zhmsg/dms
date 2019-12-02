@@ -28,6 +28,6 @@ user_role_view = create_blue('user_role_view', url_prefix=url_prefix,
 
 @user_role_view.route("", methods=["GET"])
 def mine_role():
-    policies = ur_man.select_policies(g.user_name)
+    policies = ur_man.get_policies(g.user_name)
     data = {'role': g.user_role, 'policies': policies}
     return jsonify({'status': True, 'data': data})
