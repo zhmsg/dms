@@ -206,6 +206,12 @@ class UserObject(DBObject):
                 print(e)
         return items
 
+    def get_user_role(self, user_name):
+        items = self._verify_user_exist(user_name=user_name)
+        if len(items) <= 0:
+            return None
+        return items[0]['role']
+
 
 if __name__ == "__main__":
     user = UserObject()

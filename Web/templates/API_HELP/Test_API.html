@@ -95,6 +95,13 @@
                     <li>
                         <input class="form-control bug-input" v-model="param_item.param_value"/>
                     </li>
+                    <li>
+                        <select class="form-control width100" v-model="param_item.param_value2"/>
+                            <option value=""></option>
+                            <option value="empty_string">空字符串</option>
+                            <option value="is_null">空值</option>
+                        </select>
+                    </li>
                     <li class="left5 text-danger">{{param_item.value_error}}</li>
                     <div class="clear"></div>
                 </ul>

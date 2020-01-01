@@ -2,6 +2,8 @@
  * Created by msg on 11/23/15.
  */
 
+var auth_vm = null;
+
 function bit_and(a, b) {
     var c = 1;
     var r = 0;
@@ -54,6 +56,40 @@ function remove_user(){
     my_async_request2(r_url, "DELETE", {"user_name": selected_user}, reload);
 }
 $(function() {
-    user_select_change();
-    $("#link_remove_user").click(remove_user);
+    var url = '/user/policies/manager';
+    var man_policies = {};
+    my_request2(url, 'GET', null, function(data){
+       man_policies = data;
+    });
+    for(var key in man_policies){
+        var p_item = man_policies[key];
+        p_item['policies_l'] = [{'desc': '准入', 'key': 'basic', 'checked': ''}];
+        for(var s_key in p_item['policies']){
+            var _item = p_item['policies'][s_key];
+            _item['key'] = s_key;
+            _item['checked'] = '';
+            p_item['policies_l'].push(_item);
+        }
+        p_item['policies_l'].push({'desc': '管理员', 'key': 'manager', 'checked': ''});
+    }
+
+    auth_vm = new Vue({
+        el: "#div_auth",
+        data: {
+            other_user: "",
+            man_policies: man_policies
+        },
+        methods: {
+            check_policies: function(){
+                var o_user = this.other_user;
+                console.info(o_user);
+            }
+        },
+        watch: {
+            use_env: function(val){
+                update_request_url(val);
+                return val;
+            }
+        }
+    });
 });

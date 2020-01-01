@@ -270,7 +270,7 @@ def gety_param():
 @referer_api_no
 def add_body_param():
     request_data = request.json
-    param_name = request_data["param_name"]
+    param_name = request_data["param_name"].strip()
     location = request_data["location"]
     api_no = g.api_no
     param_desc = request_data["param_desc"]

@@ -32,7 +32,7 @@ dms_view = create_blue('dms_view', url_prefix=url_prefix, auth_required=False)
 
 user_m = UserObject()
 resources_m = ResourcesManager.get_instance()
-ur_man = ResourcesManager.get_instance().get_object_manager("user_role")
+ur_man = resources_m.get_object_manager("user_role")
 
 
 def load_domain_session():

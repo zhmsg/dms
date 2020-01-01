@@ -219,11 +219,12 @@ function init_params(d){
         }
     }
     d.param_value = "";
+    d.param_value2 = "";
     d.value_error = "";
 }
 
 function extract_value(d){
-    var ev_r = {'r': true, 'v': null};
+    var ev_r = {'r': true, 'v': null, 'v2': ''};
     if("sub_params" in d){
         if(d["param_type"] == 'object'){
             var o = {};
@@ -234,7 +235,14 @@ function extract_value(d){
                 }
 
                 var sub_value = sub_ev_r['v'];
-                if(typeof sub_value == 'object' || typeof sub_value == 'array'){
+                var sub_value2 = sub_ev_r['v2'];
+                if(sub_value2 == 'empty_string'){
+                    o[key] = '';
+                }
+                else if(sub_value2 == 'is_null'){
+                    o[key] = null;
+                }
+                else if(typeof sub_value == 'object' || typeof sub_value == 'array'){
                     o[key] = sub_value;
                 }
                 else if(sub_value != null && sub_value != ""){
@@ -258,6 +266,7 @@ function extract_value(d){
     }
     else if("param_value" in d){
         ev_r['v'] = d["param_value"];
+        ev_r['v2'] = d["param_value2"];
         if(ev_r['v'] != "") {
             if (d["param_type"] == 'object' || d["param_type"] == 'list') {
                 try {
@@ -311,6 +320,8 @@ function load_request(){
 
 function test_api22(){
     update_res("正在请求...");
+    params_vm.r_http_code = "";
+    params_vm.r_http_text = "";
     var api_method = params_vm.basic_info.api_method;
     var request_url = params_vm.request_url;
     if(request_url != ""){
@@ -349,7 +360,22 @@ function test_api22(){
         }
     }
     else{
-        body_param = url_args;
+        var args_s = "";
+        for(var key in url_args){
+            var _value = url_args[key];
+            if(_value instanceof Array){
+                for(var v_index=0;v_index<_value.length;v_index++){
+                    args_s += "&" + key + "=" + _value[v_index];
+                }
+            }
+            else{
+                args_s += "&" + key + "=" + _value;
+            }
+        }
+        if(args_s.length > 0){
+            request_url += '?' + args_s.substr(1);
+        }
+        body_param = null;
     }
     var req = {
         url: request_url,
@@ -407,6 +433,7 @@ function storage_action()
 function dict_value_copy(dest_d, source_d)
 {
     if("sub_params" in dest_d) {
+
         if (typeof source_d == 'object' && dest_d.param_type == 'object') {
             for(var key in dest_d["sub_params"]){
                 if(key in source_d){
@@ -414,7 +441,7 @@ function dict_value_copy(dest_d, source_d)
                 }
             }
         }
-        else if (typeof source_d == 'array' && dest_d.param_type == 'list') {
+        else if (source_d instanceof Array && dest_d.param_type == 'list') {
             for(var i=0;i<source_d.length;i++){
                 params_vm.add_sub_params(dest_d);
                 dict_value_copy(dest_d.sub_params[dest_d.sub_params.length - 1], source_d[i]);
@@ -422,7 +449,12 @@ function dict_value_copy(dest_d, source_d)
         }
     }
     else{
-        dest_d.param_value = source_d;
+        if(typeof source_d == 'object'){
+            dest_d.param_value = JSON.stringify(source_d);
+        }
+        else {
+            dest_d.param_value = source_d;
+        }
     }
 }
 
