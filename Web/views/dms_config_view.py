@@ -2,14 +2,9 @@
 # -*- coding: utf-8 -*-
 
 import sys
-from datetime import datetime, timedelta
-from flask import request, render_template, redirect, session, url_for, jsonify, g, make_response, current_app
-from flask.sessions import SecureCookieSessionInterface
-from flask_login import login_user, current_user, logout_user
-from flask_login import login_required
-from werkzeug.security import gen_salt
-from Class.User import RoleManager
-from Web import User
+from flask import request, jsonify, g
+
+
 
 from dms.objects.user import UserObject
 from dms.objects.web_config import WebConfig

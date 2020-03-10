@@ -5,16 +5,18 @@ import os
 import re
 from time import time
 
-from dms.objects.base import DBObject
+from dms.objects.resources.base import ResourceManager
 
 
 __author__ = 'ZhouHeng'
 
 
-class ParamFormatManager(DBObject):
+class ParamFormatManager(ResourceManager):
+
+    NAME = "param_format"
 
     def __init__(self):
-        DBObject.__init__(self)
+        ResourceManager.__init__(self)
         self.t_param_format = "param_format"
 
     def new_param_format(self, user_name, param, param_type, **kwargs):

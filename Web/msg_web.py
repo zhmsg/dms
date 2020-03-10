@@ -90,7 +90,7 @@ def create_app():
 
     env = msg_web.jinja_env
     env.globals["current_env"] = current_env
-    env.globals["role_value"] = control.role_value
+    # env.globals["role_value"] = control.role_value
     env.globals["menu_url"] = dms_url_prefix + "/portal/"
     env.globals["short_link_url"] = short_link_prefix
     env.filters['unix_timestamp'] = unix_timestamp

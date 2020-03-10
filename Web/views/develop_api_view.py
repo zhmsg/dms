@@ -10,10 +10,10 @@ from Tools.RenderTemplate import RenderTemplate
 from Web import api_url_prefix, create_blue, test_url_prefix, status_url_prefix, param_url_prefix
 
 
-from dms.utils.manager import ResourcesManager
+from dms.utils.manager import Explorer
 
 
-api_man = ResourcesManager.get_instance().get_object_manager("api_help")
+api_man = Explorer.get_instance().get_object_manager("api_help")
 
 sys.path.append('..')
 

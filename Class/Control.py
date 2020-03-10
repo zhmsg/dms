@@ -7,13 +7,11 @@ from threading import Thread
 from datetime import datetime
 from Tools.Mysql_db import DB
 # from JYTools import EmailManager
-from .User import UserManager
 from .Dev import DevManager
 from .APIStatus import StatusManager
 from .Bug import BugManager
 from .Log import LogManager
 from .IP import IPManager
-from .ParamFormat import ParamFormatManager
 from .JingDuData import JingDuDataManager
 from .DingMsg import DingMsgManager
 from .Dyups import DyUpsManager
@@ -43,14 +41,10 @@ class ControlManager(object):
     def __init__(self):
         self.db = DB()
         self.sys_user = "sys_user"
-        self.user = UserManager()
-        self.user_role_desc = self.user.role_desc
-        self.role_value = self.user.role_value
         self.dev = DevManager()
         self.api_status = StatusManager()
         self.bug = BugManager()
         self.ip = IPManager()
-        self.param_man = ParamFormatManager()
         self.jd_man = JingDuDataManager(jd_mysql_host, jd_mysql_db)
         self.manger_email = ["budechao@ict.ac.cn", "biozy@ict.ac.cn"]
         self.jy_log = LogManager()
@@ -60,52 +54,6 @@ class ControlManager(object):
         self.message_man = MessageManager()
         self.name_2_role_key = {"apicluster": "dyups_api", "webcluster": "dyups_web", "amscluster": "dyups_web",
                                 "healthcluster": "dyups_api", "authcluster": "dyups_api", "samplecluster": "dyups_api"}
-
-    def new_user(self, user_name, role, nick_name, creator, creator_role):
-        if creator_role & self.role_value["user_new"] <= 0:
-            return False, u"用户无权限新建用户"
-        if creator_role | role > creator_role:
-            return False, u"给新建用户赋予权限过高"
-        return self.user.new(user_name, role, nick_name, creator)
-
-    def change_password(self, user_name, old_password, new_password):
-        return self.user.change_password(user_name, old_password, new_password)
-
-    def send_code(self, user_name, password, tel):
-        return self.user.send_code(user_name, password, tel)
-
-    def bind_tel(self, user_name, password, tel, code):
-        return self.user.bind_tel(user_name, password, tel, code)
-
-    def get_my_user(self, user_name, role):
-        if role & self.role_value["user_new"] <= 0:
-            return False, u"用户无权限操作用户"
-        return self.user.my_user(user_name)
-
-    def update_my_user_role(self, role, user_name, my_user, my_user_role):
-        if role & self.role_value["user_new"] <= 0:
-            return False, u"用户无权限操作用户"
-        if role & my_user_role != my_user_role:
-            return False, u"赋予权限过高"
-        return self.user.update_my_user_role(my_user_role, my_user, user_name)
-
-    def add_my_user_role(self, role, user_name, add_role, add_user_list):
-        if role & self.role_value["user_new"] <= 0:
-            return False, u"用户无权限操作用户"
-        if role & add_role != add_role:
-            return False, u"增加权限过高"
-
-        return self.user.add_role_my_users(add_role, add_user_list, user_name)
-
-    def remove_my_user_role(self, role, user_name, remove_role, remove_user_list):
-        if role & self.role_value["user_new"] <= 0:
-            return False, u"用户无权限操作用户"
-        if role & remove_role != remove_role:
-            return False, u"移除权限过高"
-        return self.user.remove_role_my_users(remove_role, remove_user_list, user_name)
-
-    def get_role_user(self, role):
-        return self.user.get_role_user(role)
 
     # 针对开发者的应用
     def show_operate_auth(self, role):
@@ -584,19 +532,6 @@ class ControlManager(object):
         elif service == "WEB":
             self.release_man.release_online_web()
         return True, "success"
-
-    # 针对公共参数格式
-    def add_param_format(self, user_name, user_role, param, param_type, **kwargs):
-        return self.param_man.new_param_format(user_name, param, param_type, **kwargs)
-
-    def update_param_format(self, user_name, user_role, param, **kwargs):
-        return self.param_man.update_param_format(user_name, param, **kwargs)
-
-    def get_params_info(self, user_name, user_role):
-        return self.param_man.select_param_format()
-
-    def query_params(self, user_name, user_role, params):
-        return self.param_man.select_mul_param_format(params)
 
     # 针对pull request
     def add_pull_request(self, **kwargs):

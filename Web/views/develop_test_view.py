@@ -1,7 +1,6 @@
 #!/user/bin/env python
 # -*- coding: utf-8 -*-
 
-
 import sys
 import os
 import json
@@ -10,9 +9,8 @@ from functools import wraps
 from flask import request, jsonify, g
 from Tools.RenderTemplate import RenderTemplate
 from Web import test_url_prefix, api_url_prefix, status_url_prefix, data_dir, create_blue
-from Web import control
 
-from dms.utils.manager import ResourcesManager
+from dms.utils.manager import Explorer
 
 sys.path.append('..')
 
@@ -24,7 +22,7 @@ case_dir = "%s/test_case" % data_dir
 # if os.path.isdir(case_dir) is False:
 #     os.mkdir(case_dir)
 
-api_man = ResourcesManager.get_instance().get_object_manager("api_help")
+api_man = Explorer.get_instance().get_object_manager("api_help")
 
 rt = RenderTemplate("API_HELP", url_prefix=url_prefix)
 develop_test_view = create_blue('develop_test_view', url_prefix=url_prefix)
@@ -66,10 +64,10 @@ def test_api_page():
         result, module_test_env = api_man.get_test_env(env_no_list)
         if result is False:
             return module_test_env
-    if g.user_role & control.role_value["api_new"] == control.role_value["api_new"]:
-        new_right = True
-    else:
-        new_right = False
+    # if g.user_role & control.role_value["api_new"] == control.role_value["api_new"]:
+    new_right = True
+    # else:
+    #     new_right = False
     api_info_url = api_url_prefix + "/info/"
     api_example_url = api_url_prefix + "/example/"
     status_url = status_url_prefix + "/"
@@ -83,8 +81,8 @@ def test_api_page():
 
 @develop_test_view.route("/batch/", methods=["GET"])
 def batch_test_api_page():
-    if g.user_role & control.role_value["api_new"] != control.role_value["api_new"]:
-        return "用户无权限"
+    # if g.user_role & control.role_value["api_new"] != control.role_value["api_new"]:
+    #     return "用户无权限"
     api_no = None
     if "api_no" in request.args:
         api_no = request.args["api_no"]

@@ -2,22 +2,17 @@
 # -*- coding: utf-8 -*-
 
 import sys
-from datetime import datetime, timedelta
+from datetime import datetime
 from flask import request, render_template, redirect, session, url_for, jsonify, g, make_response, current_app
 from flask.sessions import SecureCookieSessionInterface
 from flask_login import login_user, current_user, logout_user
 from flask_login import login_required
-from werkzeug.security import gen_salt
-from Class.User import RoleManager
 from Web import User
 
-from Web import dms_url_prefix, dev_url_prefix, api_url_prefix, bug_url_prefix, right_url_prefix
-from Web import log_url_prefix, create_blue, param_url_prefix, release_url_prefix, status_url_prefix
-from Web import jingdu_url_prefix, dyups_url_prefix
-from Web import control
+from Web import dms_url_prefix, create_blue
 
 from dms.utils.exception import Forbidden
-from dms.utils.manager import ResourcesManager
+from dms.utils.manager import Explorer
 from dms.objects.user import UserObject
 
 sys.path.append('..')
@@ -30,7 +25,7 @@ dms_view = create_blue('dms_view', url_prefix=url_prefix, auth_required=False)
 
 
 user_m = UserObject()
-resources_m = ResourcesManager.get_instance()
+resources_m = Explorer.get_instance()
 ur_man = resources_m.get_object_manager("user_role")
 
 
@@ -149,51 +144,53 @@ def bind_tel_page():
 
 @dms_view.route("/tel/", methods=["PUT"])
 def send_tel_code():
-    if "bind_token" in session and "expires_in" in session and "user_name" in session and "password" in session:
-        expires_in = session["expires_in"]
-        if expires_in > datetime.now():
-            request_data = request.json
-            bind_token = request_data["bind_token"]
-            if bind_token != session["bind_token"]:
-                return redirect(url_for("dms_view.login_page"))
-            tel = request_data["tel"]
-            result, info = control.send_code(session["user_name"], session["password"], tel)
-            if result is True:
-                session["tel"] = tel
-                return jsonify({"status": True, "data": {"tel": tel}})
-            return jsonify({"status": False, "data": info})
+    return 'error'
+    # if "bind_token" in session and "expires_in" in session and "user_name" in session and "password" in session:
+    #     expires_in = session["expires_in"]
+    #     if expires_in > datetime.now():
+    #         request_data = request.json
+    #         bind_token = request_data["bind_token"]
+    #         if bind_token != session["bind_token"]:
+    #             return redirect(url_for("dms_view.login_page"))
+    #         tel = request_data["tel"]
+    #         result, info = control.send_code(session["user_name"], session["password"], tel)
+    #         if result is True:
+    #             session["tel"] = tel
+    #             return jsonify({"status": True, "data": {"tel": tel}})
+    #         return jsonify({"status": False, "data": info})
     return redirect(url_for("dms_view.login_page"))
 
 
 @dms_view.route("/tel/", methods=["POST"])
 def bind_tel_func():
-    if "bind_token" in session and "expires_in" in session and "user_name" in session and "password" in session:
-        expires_in = session["expires_in"]
-        if expires_in > datetime.now():
-            if "tel" not in session:
-                return jsonify({"status": False, "data": "Please Send Code"})
-            request_data = request.json
-            bind_token = request_data["bind_token"]
-            if bind_token != session["bind_token"]:
-                return redirect(url_for("dms_view.login_page"))
-            tel = request_data["tel"]
-            if tel != session["tel"]:
-                return jsonify({"status": False, "data": "Please Send Code First"})
-            code = request_data["code"]
-            user_name = session["user_name"]
-            result, info = control.bind_tel(user_name, session["password"], tel, code)
-            if result is True:
-                user = User()
-                user.user_name = user_name
-                login_user(user)
-                del session["bind_token"]
-                del session["expires_in"]
-                del session["user_name"]
-                del session["password"]
-                del session["tel"]
-                return jsonify({"status": True, "data": {"tel": tel}})
-            else:
-                return jsonify({"status": False, "data": info})
+    return 'error'
+    # if "bind_token" in session and "expires_in" in session and "user_name" in session and "password" in session:
+    #     expires_in = session["expires_in"]
+    #     if expires_in > datetime.now():
+    #         if "tel" not in session:
+    #             return jsonify({"status": False, "data": "Please Send Code"})
+    #         request_data = request.json
+    #         bind_token = request_data["bind_token"]
+    #         if bind_token != session["bind_token"]:
+    #             return redirect(url_for("dms_view.login_page"))
+    #         tel = request_data["tel"]
+    #         if tel != session["tel"]:
+    #             return jsonify({"status": False, "data": "Please Send Code First"})
+    #         code = request_data["code"]
+    #         user_name = session["user_name"]
+    #         result, info = control.bind_tel(user_name, session["password"], tel, code)
+    #         if result is True:
+    #             user = User()
+    #             user.user_name = user_name
+    #             login_user(user)
+    #             del session["bind_token"]
+    #             del session["expires_in"]
+    #             del session["user_name"]
+    #             del session["password"]
+    #             del session["tel"]
+    #             return jsonify({"status": True, "data": {"tel": tel}})
+    #         else:
+    #             return jsonify({"status": False, "data": info})
     return redirect(url_for("dms_view.login_page"))
 
 
@@ -303,17 +300,18 @@ def authorize_page():
 @dms_view.route("/authorize/user/", methods=["POST"])
 @login_required
 def authorize():
-    perm_user = request.form["perm_user"]
-    if perm_user == "":
-        return "请选择一个账户"
-    user_role = 0
-    for key, role_module in control.user.role_desc.items():
-        for role_key, role_info in role_module["role_list"].items():
-            if role_key in request.form and request.form[role_key] == "on":
-                user_role += role_info["role_value"]
-    result, message = control.update_my_user_role(current_user.role, current_user.user_name, perm_user, user_role)
-    if result is False:
-        return message
+    return "error"
+    # perm_user = request.form["perm_user"]
+    # if perm_user == "":
+    #     return "请选择一个账户"
+    # user_role = 0
+    # for key, role_module in control.user.role_desc.items():
+    #     for role_key, role_info in role_module["role_list"].items():
+    #         if role_key in request.form and request.form[role_key] == "on":
+    #             user_role += role_info["role_value"]
+    # result, message = control.update_my_user_role(current_user.role, current_user.user_name, perm_user, user_role)
+    # if result is False:
+    #     return message
     return redirect(url_for("dms_view.authorize_page"))
 
 
@@ -346,12 +344,7 @@ def select_portal():
                 can_authorize = True
     if can_authorize:
         menu.append({"desc": "用户授权", "url": "/authorize"})
-    return render_template("portal.html", menu=menu, dev_url_prefix=dev_url_prefix,
-                           bug_url_prefix=bug_url_prefix,
-                           dms_url_prefix=dms_url_prefix, right_url_prefix=right_url_prefix,
-                           log_url_prefix=log_url_prefix, param_url_prefix=param_url_prefix,
-                           release_url_prefix=release_url_prefix, status_url_prefix=status_url_prefix,
-                           jd_url_prefix=jingdu_url_prefix, dyups_url_prefix=dyups_url_prefix)
+    return render_template("portal.html", menu=menu)
 
 
 @dms_view.route("/user/", methods=["GET"])

@@ -11,9 +11,9 @@ from Web import create_blue
 
 
 from dms.objects.user import UserObject
-from dms.utils.manager import ResourcesManager
+from dms.utils.manager import Explorer
 
-resources_m = ResourcesManager.get_instance()
+resources_m = Explorer.get_instance()
 ur_man = resources_m.get_object_manager("user_role")
 user_m = UserObject()
 

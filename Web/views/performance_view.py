@@ -7,7 +7,6 @@ import tempfile
 from flask import request, jsonify, g, send_file
 from Tools.RenderTemplate import RenderTemplate
 from Class.Performance import PerformanceManager
-from Class.User import UserManager
 from Function.Common import unix_timestamp
 
 from Web import performance_prefix as url_prefix, create_blue, dms_url_prefix
@@ -18,7 +17,7 @@ __author__ = 'Zhouheng'
 
 rt = RenderTemplate("Performance", url_prefix=url_prefix)
 performance_man = PerformanceManager()
-user_m = UserManager()
+# user_m = UserManager()
 performance_view = create_blue('performance_view', url_prefix=url_prefix)
 
 m_1 = dict(module_no=1, module_name="需求", score=1, weighted_score=2, max_sum=8, manager=["zh_test"])

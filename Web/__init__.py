@@ -18,7 +18,7 @@ TIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 db = DB()
 ip = IPManager()
-control = ControlManager()
+# control = ControlManager()
 # my_email = EmailManager(conf_dir)
 
 redis = Redis(host=redis_host, port=redis_port)
@@ -128,7 +128,7 @@ def create_blue(blue_name, url_prefix="/", auth_required=True, special_protocol=
                     redirect_url = "%s://%s%s" % (request_special_protocol[0], request.host, request.full_path)
                     return redirect(redirect_url)
 
-            g.role_value = control.role_value
+            # g.role_value = control.role_value
 
     @add_blue.route("/ping/", methods=["GET"])
     def ping():

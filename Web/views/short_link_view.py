@@ -9,12 +9,12 @@ from flask import request, jsonify, g, redirect
 
 from Web import short_link_prefix as url_prefix, create_blue
 
-from dms.utils.manager import ResourcesManager
+from dms.utils.manager import Explorer
 
 sys.path.append('..')
 
 __author__ = 'Zhouheng'
-link_man = ResourcesManager.get_instance().get_object_manager("short_link")
+link_man = Explorer.get_instance().get_object_manager("short_link")
 short_link_view = create_blue('short_link_view', url_prefix=url_prefix)
 
 
