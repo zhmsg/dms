@@ -79,6 +79,13 @@ class ApiHelpManager(ResourceManager):
                                            max_len=100)
         return rv_args
 
+    def new_api_part(self, part_name, part_desc, part_detail):
+        data = dict(part_name=part_name, part_desc=part_desc,
+                    part_detail=part_detail)
+        self.db.execute_insert(self.api_part_info, data)
+        return data
+
+
     @PolicyManager.verify_policy(["api_module_new"])
     def new_api_module(self, module_name, module_prefix, module_desc, module_part, module_env):
         module_name = module_name.strip(" ")
@@ -630,4 +637,6 @@ class ApiHelpManager(ResourceManager):
 if __name__ == "__main__":
     api_help = ApiHelpManager()
     api_help.get_test_env([2, 3])
+    # api_help.new_api_part('neutron', 'neutron', 'openstack neutron api')
+
 

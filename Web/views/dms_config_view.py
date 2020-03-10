@@ -8,7 +8,6 @@ from flask.sessions import SecureCookieSessionInterface
 from flask_login import login_user, current_user, logout_user
 from flask_login import login_required
 from werkzeug.security import gen_salt
-from Class import mongo_host
 from Class.User import RoleManager
 from Web import User
 

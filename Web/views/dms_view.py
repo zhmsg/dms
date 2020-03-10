@@ -8,7 +8,6 @@ from flask.sessions import SecureCookieSessionInterface
 from flask_login import login_user, current_user, logout_user
 from flask_login import login_required
 from werkzeug.security import gen_salt
-from Class import mongo_host
 from Class.User import RoleManager
 from Web import User
 
@@ -360,4 +359,3 @@ def select_portal():
 def list_user():
     items = user_m.list_user(g.user_name)
     return jsonify({"status": True, "data": items})
-
