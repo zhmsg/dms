@@ -1,15 +1,14 @@
 # encoding: utf-8
 # !/usr/bin/python
 
-from datetime import datetime
 from redis import Redis
 from functools import wraps
 from flask import session, g, make_response, Blueprint, jsonify, request, redirect
 from flask_login import LoginManager, UserMixin, login_required
 from Tools.Mysql_db import DB
-# from JYTools import EmailManager
-from Class.Control import ControlManager
 from Function.Common import *
+
+from dms.utils.manager import Explorer
 
 
 __author__ = 'zhouheng'
@@ -108,6 +107,8 @@ def company_ip_required(f):
 blues = {}
 dms_job = []
 
+explorer = Explorer.get_instance()
+
 
 def create_blue(blue_name, url_prefix="/", auth_required=True, special_protocol=False, **kwargs):
     required_resource = kwargs.pop('required_resource', None)
@@ -118,9 +119,10 @@ def create_blue(blue_name, url_prefix="/", auth_required=True, special_protocol=
         def before_request():
             if required_resource:
                 for rr in required_resource:
-                    if rr.missing_config:
+                    if rr in explorer.missing_config:
+                        print(explorer.missing_config)
                         redirect_url = "/config?keys=%s" % \
-                                       ",".join(rr.missing_config)
+                                       ",".join(explorer.missing_config[rr])
                         return redirect(redirect_url)
             if special_protocol is True:
                 r_protocol = request.headers.get("X-Request-Protocol", "http")

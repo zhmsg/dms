@@ -24,9 +24,8 @@ __author__ = 'Zhouheng'
 url_prefix = '/user/policies'
 
 
-
 user_role_view = create_blue('user_role_view', url_prefix=url_prefix,
-                               required_resource=[ur_man])
+                               required_resource=['user_role'])
 
 
 @user_role_view.route("", methods=["GET"])

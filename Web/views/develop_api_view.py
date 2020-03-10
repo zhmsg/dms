@@ -25,7 +25,7 @@ rt = RenderTemplate("API_HELP", url_prefix=url_prefix)
 
 
 develop_api_view = create_blue('develop_api_view', url_prefix=url_prefix,
-                               required_resource=[api_man])
+                               required_resource=['api_help'])
 
 
 def referer_api_no(f):

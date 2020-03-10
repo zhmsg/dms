@@ -14,12 +14,9 @@ class UserPoliciesManager(ResourceManager):
 
     def __init__(self):
         ResourceManager.__init__(self)
-        for r_cfg in self.REQUIRED_CONFIG:
-            if r_cfg not in self.config:
-                return
-        mongo_host = self.config['mongo_host']
-        mongo_user = self.config['mongo_user']
-        mongo_password = self.config['mongo_password']
+        mongo_host = self.config()['mongo_host']
+        mongo_user = self.config()['mongo_user']
+        mongo_password = self.config()['mongo_password']
         self.conn = MongoClient(mongo_host, username=mongo_user,
                                 password=mongo_password)
         self.db = self.conn.dms

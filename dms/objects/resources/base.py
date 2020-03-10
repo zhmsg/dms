@@ -21,6 +21,7 @@ class ResourceManager(DBObject):
 
     NAME = _UNSET
     REQUIRED_CONFIG = None
+    _config = None
 
     def get_name(self):
         if UnsetValue.is_unset(self.NAME):
@@ -37,34 +38,35 @@ class ResourceManager(DBObject):
             return cls.REQUIRED_CONFIG
         return []
 
-    def _load_config(self):
+    @classmethod
+    def _load_config(cls):
         web_c = WebConfig.get_instance()
         loaded = dict()
         missing = []
-        for config_key in self.get_required_config():
+        for config_key in cls.get_required_config():
             v = web_c.get_key(config_key)
             if v:
                 loaded[config_key] = v['config_value']
             else:
                 missing.append(config_key)
         _config = {'loaded': loaded, 'missing': missing}
-        setattr(self, '_config', _config)
+        cls._config = _config
 
-    @property
-    def config(self):
-        if not hasattr(self, "_config"):
-            self._load_config()
-        return self._config['loaded']
+    @classmethod
+    def config(cls):
+        if not cls._config:
+            cls._load_config()
+        return cls._config['loaded']
 
-    @property
-    def missing_config(self):
-        if not hasattr(self, "_config"):
-            self._load_config()
-        return self._config['missing']
+    @classmethod
+    def missing_config(cls):
+        if not cls._config:
+            cls._load_config()
+        return cls._config['missing']
 
-    @property
-    def valid(self):
-        if self.missing_config:
+    @classmethod
+    def valid(cls):
+        if cls.missing_config():
             return False
         return True
 
