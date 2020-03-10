@@ -120,7 +120,6 @@ def create_blue(blue_name, url_prefix="/", auth_required=True, special_protocol=
             if required_resource:
                 for rr in required_resource:
                     if rr in explorer.missing_config:
-                        print(explorer.missing_config)
                         redirect_url = "/config?keys=%s" % \
                                        ",".join(explorer.missing_config[rr])
                         return redirect(redirect_url)

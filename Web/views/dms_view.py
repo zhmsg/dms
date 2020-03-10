@@ -83,7 +83,10 @@ def login():
     elif r_code == -1:
         return jsonify({"status": False, "data": "密码不正确"})
     session["role"] = info["role"]
-    # session["policies"] = ur_man.get_policies(user_name)
+    if ur_man:
+        session["policies"] = ur_man.get_policies(user_name)
+    else:
+        session["policies"] = {}
     # if info["tel"] is None:
     #     session["user_name"] = info["user_name"]
     #     session["bind_token"] = gen_salt(57)
@@ -236,8 +239,12 @@ def register_page():
     # if g.user_role & control.role_value["user_new"] <= 0:
     #     return u"用户无权限操作"
     check_url = url_prefix + "/register/check/"
+    if ur_man:
+        modules = resources_m.modules
+    else:
+        modules = []
     return render_template("register.html", url_prefix=url_prefix,
-                           check_url=check_url, modules=resources_m.modules,
+                           check_url=check_url, modules=modules,
                            roles=user_m.roles())
 
 
@@ -261,7 +268,8 @@ def register():
     result, message = user_m.new_user(user_name, "dms", nick_name, current_user.user_name, user_role)
     if result is False:
         return message
-    ur_man.new_policies(user_name, policies)
+    if ur_man:
+        ur_man.new_policies(user_name, policies)
     return redirect(url_for("dms_view.select_portal"))
 
 
@@ -285,16 +293,15 @@ def remove_register_user():
 @dms_view.route("/authorize/", methods=["GET"])
 @login_required
 def authorize_page():
-    if user_m.is_manager(g.user_role):
-        man_modules = resources_m.modules
-    else:
-        man_modules = resources_m.manager_modules(g.user_policies)
-        if not man_modules:
-            raise Forbidden()
     my_user = []
     url_remove = url_prefix + "/remove/user/"
-    return render_template("authorize.html", my_user=my_user, url_prefix=url_prefix,
-                           modules=man_modules, url_remove=url_remove)
+    if ur_man:
+        loaded_ur = True
+    else:
+        loaded_ur = False
+    return render_template("authorize.html", my_user=my_user,
+                           loaded_ur=loaded_ur, url_prefix=url_prefix,
+                           url_remove=url_remove)
 
 
 @dms_view.route("/authorize/user/", methods=["POST"])

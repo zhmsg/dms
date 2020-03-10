@@ -55,12 +55,18 @@ function remove_user(){
     var r_url = $("#link_remove_user").attr("url");
     my_async_request2(r_url, "DELETE", {"user_name": selected_user}, reload);
 }
+
 $(function() {
-    var url = '/user/policies/manager';
     var man_policies = {};
-    my_request2(url, 'GET', null, function(data){
-       man_policies = data;
-    });
+    var load_ur = $("#load_ur").val();
+    console.info(load_ur);
+    if(load_ur == 'True') {
+        var url = '/user/policies/manager';
+
+        my_request2(url, 'GET', null, function (data) {
+            man_policies = data;
+        });
+    }
     for(var key in man_policies){
         var p_item = man_policies[key];
         p_item['policies_l'] = [{'desc': '准入', 'key': 'basic', 'checked': ''}];
