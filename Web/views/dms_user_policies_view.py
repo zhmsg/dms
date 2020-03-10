@@ -1,12 +1,8 @@
 #!/user/bin/env python
 # -*- coding: utf-8 -*-
 
-
 import sys
-import re
-from functools import wraps
 from flask import request, jsonify, g
-from Tools.RenderTemplate import RenderTemplate
 from Web import create_blue
 
 
@@ -44,7 +40,7 @@ def manager_policies():
         man_modules = dict()
         for m_name in man_pms:
             if m_name in resources_m.modules:
-                man_modules[m_name]= resources_m.m[m_name]
+                man_modules[m_name]= resources_m.modules[m_name]
     else:
         man_modules = resources_m.modules
     return jsonify({'status': True, 'data': man_modules})

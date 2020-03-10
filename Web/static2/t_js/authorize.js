@@ -59,10 +59,8 @@ function remove_user(){
 $(function() {
     var man_policies = {};
     var load_ur = $("#load_ur").val();
-    console.info(load_ur);
     if(load_ur == 'True') {
         var url = '/user/policies/manager';
-
         my_request2(url, 'GET', null, function (data) {
             man_policies = data;
         });

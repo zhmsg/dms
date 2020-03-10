@@ -351,6 +351,8 @@ def select_portal():
                 can_authorize = True
     if can_authorize:
         menu.append({"desc": "用户授权", "url": "/authorize"})
+    menu.append({'desc': "修改密码", 'url': '/password'})
+    menu.append({'desc': "退出", 'url': '/login'})
     return render_template("portal.html", menu=menu)
 
 
