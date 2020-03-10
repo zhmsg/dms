@@ -384,11 +384,21 @@ function test_api22(){
         headers: header_param,
         data: body_param,
         success:function(data){
+            var is_str = false;
             if(typeof(data) == "string")
             {
-                data = JSON.parse(data);
+                try {
+                    data = JSON.parse(data);
+                }catch(e){
+                    is_str = true;
+                }
             }
-            update_res(JSON.stringify(data, null, 4));
+            if(is_str){
+                update_res(data);
+            }
+            else {
+                update_res(JSON.stringify(data, null, 4));
+            }
             params_vm.r_http_code = "";
             params_vm.r_http_text = "";
         },
