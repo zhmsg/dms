@@ -89,7 +89,7 @@ def login():
     elif r_code == -1:
         return jsonify({"status": False, "data": "密码不正确"})
     session["role"] = info["role"]
-    session["policies"] = ur_man.get_policies(user_name)
+    # session["policies"] = ur_man.get_policies(user_name)
     # if info["tel"] is None:
     #     session["user_name"] = info["user_name"]
     #     session["bind_token"] = gen_salt(57)
