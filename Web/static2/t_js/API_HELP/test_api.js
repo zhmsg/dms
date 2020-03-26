@@ -634,7 +634,7 @@ $(function(){
         document.title = data.api_info.basic_info.api_title;
         params_vm.basic_info = data.api_info.basic_info;
         var module_env = data.api_info.basic_info.module_env;
-        var env_url = "/dev/api/test/env?env_no=" + module_env.replace("|", ",");
+        var env_url = "/dev/api/test/env?env_no=" + module_env.replace(/\|/g, ",");
         my_async_request2(env_url, "GET", null, function(data){
             params_vm.all_env = data;
             if(data.length > 0){
