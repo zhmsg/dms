@@ -183,7 +183,7 @@ class ApiHelpManager(ResourceManager):
         data = dict(module_no=module_no, api_title=api_title,
                     api_path=api_path, api_method=api_method,
                     api_desc=api_desc, update_time=add_time,
-                    api_no=api_no)
+                    api_no=api_no, add_time=add_time)
         if extra_opts:
             data['extra_opts'] = extra_opts
         result = self.db.execute_insert(self.api_info, data)
