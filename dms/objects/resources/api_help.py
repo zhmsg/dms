@@ -3,6 +3,7 @@
 
 from datetime import datetime
 from functools import partial
+import json
 import re
 import sys
 import tempfile
@@ -167,7 +168,7 @@ class ApiHelpManager(ResourceManager):
             self.del_api_param(api_no, e_item["param_no"])
 
     @PolicyManager.verify_policy(["api_module_new"])
-    def new_api_info(self, module_no, api_title, api_path, api_method, api_desc):
+    def new_api_info(self, module_no, api_title, api_path, api_method, api_desc, extra_opts=None):
         if type(module_no) != int:
             return False , "Bad module_no"
         if check_http_method(api_method) is False:
@@ -179,17 +180,20 @@ class ApiHelpManager(ResourceManager):
         api_no = uuid.uuid4().hex
         # 新建 api_info
         add_time = datetime.now().strftime(TIME_FORMAT)
-        insert_sql = "INSERT INTO %s (api_no,module_no,api_title,api_path,api_method,api_desc,add_time,update_time) " \
-                     "VALUES('%s',%s,'%s','%s','%s','%s','%s','%s')" \
-                     % (self.api_info, api_no, module_no, api_title, api_path, api_method, api_desc, add_time, add_time)
-        result = self.db.execute(insert_sql)
+        data = dict(module_no=module_no, api_title=api_title,
+                    api_path=api_path, api_method=api_method,
+                    api_desc=api_desc, update_time=add_time,
+                    api_no=api_no)
+        if extra_opts:
+            data['extra_opts'] = extra_opts
+        result = self.db.execute_insert(self.api_info, data)
         if result != 1:
             return False, "sql execute result is %s " % result
         self._handle_api_path(api_no, api_path)
         return True, {"api_no": api_no}
 
     @PolicyManager.verify_policy(["api_new"])
-    def update_api_info(self, api_no, module_no, api_title, api_path, api_method, api_desc):
+    def update_api_info(self, api_no, module_no, api_title, api_path, api_method, api_desc, extra_opts=None):
         if type(module_no) != int:
             return False , "Bad module_no"
         if check_http_method(api_method) is False:
@@ -200,10 +204,13 @@ class ApiHelpManager(ResourceManager):
             return False, "Bad api_desc"
         # 更新 api_info
         update_time = datetime.now().strftime(TIME_FORMAT)
-        update_sql = "UPDATE %s SET module_no=%s,api_title='%s',api_path='%s',api_method='%s',api_desc='%s',update_time='%s' " \
-                     "WHERE api_no='%s'; "  \
-                     % (self.api_info, module_no, api_title, api_path, api_method, api_desc, update_time, api_no)
-        result = self.db.execute(update_sql)
+        update_data = dict(module_no=module_no, api_title=api_title,
+                           api_path=api_path, api_method=api_method,
+                           api_desc=api_desc, update_time=update_time)
+        if extra_opts:
+            update_data['extra_opts'] = extra_opts
+        result = self.db.execute_update(self.api_info, update_value=update_data,
+                                        where_value={'api_no': api_no})
         if result > 0:
             self._handle_api_path(api_no, api_path)
         return True, "success"
@@ -454,8 +461,11 @@ class ApiHelpManager(ResourceManager):
 
     def get_api_basic_info(self, api_no):
         # get basic info
-        basic_info_col = ("module_no", "api_no", "api_title", "api_path", "api_method", "api_desc", "add_time",
-                          "update_time", "module_name", "module_prefix", "module_desc", "module_env", "stage")
+        basic_info_col = (
+            "module_no", "api_no", "api_title", "api_path", "api_method",
+            "api_desc", "add_time", "update_time", "extra_opts",
+            "module_name", "module_prefix", "module_desc", "module_env",
+            "stage")
         select_sql = "SELECT m.%s FROM %s AS i, api_module AS m WHERE i.module_no=m.module_no AND api_no='%s';" \
                      % (",".join(basic_info_col), self.api_info, api_no)
         result = self.db.execute(select_sql, auto_close=False)
@@ -474,6 +484,7 @@ class ApiHelpManager(ResourceManager):
             basic_info["api_url"] = basic_info["module_prefix"]
         basic_info["add_time"] = basic_info["add_time"].strftime(TIME_FORMAT) if basic_info["add_time"] is not None else ""
         basic_info["update_time"] = basic_info["update_time"].strftime(TIME_FORMAT) if basic_info["update_time"] is not None else ""
+        basic_info['extra_opts'] = json.loads(basic_info['extra_opts']) if basic_info['extra_opts'] else {}
         return True, basic_info
 
     def get_api_example(self, api_no):
@@ -548,7 +559,7 @@ class ApiHelpManager(ResourceManager):
         if type(module_no) != int:
             return False, "Bad module_no"
         cols = ["api_no", "module_no", "api_title", "api_path", "api_method", "api_desc", "stage", "add_time",
-                "update_time"]
+                "update_time", "extra_opts"]
         order_by = ["stage", "api_path", "api_method"]
         items = self.db.execute_select(self.api_info, where_value=dict(module_no=module_no), order_by=order_by, cols=cols)
         api_list = []
@@ -567,6 +578,7 @@ class ApiHelpManager(ResourceManager):
             # update_time = item[8].strftime(TIME_FORMAT) if item[8] is not None else ""
             item["update_recent"] = update_recent
             item["stage"] = api_stage
+            item['extra_opts'] = json.loads(item['extra_opts']) if item['extra_opts'] else {}
             api_list.append(item)
         care_info = self.get_module_care_list(module_no)
         return True, {"api_list": api_list, "care_info": care_info, "module_info": {"module_no": module_no}}

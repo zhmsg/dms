@@ -159,18 +159,23 @@ def new_update_api_info():
     url = request_data["api_path"]
     title = request_data["api_title"]
     method = request_data["api_method"]
+    extra_opts = request_data.get('extra_opts', None)
     module_no = int(api_module)
     if request.method == "PUT":
         api_no = request_data["api_no"]
         r, m = api_man.update_api_info(api_no, module_no, title, url,
-                                       method, desc)
+                                       method, desc, extra_opts)
         if r is False:
             return jsonify({"status": False, "data": m})
+        api_info = request_data
     else:
-        r, api_info = api_man.new_api_info(module_no, title, url, method, desc)
+        r, api_info = api_man.new_api_info(module_no, title, url, method,
+                                           desc, extra_opts)
         if r is False:
             return jsonify({"status": False, "data": api_info})
         api_no = api_info["api_no"]
+    if 'accept' in request.args:
+        return jsonify({'status': True, 'data': api_info})
     return jsonify({"status": True, "location": "%s/info/?api_no=%s&update="
                                                 % (url_prefix, api_no),
                     "data": "success"})
@@ -244,7 +249,7 @@ def update_api_body_page():
 
 @develop_api_view.route("/param", methods=["GET"])
 @referer_api_no
-def gety_param():
+def get_param():
     api_no = g.api_no
     param_info = api_man.get_api_param(api_no)
     _param_dict = dict(body=dict(param_type='object'),
