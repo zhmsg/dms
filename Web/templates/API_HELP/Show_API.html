@@ -19,90 +19,93 @@
     </div>
     <div class="clear"></div>
     <input class="form-control bottom10" id="api_no" value="{{ api_no }}" style="display:none;"/>
-    <p>API标题: <span id="span_api_title"></span> <a id="link_copy_location" class="status_move">复制文档地址</a></p>
-    <p>API URL: <span id="span_api_url"></span></p>
-    <p>API 请求方式: <span id="span_api_method"></span></p>
-    <p>API 状态: <span id="span_stage"></span></p>
-    <p>添加时间: <span id="span_add_time"></span></p>
-    <p>最近更新时间: <span id="span_update_time"></span></p>
-    <p>API 描述: <span id="span_api_desc"></span></p>
+    <div id="div_vue">
+        <p>API标题: <span>{{basic_info.api_title}}</span> <a @click="copy_location" class="status_move">复制文档地址</a></p>
+        <p>API URL: <span>{{basic_info.api_url}}</span></p>
+        <p>API 请求方式: <span>{{basic_info.api_method}}</span></p>
+        <p>API 状态: <span>{{basic_info.stage}}</span></p>
+        <p>添加时间: <span>{{basic_info.add_time}}</span></p>
+        <p>最近更新时间: <span>{{basic_info.update_time}}</span></p>
+        <p>API 描述: <span>{{basic_info.api_desc}}</span></p>
+        <p>成功返回状态码: <span>{{basic_info.extra_opts.ok_code}}</span></p>
+        <p>错误状态码: <span>{{basic_info.extra_opts.error_code}}</span></p>
+        <div id="div_show_params">
+            <table class="table table-bordered api-list-table" v-if="all_header_params">
+                <caption>请求头部参数</caption>
+                <tr>
+                    <th scope="col" width="15%">参数名称</th>
+                    <th class="text-center" scope="col" width="8%">是否必须</th>
+                    <th scope="col" width="77%">参数描述</th>
+                </tr>
+                <tr v-for="header_p in all_header_params">
+                    <td>{{header_p['param_name']}}</td>
 
-    <div id="div_show_params">
-        <table class="table table-bordered api-list-table" v-if="all_header_params">
-            <caption>请求头部参数</caption>
-            <tr>
-                <th scope="col" width="15%">参数名称</th>
-                <th class="text-center" scope="col" width="8%">是否必须</th>
-                <th scope="col" width="77%">参数描述</th>
-            </tr>
-            <tr v-for="header_p in all_header_params">
-                <td>{{header_p['param_name']}}</td>
+                    <td v-if="header_p['necessary']" class="text-center">是</td>
+                    <td v-else class="text-center">否</td>
+                    <td>{{header_p["param_desc"]}}</td>
+                </tr>
+            </table>
+            <table class="table table-bordered api-list-table" v-if="all_url_params">
+                <caption>URL内参数</caption>
+                <tr>
+                    <th scope="col" width="15%">参数名称</th>
+                    <th scope="col" width="85%">参数描述</th>
+                </tr>
+                <tr v-for="url_p in all_url_params">
+                    <td>{{url_p['param_name']}}</td>
+                    <td>{{url_p["param_desc"]}}</td>
+                </tr>
+            </table>
+            <table class="table table-bordered api-list-table" v-if="all_url_args_params">
+                <caption>请求URL参数</caption>
+                <tr>
+                    <th scope="col" width="15%">参数名称</th>
+                    <th class="text-center" scope="col" width="8%">是否必须</th>
+                    <th scope="col" width="77%">参数描述</th>
+                </tr>
+                <tr v-for="url_p in all_url_args_params">
+                    <td>{{url_p['param_name']}}</td>
 
-                <td v-if="header_p['necessary']" class="text-center">是</td>
-                <td v-else class="text-center">否</td>
-                <td>{{header_p["param_desc"]}}</td>
-            </tr>
-        </table>
-        <table class="table table-bordered api-list-table" v-if="all_url_params">
-            <caption>URL内参数</caption>
-            <tr>
-                <th scope="col" width="15%">参数名称</th>
-                <th scope="col" width="85%">参数描述</th>
-            </tr>
-            <tr v-for="url_p in all_url_params">
-                <td>{{url_p['param_name']}}</td>
-                <td>{{url_p["param_desc"]}}</td>
-            </tr>
-        </table>
-        <table class="table table-bordered api-list-table" v-if="all_url_args_params">
-            <caption>请求URL参数</caption>
-            <tr>
-                <th scope="col" width="15%">参数名称</th>
-                <th class="text-center" scope="col" width="8%">是否必须</th>
-                <th scope="col" width="77%">参数描述</th>
-            </tr>
-            <tr v-for="url_p in all_url_args_params">
-                <td>{{url_p['param_name']}}</td>
-
-                <td v-if="url_p['necessary']" class="text-center">是</td>
-                <td v-else class="text-center">否</td>
-                <td>{{url_p["param_desc"]}}</td>
-            </tr>
-        </table>
-        <table class="table table-bordered api-list-table" v-if="all_body_params">
-            <caption>请求主体参数</caption>
-            <tr>
-                <th scope="col" width="15%">参数名称</th>
-                <th class="text-center" scope="col" width="10%">参数类型</th>
-                <th scope="col" width="67%">参数描述</th>
-            </tr>
-            <template v-for="body_p in all_body_params">
-                <template v-if="body_p['location']=='body'">
-                    <tr>
-                        <td>{{body_p['param_name']}}<span v-if="body_p['status']==2" class="abandonTag"> 待废弃</span>
-                        <span v-if="body_p['necessary']==0" class="text-center">(可选)</span>
-                        </td>
-                        <td class="text-center">{{body_p["param_type"]}}</td>
-                        <td>{{body_p["param_desc"]}}</td>
-                    </tr>
-                    <template v-if="body_p['sub_params']">
+                    <td v-if="url_p['necessary']" class="text-center">是</td>
+                    <td v-else class="text-center">否</td>
+                    <td>{{url_p["param_desc"]}}</td>
+                </tr>
+            </table>
+            <table class="table table-bordered api-list-table" v-if="all_body_params">
+                <caption>请求主体参数</caption>
+                <tr>
+                    <th scope="col" width="15%">参数名称</th>
+                    <th class="text-center" scope="col" width="10%">参数类型</th>
+                    <th scope="col" width="67%">参数描述</th>
+                </tr>
+                <template v-for="body_p in all_body_params">
+                    <template v-if="body_p['location']=='body'">
                         <tr>
-                            <td colspan="4">
-                                <table class="table table-bordered">
-                                <tr v-for="sub_item in body_p['sub_params']">
-                                    <td width="15%">{{sub_item['param_name']}}<span v-if="sub_item['status']==2" class="abandonTag"> 待废弃</span>
-                                    <span v-if="sub_item['necessary']==0" class="text-center">(可选)</span>
-                                    </td>
-                                    <td class="text-center" width="10%">{{sub_item["param_type"]}}</td>
-                                    <td width="67%">{{sub_item["param_desc"]}}</td>
-                                </tr>
-                                </table>
+                            <td>{{body_p['param_name']}}<span v-if="body_p['status']==2" class="abandonTag"> 待废弃</span>
+                            <span v-if="body_p['necessary']==0" class="text-center">(可选)</span>
                             </td>
+                            <td class="text-center">{{body_p["param_type"]}}</td>
+                            <td>{{body_p["param_desc"]}}</td>
                         </tr>
+                        <template v-if="body_p['sub_params']">
+                            <tr>
+                                <td colspan="4">
+                                    <table class="table table-bordered">
+                                    <tr v-for="sub_item in body_p['sub_params']">
+                                        <td width="15%">{{sub_item['param_name']}}<span v-if="sub_item['status']==2" class="abandonTag"> 待废弃</span>
+                                        <span v-if="sub_item['necessary']==0" class="text-center">(可选)</span>
+                                        </td>
+                                        <td class="text-center" width="10%">{{sub_item["param_type"]}}</td>
+                                        <td width="67%">{{sub_item["param_desc"]}}</td>
+                                    </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </template>
                     </template>
                 </template>
-            </template>
-            </table>
+                </table>
+        </div>
     </div>
     <div class="bottom20 api-example" id="div_api_input">
         <b>请求示例</b>

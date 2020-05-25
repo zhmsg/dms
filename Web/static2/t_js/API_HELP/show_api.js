@@ -92,13 +92,14 @@ function init_api_info(data) {
         return;
     }
     var api_info = data.api_info;
+    param_vm.basic_info = api_info.basic_info;
 
     // basic info
-    var keys = ["api_title", "api_url", "api_method", "api_desc", "stage", "add_time", "update_time"];
-    var key_len = keys.length;
-    for (var i = 0; i < key_len; i++) {
-        $("#span_" + keys[i]).html(replace_url(escape(api_info.basic_info[keys[i]])));
-    }
+    //var keys = ["api_title", "api_url", "api_method", "api_desc", "stage", "add_time", "update_time"];
+    //var key_len = keys.length;
+    //for (var i = 0; i < key_len; i++) {
+    //    $("#span_" + keys[i]).html(replace_url(escape(api_info.basic_info[keys[i]])));
+    //}
     // predefine header
     var ph_len = api_info.predefine_param.header.length;
     for (var i = 0; i < ph_len; i++) {
@@ -217,15 +218,18 @@ function fill_param_desc(data) {
 
 $(function() {
     param_vm = new Vue({
-        el: "#div_show_params",
+        el: "#div_vue",
         data: {
+            basic_info: {},
             all_url_params: {},
             all_url_args_params: {},
             all_header_params: {},
             all_body_params: {}
         },
         methods: {
-
+            copy_location:function(){
+                copy_text(location.href);
+            }
         }
     });
     var params_url = "/dev/api/param";
@@ -241,8 +245,4 @@ $(function() {
         $("#a_update_api").attr("href", location.href + "&update=");
         $("div[id^='div_api_new_']").show();
     }
-
-    $("#link_copy_location").click(function(){
-        copy_text(location.href);
-    });
 });

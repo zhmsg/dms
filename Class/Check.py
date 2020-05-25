@@ -35,7 +35,7 @@ def check_chinese(s, min_len=1, max_len=-1):
 
 
 def check_chinese_en(s, min_len=1, max_len=-1):
-    regex = u'[^\u4e00-\u9fa5a-zA-Z_]'
+    regex = u'[^\u4e00-\u9fa5a-zA-Z_\d]'
     return check(regex, s, min_len, max_len)
 
 

@@ -116,7 +116,6 @@ def add_module_care():
 @referer_api_no
 def show_api():
     api_no = g.api_no
-
     # TODO 未按角色筛选 新建 状态的API
     result, api_info = api_man.get_api_info(api_no)
     if result is False:
