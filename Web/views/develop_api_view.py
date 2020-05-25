@@ -281,9 +281,10 @@ def add_body_param():
     necessary = int(request_data["necessary"])
     param_type = request_data["param_type"]
     status = int(request_data.get("status", "1"))
+    param_length = request_data.get('param_length', '')
     result, param_info = api_man.insert_api_param(
         api_no, param_name, location, necessary, param_type, param_desc,
-        status)
+        status, param_length)
     return jsonify({"status": result, "data": param_info})
 
 
@@ -294,7 +295,8 @@ def update_body_param():
     param_no = request_data["param_no"]
     api_no = g.api_no
     u_data = dict()
-    for a_key in ("param_desc", "necessary", "param_type", "status"):
+    for a_key in ("param_desc", "necessary", "param_type", "status",
+                  'param_length'):
         if a_key in request_data:
             u_data[a_key] = request_data[a_key]
     result, param_info = api_man.update_api_param(api_no, param_no, **u_data)

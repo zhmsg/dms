@@ -45,3 +45,62 @@ def verify_url_path(key, path, min_len=None, max_len=None):
         raise BadRequest(key, "value not allow \w<>{}-:./")
     return path
 
+
+def verify_range_str(key, s, return_str=False):
+    """
+    :param s:
+    :return:
+    '' return None, None
+    10 return  None, 10
+    -10 return None, 10
+    --10 return None, -10
+    10- return 10, None
+    -10- return -10, None
+    10-100 return 10, 100
+    -10-100 return -10, 100
+    -100--10 return -100, -10
+    """
+    items = s.split('-')
+    front_space = False
+    l = []
+    for item in items:
+        if item == '':
+            if front_space:
+                l.append(None)
+            front_space = True
+        else:
+            if front_space:
+                value = 0 - int(item)
+            else:
+                value = int(item)
+            l.append(value)
+            front_space = False
+    if front_space:
+        l.append(None)
+    if len(l) > 2:
+        raise BadRequest(key, 'range value should at most 2 values')
+    if len(l) == 1:
+        l.insert(0, None)
+    if l[0] is not None and l[1] is not None:
+        if l[0] > l[1]:
+            msg = 'left value can not greater that right value'
+            raise BadRequest(key, msg)
+    if return_str:
+        if l[0] is None:
+            return '%s' % l[1]
+        ns = '-'.join(map(lambda x: '%s' % x if x is not None else '',
+                          l))
+        return ns
+    return l
+
+
+if __name__ == "__main__":
+    s = {'10': [None, 10], '-10': [None, -10], '--10': [None, -10],
+         '10-': [10, None], '-10-': [-10, None], '10-100': [10, 100],
+         '-10-100': [-10, 100], '-100--10': [-100, -10],
+         '': [None, None]}
+    for _, f_v in s.items():
+        r = verify_range_str('', _)
+        if f_v[0] != r[0] or f_v[1] != r[1]:
+            print(_)
+            print(r)

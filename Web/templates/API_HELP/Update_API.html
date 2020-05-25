@@ -36,6 +36,7 @@
             <th scope="col" width="15%">参数名称</th>
             <th scope="col" width="8%">是否必须</th>
             <th scope="col" width="9%">参数类型</th>
+            <th scope="col" width="9%">长度限制</th>
             <th scope="col" width="45%">参数描述</th>
             <!--<th scope="col" width="10%">生效</th>-->
             <th scope="col" width="12%">操作</th>
@@ -59,6 +60,10 @@
                     <option value="object">object</option>
                     <option value="bool">bool</option>
                 </select>
+            </td>
+            <td>
+                <input class="form-control" v-model="param_item.param_length"
+                       placeholder=""/>
             </td>
             <td>
                 <input class="form-control" v-model="param_item.param_desc"
@@ -100,6 +105,10 @@
                     <option value="object">object</option>
                     <option value="bool">bool</option>
                 </select>
+            </td>
+            <td>
+                <input class="form-control" v-model="current_length"
+                       placeholder=""/>
             </td>
             <td>
                 <input class="form-control" v-model="current_desc"

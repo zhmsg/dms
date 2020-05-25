@@ -17,6 +17,7 @@ from Class.Check import check_chinese_en, check_http_method, check_sql_character
 
 from dms.utils.exception import BadRequest, ConflictRequest, ResourceNotFound
 from dms.utils.verify_convert import verify_uuid, verify_int, verify_url_path
+from dms.utils.verify_convert import verify_range_str
 
 from dms.objects.base import UnsetValue
 from dms.objects.policy import PolicyManager
@@ -78,6 +79,8 @@ class ApiHelpManager(ResourceManager):
                                       max_len=150)
         rv_args['module_prefix'] = partial(verify_url_path, 'module_prefix',
                                            max_len=100)
+        rv_args['param_length'] = partial(verify_range_str, 'param_length',
+                                          return_str=True)
         return rv_args
 
     def new_api_part(self, part_name, part_desc, part_detail):
@@ -85,7 +88,6 @@ class ApiHelpManager(ResourceManager):
                     part_detail=part_detail)
         self.db.execute_insert(self.api_part_info, data)
         return data
-
 
     @PolicyManager.verify_policy(["api_module_new"])
     def new_api_module(self, module_name, module_prefix, module_desc, module_part, module_env):
@@ -287,7 +289,7 @@ class ApiHelpManager(ResourceManager):
         where_value.update(other_cond)
         param_cols = ["param_no", "api_no", "param_name", "location",
                       "necessary", "param_type", "param_desc", "status",
-                      "add_time", "update_time"]
+                      "add_time", "update_time", 'param_length']
         body_info = self.db.execute_select(self.api_params, where_value=where_value, order_by=order_by,
                                            cols=param_cols)
         return body_info
@@ -298,7 +300,7 @@ class ApiHelpManager(ResourceManager):
 
     @PolicyManager.verify_policy(["api_new"])
     def insert_api_param(self, api_no, param_name, location, necessary,
-                         param_type, param_desc, status=1):
+                         param_type, param_desc, status=1, param_length=''):
         param_no = self.gen_uuid()
         add_time = datetime.now().strftime(TIME_FORMAT)
         update_time = int(time())
@@ -308,7 +310,7 @@ class ApiHelpManager(ResourceManager):
                       location=location, necessary=necessary,
                       param_type=param_type, param_desc=param_desc,
                       status=status, add_time=add_time,
-                      update_time=update_time)
+                      update_time=update_time, param_length=param_length)
         l = self.db.execute_insert(self.api_params, kwargs, ignore=True)
         if l == 0:
             return False, kwargs
@@ -318,7 +320,7 @@ class ApiHelpManager(ResourceManager):
 
     @PolicyManager.verify_policy(["api_new"])
     def update_api_param(self, api_no, param_no,  param_type=UNSET, necessary=UNSET, param_desc=UNSET,
-                         status=UNSET):
+                         status=UNSET, param_length=UNSET):
         where_value = dict(param_no=param_no)
         update_value = dict()
         if UnsetValue.not_unset(param_type):
@@ -335,6 +337,8 @@ class ApiHelpManager(ResourceManager):
             update_value["param_desc"] = param_desc
         if UnsetValue.not_unset(status):
             update_value["status"] = status
+        if UnsetValue.not_unset(param_length):
+            update_value['param_length'] = param_length
         if not update_value:
             return 0, "not update"
         l = self.db.execute_update(self.api_params, update_value=update_value,

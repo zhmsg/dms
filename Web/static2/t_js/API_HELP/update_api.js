@@ -60,7 +60,6 @@ function init_api_info(data) {
     }
     var api_info = data.api_info;
 
-    console.info(api_info);
     // basic info
     var keys = ["api_title", "api_url", "api_method", "api_desc", "stage", "add_time", "update_time"];
     var key_len = keys.length;
@@ -158,6 +157,7 @@ $(function () {
             current_param_name: "",
             current_necessary: "1",
             current_type: "",
+            current_length: "",
             current_desc: "",
             current_status: "1",
             //about input example
@@ -217,7 +217,8 @@ $(function () {
                 var that = this;
                 var param_data = {"param_name": this.current_param_name, "location": this.current_location,
                                     "necessary": this.current_necessary, "param_type": this.current_type,
-                                    "param_desc": this.current_desc, "status": this.current_status};
+                                    "param_desc": this.current_desc, "status": this.current_status,
+                                    "param_length": this.current_length};
 
                 my_async_request2(param_url, "POST", param_data, function(data){
                     data["location_name"] = data["location_item"]["param_name"];
@@ -227,6 +228,7 @@ $(function () {
                     that.current_necessary = "1";
                     that.current_type = "";
                     that.current_desc = "";
+                    that.current_length = "";
                     that.current_status = "1";
                     that.update_location();
                 });
