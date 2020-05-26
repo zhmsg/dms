@@ -7,9 +7,9 @@ import re
 from functools import wraps
 from flask import request, jsonify, g
 from Tools.RenderTemplate import RenderTemplate
-from Web import api_url_prefix, create_blue, test_url_prefix, status_url_prefix, param_url_prefix
+from Web import api_url_prefix, test_url_prefix, status_url_prefix, param_url_prefix
 
-
+from dms.web.base import View
 from dms.utils.manager import Explorer
 
 
@@ -24,8 +24,8 @@ url_prefix = api_url_prefix
 rt = RenderTemplate("API_HELP", url_prefix=url_prefix)
 
 
-develop_api_view = create_blue('develop_api_view', url_prefix=url_prefix,
-                               required_resource=['api_help'])
+develop_api_bp = View('develop_api_bp', __name__, url_prefix=url_prefix,
+                      required_resource=['api_help'])
 
 
 def referer_api_no(f):
@@ -64,7 +64,7 @@ def referer_module_no(f):
     return decorated_function
 
 
-@develop_api_view.route("/", methods=["GET"])
+@develop_api_bp.route("/", methods=["GET"])
 def list_api():
     test_module_url = test_url_prefix + "/batch/"
     test_env_url = test_url_prefix + "/env"
@@ -73,7 +73,7 @@ def list_api():
                      module_url=module_url)
 
 
-@develop_api_view.route("/module/", methods=["GET"])
+@develop_api_bp.route("/module/", methods=["GET"])
 def get_module_api():
     if "module_no" not in request.args:
         result, part_module = api_man.get_part_api(g.user_name)
@@ -83,7 +83,7 @@ def get_module_api():
     return jsonify({"status": result, "data": module_data})
 
 
-@develop_api_view.route("/module/", methods=["POST", "PUT"])
+@develop_api_bp.route("/module/", methods=["POST", "PUT"])
 def new_api_module():
     request_data = request.json
     module_name = request_data["module_name"]
@@ -101,7 +101,7 @@ def new_api_module():
     return jsonify({"status": result, "data": message})
 
 
-@develop_api_view.route("/module/care/", methods=["POST", "DELETE"])
+@develop_api_bp.route("/module/care/", methods=["POST", "DELETE"])
 @referer_module_no
 def add_module_care():
     module_no = int(g.module_no)
@@ -112,7 +112,7 @@ def add_module_care():
     return jsonify({"status": result, "data": care_info})
 
 
-@develop_api_view.route("/info/", methods=["GET"])
+@develop_api_bp.route("/info/", methods=["GET"])
 @referer_api_no
 def show_api():
     api_no = g.api_no
@@ -135,7 +135,7 @@ def show_api():
                      batch_test_url=batch_test_url, param_url=param_url)
 
 
-@develop_api_view.route("/basic/", methods=["GET"])
+@develop_api_bp.route("/basic/", methods=["GET"])
 def new_api_page():
     result, part_module = api_man.get_part_api(g.user_name)
     if result is False:
@@ -150,7 +150,7 @@ def new_api_page():
     return rt.render("New_API.html", part_module=part_module)
 
 
-@develop_api_view.route("/basic/", methods=["POST", "PUT"])
+@develop_api_bp.route("/basic/", methods=["POST", "PUT"])
 def new_update_api_info():
     request_data = request.json
     api_module = request_data["api_module"]
@@ -180,7 +180,7 @@ def new_update_api_info():
                     "data": "success"})
 
 
-@develop_api_view.route("/basic/", methods=["DELETE"])
+@develop_api_bp.route("/basic/", methods=["DELETE"])
 @referer_api_no
 def delete_api():
     result, data = api_man.del_api_info(g.api_no, g.user_name)
@@ -189,7 +189,7 @@ def delete_api():
     return jsonify({"status": True, "location": url_prefix + "/", "data": "success"})
 
 
-@develop_api_view.route("/stage/", methods=["PUT"])
+@develop_api_bp.route("/stage/", methods=["PUT"])
 @referer_api_no
 def update_api_status_func():
     api_no = g.api_no
@@ -200,7 +200,7 @@ def update_api_status_func():
     return jsonify({"status": True, "location": g.ref_url, "data": "success"})
 
 
-@develop_api_view.route("/header/", methods=["POST"])
+@develop_api_bp.route("/header/", methods=["POST"])
 @referer_api_no
 def add_header_param():
     request_data = request.json
@@ -212,7 +212,7 @@ def add_header_param():
     return jsonify({"status": result, "data": param_info})
 
 
-@develop_api_view.route("/header/", methods=["PUT"])
+@develop_api_bp.route("/header/", methods=["PUT"])
 @referer_api_no
 def update_api_predefine_header():
     api_no = g.api_no
@@ -227,7 +227,7 @@ def update_api_predefine_header():
     return jsonify({"status": result, "data": message})
 
 
-@develop_api_view.route("/header/", methods=["DELETE"])
+@develop_api_bp.route("/header/", methods=["DELETE"])
 @referer_api_no
 def delete_header():
     request_data = request.json
@@ -238,7 +238,7 @@ def delete_header():
     return jsonify({"status": False, "data": "need api_no and param"})
 
 
-@develop_api_view.route("/body/", methods=["GET"])
+@develop_api_bp.route("/body/", methods=["GET"])
 @referer_api_no
 def update_api_body_page():
     api_no = g.api_no
@@ -246,7 +246,7 @@ def update_api_body_page():
     return rt.render("Update_API_Param.html", api_no=api_no, body_url=body_url)
 
 
-@develop_api_view.route("/param", methods=["GET"])
+@develop_api_bp.route("/param", methods=["GET"])
 @referer_api_no
 def get_param():
     api_no = g.api_no
@@ -270,7 +270,7 @@ def get_param():
     return jsonify({"status": True, "data": _param_dict})
 
 
-@develop_api_view.route("/param", methods=["POST"])
+@develop_api_bp.route("/param", methods=["POST"])
 @referer_api_no
 def add_body_param():
     request_data = request.json
@@ -288,7 +288,7 @@ def add_body_param():
     return jsonify({"status": result, "data": param_info})
 
 
-@develop_api_view.route("/param", methods=["PUT"])
+@develop_api_bp.route("/param", methods=["PUT"])
 @referer_api_no
 def update_body_param():
     request_data = request.json
@@ -303,7 +303,7 @@ def update_body_param():
     return jsonify({"status": result, "data": param_info})
 
 
-@develop_api_view.route("/body/", methods=["PUT"])
+@develop_api_bp.route("/body/", methods=["PUT"])
 @referer_api_no
 def update_api_predefine_body():
     api_no = g.api_no
@@ -318,7 +318,7 @@ def update_api_predefine_body():
     return jsonify({"status": result, "data": message})
 
 
-@develop_api_view.route("/param", methods=["DELETE"])
+@develop_api_bp.route("/param", methods=["DELETE"])
 @referer_api_no
 def delete_body():
     request_data = request.json
@@ -330,7 +330,7 @@ def delete_body():
     return jsonify({"status": False, "data": "need api_no and param"})
 
 
-@develop_api_view.route("/example", methods=["POST"])
+@develop_api_bp.route("/example", methods=["POST"])
 @referer_api_no
 def add_api_example():
     request_form = request.json
@@ -342,7 +342,7 @@ def add_api_example():
     return jsonify({"status": result, "data": data})
 
 
-@develop_api_view.route("/example", methods=["DELETE"])
+@develop_api_bp.route("/example", methods=["DELETE"])
 @referer_api_no
 def delete_api_example():
     request_data = request.json
@@ -352,7 +352,7 @@ def delete_api_example():
     return jsonify({"status": result, "data": data})
 
 
-@develop_api_view.route("/care/", methods=["POST", "DELETE"])
+@develop_api_bp.route("/care/", methods=["POST", "DELETE"])
 def add_care():
     request_data = request.json
     api_no = request_data["api_no"]

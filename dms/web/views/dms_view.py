@@ -11,6 +11,7 @@ from Web import User
 
 from Web import dms_url_prefix, create_blue
 
+from dms.web.base import View
 from dms.utils.exception import Forbidden
 from dms.utils.manager import Explorer
 from dms.objects.user import UserObject
@@ -21,7 +22,8 @@ __author__ = 'Zhouheng'
 
 url_prefix = dms_url_prefix
 
-dms_view = create_blue('dms_view', url_prefix=url_prefix, auth_required=False)
+dms_bp = View('dms_bp', __name__, url_prefix=url_prefix, 
+                auth_required=False)
 
 
 user_m = UserObject()
@@ -35,7 +37,7 @@ def load_domain_session():
     return o_session
 
 
-@dms_view.route("/", methods=["GET", "PUT", "POST", "DELETE"])
+@dms_bp.route("/", methods=["GET", "PUT", "POST", "DELETE"])
 def index():
     next_url = ""
     if current_user.is_authenticated:
@@ -56,14 +58,14 @@ def index():
     return render_template("login.html", next_url=next_url, url_prefix=url_prefix, domain_user=domain_user)
 
 
-@dms_view.route("/login/", methods=["GET"])
+@dms_bp.route("/login/", methods=["GET"])
 def login_page():
     if current_user.is_authenticated:
         logout_user()
     return index()
 
 
-@dms_view.route("/login/", methods=["POST"])
+@dms_bp.route("/login/", methods=["POST"])
 def login():
     request_data = request.json
     if "domain_user" in request_data:
@@ -108,7 +110,7 @@ def login():
         return jsonify({"status": True, "data": {"location": url_prefix + "/portal/", "user_name": user.user_name}})
 
 
-@dms_view.route("/login/vip/", methods=["POST"])
+@dms_bp.route("/login/vip/", methods=["POST"])
 def login_vip():
     request_data = request.json
     user_name = request_data["user_name"]
@@ -123,7 +125,7 @@ def login_vip():
     return jsonify({"status": True, "data": "success"})
 
 
-@dms_view.route("/password/", methods=["GET"])
+@dms_bp.route("/password/", methods=["GET"])
 def password_page():
     if "user_name" in g:
         return render_template("password.html", url_prefix=url_prefix)
@@ -132,20 +134,20 @@ def password_page():
         if expires_in > datetime.now():
             return render_template("password.html", user_name=session["user_name"],
                                    change_token=session["change_token"], url_prefix=url_prefix)
-    return redirect(url_for("dms_view.login_page"))
+    return redirect(url_for("dms_bp.login_page"))
 
 
-@dms_view.route("/tel/", methods=["GET"])
+@dms_bp.route("/tel/", methods=["GET"])
 def bind_tel_page():
     if "bind_token" in session and "expires_in" in session and "user_name" in session and "password" in session:
         expires_in = session["expires_in"]
         if expires_in > datetime.now():
             return render_template("tel.html", user_name=session["user_name"],
                                    bind_token=session["bind_token"], url_prefix=url_prefix)
-    return redirect(url_for("dms_view.login_page"))
+    return redirect(url_for("dms_bp.login_page"))
 
 
-@dms_view.route("/tel/", methods=["PUT"])
+@dms_bp.route("/tel/", methods=["PUT"])
 def send_tel_code():
     return 'error'
     # if "bind_token" in session and "expires_in" in session and "user_name" in session and "password" in session:
@@ -154,17 +156,17 @@ def send_tel_code():
     #         request_data = request.json
     #         bind_token = request_data["bind_token"]
     #         if bind_token != session["bind_token"]:
-    #             return redirect(url_for("dms_view.login_page"))
+    #             return redirect(url_for("dms_bp.login_page"))
     #         tel = request_data["tel"]
     #         result, info = control.send_code(session["user_name"], session["password"], tel)
     #         if result is True:
     #             session["tel"] = tel
     #             return jsonify({"status": True, "data": {"tel": tel}})
     #         return jsonify({"status": False, "data": info})
-    return redirect(url_for("dms_view.login_page"))
+    return redirect(url_for("dms_bp.login_page"))
 
 
-@dms_view.route("/tel/", methods=["POST"])
+@dms_bp.route("/tel/", methods=["POST"])
 def bind_tel_func():
     return 'error'
     # if "bind_token" in session and "expires_in" in session and "user_name" in session and "password" in session:
@@ -175,7 +177,7 @@ def bind_tel_func():
     #         request_data = request.json
     #         bind_token = request_data["bind_token"]
     #         if bind_token != session["bind_token"]:
-    #             return redirect(url_for("dms_view.login_page"))
+    #             return redirect(url_for("dms_bp.login_page"))
     #         tel = request_data["tel"]
     #         if tel != session["tel"]:
     #             return jsonify({"status": False, "data": "Please Send Code First"})
@@ -194,10 +196,10 @@ def bind_tel_func():
     #             return jsonify({"status": True, "data": {"tel": tel}})
     #         else:
     #             return jsonify({"status": False, "data": info})
-    return redirect(url_for("dms_view.login_page"))
+    return redirect(url_for("dms_bp.login_page"))
 
 
-@dms_view.route("/password/", methods=["POST"])
+@dms_bp.route("/password/", methods=["POST"])
 def set_password():
     user_name = request.form["user_name"]
     new_password= request.form["new_password"]
@@ -211,7 +213,7 @@ def set_password():
         result = user_m.change_password(user_name, old_password, new_password)
         if result is False:
             return "旧密码不正确"
-        return redirect(url_for("dms_view.login_page"))
+        return redirect(url_for("dms_bp.login_page"))
     elif "change_token" in session and "expires_in" in session and "user_name" in session and "password" in session:
         expires_in = session["expires_in"]
         if expires_in > datetime.now():
@@ -227,13 +229,13 @@ def set_password():
             del session["change_token"]
             del session["expires_in"]
             del session["password"]
-            return redirect(url_for("dms_view.login_page"))
+            return redirect(url_for("dms_bp.login_page"))
         else:
             return "更新密码超时，请重新登录"
     return "更新失败，请重新登录"
 
 
-@dms_view.route("/register/", methods=["GET"])
+@dms_bp.route("/register/", methods=["GET"])
 @login_required
 def register_page():
     # if g.user_role & control.role_value["user_new"] <= 0:
@@ -248,7 +250,7 @@ def register_page():
                            roles=user_m.roles())
 
 
-@dms_view.route("/register/", methods=["POST"])
+@dms_bp.route("/register/", methods=["POST"])
 @login_required
 def register():
     request_data = request.form
@@ -270,10 +272,10 @@ def register():
         return message
     if ur_man:
         ur_man.new_policies(user_name, policies)
-    return redirect(url_for("dms_view.select_portal"))
+    return redirect(url_for("dms_bp.select_portal"))
 
 
-@dms_view.route("/register/check/", methods=["POST"])
+@dms_bp.route("/register/check/", methods=["POST"])
 @login_required
 def register_check():
     request_data = request.json
@@ -282,7 +284,7 @@ def register_check():
     return jsonify({"status": True, "data": {"result": is_exist, "message": ""}})
 
 
-@dms_view.route("/remove/user/", methods=["DELETE"])
+@dms_bp.route("/remove/user/", methods=["DELETE"])
 @login_required
 def remove_register_user():
     user_name = request.json["user_name"]
@@ -290,7 +292,7 @@ def remove_register_user():
     return jsonify({"status": True, "data": "success"})
 
 
-@dms_view.route("/authorize/", methods=["GET"])
+@dms_bp.route("/authorize/", methods=["GET"])
 @login_required
 def authorize_page():
     my_user = []
@@ -304,7 +306,7 @@ def authorize_page():
                            url_remove=url_remove)
 
 
-@dms_view.route("/authorize/user/", methods=["POST"])
+@dms_bp.route("/authorize/user/", methods=["POST"])
 @login_required
 def authorize():
     return "error"
@@ -319,10 +321,10 @@ def authorize():
     # result, message = control.update_my_user_role(current_user.role, current_user.user_name, perm_user, user_role)
     # if result is False:
     #     return message
-    return redirect(url_for("dms_view.authorize_page"))
+    return redirect(url_for("dms_bp.authorize_page"))
 
 
-@dms_view.route("/portal/", methods=["GET"])
+@dms_bp.route("/portal/", methods=["GET"])
 @login_required
 def select_portal():
     menu = []
@@ -356,7 +358,7 @@ def select_portal():
     return render_template("portal.html", menu=menu)
 
 
-@dms_view.route("/user/", methods=["GET"])
+@dms_bp.route("/user/", methods=["GET"])
 @login_required
 def list_user():
     items = user_m.list_user(g.user_name)
