@@ -11,6 +11,8 @@ function op_link(is_query) {
     }
     r_data["link"] = location.href;
     r_data["remark"] = document.title;
+    console.info('0----');
+    console.info(sl_url);
     my_async_request2(sl_url, "POST", r_data, handler2);
 }
 

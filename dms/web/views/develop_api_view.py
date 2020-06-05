@@ -1,8 +1,6 @@
 #!/user/bin/env python
 # -*- coding: utf-8 -*-
 
-
-import sys
 import re
 from functools import wraps
 from flask import request, jsonify, g
@@ -14,8 +12,6 @@ from dms.utils.manager import Explorer
 
 
 api_man = Explorer.get_instance().get_object_manager("api_help")
-
-sys.path.append('..')
 
 __author__ = 'Zhouheng'
 

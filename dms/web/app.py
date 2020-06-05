@@ -7,13 +7,11 @@ from flask_login import LoginManager, UserMixin, login_required
 from dms.web.error_hander import handle_500
 from dms.exceptions import DmsException
 
+# TODO
+from Web import *
 
 
 __author__ = 'zhouhenglc'
-
-
-def is_blueprint(obj):
-    return isinstance(obj, Blueprint)
 
 
 def handle_signal(signal_num, frame):
@@ -79,5 +77,20 @@ def get_application():
         app.after_request_funcs[None].append(h_obj.after_request)
     app.register_error_handler(500, handle_500)
     app.register_error_handler(DmsException, handle_500)
+
+    env = app.jinja_env
+
+    env.globals["current_env"] = current_env
+    env.globals["menu_url"] = dms_url_prefix + "/portal/"  # TODO
+    env.globals["short_link_url"] = short_link_prefix
+
+    env_filters = importlib.import_module('dms.web.env_filters').__all__
+    _kwargs = {'static_prefix_url': '/static'}  # TODO
+    for e_filter in env_filters:
+        env.filters[e_filter.name] = e_filter.get_func(**_kwargs)
+
+    env.variable_start_string = "{{ "
+    env.variable_end_string = " }}"
+
     register_signal()
     return app

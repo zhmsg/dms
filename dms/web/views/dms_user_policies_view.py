@@ -1,37 +1,34 @@
 #!/user/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys
 from flask import request, jsonify, g
-from Web import create_blue
-
 
 from dms.objects.user import UserObject
+from dms.web.base import View
 from dms.utils.manager import Explorer
 
 resources_m = Explorer.get_instance()
 ur_man = resources_m.get_object_manager("user_role")
 user_m = UserObject()
 
-sys.path.append('..')
 
 __author__ = 'Zhouheng'
 
 url_prefix = '/user/policies'
 
 
-user_role_view = create_blue('user_role_view', url_prefix=url_prefix,
-                               required_resource=['user_role'])
+user_role_bp = View('user_role_bp', __name__, url_prefix=url_prefix,
+                    required_resource=['user_role'])
 
 
-@user_role_view.route("", methods=["GET"])
+@user_role_bp.route("", methods=["GET"])
 def mine_policies():
     policies = ur_man.get_policies(g.user_name)
     data = {'role': g.user_role, 'policies': policies}
     return jsonify({'status': True, 'data': data})
 
 
-@user_role_view.route("/manager", methods=["GET"])
+@user_role_bp.route("/manager", methods=["GET"])
 def manager_policies():
     is_admin = user_m.is_admin(g.user_role)
     if not is_admin:
@@ -46,7 +43,7 @@ def manager_policies():
     return jsonify({'status': True, 'data': man_modules})
 
 
-@user_role_view.route("/other", methods=["POST"])
+@user_role_bp.route("/other", methods=["POST"])
 def other_user_role():
     data = request.json
     other_user = data['user_name']

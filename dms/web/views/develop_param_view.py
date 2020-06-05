@@ -1,24 +1,22 @@
 #!/user/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys
 from flask import request, jsonify, g
 from Tools.RenderTemplate import RenderTemplate
 from Web import param_url_prefix as url_prefix, create_blue
 
+from dms.web.base import View
 from dms.utils.manager import Explorer
-
-sys.path.append('..')
 
 __author__ = 'Zhouheng'
 
 html_dir = "/Param"
 rt = RenderTemplate("Param", url_prefix=url_prefix)
-develop_param_view = create_blue('develop_param_view', url_prefix=url_prefix)
+develop_param_bp = View('develop_param_bp', __name__, url_prefix=url_prefix)
 pf_man = Explorer.get_instance().get_object_manager("param_format")
 
 
-@develop_param_view.route("/", methods=["GET"])
+@develop_param_bp.route("/", methods=["GET"])
 def show_param_info_func():
     if "X-Requested-With" in request.headers or "X-JY-FROM" in request.headers:
         result, info = pf_man.select_param_format(g.user_name, g.user_role)
@@ -34,7 +32,7 @@ def show_param_info_func():
     return rt.render("Param_Info.html")
 
 
-@develop_param_view.route("/", methods=["POST", "PUT"])
+@develop_param_bp.route("/", methods=["POST", "PUT"])
 def add_param_func():
     r_data = request.json
     print(r_data)
@@ -49,7 +47,7 @@ def add_param_func():
     return jsonify({"status": result, "data": info})
 
 
-@develop_param_view.route("/query/", methods=["GET"])
+@develop_param_bp.route("/query/", methods=["GET"])
 def query_param():
     if "params" not in request.args:
         return jsonify({"status": True, "data": []})

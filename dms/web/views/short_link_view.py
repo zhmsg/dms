@@ -1,24 +1,22 @@
 #!/user/bin/env python
 # -*- coding: utf-8 -*-
 
-
-import sys
 from urllib import parse
 
 from flask import request, jsonify, g, redirect
 
-from Web import short_link_prefix as url_prefix, create_blue
+from Web import short_link_prefix as url_prefix
 
+from dms.web.base import View
 from dms.utils.manager import Explorer
 
-sys.path.append('..')
 
 __author__ = 'Zhouheng'
 link_man = Explorer.get_instance().get_object_manager("short_link")
-short_link_view = create_blue('short_link_view', url_prefix=url_prefix)
+short_link_bp = View('short_link_bp', __name__, url_prefix=url_prefix)
 
 
-@short_link_view.route("/<int:no>/", methods=["GET"])
+@short_link_bp.route("/<int:no>/", methods=["GET"])
 def get_short_link_n(no):
     exec_r, items = link_man.get_link_n_info(g.user_name, g.user_role, no)
     if exec_r is False:
@@ -28,7 +26,7 @@ def get_short_link_n(no):
     return redirect(items[0]["link"])
 
 
-@short_link_view.route("/<s>/", methods=["GET"])
+@short_link_bp.route("/<s>/", methods=["GET"])
 def get_short_link_s(s):
     exec_r, items = link_man.get_link_s_info(g.user_name, g.user_role, s)
     if exec_r is False:
@@ -38,7 +36,7 @@ def get_short_link_s(s):
     return redirect(items[0]["link"])
 
 
-@short_link_view.route("/", methods=["POST"])
+@short_link_bp.route("/", methods=["POST"])
 def create_link_func():
     r_data = request.json
     link = r_data["link"]

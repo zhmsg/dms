@@ -1,18 +1,17 @@
 #!/user/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys
 import os
 import json
 import re
 from functools import wraps
 from flask import request, jsonify, g
 from Tools.RenderTemplate import RenderTemplate
-from Web import test_url_prefix, api_url_prefix, status_url_prefix, data_dir, create_blue
+from Web import test_url_prefix, api_url_prefix, status_url_prefix, data_dir
 
+from dms.web.base import View
 from dms.utils.manager import Explorer
 
-sys.path.append('..')
 
 __author__ = 'Zhouheng'
 
@@ -25,7 +24,7 @@ case_dir = "%s/test_case" % data_dir
 api_man = Explorer.get_instance().get_object_manager("api_help")
 
 rt = RenderTemplate("API_HELP", url_prefix=url_prefix)
-develop_test_view = create_blue('develop_test_view', url_prefix=url_prefix)
+develop_test_bp = View('develop_test_bp', __name__, url_prefix=url_prefix)
 
 
 def referer_api_no(f):
@@ -45,7 +44,7 @@ def referer_api_no(f):
     return decorated_function
 
 
-@develop_test_view.route("/", methods=["GET"])
+@develop_test_bp.route("/", methods=["GET"])
 def test_api_page():
     if "api_no" not in request.args:
         return "Need api_no"
@@ -79,7 +78,7 @@ def test_api_page():
                      api_info_url=api_info_url, new_right=new_right, api_example_url=api_example_url)
 
 
-@develop_test_view.route("/batch/", methods=["GET"])
+@develop_test_bp.route("/batch/", methods=["GET"])
 def batch_test_api_page():
     # if g.user_role & control.role_value["api_new"] != control.role_value["api_new"]:
     #     return "用户无权限"
@@ -102,7 +101,7 @@ def batch_test_api_page():
                      module_api_url=module_api_url, module_no=module_no, api_url_prefix=api_url_prefix)
 
 
-@develop_test_view.route("/env", methods=["GET"])
+@develop_test_bp.route("/env", methods=["GET"])
 def get_test_env():
     env_no_list = None
     if "env_no" in request.args:
@@ -112,14 +111,14 @@ def get_test_env():
     return jsonify({"status": result, "data": env_info})
 
 
-@develop_test_view.route("/env/", methods=["POST"])
+@develop_test_bp.route("/env/", methods=["POST"])
 def add_test_env():
     r_data = request.json
     result, env_info = api_man.new_test_env(r_data["env_name"], r_data["env_address"])
     return jsonify({"status": result, "data": env_info})
 
 
-@develop_test_view.route("/case/", methods=["POST"])
+@develop_test_bp.route("/case/", methods=["POST"])
 @referer_api_no
 def add_test_case():
     r_data = request.json
@@ -137,7 +136,7 @@ def add_test_case():
     return jsonify({"status": True, "data": "success"})
 
 
-@develop_test_view.route("/case/", methods=["GET"])
+@develop_test_bp.route("/case/", methods=["GET"])
 @referer_api_no
 def list_test_case():
     api_no = g.api_no
@@ -152,7 +151,7 @@ def list_test_case():
     return jsonify({"status": True, "data": {"api_no": api_no, "case": api_test_case}})
 
 
-@develop_test_view.route("/case/<case_name>/", methods=["GET"])
+@develop_test_bp.route("/case/<case_name>/", methods=["GET"])
 @referer_api_no
 def test_case_content(case_name):
     api_no = g.api_no
