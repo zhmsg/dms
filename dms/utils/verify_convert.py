@@ -60,7 +60,9 @@ def verify_range_str(key, s, return_str=False):
     -10-100 return -10, 100
     -100--10 return -100, -10
     """
-    items = s.split('-')
+    if s is None:
+        s = ''
+    items = s.strip().split('-')
     front_space = False
     l = []
     for item in items:
@@ -86,6 +88,8 @@ def verify_range_str(key, s, return_str=False):
             msg = 'left value can not greater that right value'
             raise BadRequest(key, msg)
     if return_str:
+        if l[0] is None and l[1] is None:
+            return ''
         if l[0] is None:
             return '%s' % l[1]
         ns = '-'.join(map(lambda x: '%s' % x if x is not None else '',
