@@ -14,12 +14,12 @@ class ConfigDir(Singleton):
         parent_dir = os.path.dirname(script_dir)
         self.directories = [current_dir]
         etc_dir = "/etc/dms"
+        if etc_dir not in self.directories:
+            self.directories.append(etc_dir)
         if script_dir not in self.directories:
             self.directories.append(script_dir)
         if parent_dir not in self.directories:
             self.directories.append(parent_dir)
-        if etc_dir not in self.directories:
-            self.directories.append(etc_dir)
 
     def find_config_file(self, *filename, env_name=None):
         if env_name:

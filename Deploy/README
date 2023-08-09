@@ -9,5 +9,5 @@ docker-compose up -d
 
 4、
 python init_t.py
-docker run --rm -u root -v $DMS_DB_CONF_PATH:/etc/dms/mysql_app.conf -v $(pwd):/opt/dms meisanggou/dms python /opt/dms/Deploy/init_t.py "dmS1021<zh>"
+docker run --rm -u root --network host -v $DMS_DB_CONF_PATH:/etc/dms/mysql_app.conf -v $(pwd):/opt/dms meisanggou/dms python /opt/dms/Deploy/init_t.py "dmS1021<zh>"
 5、
