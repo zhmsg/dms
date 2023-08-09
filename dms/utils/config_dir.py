@@ -24,7 +24,7 @@ class ConfigDir(Singleton):
     def find_config_file(self, *filename, env_name=None):
         if env_name:
             path = os.environ.get(env_name)
-            if os.path.exists(path):
+            if path and os.path.exists(path):
                 return path
         for directory in self.directories:
             for name in filename:
