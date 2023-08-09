@@ -5,12 +5,14 @@ import sys
 
 from mysqldb_rich.db2 import DB, TableDB
 
+from dms.utils import database_config
+
 __author__ = 'meisa'
 
 script_dir = os.path.dirname(__file__)
 
 if __name__ == "__main__":
-    db_conf_path = os.path.join(script_dir, "..", "mysql_app.conf")
+    db_conf_path = database_config.MysqlConfig().config_path
     if len(sys.argv) >= 2:
         root_password = sys.argv[1]
     # else:

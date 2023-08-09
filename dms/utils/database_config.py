@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 # coding: utf-8
 
-from six.moves import configparser
+import configparser
 
 from dms.utils.config_dir import ConfigDir
 from dms.utils.singleton import Singleton
@@ -12,7 +12,8 @@ class MysqlConfig(Singleton):
 
     def __init__(self):
         conf_d = ConfigDir()
-        config_path = conf_d.find_config_file(*self.config_filename)
+        config_path = conf_d.find_config_file(*self.config_filename,
+                                              env_name='DMS_DB_CONF_PATH')
         if config_path is None:
             raise RuntimeError("No profile found in any directory: %s"
                                % " ".join(conf_d.directories))

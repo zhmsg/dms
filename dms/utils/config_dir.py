@@ -21,7 +21,11 @@ class ConfigDir(Singleton):
         if etc_dir not in self.directories:
             self.directories.append(etc_dir)
 
-    def find_config_file(self, *filename):
+    def find_config_file(self, *filename, env_name=None):
+        if env_name:
+            path = os.environ.get(env_name)
+            if os.path.exists(path):
+                return path
         for directory in self.directories:
             for name in filename:
                 file_path = os.path.join(directory, name)
