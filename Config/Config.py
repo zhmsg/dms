@@ -5,16 +5,21 @@ __author__ = 'ZhouHeng'
 import os
 import configparser
 
-if os.path.exists("../env.conf") is False:
+
+script_dir = os.path.abspath(os.path.dirname(__file__))
+env_path = os.path.abspath(os.path.join(script_dir, '..', 'env.conf'))
+cfg_path = os.path.abspath(os.path.join(script_dir, '..', 'config.conf'))
+
+if os.path.exists(env_path) is False:
     current_env = "Development"
 
 else:
-    with open("../env.conf") as r_env:
+    with open(env_path) as r_env:
         current_env = r_env.read().strip()
 
 # read config
 config = configparser.ConfigParser()
-config.read("../config.conf")
+config.read(cfg_path)
 
 redis_host = config.get(current_env, "redis_host")
 redis_port = config.get(current_env, "redis_port")
