@@ -1,6 +1,6 @@
 FROM docker.io/python
 MAINTAINER meisanggou
-tag: meisanggou/dms
+# tag: meisanggou/dms
 
 ADD https://raw.githubusercontent.com/zhmsg/dms/master/requirement.txt /tmp/
 RUN pip install --no-cache-dir -r /tmp/requirement.txt
