@@ -64,6 +64,7 @@ class View(OView):
             @self.before_request
             @login_required
             def before_request():
+                print(explorer.missing_config)
                 for rr in self.required_resource:
                     if rr in explorer.missing_config:
                         redirect_url = "/config?keys=%s" % \
