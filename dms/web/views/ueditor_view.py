@@ -10,11 +10,13 @@ from flask import request, send_from_directory, g, jsonify
 from Tools.RenderTemplate import RenderTemplate
 from Web import editor_url_prefix as url_prefix, create_blue, editor_data_dir
 
+from dms.web.base import View
+
 __author__ = 'ZhouHeng'
 
 
 rt = RenderTemplate("UEditor", url_prefix=url_prefix)
-editor_view = create_blue('editor_view', url_prefix=url_prefix)
+editor_view = View('editor_view', __name__, url_prefix=url_prefix)
 
 upload_data_dirs = {"image": "img", "scrawl": "scrawl"}
 

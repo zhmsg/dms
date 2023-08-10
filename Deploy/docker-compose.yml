@@ -21,6 +21,16 @@ services:
     restart: always
     volumes:
       - dms-mongo:/data/db
+  dms:
+    container_name: dms
+    environment:
+      - DMS_DATA_DIR=/opt/data
+    network_mode: host
+    image: meisanggou/dms
+    restart: always
+    volumes:
+      - $DMS_DB_CONF_PATH:/etc/dms/mysql_app.conf
+      - ../:/opt/dms
 version: '2.4'
 volumes:
   dms-mysql:
