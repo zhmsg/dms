@@ -4,7 +4,7 @@
 from flask import g, request
 from flask_login import current_user
 
-from dms.web import FlaskHook
+from flask_helper.flask_hook import FlaskHook
 
 
 __author__ = 'zhouhenglc'

@@ -1,8 +1,10 @@
 # !/usr/bin/env python
 # coding: utf-8
 from flask import Blueprint, g, Response, jsonify, redirect
-from flask_login import LoginManager, UserMixin, login_required
+from flask_login import login_required
 import functools
+
+from flask_helper.view import View as OView
 
 from dms.utils.log import getLogger
 from dms.utils.manager import Explorer
@@ -49,30 +51,15 @@ class RegisterData(object):
 REGISTER_DATA = RegisterData()
 
 
-class FlaskHook(object):
-
-    priority = 100
-
-    def __init__(self, app):
-        self.app = app
-        self.log = getLogger()
-
-    def before_request(self):
-        pass
-
-    def after_request(self, response):
-        return response
-
-
 explorer = Explorer.get_instance()
 
 
-class View(Blueprint):
+class View(OView):
 
     def __init__(self, name, import_name, *args, **kwargs):
-        self.auth_required = kwargs.pop('auth_required', False)
+        self.auth_required = kwargs.pop('auth_required', True)
         self.required_resource = kwargs.pop('required_resource', [])
-        Blueprint.__init__(self, name, import_name, *args, **kwargs)
+        super().__init__(name, import_name, *args, **kwargs)
         if self.auth_required:
             @self.before_request
             @login_required
@@ -117,6 +104,6 @@ class View(Blueprint):
                 elif hasattr(r, 'to_dict'):
                     return jsonify(r.to_dict())
                 return r
-            Blueprint.add_url_rule(self, rule, endpoint, inner, **options)
+            OView.add_url_rule(self, rule, endpoint, inner, **options)
         else:
-            Blueprint.add_url_rule(self, rule, endpoint, view_func, **options)
+            OView.add_url_rule(self, rule, endpoint, view_func, **options)

@@ -2,7 +2,7 @@
 # !/usr/bin/python
 
 from flask import g, request
-from dms.web import FlaskHook
+from flask_helper.flask_hook import FlaskHook
 
 
 __author__ = 'zhouhenglc'

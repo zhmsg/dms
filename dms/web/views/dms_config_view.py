@@ -4,15 +4,12 @@
 import sys
 from flask import request, jsonify, g
 
-
-
 from dms.objects.user import UserObject
 from dms.objects.web_config import WebConfig
-
+from dms.web.base import View
 from Tools.RenderTemplate import RenderTemplate
 
 from Web import config_url_prefix
-from Web import create_blue
 
 
 url_prefix = config_url_prefix
@@ -23,7 +20,8 @@ __author__ = 'Zhouheng'
 
 config_man = WebConfig.get_instance()
 user_man = UserObject()
-config_view = create_blue('dms_config_view', url_prefix=url_prefix, auth_required=True)
+config_view = View('dms_config_bp', __name__, url_prefix=url_prefix,
+                          auth_required=True)
 
 
 @config_view.route('', methods=['GET'])

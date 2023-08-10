@@ -2,16 +2,20 @@ import importlib
 import signal
 
 from flask import Blueprint, Flask, session
-from flask_login import LoginManager, UserMixin, login_required
+
+from flask_helper import Flask2
 
 from dms.web.error_hander import handle_500
 from dms.exceptions import DmsException
+from dms.utils.log import getLogger
 
 # TODO
 from Web import *
 
 
 __author__ = 'zhouhenglc'
+
+LOG = getLogger()
 
 
 def handle_signal(signal_num, frame):
@@ -59,22 +63,10 @@ login_manager.login_view = "dms_bp.index"
 
 
 def get_application():
-    app = Flask(__name__)
+    app = Flask2(__name__, log=LOG)
     app.secret_key = 'dms'
+    app.cross_domain()
     login_manager.init_app(app)
-    view_mod = importlib.import_module('dms.web.views')
-    bps = view_mod.__all__
-    for bp in bps:
-        app.register_blueprint(bp)
-    hook_mod = importlib.import_module('dms.web.hooks')
-    hooks = hook_mod.__all__
-    hooks.sort(key=lambda x: x.priority)
-    app.before_request_funcs.setdefault(None, [])
-    app.after_request_funcs.setdefault(None, [])
-    for hook in hooks:
-        h_obj = hook(app)
-        app.before_request_funcs[None].append(h_obj.before_request)
-        app.after_request_funcs[None].append(h_obj.after_request)
     app.register_error_handler(500, handle_500)
     app.register_error_handler(DmsException, handle_500)
 

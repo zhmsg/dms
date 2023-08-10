@@ -4,7 +4,7 @@
 from flask import g, request
 
 
-from dms.web import FlaskHook
+from flask_helper.flask_hook import FlaskHook
 from dms.web.base import REGISTER_DATA
 from dms.exceptions import InvalidInput
 
