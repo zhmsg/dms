@@ -15,7 +15,6 @@ from .IP import IPManager
 from .JingDuData import JingDuDataManager
 from .DingMsg import DingMsgManager
 from .Dyups import DyUpsManager
-from .Article import ArticleManager
 from .TopicMessage import MessageManager
 from .WeiXin import WeiXinManager
 from Class import DATE_FORMAT_STR, release_dir, jd_mysql_host, jd_mysql_db, dyups_server, wx_service, TIME_FORMAT
@@ -50,7 +49,6 @@ class ControlManager(object):
         self.jy_log = LogManager()
         self.ding_msg = DingMsgManager("a49a7c62e8601123cd417465ff8037cd8410a3572244903fa694e4b7548a917a")
         self.dyups_man = DyUpsManager(dyups_server)
-        self.article_man = ArticleManager()
         self.message_man = MessageManager()
         self.name_2_role_key = {"apicluster": "dyups_api", "webcluster": "dyups_web", "amscluster": "dyups_web",
                                 "healthcluster": "dyups_api", "authcluster": "dyups_api", "samplecluster": "dyups_api"}
@@ -614,23 +612,6 @@ class ControlManager(object):
         if l == 1:
             return True, "success"
         return False, "不存在"
-
-    # 文章管理
-    def new_article(self, user_name, user_role, title, abstract, content):
-        exec_r, data = self.article_man.new_article(user_name, title, abstract, content)
-        return exec_r, data
-
-    def update_article(self, user_name, user_role, article_no, title=None, abstract=None, content=None, auto=False):
-        exec_r, data = self.article_man.update_article(article_no, title, abstract, content)
-        return exec_r, data
-
-    def get_article(self, user_name, user_role, article_no):
-        exec_r, data = self.article_man.get_article(article_no, user_name)
-        return exec_r, data
-
-    def query_article(self, user_name, user_role, **kwargs):
-        exec_r, data = self.article_man.query_article(**kwargs)
-        return exec_r, data
 
     # 主题消息管理
     def new_topic_message(self, **kwargs):

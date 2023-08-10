@@ -6,6 +6,7 @@ from dms.utils.singleton import Singleton
 
 from dms.objects.base import UnsetValue
 from dms.objects.resources.api_help import ApiHelpManager
+from dms.objects.resources.article import ArticleManager
 from dms.objects.resources.link import ShortLinkManager
 from dms.objects.resources.param_format import ParamFormatManager
 from dms.objects.resources.user_policies import UserPoliciesManager
@@ -62,6 +63,7 @@ class Explorer(Singleton):
 
     def load_objects(self):
         self.load_object(ApiHelpManager)
+        self.load_object(ArticleManager)
         self.load_object(ShortLinkManager)
         self.load_object(UserPoliciesManager)
         self.load_object(ParamFormatManager)
