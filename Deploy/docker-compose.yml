@@ -29,6 +29,7 @@ services:
     image: meisanggou/dms
     restart: always
     volumes:
+      - $DMS_DATA_DIR:/opt/data
       - $DMS_DB_CONF_PATH:/etc/dms/mysql_app.conf
       - ../:/opt/dms
 version: '2.4'

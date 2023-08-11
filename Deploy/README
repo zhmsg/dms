@@ -8,6 +8,8 @@ pip install -r requirement.txt
 docker-compose up -d
 
 4、
+准备数据库文件，并将路径设置为环境变量DMS_DB_CONF_PATH
+准备数据目录，并将路径设置为环境变量DMS_DATA_DIR
 python init_t.py
 docker run --rm -u root --network host -v $DMS_DB_CONF_PATH:/etc/dms/mysql_app.conf -v $(pwd):/opt/dms meisanggou/dms python /opt/dms/Deploy/init_t.py "dmS1021<zh>"
 5、

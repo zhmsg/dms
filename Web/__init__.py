@@ -77,20 +77,19 @@ short_link_prefix = web_prefix + "/s"
 dist_key_prefix = web_prefix + "/dist/key"
 performance_prefix = web_prefix + "/performance"
 
-data_dir = "/geneac/dmsdata"
+data_dir = os.environ.get("DMS_DATA_DIR", "/geneac/dmsdata")
 
 editor_data_dir = data_dir + "/editor"
 article_data_dir = data_dir + "/article"
 
-# if os.path.isdir(article_data_dir) is False:
-#     os.mkdir(article_data_dir)
+if os.path.isdir(article_data_dir) is False:
+    os.mkdir(article_data_dir)
 
-import os
-# if os.path.isdir(data_dir) is False:
-#     os.mkdir(data_dir)
+if os.path.isdir(data_dir) is False:
+    os.mkdir(data_dir)
 
-# if os.path.isdir(editor_data_dir) is False:
-#     os.mkdir(editor_data_dir)
+if os.path.isdir(editor_data_dir) is False:
+    os.mkdir(editor_data_dir)
 
 
 def company_ip_required(f):
