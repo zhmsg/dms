@@ -54,23 +54,6 @@ class ApiHelpManager(ResourceManager):
         self.send_message = "send_message"
         self.test_env = "test_env"
         self.api_stage_desc = [u"新建", u"修改中", u"已完成", u"待废弃", u"已废弃", u"已删除"]
-        self.move_to_api_params()
-
-    def move_to_api_params(self):
-        cols = ["api_no", "param", "necessary", "param_desc",
-                "status", "add_time", "update_time"]
-        items = self.db.execute_select(self.api_header, cols=cols)
-        for item in items:
-            e_item = self._select_api_param(item['api_no'],
-                                            param_name=item['param'])
-            if e_item:
-                continue
-            item['location'] = 'header'
-            item['param_name'] = item.pop('param')
-            item['param_type'] = item.pop('type', 'string')
-            item['param_length'] = ''
-            item['param_no'] = self.gen_uuid()
-            self.db.execute_insert(self.api_params, item, ignore=True)
 
     @classmethod
     def get_modules_desc(cls):
