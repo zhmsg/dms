@@ -57,17 +57,17 @@ class ApiHelpManager(ResourceManager):
         self.move_to_api_params()
 
     def move_to_api_params(self):
-        cols = ["api_no", "param", "necessary", "type", "param_desc",
+        cols = ["api_no", "param", "necessary", "param_desc",
                 "status", "add_time", "update_time"]
-        items = self.db.execute_select(self.api_body, cols=cols)
+        items = self.db.execute_select(self.api_header, cols=cols)
         for item in items:
             e_item = self._select_api_param(item['api_no'],
                                             param_name=item['param'])
             if e_item:
                 continue
-            item['location'] = 'body'
+            item['location'] = 'header'
             item['param_name'] = item.pop('param')
-            item['param_type'] = item.pop('type')
+            item['param_type'] = item.pop('type', 'string')
             item['param_length'] = ''
             item['param_no'] = self.gen_uuid()
             self.db.execute_insert(self.api_params, item, ignore=True)
