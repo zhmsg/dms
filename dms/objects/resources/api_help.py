@@ -43,10 +43,10 @@ class ApiHelpManager(ResourceManager):
         self.api_module = "api_module"
         self.api_info = "api_info"
         self.t_example = "api_example"
-        self.api_header = "api_header"
+        self.api_header = "api_header"  # 可以废弃
         self.predefine_header = "predefine_header"
         self.predefine_body = "predefine_body"
-        self.api_body = "api_body"
+        self.api_body = "api_body"  # 可以废弃
         self.api_params = "api_params"
         self.predefine_param = "predefine_param"
         self.api_care = "api_care"

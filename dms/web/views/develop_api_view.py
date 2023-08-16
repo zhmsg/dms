@@ -199,6 +199,7 @@ def update_api_status_func():
 @develop_api_bp.route("/header/", methods=["POST"])
 @referer_api_no
 def add_header_param():
+    return {'status': False, 'data': 'api deleted in 20230816.'}
     request_data = request.json
     param = request_data["name"]
     api_no = g.api_no
@@ -226,6 +227,7 @@ def update_api_predefine_header():
 @develop_api_bp.route("/header/", methods=["DELETE"])
 @referer_api_no
 def delete_header():
+    return {'status': False, 'data': 'api deleted in 20230816.'}
     request_data = request.json
     api_no = g.api_no
     if "param" in request_data:
