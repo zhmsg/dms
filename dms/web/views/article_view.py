@@ -51,7 +51,7 @@ def update_article_action():
     content = request_data["content"]
     auto = request_data.get("auto", False)
     if auto is False:
-        exec_r, data = article_man.update_article(g.user_name, article_no, title, abstract, content)
+        exec_r, data = article_man.update_article(article_no, title, abstract, content)
     else:
         article_file = os.path.join(article_data_dir, "%s_%s.txt" % (article_no, int(time())))
         with open(article_file, "w") as wa:
