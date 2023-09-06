@@ -24,6 +24,12 @@
                 "col_type": "varchar(32)"
             },
             {
+                "col_comment": "参数在上级参数的 位置索引， 数越小靠前显示",
+                "col_name": "position",
+                "col_type": "int(11)",
+                "default_value": 0
+            },
+            {
                 "col_comment": "请求参数是否必需0非必需1必需",
                 "col_name": "necessary",
                 "col_type": "bit(1)"
@@ -151,6 +157,12 @@
                 "col_type": "int(11)"
             },
             {
+                "col_comment": "api在模块的 位置索引， 数越小靠前显示",
+                "col_name": "position",
+                "col_type": "int(11)",
+                "default_value": 0
+            },
+            {
                 "col_comment": "API的标题即主要功能概述",
                 "col_name": "api_title",
                 "col_type": "varchar(150)"
@@ -225,6 +237,12 @@
                 "col_comment": "文档模块所属部分",
                 "col_name": "module_part",
                 "col_type": "tinyint(4)"
+            },
+            {
+                "col_comment": "模块在所属部分 位置索引， 数越小靠前显示",
+                "col_name": "position",
+                "col_type": "int(11)",
+                "default_value": 0
             },
             {
                 "col_comment": "API可调用的环境集合，用|分割的env_no",
