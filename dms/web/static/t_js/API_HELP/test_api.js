@@ -278,6 +278,31 @@ function extract_value(d){
                     d["value_error"] = "无效的" + d['param_name'];
                 }
             }
+            else if(d['param_type'] == 'bool'){
+                if(typeof d['param_value'] == 'boolean'){
+                    ev_r['v'] = d['param_value'];
+                }
+                else if(typeof d['param_value'] == 'string' && d["param_value"].toLowerCase() == 'false'){
+                    ev_r['v'] = false;
+                }
+                else if(typeof d['param_value'] == 'string' && d["param_value"].toLowerCase() == 'true'){
+                    ev_r['v'] = true;
+                }
+                else{
+                    ev_r['r'] = false;
+                    d["value_error"] = "无效的" + d['param_name'];
+                }
+            }
+            else if(d['param_type'] == 'int'){
+                var _pv = Number(d["param_value"]);
+                if(isNaN(_pv)){
+                    ev_r['r'] = false;
+                    d["value_error"] = "无效的" + d['param_name'];
+                }
+                else{
+                    ev_r['v'] = _pv;
+                }
+            }
         }
     }
     return ev_r;
