@@ -30,7 +30,7 @@
         <!--<p>成功返回状态码: <span>{{basic_info.extra_opts.ok_code}}</span></p>-->
         <!--<p>错误状态码: <span>{{basic_info.extra_opts.error_code}}</span></p>-->
         <div id="div_show_params">
-            <table class="table table-bordered api-list-table" v-if="all_header_params">
+            <table class="table table-bordered api-list-table" v-if="all_header_params.length">
                 <caption>请求头部参数</caption>
                 <tr>
                     <th scope="col" width="15%">参数名称</th>
@@ -45,7 +45,7 @@
                     <td>{{header_p["param_desc"]}}</td>
                 </tr>
             </table>
-            <table class="table table-bordered api-list-table" v-if="all_url_params">
+            <table class="table table-bordered api-list-table" v-if="all_url_params.length">
                 <caption>URL内参数</caption>
                 <tr>
                     <th scope="col" width="15%">参数名称</th>
@@ -56,7 +56,7 @@
                     <td>{{url_p["param_desc"]}}</td>
                 </tr>
             </table>
-            <table class="table table-bordered api-list-table" v-if="all_url_args_params">
+            <table class="table table-bordered api-list-table" v-if="all_url_args_params.length">
                 <caption>请求URL参数</caption>
                 <tr>
                     <th scope="col" width="15%">参数名称</th>
@@ -71,7 +71,7 @@
                     <td>{{url_p["param_desc"]}}</td>
                 </tr>
             </table>
-            <table class="table table-bordered api-list-table" v-if="all_body_params">
+            <table class="table table-bordered api-list-table" v-if="all_body_params.length">
                 <caption>请求主体参数</caption>
                 <tr>
                     <th scope="col" width="15%">参数名称</th>
