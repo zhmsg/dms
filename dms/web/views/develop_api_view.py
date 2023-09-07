@@ -248,27 +248,12 @@ def update_api_body_page():
 @referer_api_no
 def get_param():
     api_no = g.api_no
-    param_info = api_man.get_api_param(api_no)
-    _param_dict = dict(body=dict(param_type='object', ordered_keys=[]),
-                       header=dict(param_type='object', ordered_keys=[]),
-                       url=dict(param_type='object', ordered_keys=[]),
-                       url_args=dict(param_type='object', ordered_keys=[]))
-    for item in param_info:
-        _param_dict[item['param_no']] = item
-    while param_info:
-        p_param = param_info.pop()
-        p_l = p_param["location"]
-        parent_p = _param_dict[p_l]
-        if parent_p['param_type'] == 'object':
-            if 'sub_params' not in _param_dict[p_l]:
-                parent_p['sub_params'] = dict()
-            if 'ordered_keys' not in _param_dict[p_l]:
-                parent_p['ordered_keys'] = list()
-            parent_p['sub_params'][p_param["param_name"]] = p_param
-            parent_p['ordered_keys'].append(p_param['param_name'])
-        elif parent_p['param_type'] == 'list':
-            parent_p['sub_params'] = [p_param]
-    return jsonify({"status": True, "data": _param_dict})
+    fmt = request.args.get('fmt', 'v1')
+    if fmt == 'v1':
+        params = api_man.get_api_param_format1(api_no)
+    else:
+        params = api_man.get_api_param_format2(api_no)
+    return jsonify({"status": True, "data": params})
 
 
 @develop_api_bp.route("/param", methods=["POST"])

@@ -120,25 +120,26 @@ function init_api_info(data) {
             param_vm.all_output_examples.push(example_item);
         }
     }
-    // body info
-    var param_len = api_info.body_info.length;
-    var location_map = {"header": "header", "body": "body", "url": "url", "url_args": "url_args"};
-    for(var k=0;k<param_len;k++){
-        var p_item = api_info.body_info[k];
-        if(p_item["location"] in location_map){
-            p_item["location_name"] = location_map[p_item["location"]]
+    return true;
+}
+
+
+function expand_sub_params(sub_params, parent_name){
+    var k_len = sub_params.length;
+    for(var i=0;i<k_len;i++){
+        var param = sub_params[i];
+        var param_name = param['param_name'];
+        if(parent_name){
+            param['location_name'] = parent_name;
+            param_vm.all_api_params.push(param);
         }
-        else{
-            for(var kk=0;kk<param_len;kk++){
-                var pp_item = api_info.body_info[kk];
-                if(p_item["location"] == pp_item["param_no"]){
-                    p_item["location_name"] = pp_item["param_name"];
-                }
-            }
+        if(param['param_type'] == 'object' && param.sub_params != undefined){
+            expand_sub_params(param.sub_params, param_name);
         }
-        param_vm.all_api_params.push(p_item);
+        else if(param['param_type'] == 'list' && param.sub_params != undefined){
+            expand_sub_params(param.sub_params, param_name);
+        }
     }
-    param_vm.update_location();
 }
 
 $(function () {
@@ -308,6 +309,10 @@ $(function () {
                 })
             }
         }
+    });
+    my_async_request2(param_url + '?fmt=v2', "GET", null, function(data){
+        expand_sub_params(data);
+        param_vm.update_location();
     });
     init_api_info();
 });

@@ -290,13 +290,58 @@ class ApiHelpManager(ResourceManager):
         param_cols = ["param_no", "api_no", "param_name", "location",
                       "necessary", "param_type", "param_desc", "status",
                       "add_time", "update_time", 'param_length']
-        body_info = self.db.execute_select(self.api_params, where_value=where_value, order_by=order_by,
-                                           cols=param_cols)
-        return body_info
+        params = self.db.execute_select(
+            self.api_params, where_value=where_value, order_by=order_by,
+            cols=param_cols)
+        return params
 
     @PolicyManager.verify_policy(["api_look"])
-    def get_api_param(self, api_no):
-        return self._select_api_param(api_no)
+    def get_api_param_format1(self, api_no):
+        param_info = self._select_api_param(api_no)
+        _param_dict = dict(body=dict(param_type='object', ordered_keys=[]),
+                       header=dict(param_type='object', ordered_keys=[]),
+                       url=dict(param_type='object', ordered_keys=[]),
+                       url_args=dict(param_type='object', ordered_keys=[]))
+        for item in param_info:
+            _param_dict[item['param_no']] = item
+        while param_info:
+            p_param = param_info.pop(0)
+            p_l = p_param["location"]
+            parent_p = _param_dict[p_l]
+            if parent_p['param_type'] == 'object':
+                if 'sub_params' not in _param_dict[p_l]:
+                    parent_p['sub_params'] = dict()
+                if 'ordered_keys' not in _param_dict[p_l]:
+                    parent_p['ordered_keys'] = list()
+                parent_p['sub_params'][p_param["param_name"]] = p_param
+                parent_p['ordered_keys'].append(p_param['param_name'])
+            elif parent_p['param_type'] == 'list':
+                parent_p['sub_params'] = [p_param]
+        return _param_dict
+
+    @PolicyManager.verify_policy(["api_look"])
+    def get_api_param_format2(self, api_no):
+        param_info = self._select_api_param(api_no)
+        _param_dict = dict(
+            body=dict(param_type='object', param_name='body'),
+            header=dict(param_type='object', param_name='header'),
+            url=dict(param_type='object', param_name='url'),
+            url_args=dict(param_type='object', param_name='url_args'))
+        for item in param_info:
+            _param_dict[item['param_no']] = item
+        while param_info:
+            p_param = param_info.pop(0)
+            p_l = p_param["location"]
+            parent_p = _param_dict[p_l]
+            if parent_p['param_type'] == 'object':
+                if 'sub_params' not in _param_dict[p_l]:
+                    parent_p['sub_params'] = list()
+                parent_p['sub_params'].append(p_param)
+            elif parent_p['param_type'] == 'list':
+                parent_p['sub_params'] = [p_param]
+        params = [_param_dict['header'], _param_dict['url'],
+                  _param_dict['url_args'], _param_dict['body']]
+        return params
 
     @PolicyManager.verify_policy(["api_new"])
     def insert_api_param(self, api_no, param_name, location, necessary,
@@ -517,8 +562,8 @@ class ApiHelpManager(ResourceManager):
             return False, basic_info
 
         header_info = []
-        # 获得请求主体参数列表
-        body_info = self._select_api_param(api_no)
+        # 获得请求主体参数列表 废弃 待删除（20230907）！
+        body_info = [] # self._select_api_param(api_no)
         # 获得预定义参数列表
         cols = ["param", "param_type"]
         items = self.db.execute_select(self.predefine_param, cols=cols, where_value=where_value, order_by=["add_time"])
