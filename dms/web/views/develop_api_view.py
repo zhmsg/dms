@@ -249,10 +249,10 @@ def update_api_body_page():
 def get_param():
     api_no = g.api_no
     param_info = api_man.get_api_param(api_no)
-    _param_dict = dict(body=dict(param_type='object'),
-                       header=dict(param_type='object'),
-                       url=dict(param_type='object'),
-                       url_args=dict(param_type='object'))
+    _param_dict = dict(body=dict(param_type='object', ordered_keys=[]),
+                       header=dict(param_type='object', ordered_keys=[]),
+                       url=dict(param_type='object', ordered_keys=[]),
+                       url_args=dict(param_type='object', ordered_keys=[]))
     for item in param_info:
         _param_dict[item['param_no']] = item
     while param_info:
@@ -262,7 +262,10 @@ def get_param():
         if parent_p['param_type'] == 'object':
             if 'sub_params' not in _param_dict[p_l]:
                 parent_p['sub_params'] = dict()
+            if 'ordered_keys' not in _param_dict[p_l]:
+                parent_p['ordered_keys'] = list()
             parent_p['sub_params'][p_param["param_name"]] = p_param
+            parent_p['ordered_keys'].append(p_param['param_name'])
         elif parent_p['param_type'] == 'list':
             parent_p['sub_params'] = [p_param]
     return jsonify({"status": True, "data": _param_dict})

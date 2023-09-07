@@ -216,15 +216,25 @@ function fill_param_desc(data) {
 
 }
 
+function sub_params_to_list(ordered_keys, sub_params){
+    var l_params = [];
+    var length = ordered_keys.length;
+    for(var i=0;i<length;i++){
+        l_params.push(sub_params[ordered_keys[i]]);
+    }
+    return l_params;
+}
+
+
 $(function() {
     param_vm = new Vue({
         el: "#div_vue",
         data: {
-            basic_info: {},
-            all_url_params: {},
-            all_url_args_params: {},
-            all_header_params: {},
-            all_body_params: {}
+            basic_info: [],
+            all_url_params: [],
+            all_url_args_params: [],
+            all_header_params: [],
+            all_body_params: []
         },
         methods: {
             copy_location:function(){
@@ -234,11 +244,10 @@ $(function() {
     });
     var params_url = "/dev/api/param";
     my_async_request2(params_url, "GET", null, function(data){
-        param_vm.all_body_params = data.body.sub_params;
-        param_vm.all_header_params = data.header.sub_params;
-        param_vm.all_url_params = data.url.sub_params;
-        param_vm.all_url_args_params = data.url_args.sub_params;
-        //console.info()
+        param_vm.all_body_params = sub_params_to_list(data.body.ordered_keys, data.body.sub_params);
+        param_vm.all_header_params = sub_params_to_list(data.header.ordered_keys, data.header.sub_params);
+        param_vm.all_url_params = sub_params_to_list(data.url.ordered_keys, data.url.sub_params);
+        param_vm.all_url_args_params = sub_params_to_list(data.url_args.ordered_keys, data.url_args.sub_params);
     });
     init_api_info();
     if(verify_policy("api_help", "api_new")){
