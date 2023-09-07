@@ -76,7 +76,8 @@
                 <tr>
                     <th scope="col" width="15%">参数名称</th>
                     <th class="text-center" scope="col" width="10%">参数类型</th>
-                    <th scope="col" width="67%">参数描述</th>
+                    <th class="text-center" scope="col" width="10%">参数长度</th>
+                    <th scope="col" width="65%">参数描述</th>
                 </tr>
                 <template v-for="body_p in all_body_params">
                     <template v-if="body_p['location']=='body'">
@@ -85,6 +86,7 @@
                             <span v-if="body_p['necessary']==0" class="text-center">(可选)</span>
                             </td>
                             <td class="text-center">{{body_p["param_type"]}}</td>
+                            <td class="text-center">{{body_p["param_length"]}}</td>
                             <td>{{body_p["param_desc"]}}</td>
                         </tr>
                         <template v-if="body_p['sub_params']">
@@ -96,6 +98,7 @@
                                         <span v-if="sub_item['necessary']==0" class="text-center">(可选)</span>
                                         </td>
                                         <td class="text-center" width="10%">{{sub_item["param_type"]}}</td>
+                                        <td class="text-center" width="10%">{{sub_item["param_length"]}}</td>
                                         <td width="67%">{{sub_item["param_desc"]}}</td>
                                     </tr>
                                     </table>
