@@ -482,6 +482,12 @@ class ApiHelpManager(ResourceManager):
     def get_part_list(self, user_name):
         cols = ["part_no", "part_name", "part_desc", "part_detail"]
         part_list = self.db.execute_select(self.api_part_info, cols=cols)
+        if user_name == 'admin':
+            min_part_no = 0
+        else:
+            min_part_no = 4
+        part_list = [part for part in part_list
+                     if part['part_no'] >= min_part_no]
         return part_list
 
     def get_part_api(self, user_name):

@@ -215,4 +215,4 @@ class UserObject(DBObject):
 
 if __name__ == "__main__":
     user = UserObject()
-    user.new_user("admin", "admin", role=11)
+    user.new_user("zh_test", "admin@gene.ac", role=11)
