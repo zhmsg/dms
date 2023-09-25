@@ -242,7 +242,7 @@ function extract_value(d){
                 else if(sub_value2 == 'is_null'){
                     o[key] = null;
                 }
-                else if(typeof sub_value == 'object' || typeof sub_value == 'array'){
+                else if(typeof sub_value == 'object' || typeof sub_value == 'array' || typeof sub_value == 'number'){
                     o[key] = sub_value;
                 }
                 else if(sub_value != null && sub_value != ""){
